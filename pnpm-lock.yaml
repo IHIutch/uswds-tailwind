@@ -16,6 +16,9 @@ devDependencies:
   parcel:
     specifier: ^2.9.3
     version: 2.9.3(postcss@8.4.27)
+  postcss:
+    specifier: ^8.4.27
+    version: 8.4.27
   tailwindcss:
     specifier: ^3.3.3
     version: 3.3.3
