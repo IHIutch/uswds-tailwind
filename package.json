@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "source": "assets/main.js",
   "scripts": {
-    "start": "rm -rf dist && parcel watch",
-    "build": "rm -rf dist && parcel build"
+    "start": "rm -rf public && parcel watch --dist-dir public",
+    "build": "parcel build --dist-dir public"
   },
   "devDependencies": {
     "parcel": "^2.9.3",
