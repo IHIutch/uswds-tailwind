@@ -1,0 +1,7 @@
+/** @type {import('postcss').Config} */
+{
+  plugins: {
+    tailwindcss: {
+    }
+  }
+}
