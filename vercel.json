@@ -6,12 +6,12 @@
   },
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/api/index.php"
+      "source": "/public/:path*",
+      "destination": "/:path*"
     },
     {
-      "source": "/public/*",
-      "destination": "/*"
+      "source": "/(.*)",
+      "destination": "/api/index.php"
     }
   ],
   "github": {
