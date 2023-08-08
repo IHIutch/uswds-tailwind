@@ -1,23 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
 
-	<head>
-		<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="preload"
+      href="{{
+        environment == 'production' ? './main.css' : './dist/main.css'
+      }}"
+      as="style"
+    />
+    <link
+      rel="preload"
+      href="{{ environment == 'production' ? './main.js' : './dist/main.js' }}"
+      as="script"
+    />
 
-    <link rel="preload" href="./dist/main.css" as="style" />
-    <link rel="preload" href="./dist/main.js" as="script" />
+    <link
+      rel="stylesheet"
+      href="{{
+        environment == 'production' ? './main.css' : './dist/main.css'
+      }}"
+    />
+  </head>
 
-		<link rel="stylesheet" href="./dist/main.css"/>
+  <body>
+    {% block content %} No content found! {% endblock %}
 
-	</head>
-
-	<body>
-		{% block content %}
-			No content found!
-		{% endblock %}
-
-		<script src="./dist/main.js" defer></script>
-	</body>
+    <script
+      src="{{ environment == 'production' ? './main.js' : './dist/main.js' }}"
+      defer
+    ></script>
+  </body>
 </html>

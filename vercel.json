@@ -6,10 +6,6 @@
   },
   "rewrites": [
     {
-      "source": "/public/:path*",
-      "destination": "/:path*"
-    },
-    {
       "source": "/(.*)",
       "destination": "/api/index.php"
     }
