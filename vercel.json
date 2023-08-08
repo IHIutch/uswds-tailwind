@@ -8,6 +8,10 @@
     {
       "source": "/(.*)",
       "destination": "/api/index.php"
+    },
+    {
+      "source": "/public/*",
+      "destination": "/*"
     }
   ],
   "github": {

@@ -575,6 +575,21 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"loUHo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _materialSymbolsSharp = require("@fontsource-variable/material-symbols-sharp");
+var _materialSymbolsOutlined = require("@fontsource-variable/material-symbols-outlined");
+var _openSans = require("@fontsource-variable/open-sans");
+var _publicSans = require("@fontsource-variable/public-sans");
+var _300Css = require("@fontsource/merriweather/300.css");
+var _400Css = require("@fontsource/merriweather/400.css");
+var _700Css = require("@fontsource/merriweather/700.css");
+var _900Css = require("@fontsource/merriweather/900.css");
+var _200Css = require("@fontsource/source-sans-pro/200.css");
+var _300Css1 = require("@fontsource/source-sans-pro/300.css");
+var _400Css1 = require("@fontsource/source-sans-pro/400.css");
+var _600Css = require("@fontsource/source-sans-pro/600.css");
+var _700Css1 = require("@fontsource/source-sans-pro/700.css");
+var _900Css1 = require("@fontsource/source-sans-pro/900.css");
+var _robotoMono = require("@fontsource-variable/roboto-mono");
 var _alpinejs = require("alpinejs");
 var _alpinejsDefault = parcelHelpers.interopDefault(_alpinejs);
 var _collapse = require("@alpinejs/collapse");
@@ -583,7 +598,7 @@ var _mainCss = require("./main.css");
 (0, _alpinejsDefault.default).plugin((0, _collapseDefault.default));
 (0, _alpinejsDefault.default).start();
 
-},{"alpinejs":"bTh9f","@alpinejs/collapse":"9hCNr","./main.css":"5RKaI","@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX"}],"bTh9f":[function(require,module,exports) {
+},{"alpinejs":"bTh9f","@alpinejs/collapse":"9hCNr","./main.css":"5RKaI","@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX","@fontsource-variable/open-sans":"9Mvux","@fontsource-variable/public-sans":"8vhw9","@fontsource-variable/roboto-mono":"k6xwm","@fontsource/source-sans-pro/200.css":"j1nVL","@fontsource/source-sans-pro/300.css":"h64Q8","@fontsource/source-sans-pro/400.css":"3yteB","@fontsource/source-sans-pro/600.css":"bOffY","@fontsource/source-sans-pro/700.css":"4XUjm","@fontsource/source-sans-pro/900.css":"jCvct","@fontsource/merriweather/300.css":"5nFhB","@fontsource/merriweather/400.css":"bj2Bd","@fontsource/merriweather/700.css":"1JgvY","@fontsource/merriweather/900.css":"cYluf","@fontsource-variable/material-symbols-sharp":"8GRJd","@fontsource-variable/material-symbols-outlined":"5nMRk"}],"bTh9f":[function(require,module,exports) {
 // packages/alpinejs/src/scheduler.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3551,6 +3566,6 @@ function modifierValue(modifiers, key, fallback) {
 // packages/collapse/builds/module.js
 var module_default = src_default;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX"}],"5RKaI":[function() {},{}]},["42Wsq","loUHo"], "loUHo", "parcelRequire0025")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX"}],"5RKaI":[function() {},{}],"9Mvux":[function() {},{}],"8vhw9":[function() {},{}],"k6xwm":[function() {},{}],"j1nVL":[function() {},{}],"h64Q8":[function() {},{}],"3yteB":[function() {},{}],"bOffY":[function() {},{}],"4XUjm":[function() {},{}],"jCvct":[function() {},{}],"5nFhB":[function() {},{}],"bj2Bd":[function() {},{}],"1JgvY":[function() {},{}],"cYluf":[function() {},{}],"8GRJd":[function() {},{}],"5nMRk":[function() {},{}]},["42Wsq","loUHo"], "loUHo", "parcelRequire0025")
 
 //# sourceMappingURL=main.js.map
