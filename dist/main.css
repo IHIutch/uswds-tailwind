@@ -1026,12 +1026,8 @@ img, video {
   position: relative;
 }
 
-.right-5 {
-  right: 1.25rem;
-}
-
-.top-0 {
-  top: 0;
+.ml-auto {
+  margin-left: auto;
 }
 
 .block {
@@ -1058,12 +1054,20 @@ img, video {
   max-width: 68ex;
 }
 
+.shrink-0 {
+  flex-shrink: 0;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
 
 .items-center {
   align-items: center;
+}
+
+.gap-3 {
+  gap: .75rem;
 }
 
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -1074,6 +1078,20 @@ img, video {
 
 .rounded {
   border-radius: .25rem;
+}
+
+.border-x-4 {
+  border-left-width: 4px;
+  border-right-width: 4px;
+}
+
+.border-b-4 {
+  border-bottom-width: 4px;
+}
+
+.border-gray-5 {
+  --tw-border-opacity: 1;
+  border-color: rgb(240 240 240 / var(--tw-border-opacity));
 }
 
 .bg-gray-5 {
@@ -1103,6 +1121,10 @@ img, video {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .font-source-sans-pro {
@@ -1149,6 +1171,19 @@ img, video {
   font-weight: normal;
   line-height: 1;
   display: inline-block;
+}
+
+:root {
+  --font-normalize-georgia: 1.05;
+  --font-normalize-helvetica: 1.01;
+  --font-normalize-merriweather: .98;
+  --font-normalize-open-sans: 1.01;
+  --font-normalize-public-sans: 1;
+  --font-normalize-roboto-mono: .95;
+  --font-normalize-source-sans-pro: 1.06;
+  --font-normalize-system-fonts: 1;
+  --font-normalize-tahoma: 1;
+  --font-normalize-verdana: .99;
 }
 
 .focus-within\:outline-4:focus-within {

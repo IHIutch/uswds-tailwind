@@ -543,20 +543,20 @@ module.exports = {
     },
     fontFamily: {
       "open-sans": [
-        '"Open Sans"',
+        '"Open Sans Variable"',
         "-apple-system",
         "BlinkMacSystemFont",
         '"Segoe UI"',
         "Roboto",
         "Helvetica",
         "Arial",
-        " sans-serif",
+        "sans-serif",
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
       ],
       "public-sans": [
-        '"Public Sans Web"',
+        '"Public Sans Variable"',
         "-apple-system",
         "BlinkMacSystemFont",
         '"Segoe UI"',
@@ -585,7 +585,7 @@ module.exports = {
         "sans-serif",
       ],
       "roboto-mono": [
-        '"Roboto Mono Web"',
+        '"Roboto Mono Variable"',
         '"Bitstream Vera Sans Mono"',
         '"Consolas"',
         '"Courier"',

@@ -16,6 +16,14 @@ switch ($request) {
   case '/accordion':
     echo $twig->render('accordion.twig');
     break;
+
+  case '/accordion-bordered':
+    echo $twig->render('accordion-bordered.twig');
+    break;
+
+  case '/accordion-multiple':
+    echo $twig->render('accordion-multiple.twig');
+    break;
 }
 
 exit;

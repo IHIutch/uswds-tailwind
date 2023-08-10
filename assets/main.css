@@ -19,3 +19,16 @@
   white-space: nowrap;
   direction: ltr;
 }
+
+:root {
+  --font-normalize-georgia: 1.05;
+  --font-normalize-helvetica: 1.01;
+  --font-normalize-merriweather: 0.98;
+  --font-normalize-open-sans: 1.01;
+  --font-normalize-public-sans: 1;
+  --font-normalize-roboto-mono: 0.95;
+  --font-normalize-source-sans-pro: 1.06;
+  --font-normalize-system-fonts: 1;
+  --font-normalize-tahoma: 1;
+  --font-normalize-verdana: 0.99;
+}

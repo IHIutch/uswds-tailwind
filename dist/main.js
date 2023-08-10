@@ -3566,6 +3566,6 @@ function modifierValue(modifiers, key, fallback) {
 // packages/collapse/builds/module.js
 var module_default = src_default;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX"}],"5RKaI":[function() {},{}]},["dGahl","loUHo"], "loUHo", "parcelRequire0025")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX"}],"5RKaI":[function() {},{}]},["dGahl","loUHo"], "loUHo", "parcelRequired071")
 
 //# sourceMappingURL=main.js.map
