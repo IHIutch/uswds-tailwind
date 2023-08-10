@@ -33,6 +33,8 @@ of grievances.'
       this.activeAccordion = (this.activeAccordion == id) ? '' : id
       }
     }"
+    @keydown.down="$focus.wrap().next()"
+    @keydown.up="$focus.wrap().previous()"
     class="space-y-2"
   >
     {% for accordion in accordions %}
