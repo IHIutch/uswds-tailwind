@@ -1,5 +1,8 @@
-import "@fontsource-variable/material-symbols-sharp";
 import "@fontsource-variable/material-symbols-outlined";
+import "@fontsource-variable/material-symbols-sharp";
+
+import "@fontsource-variable/material-symbols-outlined/fill.css";
+import "@fontsource-variable/material-symbols-sharp/full.css";
 
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
@@ -17,11 +20,10 @@ import "@fontsource-variable/roboto-mono";
 
 import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
-import focus from '@alpinejs/focus'
-
+import focus from "@alpinejs/focus";
 
 import "./main.css";
 
 Alpine.plugin(collapse);
-Alpine.plugin(focus)
+Alpine.plugin(focus);
 Alpine.start();

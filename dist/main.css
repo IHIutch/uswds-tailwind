@@ -1026,6 +1026,22 @@ img, video {
   position: relative;
 }
 
+.left-6 {
+  left: 1.5rem;
+}
+
+.top-3 {
+  top: .75rem;
+}
+
+.top-1 {
+  top: .25rem;
+}
+
+.mb-2 {
+  margin-bottom: .5rem;
+}
+
 .ml-auto {
   margin-left: auto;
 }
@@ -1042,8 +1058,16 @@ img, video {
   display: contents;
 }
 
+.h-8 {
+  height: 2rem;
+}
+
 .h-full {
   height: 100%;
+}
+
+.w-8 {
+  width: 2rem;
 }
 
 .w-full {
@@ -1076,6 +1100,12 @@ img, video {
   margin-bottom: calc(.5rem * var(--tw-space-y-reverse));
 }
 
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
 .rounded {
   border-radius: .25rem;
 }
@@ -1089,9 +1119,53 @@ img, video {
   border-bottom-width: 4px;
 }
 
+.border-l-8 {
+  border-left-width: 8px;
+}
+
 .border-gray-5 {
   --tw-border-opacity: 1;
   border-color: rgb(240 240 240 / var(--tw-border-opacity));
+}
+
+.border-l-cyan-30v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(0 189 227 / var(--tw-border-opacity));
+}
+
+.border-l-yellow-30v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(221 170 1 / var(--tw-border-opacity));
+}
+
+.border-l-red-30v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(255 141 123 / var(--tw-border-opacity));
+}
+
+.border-l-green-30v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(127 177 53 / var(--tw-border-opacity));
+}
+
+.border-l-gold-20v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(255 190 46 / var(--tw-border-opacity));
+}
+
+.border-l-red-warm-50v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(213 67 9 / var(--tw-border-opacity));
+}
+
+.border-l-green-cool-40v {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(0 169 28 / var(--tw-border-opacity));
+}
+
+.bg-cyan-5 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(231 246 248 / var(--tw-bg-opacity));
 }
 
 .bg-gray-5 {
@@ -1099,8 +1173,38 @@ img, video {
   background-color: rgb(240 240 240 / var(--tw-bg-opacity));
 }
 
+.bg-yellow-5 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 243 209 / var(--tw-bg-opacity));
+}
+
+.bg-red-5 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 238 238 / var(--tw-bg-opacity));
+}
+
+.bg-green-5 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 244 221 / var(--tw-bg-opacity));
+}
+
+.bg-red-warm-10 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 227 219 / var(--tw-bg-opacity));
+}
+
+.bg-green-cool-5 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 243 236 / var(--tw-bg-opacity));
+}
+
 .p-4 {
   padding: 1rem;
+}
+
+.px-16 {
+  padding-left: 4rem;
+  padding-right: 4rem;
 }
 
 .px-4 {
@@ -1123,12 +1227,50 @@ img, video {
   padding-bottom: 1.5rem;
 }
 
+.py-2 {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.pl-8 {
+  padding-left: 2rem;
+}
+
+.pr-16 {
+  padding-right: 4rem;
+}
+
 .text-left {
   text-align: left;
 }
 
 .font-source-sans-pro {
   font-family: Source Sans Pro, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.\!text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+.\!text-4xl {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+}
+
+.\!text-3xl {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+.\!text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
 }
 
 .font-bold {
@@ -1151,6 +1293,23 @@ img, video {
   line-height: 1.5;
 }
 
+.leading-none {
+  line-height: 1;
+}
+
+.leading-6 {
+  line-height: 1.5rem;
+}
+
+.text-blue-60v {
+  --tw-text-opacity: 1;
+  color: rgb(0 94 162 / var(--tw-text-opacity));
+}
+
+.underline {
+  text-decoration-line: underline;
+}
+
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
@@ -1165,6 +1324,7 @@ img, video {
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
   font-family: Material Symbols Outlined Variable;
   font-size: 24px;
   font-style: normal;
@@ -1201,6 +1361,22 @@ img, video {
 
 .focus\:outline:focus {
   outline-style: solid;
+}
+
+@font-face {
+  font-family: Material Symbols Outlined Variable;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("material-symbols-outlined-latin-fill-normal.beee0440.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: Material Symbols Sharp Variable;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("material-symbols-sharp-latin-full-normal.a96fc60f.woff2") format("woff2-variations");
 }
 
 /*# sourceMappingURL=main.css.map */

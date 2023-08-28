@@ -37,6 +37,7 @@ of grievances.'
     @keydown.up="$focus.wrap().previous()"
     class="space-y-2"
   >
+
     {% for accordion in accordions %}
     <div x-data="{ id: $id('accordion') }" class="">
       <h4 class="font-source-sans-pro relative">
@@ -47,20 +48,20 @@ of grievances.'
           :aria-expanded="activeAccordion.includes(id)"
         >
           {{ accordion.title }}
-        <div class="h-full flex items-center ml-auto shrink-0">
-          <span
-            class="material-symbols-outlined"
-            x-show="!activeAccordion.includes(id)"
-            x-cloak
-            >add</span
-          >
-          <span
-            class="material-symbols-outlined"
-            x-show="activeAccordion.includes(id)"
-            x-cloak
-            >remove</span
-          >
-        </div>
+          <div class="h-full flex items-center ml-auto shrink-0">
+            <span
+              class="material-symbols-outlined"
+              x-show="!activeAccordion.includes(id)"
+              x-cloak
+              >add</span
+            >
+            <span
+              class="material-symbols-outlined"
+              x-show="activeAccordion.includes(id)"
+              x-cloak
+              >remove</span
+            >
+          </div>
         </button>
       </h4>
       <div :id="id" class="py-6 px-4 border-b-4 border-x-4 border-gray-5" x-show="activeAccordion.includes(id)" x-cloak>

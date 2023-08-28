@@ -8,22 +8,14 @@ $twig->addGlobal('environment', $_ENV['VERCEL_ENV'] ?? 'development');
 
 $request = $_SERVER['REQUEST_URI'];
 
-switch ($request) {
-  case '/':
-    echo $twig->render('base.twig');
-    break;
-
-  case '/accordion':
-    echo $twig->render('accordion.twig');
-    break;
-
-  case '/accordion-bordered':
-    echo $twig->render('accordion-bordered.twig');
-    break;
-
-  case '/accordion-multiple':
-    echo $twig->render('accordion-multiple.twig');
-    break;
-}
+echo match ($request) {
+  '/' => $twig->render('base.twig'),
+  '/accordion' => $twig->render('accordion.twig'),
+  '/accordion-bordered' => $twig->render('accordion-bordered.twig'),
+  '/accordion-multiple' => $twig->render('accordion-multiple.twig'),
+  '/alert' => $twig->render('alert.twig'),
+  '/alert-slim' => $twig->render('alert-slim.twig'),
+  '/alert-no-icon' => $twig->render('alert-no-icon.twig'),
+};
 
 exit;
