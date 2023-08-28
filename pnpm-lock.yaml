@@ -14,9 +14,6 @@ dependencies:
   '@fontsource-variable/material-symbols-outlined':
     specifier: ^5.0.7
     version: 5.0.7
-  '@fontsource-variable/material-symbols-sharp':
-    specifier: ^5.0.7
-    version: 5.0.7
   '@fontsource-variable/open-sans':
     specifier: ^5.0.9
     version: 5.0.9
@@ -87,10 +84,6 @@ packages:
 
   /@fontsource-variable/material-symbols-outlined@5.0.7:
     resolution: {integrity: sha512-44V8EQez2d7H305mwHPOu4b6vpVhcklhA8MN7hO5jnfuSeIS3zEzzRS4/4wnHk80F3GFuqgROh2GJg631PmGvQ==}
-    dev: false
-
-  /@fontsource-variable/material-symbols-sharp@5.0.7:
-    resolution: {integrity: sha512-IsFljdzaT4t4O7/ZyJKd1FeR1BR3lZmPI1iWwRiBw/uj9248GGQANU+q5OayZg0P91LCvvT0aFkxKfM3rEeYpg==}
     dev: false
 
   /@fontsource-variable/open-sans@5.0.9:

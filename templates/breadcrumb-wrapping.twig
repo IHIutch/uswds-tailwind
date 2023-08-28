@@ -1,0 +1,34 @@
+{% extends "base.twig" %} {% block content %}
+
+{% set breadcrumbs = [{
+  label: 'Home',
+  slug: '#',
+},
+{
+  label: 'Federal Contracting',
+  slug: '#',
+},
+{
+  label: 'Contracting assistance programs',
+  slug: '#',
+}] %}
+
+<div class="p-4">
+
+<nav aria-label="Breadcrumbs" class="py-4 leading-snug">
+  <ol class="list-none p-2 -mx-1 block">
+  {% for breadcrumb in breadcrumbs %}
+    <li class="inline-block whitespace-nowrap">
+      <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
+      <span aria-hidden="true" class="material-symbols-outlined !text-base text-gray-50 !leading-none align-middle">chevron_right</span>
+    </li>
+  {% endfor %}
+    <li class="inline-block whitespace-nowrap">
+      <span>Women-owned small business federal contracting program</span>
+    </li>
+  </ol>
+</nav>
+
+</div>
+
+{% endblock %}

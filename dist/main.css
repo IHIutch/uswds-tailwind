@@ -1030,6 +1030,11 @@ img, video {
   top: .75rem;
 }
 
+.-mx-1 {
+  margin-left: -.25rem;
+  margin-right: -.25rem;
+}
+
 .mb-2 {
   margin-bottom: .5rem;
 }
@@ -1040,6 +1045,14 @@ img, video {
 
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {
@@ -1070,6 +1083,10 @@ img, video {
   cursor: pointer;
 }
 
+.list-none {
+  list-style-type: none;
+}
+
 .items-center {
   align-items: center;
 }
@@ -1088,6 +1105,16 @@ img, video {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.truncate {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
 }
 
 .rounded {
@@ -1161,6 +1188,10 @@ img, video {
   padding: 1rem;
 }
 
+.p-2 {
+  padding: .5rem;
+}
+
 .px-16 {
   padding-left: 4rem;
   padding-right: 4rem;
@@ -1203,6 +1234,10 @@ img, video {
   text-align: left;
 }
 
+.align-middle {
+  vertical-align: middle;
+}
+
 .font-source-sans-pro {
   font-family: Source Sans Pro, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
 }
@@ -1220,6 +1255,21 @@ img, video {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.\!text-sm {
+  font-size: .875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.\!text-base {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .font-bold {
@@ -1246,9 +1296,22 @@ img, video {
   line-height: 1.5;
 }
 
+.\!leading-none {
+  line-height: 1 !important;
+}
+
+.leading-snug {
+  line-height: 1.375;
+}
+
 .text-blue-60v {
   --tw-text-opacity: 1;
   color: rgb(0 94 162 / var(--tw-text-opacity));
+}
+
+.text-gray-50 {
+  --tw-text-opacity: 1;
+  color: rgb(117 117 117 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -1291,6 +1354,10 @@ img, video {
   --font-normalize-verdana: .99;
 }
 
+.visited\:text-violet-70v:visited {
+  color: #54278f;
+}
+
 .focus-within\:outline-4:focus-within {
   outline-width: 4px;
 }
@@ -1304,8 +1371,21 @@ img, video {
   background-color: rgb(230 230 230 / var(--tw-bg-opacity));
 }
 
+.hover\:text-blue-70v:hover {
+  --tw-text-opacity: 1;
+  color: rgb(11 71 120 / var(--tw-text-opacity));
+}
+
 .focus\:outline:focus {
   outline-style: solid;
+}
+
+.focus\:outline-4:focus {
+  outline-width: 4px;
+}
+
+.focus\:outline-blue-40v:focus {
+  outline-color: #2491ff;
 }
 
 @font-face {
