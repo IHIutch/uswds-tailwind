@@ -1,8 +1,6 @@
 import "@fontsource-variable/material-symbols-outlined";
-import "@fontsource-variable/material-symbols-sharp";
 
 import "@fontsource-variable/material-symbols-outlined/fill.css";
-import "@fontsource-variable/material-symbols-sharp/full.css";
 
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
