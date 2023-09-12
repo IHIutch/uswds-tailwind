@@ -2,14 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link
       rel="preload"
-      href="{{
-        environment == 'production' ? './main.css' : './dist/main.css'
-      }}"
+      href="{{ environment == 'production' ? './main.css' : './dist/main.css' }}"
       as="style"
     />
     <link
@@ -20,9 +17,7 @@
 
     <link
       rel="stylesheet"
-      href="{{
-        environment == 'production' ? './main.css' : './dist/main.css'
-      }}"
+      href="{{ environment == 'production' ? './main.css' : './dist/main.css' }}"
     />
   </head>
 

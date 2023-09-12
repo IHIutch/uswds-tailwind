@@ -986,6 +986,18 @@ img, video {
   }
 }
 
+.sr-only {
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  position: absolute;
+  overflow: hidden;
+}
+
 .visible {
   visibility: visible;
 }
@@ -1002,20 +1014,20 @@ img, video {
   position: relative;
 }
 
-.left-6 {
-  left: 1.5rem;
+.left-3 {
+  left: .75rem;
 }
 
-.top-1 {
-  top: .25rem;
+.left-\[9999px\] {
+  left: 9999px;
 }
 
 .top-3 {
   top: .75rem;
 }
 
-.left-3 {
-  left: .75rem;
+.left-\[-9999px\] {
+  left: -9999px;
 }
 
 .-mx-1 {
@@ -1049,6 +1061,10 @@ img, video {
 
 .contents {
   display: contents;
+}
+
+.hidden {
+  display: none;
 }
 
 .h-full {
@@ -1180,11 +1196,6 @@ img, video {
   padding: 1rem;
 }
 
-.px-16 {
-  padding-left: 4rem;
-  padding-right: 4rem;
-}
-
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1193,11 +1204,6 @@ img, video {
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-}
-
-.py-2 {
-  padding-top: .5rem;
-  padding-bottom: .5rem;
 }
 
 .py-4 {
@@ -1210,28 +1216,16 @@ img, video {
   padding-bottom: 1.5rem;
 }
 
-.pl-8 {
-  padding-left: 2rem;
-}
-
-.pr-16 {
-  padding-right: 4rem;
-}
-
-.pl-16 {
-  padding-left: 4rem;
-}
-
-.pr-4 {
-  padding-right: 1rem;
-}
-
 .pl-12 {
   padding-left: 3rem;
 }
 
 .pl-2 {
   padding-left: .5rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
 }
 
 .text-left {
@@ -1387,9 +1381,68 @@ img, video {
   outline-color: #2491ff;
 }
 
+@media not all and (width >= 480px) {
+  .max-mobile-lg\:sr-only {
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+  }
+}
+
+@media (width >= 480px) {
+  .mobile-lg\:not-sr-only {
+    clip: auto;
+    white-space: normal;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    position: static;
+    overflow: visible;
+  }
+
+  .mobile-lg\:static {
+    position: static;
+  }
+
+  .mobile-lg\:relative {
+    position: relative;
+  }
+
+  .mobile-lg\:left-auto {
+    left: auto;
+  }
+
+  .mobile-lg\:inline {
+    display: inline;
+  }
+
+  .mobile-lg\:hidden {
+    display: none;
+  }
+}
+
 @media (width >= 1024px) {
+  .desktop\:static {
+    position: static;
+  }
+
   .desktop\:left-6 {
     left: 1.5rem;
+  }
+
+  .desktop\:left-auto {
+    left: auto;
+  }
+
+  .desktop\:inline {
+    display: inline;
   }
 
   .desktop\:px-16 {
