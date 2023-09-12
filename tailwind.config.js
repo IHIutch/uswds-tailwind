@@ -533,13 +533,15 @@ module.exports = {
     },
     // dropShadow: ({ theme }) => theme("boxShadow"),
     screens: {
-      mobile: "320px",
+      // card: "120px",
+      // "card-lg": "240px",
+      // mobile: "320px",
       "mobile-lg": "480px",
       tablet: "640px",
-      "tablet-lg": "880px",
+      // "tablet-lg": "880px",
       desktop: "1024px",
-      "desktop-lg": "1200px",
-      widescreen: "1400px",
+      // "desktop-lg": "1200px",
+      // widescreen: "1400px",
     },
     fontFamily: {
       "open-sans": [

@@ -7,6 +7,14 @@
 }
 
 @font-face {
+  font-family: Material Symbols Outlined Variable;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("material-symbols-outlined-latin-fill-normal.beee0440.woff2") format("woff2-variations");
+}
+
+@font-face {
   font-family: Open Sans Variable;
   font-style: normal;
   font-display: swap;
@@ -960,12 +968,6 @@ img, video {
   width: 100%;
 }
 
-@media (width >= 320px) {
-  .container {
-    max-width: 320px;
-  }
-}
-
 @media (width >= 480px) {
   .container {
     max-width: 480px;
@@ -978,27 +980,9 @@ img, video {
   }
 }
 
-@media (width >= 880px) {
-  .container {
-    max-width: 880px;
-  }
-}
-
 @media (width >= 1024px) {
   .container {
     max-width: 1024px;
-  }
-}
-
-@media (width >= 1200px) {
-  .container {
-    max-width: 1200px;
-  }
-}
-
-@media (width >= 1400px) {
-  .container {
-    max-width: 1400px;
   }
 }
 
@@ -1028,6 +1012,10 @@ img, video {
 
 .top-3 {
   top: .75rem;
+}
+
+.left-3 {
+  left: .75rem;
 }
 
 .-mx-1 {
@@ -1184,12 +1172,12 @@ img, video {
   background-color: rgb(250 243 209 / var(--tw-bg-opacity));
 }
 
-.p-4 {
-  padding: 1rem;
-}
-
 .p-2 {
   padding: .5rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .px-16 {
@@ -1230,6 +1218,22 @@ img, video {
   padding-right: 4rem;
 }
 
+.pl-16 {
+  padding-left: 4rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
+}
+
+.pl-12 {
+  padding-left: 3rem;
+}
+
+.pl-2 {
+  padding-left: .5rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1252,19 +1256,14 @@ img, video {
   line-height: 2.25rem !important;
 }
 
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
-.\!text-sm {
-  font-size: .875rem !important;
-  line-height: 1.25rem !important;
-}
-
 .\!text-base {
   font-size: 1rem !important;
   line-height: 1.5rem !important;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .text-base {
@@ -1288,16 +1287,16 @@ img, video {
   text-transform: capitalize;
 }
 
+.\!leading-none {
+  line-height: 1 !important;
+}
+
 .leading-none {
   line-height: 1;
 }
 
 .leading-normal {
   line-height: 1.5;
-}
-
-.\!leading-none {
-  line-height: 1 !important;
 }
 
 .leading-snug {
@@ -1388,12 +1387,23 @@ img, video {
   outline-color: #2491ff;
 }
 
-@font-face {
-  font-family: Material Symbols Outlined Variable;
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 700;
-  src: url("material-symbols-outlined-latin-fill-normal.beee0440.woff2") format("woff2-variations");
+@media (width >= 1024px) {
+  .desktop\:left-6 {
+    left: 1.5rem;
+  }
+
+  .desktop\:px-16 {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+
+  .desktop\:pl-8 {
+    padding-left: 2rem;
+  }
+
+  .desktop\:pr-16 {
+    padding-right: 4rem;
+  }
 }
 
 /*# sourceMappingURL=main.css.map */
