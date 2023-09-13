@@ -19,6 +19,8 @@ echo match ($request) {
   '/breadcrumb' => $twig->render('breadcrumb.twig'),
   '/breadcrumb-wrapping' => $twig->render('breadcrumb-wrapping.twig'),
   '/button' => $twig->render('button.twig'),
+  '/button-group' => $twig->render('button-group.twig'),
+  '/button-group-segmented' => $twig->render('button-group-segmented.twig'),
 };
 
 exit;
