@@ -18,6 +18,7 @@ echo match ($request) {
   '/alert-no-icon' => $twig->render('alert-no-icon.twig'),
   '/breadcrumb' => $twig->render('breadcrumb.twig'),
   '/breadcrumb-wrapping' => $twig->render('breadcrumb-wrapping.twig'),
+  '/button' => $twig->render('button.twig'),
 };
 
 exit;

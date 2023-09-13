@@ -3,6 +3,9 @@ module.exports = {
   content: ["./**/*.{php,twig}"],
   theme: {
     colors: ({ colors }) => ({
+      white: "#ffffff",
+      black: "#000000",
+      // USWDS
       "red-cool-5": "#f8eff1",
       "red-cool-10": "#f3e1e4",
       "red-cool-20": "#ecbec6",
@@ -494,8 +497,6 @@ module.exports = {
       "accent-warm": colors["orange-30v"],
       "accent-warm-dark": colors["orange-50v"],
       "accent-warm-darker": colors["orange-60"],
-      emergency: colors["red-warm-60v"],
-      "emergency-dark": colors["red-warm-80"],
       // State Aliases
       "info-lighter": colors["cyan-5"],
       "info-light": colors["cyan-20"],
