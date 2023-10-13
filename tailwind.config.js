@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const { addDynamicIconSelectors } = require('@iconify/tailwind');
+
 module.exports = {
   content: ["./**/*.{php,twig}"],
   theme: {
@@ -470,7 +473,7 @@ module.exports = {
       "base-lightest": colors["gray-5"],
       "base-lighter": colors["gray-cool-10"],
       "base-light": colors["gray-cool-30"],
-      base: colors["gray-cool-50"],
+      // base: colors["gray-cool-50"],
       "base-dark": colors["gray-cool-60"],
       "base-darker": colors["gray-cool-70"],
       "base-darkest": colors["gray-90"],
@@ -605,5 +608,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    addDynamicIconSelectors()
+  ],
 };

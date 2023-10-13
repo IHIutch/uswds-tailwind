@@ -47,20 +47,18 @@ of grievances.'
           :aria-expanded="activeAccordion==id"
         >
           {{ accordion.title }}
-        <div class="h-full flex items-center ml-auto shrink-0">
-          <span
-            class="material-symbols-outlined"
-            x-show="activeAccordion!=id"
-            x-cloak
-            >add</span
-          >
-          <span
-            class="material-symbols-outlined"
-            x-show="activeAccordion==id"
-            x-cloak
-            >remove</span
-          >
-        </div>
+          <div class="h-full flex items-center ml-auto shrink-0">
+            <div
+              class="icon-[material-symbols--add] h-6 w-6"
+              x-show="activeAccordion!=id"
+              x-cloak
+              ></div>
+            <div
+              class="icon-[material-symbols--remove] h-6 w-6"
+              x-show="activeAccordion==id"
+              x-cloak
+              ></div>
+          </div>
         </button>
       </h4>
       <div :id="id" class="py-6 px-4" x-show="activeAccordion==id" x-cloak>

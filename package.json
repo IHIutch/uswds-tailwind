@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "source": "assets/main.js",
   "scripts": {
-    "start": "rm -rf dist && parcel watch",
+    "dev": "rm -rf dist && parcel watch",
     "build": "parcel build"
   },
   "devDependencies": {
+    "@iconify-json/material-symbols": "^1.1.59",
+    "@iconify/tailwind": "^0.1.3",
     "parcel": "^2.9.3",
     "postcss": "^8.4.27",
     "tailwindcss": "^3.3.3"
@@ -14,7 +16,6 @@
   "dependencies": {
     "@alpinejs/collapse": "^3.12.3",
     "@alpinejs/focus": "^3.12.3",
-    "@fontsource-variable/material-symbols-outlined": "^5.0.7",
     "@fontsource-variable/open-sans": "^5.0.9",
     "@fontsource-variable/public-sans": "^5.0.9",
     "@fontsource-variable/roboto-mono": "^5.0.9",

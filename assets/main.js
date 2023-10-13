@@ -1,7 +1,3 @@
-import "@fontsource-variable/material-symbols-outlined";
-
-import "@fontsource-variable/material-symbols-outlined/fill.css";
-
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
 import "@fontsource/merriweather/300.css";

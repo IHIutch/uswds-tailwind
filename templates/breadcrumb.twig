@@ -21,17 +21,17 @@
       <li class="inline max-mobile-lg:sr-only">
         <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
         <span aria-hidden="true" class="hidden mobile-lg:inline">
-          <span class="material-symbols-outlined !text-base !leading-none align-middle text-gray-50">chevron_right</span>
+          <span class="icon-[material-symbols--chevron-right] text-base align-middle text-gray-50"></span>
         </span>
       </li>
       {% if loop.last %}
       <li class="inline">
         <span aria-hidden="true" class="mobile-lg:hidden">
-          <span class="material-symbols-outlined !text-base !leading-none align-middle text-gray-50">arrow_back</span>
+          <span class="icon-[material-symbols--arrow-back] text-base align-middle text-gray-50"></span>
         </span>
         <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
         <span aria-hidden="true" class="hidden mobile-lg:inline">
-          <span class="material-symbols-outlined !text-base !leading-none align-middle text-gray-50">chevron_right</span>
+          <span class="icon-[material-symbols--chevron-right] text-base align-middle text-gray-50"></span>
         </span>
       </li>
       {% endif %}

@@ -49,18 +49,16 @@ of grievances.'
         >
           {{ accordion.title }}
           <div class="h-full flex items-center ml-auto shrink-0">
-            <span
-              class="material-symbols-outlined"
-              x-show="!activeAccordion.includes(id)"
+            <div
+              class="icon-[material-symbols--add] h-6 w-6"
+              x-show="activeAccordion!=id"
               x-cloak
-              >add</span
-            >
-            <span
-              class="material-symbols-outlined"
-              x-show="activeAccordion.includes(id)"
+              ></div>
+            <div
+              class="icon-[material-symbols--remove] h-6 w-6"
+              x-show="activeAccordion==id"
               x-cloak
-              >remove</span
-            >
+              ></div>
           </div>
         </button>
       </h4>
