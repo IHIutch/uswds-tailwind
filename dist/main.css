@@ -1269,6 +1269,14 @@ select {
   top: 1rem;
 }
 
+.top-\[2px\] {
+  top: 2px;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
 .-mx-1 {
   margin-left: -.25rem;
   margin-right: -.25rem;
@@ -1301,6 +1309,14 @@ select {
 
 .ml-2 {
   margin-left: .5rem;
+}
+
+.mt-2 {
+  margin-top: .5rem;
+}
+
+.mt-1 {
+  margin-top: .25rem;
 }
 
 .block {
@@ -1365,6 +1381,10 @@ select {
 
 .max-w-prose {
   max-width: 68ex;
+}
+
+.max-w-xs {
+  max-width: 20rem;
 }
 
 .shrink-0 {
@@ -1636,6 +1656,11 @@ select {
   padding-bottom: 1.5rem;
 }
 
+.px-3 {
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
 .pl-12 {
   padding-left: 3rem;
 }
@@ -1646,6 +1671,10 @@ select {
 
 .pr-4 {
   padding-right: 1rem;
+}
+
+.pl-3 {
+  padding-left: .75rem;
 }
 
 .text-left {
@@ -1673,6 +1702,11 @@ select {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: .875rem;
+  line-height: 1.25rem;
 }
 
 .font-bold {
@@ -1780,6 +1814,74 @@ select {
   --font-normalize-system-fonts: 1;
   --font-normalize-tahoma: 1;
   --font-normalize-verdana: .99;
+}
+
+.before\:absolute:before {
+  content: var(--tw-content);
+  position: absolute;
+}
+
+.before\:inset-0:before {
+  content: var(--tw-content);
+  inset: 0;
+}
+
+.after\:absolute:after {
+  content: var(--tw-content);
+  position: absolute;
+}
+
+.after\:inset-0:after {
+  content: var(--tw-content);
+  inset: 0;
+}
+
+.after\:z-0:after {
+  content: var(--tw-content);
+  z-index: 0;
+}
+
+.after\:-z-10:after {
+  content: var(--tw-content);
+  z-index: -10;
+}
+
+.after\:rounded:after {
+  content: var(--tw-content);
+  border-radius: .25rem;
+}
+
+.after\:border-2:after {
+  content: var(--tw-content);
+  border-width: 2px;
+}
+
+.after\:border-gray-20:after {
+  content: var(--tw-content);
+  --tw-border-opacity: 1;
+  border-color: rgb(201 201 201 / var(--tw-border-opacity));
+}
+
+.after\:bg-blue-60v\/10:after {
+  content: var(--tw-content);
+  background-color: #005ea21a;
+}
+
+.after\:p-2:after {
+  content: var(--tw-content);
+  padding: .5rem;
+}
+
+.after\:px-3:after {
+  content: var(--tw-content);
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
+.after\:py-4:after {
+  content: var(--tw-content);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .visited\:text-violet-70v:visited {
@@ -2041,6 +2143,49 @@ select {
   --tw-ring-color: rgb(117 117 117 / var(--tw-ring-opacity));
 }
 
+.disabled\:checked\:text-gray-50:checked:disabled {
+  --tw-text-opacity: 1;
+  color: rgb(117 117 117 / var(--tw-text-opacity));
+}
+
+.peer:checked ~ .peer-checked\:bg-blue-cool-60 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(46 98 118 / var(--tw-bg-opacity));
+}
+
+.peer:checked ~ .peer-checked\:bg-blue-20v {
+  --tw-bg-opacity: 1;
+  background-color: rgb(161 211 255 / var(--tw-bg-opacity));
+}
+
+.peer:checked ~ .peer-checked\:text-blue-cool-60 {
+  --tw-text-opacity: 1;
+  color: rgb(46 98 118 / var(--tw-text-opacity));
+}
+
+.peer:checked ~ .peer-checked\:before\:bg-blue-20v:before {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(161 211 255 / var(--tw-bg-opacity));
+}
+
+.peer:checked ~ .peer-checked\:after\:border-blue-60v:after {
+  content: var(--tw-content);
+  --tw-border-opacity: 1;
+  border-color: rgb(0 94 162 / var(--tw-border-opacity));
+}
+
+.peer:checked ~ .peer-checked\:after\:bg-blue-20v:after {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(161 211 255 / var(--tw-bg-opacity));
+}
+
+.peer:checked ~ .peer-checked\:after\:bg-blue-60v\/10:after {
+  content: var(--tw-content);
+  background-color: #005ea21a;
+}
+
 .peer:disabled ~ .peer-disabled\:cursor-not-allowed {
   cursor: not-allowed;
 }
@@ -2048,6 +2193,18 @@ select {
 .peer:disabled ~ .peer-disabled\:text-gray-60 {
   --tw-text-opacity: 1;
   color: rgb(92 92 92 / var(--tw-text-opacity));
+}
+
+.peer:disabled ~ .peer-disabled\:after\:border-gray-10:after {
+  content: var(--tw-content);
+  --tw-border-opacity: 1;
+  border-color: rgb(230 230 230 / var(--tw-border-opacity));
+}
+
+.peer:disabled ~ .peer-disabled\:after\:bg-white:after {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 @media not all and (width >= 480px) {
@@ -2111,6 +2268,17 @@ select {
   .desktop\:pr-16 {
     padding-right: 4rem;
   }
+}
+
+.peer:checked ~ .\[\&_not\:disabled\]\:peer-checked\:after\:border-blue-60v not:disabled:after {
+  content: var(--tw-content);
+  --tw-border-opacity: 1;
+  border-color: rgb(0 94 162 / var(--tw-border-opacity));
+}
+
+.peer:checked ~ .\[\&_not\:disabled\]\:peer-checked\:after\:bg-blue-60v\/10 not:disabled:after {
+  content: var(--tw-content);
+  background-color: #005ea21a;
 }
 
 /*# sourceMappingURL=main.css.map */
