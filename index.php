@@ -21,6 +21,7 @@ echo match ($request) {
   '/button' => $twig->render('button.twig'),
   '/button-group' => $twig->render('button-group.twig'),
   '/button-group-segmented' => $twig->render('button-group-segmented.twig'),
+  '/checkbox' => $twig->render('checkbox.twig'),
 };
 
 exit;

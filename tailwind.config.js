@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 const { addDynamicIconSelectors } = require('@iconify/tailwind');
+const tailwindForms = require('@tailwindcss/forms');
 
 module.exports = {
   content: ["./**/*.{php,twig}"],
@@ -609,6 +610,7 @@ module.exports = {
     },
   },
   plugins: [
-    addDynamicIconSelectors()
+    addDynamicIconSelectors(),
+    tailwindForms(),
   ],
 };

@@ -37,8 +37,8 @@ of grievances.'
     @keydown.up="$focus.wrap().previous()"
     class="space-y-2"
   >
-    {% for accordion in accordions %}
-    <div x-data="{ id: $id('accordion') }" class="">
+  {% for accordion in accordions %}
+    <div x-data="{ id: $id('accordion') }">
       <h4 class="font-source-sans-pro relative">
         <button
           @click="setActiveAccordion(id)"
@@ -67,8 +67,7 @@ of grievances.'
         </p>
       </div>
     </div>
-
-    {% endfor %}
+  {% endfor %}
   </div>
 </div>
 
