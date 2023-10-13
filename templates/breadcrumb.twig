@@ -18,26 +18,27 @@
   <nav aria-label="Breadcrumbs" class="py-4">
     <ol class="list-none truncate p-2 -mx-1 block">
     {% for breadcrumb in breadcrumbs %}
-      <li class="inline max-mobile-lg:sr-only">
-        <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
-        <span aria-hidden="true" class="hidden mobile-lg:inline">
-          <span class="icon-[material-symbols--chevron-right] text-base align-middle text-gray-50"></span>
-        </span>
-      </li>
-      {% if loop.last %}
-      <li class="inline">
-        <span aria-hidden="true" class="mobile-lg:hidden">
-          <span class="icon-[material-symbols--arrow-back] text-base align-middle text-gray-50"></span>
-        </span>
-        <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
-        <span aria-hidden="true" class="hidden mobile-lg:inline">
-          <span class="icon-[material-symbols--chevron-right] text-base align-middle text-gray-50"></span>
-        </span>
-      </li>
+      {% if not loop.last %}
+        <li class="inline max-mobile-lg:sr-only">
+          <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
+          <span aria-hidden="true" class="hidden mobile-lg:inline">
+            <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50"></span>
+          </span>
+        </li>
+      {% else %}
+        <li class="inline">
+          <span aria-hidden="true" class="mobile-lg:hidden">
+            <span class="icon-[material-symbols--arrow-back] align-middle text-gray-50"></span>
+          </span>
+          <a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"><span>{{breadcrumb.label}}</span></a>
+          <span aria-hidden="true" class="hidden mobile-lg:inline">
+            <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50"></span>
+          </span>
+        </li>
       {% endif %}
     {% endfor %}
       <li class="inline max-mobile-lg:sr-only">
-        <span>Women-owned small business federal contracting program</span>
+        <span>Economically disadvantaged women-owned small business federal contracting program</span>
       </li>
     </ol>
   </nav>
