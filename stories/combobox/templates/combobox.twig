@@ -1,0 +1,107 @@
+  <div
+      x-data="{
+        isDropdownVisible: false,
+        isDirty: false,
+        value: '',
+        selectedValue: '',
+        setSelectedValue(value) {
+          this.value = value;
+          this.selectedValue = value;
+          this.isDropdownVisible = false;
+          this.isDirty = false;
+          $focus.focus($refs.input)
+        },
+        isShowingOption(value){
+          return !this.isDirty || (this.isDirty && value.toLowerCase().startsWith(this.value.toLowerCase()));
+        },
+        checkActive(e){
+          if($refs.options && !$refs.input.contains(e.target) && !$refs.options.contains(e.target)) {
+            this.isDropdownVisible = false
+          }
+        },
+        focusFirst(){
+          var selectedEl = $root.querySelector('[data-selected=true]')
+          if(selectedEl){
+            $focus.focus(selectedEl);
+          } else {
+            $focus.within($refs.options).first();
+          }
+        },
+        focusLast(){
+          var selectedEl = $root.querySelector('[data-selected=true]')
+          if(selectedEl){
+            $focus.focus(selectedEl);
+          } else {
+            $focus.within($refs.options).last();
+          }
+        },
+        checkValidSelection(){
+          this.value = this.selectedValue
+        }
+      }"
+      @click.outside="isDropdownVisible = false;"
+      class="max-w-lg"
+   >
+      <label for="combobox" class="block">Select a fruit</label>
+      <div class="relative mt-2">
+        <div class="flex w-full">
+          <input
+            id="combobox"
+            type="text"
+            x-ref="input"
+            x-model="value"
+            @input="isDropdownVisible = true; isDirty = true;"
+            @keydown.prevent.up="isDropdownVisible = true; $nextTick(() => focusLast());"
+            @keydown.prevent.down="isDropdownVisible = true; $nextTick(() => focusFirst());"
+            class="grow py-2 pl-2 pr-12  focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+            role="combobox"
+            aria-controls="options"
+            aria-expanded="false"
+            autocapitalize="off"
+            autocomplete="off"
+         >
+          <div class="absolute z-10 inset-y-0 right-0 flex">
+            <template x-if="selectedValue">
+              <button type="button" @click="selectedValue = ''; value = ''; $focus.focus($refs.input); isDropdownVisible = false" class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent">
+                <div class="icon-[material-symbols--close] h-6 w-6 align-middle text-gray-50"></div>
+              </button>
+            </template>
+            <button type="button" @click="isDropdownVisible = !isDropdownVisible;" class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent">
+              <div class="icon-[material-symbols--keyboard-arrow-down] h-8 w-8 align-middle text-gray-50"></div>
+            </button>
+          </div>
+        </div>
+        <ul
+          x-cloak
+          x-show="isDropdownVisible"
+          x-ref="options"
+          @keydown.down="$focus.wrap().next()"
+          @keydown.up="$focus.wrap().previous()"
+          @keydown.prevent.tab="$focus.focus($refs.input)"
+          class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full"
+          id="options"
+          role="listbox"
+       >
+          {% for combobox in comboboxes %}
+          {% set combobox_id = 'combobox-' ~ random() %}
+          <template x-if="isShowingOption($el.dataset.value)" data-value="{{ combobox.value }}">
+            <li
+              id="{{ combobox_id }}"
+              data-value="{{ combobox.value }}"
+              @mouseenter="$focus.focus($el)"
+              @click="setSelectedValue($el.dataset.value)"
+              @keydown.space="setSelectedValue($el.dataset.value)"
+              @keydown.enter="setSelectedValue($el.dataset.value)"
+              :aria-selected="$el.dataset.value === selectedValue"
+              :data-selected="$el.dataset.value === selectedValue"
+              class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white focus:outline focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4"
+              role="option"
+              tabindex="-1"
+           >
+              <span>{{ combobox.label }}<span>
+            </li>
+          </template>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>

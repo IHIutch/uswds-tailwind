@@ -18,3 +18,7 @@
   --font-normalize-tahoma: 1;
   --font-normalize-verdana: 0.99;
 }
+
+body {
+  @apply font-source-sans-pro;
+}

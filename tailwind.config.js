@@ -4,7 +4,7 @@ const { addDynamicIconSelectors } = require('@iconify/tailwind');
 const tailwindForms = require('@tailwindcss/forms');
 
 module.exports = {
-  content: ["./**/*.{php,twig}"],
+  content: ["./stories/**/*.twig"],
   theme: {
     colors: ({ colors }) => ({
       white: "#ffffff",
@@ -611,6 +611,8 @@ module.exports = {
   },
   plugins: [
     addDynamicIconSelectors(),
-    tailwindForms(),
+    tailwindForms({
+      strategy: 'base'
+    }),
   ],
 };
