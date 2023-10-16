@@ -611,6 +611,8 @@ module.exports = {
   },
   plugins: [
     addDynamicIconSelectors(),
-    tailwindForms(),
+    tailwindForms({
+      strategy: 'base'
+    }),
   ],
 };

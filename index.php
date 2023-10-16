@@ -23,6 +23,8 @@ echo match ($request) {
   '/button-group-segmented' => $twig->render('button-group-segmented.twig'),
   '/checkbox' => $twig->render('checkbox.twig'),
   '/checkbox-tile' => $twig->render('checkbox-tile.twig'),
+  '/combobox' => $twig->render('combobox.twig'),
+  '/combobox-2' => $twig->render('combobox-2.twig'),
 };
 
 exit;

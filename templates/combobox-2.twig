@@ -1,0 +1,72 @@
+{% extends "base.twig" %} {% block content %}
+
+<div
+    x-data="{
+    options: ['Option 1', 'Option 2', 'Option 3', 'Option 4'],
+    filteredOptions: [],
+    selectedOption: '',
+    focusedIndex: -1,
+    isDropdownVisible: false,
+
+    filterOptions() {
+      this.filteredOptions = this.options.filter(option =>
+        option.toLowerCase().includes(this.selectedOption.toLowerCase())
+      );
+      this.isDropdownVisible = this.filteredOptions.length > 0;
+      this.focusedIndex = this.isDropdownVisible ? 0 : -1;
+    },
+
+    moveFocus(direction) {
+      if (!this.isDropdownVisible) return;
+
+      const newIndex = this.focusedIndex + direction;
+      if (newIndex >= 0 && newIndex < this.filteredOptions.length) {
+        this.focusedIndex = newIndex;
+      }
+    },
+
+    setFocusedIndex(index) {
+      this.focusedIndex = index;
+    },
+
+    selectOption(index) {
+      if (index >= 0 && index < this.filteredOptions.length) {
+        this.selectedOption = this.filteredOptions[index];
+        this.isDropdownVisible = false;
+      }
+    },
+  };"
+    @click.window="if(!$el.contains($event.target)) isDropdownVisible = false"
+  >
+  <label  for="combo">Select an option:</label>
+  <input
+    type="text"
+    id="combo"
+    role="combobox"
+    aria-autocomplete="list"
+    aria-expanded="false"
+    aria-owns="combobox-options"
+    x-ref="input"
+    x-model="selectedOption"
+    @input="filterOptions"
+    @keydown.arrow-up="moveFocus(-1)"
+    @keydown.arrow-down="moveFocus(1)"
+    @keydown.enter.prevent="selectOption"
+  />
+
+  <ul id="combobox-options" role="listbox" x-show="isDropdownVisible">
+    <template x-for="(option, index) in filteredOptions">
+      <li
+        role="option"
+        :key="index"
+        :aria-selected="index === focusedIndex ? 'true' : 'false'"
+        @click="selectOption(index)"
+        @mouseenter="setFocusedIndex(index)"
+      >
+        <span x-text="option"></span>
+      </li>
+    </template>
+  </ul>
+</div>
+
+{% endblock %}
