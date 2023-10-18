@@ -1,0 +1,129 @@
+<div class="space-y-12">
+
+<div
+  x-data="{
+    inputValue: '',
+    maskValue: '',
+    maskPlaceholder: '___ __ ____',
+    init() {
+      this.maskValue = this.maskPlaceholder
+      $watch('inputValue', (value) => {
+        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
+      })
+    }
+  }"
+  class="max-w-xs"
+  >
+  <label for="ssn" class="block">Social Security Number</label>
+  <div id="input-hint" class="text-gray-50">For example, 123 45 6789</div>
+  <div class="mt-2 relative max-w-xs">
+    <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
+      <span class="invisible whitespace-pre" x-text="inputValue"></span>
+      <span class="text-gray-50" x-text="maskValue"></span>
+    </div>
+    <input
+      id="ssn"
+      x-mask="999 99 9999"
+      x-model="inputValue"
+      aria-describedby="input-hint"
+      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+    />
+  </div>
+</div>
+
+<div
+  x-data="{
+    inputValue: '',
+    maskValue: '',
+    maskPlaceholder: '___-___-____',
+    init() {
+      this.maskValue = this.maskPlaceholder
+      $watch('inputValue', (value) => {
+        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
+      })
+    }
+  }"
+  class="max-w-xs"
+  >
+  <label for="phone" class="block">US Telephone Number</label>
+  <div id="input-hint-phone" class="text-gray-50">For example, 123 45 6789</div>
+  <div class="mt-2 relative max-w-xs">
+    <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
+      <span class="invisible whitespace-pre" x-text="inputValue"></span>
+      <span class="text-gray-50" x-text="maskValue"></span>
+    </div>
+    <input
+      id="phone"
+      x-mask="999-999-9999"
+      x-model="inputValue"
+      aria-describedby="input-hint-phone"
+      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+    />
+  </div>
+</div>
+
+
+<div
+  x-data="{
+    inputValue: '',
+    maskValue: '',
+    maskPlaceholder: '_____-____',
+    init() {
+      this.maskValue = this.maskPlaceholder
+
+      $watch('inputValue', (value) => {
+        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
+      })
+    }
+  }"
+  class="max-w-xs"
+  >
+  <label for="zip" class="block">ZIP Code</label>
+  <div id="input-hint-zip" class="text-gray-50">For example, 12345-6789</div>
+  <div class="mt-2 relative max-w-xs">
+    <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
+      <span class="invisible whitespace-pre" x-text="inputValue"></span>
+      <span class="text-gray-50" x-text="maskValue"></span>
+    </div>
+    <input
+      id="zip"
+      x-mask="99999-9999"
+      x-model="inputValue"
+      aria-describedby="input-hint-zip"
+      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+    />
+  </div>
+</div>
+
+<div
+  x-data="{
+    inputValue: '',
+    maskValue: '',
+    maskPlaceholder: '___ ___',
+    init() {
+      this.maskValue = this.maskPlaceholder
+      $watch('inputValue', (value) => {
+        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
+      })
+    }
+  }"
+  class="max-w-xs"
+  >
+  <label for="alpha" class="block">Alphanumeric</label>
+  <div id="input-hint-alpha" class="text-gray-50">For example, A1B 2C3</div>
+  <div class="mt-2 relative max-w-xs">
+    <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border flex flex-row">
+      <span class="invisible whitespace-pre" x-text="inputValue"></span>
+      <span class="text-gray-50" x-text="maskValue"></span>
+    </div>
+    <input
+      id="alpha"
+      x-mask="a9a 9a9"
+      x-model="inputValue"
+      aria-describedby="input-hint-alpha"
+      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+    />
+  </div>
+</div>
+
+</div>
