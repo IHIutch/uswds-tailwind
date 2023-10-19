@@ -16,7 +16,7 @@
   >
   <label for="ssn" class="block">Social Security Number</label>
   <div id="input-hint" class="text-gray-50">For example, 123 45 6789</div>
-  <div class="mt-2 relative max-w-xs">
+  <div class="mt-2 relative">
     <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
@@ -26,7 +26,7 @@
       x-mask="999 99 9999"
       x-model="inputValue"
       aria-describedby="input-hint"
-      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+      class="p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:border-4 data-[invalid]:border-red-60v"
     />
   </div>
 </div>
@@ -47,7 +47,7 @@
   >
   <label for="phone" class="block">US Telephone Number</label>
   <div id="input-hint-phone" class="text-gray-50">For example, 123 45 6789</div>
-  <div class="mt-2 relative max-w-xs">
+  <div class="mt-2 relative">
     <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
@@ -57,7 +57,7 @@
       x-mask="999-999-9999"
       x-model="inputValue"
       aria-describedby="input-hint-phone"
-      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+      class="p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:border-4 data-[invalid]:border-red-60v"
     />
   </div>
 </div>
@@ -80,7 +80,7 @@
   >
   <label for="zip" class="block">ZIP Code</label>
   <div id="input-hint-zip" class="text-gray-50">For example, 12345-6789</div>
-  <div class="mt-2 relative max-w-xs">
+  <div class="mt-2 relative">
     <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
@@ -90,7 +90,7 @@
       x-mask="99999-9999"
       x-model="inputValue"
       aria-describedby="input-hint-zip"
-      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+      class="p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:border-4 data-[invalid]:border-red-60v"
     />
   </div>
 </div>
@@ -111,7 +111,7 @@
   >
   <label for="alpha" class="block">Alphanumeric</label>
   <div id="input-hint-alpha" class="text-gray-50">For example, A1B 2C3</div>
-  <div class="mt-2 relative max-w-xs">
+  <div class="mt-2 relative">
     <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border flex flex-row">
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
@@ -121,7 +121,7 @@
       x-mask="a9a 9a9"
       x-model="inputValue"
       aria-describedby="input-hint-alpha"
-      class="appearance-none p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+      class="p-2 bg-transparent w-full focus:border-gray-60 border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:border-4 data-[invalid]:border-red-60v"
     />
   </div>
 </div>
