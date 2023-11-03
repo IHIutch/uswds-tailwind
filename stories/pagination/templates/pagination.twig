@@ -1,0 +1,90 @@
+<nav aria-label="Pagination" class="flex justify-center">
+  <ul class="flex space-x-2">
+    {% if pagination.current_page != 1 %}
+    <li class="h-10 min-w-[2.5rem] hidden tablet:inline-flex">
+      <a
+        href="#"
+        class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v"
+        >
+        <span
+          aria-hidden="true"
+          class="icon-[material-symbols--chevron-left] align-middle"
+        ></span>
+        Previous
+      </a>
+    </li>
+    {% endif %}
+    {% for i in 1 .. pagination.page_count %}
+      {% if  loop.index != pagination.current_page and loop.first %}
+      <li class="h-10 min-w-[2.5rem] inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+          aria-label="Page {{ loop.index }}"
+          >{{ loop.index }}</a>
+      </li>
+      {% elseif loop.index == pagination.current_page - 2 and not loop.first %}
+      <li
+        aria-label="ellipsis indicating non-visible pages"
+        class="h-10 min-w-[2.5rem] p-2 select-none flex items-center justify-center"
+        >
+        <span>...<span>
+      </li>
+      {% elseif loop.index == pagination.current_page - 1 and not loop.first %}
+      <li class="h-10 min-w-[2.5rem] inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+          aria-label="Page {{ loop.index }}"
+          >{{ loop.index }}</a>
+      </li>
+      {% elseif loop.index == pagination.current_page %}
+      <li class="h-10 min-w-[2.5rem] inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded bg-gray-90 text-white border-[transparent] justify-center items-center focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+          aria-label="Page {{ loop.index }}"
+          aria-current="page"
+          >{{ loop.index }}</a>
+      </li>
+      {% elseif loop.index == pagination.current_page + 1 and not loop.last %}
+      <li class="h-10 min-w-[2.5rem] inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+          aria-label="Page {{ loop.index }}"
+          >{{ loop.index }}</a>
+      </li>
+      {% elseif loop.index == pagination.current_page + 2 and not loop.last %}
+      <li
+        aria-label="ellipsis indicating non-visible pages"
+        class="h-10 min-w-[2.5rem] p-2 select-none flex items-center justify-center"
+        >
+        <span>...<span>
+      </li>
+      {% elseif pagination.page_count != pagination.current_page and loop.last %}
+      <li class="h-10 min-w-[2.5rem]">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+          aria-label="Last page, page {{ loop.index }}"
+          >{{ loop.index }}</a>
+      </li>
+      {% endif %}
+    {% endfor  %}
+    {% if pagination.current_page != pagination.page_count %}
+     <li class="h-10 min-w-[2.5rem] hidden tablet:inline-flex">
+      <a
+        href="#"
+        class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v"
+        >
+        Next
+        <span
+          aria-hidden="true"
+          class="icon-[material-symbols--chevron-right] align-middle"
+        ></span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
