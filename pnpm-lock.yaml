@@ -11,6 +11,9 @@ dependencies:
   '@alpinejs/focus':
     specifier: ^3.12.3
     version: 3.13.1
+  '@alpinejs/mask':
+    specifier: ^3.13.2
+    version: 3.13.2
   '@fontsource-variable/open-sans':
     specifier: ^5.0.9
     version: 5.0.16
@@ -31,9 +34,6 @@ dependencies:
     version: 3.13.1
 
 devDependencies:
-  '@alpinejs/mask':
-    specifier: ^3.13.2
-    version: 3.13.2
   '@iconify-json/material-symbols':
     specifier: ^1.1.59
     version: 1.1.59
@@ -109,7 +109,7 @@ packages:
 
   /@alpinejs/mask@3.13.2:
     resolution: {integrity: sha512-62Oa5fHAKHe1fU5l4KIBHDinvQuOybObwITcpaq4Hjfl+GuRXp1gCnaPTkJTo5jHQ6r4UXbqzrIBkjg1qXUkzA==}
-    dev: true
+    dev: false
 
   /@ampproject/remapping@2.2.1:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==}
