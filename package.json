@@ -13,18 +13,18 @@
   "devDependencies": {
     "@iconify-json/material-symbols": "^1.1.59",
     "@iconify/tailwind": "^0.1.3",
-    "@storybook/addon-a11y": "^7.4.6",
-    "@storybook/addon-essentials": "^7.4.6",
-    "@storybook/addon-links": "^7.4.6",
-    "@storybook/blocks": "^7.4.6",
-    "@storybook/html": "^7.4.6",
-    "@storybook/html-vite": "^7.4.6",
+    "@storybook/addon-a11y": "^7.5.3",
+    "@storybook/addon-essentials": "^7.5.3",
+    "@storybook/addon-links": "^7.5.3",
+    "@storybook/blocks": "^7.5.3",
+    "@storybook/html": "^7.5.3",
+    "@storybook/html-vite": "^7.5.3",
     "@storybook/testing-library": "^0.2.2",
     "@tailwindcss/forms": "^0.5.6",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "storybook": "^7.4.6",
+    "storybook": "^7.5.3",
     "tailwindcss": "^3.3.3",
     "twig": "^1.16.0",
     "vite": "^4.4.11",
@@ -39,6 +39,10 @@
     "@fontsource-variable/roboto-mono": "^5.0.9",
     "@fontsource/merriweather": "^5.0.8",
     "@fontsource/source-sans-pro": "^5.0.8",
-    "alpinejs": "^3.13.1"
+    "alpinejs": "^3.13.1",
+    "drupal-attribute": "^1.0.2",
+    "drupal-twig-extensions": "1.0.0-beta.5",
+    "twing": "6.0.0-alpha.1",
+    "vite-plugin-twig-drupal": "^1.0.1"
   }
 }
