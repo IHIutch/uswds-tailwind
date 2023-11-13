@@ -20,7 +20,7 @@ const config = {
     options: {},
   },
 
-  async viteFinal(config, { configType }) {
+  viteFinal(config, { configType }) {
     return mergeConfig(config, {
       plugins: [
         twig({

@@ -1,7 +1,7 @@
 import Twig from 'twig';
-import { ctx as InputDefault } from './templates/input.twig';
-import { ctx as InputGroup } from './templates/input-group.twig';
-import { ctx as InputMask } from './templates/input-mask.twig';
+import InputDefault from './templates/input.twig';
+import InputGroup from './templates/input-group.twig';
+import InputMask from './templates/input-mask.twig';
 
 export default {
   title: 'Input',
@@ -9,18 +9,18 @@ export default {
 
 export const Default = {
   render: () => {
-    return Twig.twig({ data: InputDefault }).render()
+    return InputDefault()
   },
 };
 
 export const Group = {
   render: () => {
-    return Twig.twig({ data: InputGroup }).render()
+    return InputGroup()
   },
 };
 
 export const Mask = {
   render: () => {
-    return Twig.twig({ data: InputMask }).render()
+    return InputMask()
   },
 };

@@ -1,7 +1,26 @@
-{% import "../macros/pagination-link.twig" as pagination %}
-
 <nav aria-label="Pagination" class="flex justify-center">
   <ul class="flex space-x-2">
-    {{ pagination.input('username') }}
+    {{ _self.pagination_link(2) }}
+    {{ _self.pagination_link(3) }}
+    {{ _self.pagination_link(4) }}
   </ul>
 </nav>
+
+{% macro pagination_link(page_number, href = '#', is_last = false) %}
+  <li class="h-10 min-w-[2.5rem] inline-flex">
+    <a
+      href="#"
+      class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+      aria-label="{{is_last ? 'Last page, page ' ~ page_number : 'Page ' ~ page_number }}"
+      >{{ page_number }}</a>
+  </li>
+{% endmacro %}
+
+{% macro pagination_ellsis(name, value, type = "text", size = 20) %}
+  <li
+    aria-label="ellipsis indicating non-visible pages"
+    class="h-10 min-w-[2.5rem] p-2 select-none flex items-center justify-center"
+    >
+    <span>...<span>
+  </li>
+{% endmacro %}

@@ -1,7 +1,7 @@
 import Twig from 'twig';
-import { ctx as ModalDefault } from './templates/modal.twig';
-import { ctx as ModalLarge } from './templates/modal-large.twig';
-import { ctx as ModalForcedAction } from './templates/modal-forced-action.twig';
+import ModalDefault from './templates/modal.twig';
+import ModalLarge from './templates/modal-large.twig';
+import ModalForcedAction from './templates/modal-forced-action.twig';
 
 export default {
   title: 'Modal',
@@ -9,18 +9,18 @@ export default {
 
 export const Default = {
   render: () => {
-    return Twig.twig({ data: ModalDefault }).render()
+    return ModalDefault()
   },
 };
 
 export const Large = {
   render: () => {
-    return Twig.twig({ data: ModalLarge }).render()
+    return ModalLarge()
   },
 };
 
 export const ForcedAction = {
   render: () => {
-    return Twig.twig({ data: ModalForcedAction }).render()
+    return ModalForcedAction()
   },
 };

@@ -1,6 +1,6 @@
 import Twig from 'twig';
-import { ctx as BreadcrumbDefault } from './templates/breadcrumb.twig';
-import { ctx as BreadcrumbWrapping } from './templates/breadcrumb-wrapping.twig';
+import BreadcrumbDefault from './templates/breadcrumb.twig';
+import BreadcrumbWrapping from './templates/breadcrumb-wrapping.twig';
 import props from "./breadcrumb-props.json";
 
 export default {
@@ -9,12 +9,12 @@ export default {
 
 export const Default = {
   render: () => {
-    return Twig.twig({ data: BreadcrumbDefault }).render(props)
+    return BreadcrumbDefault(props)
   },
 };
 
 export const Wrapping = {
   render: () => {
-    return Twig.twig({ data: BreadcrumbWrapping }).render(props)
+    return BreadcrumbWrapping(props)
   },
 };

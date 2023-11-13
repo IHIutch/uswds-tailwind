@@ -1,3 +1,9 @@
-{% macro input(name, value, type = "text", size = 20) %}
-    <input type="{{ type }}" name="{{ name }}" value="{{ value|e }}" size="{{ size }}"/>
+{% macro pagination_link(page_number, href = '#', is_last = false) %}
+  <li class="h-10 min-w-[2.5rem] inline-flex">
+    <a
+      href="#"
+      class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"
+      aria-label="{{is_last ? 'Last page, page ' ~ page_number : 'Page ' ~ page_number }}"
+      >{{ page_number }}</a>
+  </li>
 {% endmacro %}
