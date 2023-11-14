@@ -7,6 +7,7 @@ module.exports = {
   content: ["./stories/**/*.twig"],
   theme: {
     colors: ({ colors }) => ({
+      transparent: 'transparent',
       white: "#ffffff",
       black: "#000000",
       // USWDS
