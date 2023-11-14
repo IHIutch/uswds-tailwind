@@ -64,6 +64,12 @@ devDependencies:
   '@tailwindcss/forms':
     specifier: ^0.5.6
     version: 0.5.6(tailwindcss@3.3.3)
+  drupal-attribute:
+    specifier: ^1.0.2
+    version: 1.0.2
+  drupal-twig-extensions:
+    specifier: 1.0.0-beta.5
+    version: 1.0.0-beta.5
   postcss:
     specifier: ^8.4.31
     version: 8.4.31
@@ -85,9 +91,9 @@ devDependencies:
   vite:
     specifier: ^4.4.11
     version: 4.4.11
-  vite-plugin-twig-loader:
-    specifier: ^0.0.6
-    version: 0.0.6
+  vite-plugin-twig-drupal:
+    specifier: ^1.0.2
+    version: 1.0.2(vite@4.4.11)
 
 packages:
 
@@ -4349,6 +4355,18 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /drupal-attribute@1.0.2:
+    resolution: {integrity: sha512-jsgfdE3EzN6UFUASPKVr9il68ymytaCAv/EAFLCLe1Wdu0iQ3xWghcpbjiZBJp2hxBG9rjeDt4yMJrW2oTtBwg==}
+    dev: true
+
+  /drupal-twig-extensions@1.0.0-beta.5:
+    resolution: {integrity: sha512-TrijTIs6wAwMmAa6eikQDyHTLNVizHPptpMd2BsRWDGpRozfH4OdY75ZQXbfnQmH5vl9kydKUfp57lUkcgQZBQ==}
+    dependencies:
+      drupal-attribute: 1.0.2
+      locutus: 2.0.16
+      lodash.clonedeep: 4.5.0
+    dev: true
+
   /duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
     dependencies:
@@ -5529,6 +5547,10 @@ packages:
   /locutus@2.0.16:
     resolution: {integrity: sha512-pGfl6Hb/1mXLzrX5kl5lH7gz25ey0vwQssZp8Qo2CEF59di6KrAgdFm+0pW8ghLnvNzzJGj5tlWhhv2QbK3jeQ==}
     engines: {node: '>= 10'}
+    dev: true
+
+  /lodash.clonedeep@4.5.0:
+    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
     dev: true
 
   /lodash.debounce@4.0.8:
@@ -7342,10 +7364,15 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /vite-plugin-twig-loader@0.0.6:
-    resolution: {integrity: sha512-OjZWUALOdKHr2Haub4bqhmPvQqsPNbqfBbF1S91/1vOf4rMoWIg9l4J45GSAbLha8/FNhVZtzA+caaeyzwuUiA==}
+  /vite-plugin-twig-drupal@1.0.2(vite@4.4.11):
+    resolution: {integrity: sha512-wz9TaeVaPlIj42I66H43TBRqyhA5Wc6DZO9dm9JRoIZS63qozPc+I43y3MEXZLpgA5w24jssZvvQPYjl/V4M2g==}
+    peerDependencies:
+      vite: ^4.4.11
     dependencies:
+      drupal-attribute: 1.0.2
+      drupal-twig-extensions: 1.0.0-beta.5
       twig: 1.16.0
+      vite: 4.4.11
     dev: true
 
   /vite@4.4.11:

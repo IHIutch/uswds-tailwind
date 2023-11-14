@@ -1,7 +1,6 @@
-import Twig from 'twig';
-import { ctx as PaginationDefault } from './templates/pagination.twig';
+import PaginationDefault from './templates/pagination.twig';
+import PaginationUnbounded from './templates/pagination-unbounded.twig';
 import props from "./pagination-props.json";
-
 
 export default {
   title: 'Pagination',
@@ -9,6 +8,12 @@ export default {
 
 export const Default = {
   render: () => {
-    return Twig.twig({ data: PaginationDefault }).render(props)
+    return PaginationDefault(props)
+  },
+};
+
+export const Unbounded = {
+  render: () => {
+    return PaginationUnbounded(props)
   },
 };

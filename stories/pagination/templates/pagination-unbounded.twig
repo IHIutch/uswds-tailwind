@@ -18,47 +18,24 @@
       </li>
     {% endif %}
 
-    {% if pagination.page_count <= 7 %}
+    {% if pagination.current_page <= 5  %}
 
-      {% for i in range(1, pagination.page_count) %}
-        {{ paginate.button(i, '', i == pagination.current_page, i == pagination.page_count) }}
-      {% endfor %}
-
-    {% else %}
-
-      {% if pagination.current_page <= 4  %}
-
-        {% for i in range(1, 4) %}
+        {% for i in range(1, 6) %}
           {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
         {% endfor %}
         {{ paginate.ellipsis() }}
-        {{ paginate.button(pagination.page_count, '') }}
-
-      {% elseif pagination.current_page >= pagination.page_count - 3 %}
-
-        {{ paginate.button(1, '') }}
-        {{ paginate.ellipsis() }}
-        {% for i in range(pagination.page_count - 4, pagination.page_count) %}
-          {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
-        {% endfor %}
 
       {% else %}
 
         {{ paginate.button(1, '') }}
         {{ paginate.ellipsis() }}
-
-        {% for i in range(pagination.current_page - 1, pagination.current_page + 1) %}
-          {{ paginate.button(i, '', i == pagination.current_page, i == pagination.page_count) }}
+        {% for i in range(pagination.current_page - 1, pagination.current_page + 2) %}
+          {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
         {% endfor %}
-
         {{ paginate.ellipsis() }}
-        {{ paginate.button(pagination.page_count, '') }}
 
       {% endif %}
 
-    {% endif %}
-
-    {% if pagination.current_page != pagination.page_count %}
      <li class="h-10 min-w-[2.5rem] hidden tablet:inline-flex">
       <a
         href="#"
@@ -71,7 +48,7 @@
         ></span>
       </a>
     </li>
-    {% endif %}
 
   </ul>
 </nav>
+
