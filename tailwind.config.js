@@ -2,6 +2,17 @@
 
 const { addDynamicIconSelectors } = require('@iconify/tailwind');
 const tailwindForms = require('@tailwindcss/forms');
+const plugin = require('tailwindcss/plugin')
+
+
+const customPlugin = ({ addComponent, theme }) => {
+  addComponent({
+    'h1': {
+      fontFamily: theme('fontFamily.source-sans-pro'),
+    },
+  })
+}
+
 
 module.exports = {
   content: ["./stories/**/*.twig"],
@@ -577,7 +588,7 @@ module.exports = {
         "Segoe UI Symbol",
       ],
       merriweather: [
-        '"Merriweather Web"',
+        '"Merriweather"',
         '"Georgia"',
         '"Cambria"',
         '"Times New Roman"',
@@ -615,5 +626,141 @@ module.exports = {
     tailwindForms({
       strategy: 'class'
     }),
+    plugin(({ addComponents, theme }) => {
+      addComponents({
+        '.usa-prose': {
+          maxWidth: theme('maxWidth.prose'),
+          fontFamily: theme('fontFamily.source-sans-pro'),
+          fontSize: theme('fontSize.base'),
+          lineHeight: theme('lineHeight.normal'),
+
+          '& > * + *': {
+            marginTop: theme('spacing.4'),
+            marginBottom: '0',
+          },
+
+          // List style
+          '& ul ul, & ul ol, & ol ol, & ol ul': {
+            marginTop: theme('spacing.1'),
+            paddingLeft: theme('spacing.10')
+          },
+          '& ol li, & ul li': {
+            marginBottom: theme('spacing.1'),
+          },
+          '& ol:last-child, & ul:last-child, & li:last-child': {
+            marginBottom: '0',
+          },
+          '& ol, & ul': {
+            listStyle: 'revert',
+            marginBottom: theme('spacing.1'),
+            marginTop: theme('spacing.4'),
+            lineHeight: theme('lineHeight.normal'),
+            paddingLeft: theme('spacing.6'),
+          },
+
+          // Table styles
+          '& > table': {
+            fontSize: theme('fontSize.base'),
+            lineHeight: theme('lineHeight.normal'),
+            borderCollapse: 'collapse',
+            borderSpacing: '0',
+            color: theme('colors.gray-90'),
+            margin: theme('spacing.5') + ' 0',
+            textAlign: 'left',
+          },
+          '& > table tbody th': {
+            textAlign: 'left',
+          },
+          '& > table thead th': {
+            backgroundClip: 'padding-box',
+            fontWeight: theme('fontWeight.bold'),
+            lineHeight: theme('lineHeight.tight'),
+          },
+          '& > table thead td, & > table thead th': {
+            backgroundColor: theme('colors.gray-cool-10'),
+            color: theme('colors.gray-90'),
+          },
+          '& > table td, & > table th': {
+            backgroundColor: theme('colors.white'),
+            border: '1px solid ' + theme('colors.gray-90'),
+            fontWeight: theme('fontWeight.normal'),
+            padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+          },
+          '& > table caption': {
+            textAlign: 'left',
+            fontSize: theme('fontSize.base'),
+            fontWeight: theme('fontWeight.bold'),
+            marginBottom: theme('spacing.3'),
+          },
+          '& > table th[data-sortable]': {
+            paddingRight: theme('spacing.10'),
+            position: 'relative',
+          },
+          '& > table th[data-sortable]::after': {
+            borderBottomColor: 'transparent',
+            borderBottomStyle: 'solid',
+            borderBottomWidth: '1px',
+            bottom: '0',
+            content: '""',
+            height: '0',
+            left: '0',
+            position: 'absolute',
+            width: '100%',
+          },
+
+          // Text styles
+          '& > p': {
+            lineHeight: theme('lineHeight.normal'),
+          },
+          '& > h1, & > h2, & > h3, & > h4, & > h5, & > h6': {
+            marginBottom: '0',
+            marginTop: '0',
+          },
+          '& > * + h1, & > * + h2, & > * + h3, & > * + h4, & > * + h5, & > * + h6': {
+            marginTop: theme('spacing.8'),
+          },
+          '& > h1': {
+            fontSize: theme('fontSize.4xl'),
+            fontFamily: theme('fontFamily.merriweather'),
+            lineHeight: theme('lineHeight.tight'),
+            fontWeight: theme('fontWeight.black'),
+          },
+          '& > h2': {
+            fontSize: theme('fontSize.3xl'),
+            fontFamily: theme('fontFamily.merriweather'),
+            lineHeight: theme('lineHeight.tight'),
+            fontWeight: theme('fontWeight.black'),
+          },
+          '& > h3': {
+            fontSize: theme('fontSize.xl'),
+            fontFamily: theme('fontFamily.merriweather'),
+            lineHeight: theme('lineHeight.tight'),
+            fontWeight: theme('fontWeight.black'),
+          },
+          '& > h4': {
+            fontSize: theme('fontSize.md'),
+            fontFamily: theme('fontFamily.merriweather'),
+            lineHeight: theme('lineHeight.tight'),
+            fontWeight: theme('fontWeight.black'),
+          },
+          '& > h5': {
+            fontSize: theme('fontSize.base'),
+            fontFamily: theme('fontFamily.public-sans'),
+            lineHeight: theme('lineHeight.tight'),
+            fontWeight: theme('fontWeight.black'),
+          },
+          '& > h6': {
+            fontFamily: theme('fontFamily.source-sans-pro'),
+            fontSize: theme('fontSize.sm'),
+            lineHeight: theme('lineHeight.none'),
+            fontWeight: theme('fontWeight.normal'),
+            letterSpacing: theme('letterSpacing.wide'),
+            textTransform: 'uppercase',
+          },
+        },
+      })
+    })
   ],
 };
+
+
