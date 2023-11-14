@@ -7,13 +7,9 @@ export default {
 };
 
 export const Default = {
-  render: () => {
-    return PaginationDefault(props)
-  },
+  render: () => PaginationDefault(props)
 };
 
 export const Unbounded = {
-  render: () => {
-    return PaginationUnbounded(props)
-  },
+  render: () => PaginationUnbounded(props)
 };

@@ -1,26 +1,19 @@
-import Twig from 'twig';
-import { ctx as ButtonDefault } from './templates/button.twig';
-import { ctx as ButtonGroup } from './templates/button-group.twig';
-import { ctx as ButtonGroupSegmented } from './templates/button-group-segmented.twig';
+import ButtonDefault from './templates/button.twig';
+import ButtonGroup from './templates/button-group.twig';
+import ButtonGroupSegmented from './templates/button-group-segmented.twig';
 
 export default {
   title: 'Button',
 };
 
 export const Default = {
-  render: () => {
-    return Twig.twig({ data: ButtonDefault }).render()
-  },
+  render: () => ButtonDefault()
 };
 
 export const Group = {
-  render: () => {
-    return Twig.twig({ data: ButtonGroup }).render()
-  },
+  render: () => ButtonGroup()
 };
 
 export const GroupSegmented = {
-  render: () => {
-    return Twig.twig({ data: ButtonGroupSegmented }).render()
-  },
+  render: () => ButtonGroupSegmented()
 };
