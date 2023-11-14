@@ -53,7 +53,7 @@
             @input="isDropdownVisible = true; isDirty = true;"
             @keydown.prevent.up="isDropdownVisible = true; $nextTick(() => focusLast());"
             @keydown.prevent.down="isDropdownVisible = true; $nextTick(() => focusFirst());"
-            class="pr-10 p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-[transparent] data-[invalid]:outline-offset-4"
+            class="pr-10 p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
             role="combobox"
             aria-controls="options"
             aria-expanded="false"
