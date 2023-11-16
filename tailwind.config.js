@@ -5,15 +5,6 @@ const tailwindForms = require('@tailwindcss/forms');
 const plugin = require('tailwindcss/plugin')
 
 
-const customPlugin = ({ addComponent, theme }) => {
-  addComponent({
-    'h1': {
-      fontFamily: theme('fontFamily.source-sans-pro'),
-    },
-  })
-}
-
-
 module.exports = {
   content: ["./stories/**/*.twig"],
   theme: {

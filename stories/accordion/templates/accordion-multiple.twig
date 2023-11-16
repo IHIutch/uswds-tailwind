@@ -15,21 +15,14 @@
       <h4 class="relative">
         <button
           @click="setActiveAccordion(id)"
-          class="flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline focus-within:outline-4 focus-within:outline-blue-40v cursor-pointer text-left gap-3"
+          class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
           :aria-controls="id"
           :aria-expanded="activeAccordion.includes(id)"
        >
           {{ accordion.title }}
           <div class="h-full flex items-center ml-auto shrink-0">
             <div
-              class="icon-[material-symbols--add] h-6 w-6"
-              x-show="activeAccordion!=id"
-              x-cloak
-             ></div>
-            <div
-              class="icon-[material-symbols--remove] h-6 w-6"
-              x-show="activeAccordion==id"
-              x-cloak
+              class="!h-6 !w-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
              ></div>
           </div>
         </button>
