@@ -4,15 +4,26 @@
       <div class="space-y-2">
       {% for checkbox in checkboxes %}
         {% set checkbox_id = 'checkbox-' ~ random() %}
-        <div class="flex relative px-3 py-4">
-          <input {{ checkbox.isDisabled == true ? 'disabled' : null }} id="{{ checkbox_id }}" type="checkbox" value="{{ checkbox.value }}" class="form-checkbox peer top-0.5 relative cursor-pointer text-blue-60v border-none h-5 w-5 rounded-sm ring-2 ring-offset-0 ring-gray-90 focus:ring-2 focus:ring-offset-0 focus:ring-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:ring-gray-50 disabled:cursor-not-allowed disabled:checked:text-gray-50 checked:ring-blue-60v focus:checked:ring-blue-60v" />
-          <label for="{{ checkbox_id }}" class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:inset-0 after:absolute after:inset-0 after:border-2 after:border-gray-20 after:rounded after:-z-10 peer-checked:after:border-blue-60v peer-checked:after:bg-blue-60v/10 peer-disabled:after:border-gray-10 peer-disabled:after:bg-white">
-            {{ checkbox.label }}
-            {% if checkbox.description %}
-            <span class="block mt-1 text-sm">{{ checkbox.description }}</span>
-            {% endif %}
+        <label for="{{ checkbox_id }}" class="flex relative px-3 py-4">
+            <input
+              {{ checkbox.isDisabled == true ? 'disabled' : null }}
+              id="{{ checkbox_id }}"
+              type="checkbox"
+              value="{{ checkbox.value }}"
+              class="sr-only peer"
+            />
+            <div class="flex items-center justify-center top-0.5 relative shrink-0 cursor-pointer text-transparent peer-checked:text-white border-none h-5 w-5 rounded-sm ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-checked:ring-blue-60v peer-checked:bg-blue-60v peer-disabled:peer-checked:bg-gray-50 peer-focus:peer-checked:ring-blue-60v">
+              <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" width="65" height="50" viewBox="0 0 65 50"><path fill="#FFF" fill-rule="evenodd" d="M63.268 7.063l-5.616-5.61C56.882.685 55.946.3 54.845.3s-2.038.385-2.808 1.155L24.951 28.552 12.81 16.385c-.77-.77-1.707-1.155-2.808-1.155-1.1 0-2.037.385-2.807 1.154l-5.616 5.61C.81 22.764.425 23.7.425 24.8s.385 2.035 1.155 2.805l14.947 14.93 5.616 5.61c.77.77 1.706 1.154 2.807 1.154s2.038-.384 2.808-1.154l5.616-5.61 29.894-29.86c.77-.77 1.157-1.707 1.157-2.805 0-1.101-.385-2.036-1.156-2.805l-.001-.002z"/></svg>
+            </div>
+            <div class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:inset-0 after:absolute after:inset-0 after:border-2 after:border-gray-20 after:rounded after:-z-10 peer-checked:after:border-blue-60v peer-checked:after:bg-blue-60v/10 peer-disabled:after:border-gray-10 peer-disabled:after:bg-white">
+              {{- checkbox.label -}}
+              {% if checkbox.description %}
+              <span class="block mt-1 text-sm">
+                {{- checkbox.description -}}
+              </span>
+              {% endif %}
+            </div>
           </label>
-        </div>
       {% endfor %}
       </div>
     </fieldset>
