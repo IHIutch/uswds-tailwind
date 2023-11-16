@@ -626,6 +626,10 @@ module.exports = {
     tailwindForms({
       strategy: 'class'
     }),
+    plugin(function ({ addVariant }) {
+      addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
+      addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
+    }),
     plugin(({ addComponents, theme }) => {
       addComponents({
         '.usa-prose': {
