@@ -6,15 +6,17 @@
       <select
         id="select"
         type="search"
-        class="peer opacity-100 p-2 pr-8 bg-transparent text-gray-90 w-full appearance-none border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 disabled:text-gray-70 disabled:cursor-not-allowed disabled:bg-gray-20 "
+        class="peer opacity-100 p-2 pr-8 bg-transparent text-gray-90 w-full appearance-none border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 disabled:text-gray-70 disabled:cursor-not-allowed disabled:bg-gray-20"
       >
         <option value>- Select -</option>
         <option value="value1">Option A</option>
         <option value="value2">Option B</option>
         <option value="value3">Option C</option>
       </select>
-      <div class="h-full w-8 flex items-center justify-center right-0 absolute text-gray-90 peer-disabled:text-gray-70">
-        <div class="icon-[material-symbols--unfold-more-rounded] h-5 w-5"></div>
+      <div
+        aria-hidden="true"
+        class="select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70">
+        <div class="icon-[material-symbols--unfold-more] h-5 w-5"></div>
       </div>
     </div>
   </div>
@@ -33,8 +35,10 @@
         <option value="value2">Option B</option>
         <option value="value3">Option C</option>
       </select>
-      <div class="h-full w-8 flex items-center justify-center right-0 absolute text-gray-90 peer-disabled:text-gray-70">
-        <div class="icon-[material-symbols--unfold-more-rounded] h-5 w-5"></div>
+      <div
+        aria-hidden="true"
+        class="select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70">
+        <div class="icon-[material-symbols--unfold-more] h-5 w-5"></div>
       </div>
     </div>
   </div>
