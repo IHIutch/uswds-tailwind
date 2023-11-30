@@ -620,6 +620,7 @@ module.exports = {
     plugin(function ({ addVariant }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
+      addVariant('forced-colors', '@media (forced-colors: active)')
     }),
     plugin(({ addComponents, theme }) => {
       addComponents({
