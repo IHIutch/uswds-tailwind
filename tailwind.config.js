@@ -613,7 +613,9 @@ module.exports = {
     },
   },
   plugins: [
-    addDynamicIconSelectors(),
+    addDynamicIconSelectors({
+      scale: 0
+    }),
     tailwindForms({
       strategy: 'class'
     }),
