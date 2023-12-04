@@ -632,6 +632,14 @@ module.exports = {
           fontSize: theme('fontSize.base'),
           lineHeight: theme('lineHeight.normal'),
 
+          'a': {
+            color: theme('colors.blue-60v'),
+            textDecoration: 'underline',
+            '&:visited': {
+              color: theme('colors.violet-70v')
+            }
+          },
+
           '& > * + *': {
             marginTop: theme('spacing.4'),
             marginBottom: '0',

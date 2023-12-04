@@ -17,7 +17,7 @@ import collapse from "@alpinejs/collapse";
 import focus from "@alpinejs/focus";
 import mask from '@alpinejs/mask'
 
-import "./main.css";
+// import "./main.css";
 
 Alpine.plugin(collapse);
 Alpine.plugin(focus);
