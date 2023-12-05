@@ -1,0 +1,139 @@
+  <div
+      x-data="{
+        init() {
+          this.allOptions = [...$refs.options.getElementsByTagName('li')].map(el => el.textContent)
+          $watch('value', value => this.filteredOptions = this.allOptions)
+        },
+        isDropdownVisible: false,
+        isDirty: false,
+        value: '',
+        selectedValue: '',
+        activeItem: '',
+        filteredOptions: [],
+        allOptions: [],
+        setSelectedValue(value) {
+          this.value = value;
+          this.selectedValue = value;
+          this.isDropdownVisible = false;
+          this.isDirty = false;
+          $focus.focus($refs.input)
+        },
+        isShowingOption(value){
+          console.log(value)
+          return !this.isDirty || (this.isDirty && value.toLowerCase().startsWith(this.value.toLowerCase()));
+        },
+        focusFirst(){
+          const options = $refs.options.querySelectorAll(`[data-value]:not([style*='display: none'])`)
+          const el = options[0]
+          if(el){
+            el.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+            this.activeItem = el
+          }
+        },
+        focusLast(){
+          const options = $refs.options.querySelectorAll(`[data-value]:not([style*='display: none'])`)
+          const el = options[options.length - 1]
+          if(el){
+            el.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+            this.activeItem = el
+          }
+        },
+        focusNext(){
+          const options = $refs.options.querySelectorAll(`[data-value]:not([style*='display: none'])`)
+          const activeElIdx = [...options].findIndex(el => el.id === this.activeItem.id)
+          const nextEl = options[activeElIdx + 1]
+
+          if(this.activeItem){
+            if(!nextEl){
+              this.focusFirst()
+            } else {
+              nextEl.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+              this.activeItem = nextEl
+            }
+          } else {
+            this.focusFirst()
+          }
+        },
+        focusPrev(){
+          const options = $refs.options.querySelectorAll(`[data-value]:not([style*='display: none'])`)
+          const activeElIdx = [...options].findIndex(el => el.id === this.activeItem.id)
+          const prevEl = options[activeElIdx - 1]
+
+          if(this.activeItem){
+            if(!prevEl){
+              this.focusLast()
+            } else {
+              prevEl.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+              this.activeItem = prevEl
+            }
+          } else {
+            this.focusLast()
+          }
+        },
+        checkValidSelection(){
+          this.value = this.selectedValue
+        }
+      }"
+      @click.outside="isDropdownVisible = false;"
+      class="max-w-lg"
+   >
+      <label for="timepicker" class="block">Appointment time</label>
+      <div id="input-hint" class="text-gray-50">hh:mm</div>
+      <div class="relative mt-2 max-w-[10rem]">
+        <div class="flex w-full">
+          <input
+            id="timepicker"
+            type="text"
+            x-ref="input"
+            x-model="value"
+            @input="isDropdownVisible = true; isDirty = true;"
+            @keydown.prevent.up="isDropdownVisible = true; $nextTick(() => focusPrev());"
+            @keydown.prevent.down="isDropdownVisible = true; $nextTick(() => focusNext());"
+            @keydown.prevent.enter="setSelectedValue(activeItem.textContent)"
+            class="pr-10 p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4"
+            role="combobox"
+            aria-describedby="input-hint"
+            aria-controls="options"
+            aria-expanded="false"
+            autocapitalize="off"
+            autocomplete="off"
+            :aria-activedescendant="activeItem.id"
+         >
+          <div class="absolute z-10 inset-y-0 right-0 flex">
+            <template x-if="selectedValue">
+              <button type="button" @click="selectedValue = ''; value = ''; $focus.focus($refs.input); isDropdownVisible = false" class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent">
+                <div class="icon-[material-symbols--close] h-6 w-6 align-middle text-gray-50"></div>
+              </button>
+            </template>
+            <button type="button" @click="isDropdownVisible = !isDropdownVisible;" class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent">
+              <div class="icon-[material-symbols--keyboard-arrow-down] h-8 w-8 align-middle text-gray-50"></div>
+            </button>
+          </div>
+        </div>
+        <ul
+          x-cloak
+          x-show="isDropdownVisible"
+          x-ref="options"
+          @keydown.prevent.tab="$focus.focus($refs.input)"
+          class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full"
+          id="options"
+          role="listbox"
+       >
+          {% for combobox in comboboxes %}
+            <li
+              :id="$id('option')"
+              x-show="isShowingOption($el.textContent)"
+              @click="setSelectedValue($el.dataset.value)"
+              :aria-selected="$el.dataset.value === selectedValue"
+              :data-active-item="$el.id === activeItem.id"
+              data-value="{{ combobox.value }}"
+              class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active-item]:outline data-[active-item]:outline-4 data-[active-item]:outline-blue-40v data-[active-item]:-outline-offset-4"
+              role="option"
+              tabindex="-1"
+            >
+              {{- combobox.label -}}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
