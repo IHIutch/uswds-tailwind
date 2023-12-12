@@ -1,6 +1,7 @@
 import AccordionDefault from './templates/accordion.twig';
 import AccordionBordered from './templates/accordion-bordered.twig';
 import AccordionMultiple from './templates/accordion-multiple.twig';
+import AccordionTest from './templates/accordion-test.twig';
 import props from "./accordion-props.json";
 
 export default {
@@ -17,4 +18,8 @@ export const Bordered = {
 
 export const Multiple = {
   render: () => AccordionMultiple(props)
+};
+
+export const Test = {
+  render: () => AccordionTest(props)
 };

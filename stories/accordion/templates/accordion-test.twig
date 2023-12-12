@@ -1,0 +1,25 @@
+<div
+    x-data="accordion"
+    class="space-y-2"
+    data-multiple
+ >
+  {% for accordion in accordions %}
+    <div x-bind="accordion_item">
+      <h4 class="relative">
+        <button x-bind="accordion_trigger" class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3">
+          {{accordion.title}}
+          <div class="h-full flex items-center ml-auto shrink-0">
+            <div
+              class="h-6 w-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
+             ></div>
+          </div>
+        </button>
+      </h4>
+      <div x-bind="accordion_content" class="py-6 px-4">
+        <p class="leading-normal max-w-prose">
+          {{accordion.content}}
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+  </div>

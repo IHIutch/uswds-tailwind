@@ -64,6 +64,18 @@ devDependencies:
   '@tailwindcss/forms':
     specifier: ^0.5.7
     version: 0.5.7(tailwindcss@3.3.5)
+  '@types/alpinejs':
+    specifier: ^3.13.5
+    version: 3.13.5
+  '@types/alpinejs__collapse':
+    specifier: ^3.13.3
+    version: 3.13.3
+  '@types/alpinejs__focus':
+    specifier: ^3.13.3
+    version: 3.13.3
+  '@types/alpinejs__mask':
+    specifier: ^3.13.3
+    version: 3.13.3
   autoprefixer:
     specifier: ^10.4.16
     version: 10.4.16(postcss@8.4.31)
@@ -3402,6 +3414,28 @@ packages:
       '@testing-library/dom': '>=7.21.4'
     dependencies:
       '@testing-library/dom': 9.3.3
+    dev: true
+
+  /@types/alpinejs@3.13.5:
+    resolution: {integrity: sha512-BSNTroRhmBkNiyd7ELK/5Boja92hnQMST6H4z1BqXKeMVzHjp9o1j5poqd5Tyhjd8oMFwxYC4I00eghfg2xrTA==}
+    dev: true
+
+  /@types/alpinejs__collapse@3.13.3:
+    resolution: {integrity: sha512-k8Xyov6K9zY32qbjeX5rdbiO2gONm5A2YhI6cWWETlrmM6r9EcZp6G/CfwxKBpRPRSS/MnCWMZQb8paIPw+z1Q==}
+    dependencies:
+      '@types/alpinejs': 3.13.5
+    dev: true
+
+  /@types/alpinejs__focus@3.13.3:
+    resolution: {integrity: sha512-U6h4IIp27fs0LF4+fbTDkwbMjlEqMaDD48MplxG6n7PAh9BDsUvSI5E1Lc+huhLxYHFmGm0AVCSI++y006QRrA==}
+    dependencies:
+      '@types/alpinejs': 3.13.5
+    dev: true
+
+  /@types/alpinejs__mask@3.13.3:
+    resolution: {integrity: sha512-6WYgWW0LNZyJkUjRYGckeHvqtLdJ/qHNOlIQs1YOUbG6fqVuIvDRRajOmecJFl+2Anyr16CREvnXSqdBO2Ux7A==}
+    dependencies:
+      '@types/alpinejs': 3.13.5
     dev: true
 
   /@types/aria-query@5.0.2:
