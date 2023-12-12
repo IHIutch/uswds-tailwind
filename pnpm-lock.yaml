@@ -57,7 +57,7 @@ devDependencies:
     version: 7.6.3(@babel/core@7.23.5)
   '@storybook/html-vite':
     specifier: ^7.6.3
-    version: 7.6.3(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)(vite@5.0.4)
+    version: 7.6.3(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(vite@5.0.4)
   '@storybook/testing-library':
     specifier: ^0.2.2
     version: 0.2.2
@@ -103,6 +103,9 @@ devDependencies:
   twig:
     specifier: ^1.17.1
     version: 1.17.1
+  typescript:
+    specifier: ^5.3.3
+    version: 5.3.3
   vite:
     specifier: ^5.0.4
     version: 5.0.4
@@ -2900,7 +2903,7 @@ packages:
       - supports-color
     dev: true
 
-  /@storybook/builder-vite@7.6.3(vite@5.0.4):
+  /@storybook/builder-vite@7.6.3(typescript@5.3.3)(vite@5.0.4):
     resolution: {integrity: sha512-r/G/6wdwgbhMiMZ8Z+Js8VLjIo7a0DG5SxJorTHSWNi0+jyM+3Qlg3Xj96I8yL4gfTIKWVScHqHprhjRb2E64g==}
     peerDependencies:
       '@preact/preset-vite': '*'
@@ -2931,6 +2934,7 @@ packages:
       fs-extra: 11.1.1
       magic-string: 0.30.5
       rollup: 3.29.4
+      typescript: 5.3.3
       vite: 5.0.4
     transitivePeerDependencies:
       - encoding
@@ -3206,12 +3210,12 @@ packages:
     resolution: {integrity: sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==}
     dev: true
 
-  /@storybook/html-vite@7.6.3(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)(vite@5.0.4):
+  /@storybook/html-vite@7.6.3(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(vite@5.0.4):
     resolution: {integrity: sha512-W77znfEQ2Fbhe0U7SHzsD5wcbo01v9LCNMLLxoLXDvLqruKKzNmnA6ctQz0qpoSsbjKcIESngiidWabkagkiLw==}
     engines: {node: ^14.18 || >=16}
     dependencies:
       '@storybook/addons': 7.6.3(react-dom@18.2.0)(react@18.2.0)
-      '@storybook/builder-vite': 7.6.3(vite@5.0.4)
+      '@storybook/builder-vite': 7.6.3(typescript@5.3.3)(vite@5.0.4)
       '@storybook/client-api': 7.6.3
       '@storybook/core-server': 7.6.3
       '@storybook/html': 7.6.3(@babel/core@7.23.5)
@@ -7378,6 +7382,12 @@ packages:
 
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
+    dev: true
+
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
     dev: true
 
   /uglify-js@3.17.4:

@@ -1,7 +1,7 @@
 /** @type { import('@storybook/html').Preview } */
 
-import '../assets/main.css';
-import '../assets/main.ts';
+import '../src/main.css';
+import '../src/main';
 
 const preview = {
   parameters: {
