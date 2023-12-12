@@ -1,34 +1,28 @@
 <div
-    x-data="{
-      activeAccordion: '',
-      setActiveAccordion(id) {
-      this.activeAccordion = (this.activeAccordion == id) ? '' : id
-      }
-    }"
-    @keydown.down="$focus.wrap().next()"
-    @keydown.up="$focus.wrap().previous()"
+    x-data="accordion_root"
     class="space-y-2"
  >
   {% for accordion in accordions %}
-    <div x-data="{ id: $id('accordion') }">
+    <div x-bind="accordion_item">
       <h4 class="relative">
         <button
-          @click="setActiveAccordion(id)"
+          x-bind="accordion_trigger"
           class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
-          :aria-controls="id"
-          :aria-expanded="activeAccordion==id"
-       >
-          {{ accordion.title }}
+        >
+          {{- accordion.title -}}
           <div class="h-full flex items-center ml-auto shrink-0">
             <div
-              class="!h-6 !w-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
+              class="h-6 w-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
              ></div>
           </div>
         </button>
       </h4>
-      <div :id="id" class="py-6 px-4" x-show="activeAccordion==id" x-cloak>
+      <div
+        x-bind="accordion_content"
+        class="py-6 px-4"
+      >
         <p class="leading-normal max-w-prose">
-          {{ accordion.content }}
+          {{- accordion.content -}}
         </p>
       </div>
     </div>

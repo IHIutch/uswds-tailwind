@@ -16,12 +16,13 @@ import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
 import focus from "@alpinejs/focus";
 import mask from '@alpinejs/mask'
+
 import accordion from "./accordion";
 
 Alpine.plugin(collapse);
 Alpine.plugin(focus);
 Alpine.plugin(mask);
 
-Alpine.data('accordion', accordion)
+Alpine.data('accordion_root', accordion)
 
 Alpine.start();
