@@ -1,61 +1,51 @@
 <div class="space-y-12">
 
-<div
-  x-data="{
-    inputValue: '',
-    maskValue: '',
-    maskPlaceholder: '___ __ ____',
-    init() {
-      this.maskValue = this.maskPlaceholder
-      $watch('inputValue', (value) => {
-        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
-      })
-    }
-  }"
-  class="max-w-xs"
-  >
+<div class="max-w-xs">
   <label for="ssn" class="block">Social Security Number</label>
   <div id="input-hint" class="text-gray-50">For example, 123 45 6789</div>
-  <div class="mt-2 relative">
-    <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
+  <div
+    x-data="input_mask_root"
+    class="mt-2 relative"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row"
+    >
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
     </div>
     <input
-      id="ssn"
+      x-bind="input_mask_input"
       x-mask="999 99 9999"
-      x-model="inputValue"
+      id="ssn"
+      placeholder="___ __ ____"
+      pattern="^(?!(000|666|9))\d{3} (?!00)\d{2} (?!0000)\d{4}$"
       aria-describedby="input-hint"
       class="p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
     />
   </div>
 </div>
 
-<div
-  x-data="{
-    inputValue: '',
-    maskValue: '',
-    maskPlaceholder: '___-___-____',
-    init() {
-      this.maskValue = this.maskPlaceholder
-      $watch('inputValue', (value) => {
-        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
-      })
-    }
-  }"
-  class="max-w-xs"
-  >
+<div class="max-w-xs">
   <label for="phone" class="block">US Telephone Number</label>
   <div id="input-hint-phone" class="text-gray-50">For example, 123-456-7890</div>
-  <div class="mt-2 relative">
-    <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
+  <div
+    x-data="input_mask_root"
+    class="mt-2 relative"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row"
+    >
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
     </div>
     <input
-      id="phone"
+      x-bind="input_mask_input"
       x-mask="999-999-9999"
-      x-model="inputValue"
+      id="phone"
+      placeholder="___-___-____"
+      pattern="\d{3}-\d{3}-\d{4}"
       aria-describedby="input-hint-phone"
       class="p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
     />
@@ -63,63 +53,49 @@
 </div>
 
 
-<div
-  x-data="{
-    inputValue: '',
-    maskValue: '',
-    maskPlaceholder: '_____-____',
-    init() {
-      this.maskValue = this.maskPlaceholder
-
-      $watch('inputValue', (value) => {
-        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
-      })
-    }
-  }"
-  class="max-w-xs"
-  >
+<div class="max-w-xs">
   <label for="zip" class="block">ZIP Code</label>
   <div id="input-hint-zip" class="text-gray-50">For example, 12345-6789</div>
-  <div class="mt-2 relative">
-    <div class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row">
+  <div
+    x-data="input_mask_root"
+    class="mt-2 relative"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 p-2 pointer-events-none z-0 border flex flex-row"
+    >
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
     </div>
     <input
-      id="zip"
+      x-bind="input_mask_input"
       x-mask="99999-9999"
-      x-model="inputValue"
+      placeholder="_____-____"
+      pattern="^[0-9]{5}(?:-[0-9]{4})?$"
+      id="zip"
       aria-describedby="input-hint-zip"
       class="p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
     />
   </div>
 </div>
 
-<div
-  x-data="{
-    inputValue: '',
-    maskValue: '',
-    maskPlaceholder: '___ ___',
-    init() {
-      this.maskValue = this.maskPlaceholder
-      $watch('inputValue', (value) => {
-        this.maskValue = this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
-      })
-    }
-  }"
-  class="max-w-xs"
-  >
+<div class="max-w-xs">
   <label for="alpha" class="block">Alphanumeric</label>
   <div id="input-hint-alpha" class="text-gray-50">For example, A1B 2C3</div>
-  <div class="mt-2 relative">
+  <div
+    x-data="input_mask_root"
+    class="mt-2 relative"
+  >
     <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border flex flex-row">
       <span class="invisible whitespace-pre" x-text="inputValue"></span>
       <span class="text-gray-50" x-text="maskValue"></span>
     </div>
     <input
-      id="alpha"
+      x-bind="input_mask_input"
       x-mask="a9a 9a9"
-      x-model="inputValue"
+      placeholder="___ ___"
+      pattern="\w\d\w \d\w\d"
+      id="alpha"
       aria-describedby="input-hint-alpha"
       class="p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
     />

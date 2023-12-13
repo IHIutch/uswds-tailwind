@@ -18,11 +18,13 @@ import focus from "@alpinejs/focus";
 import mask from '@alpinejs/mask'
 
 import accordion from "../components/accordion/accordion";
+import inputMask from "../components/input/input-mask";
 
 Alpine.plugin(collapse);
 Alpine.plugin(focus);
 Alpine.plugin(mask);
 
 Alpine.data('accordion_root', accordion)
+Alpine.data('input_mask_root', inputMask)
 
 Alpine.start();
