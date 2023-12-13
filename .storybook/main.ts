@@ -6,7 +6,7 @@ import { join } from "node:path"
 
 const config = {
   stories: [
-    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
 
   addons: [
@@ -25,7 +25,7 @@ const config = {
       plugins: [
         twig({
           namespaces: {
-            components: join(__dirname, "../stories"),
+            components: join(__dirname, "../src/stories"),
           },
         }),
       ],

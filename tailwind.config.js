@@ -6,7 +6,7 @@ const plugin = require('tailwindcss/plugin')
 
 
 module.exports = {
-  content: ["./stories/**/*.twig"],
+  content: ["./src/components/**/*.twig"],
   theme: {
     colors: ({ colors }) => ({
       transparent: 'transparent',
