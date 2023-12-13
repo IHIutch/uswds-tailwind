@@ -2,7 +2,7 @@ import { defineComponent } from "../../utils/define-component"
 
 export default defineComponent(() => ({
   init() {
-    this.multiple = this.$el.dataset.multiple !== undefined
+    this.multiple = this.$el.hasAttribute('data-multiple')
   },
   multiple: false,
   value: [] as Array<string>,
