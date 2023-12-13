@@ -19,6 +19,7 @@ import mask from '@alpinejs/mask'
 
 import accordion from "../components/accordion/accordion";
 import inputMask from "../components/input/input-mask";
+import modal from "../components/modal/modal";
 
 Alpine.plugin(collapse);
 Alpine.plugin(focus);
@@ -26,5 +27,6 @@ Alpine.plugin(mask);
 
 Alpine.data('accordion_root', accordion)
 Alpine.data('input_mask_root', inputMask)
+Alpine.data('modal_root', modal)
 
 Alpine.start();

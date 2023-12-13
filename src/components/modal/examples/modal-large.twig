@@ -1,74 +1,63 @@
-<div x-data="{
-  isOpen: false,
-  id: $id('modal-title')
-}">
+<div x-data="modal_root">
 
   <button
+    x-bind="modal_button"
     class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-    @click="isOpen = true"
     >Open large modal</button>
 
-    <div
-      class="fixed inset-0 overflow-y-auto"
-      role="dialog"
-      :aria-labelledby="$id('modal-title')"
-      aria-modal="true"
-      x-show="isOpen"
-      @keydown.escape.prevent.stop="isOpen = false"
-      >
+     <div
+      x-bind="modal_container"
+      class="fixed inset-0"
+      tabindex="-1"
+    >
         {# Backdrop #}
         <div
-          x-show="isOpen"
-          x-transition.opacity
-          x-transition:leave.duration.0ms
-          class="fixed inset-0 bg-black/70"
+          x-bind="modal_backdrop"
+          class="fixed inset-0 bg-black/70 overflow-y-auto flex items-center justify-center p-4"
           aria-hidden="true"
-          ></div>
+        >
 
-        {# Modal #}
-        <div
-          x-show="isOpen"
-          x-transition
-          x-transition:leave.duration.0ms
-          @click="isOpen = false"
-          class="relative flex min-h-screen items-center justify-center p-4"
+          {# Modal #}
+          <div
+            x-bind="modal_content"
+            class="relative w-full max-w-4xl rounded-lg bg-white shadow-lg"
           >
-            <div
-              @click.stop
-              x-trap.noscroll.inert="isOpen"
-              class="relative w-full max-w-4xl rounded-lg bg-white shadow-lg"
-              >
-              <div class="px-8 pb-16 pt-14 w-full max-w-2xl mx-auto">
-                <h2 class="text-3xl font-bold font-merriweather" :id="$id('modal-title')">Are you sure you want to continue?</h2>
-                <div class="mt-4">
-                  <p class="mt-2 text-gray-600">You have unsaved changes that will be lost.</p>
-                </div>
-                <div class="mt-6">
-                  <ul class="flex max-mobile-lg:flex-col max-mobile-lg:space-y-2 mobile-lg:space-x-2">
-                    <li class="flex">
-                      <button type="button"
-                        @click="isOpen = false"
-                        class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                        >Continue without saving</button>
-                    </li>
-                    <li class="flex">
-                      <button type="button"
-                        @click="isOpen = false"
-                        class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                        >Go back</button>
-                    </li>
-                  </ul>
-                </div>
-                <button
-                  type="button"
-                  @click="isOpen = false"
-                  class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:ext-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                  aria-label="Close this window"
-                  >
-                    <div class="icon-[material-symbols--close] h-8 w-8 mt-0.5 mr-0.5 align-middle"></div>
-                </button>
-              </div>
+          <div class="px-8 pb-16 pt-14 w-full max-w-2xl mx-auto">
+            <h2
+              x-bind="modal_title"
+              class="text-3xl font-bold font-merriweather"
+            >Are you sure you want to continue?</h2>
+            <div class="mt-4">
+              <p
+                x-bind="modal_description"
+                class="mt-2 text-gray-600"
+              >You have unsaved changes that will be lost.</p>
             </div>
+            <div class="mt-6">
+              <ul class="flex max-mobile-lg:flex-col max-mobile-lg:space-y-2 mobile-lg:space-x-2">
+                <li class="flex">
+                  <button type="button"
+                    @click="isOpen = false"
+                    class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                    >Continue without saving</button>
+                </li>
+                <li class="flex">
+                  <button type="button"
+                    @click="isOpen = false"
+                    class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                    >Go back</button>
+                </li>
+              </ul>
+            </div>
+            <button
+              type="button"
+              @click="isOpen = false"
+              class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:ext-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              aria-label="Close this window"
+              >
+                <div class="icon-[material-symbols--close] h-8 w-8 mt-0.5 mr-0.5 align-middle"></div>
+            </button>
+          </div>
         </div>
     </div>
 
