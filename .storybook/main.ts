@@ -25,7 +25,7 @@ const config = {
       plugins: [
         twig({
           namespaces: {
-            components: join(__dirname, "../src/stories"),
+            components: join(__dirname, "../src/components"),
           },
         }),
       ],
