@@ -20,21 +20,21 @@
 
     {% if pagination.current_page <= 5  %}
 
-        {% for i in range(1, 6) %}
-          {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
-        {% endfor %}
-        {{ paginate.ellipsis() }}
+      {% for i in range(1, 6) %}
+        {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
+      {% endfor %}
+      {{ paginate.ellipsis() }}
 
-      {% else %}
+    {% else %}
 
-        {{ paginate.button(1, '') }}
-        {{ paginate.ellipsis() }}
-        {% for i in range(pagination.current_page - 1, pagination.current_page + 2) %}
-          {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
-        {% endfor %}
-        {{ paginate.ellipsis() }}
+      {{ paginate.button(1, '') }}
+      {{ paginate.ellipsis() }}
+      {% for i in range(pagination.current_page - 1, pagination.current_page + 2) %}
+        {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
+      {% endfor %}
+      {{ paginate.ellipsis() }}
 
-      {% endif %}
+    {% endif %}
 
      <li class="h-10 min-w-[2.5rem] hidden tablet:inline-flex">
       <a
