@@ -25,7 +25,7 @@ Alpine.plugin(collapse);
 Alpine.plugin(focus);
 Alpine.plugin(mask);
 
-Alpine.data('accordion_root', accordion)
+Alpine.plugin(accordion)
 Alpine.data('input_mask_root', inputMask)
 Alpine.data('modal_root', modal)
 

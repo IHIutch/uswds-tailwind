@@ -25,6 +25,7 @@
     /* Strictness */
     "noUncheckedIndexedAccess": true,
     "strictNullChecks": true,
+    "noImplicitThis": true,
   },
   "include": [
     "src",

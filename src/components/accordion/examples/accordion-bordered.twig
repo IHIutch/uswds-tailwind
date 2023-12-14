@@ -1,13 +1,13 @@
 <div
-    x-data="accordion_root"
+    x-accordion
     class="space-y-2"
     data-multiple
  >
     {% for accordion in accordions %}
-    <div x-bind="accordion_item">
+    <div x-accordion:item>
       <h4 class="relative">
         <button
-          x-bind="accordion_trigger"
+          x-accordion:trigger
           class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
         >
           {{- accordion.title -}}
@@ -19,7 +19,7 @@
         </button>
       </h4>
       <div
-        x-bind="accordion_content"
+        x-accordion:content
         class="py-6 px-4 border-b-4 border-x-4 border-gray-5"
       >
         <p class="leading-normal max-w-prose">
