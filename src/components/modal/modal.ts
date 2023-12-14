@@ -34,6 +34,12 @@ export default defineComponent(() => ({
   },
 
   modal_container: {
+    ['x-init']() {
+      return this.isDismissable = !this.$el.hasAttribute('data-force-action')
+    },
+    ['x-trap.noscroll.inert']() {
+      return this.isOpen
+    },
     [':id']() {
       return this.modalId
     },
@@ -61,21 +67,23 @@ export default defineComponent(() => ({
   },
 
   modal_backdrop: {
-    ['@click']() {
-      console.log({ isDismissable: this.isDismissable })
-      this.isOpen = this.isDismissable ? false : true
+    ['x-show']() {
+      return this.isOpen
+    },
+    ['@click.stop.prevent']() {
+      return this.isOpen = this.isDismissable ? false : true
+    },
+    ['x-transition.opacity']() {
+      return true
+    },
+    ['x-transition:leave.duration.0ms']() {
+      return true
     },
   },
 
   modal_content: {
-    ['x-init']() {
-      this.isDismissable = !this.$el.hasAttribute('data-force-action')
+    ['@click.outside']() {
+      return this.isOpen = this.isDismissable ? false : true
     },
-    ['@click.stop']() {
-      return true
-    },
-    ['x-trap.noscroll.inert']() {
-      return this.isOpen
-    }
   }
 }))

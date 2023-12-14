@@ -6,51 +6,51 @@
     class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
   >Open modal with forced action</button>
 
+    {# Modal #}
     <div
       x-bind="modal_container"
-      class="fixed inset-0"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50"
       tabindex="-1"
+      data-force-action
     >
-      {# Backdrop #}
       <div
-        x-bind="modal_backdrop"
-        class="fixed inset-0 bg-black/70 overflow-y-auto flex items-center justify-center p-4"
-        aria-hidden="true"
+        x-bind="modal_content"
+        class="relative w-full max-w-lg rounded-lg bg-white p-8 pt-10 shadow-lg"
       >
-        {# Modal #}
-        <div
-          x-bind="modal_content"
-          class="relative w-full max-w-lg rounded-lg bg-white p-8 pt-10 shadow-lg"
-          data-force-action
-        >
-          <h2
-            x-bind="modal_title"
-            class="text-xl font-bold font-merriweather"
-          >Your session will end soon.</h2>
-          <div class="mt-4">
-            <p
-              x-bind="modal_description"
-              class="mt-2 text-gray-600"
-            >You’ve been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you’ll be signed out automatically in 5 minutes.</p>
-          </div>
-          <div class="mt-6">
-            <ul class="flex max-mobile-lg:flex-col max-mobile-lg:space-y-2 mobile-lg:space-x-2">
-              <li class="flex">
-                <button type="button"
-                  @click="isOpen = false"
-                  class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                  >Yes, stay signed in</button>
-              </li>
-              <li class="flex">
-                <button type="button"
-                  @click="isOpen = false"
-                  class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                  >Sign out</button>
-              </li>
-            </ul>
-          </div>
+        <h2
+          x-bind="modal_title"
+          class="text-xl font-bold font-merriweather"
+        >Your session will end soon.</h2>
+        <div class="mt-4">
+          <p
+            x-bind="modal_description"
+            class="mt-2 text-gray-600"
+          >You’ve been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you’ll be signed out automatically in 5 minutes.</p>
+        </div>
+        <div class="mt-6">
+          <ul class="flex max-mobile-lg:flex-col max-mobile-lg:space-y-2 mobile-lg:space-x-2">
+            <li class="flex">
+              <button type="button"
+                @click="isOpen = false"
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                >Yes, stay signed in</button>
+            </li>
+            <li class="flex">
+              <button type="button"
+                @click="isOpen = false"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                >Sign out</button>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+  </div>
 
+  {# Backdrop #}
+  <div
+    x-bind="modal_backdrop"
+    class="fixed inset-0 bg-black/70 z-40"
+    aria-hidden="true"
+  >
+  </div>
 </div>
