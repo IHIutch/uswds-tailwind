@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@alpinejs/collapse':
-    specifier: ^3.13.3
-    version: 3.13.3
   '@alpinejs/focus':
     specifier: ^3.13.3
     version: 3.13.3
@@ -67,9 +64,6 @@ devDependencies:
   '@types/alpinejs':
     specifier: ^3.13.5
     version: 3.13.5
-  '@types/alpinejs__collapse':
-    specifier: ^3.13.3
-    version: 3.13.3
   '@types/alpinejs__focus':
     specifier: ^3.13.3
     version: 3.13.3
@@ -119,10 +113,6 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
     dev: true
-
-  /@alpinejs/collapse@3.13.3:
-    resolution: {integrity: sha512-iGO6IzqBwVNxAaoS4XCCJIIg9U/mH7v4vk6wlzxXKFWMXt2yynw93TkdELyjwxQqeNTEGimZRR+2wNf9yhJn0A==}
-    dev: false
 
   /@alpinejs/focus@3.13.3:
     resolution: {integrity: sha512-fTRX/9wOfysyZ1PJ4gHeUnmiNTIgqBDIqKxeP5iMvj1UHD3TFLDXllvoIKH3ezqcsyQZqxd/q1MFM7dlIhkmeg==}
@@ -3422,12 +3412,6 @@ packages:
 
   /@types/alpinejs@3.13.5:
     resolution: {integrity: sha512-BSNTroRhmBkNiyd7ELK/5Boja92hnQMST6H4z1BqXKeMVzHjp9o1j5poqd5Tyhjd8oMFwxYC4I00eghfg2xrTA==}
-    dev: true
-
-  /@types/alpinejs__collapse@3.13.3:
-    resolution: {integrity: sha512-k8Xyov6K9zY32qbjeX5rdbiO2gONm5A2YhI6cWWETlrmM6r9EcZp6G/CfwxKBpRPRSS/MnCWMZQb8paIPw+z1Q==}
-    dependencies:
-      '@types/alpinejs': 3.13.5
     dev: true
 
   /@types/alpinejs__focus@3.13.3:

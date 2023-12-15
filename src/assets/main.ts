@@ -13,7 +13,6 @@ import "@fontsource/source-sans-pro/900.css";
 import "@fontsource-variable/roboto-mono";
 
 import Alpine from "alpinejs";
-import collapse from "@alpinejs/collapse";
 import focus from "@alpinejs/focus";
 import mask from '@alpinejs/mask'
 
@@ -21,7 +20,6 @@ import accordion from "../components/accordion/accordion";
 import inputMask from "../components/input/input-mask";
 import modal from "../components/modal/modal";
 
-Alpine.plugin(collapse);
 Alpine.plugin(focus);
 Alpine.plugin(mask);
 
