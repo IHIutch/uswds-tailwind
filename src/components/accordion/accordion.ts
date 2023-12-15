@@ -45,6 +45,9 @@ const accordionRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
 
 const accordionItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    'x-init'() {
+      if (this.value === undefined) console.warn('"x-accordion:item" is missing a parent element with "x-accordion".')
+    },
     'x-id'() {
       return ['accordion']
     },
@@ -53,6 +56,9 @@ const accordionItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
 
 const accordionTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    'x-init'() {
+      if (this.value === undefined) console.warn('"x-accordion:trigger" is missing a parent element with "x-accordion".')
+    },
     '@click'() {
       return this.value.includes(this.$id('accordion'))
         ? this.remove(this.$id('accordion'))
@@ -65,22 +71,25 @@ const accordionTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
       return this.value.includes(this.$id('accordion'))
     },
     '@keydown.down'() {
-      return this.$focus.within(this.$data.rootEl).wrap().next()
+      return this.$focus.within(this.rootEl).wrap().next()
     },
     '@keydown.up'() {
-      return this.$focus.within(this.$data.rootEl).wrap().previous()
+      return this.$focus.within(this.rootEl).wrap().previous()
     },
     '@keydown.home'() {
-      return this.$focus.within(this.$data.rootEl).first()
+      return this.$focus.within(this.rootEl).first()
     },
     '@keydown.end'() {
-      return this.$focus.within(this.$data.rootEl).last()
+      return this.$focus.within(this.rootEl).last()
     },
   })
 }
 
 const accordionContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    'x-init'() {
+      if (this.value === undefined) console.warn('"x-accordion:content" is missing a parent element with "x-accordion".')
+    },
     'x-cloak'() {
       return true
     },
