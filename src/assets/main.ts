@@ -24,7 +24,7 @@ Alpine.plugin(focus);
 Alpine.plugin(mask);
 
 Alpine.plugin(accordion)
+Alpine.plugin(modal)
 Alpine.data('input_mask_root', inputMask)
-Alpine.data('modal_root', modal)
 
 Alpine.start();

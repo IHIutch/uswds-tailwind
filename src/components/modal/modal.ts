@@ -1,89 +1,140 @@
-import { defineComponent } from "../../utils/define-component";
+import { Alpine, ElementWithXAttributes } from "alpinejs";
 
-export default defineComponent(() => ({
-  isOpen: false,
-  modalId: '',
-  modalTitleId: '',
-  modalDescId: '',
-  init() {
-    this.modalId = this.$id('modal')
-    this.modalTitleId = this.$id('modal-title')
-    this.modalDescId = this.$id('modal-description')
-  },
-  isDismissable: true,
+export default function (Alpine: Alpine) {
+  Alpine.directive('modal', (el, directive) => {
+    if (directive.value === 'title') modalTitle(el, Alpine)
+    else if (directive.value === 'description') modalDescription(el, Alpine)
+    else if (directive.value === 'backdrop') modalBackdrop(el, Alpine)
+    else if (directive.value === 'dialog') modalDialog(el, Alpine)
+    else if (directive.value === 'content') modalContent(el, Alpine)
+    else modalRoot(el, Alpine)
+  })
 
-  modal_button: {
-    ['@click']() {
-      return this.isOpen = true
+  Alpine.magic('modal', el => {
+    const $data = Alpine.$data(el)
+
+    return {
+      get isOpen() {
+        return $data.isOpen
+      },
+      close() {
+        return $data.close()
+      }
+    }
+  })
+
+}
+
+const modalRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  Alpine.bind(el, {
+    'x-data'() {
+      return {
+        isOpenExternal: false,
+        get isOpen() {
+          return this.isOpenExternal
+        },
+        isDismissable: true,
+        open() {
+          return this.isOpenExternal = true
+        },
+        close() {
+          return this.isOpenExternal = false
+        }
+      }
     },
-    [':aria-controls']() {
-      return this.modalId
-    }
-  },
-
-  modal_title: {
-    [':id']() {
-      return this.modalTitleId
-    }
-  },
-
-  modal_description: {
-    [':id']() {
-      return this.modalDescId
-    }
-  },
-
-  modal_container: {
-    ['x-init']() {
-      return this.isDismissable = !this.$el.hasAttribute('data-force-action')
+    'x-id'() {
+      return ['modal', 'modal-title', 'modal-description']
     },
-    ['x-trap.noscroll.inert']() {
+    // Enables two way binding from internal and external x-model
+    'x-modelable': 'isOpenExternal',
+  })
+}
+
+const modalTitle = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  Alpine.bind(el, {
+    'x-init'() {
+      if (this.isOpen === undefined) console.warn('"x-modal:title" is missing a parent element with "x-modal".')
+    },
+    ':id'() {
+      return this.$id('modal-title')
+    },
+  })
+}
+
+const modalDescription = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  Alpine.bind(el, {
+    'x-init'() {
+      if (this.isOpen === undefined) console.warn('"x-modal:description" is missing a parent element with "x-modal".')
+    },
+    ':id'() {
+      return this.$id('modal-description')
+    },
+  })
+}
+
+const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  Alpine.bind(el, {
+    'x-show'() {
       return this.isOpen
     },
-    [':id']() {
-      return this.modalId
+    '@click.stop.prevent'() {
+      if (this.isDismissable) this.close()
+      return
     },
-    [':aria-labelledby']() {
-      return this.modalTitleId
-    },
-    [':aria-describedby']() {
-      return this.modalDescId
-    },
-    [':aria-modal']() {
+    'x-transition.opacity'() {
       return true
     },
-    ['x-show']() {
+    'x-transition:leave.duration.0ms'() {
+      return true
+    },
+  })
+}
+
+const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  Alpine.bind(el, {
+    'x-init'() {
+      if (this.isOpen === undefined) console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
+      this.isDismissable = !el.hasAttribute('data-force-action')
+    },
+    ':id'() {
+      return this.$id('modal')
+    },
+    'x-show'() {
       return this.isOpen
     },
-    ['@keydown.escape.prevent.stop']() {
-      this.isOpen = this.isDismissable ? false : true
+    ':aria-labelledby'() {
+      return this.$id('modal-title')
     },
-    ['x-transition.opacity']() {
+    ':aria-describedby'() {
+      return this.$id('modal-description')
+    },
+    ':aria-modal'() {
       return true
     },
-    ['x-transition:leave.duration.0ms']() {
-      return true
+    ':role'() {
+      return 'dialog'
     },
-  },
-
-  modal_backdrop: {
-    ['x-show']() {
+    'x-trap.inert.noscroll'() {
       return this.isOpen
     },
-    ['@click.stop.prevent']() {
-      return this.isOpen = this.isDismissable ? false : true
+    '@keydown.escape.prevent.stop'() {
+      if (this.isDismissable) this.close()
+      return
     },
-    ['x-transition.opacity']() {
+    'x-transition.opacity'() {
       return true
     },
-    ['x-transition:leave.duration.0ms']() {
+    'x-transition:leave.duration.0ms'() {
       return true
     },
-  },
+  })
+}
 
-  modal_content: {
-    ['@click.outside']() {
-      return this.isOpen = this.isDismissable ? false : true
+const modalContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  Alpine.bind(el, {
+    '@click.outside'() {
+      if (this.isDismissable) this.close()
+      return
     },
-  }
-}))
+  })
+}
