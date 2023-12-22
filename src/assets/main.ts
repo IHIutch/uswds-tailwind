@@ -19,6 +19,7 @@ import mask from '@alpinejs/mask'
 import accordion from "../components/accordion/accordion";
 import inputMask from "../components/input/input-mask";
 import modal from "../components/modal/modal";
+import combobox from "../components/combobox/combobox";
 
 Alpine.plugin(focus);
 Alpine.plugin(mask);
@@ -26,5 +27,9 @@ Alpine.plugin(mask);
 Alpine.plugin(accordion)
 Alpine.plugin(inputMask)
 Alpine.plugin(modal)
+Alpine.plugin(combobox)
 
-Alpine.start();
+if (typeof window.Alpine === "undefined") {
+  window.Alpine = Alpine;
+  Alpine.start();
+}

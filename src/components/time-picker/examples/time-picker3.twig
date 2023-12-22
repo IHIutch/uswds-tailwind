@@ -1,0 +1,68 @@
+
+<div x-combobox class="max-w-lg">
+  <label
+    for="timepicker"
+    x-combobox:label
+    class="block"
+  >Appointment time</label>
+  <div id="input-hint" class="text-gray-50">hh:mm</div>
+
+  <select
+    id="timepicker"
+    x-combobox:values
+  >
+    {% for combobox in comboboxes %}
+      <option value="{{- combobox.value -}}">{{- combobox.label -}}</option>
+    {% endfor %}
+  </select>
+
+  <template x-if="$combobox.isLoaded">
+    <div class="relative mt-2 max-w-[10rem]">
+      <div class="flex w-full">
+        <input
+          x-combobox:input
+          class="pr-10 p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4"
+          aria-describedby="input-hint"
+        >
+        <div class="absolute z-10 inset-y-0 right-0 flex">
+          <button
+            x-combobox:clear
+            class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent"
+          >
+            <div class="icon-[material-symbols--close] h-6 w-6 align-middle text-gray-50"></div>
+          </button>
+          <button
+            x-combobox:toggle
+            class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent"
+          >
+            <div class="icon-[material-symbols--keyboard-arrow-down] h-8 w-8 align-middle text-gray-50"></div>
+          </button>
+        </div>
+      </div>
+      <ul
+        x-combobox:list
+        class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full"
+        >
+          <template
+            x-for="option in $combobox.allOptions"
+            :key="option.value"
+          >
+            <li
+              x-combobox:item
+              class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+              x-text="option.label"
+            >
+            </li>
+          </template>
+          <template
+            x-if="$combobox.noResults"
+          >
+            <li class="p-2 cursor-not-allowed">
+              No results found
+            </li>
+          </template>
+        </template>
+      </ul>
+    </div>
+  </template>
+</div>
