@@ -610,6 +610,9 @@ module.exports = {
       maxWidth: {
         prose: "68ex",
       },
+      lineHeight: {
+        tighter: '1.125'
+      },
     },
   },
   plugins: [
