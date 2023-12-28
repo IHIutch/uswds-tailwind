@@ -541,7 +541,7 @@ module.exports = {
     },
     // dropShadow: ({ theme }) => theme("boxShadow"),
     screens: {
-      // card: "120px",
+      // card: "160px",
       // "card-lg": "240px",
       // mobile: "320px",
       "mobile-lg": "480px",
