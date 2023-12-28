@@ -1,0 +1,11 @@
+{
+  "languages": [
+    { "label": "العربية", "lang": "ar", "translation": "Arabic" },
+    { "label": "简体字", "lang": "zh", "translation": "Chinese - Simplified" },
+    { "label": "English", "lang": "en", "translation": "" },
+    { "label": "Español", "lang": "es", "translation": "Spanish" },
+    { "label": "Français", "lang": "fr", "translation": "French" },
+    { "label": "Italiano", "lang": "it", "translation": "Italian" },
+    { "label": "Pусский", "lang": "ru", "translation": "Russian" }
+  ]
+}

@@ -176,7 +176,7 @@ const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
     'x-init'() {
       this.inputEl = el;
     },
-    '@mousedown.'() {
+    '@mousedown'() {
       this.isOpen = true;
       this.activeEl = undefined
     },

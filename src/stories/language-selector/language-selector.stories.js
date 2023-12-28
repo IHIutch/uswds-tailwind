@@ -1,9 +1,16 @@
+import LanguageSelectorDefault from '../../components/language-selector/examples/language-selector.twig'
+import LanguageSelectorMenu from '../../components/language-selector/examples/menu.twig'
+import props from "./language-selector-props.json";
 
 export default {
-  title: '_Language Selector',
+  title: 'Language Selector',
 };
 
 export const Default = {
-  render: () => '<div>todo</div>'
+  render: () => LanguageSelectorDefault()
+};
+
+export const Menu = {
+  render: () => LanguageSelectorMenu(props)
 };
 

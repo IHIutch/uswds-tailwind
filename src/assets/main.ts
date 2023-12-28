@@ -15,21 +15,25 @@ import "@fontsource-variable/roboto-mono";
 import Alpine from "alpinejs";
 import focus from "@alpinejs/focus";
 import mask from '@alpinejs/mask'
+import anchor from '@alpinejs/anchor'
 
 import accordion from "../components/accordion/accordion";
 import inputMask from "../components/input/input-mask";
 import modal from "../components/modal/modal";
 import combobox from "../components/combobox/combobox";
 import collapse from "../components/banner/collapse";
+import dropdown from "../components/language-selector/dropdown";
 
 Alpine.plugin(focus);
 Alpine.plugin(mask);
+Alpine.plugin(anchor);
 
 Alpine.plugin(accordion)
 Alpine.plugin(inputMask)
 Alpine.plugin(modal)
 Alpine.plugin(combobox)
 Alpine.plugin(collapse)
+Alpine.plugin(dropdown)
 
 if (typeof window.Alpine === "undefined") {
   window.Alpine = Alpine;

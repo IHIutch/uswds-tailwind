@@ -25,6 +25,7 @@
     "@storybook/testing-library": "^0.2.2",
     "@tailwindcss/forms": "^0.5.7",
     "@types/alpinejs": "^3.13.5",
+    "@types/alpinejs__anchor": "^3.13.0",
     "@types/alpinejs__focus": "^3.13.3",
     "@types/alpinejs__mask": "^3.13.3",
     "autoprefixer": "^10.4.16",
@@ -41,6 +42,7 @@
     "vite-plugin-twig-drupal": "^1.0.3"
   },
   "dependencies": {
+    "@alpinejs/anchor": "^3.13.3",
     "@alpinejs/focus": "^3.13.3",
     "@alpinejs/mask": "^3.13.3",
     "@fontsource-variable/open-sans": "^5.0.21",
