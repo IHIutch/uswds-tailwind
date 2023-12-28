@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@iconify-json/fa6-brands": "^1.1.18",
     "@iconify-json/material-symbols": "^1.1.68",
     "@iconify/tailwind": "^0.1.4",
     "@storybook/addon-a11y": "^7.6.6",
