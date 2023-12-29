@@ -1,9 +1,9 @@
+import TooltipDefault from '../../components/tooltip/examples/tooltip.twig';
 
 export default {
-  title: '_Validation',
+  title: 'Tooltip',
 };
 
 export const Default = {
-  render: () => '<div>todo</div>'
+  render: () => TooltipDefault()
 };
-

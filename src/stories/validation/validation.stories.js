@@ -1,6 +1,6 @@
 
 export default {
-  title: '_Tooltip',
+  title: '_Validation',
 };
 
 export const Default = {

@@ -23,6 +23,7 @@ import modal from "../components/modal/modal";
 import combobox from "../components/combobox/combobox";
 import collapse from "../components/banner/collapse";
 import dropdown from "../components/language-selector/dropdown";
+import tooltip from "../components/tooltip/tooltip";
 
 Alpine.plugin(focus);
 Alpine.plugin(mask);
@@ -34,6 +35,7 @@ Alpine.plugin(modal)
 Alpine.plugin(combobox)
 Alpine.plugin(collapse)
 Alpine.plugin(dropdown)
+Alpine.plugin(tooltip)
 
 if (typeof window.Alpine === "undefined") {
   window.Alpine = Alpine;
