@@ -13,8 +13,7 @@
       <div
         x-modal:dialog
         data-force-action
-        class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50"
-        tabindex="-1"
+        class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
       >
         <div
           x-modal:content
@@ -28,7 +27,7 @@
             <p
               x-modal:description
               class="mt-2 text-gray-600"
-            >You’ve been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you’ll be signed out automatically in 5 minutes.</p>
+            >You've been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you’ll be signed out automatically in 5 minutes.</p>
           </div>
           <div class="mt-6">
             <ul class="flex max-mobile-lg:flex-col max-mobile-lg:space-y-2 mobile-lg:space-x-2">
@@ -52,11 +51,9 @@
       </div>
 
       <div
-        x-modal:backdrop
-        class="fixed inset-0 bg-black/70 z-40"
-        aria-hidden="true"
-      >
-      </div>
+      x-modal:backdrop
+      class="fixed inset-0 bg-black/70 z-40 animate-in ease-in-out duration-150 fade-in"
+    ></div>
 
     </div>
 </div>

@@ -52,22 +52,22 @@ const modalRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
 
 const modalTitle = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:title" is missing a parent element with "x-modal".')
-    },
     ':id'() {
       return this.$id('modal-title')
+    },
+    'x-init'() {
+      if (this.isOpen === undefined) console.warn('"x-modal:title" is missing a parent element with "x-modal".')
     },
   })
 }
 
 const modalDescription = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:description" is missing a parent element with "x-modal".')
-    },
     ':id'() {
       return this.$id('modal-description')
+    },
+    'x-init'() {
+      if (this.isOpen === undefined) console.warn('"x-modal:description" is missing a parent element with "x-modal".')
     },
   })
 }
@@ -77,6 +77,9 @@ const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
     ':aria-haspopup'() {
       return true
     },
+    ':aria-hidden'() {
+      return true
+    },
     'x-show'() {
       return this.isOpen
     },
@@ -84,12 +87,6 @@ const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
       if (this.isDismissable) this.close()
       return
     },
-    // 'x-transition.opacity'() {
-    //   return true
-    // },
-    // 'x-transition:leave.duration.0ms'() {
-    //   return true
-    // },
   })
 }
 
@@ -98,15 +95,8 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     ':tabIndex'() {
       return -1
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
-      this.isDismissable = !el.hasAttribute('data-force-action')
-    },
     ':id'() {
       return this.$id('modal')
-    },
-    'x-show'() {
-      return this.isOpen
     },
     ':aria-labelledby'() {
       return this.$id('modal-title')
@@ -120,6 +110,13 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     ':role'() {
       return 'dialog'
     },
+    'x-init'() {
+      if (this.isOpen === undefined) console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
+      this.isDismissable = !el.hasAttribute('data-force-action')
+    },
+    'x-show'() {
+      return this.isOpen
+    },
     'x-trap.inert.noscroll'() {
       return this.isOpen
     },
@@ -127,12 +124,6 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
       if (this.isDismissable) this.close()
       return
     },
-    // 'x-transition.opacity'() {
-    //   return true
-    // },
-    // 'x-transition:leave.duration.0ms'() {
-    //   return true
-    // },
   })
 }
 

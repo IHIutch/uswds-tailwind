@@ -11,8 +11,7 @@
   >
     <div
       x-modal:dialog
-      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50"
-      tabindex="-1"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
     >
       <div
         x-modal:content
@@ -49,7 +48,7 @@
         <button
           type="button"
           @click="$modal.close()"
-          class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:ext-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+          class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:text-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
           aria-label="Close this window"
         >
           <div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
@@ -59,8 +58,7 @@
 
     <div
       x-modal:backdrop
-      class="fixed inset-0 bg-black/70 z-40"
-      aria-hidden="true"
+      class="fixed inset-0 bg-black/70 z-40 animate-in ease-in-out duration-150 fade-in"
     ></div>
 
   </div>
