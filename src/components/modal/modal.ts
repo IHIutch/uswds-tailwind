@@ -74,6 +74,9 @@ const modalDescription = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
 
 const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    ':aria-haspopup'() {
+      return true
+    },
     'x-show'() {
       return this.isOpen
     },
@@ -81,17 +84,20 @@ const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
       if (this.isDismissable) this.close()
       return
     },
-    'x-transition.opacity'() {
-      return true
-    },
-    'x-transition:leave.duration.0ms'() {
-      return true
-    },
+    // 'x-transition.opacity'() {
+    //   return true
+    // },
+    // 'x-transition:leave.duration.0ms'() {
+    //   return true
+    // },
   })
 }
 
 const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    ':tabIndex'() {
+      return -1
+    },
     'x-init'() {
       if (this.isOpen === undefined) console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
       this.isDismissable = !el.hasAttribute('data-force-action')
@@ -121,12 +127,12 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
       if (this.isDismissable) this.close()
       return
     },
-    'x-transition.opacity'() {
-      return true
-    },
-    'x-transition:leave.duration.0ms'() {
-      return true
-    },
+    // 'x-transition.opacity'() {
+    //   return true
+    // },
+    // 'x-transition:leave.duration.0ms'() {
+    //   return true
+    // },
   })
 }
 

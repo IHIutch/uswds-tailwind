@@ -1,0 +1,18 @@
+<header>
+	<div class="max-w-5xl flex mx-auto justify-between items-center desktop:items-end max-desktop:border-b max-desktop:border-b-gray-cool-10">
+
+		<div class="desktop:w-1/3 flex w-full items-center">
+			<div class="desktop:text-2xl desktop:mt-8 desktop:mb-4 ml-4 desktop:ml-0">
+				<em class="font-bold not-italic">
+					<a class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v" href="/">Project Title</a>
+				</em>
+			</div>
+		</div>
+		<div class="hidden desktop:flex ml-auto">
+			{% include '@components/header/includes/desktop.twig' with {"navigation": navigation}  %}
+		</div>
+		<div class="desktop:hidden">
+			{% include '@components/header/includes/mobile.twig' with {"navigation": navigation}  %}
+		</div>
+	</div>
+</header>

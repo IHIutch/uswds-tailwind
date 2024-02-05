@@ -1,9 +1,11 @@
+import HeaderDefault from '../../components/header/examples/header.twig'
+import props from "./header-props.json";
 
 export default {
-  title: '_Header',
+  title: 'Header',
 };
 
 export const Default = {
-  render: () => '<div>todo</div>'
+  render: () => HeaderDefault(props)
 };
 

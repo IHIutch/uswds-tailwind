@@ -5,5 +5,11 @@
         e.preventDefault();
       });
     });
+
+    document.querySelectorAll("form").forEach(function (form){
+      form.addEventListener("submit", function(e){
+        e.preventDefault()
+      })
+    })
   });
 </script>

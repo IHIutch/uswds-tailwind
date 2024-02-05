@@ -2,6 +2,7 @@
 
 const { addDynamicIconSelectors } = require('@iconify/tailwind');
 const tailwindForms = require('@tailwindcss/forms');
+const tailwindAnimate = require("tailwindcss-animate");
 const plugin = require('tailwindcss/plugin')
 
 
@@ -616,6 +617,7 @@ module.exports = {
     },
   },
   plugins: [
+    tailwindAnimate,
     addDynamicIconSelectors({
       scale: 0
     }),

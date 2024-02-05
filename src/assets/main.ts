@@ -1,5 +1,6 @@
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
+import "@fontsource-variable/roboto-mono";
 import "@fontsource/merriweather/300.css";
 import "@fontsource/merriweather/400.css";
 import "@fontsource/merriweather/700.css";
@@ -10,7 +11,6 @@ import "@fontsource/source-sans-pro/400.css";
 import "@fontsource/source-sans-pro/600.css";
 import "@fontsource/source-sans-pro/700.css";
 import "@fontsource/source-sans-pro/900.css";
-import "@fontsource-variable/roboto-mono";
 
 import Alpine from "alpinejs";
 import focus from "@alpinejs/focus";
