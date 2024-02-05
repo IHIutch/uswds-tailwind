@@ -143,15 +143,14 @@ const dropdownTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine
     },
     '@click'() {
       this.toggle()
-      this.$nextTick(() => {
-        if (this.isOpen) {
-          if (this.$event.detail) {
-            this.$focus.focus(this.contentEl)
-          } else {
-            this.$focus.within(this.contentEl).first()
-          }
-        }
-      })
+    },
+    '@keydown.prevent.enter'() {
+      this.open();
+      this.$focus.within(this.contentEl).first()
+    },
+    '@keydown.prevent.space'() {
+      this.open();
+      this.$focus.within(this.contentEl).first()
     },
     '@keydown.prevent.up'() {
       this.open();
