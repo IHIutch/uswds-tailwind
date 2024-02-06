@@ -57,15 +57,6 @@ const tooltipContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
         },
       };
     },
-    'x-transition.opacity'() {
-      return true
-    },
-    'x-transition:enter.duration.80ms'() {
-      return true
-    },
-    'x-transition:leave.duration.0ms'() {
-      return true
-    },
   })
 }
 
