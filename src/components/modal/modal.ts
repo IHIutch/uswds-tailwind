@@ -74,12 +74,8 @@ const modalDescription = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
 
 const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    ':aria-haspopup'() {
-      return true
-    },
-    ':aria-hidden'() {
-      return true
-    },
+    'aria-haspopup': 'true',
+    'aria-hidden': 'true',
     'x-show'() {
       return this.isOpen
     },
@@ -104,12 +100,8 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     ':aria-describedby'() {
       return this.$id('modal-description')
     },
-    ':aria-modal'() {
-      return true
-    },
-    ':role'() {
-      return 'dialog'
-    },
+    'aria-modal': 'true',
+    'role': 'dialog',
     'x-init'() {
       if (this.isOpen === undefined) console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
       this.isDismissable = !el.hasAttribute('data-force-action')
