@@ -1,9 +1,10 @@
+import CharacterCountDefault from '../../components/character-count/examples/character-count.twig';
 
 export default {
-  title: '_Character Count',
+  title: 'Character Count',
 };
 
 export const Default = {
-  render: () => '<div>todo</div>'
+  render: () => CharacterCountDefault()
 };
 

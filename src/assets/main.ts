@@ -24,6 +24,7 @@ import combobox from "../components/combobox/combobox";
 import collapse from "../components/banner/collapse";
 import dropdown from "../components/language-selector/dropdown";
 import tooltip from "../components/tooltip/tooltip";
+import characterCount from "../components/character-count/character-count";
 
 Alpine.plugin(focus);
 Alpine.plugin(mask);
@@ -36,6 +37,7 @@ Alpine.plugin(combobox)
 Alpine.plugin(collapse)
 Alpine.plugin(dropdown)
 Alpine.plugin(tooltip)
+Alpine.plugin(characterCount)
 
 if (typeof window.Alpine === "undefined") {
   window.Alpine = Alpine;
