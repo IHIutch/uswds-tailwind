@@ -21,20 +21,26 @@ const characterCountRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alp
         maxLength: undefined,
         charCount: 0,
         charsRemaining: 0,
-        srStatusText: '',
+        srStatusText: undefined,
+        setSrStatusText: undefined,
+        debouncedSetSrStatusText() {
+          if (!this.setSrStatusText) {
+            this.setSrStatusText = Alpine.debounce(() => {
+              this.srStatusText = this.statusText
+            }, 1000)
+          }
+          this.setSrStatusText()
+        },
         get statusText() {
           if (this.maxLength) {
-            if (this.charCount === 0) {
-              return `${this.maxLength} characters allowed`
-            } else if (this.charCount === 1) {
-              return `${this.charsRemaining} character left`
-            } else if (this.charCount === -1) {
-              return `${Math.abs(this.charsRemaining)} character over limit`
-            } else if (this.charsRemaining < 0) {
-              return `${Math.abs(this.charsRemaining)} characters over limit`
-            } else {
-              return `${this.charsRemaining} characters left`
-            }
+            const difference = Math.abs(this.maxLength - this.charCount);
+            const characters = difference === 1 ? "character" : "characters";
+            const guidance = this.charCount === 0
+              ? "allowed"
+              : this.charCount > this.maxLength
+                ? "over limit"
+                : "left";
+            return `${difference} ${characters} ${guidance}`;
           } else {
             return undefined
           }
@@ -53,9 +59,6 @@ const characterCountRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alp
 }
 
 const characterCountInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
-  const setSrStatusText = Alpine.debounce((val) => {
-    Alpine.$data(el).srStatusText = val
-  }, 1000)
 
   Alpine.bind(el, {
     'x-init'() {
@@ -80,7 +83,7 @@ const characterCountInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Al
     '@input'() {
       this.charCount = el.value.length
       this.charsRemaining = this.maxLength - this.charCount
-      setSrStatusText(this.statusText)
+      this.debouncedSetSrStatusText()
     },
   })
 }
