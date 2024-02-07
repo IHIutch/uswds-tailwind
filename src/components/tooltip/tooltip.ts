@@ -30,20 +30,28 @@ const tooltipRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     'x-init'() {
       this.rootEl = el;
       this.isOpen = false;
-      if (!validPositions.includes(el.dataset.position)) {
-        console.warn(`Tooltip "data-position" of "${el.dataset.position}" is invalid. Defaulting to "top".`)
-      } else {
+      if (el.dataset.position) {
         this.position = el.dataset.position
+      }
+      if (!validPositions.includes(this.position)) {
+        console.warn(`Tooltip "data-position" of "${el.dataset.position}" is invalid. Defaulting to "top".`)
       }
     },
     'x-id'() {
-      return ['tooltip-trigger', 'tooltip-content']
+      return ['tooltip-content']
     },
   })
 }
 
 const tooltipContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    ':id'() {
+      return this.$id('tooltip-content')
+    },
+    ':aria-hidden'() {
+      return this.isOpen ? 'false' : 'true'
+    },
+    'role': 'tooltip',
     'x-init'() {
       if (this.isOpen === undefined) console.warn('"x-tooltip:content" is missing a parent element with "x-tooltip".')
     },
@@ -62,6 +70,9 @@ const tooltipContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
 
 const tooltipTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
+    ':aria-describedby'() {
+      return this.$id('tooltip-content')
+    },
     'x-init'() {
       if (this.isOpen === undefined) console.warn('"x-tooltip:trigger" is missing a parent element with "x-tooltip".')
       this.triggerEl = el
