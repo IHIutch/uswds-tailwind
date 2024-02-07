@@ -42,18 +42,6 @@ const characterCountRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alp
         get isInvalid() {
           return this.charsRemaining < 0 ? true : false
         },
-
-        debounceTimer: undefined,
-        debounceSetSrStatusText() {
-          // debounce(() => {
-          //   this.srStatusText = this.statusText
-          // }, 1000, false)()
-
-          clearTimeout(this.debounceTimer);
-          this.debounceTimer = setTimeout(() => {
-            this.srStatusText = this.statusText
-          }, 1000);
-        }
       }
     },
     'x-init'() {
@@ -65,6 +53,10 @@ const characterCountRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alp
 }
 
 const characterCountInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+  const setSrStatusText = Alpine.debounce((val) => {
+    Alpine.$data(el).srStatusText = val
+  }, 1000)
+
   Alpine.bind(el, {
     'x-init'() {
       if (this.isInitialized === undefined) console.warn('"x-character-count:input" is missing a parent element with "x-character-count".')
@@ -88,7 +80,7 @@ const characterCountInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Al
     '@input'() {
       this.charCount = el.value.length
       this.charsRemaining = this.maxLength - this.charCount
-      this.debounceSetSrStatusText()
+      setSrStatusText(this.statusText)
     },
   })
 }
