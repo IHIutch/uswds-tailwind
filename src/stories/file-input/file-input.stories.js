@@ -1,9 +1,10 @@
+import FileInputDefault from '../../components/file-input/examples/file-input.twig'
 
 export default {
-  title: '_File Input',
+  title: 'File Input',
 };
 
 export const Default = {
-  render: () => '<div>todo</div>'
+  render: () => FileInputDefault()
 };
 

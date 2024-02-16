@@ -25,6 +25,7 @@ import collapse from "../components/banner/collapse";
 import dropdown from "../components/language-selector/dropdown";
 import tooltip from "../components/tooltip/tooltip";
 import characterCount from "../components/character-count/character-count";
+import fileInput from "../components/file-input/file-input";
 
 Alpine.plugin(focus);
 Alpine.plugin(mask);
@@ -38,6 +39,7 @@ Alpine.plugin(collapse)
 Alpine.plugin(dropdown)
 Alpine.plugin(tooltip)
 Alpine.plugin(characterCount)
+Alpine.plugin(fileInput)
 
 if (typeof window.Alpine === "undefined") {
   window.Alpine = Alpine;

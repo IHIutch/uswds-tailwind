@@ -1,5 +1,4 @@
 import { Alpine, ElementWithXAttributes } from "alpinejs"
-// import { debounce } from "../../utils/debounce"
 
 export default function (Alpine: Alpine) {
   Alpine.directive('character-count', (el, directive) => {
