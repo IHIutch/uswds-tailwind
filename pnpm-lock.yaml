@@ -75,6 +75,15 @@ importers:
       '@types/alpinejs':
         specifier: ^3.13.6
         version: 3.13.6
+      '@types/alpinejs__anchor':
+        specifier: ^3.13.0
+        version: 3.13.0
+      '@types/alpinejs__focus':
+        specifier: ^3.13.3
+        version: 3.13.3
+      '@types/alpinejs__mask':
+        specifier: ^3.13.3
+        version: 3.13.3
       '@types/twig':
         specifier: ^1.12.16
         version: 1.12.16
