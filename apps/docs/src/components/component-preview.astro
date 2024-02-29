@@ -1,0 +1,102 @@
+---
+import fs from 'fs';
+import {renderTwigTemplate} from '#utils/functions';
+import { Code } from 'astro-expressive-code/components';
+
+interface Props {
+  componentId: string
+}
+
+const { componentId } = Astro.props
+
+const code = fs.readFileSync(`./src/components/demos/${componentId}.demo.twig`, 'utf8')
+const template =  await renderTwigTemplate({
+  path: `./src/components/demos/${componentId}.demo.twig`, 
+  props: {
+    "breadcrumbs": [
+      {
+        "label": "Home",
+        "slug": "#"
+      },
+      {
+        "label": "Federal Contracting",
+        "slug": "#"
+      },
+      {
+        "label": "Contracting assistance programs",
+        "slug": "#"
+      }
+    ]
+  }
+})
+
+const rawHTML = '<!DOCTYPE html>' +
+  '<html lang="en">' +
+  '<head>' +
+  '<meta charset="UTF-8">' +
+  '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+  '<title>Embedded HTML</title>' +
+  '<link rel="stylesheet" href="/test.css">'+ 
+  '</head>' +
+  '<body>' +
+  template +
+  '</body>' +
+  '</html>'
+---
+
+<div x-data="{ 
+  exampleSize: '1024px',
+  handleResize() {
+    $refs.iframe.style.height = $refs.iframe.contentWindow.document.body.scrollHeight + 'px'
+  },
+  updateWidth(value) {
+    this.exampleSize = value
+    this.$nextTick(() => {
+      this.handleResize()
+    })
+  },
+  init(){
+    this.handleResize()
+  }
+ }" class="not-usa-prose">
+  <div class="max-w-3xl mx-auto">
+    <Code code={code} lang="twig" title='breadcrumb.twig' />
+  </div>
+  <div class="max-w-5xl mx-auto">
+    <div class="border border-gray-cool-20 rounded-t px-4">
+      <div class="flex justify-end gap-2">
+        <button type="button" @click="updateWidth('320px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '320px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+          <span aria-hidden="true" class="icon-[material-symbols--phone-android] align-middle size-6"></span>
+          <span class="sr-only">Display small phone layout</span>
+        </button>
+        <button type="button" @click="updateWidth('480px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '480px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+          <span aria-hidden="true" class="icon-[material-symbols--tablet-mac] align-middle size-6"></span>
+          <span class="sr-only">Display large phone layout</span>
+        </button>
+        <button type="button" @click="updateWidth('640px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '640px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+          <span aria-hidden="true" class="icon-[material-symbols--tablet] align-middle size-6"></span>
+          <span class="sr-only">Display tablet layout</span>
+        </button>
+        <button type="button" @click="updateWidth('1024px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '1024px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+          <span aria-hidden="true" class="icon-[material-symbols--desktop-mac-outline] align-middle size-6"></span>
+          <span class="sr-only">Display desktop layout</span>
+        </button>
+      </div>
+    </div>
+    <div class="bg-gray-cool-20 min-w-80 border border-gray-cool-20 rounded-b border-t-0 overflow-hidden relative">
+      <div class="absolute top-2 right-2">
+        <span class="bg-black/80 py-0.5 px-1 rounded text-sm text-white" x-text="exampleSize"></span>
+      </div>
+      <div class="min-h-[350px] bg-gray-cool-2 p-10 flex items-center justify-center mx-auto" :style="{ width: exampleSize }">
+        <iframe x-ref="iframe" class="w-full" height="auto" srcdoc={rawHTML}></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <script>
+  const iframes = document.querySelectorAll('iframe');
+  iframes.forEach((iframe) => {
+      iframe.style.height = iframe?.contentWindow?.document.body.scrollHeight + 'px'
+  });
+</script> -->

@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '#layouts/base-layout.astro';
+
+const allComponents = await getCollection('components')
+
+---
+
+<Layout title="Welcome">
+
+  <ul>
+    {allComponents.map(comps => (
+      <li>
+        <a href={`/components/${comps.slug}`}>{comps.data.title}</a>
+      </li>
+    ))}
+  </ul>
+
+</Layout>

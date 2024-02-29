@@ -1,15 +1,15 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
 
-const { addDynamicIconSelectors } = require('@iconify/tailwind');
-const tailwindForms = require('@tailwindcss/forms');
-const tailwindAnimate = require("tailwindcss-animate");
-const plugin = require('tailwindcss/plugin')
+import { addDynamicIconSelectors } from '@iconify/tailwind'
+import tailwindForms from '@tailwindcss/forms'
+import tailwindTypography from '@tailwindcss/typography'
+import tailwindAnimate from "tailwindcss-animate"
+import plugin from 'tailwindcss/plugin'
+import type { PluginAPI, PluginUtils } from "tailwindcss/types/config";
 
-
-module.exports = {
-  content: ["./src/components/**/*.twig"],
+const config = {
   theme: {
-    colors: ({ colors }) => ({
+    colors: {
       transparent: 'transparent',
       white: "#ffffff",
       black: "#000000",
@@ -474,64 +474,64 @@ module.exports = {
       "gray-warm-70": "#454540",
       "gray-warm-80": "#2e2e2a",
       "gray-warm-90": "#171716",
-      // Theme Aliases
-      "base-lightest": colors["gray-5"],
-      "base-lighter": colors["gray-cool-10"],
-      "base-light": colors["gray-cool-30"],
-      // base: colors["gray-cool-50"],
-      "base-dark": colors["gray-cool-60"],
-      "base-darker": colors["gray-cool-70"],
-      "base-darkest": colors["gray-90"],
-      ink: colors["gray-90"],
-      "primary-lighter": colors["blue-10"],
-      "primary-light": colors["blue-30"],
-      primary: colors["blue-60v"],
-      "primary-vivid": colors["blue-warm-60v"],
-      "primary-dark": colors["blue-warm-70v"],
-      "primary-darker": colors["blue-warm-80v"],
-      "secondary-lighter": colors["red-cool-10v"],
-      "secondary-light": colors["red-30"],
-      secondary: colors["red-50"],
-      "secondary-vivid": colors["red-cool-50v"],
-      "secondary-dark": colors["red-60v"],
-      "secondary-darker": colors["red-70v"],
-      "accent-cool-lighter": colors["blue-cool-5v"],
-      "accent-cool-light": colors["blue-cool-20v"],
-      "accent-cool": colors["cyan-30v"],
-      "accent-cool-dark": colors["blue-cool-40v"],
-      "accent-cool-darker": colors["blue-cool-60v"],
-      "accent-warm-lighter": colors["orange-10"],
-      "accent-warm-light": colors["orange-20v"],
-      "accent-warm": colors["orange-30v"],
-      "accent-warm-dark": colors["orange-50v"],
-      "accent-warm-darker": colors["orange-60"],
-      // State Aliases
-      "info-lighter": colors["cyan-5"],
-      "info-light": colors["cyan-20"],
-      info: colors["cyan-30v"],
-      "info-dark": colors["cyan-40v"],
-      "info-darker": colors["blue-cool-60"],
-      "error-lighter": colors["red-warm-10"],
-      "error-light": colors["red-warm-30v"],
-      error: colors["red-warm-50v"],
-      "error-dark": colors["red-60v"],
-      "error-darker": colors["red-70"],
-      "warning-lighter": colors["yellow-5"],
-      "warning-light": colors["yellow-10v"],
-      warning: colors["gold-20v"],
-      "warning-dark": colors["gold-30v"],
-      "warning-darker": colors["gold-50v"],
-      "success-lighter": colors["green-cool-5"],
-      "success-light": colors["green-cool-20v"],
-      success: colors["green-cool-40v"],
-      "success-dark": colors["green-cool-50v"],
-      "success-darker": colors["green-cool-60v"],
-      "disabled-light": colors["gray-10"],
-      disabled: colors["gray-20"],
-      "disabled-dark": colors["gray-30"],
-      emergency: colors["red-warm-60v"],
-      "emergency-dark": colors["red-warm-80"],
-    }),
+      // // Theme Aliases
+      // "base-lightest": theme("colors.gray-5"),
+      // "base-lighter": theme("colors.gray-cool-10"),
+      // "base-light": theme("colors.gray-cool-30"),
+      // // base: theme("colors.gray-cool-50"),
+      // "base-dark": theme("colors.gray-cool-60"),
+      // "base-darker": theme("colors.gray-cool-70"),
+      // "base-darkest": theme("colors.gray-90"),
+      // ink: theme("colors.gray-90"),
+      // "primary-lighter": theme("colors.blue-10"),
+      // "primary-light": theme("colors.blue-30"),
+      // primary: theme("colors.blue-60v"),
+      // "primary-vivid": theme("colors.blue-warm-60v"),
+      // "primary-dark": theme("colors.blue-warm-70v"),
+      // "primary-darker": theme("colors.blue-warm-80v"),
+      // "secondary-lighter": theme("colors.red-cool-10v"),
+      // "secondary-light": theme("colors.red-30"),
+      // secondary: theme("colors.red-50"),
+      // "secondary-vivid": theme("colors.red-cool-50v"),
+      // "secondary-dark": theme("colors.red-60v"),
+      // "secondary-darker": theme("colors.red-70v"),
+      // "accent-cool-lighter": theme("colors.blue-cool-5v"),
+      // "accent-cool-light": theme("colors.blue-cool-20v"),
+      // "accent-cool": theme("colors.cyan-30v"),
+      // "accent-cool-dark": theme("colors.blue-cool-40v"),
+      // "accent-cool-darker": theme("colors.blue-cool-60v"),
+      // "accent-warm-lighter": theme("colors.orange-10"),
+      // "accent-warm-light": theme("colors.orange-20v"),
+      // "accent-warm": theme("colors.orange-30v"),
+      // "accent-warm-dark": theme("colors.orange-50v"),
+      // "accent-warm-darker": theme("colors.orange-60"),
+      // // State Aliases
+      // "info-lighter": theme("colors.cyan-5"),
+      // "info-light": theme("colors.cyan-20"),
+      // info: theme("colors.cyan-30v"),
+      // "info-dark": theme("colors.cyan-40v"),
+      // "info-darker": theme("colors.blue-cool-60"),
+      // "error-lighter": theme("colors.red-warm-10"),
+      // "error-light": theme("colors.red-warm-30v"),
+      // error: theme("colors.red-warm-50v"),
+      // "error-dark": theme("colors.red-60v"),
+      // "error-darker": theme("colors.red-70"),
+      // "warning-lighter": theme("colors.yellow-5"),
+      // "warning-light": theme("colors.yellow-10v"),
+      // warning: theme("colors.gold-20v"),
+      // "warning-dark": theme("colors.gold-30v"),
+      // "warning-darker": theme("colors.gold-50v"),
+      // "success-lighter": theme("colors.green-cool-5"),
+      // "success-light": theme("colors.green-cool-20v"),
+      // success: theme("colors.green-cool-40v"),
+      // "success-dark": theme("colors.green-cool-50v"),
+      // "success-darker": theme("colors.green-cool-60v"),
+      // "disabled-light": theme("colors.gray-10"),
+      // disabled: theme("colors.gray-20"),
+      // "disabled-dark": theme("colors.gray-30"),
+      // emergency: theme("colors.red-warm-60v"),
+      // "emergency-dark": theme("colors.red-warm-80"),
+    },
     boxShadow: {
       none: "none",
       1: "0 1px 4px 0 rgba(0, 0, 0, 0.1)",
@@ -553,71 +553,168 @@ module.exports = {
       // widescreen: "1400px",
     },
     fontFamily: {
-      "open-sans": [
-        '"Open Sans Variable"',
-        "-apple-system",
-        "BlinkMacSystemFont",
-        '"Segoe UI"',
-        "Roboto",
-        "Helvetica",
-        "Arial",
-        "sans-serif",
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ],
-      "public-sans": [
-        '"Public Sans Variable"',
-        "-apple-system",
-        "BlinkMacSystemFont",
-        '"Segoe UI"',
-        "Roboto",
-        "Helvetica",
-        "Arial",
-        "sans-serif",
-        "Apple Color Emoji",
-        "Segoe UI Emoji",
-        "Segoe UI Symbol",
-      ],
-      merriweather: [
-        '"Merriweather"',
-        '"Georgia"',
-        '"Cambria"',
-        '"Times New Roman"',
-        '"Times"',
-        "serif",
-      ],
-      "source-sans-pro": [
-        '"Source Sans Pro"',
-        '"Helvetica Neue"',
-        '"Helvetica"',
-        '"Roboto"',
-        '"Arial"',
-        "sans-serif",
-      ],
-      "roboto-mono": [
-        '"Roboto Mono Variable"',
-        '"Bitstream Vera Sans Mono"',
-        '"Consolas"',
-        '"Courier"',
-        "monospace",
-      ],
+      "open-sans": ' "Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif,  "Apple Color Emoji",  "Segoe UI Emoji","Segoe UI Symbol"',
+      "public-sans": ' "Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+      "merriweather": '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
+      "source-sans-pro": '"Source Sans Pro", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
+      "roboto-mono": '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
     },
-
     extend: {
-      order: {
-        initial: "initial",
-      },
       maxWidth: {
         prose: "68ex",
       },
       lineHeight: {
         tighter: '1.125'
       },
-    },
+      typography: ({ theme }: PluginUtils) => ({
+        DEFAULT: {
+          css: {
+            maxWidth: theme('maxWidth.prose'),
+            fontFamily: theme('fontFamily.source-sans-pro'),
+            fontSize: theme('fontSize.base')[0],
+            lineHeight: theme('lineHeight.normal'),
+
+            'a': {
+              color: theme('colors.blue-60v'),
+              textDecoration: 'underline',
+              '&:visited': {
+                color: theme('colors.violet-70v')
+              }
+            },
+
+            '& > * + *': {
+              marginTop: theme('spacing.4'),
+              marginBottom: '0',
+            },
+
+            // List style
+            '& ul ul, & ul ol, & ol ol, & ol ul': {
+              marginTop: theme('spacing.1'),
+              paddingLeft: theme('spacing.10')
+            },
+            '& ol li, & ul li': {
+              marginBottom: theme('spacing.1'),
+            },
+            '& ol:last-child, & ul:last-child, & li:last-child': {
+              marginBottom: '0',
+            },
+            '& ol, & ul': {
+              listStyle: 'revert',
+              marginBottom: theme('spacing.1'),
+              marginTop: theme('spacing.4'),
+              lineHeight: theme('lineHeight.normal'),
+              paddingLeft: theme('spacing.6'),
+            },
+
+            // Table styles
+            '& > table': {
+              fontSize: theme('fontSize.base')[0],
+              lineHeight: theme('lineHeight.normal'),
+              borderCollapse: 'collapse',
+              borderSpacing: '0',
+              color: theme('colors.gray-90'),
+              margin: theme('spacing.5') + ' 0',
+              textAlign: 'left',
+            },
+            '& > table tbody th': {
+              textAlign: 'left',
+            },
+            '& > table thead th': {
+              backgroundClip: 'padding-box',
+              fontWeight: theme('fontWeight.bold'),
+              lineHeight: theme('lineHeight.tight'),
+            },
+            '& > table thead td, & > table thead th': {
+              backgroundColor: theme('colors.gray-cool-10'),
+              color: theme('colors.gray-90'),
+            },
+            '& > table td, & > table th': {
+              backgroundColor: theme('colors.white'),
+              border: '1px solid ' + theme('colors.gray-90'),
+              fontWeight: theme('fontWeight.normal'),
+              padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+            },
+            '& > table caption': {
+              textAlign: 'left',
+              fontSize: theme('fontSize.base')[0],
+              fontWeight: theme('fontWeight.bold'),
+              marginBottom: theme('spacing.3'),
+            },
+            '& > table th[data-sortable]': {
+              paddingRight: theme('spacing.10'),
+              position: 'relative',
+            },
+            '& > table th[data-sortable]::after': {
+              borderBottomColor: 'transparent',
+              borderBottomStyle: 'solid',
+              borderBottomWidth: '1px',
+              bottom: '0',
+              content: '""',
+              height: '0',
+              left: '0',
+              position: 'absolute',
+              width: '100%',
+            },
+
+            // Text styles
+            '& > p': {
+              lineHeight: theme('lineHeight.normal'),
+            },
+            '& > h1, & > h2, & > h3, & > h4, & > h5, & > h6': {
+              marginBottom: '0',
+              marginTop: '0',
+            },
+            '& > * + h1, & > * + h2, & > * + h3, & > * + h4, & > * + h5, & > * + h6': {
+              marginTop: theme('spacing.8'),
+            },
+            '& > h1': {
+              fontSize: theme('fontSize.4xl')[0],
+              fontFamily: theme('fontFamily.merriweather'),
+              lineHeight: theme('lineHeight.tight'),
+              fontWeight: theme('fontWeight.black'),
+            },
+            '& > h2': {
+              fontSize: theme('fontSize.3xl')[0],
+              fontFamily: theme('fontFamily.merriweather'),
+              lineHeight: theme('lineHeight.tight'),
+              fontWeight: theme('fontWeight.black'),
+            },
+            '& > h3': {
+              fontSize: theme('fontSize.xl')[0],
+              fontFamily: theme('fontFamily.merriweather'),
+              lineHeight: theme('lineHeight.tight'),
+              fontWeight: theme('fontWeight.black'),
+            },
+            '& > h4': {
+              fontSize: theme('fontSize.base')[0],
+              fontFamily: theme('fontFamily.merriweather'),
+              lineHeight: theme('lineHeight.tight'),
+              fontWeight: theme('fontWeight.black'),
+            },
+            '& > h5': {
+              fontSize: theme('fontSize.base')[0],
+              fontFamily: theme('fontFamily.public-sans'),
+              lineHeight: theme('lineHeight.tight'),
+              fontWeight: theme('fontWeight.black'),
+            },
+            '& > h6': {
+              fontFamily: theme('fontFamily.source-sans-pro'),
+              fontSize: theme('fontSize.sm')[0],
+              lineHeight: theme('lineHeight.none'),
+              fontWeight: theme('fontWeight.normal'),
+              letterSpacing: theme('letterSpacing.wide'),
+              textTransform: 'uppercase',
+            },
+          },
+        }
+      })
+    }
   },
   plugins: [
     tailwindAnimate,
+    tailwindTypography({
+      className: 'usa-prose'
+    }),
     addDynamicIconSelectors({
       scale: 0
     }),
@@ -627,153 +724,11 @@ module.exports = {
     plugin(function ({ addVariant }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
-      addVariant('forced-colors', '@media (forced-colors: active)')
       addVariant('valid', ['&[data-valid]'])
       addVariant('invalid', ['&[data-invalid]'])
+      addVariant('forced-colors', '@media (forced-colors: active)')
     }),
-    plugin(({ addComponents, theme }) => {
-      addComponents({
-        '.usa-prose': {
-          maxWidth: theme('maxWidth.prose'),
-          fontFamily: theme('fontFamily.source-sans-pro'),
-          fontSize: theme('fontSize.base'),
-          lineHeight: theme('lineHeight.normal'),
-
-          'a': {
-            color: theme('colors.blue-60v'),
-            textDecoration: 'underline',
-            '&:visited': {
-              color: theme('colors.violet-70v')
-            }
-          },
-
-          '& > * + *': {
-            marginTop: theme('spacing.4'),
-            marginBottom: '0',
-          },
-
-          // List style
-          '& ul ul, & ul ol, & ol ol, & ol ul': {
-            marginTop: theme('spacing.1'),
-            paddingLeft: theme('spacing.10')
-          },
-          '& ol li, & ul li': {
-            marginBottom: theme('spacing.1'),
-          },
-          '& ol:last-child, & ul:last-child, & li:last-child': {
-            marginBottom: '0',
-          },
-          '& ol, & ul': {
-            listStyle: 'revert',
-            marginBottom: theme('spacing.1'),
-            marginTop: theme('spacing.4'),
-            lineHeight: theme('lineHeight.normal'),
-            paddingLeft: theme('spacing.6'),
-          },
-
-          // Table styles
-          '& > table': {
-            fontSize: theme('fontSize.base'),
-            lineHeight: theme('lineHeight.normal'),
-            borderCollapse: 'collapse',
-            borderSpacing: '0',
-            color: theme('colors.gray-90'),
-            margin: theme('spacing.5') + ' 0',
-            textAlign: 'left',
-          },
-          '& > table tbody th': {
-            textAlign: 'left',
-          },
-          '& > table thead th': {
-            backgroundClip: 'padding-box',
-            fontWeight: theme('fontWeight.bold'),
-            lineHeight: theme('lineHeight.tight'),
-          },
-          '& > table thead td, & > table thead th': {
-            backgroundColor: theme('colors.gray-cool-10'),
-            color: theme('colors.gray-90'),
-          },
-          '& > table td, & > table th': {
-            backgroundColor: theme('colors.white'),
-            border: '1px solid ' + theme('colors.gray-90'),
-            fontWeight: theme('fontWeight.normal'),
-            padding: theme('spacing.2') + ' ' + theme('spacing.4'),
-          },
-          '& > table caption': {
-            textAlign: 'left',
-            fontSize: theme('fontSize.base'),
-            fontWeight: theme('fontWeight.bold'),
-            marginBottom: theme('spacing.3'),
-          },
-          '& > table th[data-sortable]': {
-            paddingRight: theme('spacing.10'),
-            position: 'relative',
-          },
-          '& > table th[data-sortable]::after': {
-            borderBottomColor: 'transparent',
-            borderBottomStyle: 'solid',
-            borderBottomWidth: '1px',
-            bottom: '0',
-            content: '""',
-            height: '0',
-            left: '0',
-            position: 'absolute',
-            width: '100%',
-          },
-
-          // Text styles
-          '& > p': {
-            lineHeight: theme('lineHeight.normal'),
-          },
-          '& > h1, & > h2, & > h3, & > h4, & > h5, & > h6': {
-            marginBottom: '0',
-            marginTop: '0',
-          },
-          '& > * + h1, & > * + h2, & > * + h3, & > * + h4, & > * + h5, & > * + h6': {
-            marginTop: theme('spacing.8'),
-          },
-          '& > h1': {
-            fontSize: theme('fontSize.4xl'),
-            fontFamily: theme('fontFamily.merriweather'),
-            lineHeight: theme('lineHeight.tight'),
-            fontWeight: theme('fontWeight.black'),
-          },
-          '& > h2': {
-            fontSize: theme('fontSize.3xl'),
-            fontFamily: theme('fontFamily.merriweather'),
-            lineHeight: theme('lineHeight.tight'),
-            fontWeight: theme('fontWeight.black'),
-          },
-          '& > h3': {
-            fontSize: theme('fontSize.xl'),
-            fontFamily: theme('fontFamily.merriweather'),
-            lineHeight: theme('lineHeight.tight'),
-            fontWeight: theme('fontWeight.black'),
-          },
-          '& > h4': {
-            fontSize: theme('fontSize.md'),
-            fontFamily: theme('fontFamily.merriweather'),
-            lineHeight: theme('lineHeight.tight'),
-            fontWeight: theme('fontWeight.black'),
-          },
-          '& > h5': {
-            fontSize: theme('fontSize.base'),
-            fontFamily: theme('fontFamily.public-sans'),
-            lineHeight: theme('lineHeight.tight'),
-            fontWeight: theme('fontWeight.black'),
-          },
-          '& > h6': {
-            fontFamily: theme('fontFamily.source-sans-pro'),
-            fontSize: theme('fontSize.sm'),
-            lineHeight: theme('lineHeight.none'),
-            fontWeight: theme('fontWeight.normal'),
-            letterSpacing: theme('letterSpacing.wide'),
-            textTransform: 'uppercase',
-          },
-        },
-      })
-    })
   ],
-};
+} satisfies Omit<Config, 'content'>
 
-
+export default config

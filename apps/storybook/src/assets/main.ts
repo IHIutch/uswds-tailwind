@@ -1,3 +1,4 @@
+import './main.css';
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
 import "@fontsource-variable/roboto-mono";
