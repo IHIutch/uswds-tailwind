@@ -44,7 +44,7 @@ const rawHTML = '<!DOCTYPE html>' +
   '</html>'
 ---
 
-<div x-data="{  exampleSize: '1024px',handleResize() {  $refs.iframe.style.height = $refs.iframe.contentWindow.document.body.scrollHeight + 'px'},updateWidth(value) {  this.exampleSize = value   this.$nextTick(() => {     this.handleResize()   }) }, init(){ this.handleResize() }}" 
+<div x-data="{ exampleSize: '1024px', handleResize() { $refs.iframe.style.height = $refs.iframe.contentWindow.document.body.scrollHeight + 'px'}, updateWidth(value) { this.exampleSize = value; this.$nextTick(() => { this.handleResize() }) }, init(){ this.handleResize() }};" 
  class="not-usa-prose">
   <div class="max-w-3xl mx-auto">
     <Code code={code} lang="twig" title='breadcrumb.twig' />
