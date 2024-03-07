@@ -1,0 +1,6 @@
+{
+  "component": "select",
+  "variant": "select.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/select/examples/select.twig"
+}

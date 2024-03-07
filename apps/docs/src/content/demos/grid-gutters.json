@@ -1,0 +1,6 @@
+{
+  "component": "grid",
+  "variant": "grid-gutters.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/grid/examples/grid-gutters.twig"
+}

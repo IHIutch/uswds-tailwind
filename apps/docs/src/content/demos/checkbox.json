@@ -1,0 +1,6 @@
+{
+  "component": "checkbox",
+  "variant": "checkbox.twig",
+  "propsPath": "src/__demos__/checkbox/checkbox-props.json",
+  "componentPath": "src/__demos__/checkbox/examples/checkbox.twig"
+}

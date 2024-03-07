@@ -1,0 +1,6 @@
+{
+  "component": "combobox",
+  "variant": "combobox.twig",
+  "propsPath": "src/__demos__/combobox/combobox-props.json",
+  "componentPath": "src/__demos__/combobox/examples/combobox.twig"
+}

@@ -1,0 +1,6 @@
+{
+  "component": "list",
+  "variant": "list.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/list/examples/list.twig"
+}

@@ -1,0 +1,6 @@
+{
+  "component": "banner",
+  "variant": "banner.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/banner/examples/banner.twig"
+}

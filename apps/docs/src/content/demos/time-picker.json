@@ -1,0 +1,6 @@
+{
+  "component": "time-picker",
+  "variant": "time-picker.twig",
+  "propsPath": "src/__demos__/time-picker/time-picker-props.json",
+  "componentPath": "src/__demos__/time-picker/examples/time-picker.twig"
+}

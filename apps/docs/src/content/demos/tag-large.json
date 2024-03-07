@@ -1,0 +1,6 @@
+{
+  "component": "tag",
+  "variant": "tag-large.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/tag/examples/tag-large.twig"
+}

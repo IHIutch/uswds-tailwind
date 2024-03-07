@@ -1,0 +1,6 @@
+{
+  "component": "identifier",
+  "variant": "identifier.twig",
+  "propsPath": "src/__demos__/identifier/identifier-props.json",
+  "componentPath": "src/__demos__/identifier/examples/identifier.twig"
+}

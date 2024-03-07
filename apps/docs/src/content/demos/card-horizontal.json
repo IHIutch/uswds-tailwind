@@ -1,0 +1,6 @@
+{
+  "component": "card",
+  "variant": "card-horizontal.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/card/examples/card-horizontal.twig"
+}

@@ -1,0 +1,17 @@
+<div x-file-input class="max-w-lg group data-[invalid]:border-l-4 data-[invalid]:red-60v data-[invalid]:-ml-5 data-[invalid]:pl-4">
+	<label class="block" for="file-input-single">Input accepts a single file</label>
+	<span x-file-input:error-message class="hidden text-red-60v py-1 font-bold group-[[data-invalid]]:block"></span>
+	<div>
+		<div class="sr-only" aria-live="polite">
+			No file selected.
+		</div>
+		<div x-file-input:dropzone class="border border-dashed border-gray-30 hover:border-gray-50 group-[[data-invalid]]:border-2 group-[[data-invalid]]:border-red-60v mt-2 relative w-full">
+			<div class="bg-white pointer-events-none absolute inset-0 z-20 group-[[data-dragging]]:bg-blue-10"></div>
+			<div class="py-8 px-4 pointer-events-none z-30 relative text-center" aria-hidden="true">
+				<span>Drag file here or</span>
+				<span class="text-blue-60v underline">choose from folder</span>
+			</div>
+			<input x-file-input:input id="file-input-single" class="cursor-pointer absolute inset-0 z-10 p-2 focus:outline focus:outline-4 focus:outline-blue-40v" type="file" name="file-input-single" aria-label="Drag file here or choose from folder" accept=".pdf,.txt"/>
+		</div>
+	</div>
+</div>

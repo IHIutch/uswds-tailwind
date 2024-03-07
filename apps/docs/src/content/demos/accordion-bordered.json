@@ -1,0 +1,6 @@
+{
+  "component": "accordion",
+  "variant": "accordion-bordered.twig",
+  "propsPath": "src/__demos__/accordion/accordion-props.json",
+  "componentPath": "src/__demos__/accordion/examples/accordion-bordered.twig"
+}

@@ -1,0 +1,6 @@
+{
+  "component": "footer",
+  "variant": "slim.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/footer/examples/slim.twig"
+}

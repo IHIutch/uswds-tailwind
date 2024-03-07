@@ -1,0 +1,6 @@
+{
+  "component": "character-count",
+  "variant": "character-count.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/character-count/examples/character-count.twig"
+}

@@ -1,0 +1,82 @@
+<div class="grid grid-cols-2 gap-12">
+
+  <nav aria-label="Side navigation nested">
+    <ul class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12">
+      {% for item in navigation %}
+        <li class="border-t border-t-gray-10">
+          <a
+            href="{{ item.href }}"
+            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+            {{ item.is_active ? "aria-current='page'" }}
+            >
+            {{- item.label -}}
+          </a>
+
+          {% if item.children %}
+          <ul>
+            {% for child in item.children %}
+              <li class="border-t border-t-gray-10">
+                <a href="{{ item.href }}"
+                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                  {{ child.is_active ? "aria-current='true'" }}
+                >
+                  {{- item.label -}}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+    <nav aria-label="Side navigation deeply nested">
+    <ul class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12">
+      {% for item in navigation %}
+        <li class="border-t border-t-gray-10">
+          <a
+            href="{{ item.href }}"
+            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+            {{ item.is_active ? "aria-current='page'" }}
+            >
+            {{- item.label -}}
+          </a>
+
+          {% if item.children %}
+          <ul>
+          {% for child in item.children %}
+            <li class="border-t border-t-gray-10">
+              <a href="{{ child.href }}"
+                class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                {{ child.is_active ? "aria-current='true'" }}
+              >
+                {{- child.label -}}
+              </a>
+
+                {% if child.children %}
+                <ul>
+                  {% for grandchild in child.children %}
+                  <li class="border-t border-t-gray-10">
+                    <a href="{{ grandchild.href }}"
+                      class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                      {{ grandchild.is_active ? "aria-current='true'" }}
+                    >
+                      {{- grandchild.label -}}
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+
+            </li>
+          {% endfor %}
+          </ul>
+          {% endif %}
+
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+</div>

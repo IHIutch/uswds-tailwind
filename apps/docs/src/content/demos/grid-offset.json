@@ -1,0 +1,6 @@
+{
+  "component": "grid",
+  "variant": "grid-offset.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/grid/examples/grid-offset.twig"
+}

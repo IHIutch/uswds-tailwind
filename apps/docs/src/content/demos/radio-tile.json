@@ -1,0 +1,6 @@
+{
+  "component": "radio",
+  "variant": "radio-tile.twig",
+  "propsPath": "src/__demos__/radio/radio-props.json",
+  "componentPath": "src/__demos__/radio/examples/radio-tile.twig"
+}

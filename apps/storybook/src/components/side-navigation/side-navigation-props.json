@@ -1,0 +1,47 @@
+{
+  "navigation": [
+    {
+      "label": "Parent Link",
+      "href": "#"
+    },
+    {
+      "label": "Parent Link",
+      "href": "#",
+      "is_active": true,
+      "children": [
+        {
+          "label": "Child Link",
+          "href": "#"
+        },
+        {
+          "label": "Child Link",
+          "href": "#",
+          "is_active": true,
+          "children": [
+            {
+              "label": "Grandchild Link",
+              "href": "#"
+            },
+            {
+              "label": "Grandchild Link",
+              "href": "#",
+              "is_active": true
+            },
+            {
+              "label": "Grandchild Link",
+              "href": "#"
+            }
+          ]
+        },
+        {
+          "label": "Child Link",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "label": "Parent Link",
+      "href": "#"
+    }
+  ]
+}

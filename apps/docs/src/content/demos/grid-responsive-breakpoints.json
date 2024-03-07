@@ -1,0 +1,6 @@
+{
+  "component": "grid",
+  "variant": "grid-responsive-breakpoints.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/grid/examples/grid-responsive-breakpoints.twig"
+}

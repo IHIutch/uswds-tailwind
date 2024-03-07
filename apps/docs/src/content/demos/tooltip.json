@@ -1,0 +1,6 @@
+{
+  "component": "tooltip",
+  "variant": "tooltip.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/tooltip/examples/tooltip.twig"
+}

@@ -1,0 +1,6 @@
+{
+  "component": "prose",
+  "variant": "prose.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/prose/examples/prose.twig"
+}

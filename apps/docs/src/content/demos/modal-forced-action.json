@@ -1,0 +1,6 @@
+{
+  "component": "modal",
+  "variant": "modal-forced-action.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/modal/examples/modal-forced-action.twig"
+}

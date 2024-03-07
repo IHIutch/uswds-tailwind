@@ -1,0 +1,22 @@
+{
+  "checkboxes": [
+    {
+      "label": "Sojourner Truth",
+      "description": "This is optional text that can be used to describe the label in more detail.",
+      "value": "Sojourner Truth"
+    },
+    {
+      "label": "Frederick Douglass",
+      "value": "Frederick Douglass"
+    },
+    {
+      "label": "Booker T. Washington",
+      "value": "Booker T. Washington"
+    },
+    {
+      "label": "George Washington Carver",
+      "value": "George Washington Carver",
+      "isDisabled": true
+    }
+  ]
+}

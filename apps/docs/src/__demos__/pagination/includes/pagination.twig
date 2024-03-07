@@ -1,0 +1,21 @@
+{% macro button(page_number, href = '#', is_active = false, is_last = false) %}
+  <li class="h-10 min-w-10 inline-flex">
+    <a
+      href="#"
+      class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+      aria-label="{{ is_last ? 'Last page, page #{page_number}' : 'Page #{page_number}' }}"
+      {{ is_active ? "aria-current='page'" }}
+      >
+      {{- page_number -}}
+    </a>
+  </li>
+{% endmacro %}
+
+{% macro ellipsis() %}
+  <li
+    aria-label="ellipsis indicating non-visible pages"
+    class="h-10 min-w-10 p-2 select-none flex items-center justify-center"
+    >
+    <span>...</span>
+  </li>
+{% endmacro %}

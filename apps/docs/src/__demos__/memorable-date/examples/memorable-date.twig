@@ -1,0 +1,67 @@
+<fieldset>
+  <legend>Date of birth</legend>
+  <div id="date-hint" class="text-gray-50">For example: January 19 2000</div>
+
+  <div class="flex flex-wrap gap-4 mt-4">
+
+    <div class="w-60">
+      <label for="month">Month</label>
+      <div class="mt-2 relative flex items-center">
+        <select
+          id="month"
+          class="peer opacity-100 p-2 pr-8 bg-transparent text-gray-90 w-full appearance-none border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 disabled:text-gray-70 disabled:cursor-not-allowed disabled:bg-gray-20"
+          aria-describedby="date-hint"
+        >
+          <option value>- Select -</option>
+          <option value="1">01 - January</option>
+          <option value="2">02 - February</option>
+          <option value="3">03 - March</option>
+          <option value="4">04 - April</option>
+          <option value="5">05 - May</option>
+          <option value="6">06 - June</option>
+          <option value="7">07 - July</option>
+          <option value="8">08 - August</option>
+          <option value="9">09 - September</option>
+          <option value="10">10 - October</option>
+          <option value="11">11 - November</option>
+          <option value="12">12 - December</option>
+        </select>
+        <div
+          aria-hidden="true"
+          class="select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70">
+          <div class="icon-[material-symbols--unfold-more] size-5"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-12">
+      <label for="day" class="block">Day</label>
+      <div class="mt-2 relative">
+        <input
+          id="day"
+          class="p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+          minlength="4"
+          maxlength="4"
+          pattern="[0-9]*"
+          inputmode="numeric"
+          aria-describedby="date-hint"
+        />
+      </div>
+    </div>
+
+    <div class="w-20">
+      <label for="year" class="block">Year</label>
+      <div class="mt-2 relative">
+        <input
+          id="year"
+          class="p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+          maxlength="2"
+          pattern="[0-9]*"
+          inputmode="numeric"
+          aria-describedby="date-hint"
+        />
+      </div>
+    </div>
+
+  </div>
+</fieldset>

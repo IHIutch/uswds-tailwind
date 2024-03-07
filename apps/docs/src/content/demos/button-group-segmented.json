@@ -1,0 +1,6 @@
+{
+  "component": "button",
+  "variant": "button-group-segmented.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/button/examples/button-group-segmented.twig"
+}

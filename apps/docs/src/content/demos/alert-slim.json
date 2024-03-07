@@ -1,0 +1,6 @@
+{
+  "component": "alert",
+  "variant": "alert-slim.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/alert/examples/alert-slim.twig"
+}

@@ -1,0 +1,6 @@
+{
+  "component": "side-navigation",
+  "variant": "side-navigation-nested.twig",
+  "propsPath": "src/__demos__/side-navigation/side-navigation-props.json",
+  "componentPath": "src/__demos__/side-navigation/examples/side-navigation-nested.twig"
+}

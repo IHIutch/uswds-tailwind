@@ -1,0 +1,35 @@
+<div x-combobox class="max-w-lg">
+	<label x-combobox:label for="combobox" class="block">Select a fruit</label>
+
+	<select id="combobox" x-combobox:values>
+		{% for combobox in comboboxes %}
+			<option value="{{- combobox.value -}}">{{- combobox.label -}}</option>
+		{% endfor %}
+	</select>
+
+	<template x-if="$combobox.isLoaded">
+		<div class="relative mt-2">
+			<div class="flex w-full">
+				<input x-combobox:input class="pr-10 p-2 bg-transparent w-full h-10 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4">
+				<div class="absolute z-10 inset-y-0 right-0 flex">
+					<button x-combobox:clear class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent">
+						<div class="icon-[material-symbols--close] size-6 align-middle text-gray-50"></div>
+					</button>
+					<button x-combobox:toggle class="h-full px-1 flex items-center focus:outline focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent">
+						<div class="icon-[material-symbols--expand-more] size-8 align-middle text-gray-50"></div>
+					</button>
+				</div>
+			</div>
+			<ul x-combobox:list class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full">
+				<template x-for="option in $combobox.allOptions" :key="option.value">
+					<li x-combobox:item class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4" x-text="option.label"></li>
+				</template>
+				<template x-if="$combobox.noResults">
+					<li class="p-2 cursor-not-allowed">
+						No results found
+					</li>
+				</template>
+			</template>
+		</ul>
+	</div>
+</template></div>

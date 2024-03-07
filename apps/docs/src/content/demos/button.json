@@ -1,0 +1,6 @@
+{
+  "component": "button",
+  "variant": "button.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/button/examples/button.twig"
+}

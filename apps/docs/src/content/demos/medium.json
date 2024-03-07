@@ -1,0 +1,6 @@
+{
+  "component": "footer",
+  "variant": "medium.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/footer/examples/medium.twig"
+}

@@ -1,0 +1,6 @@
+{
+  "component": "search",
+  "variant": "search.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/search/examples/search.twig"
+}

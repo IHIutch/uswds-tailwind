@@ -1,0 +1,6 @@
+{
+  "component": "range-slider",
+  "variant": "range-slider.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/range-slider/examples/range-slider.twig"
+}

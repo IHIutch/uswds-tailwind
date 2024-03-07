@@ -1,0 +1,6 @@
+{
+  "component": "input",
+  "variant": "input-mask.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/input/examples/input-mask.twig"
+}

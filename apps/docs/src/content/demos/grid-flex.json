@@ -1,0 +1,6 @@
+{
+  "component": "grid",
+  "variant": "grid-flex.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/grid/examples/grid-flex.twig"
+}

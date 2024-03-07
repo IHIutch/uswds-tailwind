@@ -1,0 +1,12 @@
+{
+  "step_indicator": {
+    "current_step": 3,
+    "steps": [
+      { "label": "Personal information" },
+      { "label": "Household status" },
+      { "label": "Supporting documents" },
+      { "label": "Signature" },
+      { "label": "Review and submit" }
+    ]
+  }
+}

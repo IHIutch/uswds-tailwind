@@ -1,0 +1,6 @@
+{
+  "component": "modal",
+  "variant": "modal-large.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/modal/examples/modal-large.twig"
+}

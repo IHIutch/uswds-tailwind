@@ -1,0 +1,6 @@
+{
+  "component": "step-indicator",
+  "variant": "step-indicator-counters-small.twig",
+  "propsPath": "src/__demos__/step-indicator/step-indicator-props.json",
+  "componentPath": "src/__demos__/step-indicator/examples/step-indicator-counters-small.twig"
+}

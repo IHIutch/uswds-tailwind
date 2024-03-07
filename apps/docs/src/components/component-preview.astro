@@ -1,51 +1,25 @@
 ---
 import fs from 'fs';
-import {renderTwigTemplate} from '#utils/functions';
+import {join} from 'path';
 import { Code } from 'astro-expressive-code/components';
+import type { InferEntrySchema } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
-interface Props {
-  componentId: string
+type Props = {
+  title: string
+  component: CollectionEntry<"demos">['data']['component'],
+  variant: CollectionEntry<"demos">['data']['variant'],
 }
 
-const { componentId } = Astro.props
+const { title, component, variant } = Astro.props
 
-const code = fs.readFileSync(`./src/components/demos/${componentId}.demo.twig`, 'utf8')
-const template =  await renderTwigTemplate({
-  path: `./src/components/demos/${componentId}.demo.twig`, 
-  props: {
-    "breadcrumbs": [
-      {
-        "label": "Home",
-        "slug": "#"
-      },
-      {
-        "label": "Federal Contracting",
-        "slug": "#"
-      },
-      {
-        "label": "Contracting assistance programs",
-        "slug": "#"
-      }
-    ]
-  }
-})
-
-const rawHTML = '<!DOCTYPE html>' +
-  '<html lang="en">' +
-  '<head>' +
-  '<meta charset="UTF-8">' +
-  '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-  '<title>Embedded HTML</title>' +
-  '<link rel="stylesheet" href="/test.css">'+ 
-  '</head>' +
-  '<body>' +
-  template +
-  '</body>' +
-  '</html>'
+const code = fs.readFileSync(`./src/__demos__/${component}/examples/${variant}.twig`, 'utf8')
+const demoPath = join(import.meta.env.BASE_URL, 'demos', variant)
 ---
 
-<div x-data="{ exampleSize: '1024px', handleResize() { $refs.iframe.style.height = $refs.iframe.contentWindow.document.body.scrollHeight + 'px'}, updateWidth(value) { this.exampleSize = value; this.$nextTick(() => { this.handleResize() }) }, init(){ this.handleResize() }};" 
- class="not-usa-prose">
+<div 
+  x-data="{ exampleSize: '1024px', handleResize() { $refs.iframe.style.height = $refs.iframe.contentWindow.document.body.scrollHeight + 'px'}, updateWidth(value) { this.exampleSize = value; this.$nextTick(() => { this.handleResize() }) }, init(){ this.handleResize() }};" 
+  class="not-usa-prose">
   <div class="max-w-3xl mx-auto">
     <Code code={code} lang="twig" title='breadcrumb.twig' />
   </div>
@@ -74,16 +48,9 @@ const rawHTML = '<!DOCTYPE html>' +
       <div class="absolute top-2 right-2">
         <span class="bg-black/80 py-0.5 px-1 rounded text-sm text-white" x-text="exampleSize"></span>
       </div>
-      <div class="min-h-[350px] bg-gray-cool-2 p-10 flex items-center justify-center mx-auto" :style="{ width: exampleSize }">
-        <iframe x-ref="iframe" class="w-full" height="auto" srcdoc={rawHTML}></iframe>
+      <div class="min-h-[350px] bg-gray-cool-2 flex items-center justify-center mx-auto" :style="{ width: exampleSize }">
+        <iframe title={title} x-ref="iframe" class="w-full" height="auto" src={demoPath}></iframe>
       </div>
     </div>
   </div>
 </div>
-
-<!-- <script>
-  const iframes = document.querySelectorAll('iframe');
-  iframes.forEach((iframe) => {
-      iframe.style.height = iframe?.contentWindow?.document.body.scrollHeight + 'px'
-  });
-</script> -->

@@ -1,0 +1,6 @@
+{
+  "component": "pagination",
+  "variant": "pagination-unbounded.twig",
+  "propsPath": "src/__demos__/pagination/pagination-props.json",
+  "componentPath": "src/__demos__/pagination/examples/pagination-unbounded.twig"
+}

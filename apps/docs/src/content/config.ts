@@ -1,17 +1,24 @@
 import { defineCollection, z } from "astro:content";
 
-export function componentSchema() {
-  return z.object({
-    title: z.string(),
-    description: z.string()
-  })
-}
-
 const componentsCollection = defineCollection({
   type: 'content',
-  schema: componentSchema,
+  schema: z.object({
+    title: z.string(),
+    description: z.string()
+  }),
+})
+
+const componentVariantsCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    component: z.string(),
+    variant: z.string(),
+    propsPath: z.string(),
+    componentPath: z.string()
+  })
 })
 
 export const collections = {
   components: componentsCollection,
+  demos: componentVariantsCollection,
 }

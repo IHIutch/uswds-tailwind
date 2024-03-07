@@ -13,6 +13,6 @@ export default defineConfig({
       themes: ['dark-plus'],
     }),
     mdx(),
-    alpinejs({ entrypoint: "./src/utils/alpine" }),
+    alpinejs({ entrypoint: "/src/utils/alpine/entrypoint" }),
   ]
 });

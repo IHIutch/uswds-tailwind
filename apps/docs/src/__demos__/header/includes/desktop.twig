@@ -1,0 +1,38 @@
+<nav class="flex justify-end items-center pl-2">
+	<ul class="flex pb-1">
+		{% for item in navigation %}
+			<li class="leading-none">
+				{% if item.children  %}
+					<div x-dropdown>
+						<button x-dropdown:trigger class="{{ item.is_active ? 'after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1' }} relative group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1">
+							<span>{{- item.label -}}</span>
+							<span aria-hidden="true" class="hidden mobile-lg:inline">
+								<span class="icon-[material-symbols--keyboard-arrow-down] group-aria-expanded:icon-[material-symbols--keyboard-arrow-up] align-middle size-4"></span>
+							</span>
+						</button>
+						<div x-dropdown:content class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug">
+							{% for child in item.children %}
+								<a x-dropdown:item href="{{- child.href -}}" class="flex text-white py-2 px-4 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v">{{- child.label -}}</a>
+							{% endfor %}
+						</div>
+					</div>
+				{% else %}
+					<a href="{{- item.href -}}" class="p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v">{{- item.label -}}</a>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+
+	<section aria-label="search component">
+		<form role="search">
+			<label for="nav-search" class="sr-only">Search</label>
+			<div class="relative flex items-center">
+				<input id="nav-search" type="search" class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
+				<button aria-label="search" class="rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
+					<div class="icon-[material-symbols--search] size-6"></div>
+				</button>
+			</div>
+		</form>
+	</section>
+
+</nav>

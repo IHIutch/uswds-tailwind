@@ -1,0 +1,6 @@
+{
+  "component": "card",
+  "variant": "card.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/card/examples/card.twig"
+}

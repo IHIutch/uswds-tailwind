@@ -1,0 +1,6 @@
+{
+  "component": "modal",
+  "variant": "modal.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/modal/examples/modal.twig"
+}

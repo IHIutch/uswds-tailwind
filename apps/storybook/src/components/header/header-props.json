@@ -1,0 +1,35 @@
+{
+  "navigation": [
+    {
+      "label": "Dropdown",
+      "is_active": true,
+      "children": [
+        {
+          "label": "Action",
+          "href": "#"
+        },
+        {
+          "label": "Another action",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "label": "Dropdown",
+      "children": [
+        {
+          "label": "Action",
+          "href": "#"
+        },
+        {
+          "label": "Another action",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "label": "Link",
+      "href": "#"
+    }
+  ]
+}

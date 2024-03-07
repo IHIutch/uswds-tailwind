@@ -1,0 +1,58 @@
+---
+import fs from 'fs';
+import { getCollection } from 'astro:content'
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { renderTwigTemplate } from '#utils/functions';
+
+export const getStaticPaths = (async () => {
+  const allDemos = await getCollection('demos')
+  return allDemos.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }))
+}) satisfies GetStaticPaths
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+
+const { entry } = Astro.props
+
+let props = ""
+if(fs.existsSync(entry.data.propsPath)){
+  props = fs.readFileSync(entry.data.propsPath, 'utf8')
+}
+
+
+const template =  await renderTwigTemplate({
+  path: entry.data.componentPath, 
+  props: props ? JSON.parse(props) : ''
+})
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{entry.id}</title>
+	</head>
+	<body x-data class="p-4 font-source-sans-pro">
+		<Fragment set:html={template} />
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("a").forEach(function (link) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+          });
+        });
+
+        document.querySelectorAll("form").forEach(function (form){
+          form.addEventListener("submit", function(e){
+            e.preventDefault()
+          })
+        })
+      });
+    </script>
+	</body>
+</html>
+

@@ -1,0 +1,6 @@
+{
+  "component": "accordion",
+  "variant": "accordion.twig",
+  "propsPath": "src/__demos__/accordion/accordion-props.json",
+  "componentPath": "src/__demos__/accordion/examples/accordion.twig"
+}

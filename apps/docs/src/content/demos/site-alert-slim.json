@@ -1,0 +1,6 @@
+{
+  "component": "site-alert",
+  "variant": "site-alert-slim.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/site-alert/examples/site-alert-slim.twig"
+}

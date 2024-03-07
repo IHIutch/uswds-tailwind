@@ -1,0 +1,6 @@
+{
+  "component": "language-selector",
+  "variant": "menu.twig",
+  "propsPath": "src/__demos__/language-selector/language-selector-props.json",
+  "componentPath": "src/__demos__/language-selector/examples/menu.twig"
+}

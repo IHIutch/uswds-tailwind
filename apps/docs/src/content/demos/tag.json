@@ -1,0 +1,6 @@
+{
+  "component": "tag",
+  "variant": "tag.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/tag/examples/tag.twig"
+}

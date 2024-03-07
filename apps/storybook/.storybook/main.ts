@@ -6,7 +6,7 @@ import { join } from "node:path"
 
 const config = {
   stories: [
-    "../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/components/**/*.stories.@(js|ts)",
   ],
 
   addons: [
@@ -23,11 +23,7 @@ const config = {
   viteFinal(config) {
     return mergeConfig(config, {
       plugins: [
-        twig({
-          namespaces: {
-            components: join(__dirname, "../src/components"),
-          },
-        }),
+        twig(),
       ],
     });
   },
