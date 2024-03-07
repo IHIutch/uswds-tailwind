@@ -4,6 +4,20 @@ import { getCollection } from 'astro:content'
 import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
 import { renderTwigTemplate } from '#utils/functions';
 
+import "@fontsource-variable/open-sans";
+import "@fontsource-variable/public-sans";
+import "@fontsource-variable/roboto-mono";
+import "@fontsource/merriweather/300.css";
+import "@fontsource/merriweather/400.css";
+import "@fontsource/merriweather/700.css";
+import "@fontsource/merriweather/900.css";
+import "@fontsource/source-sans-pro/200.css";
+import "@fontsource/source-sans-pro/300.css";
+import "@fontsource/source-sans-pro/400.css";
+import "@fontsource/source-sans-pro/600.css";
+import "@fontsource/source-sans-pro/700.css";
+import "@fontsource/source-sans-pro/900.css";
+
 export const getStaticPaths = (async () => {
   const allDemos = await getCollection('demos')
   return allDemos.map((entry) => ({
@@ -29,29 +43,34 @@ const template =  await renderTwigTemplate({
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{entry.id}</title>
 	</head>
-	<body x-data class="p-4 font-source-sans-pro">
-		<Fragment set:html={template} />
+	<body x-data class="font-source-sans-pro h-full">
+		<div class="p-4">
+      <!-- Example start -->
+      <Fragment set:html={template} />
+      <!-- Example end -->
+    </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("a").forEach(function (link) {
-          link.addEventListener("click", function (e) {
-            e.preventDefault();
-          });
+      // @ts-ignore
+      import 'iframe-resizer' // This runs automatically
+        
+      document.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
         });
-
-        document.querySelectorAll("form").forEach(function (form){
-          form.addEventListener("submit", function(e){
-            e.preventDefault()
-          })
-        })
       });
+      
+      document.querySelectorAll("form").forEach(function (form){
+        form.addEventListener("submit", function(e){
+          e.preventDefault()
+        })
+      })
     </script>
 	</body>
 </html>

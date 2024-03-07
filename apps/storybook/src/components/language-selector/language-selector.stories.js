@@ -1,5 +1,5 @@
 import LanguageSelectorDefault from '../../components/language-selector/examples/language-selector.twig'
-import LanguageSelectorMenu from '../../components/language-selector/examples/menu.twig'
+import LanguageSelectorMenu from '../../components/language-selector/examples/language-selector-menu.twig'
 import props from "./language-selector-props.json";
 
 export default {

@@ -29,5 +29,8 @@
   },
   "include": [
     "src",
+  ],
+  "exclude": [
+    "../docs/src/utils/alpine/*.ts"
   ]
 }

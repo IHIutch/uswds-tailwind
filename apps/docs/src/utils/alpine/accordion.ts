@@ -28,7 +28,6 @@ export default function (Alpine: Alpine) {
 const accordionRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
     'x-data'() {
-      console.log({ el })
       return {
         rootEl: el,
         multiple: el.hasAttribute('data-multiple'),

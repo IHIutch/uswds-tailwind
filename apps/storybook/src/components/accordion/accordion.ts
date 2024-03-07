@@ -1,4 +1,4 @@
-import { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from "alpinejs"
 
 export default function (Alpine: Alpine) {
   Alpine.directive('accordion', (el, directive) => {

@@ -13,6 +13,7 @@ import "@fontsource/source-sans-pro/600.css";
 import "@fontsource/source-sans-pro/700.css";
 import "@fontsource/source-sans-pro/900.css";
 import { getCollection } from "astro:content";
+
 interface Props {
 	title: string;
 }
@@ -21,6 +22,7 @@ const allComponents = await getCollection('components')
 
 const { title } = Astro.props;
 const {pathname} = Astro.url
+
 ---
 
 <!doctype html>
@@ -54,5 +56,14 @@ const {pathname} = Astro.url
     <div class="fixed inset-0 ml-72 h-full overflow-y-auto">
       <slot />
     </div>
+    <script>
+      // @ts-ignore
+      import 'iframe-resizer'
+
+      window.iFrameResize({
+        // log: true,
+        heightCalculationMethod: 'lowestElement',
+      });
+    </script>
 	</body>
 </html>
