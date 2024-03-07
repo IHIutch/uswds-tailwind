@@ -3,4 +3,5 @@
 
 interface Window {
   Alpine: import('alpinejs').Alpine;
+  iFrameResize: import('iframe-resizer').iFrameResize;
 }

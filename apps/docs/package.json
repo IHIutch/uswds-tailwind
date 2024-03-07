@@ -25,6 +25,7 @@
     "alpinejs": "^3.13.5",
     "astro": "^4.4.0",
     "astro-expressive-code": "^0.32.4",
+    "iframe-resizer": "^4.3.9",
     "tailwindcss": "^3.4.1",
     "twig": "^1.17.1",
     "typescript": "^5.3.3"

@@ -1,8 +1,6 @@
 /** @type { import('@storybook/html-vite').StorybookConfig } */
 import { mergeConfig } from 'vite';
 import twig from 'vite-plugin-twig-drupal'
-import { join } from "node:path"
-
 
 const config = {
   stories: [

@@ -1,65 +1,77 @@
 {% import '../includes/pagination.twig' as paginate  %}
 
 <nav aria-label="Pagination" class="flex justify-center">
-	<ul class="flex space-x-2">
+  <ul class="flex space-x-2">
 
-		{% if pagination.current_page != 1 %}
-			<li class="h-10 min-w-10 hidden tablet:inline-flex">
-				<a href="#" class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v">
-					<span aria-hidden="true" class="icon-[material-symbols--chevron-left] align-middle"></span>
-					Previous
-				</a>
-			</li>
-		{% endif %}
+    {% if pagination.current_page != 1 %}
+      <li class="h-10 min-w-10 hidden tablet:inline-flex">
+        <a
+          href="#"
+          class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v"
+          >
+          <span
+            aria-hidden="true"
+            class="icon-[material-symbols--chevron-left] align-middle"
+          ></span>
+          Previous
+        </a>
+      </li>
+    {% endif %}
 
-		{% if pagination.page_count <= 7 %}
+    {% if pagination.page_count <= 7 %}
 
-			{% for i in range(1, pagination.page_count) %}
-				{{ paginate.button(i, '', i == pagination.current_page, i == pagination.page_count) }}
-			{% endfor %}
+      {% for i in range(1, pagination.page_count) %}
+        {{ paginate.button(i, '', i == pagination.current_page, i == pagination.page_count) }}
+      {% endfor %}
 
-		{% else %}
+    {% else %}
 
-			{% if pagination.current_page <= 4  %}
+      {% if pagination.current_page <= 4  %}
 
-				{% for i in range(1, 4) %}
-					{{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
-				{% endfor %}
-				{{ paginate.ellipsis() }}
-				{{ paginate.button(pagination.page_count, '') }}
+        {% for i in range(1, 4) %}
+          {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
+        {% endfor %}
+        {{ paginate.ellipsis() }}
+        {{ paginate.button(pagination.page_count, '') }}
 
-			{% elseif pagination.current_page >= pagination.page_count - 3 %}
+      {% elseif pagination.current_page >= pagination.page_count - 3 %}
 
-				{{ paginate.button(1, '') }}
-				{{ paginate.ellipsis() }}
-				{% for i in range(pagination.page_count - 4, pagination.page_count) %}
-					{{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
-				{% endfor %}
+        {{ paginate.button(1, '') }}
+        {{ paginate.ellipsis() }}
+        {% for i in range(pagination.page_count - 4, pagination.page_count) %}
+          {{ paginate.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
+        {% endfor %}
 
-			{% else %}
+      {% else %}
 
-				{{ paginate.button(1, '') }}
-				{{ paginate.ellipsis() }}
+        {{ paginate.button(1, '') }}
+        {{ paginate.ellipsis() }}
 
-				{% for i in range(pagination.current_page - 1, pagination.current_page + 1) %}
-					{{ paginate.button(i, '', i == pagination.current_page, i == pagination.page_count) }}
-				{% endfor %}
+        {% for i in range(pagination.current_page - 1, pagination.current_page + 1) %}
+          {{ paginate.button(i, '', i == pagination.current_page, i == pagination.page_count) }}
+        {% endfor %}
 
-				{{ paginate.ellipsis() }}
-				{{ paginate.button(pagination.page_count, '') }}
+        {{ paginate.ellipsis() }}
+        {{ paginate.button(pagination.page_count, '') }}
 
-			{% endif %}
+      {% endif %}
 
-		{% endif %}
+    {% endif %}
 
-		{% if pagination.current_page != pagination.page_count %}
-			<li class="h-10 min-w-10 hidden tablet:inline-flex">
-				<a href="#" class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v">
-					Next
-					<span aria-hidden="true" class="icon-[material-symbols--chevron-right] align-middle"></span>
-				</a>
-			</li>
-		{% endif %}
+    {% if pagination.current_page != pagination.page_count %}
+     <li class="h-10 min-w-10 hidden tablet:inline-flex">
+      <a
+        href="#"
+        class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v"
+        >
+        Next
+        <span
+          aria-hidden="true"
+          class="icon-[material-symbols--chevron-right] align-middle"
+        ></span>
+      </a>
+    </li>
+    {% endif %}
 
-	</ul>
+  </ul>
 </nav>
