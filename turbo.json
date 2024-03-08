@@ -10,6 +10,9 @@
         ".astro/**"
       ]
     },
+    "build-registry": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true
