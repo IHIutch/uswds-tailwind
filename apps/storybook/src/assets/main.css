@@ -1,4 +1,15 @@
 @tailwind base;
+
+
+/* @layer base {
+  @supports (content-visibility:hidden) {
+    [hidden='until-found'] {
+      display: inherit;
+      content-visibility: hidden;
+    }
+  }
+} */
+
 @tailwind components;
 @tailwind utilities;
 

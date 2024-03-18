@@ -5,7 +5,7 @@ import tailwindForms from '@tailwindcss/forms'
 import tailwindTypography from '@tailwindcss/typography'
 import tailwindAnimate from "tailwindcss-animate"
 import plugin from 'tailwindcss/plugin'
-import type { PluginAPI, PluginUtils } from "tailwindcss/types/config";
+import type { PluginUtils } from "tailwindcss/types/config";
 
 const config = {
   theme: {
@@ -721,12 +721,20 @@ const config = {
     tailwindForms({
       strategy: 'class'
     }),
-    plugin(function ({ addVariant }) {
+    plugin(function ({ addVariant, addUtilities }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
       addVariant('valid', ['&[data-valid]'])
       addVariant('invalid', ['&[data-invalid]'])
-      addVariant('forced-colors', '@media (forced-colors: active)')
+      addVariant('forced-colors', '@media (forced-colors: active)'),
+      addUtilities({
+        '[hidden=until-found]': {
+          '@supports (content-visibility:hidden)': {
+            display: 'inherit',
+            'content-visibility': 'hidden',
+          },
+        },
+      });
     }),
   ],
 } satisfies Omit<Config, 'content'>
