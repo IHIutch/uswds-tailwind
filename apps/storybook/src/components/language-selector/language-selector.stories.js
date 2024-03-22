@@ -1,16 +1,15 @@
-import LanguageSelectorDefault from '../../components/language-selector/examples/language-selector.twig'
-import LanguageSelectorMenu from '../../components/language-selector/examples/language-selector-menu.twig'
+import LanguageSelectorDefault from "../../components/language-selector/examples/language-selector.twig";
+import LanguageSelectorMenu from "../../components/language-selector/examples/language-selector-menu.twig";
 import props from "./language-selector-props.json";
 
 export default {
-  title: 'Language Selector',
+  title: "Language Selector",
 };
 
 export const Default = {
-  render: () => LanguageSelectorDefault()
+  render: () => LanguageSelectorDefault(),
 };
 
 export const Menu = {
-  render: () => LanguageSelectorMenu(props)
+  render: () => LanguageSelectorMenu(props),
 };
-

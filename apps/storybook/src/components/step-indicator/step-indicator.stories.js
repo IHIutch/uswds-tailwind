@@ -1,30 +1,30 @@
-import StepIndicatorDefault from '../../components/step-indicator/examples/step-indicator.twig';
-import StepIndicatorNoLabels from '../../components/step-indicator/examples/step-indicator-no-labels.twig';
-import StepIndicatorCentered from '../../components/step-indicator/examples/step-indicator-centered.twig';
-import StepIndicatorCounters from '../../components/step-indicator/examples/step-indicator-counters.twig';
-import StepIndicatorCountersSmall from '../../components/step-indicator/examples/step-indicator-counters-small.twig';
+import StepIndicatorDefault from "../../components/step-indicator/examples/step-indicator.twig";
+import StepIndicatorNoLabels from "../../components/step-indicator/examples/step-indicator-no-labels.twig";
+import StepIndicatorCentered from "../../components/step-indicator/examples/step-indicator-centered.twig";
+import StepIndicatorCounters from "../../components/step-indicator/examples/step-indicator-counters.twig";
+import StepIndicatorCountersSmall from "../../components/step-indicator/examples/step-indicator-counters-small.twig";
 import props from "./step-indicator-props.json";
 
 export default {
-  title: 'Step Indicator',
+  title: "Step Indicator",
 };
 
 export const Default = {
-  render: () => StepIndicatorDefault(props)
+  render: () => StepIndicatorDefault(props),
 };
 
 export const NoLabels = {
-  render: () => StepIndicatorNoLabels(props)
+  render: () => StepIndicatorNoLabels(props),
 };
 
 export const Centered = {
-  render: () => StepIndicatorCentered(props)
+  render: () => StepIndicatorCentered(props),
 };
 
 export const Counters = {
-  render: () => StepIndicatorCounters(props)
+  render: () => StepIndicatorCounters(props),
 };
 
 export const CountersSmall = {
-  render: () => StepIndicatorCountersSmall(props)
+  render: () => StepIndicatorCountersSmall(props),
 };

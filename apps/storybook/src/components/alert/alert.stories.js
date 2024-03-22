@@ -1,19 +1,19 @@
-import AlertDefault from '../../components/alert/examples/alert.twig';
-import AlertSlim from '../../components/alert/examples/alert-slim.twig';
-import AlertNoIcon from '../../components/alert/examples/alert-no-icon.twig';
+import AlertDefault from "../../components/alert/examples/alert.twig";
+import AlertSlim from "../../components/alert/examples/alert-slim.twig";
+import AlertNoIcon from "../../components/alert/examples/alert-no-icon.twig";
 
 export default {
-  title: 'Alert',
+  title: "Alert",
 };
 
 export const Default = {
-  render: () => AlertDefault()
+  render: () => AlertDefault(),
 };
 
 export const Slim = {
-  render: () => AlertSlim()
+  render: () => AlertSlim(),
 };
 
 export const NoIcon = {
-  render: () => AlertNoIcon()
+  render: () => AlertNoIcon(),
 };

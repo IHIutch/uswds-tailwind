@@ -1,9 +1,9 @@
-import MemorableDateDefault from '../../components/memorable-date/examples/memorable-date.twig';
+import MemorableDateDefault from "../../components/memorable-date/examples/memorable-date.twig";
 
 export default {
-  title: 'Memorable Date',
+  title: "Memorable Date",
 };
 
 export const Default = {
-  render: () => MemorableDateDefault()
+  render: () => MemorableDateDefault(),
 };

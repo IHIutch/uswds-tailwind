@@ -1,9 +1,9 @@
-import SummaryBoxDefault from '../../components/summary-box/examples/summary-box.twig';
+import SummaryBoxDefault from "../../components/summary-box/examples/summary-box.twig";
 
 export default {
-  title: 'Summary Box',
+  title: "Summary Box",
 };
 
 export const Default = {
-  render: () => SummaryBoxDefault()
+  render: () => SummaryBoxDefault(),
 };

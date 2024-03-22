@@ -1,9 +1,7 @@
-
 export default {
-  title: '_Table',
+  title: "_Table",
 };
 
 export const Default = {
-  render: () => '<div>todo</div>'
+  render: () => "<div>todo</div>",
 };
-

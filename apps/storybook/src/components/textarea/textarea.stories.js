@@ -1,9 +1,9 @@
-import TextareaDefault from '../../components/textarea/examples/textarea.twig';
+import TextareaDefault from "../../components/textarea/examples/textarea.twig";
 
 export default {
-  title: 'Textarea',
+  title: "Textarea",
 };
 
 export const Default = {
-  render: () => TextareaDefault()
+  render: () => TextareaDefault(),
 };

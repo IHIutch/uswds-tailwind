@@ -1,15 +1,14 @@
-import CardDefault from '../../components/card/examples/card.twig';
-import CardHorizontal from '../../components/card/examples/card-horizontal.twig';
+import CardDefault from "../../components/card/examples/card.twig";
+import CardHorizontal from "../../components/card/examples/card-horizontal.twig";
 
 export default {
-  title: 'Card',
+  title: "Card",
 };
 
 export const Default = {
-  render: () => CardDefault()
+  render: () => CardDefault(),
 };
 
 export const Horizontal = {
-  render: () => CardHorizontal()
+  render: () => CardHorizontal(),
 };
-

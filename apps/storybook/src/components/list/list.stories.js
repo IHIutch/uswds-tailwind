@@ -1,9 +1,9 @@
-import ListDefault from '../../components/list/examples/list.twig';
+import ListDefault from "../../components/list/examples/list.twig";
 
 export default {
-  title: 'List',
+  title: "List",
 };
 
 export const Default = {
-  render: () => ListDefault()
+  render: () => ListDefault(),
 };

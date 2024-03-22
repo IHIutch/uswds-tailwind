@@ -1,15 +1,15 @@
-import SideNavigationDefault from '../../components/side-navigation/examples/side-navigation.twig';
-import SideNavigationNested from '../../components/side-navigation/examples/side-navigation-nested.twig';
+import SideNavigationDefault from "../../components/side-navigation/examples/side-navigation.twig";
+import SideNavigationNested from "../../components/side-navigation/examples/side-navigation-nested.twig";
 import props from "./side-navigation-props.json";
 
 export default {
-  title: 'Side Navigation',
+  title: "Side Navigation",
 };
 
 export const Default = {
-  render: () => SideNavigationDefault(props)
+  render: () => SideNavigationDefault(props),
 };
 
 export const Nested = {
-  render: () => SideNavigationNested(props)
+  render: () => SideNavigationNested(props),
 };

@@ -1,4 +1,4 @@
-/** @type { import('@storybook/html-vite').StorybookConfig } */
+import { dirname, join } from "path";
 import { mergeConfig } from 'vite';
 import twig from 'vite-plugin-twig-drupal'
 
@@ -8,13 +8,13 @@ const config = {
   ],
 
   addons: [
-    '@storybook/addon-a11y',
-    "@storybook/addon-essentials",
-    "@storybook/addon-links",
+    getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-essentials"),
+    getAbsolutePath("@storybook/addon-links"),
   ],
 
   framework: {
-    name: "@storybook/html-vite",
+    name: getAbsolutePath("@storybook/html-vite"),
     options: {},
   },
 
@@ -27,3 +27,7 @@ const config = {
   },
 };
 export default config;
+
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, "package.json")));
+}

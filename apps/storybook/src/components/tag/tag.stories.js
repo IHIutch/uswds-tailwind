@@ -1,14 +1,14 @@
-import TagDefault from '../../components/tag/examples/tag.twig';
-import TagLarge from '../../components/tag/examples/tag-large.twig';
+import TagDefault from "../../components/tag/examples/tag.twig";
+import TagLarge from "../../components/tag/examples/tag-large.twig";
 
 export default {
-  title: 'Tag',
+  title: "Tag",
 };
 
 export const Default = {
-  render: () => TagDefault()
+  render: () => TagDefault(),
 };
 
 export const Large = {
-  render: () => TagLarge()
+  render: () => TagLarge(),
 };

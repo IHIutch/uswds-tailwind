@@ -1,9 +1,9 @@
-import LinkDefault from '../../components/link/examples/link.twig';
+import LinkDefault from "../../components/link/examples/link.twig";
 
 export default {
-  title: 'Link',
+  title: "Link",
 };
 
 export const Default = {
-  render: () => LinkDefault()
+  render: () => LinkDefault(),
 };

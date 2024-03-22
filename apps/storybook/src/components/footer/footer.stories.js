@@ -1,18 +1,17 @@
-import FooterDefault from '../../components/footer/examples/footer.twig'
-import FooterMedium from '../../components/footer/examples/medium.twig'
-import FooterSlim from '../../components/footer/examples/slim.twig'
+import FooterDefault from "../../components/footer/examples/footer.twig";
+import FooterMedium from "../../components/footer/examples/medium.twig";
+import FooterSlim from "../../components/footer/examples/slim.twig";
 
 export default {
-  title: 'Footer',
+  title: "Footer",
 };
 
 export const Default = {
-  render: () => FooterDefault()
+  render: () => FooterDefault(),
 };
 export const Medium = {
-  render: () => FooterMedium()
+  render: () => FooterMedium(),
 };
 export const Slim = {
-  render: () => FooterSlim()
+  render: () => FooterSlim(),
 };
-

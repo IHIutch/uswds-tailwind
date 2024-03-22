@@ -1,9 +1,9 @@
-import TooltipDefault from '../../components/tooltip/examples/tooltip.twig';
+import TooltipDefault from "../../components/tooltip/examples/tooltip.twig";
 
 export default {
-  title: 'Tooltip',
+  title: "Tooltip",
 };
 
 export const Default = {
-  render: () => TooltipDefault()
+  render: () => TooltipDefault(),
 };
