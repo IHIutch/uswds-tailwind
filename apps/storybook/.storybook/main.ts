@@ -1,6 +1,5 @@
 import { dirname, join } from "path";
 import { mergeConfig } from 'vite';
-import twig from 'vite-plugin-twig-drupal'
 
 const config = {
   stories: [
@@ -16,14 +15,6 @@ const config = {
   framework: {
     name: getAbsolutePath("@storybook/html-vite"),
     options: {},
-  },
-
-  viteFinal(config) {
-    return mergeConfig(config, {
-      plugins: [
-        twig(),
-      ],
-    });
   },
 };
 export default config;
