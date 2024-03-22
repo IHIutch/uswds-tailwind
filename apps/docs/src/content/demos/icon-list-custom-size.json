@@ -1,0 +1,6 @@
+{
+  "component": "icon-list",
+  "variant": "icon-list-custom-size.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/icon-list/examples/icon-list-custom-size.twig"
+}

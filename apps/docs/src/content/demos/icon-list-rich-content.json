@@ -1,0 +1,6 @@
+{
+  "component": "icon-list",
+  "variant": "icon-list-rich-content.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/icon-list/examples/icon-list-rich-content.twig"
+}
