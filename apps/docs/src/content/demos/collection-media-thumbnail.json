@@ -1,0 +1,6 @@
+{
+  "component": "collection",
+  "variant": "collection-media-thumbnail.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/collection/examples/collection-media-thumbnail.twig"
+}

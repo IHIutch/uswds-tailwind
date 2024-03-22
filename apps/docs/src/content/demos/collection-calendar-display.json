@@ -1,0 +1,6 @@
+{
+  "component": "collection",
+  "variant": "collection-calendar-display.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/collection/examples/collection-calendar-display.twig"
+}

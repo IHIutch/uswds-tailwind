@@ -1,0 +1,6 @@
+{
+  "component": "collection",
+  "variant": "collection-headings-only.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/collection/examples/collection-headings-only.twig"
+}
