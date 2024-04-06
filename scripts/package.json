@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "migrate": "ts-node src/migrate.ts"
+    "migrate": "tsx src/migrate.ts"
   },
   "dependencies": {
     "find-up": "6.3.0",
@@ -16,7 +16,7 @@
     "@types/fs-extra": "11.0.1",
     "@types/node": "18.16.19",
     "@types/prettier": "2.7.3",
-    "ts-node": "10.9.1",
+    "tsx": "^4.7.2",
     "typescript": "5.1.6"
   }
 }
