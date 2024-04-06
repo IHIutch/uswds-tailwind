@@ -7,9 +7,9 @@ export default {
 };
 
 export const Default = {
-  render: () => renderTwig({path: TagDefault}),
+  render: () => renderTwig({ path: TagDefault }),
 };
 
 export const Large = {
-  render: () => renderTwig({path: TagLarge}),
+  render: () => renderTwig({ path: TagLarge }),
 };
