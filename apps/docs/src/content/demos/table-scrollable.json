@@ -1,0 +1,6 @@
+{
+  "component": "table",
+  "variant": "table-scrollable.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/table/examples/table-scrollable.twig"
+}

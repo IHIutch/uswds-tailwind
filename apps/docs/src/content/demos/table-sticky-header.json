@@ -1,0 +1,6 @@
+{
+  "component": "table",
+  "variant": "table-sticky-header.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/table/examples/table-sticky-header.twig"
+}

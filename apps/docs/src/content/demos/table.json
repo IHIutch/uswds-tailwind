@@ -1,0 +1,6 @@
+{
+  "component": "table",
+  "variant": "table.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/table/examples/table.twig"
+}

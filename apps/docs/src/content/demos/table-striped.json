@@ -1,0 +1,6 @@
+{
+  "component": "table",
+  "variant": "table-striped.twig",
+  "propsPath": "",
+  "componentPath": "src/__demos__/table/examples/table-striped.twig"
+}
