@@ -10,7 +10,7 @@
         ".astro/**"
       ]
     },
-    "build-registry": {
+    "migrate": {
       "cache": false
     },
     "dev": {
