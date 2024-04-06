@@ -15,11 +15,35 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
 const { entry } = Astro.props
-const { Content } = await entry.render()
+const { Content, headings } = await entry.render()
+
+const activeHeading = ''
 ---
 
 <Layout title={entry.data.title}>
-    <div class="mx-auto usa-prose max-w-none w-full my-12 [&_>_*:not(.not-usa-prose)]:max-w-3xl [&_>_*:not(.not-usa-prose)]:mx-auto">
-      <Content />
+    <div class="flex w-full">
+      <aside class="w-72 shrink-0 order-1 pr-4 hidden desktop-lg:block">
+        <div class="fixed top-0 py-12 font-public-sans">
+          <h4 class="font-bold mb-2">On this page</h4>
+          <ul class="border-l border-gray-cool-20">
+            {headings.map((heading) => (
+              <li class="border-l-4 -ml-1" class:list={activeHeading === heading.slug ? 'border-black' : 'border-transparent'}>
+                <a class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v leading-tighter text-sm" href={`#${heading.slug}`}>
+                  <span class:list={{'pl-3': heading.depth === 3}}>{heading.text}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+      <div class="py-12 px-8 w-full desktop-lg:w-[calc(100%_-_18rem)]">
+        <div class="mb-16">
+          <h1 class="text-4xl font-bold font-public-sans mb-4">{entry.data.title}</h1>
+          <p class="text-xl font-light font-public-sans max-w-prose">{entry.data.description}</p>
+        </div>
+        <div class="usa-prose max-w-fit [&_>_*:not(.not-usa-prose)]:max-w-prose">
+          <Content />
+        </div>
+      </div>
     </div>
 </Layout>

@@ -549,7 +549,7 @@ const config = {
       tablet: "640px",
       // "tablet-lg": "880px",
       desktop: "1024px",
-      // "desktop-lg": "1200px",
+      "desktop-lg": "1200px",
       // widescreen: "1400px",
     },
     fontFamily: {
@@ -573,6 +573,7 @@ const config = {
             fontFamily: theme('fontFamily.source-sans-pro'),
             fontSize: theme('fontSize.base')[0],
             lineHeight: theme('lineHeight.normal'),
+            color: theme('colors.black'),
 
             'a': {
               color: theme('colors.blue-60v'),
