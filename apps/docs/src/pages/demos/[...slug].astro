@@ -50,7 +50,7 @@ const template =  await renderTwigTemplate({
 		<title>{entry.id}</title>
 	</head>
 	<body x-data class="font-source-sans-pro h-full">
-		<div class="p-4">
+		<div class="p-4" data-iframe-height>
       <!-- Example start -->
       <Fragment set:html={template} />
       <!-- Example end -->

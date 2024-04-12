@@ -7,6 +7,157 @@ import ComponentPreview from '#components/component-preview.astro'
 
 ## Usage
 
-<ComponentPreview title="Accordion Default" component="accordion" variant="accordion"   />
-<ComponentPreview title="Accordion Bordered" component="accordion" variant="accordion-bordered"   />
-<ComponentPreview title="Accordion Multiple" component="accordion" variant="accordion-multiple"   />
+An accordion is a list of headers that hide or reveal additional content when selected.
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Accordion Default" component="accordion" variant="accordion" />
+
+### Multiselectable
+
+<ComponentPreview title="Accordion Multiple" component="accordion" variant="accordion-multiple" />
+
+### Bordered
+
+<ComponentPreview title="Accordion Bordered" component="accordion" variant="accordion-bordered" />
+
+## Component API
+
+Accordions are made up of 4 primary elements:
+
+### Root
+
+<ContentList>
+  - #### `x-accordion`
+    
+    Custom **Alpine** directive that marks the **Accordion Root**.
+</ContentList>
+
+{ /* <PropsTable>
+| Name | Values | Notes |
+| --- | --- | --- |
+| `x-accordion` |  | Custom **Alpine** directive that marks the **Accordion Root**  |
+</PropsTable> */}
+
+### Item
+
+<ContentList>
+  - #### `x-accordion:item`
+    
+    Custom **Alpine** directive that marks a single **Accordion Item**.
+</ContentList>
+
+{/* <PropsTable>
+| Name | Values | Notes |
+| --- | --- | --- |
+| `x-accordion:item` |   | Custom **Alpine** directive that marks a single **Accordion Item**  |
+</PropsTable> */}
+
+### Trigger
+
+<ContentList>
+  - #### `x-accordion:trigger`
+    
+    Custom **Alpine** directive that marks the **Accordion Trigger**.
+  
+  - #### `aria-controls`
+    
+    **Type:** `string`
+  
+    Accessibility label that links the **Accordion Trigger** control to it's respective **Accordion Content**. 
+    
+    **Automatically handled with JavaScript.**
+  
+  - #### `aria-expanded`
+    
+    **Type:** `boolean`
+  
+    Accessibility label that tells screen readers whether an element is expanded or collapsed. 
+    
+    **Automatically handled with JavaScript.**
+</ContentList>
+
+{/* <PropsTable>
+| Name | Values | Notes |
+| --- | --- | --- |
+| `x-accordion:trigger` |  | Custom **Alpine** directive that marks the **Accordion Trigger**  |
+| `aria-controls` | `string`  | Accessibility label that links the **Accordion Trigger** control to it's respective **Accordion Content**. Automatically handled with JavaScript.   |
+| `aria-expanded` | `true \| false` | Accessibility label that tells screen readers whether an element is expanded or collapsed. Automatically handled with JavaScript.   |
+</PropsTable> */}
+
+### Content
+
+<ContentList>
+  - #### `x-accordion:content`
+    
+    Custom **Alpine** directive that marks the **Accordion Content**.
+  
+  - #### `id`
+    **Type:** `string`
+  
+    Links the **Accordion Content** an it's respective **Accordion Trigger**. 
+    
+    **Automatically handled with JavaScript.**
+  
+  - #### `hidden`
+    **Type:** `'until-found' | false`
+  
+    Handles the visibility of the **Accordion Content**. When `until-found`, content will be hidden but discoverable to browser search. When `false`, content will be visible and `hidden` attribute will be removed. 
+    
+    **Automatically handled with JavaScript.**
+</ContentList>
+
+
+{/* <PropsTable>
+| Name | Description |
+| --- | --- |
+| `x-accordion:content` | Custom **Alpine** directive that marks the **Accordion Content**  |
+| `id` | `string` Links the **Accordion Content** an it's respective **Accordion Trigger**. Automatically handled with JavaScript. |
+| `hidden` | <p>`until-found \| false`</p> <p>Handles the visibility of the **Accordion Content**. When `until-found`, content will be hidden but discoverable to browser search. When `false`, content will be visible and `hidden` attribute will be removed. Automatically handled with JavaScript.</p> |
+</PropsTable> */}
+
+## Keyboard Interactions
+
+{/* <PropsTable>
+| Keyboard Command | Description |
+| --- | --- |
+| <kbd>Enter</kbd> or <kbd>Space</kbd> | When focus is on an **Accordion Item** for a collapsed panel, expands the associated panel. If the implementation allows only one panel to be expanded, the previously expanded panel is collapsed. |
+| <kbd>Tab</kbd> | Moves focus to the next focusable element. All **Accordion Items** in the **Accordion List** must be included in the page <kbd>Tab</kbd> sequence. |
+| <kbd>Down Arrow</kbd> | If focus is on an **Accordion Item**, moves focus to the next **Accordion Item**. If focus is on the last **Accordion Item**, moves focus to the first **Accordion Item**. |
+| <kbd>Shift + Tab</kbd> | Moves focus to the previous focusable element. All **Accordion Items** in the **Accordion List** must be included in the page <kbd>Tab</kbd> sequence. |
+| <kbd>Up Arrow</kbd> | If focus is on an **Accordion Item**, moves focus to the previous **Accordion Item**. If focus is on the first **Accordion Item**, moves focus to the last **Accordion Item**. |
+| <kbd>Home</kbd> or <kbd>fn + Left Arrow</kbd> on Mac | If focus is on an **Accordion Item**, moves focus to the first **Accordion Item**. |
+| <kbd>End</kbd> or <kbd>fn + Right Arrow</kbd> on Mac | If focus is on an **Accordion Item**, moves focus to the last **Accordion Item**. |
+</PropsTable> */}
+
+<ContentList>
+  - <kbd>Enter</kbd> or <kbd>Space</kbd>
+  
+    When focus is on an **Accordion Item** for a collapsed panel, expands the associated panel. If the implementation allows only one panel to be expanded, the previously expanded panel is collapsed.
+  
+  - <kbd>Tab</kbd>
+  
+    Moves focus to the next focusable element. All **Accordion Items** in the **Accordion List** must be included in the page <kbd>Tab</kbd> sequence.
+  
+  - <kbd>Down Arrow</kbd>
+  
+    If focus is on an **Accordion Item**, moves focus to the next **Accordion Item**. If focus is on the last **Accordion Item**, moves focus to the first **Accordion Item**.
+  
+  - <kbd>Shift</kbd> + <kbd>Tab</kbd>
+  
+    Moves focus to the previous focusable element. All **Accordion Items** in the **Accordion List** must be included in the page <kbd>Tab</kbd> sequence.
+  
+  - <kbd>Up Arrow</kbd>
+  
+    If focus is on an **Accordion Item**, moves focus to the previous **Accordion Item**. If focus is on the first **Accordion Item**, moves focus to the last **Accordion Item**.
+  
+  - <kbd>Home</kbd> or <kbd>fn</kbd> + <kbd>Left Arrow</kbd> (Mac)
+  
+    If focus is on an **Accordion Item**, moves focus to the first **Accordion Item**.
+  
+  - <kbd>End</kbd> or <kbd>fn</kbd> + <kbd>Right Arrow</kbd> (Mac)
+  
+    If focus is on an **Accordion Item**, moves focus to the last **Accordion Item**.
+</ContentList>

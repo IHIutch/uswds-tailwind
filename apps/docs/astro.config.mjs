@@ -8,9 +8,9 @@ import expressiveCode from 'astro-expressive-code'
 export default defineConfig({
   integrations: [
     tailwind(),
-    expressiveCode({
-      themes: ['dark-plus'],
-    }),
+    // expressiveCode({
+    //   themes: ['light-plus'],
+    // }),
     mdx(),
     alpinejs({ entrypoint: "/src/utils/alpine/entrypoint" }),
   ]

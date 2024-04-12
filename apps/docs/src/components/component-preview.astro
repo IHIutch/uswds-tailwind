@@ -1,8 +1,7 @@
 ---
 import fs from 'fs';
 import {join} from 'path';
-import { Code } from 'astro-expressive-code/components';
-import type { InferEntrySchema } from 'astro:content';
+import { Code } from 'astro:components'
 import type { CollectionEntry } from 'astro:content';
 
 type Props = {
@@ -19,38 +18,63 @@ const demoPath = join(import.meta.env.BASE_URL, 'demos', variant)
 
 <div 
   x-data="{ exampleSize: '1024px', updateWidth(value) { this.exampleSize = value; } }" 
-  class="not-usa-prose">
-  <div class="mb-4">
-    <div class="border border-gray-cool-20 rounded-t px-4">
-      <div class="flex justify-end gap-2">
-        <button type="button" @click="updateWidth('320px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '320px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
-          <span aria-hidden="true" class="icon-[material-symbols--phone-android] align-middle size-6"></span>
-          <span class="sr-only">Display small phone layout</span>
-        </button>
-        <button type="button" @click="updateWidth('480px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '480px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
-          <span aria-hidden="true" class="icon-[material-symbols--tablet-mac] align-middle size-6"></span>
-          <span class="sr-only">Display large phone layout</span>
-        </button>
-        <button type="button" @click="updateWidth('640px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '640px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
-          <span aria-hidden="true" class="icon-[material-symbols--tablet] align-middle size-6"></span>
-          <span class="sr-only">Display tablet layout</span>
-        </button>
-        <button type="button" @click="updateWidth('1024px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '1024px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
-          <span aria-hidden="true" class="icon-[material-symbols--desktop-mac-outline] align-middle size-6"></span>
-          <span class="sr-only">Display desktop layout</span>
-        </button>
+  class="not-usa-prose w-full max-w-5xl">
+  <div>
+    <div class="border border-gray-cool-20 rounded-t">
+      <div class="flex">
+        <div class="text-black text-sm px-2 border-r border-r-gray-cool-20 flex items-center justify-center w-28">
+          <span class="font-semibold pr-1">Width: </span>
+          <span x-text="exampleSize"></span>
+        </div>
+        <div class="flex gap-2 px-2 ml-auto">
+          <button type="button" @click="updateWidth('320px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '320px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+            <span aria-hidden="true" class="icon-[material-symbols--phone-android] align-middle size-6"></span>
+            <span class="sr-only">Display small phone layout</span>
+          </button>
+          <button type="button" @click="updateWidth('480px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '480px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+            <span aria-hidden="true" class="icon-[material-symbols--tablet-mac] align-middle size-6"></span>
+            <span class="sr-only">Display large phone layout</span>
+          </button>
+          <button type="button" @click="updateWidth('640px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '640px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+            <span aria-hidden="true" class="icon-[material-symbols--tablet] align-middle size-6"></span>
+            <span class="sr-only">Display tablet layout</span>
+          </button>
+          <button type="button" @click="updateWidth('1024px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '1024px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+            <span aria-hidden="true" class="icon-[material-symbols--desktop-mac-outline] align-middle size-6"></span>
+            <span class="sr-only">Display desktop layout</span>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="bg-gray-cool-20 min-w-80 border border-gray-cool-20 rounded-b border-t-0 overflow-hidden relative">
-      <div class="absolute top-2 right-2">
-        <span class="bg-black/80 py-0.5 px-1 rounded text-sm text-white" x-text="exampleSize"></span>
-      </div>
+    <div class="bg-gray-cool-20 min-w-80 border border-gray-cool-20 border-t-0 overflow-auto relative">
       <div class="bg-gray-cool-2 flex items-center justify-center mx-auto" :style="{ width: exampleSize }">
         <iframe title={title} width="100%" height="100%" src={demoPath}></iframe>
       </div>
     </div>
   </div>
-  <div class="">
-    <Code code={code} lang="twig" title='breadcrumb.twig' />
+   <div x-data="{ isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }" >
+    <div class="relative border border-gray-cool-20 border-t-0 rounded-b overflow-hidden">
+      <div class="border-b border-b-gray-cool-20 border-t-0">
+        <div class="flex justify-between">
+          <div class="px-3 border-r border-r-gray-cool-20 flex items-center">
+            <span class="text-black text-sm font-semibold">Twig</span>
+          </div>
+          <div>
+            <button type="button" class="flex items-center justify-center h-10 px-3 border-l border-l-gray-cool-20">
+              <span aria-hidden="true" class="icon-[material-symbols--file-copy] align-middle size-4"></span>
+              <span class="text-sm pl-1">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div :class="isCodeExpanded ? 'h-auto' : 'h-96'" class="overflow-hidden">
+        <Code code={code} lang="twig" theme="light-plus" class="p-4 text-sm" style="background-color: #f7f9fa" />
+      </div>
+      <button x-show="!isCodeExpanded" type="button" @click="toggleExpanded()" class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0">
+        <div class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v">
+          <span>Expand Code</span>
+        </div>
+      </button>
+    </div>
   </div>
 </div>

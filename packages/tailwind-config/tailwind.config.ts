@@ -575,6 +575,37 @@ const config = {
             lineHeight: theme('lineHeight.normal'),
             color: theme('colors.black'),
 
+            'code': {
+              fontFamily: theme('fontFamily.roboto-mono'),
+            },
+            'kbd': {
+              fontFamily: theme('fontFamily.roboto-mono'),
+              borderRadius: theme('rounded'),
+              border: '1px solid ' + theme('colors.gray-cool-30'),
+              color: theme('colors.black'),
+              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-30') + ', 0 3px 2px ' + theme('colors.gray-cool-70') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
+              background: theme('colors.gray-cool-2')
+            },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
+            'code:not([data-rehype-pretty-code-figure] code)': {
+              color: theme('colors.black'),
+              fontWeight: 'normal',
+              backgroundColor: theme('colors.gray-cool-5'),
+              paddingTop: '2px',
+              paddingRight: theme('spacing.2'),
+              paddingBottom: '2px',
+              paddingLeft: theme('spacing.2'),
+              letterSpacing: theme('letterSpacing.wide'),
+            },
+            'strong code:not([data-rehype-pretty-code-figure] code)': {
+              fontWeight: 'bolder',
+            },
+
             'a': {
               color: theme('colors.blue-60v'),
               textDecoration: 'underline',
@@ -722,12 +753,12 @@ const config = {
     tailwindForms({
       strategy: 'class'
     }),
-    plugin(function ({ addVariant, addUtilities }) {
+    plugin(function ({ addVariant, addUtilities, addComponents, theme }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
       addVariant('valid', ['&[data-valid]'])
       addVariant('invalid', ['&[data-invalid]'])
-      addVariant('forced-colors', '@media (forced-colors: active)'),
+      addVariant('forced-colors', '@media (forced-colors: active)')
       addUtilities({
         '[hidden=until-found]': {
           '@supports (content-visibility:hidden)': {
@@ -735,8 +766,80 @@ const config = {
             'content-visibility': 'hidden',
           },
         },
-      });
-    }),
+      })
+      addComponents({
+        '.props-table': {
+          'table': {
+            fontSize: theme('fontSize.sm'),
+            lineHeight: theme('lineHeight.normal'),
+            borderCollapse: 'collapse',
+            borderSpacing: '0',
+            color: theme('colors.gray-90'),
+            textAlign: 'left',
+            // width: '100%',
+          },
+          'table code': {
+            fontFamily: theme('fontFamily.roboto-mono'),
+            color: theme('colors.black'),
+            fontWeight: 'normal',
+            backgroundColor: theme('colors.gray-cool-5'),
+            paddingTop: '2px',
+            paddingRight: theme('spacing.2'),
+            paddingBottom: '2px',
+            paddingLeft: theme('spacing.2'),
+            letterSpacing: theme('letterSpacing.wide'),
+            whiteSpace: 'nowrap'
+          },
+          'table kbd': {
+            fontFamily: theme('fontFamily.roboto-mono'),
+          },
+          'table tbody th': {
+            textAlign: 'left',
+          },
+          'table thead th': {
+            fontWeight: theme('fontWeight.bold'),
+            lineHeight: theme('lineHeight.tight'),
+          },
+          'table thead td, table thead th': {
+            color: theme('colors.gray-90'),
+          },
+          'table th': {
+            backgroundColor: theme('colors.white'),
+            borderBottom: '1px solid ' + theme('colors.gray-90'),
+            fontWeight: theme('fontWeight.normal'),
+            padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+          },
+          'table td': {
+            backgroundColor: theme('colors.white'),
+            borderBottom: '1px solid ' + theme('colors.gray-90'),
+            fontWeight: theme('fontWeight.normal'),
+            padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+            verticalAlign: 'top'
+          },
+          'table caption': {
+            textAlign: 'left',
+            fontSize: theme('fontSize.base')?.[0],
+            fontWeight: theme('fontWeight.bold'),
+            marginBottom: theme('spacing.3'),
+          },
+          'table th[data-sortable]': {
+            paddingRight: theme('spacing.10'),
+            position: 'relative',
+          },
+          'table th[data-sortable]::after': {
+            borderBottomColor: 'transparent',
+            borderBottomStyle: 'solid',
+            borderBottomWidth: '1px',
+            bottom: '0',
+            content: '""',
+            height: '0',
+            left: '0',
+            position: 'absolute',
+            width: '100%',
+          },
+        }
+      })
+    })
   ],
 } satisfies Omit<Config, 'content'>
 
