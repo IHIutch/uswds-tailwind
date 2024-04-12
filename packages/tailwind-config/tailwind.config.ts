@@ -574,7 +574,6 @@ const config = {
             fontSize: theme('fontSize.base')[0],
             lineHeight: theme('lineHeight.normal'),
             color: theme('colors.black'),
-
             'code': {
               fontFamily: theme('fontFamily.roboto-mono'),
             },
@@ -583,7 +582,7 @@ const config = {
               borderRadius: theme('rounded'),
               border: '1px solid ' + theme('colors.gray-cool-30'),
               color: theme('colors.black'),
-              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-30') + ', 0 3px 2px ' + theme('colors.gray-cool-70') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
+              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-30/90') + ', 0 3px 2px ' + theme('colors.gray-cool-70') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
               background: theme('colors.gray-cool-2')
             },
             'code::before': {
@@ -614,23 +613,23 @@ const config = {
               }
             },
 
-            '& > * + *': {
+            '> * + *': {
               marginTop: theme('spacing.4'),
               marginBottom: '0',
             },
 
             // List style
-            '& ul ul, & ul ol, & ol ol, & ol ul': {
+            'ul ul, ul ol, ol ol, ol ul': {
               marginTop: theme('spacing.1'),
               paddingLeft: theme('spacing.10')
             },
-            '& ol li, & ul li': {
+            'ol li, ul li': {
               marginBottom: theme('spacing.1'),
             },
-            '& ol:last-child, & ul:last-child, & li:last-child': {
+            'ol:last-child, ul:last-child, li:last-child': {
               marginBottom: '0',
             },
-            '& ol, & ul': {
+            'ol, ul': {
               listStyle: 'revert',
               marginBottom: theme('spacing.1'),
               marginTop: theme('spacing.4'),
@@ -639,7 +638,7 @@ const config = {
             },
 
             // Table styles
-            '& > table': {
+            '> table': {
               fontSize: theme('fontSize.base')[0],
               lineHeight: theme('lineHeight.normal'),
               borderCollapse: 'collapse',
@@ -648,35 +647,35 @@ const config = {
               margin: theme('spacing.5') + ' 0',
               textAlign: 'left',
             },
-            '& > table tbody th': {
+            '> table tbody th': {
               textAlign: 'left',
             },
-            '& > table thead th': {
+            '> table thead th': {
               backgroundClip: 'padding-box',
               fontWeight: theme('fontWeight.bold'),
               lineHeight: theme('lineHeight.tight'),
             },
-            '& > table thead td, & > table thead th': {
+            '> table thead td, > table thead th': {
               backgroundColor: theme('colors.gray-cool-10'),
               color: theme('colors.gray-90'),
             },
-            '& > table td, & > table th': {
+            '> table td, > table th': {
               backgroundColor: theme('colors.white'),
               border: '1px solid ' + theme('colors.gray-90'),
               fontWeight: theme('fontWeight.normal'),
               padding: theme('spacing.2') + ' ' + theme('spacing.4'),
             },
-            '& > table caption': {
+            '> table caption': {
               textAlign: 'left',
               fontSize: theme('fontSize.base')[0],
               fontWeight: theme('fontWeight.bold'),
               marginBottom: theme('spacing.3'),
             },
-            '& > table th[data-sortable]': {
+            '> table th[data-sortable]': {
               paddingRight: theme('spacing.10'),
               position: 'relative',
             },
-            '& > table th[data-sortable]::after': {
+            '> table th[data-sortable]::after': {
               borderBottomColor: 'transparent',
               borderBottomStyle: 'solid',
               borderBottomWidth: '1px',
@@ -689,47 +688,47 @@ const config = {
             },
 
             // Text styles
-            '& > p': {
+            '> p': {
               lineHeight: theme('lineHeight.normal'),
             },
-            '& > h1, & > h2, & > h3, & > h4, & > h5, & > h6': {
+            '> h1, > h2, > h3, > h4, > h5, > h6': {
               marginBottom: '0',
               marginTop: '0',
             },
-            '& > * + h1, & > * + h2, & > * + h3, & > * + h4, & > * + h5, & > * + h6': {
+            '> * + h1, > * + h2, > * + h3, > * + h4, > * + h5, > * + h6': {
               marginTop: theme('spacing.8'),
             },
-            '& > h1': {
+            'h1': {
               fontSize: theme('fontSize.4xl')[0],
               fontFamily: theme('fontFamily.merriweather'),
               lineHeight: theme('lineHeight.tight'),
-              fontWeight: theme('fontWeight.black'),
+              fontWeight: theme('fontWeight.bold'),
             },
-            '& > h2': {
+            'h2': {
               fontSize: theme('fontSize.3xl')[0],
               fontFamily: theme('fontFamily.merriweather'),
               lineHeight: theme('lineHeight.tight'),
-              fontWeight: theme('fontWeight.black'),
+              fontWeight: theme('fontWeight.bold'),
             },
-            '& > h3': {
+            'h3': {
               fontSize: theme('fontSize.xl')[0],
               fontFamily: theme('fontFamily.merriweather'),
               lineHeight: theme('lineHeight.tight'),
-              fontWeight: theme('fontWeight.black'),
+              fontWeight: theme('fontWeight.bold'),
             },
-            '& > h4': {
-              fontSize: theme('fontSize.base')[0],
+            'h4': {
+              fontSize: theme('fontSize.lg')[0],
               fontFamily: theme('fontFamily.merriweather'),
               lineHeight: theme('lineHeight.tight'),
-              fontWeight: theme('fontWeight.black'),
+              fontWeight: theme('fontWeight.bold'),
             },
-            '& > h5': {
+            'h5': {
               fontSize: theme('fontSize.base')[0],
               fontFamily: theme('fontFamily.public-sans'),
               lineHeight: theme('lineHeight.tight'),
-              fontWeight: theme('fontWeight.black'),
+              fontWeight: theme('fontWeight.bold'),
             },
-            '& > h6': {
+            'h6': {
               fontFamily: theme('fontFamily.source-sans-pro'),
               fontSize: theme('fontSize.sm')[0],
               lineHeight: theme('lineHeight.none'),
