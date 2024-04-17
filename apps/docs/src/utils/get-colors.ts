@@ -1,3 +1,53 @@
+type ColorArrayTest = {
+  [hue: string]: [{
+    label: string,
+    colors: {
+      level: string,
+      hex: string
+    }[]
+    order: number,
+    className: string
+  }];
+};
+
+export const getColors = () => Object.entries(colorsList).reduce((acc, [key, value]) => {
+  const level = key.split('-').pop() || ''
+  let [hue = '', temp = ''] = key.replace(`-${level}`, '').split('-')
+
+  const className = key.replace(`${level}`, '*')
+  hue = hue.charAt(0).toUpperCase() + hue.slice(1)
+  temp = temp.charAt(0).toUpperCase() + temp.slice(1)
+
+  const label = (level.endsWith('v') ? `Vivid ${temp}` : temp ? temp : 'Default').trim();
+
+  let order = 0
+  if (label.includes('Warm')) order += 1
+  if (label.includes('Cool')) order += 2
+  if (label.includes('Vivid')) order += 3
+
+  acc[hue] = acc[hue] || [];
+
+  const found = acc[hue].find(v => v.label === label)
+  if (!found) {
+    acc[hue].push({
+      label,
+      colors: [{
+        level,
+        hex: value
+      }],
+      order,
+      className
+    })
+  } else {
+    found.colors.push({
+      level,
+      hex: value
+    })
+  }
+
+  return acc;
+}, {} as ColorArrayTest);
+
 const colorsList = {
   "gray-cool-1": "#fbfcfd",
   "gray-cool-2": "#f7f9fa",
@@ -460,52 +510,3 @@ const colorsList = {
   "magenta-70v": "#731f44",
   "magenta-80v": "#4f172e"
 }
-
-type ColorArray = {
-  hue: string,
-  temp: string,
-  level: string,
-  isVivid: boolean
-}[]
-
-
-// export const getColors = () => Object.entries(colorsList).reduce((acc, [key, value]) => {
-//   const level = key.split('-').pop() || ''
-//   const [hue = '', temp = ''] = key.replace(`-${level}`, '').split('-')
-
-//   const color = {
-//     hue: hue.charAt(0).toUpperCase() + hue.slice(1),
-//     temp: temp.charAt(0).toUpperCase() + temp.slice(1),
-//     level,
-//     isVivid: level.endsWith('v')
-//   }
-
-//   acc.push(color)
-//   return acc;
-// }, [] as ColorArray);
-
-type ColorArrayTest = {
-  [hue: string]: {
-    [type: string]: {
-      [level: string]: string;
-    };
-  };
-};
-
-export const getColors = () => Object.entries(colorsList).reduce((acc, [key, value]) => {
-  const level = key.split('-').pop() || ''
-  let [hue = '', temp = ''] = key.replace(`-${level}`, '').split('-')
-
-  hue = hue.charAt(0).toUpperCase() + hue.slice(1)
-  temp = temp.charAt(0).toUpperCase() + temp.slice(1)
-
-  const typeKey = level.endsWith('v') ? `Vivid ${temp}` : temp ? temp : 'Default';
-
-  acc[hue] = acc[hue] || {};
-  acc[hue][typeKey] = acc[hue][typeKey] || {};
-  acc[hue][typeKey][level] = value;
-
-  console.log({ hue, temp, level })
-
-  return acc;
-}, {} as ColorArrayTest);

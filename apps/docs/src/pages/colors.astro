@@ -5,8 +5,6 @@ import { getColors } from "#utils/get-colors";
 const formattedColors = getColors()
 const activeHeading = ''
 
-console.log(formattedColors)
-
 ---
 
 <BaseLayout title="Colors">
@@ -35,45 +33,39 @@ console.log(formattedColors)
             Color is a practical and emotional tool. It conveys personality, sets a tone, attracts attention, and indicates importance.
           </p>
         </div>
-        <div class="">
-          <!-- <Content components={{
-            PropsTable,
-            ContentList
-          }} /> -->
-          <!-- <pre>{JSON.stringify(formattedColors, null, 2)}</pre> -->
-
-          <div class="space-y-12">
-            {Object.keys(formattedColors).map(color => (
-              <div>
-                <h2 id={color} class="font-public-sans text-3xl font-bold mb-6">{color}</h2>
-                <div class="space-y-6">
-                {Object.keys(formattedColors[color]).map(type => (
-                    <div>
-                      <h3 class="font-public-sans text-lg font-medium mb-2">{type || 'Default'}</h3>
-                      <div class="grid grid-cols-10 gap-y-3 gap-x-2" class:list={Object.entries(formattedColors[color][type]).length <= 10 ? 'grid-cols-10' : 'grid-cols-[repeat(14,_minmax(0,_1fr))]'}>
-                        {Object.entries(formattedColors[color][type]).map(([key, val]) => (
-                          <div>
-                            <div class="h-10 w-10 mobile-lg:w-full" style={{backgroundColor: val}}></div>
-                            <div class="mt-1">
-                              <div class="flex">
-                                <span class="text-sm font-medium">{key}</span>
-                              </div>
-                              <div class="flex">
-                                <span class="text-sm font-roboto-mono text-gray-cool-50">{val}</span>
-                              </div>
+        <div class="space-y-12">
+          {Object.keys(formattedColors).map(colorName => (
+            <div>
+              <h2 id={colorName} class="font-public-sans text-3xl font-bold mb-4">{colorName}</h2>
+              <div class="space-y-8">
+              {Object.values(formattedColors[colorName]).sort((a, b) => a.order - b.order).map(temp => (
+                  <div>
+                    <div class="mb-2">
+                      <h3 class="font-public-sans text-lg font-medium mb-1">{temp.label}</h3>
+                      <!-- <code class="bg-gray-cool-3 px-2 py-0.5 text-sm">{temp.className}</code>  -->
+                    </div>
+                    <div class="grid grid-cols-10 gap-y-3 gap-x-2" class:list={temp.colors.length <= 10 ? 'grid-cols-10' : 'grid-cols-[repeat(14,_minmax(0,_1fr))]'}>
+                      {temp.colors.map((color) => (
+                        <div>
+                          <div class="h-10 w-10 mobile-lg:w-full" style={{backgroundColor: color.hex}}></div>
+                          <div class="mt-1">
+                            <div class="flex">
+                              <span class="text-sm font-medium">{color.level}</span>
+                            </div>
+                            <div class="flex">
+                              <span class="text-sm font-roboto-mono text-gray-cool-50 leading-tight">{color.hex}</span>
                             </div>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
                   </div>
-              </div>
-            ))}
-          </div>
+                ))}
+                </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   </div>
 </Layout>
-#utils/get-colors
