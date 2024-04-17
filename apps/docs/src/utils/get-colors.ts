@@ -1,4 +1,4 @@
-type ColorArrayTest = {
+type ColorArray = {
   [hue: string]: [{
     label: string,
     colors: {
@@ -46,7 +46,7 @@ export const getColors = () => Object.entries(colorsList).reduce((acc, [key, val
   }
 
   return acc;
-}, {} as ColorArrayTest);
+}, {} as ColorArray);
 
 const colorsList = {
   "gray-cool-1": "#fbfcfd",

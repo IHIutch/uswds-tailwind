@@ -33,35 +33,59 @@ const activeHeading = ''
             Color is a practical and emotional tool. It conveys personality, sets a tone, attracts attention, and indicates importance.
           </p>
         </div>
-        <div class="space-y-12">
+        <div class="space-y-16 desktop:space-y-32">
           {Object.keys(formattedColors).map(colorName => (
             <div>
               <h2 id={colorName} class="font-public-sans text-3xl font-bold mb-4">{colorName}</h2>
-              <div class="space-y-8">
-              {Object.values(formattedColors[colorName]).sort((a, b) => a.order - b.order).map(temp => (
-                  <div>
-                    <div class="mb-2">
-                      <h3 class="font-public-sans text-lg font-medium mb-1">{temp.label}</h3>
-                      <!-- <code class="bg-gray-cool-3 px-2 py-0.5 text-sm">{temp.className}</code>  -->
+              <div class="grid grid-cols-6 desktop:grid-cols-1 gap-x-4 gap-y-8 desktop:gap-x-8">
+                {Object.values(formattedColors[colorName]).sort((a, b) => a.order - b.order).map(temp => (
+                  <div class:list={
+                    formattedColors[colorName].length === 3 || formattedColors[colorName].length === 6
+                    ? 'col-span-2' 
+                    : formattedColors[colorName].length === 2 || formattedColors[colorName].length === 4 
+                    ? 'col-span-3' 
+                    : 'col-span-1'
+                  }>
+                    <div class="mb-1">
+                      <h3 class="font-public-sans font-medium mb-2">{temp.label}</h3>
                     </div>
-                    <div class="grid grid-cols-10 gap-y-3 gap-x-2" class:list={temp.colors.length <= 10 ? 'grid-cols-10' : 'grid-cols-[repeat(14,_minmax(0,_1fr))]'}>
-                      {temp.colors.map((color) => (
-                        <div>
-                          <div class="h-10 w-10 mobile-lg:w-full" style={{backgroundColor: color.hex}}></div>
-                          <div class="mt-1">
-                            <div class="flex">
-                              <span class="text-sm font-medium">{color.level}</span>
+                    <div class="space-y-3">
+                      {temp.colors.length > 10 ? (
+                        <div class="grid grid-cols-1 gap-y-3 gap-x-2 desktop:grid-cols-10">
+                          {temp.colors.splice(0,4).map((color) => (
+                            <div class="flex max-desktop:items-center gap-2 desktop:flex-col desktop:gap-1">
+                              <div class="h-10 w-full max-w-24 rounded-sm" style={{backgroundColor: color.hex}}></div>
+                              <div>
+                                <div class="flex">
+                                  <span class="text-sm font-medium leading-tight">{color.level}</span>
+                                </div>
+                                <div class="flex">
+                                  <span class="text-xs font-roboto-mono text-gray-cool-50 leading-tight">{color.hex}</span>
+                                </div>
+                              </div>
                             </div>
-                            <div class="flex">
-                              <span class="text-sm font-roboto-mono text-gray-cool-50 leading-tight">{color.hex}</span>
+                          ))}
+                        </div>
+                      ) : null}
+                      <div class="grid grid-cols-1 gap-y-3 gap-x-2 desktop:grid-cols-10">
+                        {temp.colors.map((color) => (
+                          <div class="flex max-desktop:items-center gap-3 desktop:flex-col desktop:gap-1">
+                            <div class="h-10 w-full max-w-24 rounded-sm" style={{backgroundColor: color.hex}}></div>
+                            <div>
+                              <div class="flex">
+                                <span class="text-sm font-medium">{color.level}</span>
+                              </div>
+                              <div class="flex">
+                                <span class="text-xs font-roboto-mono text-gray-cool-50 leading-tight">{color.hex}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ))}
-                </div>
+              </div>
             </div>
           ))}
         </div>
