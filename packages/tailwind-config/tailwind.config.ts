@@ -580,10 +580,11 @@ const config = {
             'kbd': {
               fontFamily: theme('fontFamily.roboto-mono'),
               borderRadius: theme('rounded'),
-              border: '1px solid ' + theme('colors.gray-cool-30'),
+              border: '0.5px solid ' + theme('colors.gray-cool-40'),
               color: theme('colors.black'),
-              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-30/90') + ', 0 3px 2px ' + theme('colors.gray-cool-70') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
-              background: theme('colors.gray-cool-2')
+              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-30/70') + ', 0 3px 2px ' + theme('colors.gray-cool-70') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
+              background: theme('colors.gray-cool-2'),
+              backgroundImage: 'linear-gradient(to bottom, ' + theme('colors.gray-cool-5') + ', ' + theme('colors.gray-cool-1') + ')'
             },
             'code::before': {
               content: 'none',
