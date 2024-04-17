@@ -1,0 +1,79 @@
+---
+import BaseLayout from "#layouts/base-layout.astro";
+import { getColors } from "#utils/get-colors";
+
+const formattedColors = getColors()
+const activeHeading = ''
+
+console.log(formattedColors)
+
+---
+
+<BaseLayout title="Colors">
+  <div class="flex w-full">
+    <aside class="w-72 shrink-0 order-1 pr-4 hidden desktop-lg:flex">
+      <div class="fixed top-0 py-12 font-public-sans">
+        <h4 class="font-bold mb-2">On this page</h4>
+        <ul class="border-l border-gray-cool-20">
+          {Object.keys(formattedColors).map(color => (
+            <li class="border-l-4 -ml-1" class:list={activeHeading === color ? 'border-black' : 'border-transparent'}>
+              <a class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v leading-tighter text-sm" href={`#${color}`}>
+                <span>{color}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+    <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
+      <div class="flex flex-col mx-auto max-w-5xl">
+        <div class="mb-16">
+          <h1 class="text-4xl font-bold font-public-sans mb-4">
+            Colors
+          </h1>
+          <p class="text-xl font-light font-public-sans max-w-prose">
+            Color is a practical and emotional tool. It conveys personality, sets a tone, attracts attention, and indicates importance.
+          </p>
+        </div>
+        <div class="">
+          <!-- <Content components={{
+            PropsTable,
+            ContentList
+          }} /> -->
+          <!-- <pre>{JSON.stringify(formattedColors, null, 2)}</pre> -->
+
+          <div class="space-y-12">
+            {Object.keys(formattedColors).map(color => (
+              <div>
+                <h2 id={color} class="font-public-sans text-3xl font-bold mb-6">{color}</h2>
+                <div class="space-y-6">
+                {Object.keys(formattedColors[color]).map(type => (
+                    <div>
+                      <h3 class="font-public-sans text-lg font-medium mb-2">{type || 'Default'}</h3>
+                      <div class="grid grid-cols-10 gap-y-3 gap-x-2" class:list={Object.entries(formattedColors[color][type]).length <= 10 ? 'grid-cols-10' : 'grid-cols-[repeat(14,_minmax(0,_1fr))]'}>
+                        {Object.entries(formattedColors[color][type]).map(([key, val]) => (
+                          <div>
+                            <div class="h-10 w-10 mobile-lg:w-full" style={{backgroundColor: val}}></div>
+                            <div class="mt-1">
+                              <div class="flex">
+                                <span class="text-sm font-medium">{key}</span>
+                              </div>
+                              <div class="flex">
+                                <span class="text-sm font-roboto-mono text-gray-cool-50">{val}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+#utils/get-colors
