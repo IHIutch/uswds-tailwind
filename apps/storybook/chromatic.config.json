@@ -1,4 +1,5 @@
 {
   "projectId": "Project:66227ce605a9e64e344ef74e",
-  "zip": true
+  "zip": true,
+  "storybookBaseDir": "apps/storybook"
 }
