@@ -37,11 +37,9 @@ const {pathname} = Astro.url
 		<title>{title}</title>
 	</head>
 	<body class="h-full">
-    <div class="border-b z-20 bg-white fixed top-0 inset-x-0">
-      <GlobalNav />
-    </div>
-		<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-20">
-      <nav aria-label="Side navigation" class="px-2 h-full overflow-y-auto">
+    <GlobalNav className="desktop:border-b-2 desktop:border-b-gray-cool-20 z-20 bg-white fixed top-0 inset-x-0" />
+		<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-28">
+      <nav aria-label="Side navigation" class="p-2 h-full overflow-y-auto">
         <ul class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12 font-public-sans">
           {allComponents.map(comps => (
             <li class="border-t border-t-gray-10">
@@ -57,7 +55,7 @@ const {pathname} = Astro.url
         </ul>
       </nav>
     </div>
-    <div class="desktop:pl-64 desktop-lg:pr-64 pt-20">
+    <div class="desktop:pl-64 desktop-lg:pr-64 pt-12 desktop:pt-28">
       <slot />
     </div>
     <script>

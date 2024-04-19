@@ -1,23 +1,9 @@
 ---
+import type { NavLinks } from 'types'
 
-type Props = {
-  items: ({
-    href: string,
-    label: string,
-    isActive?: boolean,
-    children?: undefined
-  } | {
-    label: string,
-    isActive?: boolean,
-    children: {
-      label: string,
-      href: string,
-      isActive?: boolean
-    }[]
-  })[]
-}
+type Props = NavLinks
 
-const { items } = Astro.props
+const { primary, secondary } = Astro.props
 
 ---
 
@@ -34,20 +20,8 @@ const { items } = Astro.props
 					<div class="icon-[material-symbols--close] size-6"></div>
 				</button>
 
-				<section aria-label="search component">
-					<form role="search">
-						<label for="mobile-nav-search" class="sr-only">Search</label>
-						<div class="relative flex items-center">
-							<input id="mobile-nav-search" type="search" class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
-							<button aria-label="search" class="rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
-								<div class="icon-[material-symbols--search] size-6"></div>
-							</button>
-						</div>
-					</form>
-				</section>
-
 				<ul class="flex flex-col">
-          {items.map(item => (
+          {primary ? primary.map(item => (
 						<li class="border-t border-t-gray-10">
 							{item.children !== undefined ? (
 								<div x-accordion>
@@ -76,9 +50,34 @@ const { items } = Astro.props
 								<a href={item.href} class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v">{item.label}</a>
               )}
 						</li>
-          ))}
-
+          )) : null}
 				</ul>
+
+        <div class="flex flex-col gap-4">
+
+          {secondary && secondary.length > 0 ? (
+            <ul>
+              {secondary.map(item=> (
+                <li>
+                  <a href={item.href} class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v">{item.label}</a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+
+          <section aria-label="search component">
+            <form role="search">
+              <label for="mobile-nav-search" class="sr-only">Search</label>
+              <div class="relative flex items-center">
+                <input id="mobile-nav-search" type="search" class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
+                <button aria-label="search" class="rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
+                  <div class="icon-[material-symbols--search] size-6"></div>
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
 
 			</nav>
 		</div>
