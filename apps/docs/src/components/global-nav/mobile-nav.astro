@@ -1,0 +1,89 @@
+---
+
+type Props = {
+  items: ({
+    href: string,
+    label: string,
+    isActive?: boolean,
+    children?: undefined
+  } | {
+    label: string,
+    isActive?: boolean,
+    children: {
+      label: string,
+      href: string,
+      isActive?: boolean
+    }[]
+  })[]
+}
+
+const { items } = Astro.props
+
+---
+
+<div x-data="{ isOpen: false }">
+	<button @click="isOpen = true" class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-blue-40v">Menu</button>
+
+	<div x-modal x-model="isOpen">
+		<div x-modal:dialog class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in duration-300 ease-in-out slide-in-from-right">
+			<nav x-modal:content class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0">
+
+				<header x-modal:title class="sr-only">Menu</header>
+
+				<button type="button" @click="$modal.close()" class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v" aria-label="Close">
+					<div class="icon-[material-symbols--close] size-6"></div>
+				</button>
+
+				<section aria-label="search component">
+					<form role="search">
+						<label for="mobile-nav-search" class="sr-only">Search</label>
+						<div class="relative flex items-center">
+							<input id="mobile-nav-search" type="search" class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
+							<button aria-label="search" class="rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
+								<div class="icon-[material-symbols--search] size-6"></div>
+							</button>
+						</div>
+					</form>
+				</section>
+
+				<ul class="flex flex-col">
+          {items.map(item => (
+						<li class="border-t border-t-gray-10">
+							{item.children !== undefined ? (
+								<div x-accordion>
+									<div x-accordion:item>
+										<button x-accordion:trigger 
+                      class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
+                      data-current={item.isActive ? true : undefined }
+                    >
+											<span class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">{item.label}</span>
+											<span class="h-full flex items-center">
+												<span class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></span>
+											</span>
+										</button>
+										<ul x-accordion:content>
+											{item.children.map((child) => (
+												<li class="border-t border-t-gray-10">
+													<a href={child.href} class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v">
+														{child.href}
+													</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								</div>
+							) : (
+								<a href={item.href} class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v">{item.label}</a>
+              )}
+						</li>
+          ))}
+
+				</ul>
+
+			</nav>
+		</div>
+
+		<div x-modal:backdrop class="fixed inset-0 bg-black/70 z-40"></div>
+
+	</div>
+</div>

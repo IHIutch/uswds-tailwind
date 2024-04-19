@@ -1,4 +1,5 @@
 ---
+import GlobalNav from "#components/global-nav/index.astro";
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
 import "@fontsource-variable/roboto-mono";
@@ -36,10 +37,13 @@ const {pathname} = Astro.url
 		<title>{title}</title>
 	</head>
 	<body class="h-full">
-		<div class="hidden desktop:block w-64 h-full overflow-y-auto fixed inset-y-0 left-0 z-10">
-      <nav aria-label="Side navigation" class="py-8 px-2">
+    <div class="border-b z-20 bg-white fixed top-0 inset-x-0">
+      <GlobalNav />
+    </div>
+		<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-20">
+      <nav aria-label="Side navigation" class="px-2 h-full overflow-y-auto">
         <ul class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12 font-public-sans">
-        {allComponents.map(comps => (
+          {allComponents.map(comps => (
             <li class="border-t border-t-gray-10">
               <a
                 href={`/components/${comps.slug}`}
@@ -53,7 +57,7 @@ const {pathname} = Astro.url
         </ul>
       </nav>
     </div>
-    <div class="fixed max-w-full inset-0 desktop:pl-64 h-full overflow-y-auto">
+    <div class="desktop:pl-64 desktop-lg:pr-64 pt-20">
       <slot />
     </div>
     <script>
