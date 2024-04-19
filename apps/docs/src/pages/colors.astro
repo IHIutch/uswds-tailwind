@@ -1,29 +1,22 @@
 ---
 import ColorSwatch from "#components/color-swatch.astro";
+import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
 import { getColors } from "#utils/get-colors";
+import type { MarkdownHeading } from "astro";
 
 const formattedColors = getColors()
-const activeHeading = ''
 
+const headings: MarkdownHeading[]  = Object.keys(formattedColors).map(heading => ({
+  text: heading,
+  slug: heading.toLowerCase(),
+  depth: 1
+}))
 ---
 
 <BaseLayout title="Colors">
   <div class="flex w-full">
-    <aside class="fixed inset-y-0 w-64 right-0 top-20 shrink-0 order-1 hidden desktop-lg:flex">
-      <div class="py-12 w-full h-full overflow-auto font-public-sans pr-4">
-        <h4 class="font-bold mb-2">On this page</h4>
-        <ul class="border-l border-gray-cool-20">
-          {Object.keys(formattedColors).map(color => (
-            <li class="border-l-4 -ml-1" class:list={activeHeading === color ? 'border-black' : 'border-transparent'}>
-              <a class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v leading-tighter text-sm" href={`#${color}`}>
-                <span>{color}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </aside>
+    <TableOfContents headings={headings} />
     <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
       <div class="flex flex-col mx-auto max-w-5xl">
         <div class="mb-16">
