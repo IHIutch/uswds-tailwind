@@ -1,0 +1,6 @@
+{
+  "component": "header",
+  "variant": "header-extended.twig",
+  "propsPath": "src/__demos__/header/header-props.json",
+  "componentPath": "src/__demos__/header/examples/header-extended.twig"
+}
