@@ -6,7 +6,8 @@
     "storybook": "storybook dev -p 6006",
     "build": "storybook build",
     "build-storybook": "pnpm build",
-    "upgrade": "pnpm dlx sb@latest upgrade"
+    "upgrade": "pnpm dlx sb@latest upgrade",
+    "chromatic": "npx chromatic --project-token=chpt_870c07f687e886f"
   },
   "keywords": [],
   "author": "",

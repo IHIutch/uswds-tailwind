@@ -1,35 +1,47 @@
 {
-  "navigation": [
-    {
-      "label": "Dropdown",
-      "is_active": true,
-      "children": [
-        {
-          "label": "Action",
-          "href": "#"
-        },
-        {
-          "label": "Another action",
-          "href": "#"
-        }
-      ]
-    },
-    {
-      "label": "Dropdown",
-      "children": [
-        {
-          "label": "Action",
-          "href": "#"
-        },
-        {
-          "label": "Another action",
-          "href": "#"
-        }
-      ]
-    },
-    {
-      "label": "Link",
-      "href": "#"
-    }
-  ]
+  "navigation": {
+    "primary": [
+      {
+        "label": "Dropdown",
+        "is_active": true,
+        "children": [
+          {
+            "label": "Action",
+            "href": "#"
+          },
+          {
+            "label": "Another action",
+            "href": "#"
+          }
+        ]
+      },
+      {
+        "label": "Dropdown",
+        "children": [
+          {
+            "label": "Action",
+            "href": "#"
+          },
+          {
+            "label": "Another action",
+            "href": "#"
+          }
+        ]
+      },
+      {
+        "label": "Link",
+        "href": "#"
+      }
+    ],
+    "secondary": [
+      {
+        "label": "Secondary Link",
+        "href": "#"
+      },
+      {
+        "label": "Secondary Link",
+        "href": "#"
+      }
+    ]
+  }
 }
