@@ -5,7 +5,7 @@
 				<li class="leading-none">
 					{% if primary_item.children  %}
 						<div x-dropdown>
-							<button x-dropdown:trigger class="{{ primary_item.is_active ? 'after:bg-blue-60v after:absolute after:bottom-0 after:inset-x-4 after:h-1' }} relative flex items-center group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:bottom-0 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden">
+							<button x-dropdown:trigger class="{{ primary_item.is_active ? 'after:bg-blue-60v after:absolute after:bottom-0 after:inset-x-4 after:h-1' }} relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:bottom-0 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden">
 								<span>{{- primary_item.label -}}</span>
 								<div aria-hidden="true" class="hidden mobile-lg:inline-flex">
 									<span class="icon-[material-symbols--keyboard-arrow-down] group-aria-expanded:icon-[material-symbols--keyboard-arrow-up] align-middle size-4"></span>
@@ -58,7 +58,7 @@
 
 		<div x-modal x-model="isOpen">
 			<div x-modal:dialog class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in duration-300 ease-in-out slide-in-from-right">
-				<nav x-modal:content class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0">
+				<nav x-modal:content class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto">
 
 					<header x-modal:title class="sr-only">Menu</header>
 
