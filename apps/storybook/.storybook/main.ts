@@ -1,5 +1,4 @@
 import { dirname, join } from "path";
-import { mergeConfig } from 'vite';
 
 const config = {
   stories: [
@@ -10,12 +9,17 @@ const config = {
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-essentials"),
     getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@chromatic-com/storybook")
   ],
 
   framework: {
     name: getAbsolutePath("@storybook/html-vite"),
     options: {},
   },
+
+  docs: {
+    autodocs: false
+  }
 };
 export default config;
 
