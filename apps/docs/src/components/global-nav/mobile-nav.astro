@@ -12,7 +12,7 @@ const { primary, secondary } = Astro.props
 
 	<div x-modal x-model="isOpen">
 		<div x-modal:dialog class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in duration-300 ease-in-out slide-in-from-right">
-			<nav x-modal:content class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0">
+			<nav x-modal:content class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto">
 
 				<header x-modal:title class="sr-only">Menu</header>
 
@@ -39,7 +39,7 @@ const { primary, secondary } = Astro.props
 											{item.children.map((child) => (
 												<li class="border-t border-t-gray-10">
 													<a href={child.href} class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v">
-														{child.href}
+														{child.label}
 													</a>
 												</li>
 											))}

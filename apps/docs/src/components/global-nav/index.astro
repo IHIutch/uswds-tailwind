@@ -1,29 +1,57 @@
 ---
+import type { NavLinks } from "types"
 import DesktopNav from "./desktop-nav.astro"
 import MobileNav from "./mobile-nav.astro"
+import { getCollection } from "astro:content"
 
 type Props = {
   className?: string
 }
 
-const globalLinks = [
+const allComponents = await getCollection('components')
+const desktopLinks: NavLinks = {
+  primary: [
   {
-  label: 'Home',
-  href: '/'
-},
+    label: 'Home',
+    href: '/'
+  },
   {
-  label: 'Getting Started',
-  href: '/getting-started'
-},
-{
-  label: 'Components',
-  href: '/components'
-},
-{
-  label: 'Colors',
-  href: '/colors'
-}
-]
+    label: 'Getting Started',
+    href: '/getting-started'
+  },
+  {
+    label: 'Components',
+    href: '/components',
+  },
+  {
+    label: 'Colors',
+    href: '/colors'
+  }
+]}
+
+const mobileLinks: NavLinks = {
+  primary: [
+  {
+    label: 'Home',
+    href: '/'
+  },
+  {
+    label: 'Getting Started',
+    href: '/getting-started'
+  },
+  {
+    label: 'Components',
+    // href: '/components',
+    children: allComponents.map(c => ({
+      label: c.data.title,
+      href: `/components/${c.slug}`,
+    }))
+  },
+  {
+    label: 'Colors',
+    href: '/colors'
+  }
+]}
 
 const {className} = Astro.props
 ---
@@ -37,11 +65,11 @@ const {className} = Astro.props
         </em>
       </div>
       <div class="desktop:hidden">
-          <MobileNav primary={globalLinks}/>
+        <MobileNav primary={mobileLinks.primary}/>
       </div>
     </div>
   </div>
 	<div class="hidden desktop:block border-t border-t-gray-cool-10">
-    <DesktopNav primary={globalLinks} />
+    <DesktopNav primary={desktopLinks.primary} />
 	</div>
 </header>

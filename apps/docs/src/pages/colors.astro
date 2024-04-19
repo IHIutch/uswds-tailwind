@@ -4,12 +4,13 @@ import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
 import { getColors } from "#utils/get-colors";
 import type { MarkdownHeading } from "astro";
+import {slug} from 'github-slugger'
 
 const formattedColors = getColors()
 
 const headings: MarkdownHeading[]  = Object.keys(formattedColors).map(heading => ({
   text: heading,
-  slug: heading.toLowerCase(),
+  slug: slug(heading),
   depth: 1
 }))
 ---
@@ -20,17 +21,17 @@ const headings: MarkdownHeading[]  = Object.keys(formattedColors).map(heading =>
     <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
       <div class="flex flex-col mx-auto max-w-5xl">
         <div class="mb-16">
-          <h1 class="text-4xl font-bold font-public-sans mb-4">
+          <h1 class="text-4xl font-bold mb-4">
             Colors
           </h1>
-          <p class="text-xl font-light font-public-sans max-w-prose">
+          <p class="text-xl font-light max-w-prose">
             Color is a practical and emotional tool. It conveys personality, sets a tone, attracts attention, and indicates importance.
           </p>
         </div>
         <div class="space-y-16 desktop:space-y-32">
           {Object.keys(formattedColors).map(colorName => (
             <div>
-              <h2 id={colorName} class="font-public-sans text-3xl font-bold mb-4">{colorName}</h2>
+              <h2 id={slug(colorName)} class="scroll-mt-24 desktop:scroll-mt-40 text-3xl font-bold mb-4">{colorName}</h2>
               <div class="grid grid-cols-6 desktop:grid-cols-1 gap-x-4 gap-y-8 desktop:gap-x-8">
                 {Object.values(formattedColors[colorName]).sort((a, b) => a.order - b.order).map(temp => (
                   <div class:list={
@@ -41,7 +42,7 @@ const headings: MarkdownHeading[]  = Object.keys(formattedColors).map(heading =>
                     : 'col-span-1'
                   }>
                     <div class="mb-1">
-                      <h3 class="font-public-sans font-medium mb-2">{temp.label}</h3>
+                      <h3 class="font-medium mb-2">{temp.label}</h3>
                     </div>
                     <div class="space-y-3">
                       {temp.colors.length > 10 ? (

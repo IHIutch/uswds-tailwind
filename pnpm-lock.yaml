@@ -59,6 +59,9 @@ importers:
       astro-expressive-code:
         specifier: ^0.34.1
         version: 0.34.1(astro@4.6.0)
+      github-slugger:
+        specifier: ^2.0.0
+        version: 2.0.0
       iframe-resizer:
         specifier: ^4.3.9
         version: 4.3.9
