@@ -1,19 +1,17 @@
-import { dirname, join } from "path";
-
 const config = {
   stories: [
     "../src/components/**/*.stories.@(js|ts)",
   ],
 
   addons: [
-    getAbsolutePath("@storybook/addon-a11y"),
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@chromatic-com/storybook")
+    "@storybook/addon-a11y",
+    "@storybook/addon-essentials",
+    "@storybook/addon-links",
+    "@chromatic-com/storybook",
   ],
 
   framework: {
-    name: getAbsolutePath("@storybook/html-vite"),
+    name: "@storybook/html-vite",
     options: {},
   },
 
@@ -22,7 +20,3 @@ const config = {
   }
 };
 export default config;
-
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, "package.json")));
-}

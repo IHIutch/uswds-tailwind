@@ -166,6 +166,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.17(postcss@8.4.35)
+      chromatic:
+        specifier: ^11.3.0
+        version: 11.3.0
       postcss:
         specifier: ^8.4.32
         version: 8.4.35

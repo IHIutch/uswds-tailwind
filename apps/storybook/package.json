@@ -5,6 +5,7 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build": "storybook build",
+    "build-storybook": "pnpm build",
     "upgrade": "pnpm dlx sb@latest upgrade"
   },
   "keywords": [],
@@ -25,6 +26,7 @@
     "@types/alpinejs__mask": "^3.13.3",
     "@types/twig": "^1.12.16",
     "autoprefixer": "^10.4.16",
+    "chromatic": "^11.3.0",
     "postcss": "^8.4.32",
     "storybook": "^8.0.8",
     "tailwindcss": "^3.4.0",
