@@ -532,15 +532,6 @@ const config = {
       // emergency: theme("colors.red-warm-60v"),
       // "emergency-dark": theme("colors.red-warm-80"),
     },
-    boxShadow: {
-      none: "none",
-      1: "0 1px 4px 0 rgba(0, 0, 0, 0.1)",
-      2: "0 4px 8px 0 rgba(0, 0, 0, 0.1)",
-      3: "0 8px 16px 0 rgba(0, 0, 0, 0.1)",
-      4: "0 12px 24px 0 rgba(0, 0, 0, 0.1)",
-      5: "0 16px 32px 0 rgba(0, 0, 0, 0.1)",
-    },
-    // dropShadow: ({ theme }) => theme("boxShadow"),
     screens: {
       // card: "160px",
       // "card-lg": "240px",
@@ -580,9 +571,9 @@ const config = {
             'kbd': {
               fontFamily: theme('fontFamily.roboto-mono'),
               borderRadius: theme('rounded'),
-              border: '0.5px solid ' + theme('colors.gray-cool-40'),
+              border: '0.5px solid ' + theme('colors.gray-cool-30'),
               color: theme('colors.black'),
-              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-30/70') + ', 0 3px 2px ' + theme('colors.gray-cool-70') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
+              boxShadow: '0 2px 0px ' + theme('colors.gray-cool-20') + ', 0 3px 2px ' + theme('colors.gray-cool-50') + ', 0 2px 0 0 ' + theme('colors.white') + ' inset',
               background: theme('colors.gray-cool-2'),
               backgroundImage: 'linear-gradient(to bottom, ' + theme('colors.gray-cool-5') + ', ' + theme('colors.gray-cool-1') + ')'
             },
