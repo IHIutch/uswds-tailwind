@@ -27,7 +27,9 @@
 			</div>
 		</div>
 
-		<div x-modal:backdrop class="fixed inset-0 bg-black/70 z-40 animate-in ease-in-out duration-150 fade-in"></div>
+		<template x-teleport="body">
+			<div x-modal:backdrop class="fixed z-50 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"></div>
+		</template>
 
 	</div>
 </div>
