@@ -1,8 +1,15 @@
+import { fn } from '@storybook/test';
+
 import '../src/assets/main';
 
 const preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    layout: 'fullscreen',
+    actions: {
+      args: {
+        onClick: fn()
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

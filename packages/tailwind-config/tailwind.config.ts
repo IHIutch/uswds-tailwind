@@ -4,6 +4,7 @@ import { addDynamicIconSelectors } from '@iconify/tailwind'
 import tailwindForms from '@tailwindcss/forms'
 import tailwindTypography from '@tailwindcss/typography'
 import tailwindAnimate from "tailwindcss-animate"
+import tailwaindContainerQueries from "@tailwindcss/container-queries"
 import plugin from 'tailwindcss/plugin'
 import type { PluginUtils } from "tailwindcss/types/config";
 
@@ -543,6 +544,17 @@ const config = {
       "desktop-lg": "1200px",
       // widescreen: "1400px",
     },
+    containers: {
+      // card: "160px",
+      // "card-lg": "240px",
+      // mobile: "320px",
+      "mobile-lg": "480px",
+      tablet: "640px",
+      // "tablet-lg": "880px",
+      desktop: "1024px",
+      "desktop-lg": "1200px",
+      // widescreen: "1400px",
+    },
     fontFamily: {
       "open-sans": ' "Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif,  "Apple Color Emoji",  "Segoe UI Emoji","Segoe UI Symbol"',
       "public-sans": ' "Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
@@ -735,6 +747,7 @@ const config = {
   },
   plugins: [
     tailwindAnimate,
+    tailwaindContainerQueries,
     tailwindTypography({
       className: 'usa-prose'
     }),
@@ -744,6 +757,7 @@ const config = {
     tailwindForms({
       strategy: 'class'
     }),
+
     plugin(function ({ addVariant, addUtilities, addComponents, theme }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])

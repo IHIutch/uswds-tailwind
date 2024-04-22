@@ -1,30 +1,30 @@
-<nav aria-label="Breadcrumbs">
+<nav aria-label="Breadcrumbs" class="@container">
 	<ol class="list-none truncate p-2 -mx-1 block">
 		{% for breadcrumb in breadcrumbs %}
 			{% if not loop.last %}
-				<li class="inline max-mobile-lg:sr-only">
+				<li class="inline sr-only @mobile-lg:not-sr-only @mobile-lg:whitespace-nowrap">
 					<a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline">
 						<span>{{breadcrumb.label}}</span>
 					</a>
-					<span aria-hidden="true" class="hidden mobile-lg:inline">
+					<span aria-hidden="true" class="hidden @mobile-lg:inline">
 						<span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
 					</span>
 				</li>
 			{% else %}
 				<li class="inline">
-					<span aria-hidden="true" class="mobile-lg:hidden">
+					<span aria-hidden="true" class="@mobile-lg:hidden">
 						<span class="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>
 					</span>
 					<a href="{{breadcrumb.slug}}" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline">
 						<span>{{breadcrumb.label}}</span>
 					</a>
-					<span aria-hidden="true" class="hidden mobile-lg:inline">
+					<span aria-hidden="true" class="hidden @mobile-lg:inline">
 						<span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
 					</span>
 				</li>
 			{% endif %}
 		{% endfor %}
-		<li class="inline max-mobile-lg:sr-only">
+		<li class="inline sr-only @mobile-lg:not-sr-only @mobile-lg:whitespace-nowrap">
 			<span>Economically disadvantaged women-owned small business federal contracting program</span>
 		</li>
 	</ol>

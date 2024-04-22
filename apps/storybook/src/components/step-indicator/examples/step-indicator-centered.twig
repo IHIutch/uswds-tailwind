@@ -1,6 +1,6 @@
 {% set current_step = step_indicator.current_step  %}
 
-<div aria-label="progress">
+<div aria-label="progress" class="@container">
   <ol class="flex space-x-0.5">
     {% for step in step_indicator.steps %}
 
@@ -8,7 +8,7 @@
       class="border-t-8 px-2 pt-2 w-full text-center {{ loop.index < current_step ? 'border-t-blue-warm-80v' : loop.index > current_step ? 'border-t-gray-40' : 'border-t-blue-60v' }}"
       {{ loop.index == current_step ? "aria-current='true'" }}
       >
-      <span class="hidden tablet:block leading-none {{ loop.index < current_step ? 'text-blue-warm-80v' : loop.index > current_step ? 'text-gray-cool-60' : 'text-blue-60v font-bold' }}">{{step.label}}</span>
+      <span class="hidden @tablet:block leading-none {{ loop.index < current_step ? 'text-blue-warm-80v' : loop.index > current_step ? 'text-gray-cool-60' : 'text-blue-60v font-bold' }}">{{step.label}}</span>
       {% if loop.index != current_step %}
       <span class="sr-only">{{ loop.index < current_step ? 'not completed' : 'completed'}}</span>
       {% endif %}

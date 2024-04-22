@@ -1,59 +1,30 @@
-
 <div x-data="{ isOpen: false }">
 
-  <button
-    @click="isOpen = true"
-    class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-  >Open modal with forced action</button>
+	<button @click="isOpen = true" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Open modal with forced action</button>
 
-    <div
-      x-modal
-      x-model="isOpen"
-    >
-      <div
-        x-modal:dialog
-        data-force-action
-        class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
-      >
-        <div
-          x-modal:content
-          class="relative w-full max-w-lg rounded-lg bg-white p-8 pt-10 shadow-lg"
-        >
-          <h2
-            x-modal:title
-            class="text-xl font-bold font-merriweather"
-          >Your session will end soon.</h2>
-          <div class="mt-4">
-            <p
-              x-modal:description
-              class="mt-2 text-gray-600"
-            >You've been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you’ll be signed out automatically in 5 minutes.</p>
-          </div>
-          <div class="mt-6">
-            <ul class="flex max-mobile-lg:flex-col max-mobile-lg:space-y-2 mobile-lg:space-x-2">
-              <li class="flex">
-                <button
-                  type="button"
-                  @click="$modal.close()"
-                  class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                >Yes, stay signed in</button>
-              </li>
-              <li class="flex">
-                <button
-                  type="button"
-                  @click="$modal.close()"
-                  class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                >Sign out</button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+	<div x-modal x-model="isOpen">
+		<div x-modal:dialog data-force-action class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in">
+			<div x-modal:content class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg">
+				<div class="p-8 pt-10">
+					<h2 x-modal:title class="text-xl font-bold font-merriweather">Your session will end soon.</h2>
+					<div class="mt-4">
+						<p x-modal:description class="mt-2 text-gray-600">You've been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you’ll be signed out automatically in 5 minutes.</p>
+					</div>
+					<div class="mt-6">
+						<ul class="flex flex-col @mobile-lg:flex-row gap-2">
+							<li class="flex">
+								<button type="button" @click="$modal.close()" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Yes, stay signed in</button>
+							</li>
+							<li class="flex">
+								<button type="button" @click="$modal.close()" class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Sign out</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
-      <div
-      x-modal:backdrop
-      class="fixed inset-0 bg-black/70 z-40 animate-in ease-in-out duration-150 fade-in"
-    ></div>
+		<div x-modal:backdrop class="fixed inset-0 bg-black/70 z-40 animate-in ease-in-out duration-150 fade-in"></div>
 
-    </div>
+	</div>
 </div>
