@@ -1,53 +1,68 @@
 ---
 import fs from 'fs';
-import {join} from 'path';
 import { Code } from 'astro:components'
 import type { CollectionEntry } from 'astro:content';
 import graphPaper from '#assets/img/graph-paper.svg'
+import { renderTwigTemplate } from '#utils/functions';
 
 type Props = {
-  title: string
   component: CollectionEntry<"demos">['data']['component'],
   variant: CollectionEntry<"demos">['data']['variant'],
 }
 
-const { title, component, variant } = Astro.props
+const { component, variant } = Astro.props
 
-const code = fs.readFileSync(`./src/__demos__/${component}/examples/${variant}.twig`, 'utf8')
-const demoPath = join(import.meta.env.BASE_URL, 'demos', variant)
+const propsPath  = `./src/__demos__/${component}/${component}-props.json`
+const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`
+
+let componentProps = ""
+if(fs.existsSync(propsPath)){
+  componentProps = JSON.parse(fs.readFileSync(propsPath, 'utf8'))
+}
+
+const componentCode = fs.readFileSync(componentPath, 'utf-8')
+const template =  await renderTwigTemplate({
+  path: componentPath, 
+  props: componentProps || ''
+})
+
+
+console.log({template, componentCode, componentProps})
 ---
 
 <div 
-  x-data="{ exampleSize: '1024px', updateWidth(value) { this.exampleSize = value; } }" 
-  class="not-usa-prose w-full max-w-5xl mt-6 mb-12">
-  <div class="outline outline-1 outline-gray-cool-20 rounded overflow-hidden">
+  x-data="{ exampleSize: '1056px', updateWidth(value) { this.exampleSize = value; } }" 
+  class="not-usa-prose w-full max-w-[1056px] mt-6 mb-12">
+  <div class="border border-gray-cool-20 rounded overflow-hidden">
     <div class="flex border-b border-b-gray-cool-20">
       <div class="text-black text-sm px-2 flex items-center justify-center w-28">
         <span class="font-semibold pr-1">Width: </span>
         <span x-text="exampleSize"></span>
       </div>
       <div class="flex gap-2 px-2 ml-auto">
-        <button type="button" @click="updateWidth('320px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '320px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+        <button type="button" @click="updateWidth('352px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '320px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
           <span aria-hidden="true" class="icon-[material-symbols--phone-android] align-middle size-6"></span>
           <span class="sr-only">Display small phone layout</span>
         </button>
-        <button type="button" @click="updateWidth('480px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '480px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+        <button type="button" @click="updateWidth('512px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '480px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
           <span aria-hidden="true" class="icon-[material-symbols--tablet-mac] align-middle size-6"></span>
           <span class="sr-only">Display large phone layout</span>
         </button>
-        <button type="button" @click="updateWidth('640px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '640px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+        <button type="button" @click="updateWidth('672px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '640px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
           <span aria-hidden="true" class="icon-[material-symbols--tablet] align-middle size-6"></span>
           <span class="sr-only">Display tablet layout</span>
         </button>
-        <button type="button" @click="updateWidth('1024px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '1024px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
+        <button type="button" @click="updateWidth('1056px')" class="flex items-center justify-center pt-1 size-10" :class="exampleSize === '1024px' ? 'text-blue-60v border-blue-60v border-b-4' : 'text-gray-50 border-transparent border-b-4'">
           <span aria-hidden="true" class="icon-[material-symbols--desktop-mac-outline] align-middle size-6"></span>
           <span class="sr-only">Display desktop layout</span>
         </button>
       </div>
     </div>
-    <div class="bg-gray-cool-4 min-w-80 overflow-auto" style={{backgroundImage: `url(${graphPaper.src})`}}>
-      <div class="bg-gray-cool-2 flex items-center justify-center mx-auto outline outline-1 outline-gray-cool-10" :style="{ width: exampleSize }">
-        <iframe class="size-full" title={title} src={demoPath}></iframe>
+    <div class="bg-gray-cool-4 min-w-80 z-10 relative" style={{backgroundImage: `url(${graphPaper.src})`}}>
+      <div class="bg-gray-cool-2 mx-auto shadow-[-1px_0px_0px_#dfe1e2,_1px_0px_0px_#dfe1e2] p-4" :style="{ width: exampleSize }">
+        <!-- Example start -->
+        <Fragment set:html={template} />
+        <!-- Example end -->
       </div>
     </div>
     <div x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }" x-init="codeHeight = $refs.code.offsetHeight; console.log($refs.code.offsetHeight);">
@@ -66,7 +81,7 @@ const demoPath = join(import.meta.env.BASE_URL, 'demos', variant)
           </div>
         </div>
         <div :class="codeHeight < 400 || isCodeExpanded ? 'h-auto' : 'h-96'" class="overflow-hidden" x-ref="code">
-          <Code code={code} lang="twig" theme="light-plus" class="p-4 text-sm" style="background-color: #f7f9fa" />
+          <Code code={componentCode} lang="twig" theme="light-plus" class="p-4 text-sm" style="background-color: #f7f9fa" />
         </div>
         <button x-show="codeHeight > 400 && !isCodeExpanded" type="button" @click="toggleExpanded()" class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0">
           <div class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v">
