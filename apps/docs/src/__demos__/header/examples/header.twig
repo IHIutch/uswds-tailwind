@@ -1,4 +1,4 @@
-{% macro desktop(navigation) %}
+{% macro @desktop(navigation) %}
 	<nav class="flex justify-end items-center pl-2 pb-1">
 		<ul class="flex">
 			{% for primary_item in navigation.primary %}
@@ -7,7 +7,7 @@
 						<div x-dropdown>
 							<button x-dropdown:trigger class="{{ primary_item.is_active ? 'after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1' }} relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden">
 								<span>{{- primary_item.label -}}</span>
-								<div aria-hidden="true" class="hidden mobile-lg:inline-flex">
+								<div aria-hidden="true" class="hidden @mobile-lg:inline-flex">
 									<span class="icon-[material-symbols--keyboard-arrow-down] group-aria-expanded:icon-[material-symbols--keyboard-arrow-up] align-middle size-4"></span>
 								</div>
 							</button>
@@ -106,17 +106,17 @@
 
 {% import _self as self %}
 
-<header>
-	<div class="max-w-5xl flex mx-auto justify-between items-center desktop:items-end max-desktop:border-b max-desktop:border-b-gray-cool-10">
-		<div class="desktop:text-2xl desktop:mt-8 desktop:mb-4 ml-4 desktop:ml-0 desktop:w-1/3 w-full">
+<header class="@container">
+	<div class="max-w-5xl flex mx-auto justify-between items-center @desktop:items-end border-b @desktop:border-b-0 border-b-gray-cool-10">
+		<div class="@desktop:text-2xl @desktop:mt-8 @desktop:mb-4 ml-4 @desktop:ml-0 @desktop:w-1/3 w-full">
 			<em class="font-bold not-italic">
 				<a class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v" href="/">Project Title</a>
 			</em>
 		</div>
-		<div class="desktop:hidden">
+		<div class="@desktop:hidden">
 			{{ self.mobile(navigation) }}
 		</div>
-		<div class="hidden desktop:flex ml-auto">
+		<div class="hidden @desktop:flex ml-auto">
 			{{ self.desktop(navigation) }}
 		</div>
 	</div>

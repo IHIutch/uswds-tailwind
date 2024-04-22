@@ -1,5 +1,5 @@
-<div class="bg-gray-90 text-white pb-4">
-	<section aria-label="Agency identifier" class="py-4 flex flex-col tablet:flex-row px-8 gap-4">
+<div class="@container bg-gray-90 text-white pb-4">
+	<section aria-label="Agency identifier" class="py-4 flex flex-col @tablet:flex-row px-8 gap-4">
 		<div>
 			<a href="#" class="block focus:outline focus:outline-4 focus:outline-blue-40v">
 				<img src="#" alt="Agency name" class="size-10 rounded-full bg-gray-10 object-cover">
@@ -13,7 +13,7 @@
 		</section>
 	</section>
 	<nav class="px-8 py-2">
-		<ul class="columns-1 tablet:columns-2 desktop:columns-4 space-y-2">
+		<ul class="columns-1 @tablet:columns-2 @desktop:columns-4 space-y-2">
 			{% for link in links %}
 				<li>
 					<a href="{{- link.href -}}" class="text-gray-30 hover:text-gray-10 focus:outline focus:outline-4 focus:outline-blue-40v underline">{{- link.title -}}</a>
