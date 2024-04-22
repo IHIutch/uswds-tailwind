@@ -25,9 +25,6 @@ const template =  await renderTwigTemplate({
   path: componentPath, 
   props: componentProps || ''
 })
-
-
-console.log({template, componentCode, componentProps})
 ---
 
 <div 
@@ -65,7 +62,7 @@ console.log({template, componentCode, componentProps})
         <!-- Example end -->
       </div>
     </div>
-    <div x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }" x-init="codeHeight = $refs.code.offsetHeight; console.log($refs.code.offsetHeight);">
+    <div x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }" x-init="codeHeight = $refs.code.offsetHeight;">
       <div class="relative overflow-hidden">
         <div class="border-y border-y-gray-cool-20">
           <div class="flex justify-between">

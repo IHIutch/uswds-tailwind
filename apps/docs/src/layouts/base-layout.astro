@@ -56,14 +56,5 @@ const {pathname} = Astro.url
     <div class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-28">
       <slot />
     </div>
-    <script>
-      // @ts-ignore
-      import 'iframe-resizer'
-
-      window.iFrameResize({
-        // log: true,
-        heightCalculationMethod: 'lowestElement',
-      });
-    </script>
 	</body>
 </html>
