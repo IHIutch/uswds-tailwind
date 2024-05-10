@@ -5,7 +5,18 @@ description: "Cards contain content and actions about a single subject."
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Examples
+
+### Vertical 
 
 <ComponentPreview title="Cards Default" component="card" variant="card" />
+
+### Horizontal
+
 <ComponentPreview title="Cards Horizontal" component="card" variant="card-horizontal" />
+
+## Accessibility
+
+- Use a `<ul>` to surround a card group and a `<li>` for each card within. This formatting allows screen readers to enumerate the items in the card group and allows shortcuts between list items.
+
+- Use the appropriate heading level for your page. Update heading level based on the content of your page to make sure card headings are in the correct, logical outline order.

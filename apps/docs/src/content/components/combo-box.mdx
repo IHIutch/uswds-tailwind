@@ -5,6 +5,248 @@ description: "A combo box helps users select an item from a large list of option
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Example
 
 <ComponentPreview title="Combo Box" component="combobox" variant="combobox" />
+
+## Component API
+
+### Root
+
+<ContentList>
+
+  - #### `x-combobox`
+    
+    Custom **Alpine** directive that marks the **Combobox Root**.
+</ContentList>
+
+### Label
+
+<ContentList>
+
+  - #### `x-combobox:label`
+    
+    Custom **Alpine** directive that marks the **Combobox Label**.
+
+  - #### `id`
+
+    **Type:** `string`
+
+    Used to link the **Combobox Label** to the **Combobox List** via `aria-labelledby`. 
+
+  - #### `for`
+
+    **Type:** `string`
+
+    Links the **Combobox Label** to the **Combobox Input**. 
+    
+    By default, this value should match the `id` on the `select` element. When Javascript loads, this value will be updated to match the `id` of the **Combobox Input**.
+
+</ContentList>
+
+### Values
+
+<ContentList>
+
+  - #### `x-combobox:values`
+    
+    Custom **Alpine** directive that marks the **Combobox Values**.
+
+  - #### `hidden`
+
+    **Type:** `boolean`<br/>**Default:** `true`
+
+    Attribute is applied when JavaScript is loaded to hide the initial `<select>` element.
+
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+### Input
+
+<ContentList>
+
+  - #### `x-combobox:input`
+    
+    Custom **Alpine** directive that marks the **Combobox Input**.
+
+  - #### `id`
+
+    **Type:** `string`
+
+    Used to link the **Combobox Input** to the **Combobox Label** via `for`. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `role`
+
+    **Value:** `'combobox'`
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-expanded`
+    
+    **Type:** `boolean`<br/>**Default:** `false`
+
+    Accessibility attribute that communicates whether the **Combobox List** is expanded or collapsed. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-activedescendant`
+
+    **Type:** `string`
+
+    Accessibility attribute that communicates which, if any, **Combobox Item** is currently focused.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-controls`
+
+    **Type:** `string`
+
+    Accessibility attribute that communicates that the **Combobox Input** controls the state of the **Combobox List** and visibility of **Combobox Items**.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-owns`
+  
+    **Type:** `string`
+
+    Accessibility attribute establishes the contextual relationship between the **Combobox Input** and the **Combobox List**
+
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+### List
+
+<ContentList>
+
+  - #### `x-combobox:list`
+    
+    Custom **Alpine** directive that marks the **Combobox List**.
+
+  - #### `role`
+
+    **Type:** `string`<br/>**Value:** `'listbox'`
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-labelledby`
+
+    **Type:** `string`
+
+    Accessibility attribute that links the **Combobox List** to the **Combobox Label** via `id`. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Value:** `-1`
+
+    Prevents users from tabbing to this element.
+
+    **Automatically handled with JavaScript.**
+  
+</ContentList>
+
+### Item
+
+<ContentList>
+
+  - #### `x-combobox:item`
+    
+    Custom **Alpine** directive that marks the **Combobox Item**.
+
+  - #### `id`
+    
+    **Type:** `string`
+
+    Used to link the **Combobox Item** to the **Combobox Input** via `aria-activedescendant`. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `role`
+    
+    **Value:** `'option'`
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-selected`
+
+    **Type:** `boolean`<br/>**Default:** `false`
+
+    Accessibility attribute the communicates the selected state of the **Combobox Item**. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `data-active`
+
+    **Type:** `boolean`<br/>**Default:** `false`
+
+    Attribute used to style the the **Combobox Item** element when hovered or focused. Defaults to `false`, set to `true` when an item is hovers or focused.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Default:** `-1`
+
+    Prevents users from tabbing to this element. Defaults to `-1`, set to `0` when item it hovered or focused. 
+
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+### Toggle Button
+
+<ContentList>
+
+  - #### `x-combobox:toggle`
+    
+    Custom **Alpine** directive that marks the **Combobox Toggle Button**.
+
+  - #### `aria-label`
+    
+    **Type:** `string`
+
+    **Automatically handled with JavaScript.**
+
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Value:** `-1`
+
+    Prevents users from tabbing to this element.
+
+    **Automatically handled with JavaScript.**
+  
+</ContentList>
+
+### Clear Button
+
+<ContentList>
+
+  - #### `x-combobox:clear`
+    
+    Custom **Alpine** directive that marks the **Combobox Clear Button**.
+
+  - #### `aria-label`
+    
+    **Type:** `string`
+
+    **Automatically handled with JavaScript.**
+  
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Value:** `-1`
+
+    Prevents users from tabbing to this element.
+
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+## Progressive Enhancement
+Because this component heavily relies on Javascript, in environments where Javascript isn't present or hasn't yet loaded, this component falls back to the native `<select>` element. When Javascript is loaded, the `<select>` element will be hidden and all options will be passed to the **Combobox** component.
+
+This ensures that users will always be able to interact with a functional component regardless of their connectivity or browser settings.

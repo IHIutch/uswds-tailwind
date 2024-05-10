@@ -5,6 +5,73 @@ description: "Character count helps users know how much text they can enter when
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Example
 
 <ComponentPreview title="Character Count" component="character-count" variant="character-count" />
+
+## Component API
+
+### Root
+
+<ContentList>
+
+  - #### `x-character-count`
+    
+    Custom **Alpine** directive that marks the **Character Count Root**.
+</ContentList>
+
+### Input / Textarea
+
+<ContentList>
+
+  - #### `x-character-count:input`
+    
+    Custom **Alpine** directive that marks the **Character Count Input**.
+
+  - #### `maxlength`
+
+    **Type:** `number`
+    
+    Sets the limit on the number of characters allowed in the input. This attribute is validated natively by the browser.
+
+  - #### `aria-describedby`
+
+    **Type:** `string`
+
+    Accessibility attribute that links various input descriptors to the input itself. This attribute accepts multiple values, seperated by a space. 
+    
+</ContentList>
+
+### Hint
+
+<ContentList>
+
+  - **Note:** A hint is made up of several (seemingly redundant) elements to account for [progressive enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) and assisted technology.
+      
+  - #### `id`
+
+    **Type:** `string`
+
+    Unique value that links static hint element to the input via `aria-describedby`.
+
+  - #### `x-character-count:status`
+  
+    Custom **Alpine** directive that marks the **Character Count Status**.
+
+  - #### `aria-hidden="true"`
+
+    **Type:** `boolean`
+  
+    Accessibility attribute that hides this element from screen readers.
+
+  - #### `x-character-count:sr-status`
+
+    Custom **Alpine** directive that marks the **Character Count Screen Reader Status**.
+
+  - #### `aria-live="polite"`
+
+    **Type:** `string`
+
+    Accessibility attribute that is used to notify screen readers of the current character count status when it is changed.
+    
+</ContentList>

@@ -5,11 +5,29 @@ description: "Use our flexible grid system to structure website content. The gri
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Examples
+
+### Grid Layout
 
 <ComponentPreview title="Grid" component="grid" variant="grid" />
+
+### Grid vs Flex
+
 <ComponentPreview title="Flex" component="grid" variant="grid-flex" />
+
+### Gutters
+
 <ComponentPreview title="Grid Gutters" component="grid" variant="grid-gutters" />
+
+### Column Offset
+
 <ComponentPreview title="Grid Offset" component="grid" variant="grid-offset" />
+
+### Column Wrapping
+
 <ComponentPreview title="Grid Wrapping" component="grid" variant="grid-wrapping" />
+
+### Responsive
+
+Unlike components, layouts use viewport media queries instead of container queries. In order to demonstrate this, change the width of the browser window instead of the component example window.
 <ComponentPreview title="Responsive Breakpoints" component="grid" variant="grid-responsive-breakpoints" />

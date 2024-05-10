@@ -15,35 +15,84 @@ A breadcrumb shows the location of the current page in the site structure. It's 
 
 <ComponentPreview title="Breadcumb Default" component="breadcrumb" variant="breadcrumb" />
 
-## Variants
-
 ### Wrapping 
 
 <ComponentPreview title="Breadcrumb Wrapping" component="breadcrumb" variant="breadcrumb-wrapping" />
 
-## Anatomy
+## Component API
 
-Breadcrumbs are made up of 4 primary elements:
+Breadcrumbs are made up of the following elements:
 
-- Root
-- Breadcrumb List
-- Breadcrumb Item
-- Separator
+### Root
+
+<ContentList>
+  - #### `<nav>`
+    
+    Use a `<nav>` as the root element. This allows assistive technology to present the **breadcrumbs** in context as a navigational element on the page.
+
+  - #### `aria-label`
+
+    **Default:** `'Breadcrumb'`
+    
+    Provide a label that describes the type of navigation provided in the nav element. 
+</ContentList>
+
+### List
+
+<ContentList>
+  - #### `<ol>`
+    
+    Use an `<ol>` for breadcrumb **lists**. This allows assistive technology to enumerate the items in the **breadcrumbs** and allows shortcuts between list items.
+
+</ContentList>
+
+### List Item
+
+<ContentList>
+  - #### `<li>`
+    
+    Use an `<li>` for breadcrumb **list items**. This allows assistive technology to enumerate the items in the **breadcrumbs** and allows shortcuts between list items.
+
+</ContentList>
+
+### Link
+
+<ContentList>
+  - #### `<a>` or `<span>`
+
+    Use an `<a>` element when breadcrumb items are clickable. Every item, except for the **current page** (in our case the *last* item), represented in the breadcrumb should use an `<a>` element. 
+    
+    Use a `<span>` for the item in a breadcrumb represents the **current page**. This element is not clickable. Combine this element with the attributes below to create an accessible "current page" breadcrumb item.
+
+  - #### `role="link"`
+    
+    Allows screen readers to communicate the breadcrumb item as if it were a link.
+
+    **Only use on the "current page" breadcrumb item.**
+
+  - #### `aria-current="page"`
+    
+    Allows screen readers to communicate that the element represents the current page.
+
+    **Only use on the "current page" breadcrumb item.**
+
+  - #### `aria-disabled="true"`
+    
+    Allows screen readers to communicate that the element is not clickable.
+
+    **Only use on the "current page" breadcrumb item.**
+
+</ContentList>
+
+### Seperator
+
+<ContentList>
+  - #### `aria-hidden="true"`
+    
+    Hide **separators** from screen readers by using `aria-hidden="true"`. **Separators** between **breadcrumb items** should not be read by screen readers.
+
+</ContentList>
 
 ## Accessibility
 
-- Use `<nav>` as as the root element. This allows assistive technology to present the **breadcrumbs** in context as a navigational element on the page.
-- Use ordered lists and list items. Use an `<ol>` for **breadcrumb lists** and an `<li>` for each **breadcrumb item**. This allows assistive technology to enumerate the items in the **breadcrumbs** and allows shortcuts between list items.
-- Use ARIA markup for additional context. Use `aria-label="Breadcrumbs"` on the root element and `aria-current="page"` on the **breadcrumb item** that represents the current page (typically the last item of the list).
 - Like text, **separators** must have at least have a contrast ratio of **4.5:1** (WCAG AA) against their background.
-- Hide **separators** from screen readers by using `aria-hidden="true"`. **Separators** between **breadcrumb items** should not be read by screen readers.
-
-## Element Attributes
-
-<PropsTable>
-| Element | Attribute | Default | Notes |
-| --- | --- | --- | --- |
-| `nav` | `aria-label="Breadcrumb"` |  | Provides a label that describes the type of navigation provided in the nav element. |
-| `li` | `aria-current="page"` |  | Provides a label that describes the type of navigation provided in the nav element. |
-| **Seperator** | `aria-hidden="true"` |  | Provides a label that describes the type of navigation provided in the nav element. |
-</PropsTable>

@@ -8,3 +8,78 @@ import ComponentPreview from '#components/component-preview.astro'
 ## Usage
 
 <ComponentPreview title="Banner" component="banner" variant="banner" />
+
+## Component API
+
+A banner is composed using a `x-collapse` directive, using the following elements: 
+
+### Root
+
+<ContentList>
+  - #### `<section>`
+    
+    Using a `<section>` element ensures banners can be found by navigating by landmark when using assistive technologies.
+
+  - #### `x-collapse`
+    
+    Custom **Alpine** directive that marks the **Banner Root**.
+
+  - #### `aria-label`
+
+    **Type:** `string`
+    
+    **.gov** websites should use the following `aria-label`: 
+    
+    *"Official website of the United States government"*
+
+</ContentList>
+
+### Trigger
+
+<ContentList>
+  - #### `<button>`
+    
+    Use a button element as a banner's trigger.
+    
+  - #### `x-collapse:trigger`
+    
+    Custom **Alpine** directive that marks the **Collapse Trigger**.
+
+    - #### `aria-controls`
+    
+    **Type:** `string`
+  
+    Accessibility attribute that links the **Accordion Trigger** control to it's respective **Accordion Content**. 
+    
+    **Automatically handled with JavaScript.**
+  
+  - #### `aria-expanded`
+    
+    **Type:** `boolean`
+  
+    Accessibility attribute that communicates whether an element is expanded or collapsed. 
+    
+    **Automatically handled with JavaScript.**
+</ContentList>
+
+### Content
+
+<ContentList>
+  - #### `x-collapse:content`
+    
+    Custom **Alpine** directive that marks the **Collapse Content**.
+  
+  - #### `id`
+    **Type:** `string`
+  
+    Links the **Collapse Content** an it's respective **Collapse Trigger**. 
+    
+    **Automatically handled with JavaScript.**
+  
+  - #### `hidden`
+    **Type:** `boolean`
+  
+    When `true`, content will be hidden. When `false`, content will be visible and `hidden` attribute will be removed. 
+    
+    **Automatically handled with JavaScript.**
+</ContentList>

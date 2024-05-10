@@ -4,8 +4,22 @@ description: "An alert keeps users informed of important and sometimes time-sens
 ---
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Examples
+
+### Default
 
 <ComponentPreview title="Alert" component="alert" variant="alert" />
-<ComponentPreview title="Alert No Icon" component="alert" variant="alert-no-icon" />
+
+### Slim
+
 <ComponentPreview title="Alert Slim" component="alert" variant="alert-slim" />
+
+### No Icon
+
+<ComponentPreview title="Alert No Icon" component="alert" variant="alert-no-icon" />
+
+## Accessibility
+
+- The `role` attribute can notify assistive technologies of time-sensitive and important messages. 
+
+  For messages that demand users' immediate attention, like in cases when using the **error** or **emergency** alerts documented above, use `role="alert"`. Otherwise, use `role="status"` to provide advisory information.

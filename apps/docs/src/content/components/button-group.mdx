@@ -5,7 +5,16 @@ description: "A button group collects similar or related actions."
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Examples
+
+### Default
 
 <ComponentPreview title="Button Group Default" component="button" variant="button-group" />
+
+### Segmented
+
 <ComponentPreview title="Button Group Segmented" component="button" variant="button-group-segmented" />
+
+## Accessibility
+
+- When using a button group, convey relationship. This can either be done by using `<ul>` and `<li>` or, if not using a list element, by adding `role="group"` to the parent element.

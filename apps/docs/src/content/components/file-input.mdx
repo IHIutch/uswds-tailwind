@@ -5,6 +5,108 @@ description: "File input allows users to attach one or multiple files."
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Example
 
 <ComponentPreview title="File Input" component="file-input" variant="file-input" />
+
+## Component API
+
+### Root
+
+<ContentList>
+
+  - #### `x-file-input`
+    
+    Custom **Alpine** directive that marks the **File Input Root**.
+
+  - #### `data-dragging`
+
+     **Type:** `boolean`<br/>**Default:** `false`
+    
+    Attribute used to style **File Input Root** when a file is dragged over the **File Input Dropzone**.
+
+  - #### `data-invalid`
+
+    **Type:** `boolean`<br/>**Default:** `false`
+    
+    Attribute used to style **File Input Root** when an invalid file is provided.
+
+</ContentList>
+
+### Dropzone
+
+<ContentList>
+
+  - #### `x-file-input:dropzone`
+    
+    Custom **Alpine** directive that marks the **File Input Dropzone**.
+
+  - #### `data-dragging`
+
+     **Type:** `boolean`<br/>**Default:** `false`
+    
+    Attribute used to style **File Input Root** when a file is dragged over the **File Input Dropzone**.
+
+  - #### `data-invalid`
+
+    **Type:** `boolean`<br/>**Default:** `false`
+    
+    Attribute used to style **File Input Root** when an invalid file is provided.
+    
+</ContentList>
+
+### Input
+
+<ContentList>
+
+  - #### `x-file-input:input`
+    
+    Custom **Alpine** directive that marks the **File Input Input**.
+
+  - #### `aria-label`
+
+    **Default:** `'Drag file here or choose from folder'`
+    
+    Accessibility attribute describing the file input to assistive technology.
+
+  - #### `accept`
+
+    **Type:** `string | undefined`<br/>**Default:** `undefined`
+    
+    Native attribute used to describe the file types accepted by this input.
+
+  - #### `data-minsize`
+
+    **Type:** `number | undefined`<br/>**Default:** `undefined`
+    
+    Custom attribute use to provide the minimum acceptable file size, in bytes.
+
+  - #### `data-maxsize`
+
+    **Type:** `number | undefined`<br/>**Default:** `undefined`
+    
+    Custom attribute use to provide the maximum acceptable file size, in bytes.
+
+  - #### `data-invalid`
+
+    **Type:** `boolean`<br/>**Default:** `false`
+    
+    Attribute used to style **File Input Root** when an invalid file is provided.
+    
+  - #### `aria-invalid`
+
+    **Type:** `boolean`<br/>**Default:** `false`
+    
+    Accessibility attribute that communicates when a provided file was invalid.
+    
+</ContentList>
+
+### Error Message
+
+<ContentList>
+
+  - #### `x-file-input:error-message`
+    
+    Custom **Alpine** directive that marks the **File Input Error Message**.
+    
+</ContentList>
