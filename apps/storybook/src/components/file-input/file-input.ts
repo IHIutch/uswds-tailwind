@@ -23,7 +23,7 @@ const fileInputRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
           const acceptedTypes = this.inputEl.getAttribute("accept");
           const minFileSize = this.inputEl.getAttribute("data-minsize");
           const maxFileSize = this.inputEl.getAttribute("data-maxsize");
-          const maxFiles = this.inputEl.getAttribute("data-maxfiles");
+          // const maxFiles = this.inputEl.getAttribute("data-maxfiles");
 
           const files: File[] = Array.from(this.$event.target.files || this.$event.dataTransfer.files)
           const acceptedFiles: File[] = []

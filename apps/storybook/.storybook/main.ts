@@ -1,7 +1,7 @@
 const config = {
-  stories: [
-    "../src/components/**/*.stories.@(js|ts)",
-  ],
+  stories: ["../src/components/**/*.stories.@(js|ts)"],
+
+  staticDirs: ['../public'],
 
   addons: [
     "@storybook/addon-a11y",

@@ -36,7 +36,7 @@ export default function (Alpine: Alpine) {
 const comboboxRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
     'x-id'() {
-      return ['combobox-label', 'combobox-input']
+      return ['combobox-label', 'combobox-list', 'combobox-input']
     },
     'x-init'() {
       this.isLoaded = true;
@@ -168,10 +168,10 @@ const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
       return this.activeEl ? this.activeEl.id : undefined
     },
     ':aria-controls'() {
-      return this.$id('combobox-item')
+      return this.$id('combobox-list')
     },
     ':aria-owns'() {
-      return this.$id('combobox-item')
+      return this.$id('combobox-list')
     },
     'x-init'() {
       this.inputEl = el;
@@ -210,9 +210,10 @@ const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
 const comboboxList = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
     'role': 'listbox',
-    ':tabIndex'() {
-      return -1
+    ':id'() {
+      return this.$id('combobox-list')
     },
+    'tabindex': '-1',
     ':aria-labelledby'() {
       return this.$id('combobox-label')
     },
@@ -244,9 +245,7 @@ const comboboxClearButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Al
   Alpine.bind(el, {
     'type': 'button',
     'aria-label': 'clear input',
-    ':tabIndex'() {
-      return -1
-    },
+    'tabindex': '-1',
     'x-show'() {
       return !!this.selectedValue
     },
@@ -264,9 +263,7 @@ const comboboxToggleButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: A
   Alpine.bind(el, {
     'type': 'button',
     'aria-label': 'toggle options',
-    ':tabIndex'() {
-      return -1
-    },
+    'tabindex': '-1',
     // '@mousedown.prevent'() {
     //   return true
     // },

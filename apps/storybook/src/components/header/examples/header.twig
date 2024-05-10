@@ -28,7 +28,7 @@
 			<form role="search">
 				<label for="nav-search" class="sr-only">Search</label>
 				<div class="relative flex items-center">
-					<input id="nav-search" type="search" class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
+					<input id="nav-search" type="search" class="p-2 w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
 					<button aria-label="search" class="flex items-center rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
 						<div class="icon-[material-symbols--search] size-6"></div>
 					</button>
@@ -59,7 +59,7 @@
 	</div>
 
 	<div x-modal x-model="isOpen">
-		<div x-modal:dialog class="fixed z-40 inset-0 overflow-y-auto flex items-center justify-center p-4 animate-in duration-300 ease-in-out slide-in-from-right">
+		<div x-modal:dialog class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center p-4 animate-in duration-300 ease-in-out slide-in-from-right">
 			<nav x-modal:content class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto">
 
 				<header x-modal:title class="sr-only">Menu</header>
@@ -72,7 +72,7 @@
 					<form role="search">
 						<label for="mobile-nav-search" class="sr-only">Search</label>
 						<div class="relative flex items-center">
-							<input id="mobile-nav-search" type="search" class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
+							<input id="mobile-nav-search" type="search" class="p-2 w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
 							<button aria-label="search" class="flex items-center rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
 								<div class="icon-[material-symbols--search] size-6"></div>
 							</button>
@@ -114,7 +114,7 @@
 		</div>
 
 		<template x-teleport="body">
-			<div x-modal:backdrop class="fixed z-50 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in-0"></div>
+			<div x-modal:backdrop class="fixed z-40 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in-0"></div>
 		</template>
 
 	</div>

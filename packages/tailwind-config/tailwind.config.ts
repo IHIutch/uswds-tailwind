@@ -623,22 +623,50 @@ const config = {
             },
 
             // List style
-            'ul ul, ul ol, ol ol, ol ul': {
-              marginTop: theme('spacing.1'),
-              paddingLeft: theme('spacing.10')
-            },
-            'ol li, ul li': {
-              marginBottom: theme('spacing.1'),
-            },
-            'ol:last-child, ul:last-child, li:last-child': {
-              marginBottom: '0',
-            },
-            'ol, ul': {
+            'ol': {
               listStyle: 'revert',
               marginBottom: theme('spacing.1'),
               marginTop: theme('spacing.4'),
               lineHeight: theme('lineHeight.normal'),
               paddingLeft: theme('spacing.6'),
+            },
+            'ul': {
+              listStyle: 'revert',
+              marginBottom: theme('spacing.1'),
+              marginTop: theme('spacing.4'),
+              lineHeight: theme('lineHeight.normal'),
+              paddingLeft: theme('spacing.6'),
+            },
+            'ul ul': {
+              marginTop: theme('spacing.1'),
+              paddingLeft: theme('spacing.10')
+            },
+            'ul ol': {
+              marginTop: theme('spacing.1'),
+              paddingLeft: theme('spacing.10')
+            },
+            'ul li': {
+              marginBottom: theme('spacing.1'),
+            },
+            'ol ol': {
+              marginTop: theme('spacing.1'),
+              paddingLeft: theme('spacing.10')
+            },
+            'ol ul': {
+              marginTop: theme('spacing.1'),
+              paddingLeft: theme('spacing.10')
+            },
+            'ol li': {
+              marginBottom: theme('spacing.1'),
+            },
+            'ol:last-child': {
+              marginBottom: '0',
+            },
+            'ul:last-child': {
+              marginBottom: '0',
+            },
+            'li:last-child': {
+              marginBottom: '0',
             },
 
             // Table styles
@@ -655,15 +683,23 @@ const config = {
               textAlign: 'left',
             },
             '> table thead th': {
+              backgroundColor: theme('colors.gray-cool-10'),
+              color: theme('colors.gray-90'),
               backgroundClip: 'padding-box',
               fontWeight: theme('fontWeight.bold'),
               lineHeight: theme('lineHeight.tight'),
             },
-            '> table thead td, > table thead th': {
+            '> table thead td': {
               backgroundColor: theme('colors.gray-cool-10'),
               color: theme('colors.gray-90'),
             },
-            '> table td, > table th': {
+            '> table td': {
+              backgroundColor: theme('colors.white'),
+              border: '1px solid ' + theme('colors.gray-90'),
+              fontWeight: theme('fontWeight.normal'),
+              padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+            },
+            '> table th': {
               backgroundColor: theme('colors.white'),
               border: '1px solid ' + theme('colors.gray-90'),
               fontWeight: theme('fontWeight.normal'),
@@ -695,11 +731,46 @@ const config = {
             '> p': {
               lineHeight: theme('lineHeight.normal'),
             },
-            '> h1, > h2, > h3, > h4, > h5, > h6': {
+            '> h1': {
               marginBottom: '0',
               marginTop: '0',
             },
-            '> * + h1, > * + h2, > * + h3, > * + h4, > * + h5, > * + h6': {
+            '> h2': {
+              marginBottom: '0',
+              marginTop: '0',
+            },
+            '> h3': {
+              marginBottom: '0',
+              marginTop: '0',
+            },
+            '> h4': {
+              marginBottom: '0',
+              marginTop: '0',
+            },
+            '> h5': {
+              marginBottom: '0',
+              marginTop: '0',
+            },
+            '> h6': {
+              marginBottom: '0',
+              marginTop: '0',
+            },
+            '> * + h1': {
+              marginTop: theme('spacing.8'),
+            },
+            '> * + h2': {
+              marginTop: theme('spacing.8'),
+            },
+            '> * + h3': {
+              marginTop: theme('spacing.8'),
+            },
+            '> * + h4': {
+              marginTop: theme('spacing.8'),
+            },
+            '> * + h5': {
+              marginTop: theme('spacing.8'),
+            },
+            '> * + h6': {
               marginTop: theme('spacing.8'),
             },
             'h1': {

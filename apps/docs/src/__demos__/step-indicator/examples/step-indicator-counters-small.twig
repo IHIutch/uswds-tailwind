@@ -1,14 +1,15 @@
 {% set current_step = step_indicator.current_step  %}
 
 <div aria-label="progress" class="@container">
-  <ol class="flex space-x-0.5 pt-">
+  <ol class="flex space-x-0.5">
     {% for step in step_indicator.steps %}
 
     <li
-      class="border-t-8 pr-8 pt-6 w-full mt-2 relative last:border-t-transparent {{ loop.index < current_step ? 'border-t-blue-warm-80v' : loop.index > current_step ? 'border-t-gray-40' : 'border-t-blue-60v' }}"
+      class="relative border-t-8 pr-8 pt-2 w-full @tablet:mt-2 @tablet:pt-4 @tablet:last:border-t-transparent
+      {{ loop.index < current_step ? 'border-t-blue-warm-80v' : loop.index > current_step ? 'border-t-gray-40' : 'border-t-blue-60v' }}"
       {{ loop.index == current_step ? "aria-current='true'" }}
       >
-      <div class="size-6 rounded-full flex items-center justify-center absolute -top-4 outline outline-white outline-4 {{ loop.index < current_step ? 'bg-blue-warm-80v' : loop.index > current_step ? 'bg-white border-4 border-gray-40' : 'bg-blue-60v' }}">
+      <div class="hidden @tablet:flex size-6 rounded-full items-center justify-center absolute -top-4 outline outline-white outline-4 {{ loop.index < current_step ? 'bg-blue-warm-80v' : loop.index > current_step ? 'bg-white border-4 border-gray-40' : 'bg-blue-60v' }}">
         <span class="font-bold {{ loop.index <= current_step ? 'text-white' : 'text-gray-60' }}">{{- loop.index -}}</span>
       </div>
       <span class="hidden @tablet:block leading-none {{ loop.index < current_step ? 'text-blue-warm-80v' : loop.index > current_step ? 'text-gray-cool-60' : 'text-blue-60v font-bold' }}">{{step.label}}</span>
@@ -20,7 +21,7 @@
     {% endfor %}
   </ol>
 
-  <div class="mt-8">
+  <div class="mt-4 @tablet:mt-8">
     <h4 class="text-2xl text-gray-90">
       <span>
         <span class="sr-only">Step</span>
