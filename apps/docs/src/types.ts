@@ -18,3 +18,5 @@ export type NavLinks = {
     label: string,
   }[]
 }
+
+export type AttrMap = Record<string, any>

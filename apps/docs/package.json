@@ -22,6 +22,7 @@
     "@fontsource-variable/roboto-mono": "^5.0.17",
     "@fontsource/merriweather": "^5.0.8",
     "@fontsource/source-sans-pro": "^5.0.8",
+    "@zag-js/splitter": "^0.50.0",
     "alpinejs": "^3.13.5",
     "astro": "^4.6.0",
     "astro-expressive-code": "^0.34.1",

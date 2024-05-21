@@ -63,10 +63,18 @@ const template =  await renderTwigTemplate({
       </div>
     </div>
     <div class="bg-gray-cool-4 min-w-80 outline outline-1 outline-gray-cool-20" style={{backgroundImage: `url(${graphPaper.src})`}}>
-      <div class="tablet:resize max-w-full min-h-48 min-w-72 overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4">
-        <!-- Example start -->
-        <Fragment set:html={template} />
-        <!-- Example end -->
+      <div data-part="splitter-root">
+        <div data-part="splitter-panel" data-value="a" data-size="100" class="overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4">
+          <!-- Example start -->
+          <Fragment set:html={template} />
+          <!-- Example end -->
+        </div>
+        <button type="button" data-part="splitter-resizer" data-value="a:b" class="items-center p-2 group outline-none hidden tablet:flex">
+          <div class="flex max-h-32 h-full rounded-full w-1.5 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"></div>
+        </button>
+        <div data-part="splitter-panel" data-value="b" data-size="0">
+          <!-- Intentionally empty -->
+        </div>
       </div>
     </div>
   </div>
@@ -96,3 +104,9 @@ const template =  await renderTwigTemplate({
     </div>
   </div>
 </div>
+
+<script>
+  import { initSplitter } from "#utils/zag/splitter";
+
+  initSplitter()
+</script>
