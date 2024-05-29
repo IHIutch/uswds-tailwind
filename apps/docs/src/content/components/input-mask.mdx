@@ -8,3 +8,75 @@ import ComponentPreview from '#components/component-preview.astro'
 ## Example
 
 <ComponentPreview title="Input Mask" component="input" variant="input-mask" />
+
+## Component API
+
+### Root
+
+<ContentList>
+
+  - #### `x-input-mask`
+    
+    Custom **Alpine** directive that marks the **Input Mask Root**.
+
+</ContentList>
+
+### Input
+
+<ContentList>
+
+  - #### `x-input-mask:input`
+    
+    Custom **Alpine** directive that marks the **Input Mask**.
+
+  - #### `x-mask`
+
+    This attribute defines the values that the input will accept. `9` allows any number, `a` allows any letter, `*` allows any character.
+
+  - #### `placeholder`
+
+    The displayed "empty" values of the input. Used to show the **Input Mask Mask Display** value.
+  
+  - #### `pattern`
+
+    Native form validation attribute. 
+    
+    Take care to ensure this value validates according to your `x-mask` attribute. A mismatch may lead to a confusing user experience where users are unable to submit a form.
+
+</ContentList>
+
+### Input Display
+
+<ContentList>
+
+  - #### `x-input-mask:input-display`
+    
+    Custom **Alpine** directive that marks the **Input Mask Input Display**.
+
+    Matches the value entered in the input. Used to keep the **Mask Display** in place, correctly.
+
+</ContentList>
+
+### Mask Display
+
+<ContentList>
+
+  - #### `x-input-mask:mask-display`
+    
+    Custom **Alpine** directive that marks the **Input Mask Mask Display**.
+
+    Displays the updated mask value as the user types.
+
+</ContentList>
+
+## Progressive Enhancement
+
+Because this component relies on JavaScript, you should use the `placeholder` attribute to define the "mask" value. Once JavaScript loads, the `placeholder` attribute will be removed and used as the background **Input Mask Mask Display**. 
+
+If JavaScript doesn't load, users will see the native placeholder.
+
+## Accessibility
+
+Be sure to show an example of the proper expected formatting. While a placeholder can act as an affordance, it's not gauranteed that users, expecially those using assistive technology, will understand the expected formatting from the placeholder alone.
+
+This can be achieved by creating an "input hint" and linking that value to the input via the `aria-describedby` attribute.

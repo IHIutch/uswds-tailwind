@@ -14,16 +14,20 @@ const inputMaskRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
     'x-data'() {
       return {
         maskPlaceholder: '',
-        inputValue: ''
+        inputValue: '',
+        isInitialized: false
       }
-    }
+    },
+    'x-init'() {
+      this.isInitialized = true
+    },
   })
 }
 
 const inputMaskInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
     'x-init'() {
-      if (this.inputValue === undefined) console.warn('"x-input-mask:input" is missing a parent element with "x-input-mask".')
+      if (this.isInitialized === undefined) console.warn('"x-input-mask:input" is missing a parent element with "x-input-mask".')
       if (el.placeholder) {
         this.maskPlaceholder = el.placeholder
         el.dataset.placeholder = el.placeholder
