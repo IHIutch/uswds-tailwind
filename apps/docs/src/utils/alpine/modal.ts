@@ -42,7 +42,7 @@ const modalRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
       }
     },
     'x-id'() {
-      return ['modal', 'modal-title', 'modal-description']
+      return ['modal-title', 'modal-description']
     },
   })
 }
@@ -91,9 +91,6 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     },
     ':tabIndex'() {
       return -1
-    },
-    ':id'() {
-      return this.$id('modal')
     },
     ':aria-labelledby'() {
       return this.$id('modal-title')

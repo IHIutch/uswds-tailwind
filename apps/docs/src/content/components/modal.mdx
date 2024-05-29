@@ -5,8 +5,156 @@ description: "A modal disables page content and focuses the user’s attention o
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Examples
+
+### Default
 
 <ComponentPreview title="Modal Default" component="modal" variant="modal" />
+
+### Large
+
 <ComponentPreview title="Modal Large" component="modal" variant="modal-large" />
+
+### Forced Action
+
 <ComponentPreview title="Modal Forced Action" component="modal" variant="modal-forced-action" />
+
+## Component API
+
+### Root
+
+<ContentList>
+
+  - #### `x-modal`
+    
+    Custom **Alpine** directive that marks the **Modal Root**.
+
+</ContentList>
+
+### Trigger
+
+<ContentList>
+
+  - #### `x-modal:trigger`
+    
+    Custom **Alpine** directive that marks the **Modal Trigger**.
+
+</ContentList>
+
+### Dialog
+
+<ContentList>
+
+  - #### `x-modal:dialog`
+    
+    Custom **Alpine** directive that marks the **Modal Dialog**.
+
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Value:** `-1`
+
+    Prevents users from tabbing to this element.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-labelledby`
+
+    **Type:** `string`
+
+    Accessibility attribute that links the **Modal Dialog** to the **Modal Title** via `id`. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-describedby`
+
+    **Type:** `string`
+
+    Accessibility attribute that links the **Modal Dialog** to the **Modal Description** via `id`.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-modal`
+
+    **Value:** `true`
+
+    Accessibility attribute that indicates that this element is a modal when displayed.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `role`
+
+    **Value:** `'combobox'`
+
+    Attribute that allows assistive technology identify that the content contained in the modal is grouped and seperate from the reast of the page content.
+
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+### Content
+
+<ContentList>
+
+  - #### `x-modal:content`
+    
+    Custom **Alpine** directive that marks the **Modal Content**.
+
+</ContentList>
+
+### Title
+
+<ContentList>
+
+  - #### `x-modal:title`
+    
+    Custom **Alpine** directive that marks the **Modal Title**.
+
+  - #### `id`
+
+    **Type:** `string`
+
+    Used to link the **Modal Title** to the **Modal Dialog** via `aria-labelledby`.
+    
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+### Description
+
+<ContentList>
+
+  - #### `x-modal:description`
+    
+    Custom **Alpine** directive that marks the **Modal Title**.
+
+  - #### `id`
+
+    **Type:** `string`
+
+    Used to link the **Modal Description** to the **Modal Dialog** via `aria-describedby`. 
+
+    **Automatically handled with JavaScript.**
+
+</ContentList>
+
+### Close Button
+
+<ContentList>
+
+  - #### `x-modal:close-button`
+    
+  Custom **Alpine** directive that marks the **Modal Close Button**.
+
+</ContentList>
+
+### Backdrop
+
+<ContentList>
+
+  - #### `x-modal:backdrop`
+    
+  Custom **Alpine** directive that marks the **Modal Backdrop**.
+
+  This element is automatically appended to the document `body`, ensuring that this element always properly overlays page contents when opened.
+
+</ContentList>
