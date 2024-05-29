@@ -1,8 +1,8 @@
-<div x-data="{ isOpen: false }">
+<div x-modal>
 
-	<button @click="isOpen = true" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Open default modal</button>
+	<button x-modal:trigger class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Open default modal</button>
 
-	<div x-modal x-model="isOpen">
+	<div>
 		<div x-modal:dialog class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in">
 			<div x-modal:content class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg">
 				<div class="p-8 pt-10">
@@ -13,14 +13,14 @@
 					<div class="mt-6">
 						<ul class="flex flex-col @mobile-lg:flex-row gap-2">
 							<li class="flex">
-								<button type="button" @click="$modal.close()" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Continue without saving</button>
+								<button x-modal:close-button type="button" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Continue without saving</button>
 							</li>
 							<li class="flex">
-								<button type="button" @click="$modal.close()" class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Go back</button>
+								<button x-modal:close-button type="button" class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Go back</button>
 							</li>
 						</ul>
 					</div>
-					<button type="button" @click="$modal.close()" class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:text-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v" aria-label="Close this window">
+					<button x-modal:close-button type="button" class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:text-gray-90 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v" aria-label="Close this window">
 						<div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
 					</button>
 				</div>
