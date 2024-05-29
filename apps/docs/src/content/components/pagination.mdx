@@ -14,3 +14,67 @@ import ComponentPreview from '#components/component-preview.astro'
 ### Unbounded
 
 <ComponentPreview title="Pagination Unbounded" component="pagination" variant="pagination-unbounded" />
+
+## Component API
+
+Pagination is made up of the following elements:
+
+### Root
+
+<ContentList>
+
+  - #### `<nav>`
+
+    This element is automatically appended to the document `body`, ensuring that this element always properly overlays page contents when opened.
+
+  - #### `aria-label`
+
+    **Default:** `'Breadcrumb'`
+    
+    Provide a label that describes the type of navigation provided in the nav element. 
+
+</ContentList>
+
+### List
+
+<ContentList>
+
+  - #### `<ul>`
+
+    Use an `<ul>` for **Pagination Lists**. This allows assistive technology to enumerate the items in the pagination and allows shortcuts between list items.
+
+</ContentList>
+
+### List Items
+
+<ContentList>
+
+  - #### `<li>`
+
+    Use an `<li>` **Pagination List Items**. This allows assistive technology to enumerate the items in the pagination and allows shortcuts between list items.
+
+  - #### `aria-label`
+
+    **Default:** `'ellipsis indicating non-visible pages'`
+
+    When a **Pagination List Item** contains an **Ellipsis**, use an `aria-label` to describe to assistive technology the meaning of the ellipsis item.
+
+</ContentList>
+
+### Links
+
+<ContentList>
+
+  - #### `<a>` or `<span>`
+
+    Use an `<a>` element when **Pagination List Items** are clickable. Every item, except **Ellipsis** elements, should use an `<a>` element. 
+
+    Use a `<span>` element for **Ellipsis** elements.
+
+  - #### `aria-current="page"`
+    
+    Allows screen readers to communicate that the element represents a link to the current page.
+
+    **Only use on the "current page" pagination item.**
+
+</ContentList>
