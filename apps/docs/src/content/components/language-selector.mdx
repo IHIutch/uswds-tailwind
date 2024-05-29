@@ -5,7 +5,90 @@ description: "The consistent placement, interface, and behavior of the language 
 
 import ComponentPreview from '#components/component-preview.astro'
 
-## Usage
+## Examples
+
+### Toggle
 
 <ComponentPreview title="Language Selector" component="language-selector" variant="language-selector" />
+
+### Dropdown
+
 <ComponentPreview title="Language Selector" component="language-selector" variant="language-selector-menu" />
+
+## Component API
+
+### Root
+
+<ContentList>
+
+  - #### `x-dropdown`
+    
+    Custom **Alpine** directive that marks the **Dropdown Root**.
+  
+</ContentList>
+
+### Trigger
+
+<ContentList>
+
+  - #### `x-dropdown:trigger`
+    
+    Custom **Alpine** directive that marks the **Dropdown Root**.
+
+  - #### `aria-controls`
+
+    **Type:** `string`
+
+    Accessibility attribute that communicates that the **Dropdown Trigger** controls the state and visibility of the **Dropdown Menu**.
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-expanded`
+    
+    **Type:** `boolean`<br/>**Default:** `false`
+
+    Accessibility attribute that communicates whether the **Dropdown Menu** is expanded or collapsed. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-haspopup`
+
+    **Type:** `string`
+
+    Accessibility attribute that communicates that this component has an interactive popup element.
+
+    **Automatically handled with JavaScript.**
+  
+</ContentList>
+
+### Content
+
+<ContentList>
+
+  - #### `x-dropdown:content`
+    
+    Custom **Alpine** directive that marks the **Dropdown Root**.
+
+  - #### `role`
+
+    **Type:** `string`<br/>**Value:** `'menu'`
+
+    **Automatically handled with JavaScript.**
+
+  - #### `aria-labelledby`
+
+    **Type:** `string`
+
+    Accessibility attribute that links the **Dropdown Content** to the **Dropdown Trigger** via `id`. 
+
+    **Automatically handled with JavaScript.**
+
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Value:** `-1`
+
+    Prevents users from tabbing to this element.
+
+    **Automatically handled with JavaScript.**
+  
+</ContentList>
