@@ -39,7 +39,7 @@ import ComponentPreview from '#components/component-preview.astro'
 
     **Type:** `string`
 
-    The displayed "empty" values of the input. Used to show the **Input Mask Mask Display** value.
+    The displayed "empty" values of the input. Used to show the **Input Mask Mask Placeholder** value.
   
   - #### `pattern`
 
@@ -53,36 +53,37 @@ import ComponentPreview from '#components/component-preview.astro'
 
 ### Input Display
 
+  Matches the value entered in the input. Match the width of the value entered in the input.
+
 <ContentList>
 
-  - #### `x-input-mask:input-display`
+  - #### `x-input-mask:input-placeholder`
     
-    Custom **Alpine** directive that marks the **Input Mask Input Display**.
-
-    Matches the value entered in the input. Used to keep the **Mask Display** in place, correctly.
+    Custom **Alpine** directive that marks the **Input Mask Input Placeholder**.
 
 </ContentList>
 
 ### Mask Display
 
+Displays the updated mask value as the user types.
+
 <ContentList>
 
-  - #### `x-input-mask:mask-display`
+  - #### `x-input-mask:mask-placeholder`
     
-    Custom **Alpine** directive that marks the **Input Mask Mask Display**.
+    Custom **Alpine** directive that marks the **Input Mask Mask Placeholder**.
 
-    Displays the updated mask value as the user types.
 
 </ContentList>
 
 ## Progressive Enhancement
 
-Because this component relies on JavaScript, you should use the `placeholder` attribute to define the "mask" value. Once JavaScript loads, the `placeholder` attribute will be removed and used as the background **Input Mask Mask Display**. 
+Because this component relies on JavaScript, use the native `placeholder` attribute to define the "mask" value. 
 
-If JavaScript doesn't load, users will see the native placeholder.
+Once JavaScript loads, the `placeholder` attribute will be removed and used as the initial value of the **Input Mask Mask Placeholder**. If JavaScript doesn't load, users will see the native placeholder.
 
 ## Accessibility
 
-Be sure to show an example of the proper expected formatting. While a placeholder can act as an affordance, it's not gauranteed that users, expecially those using assistive technology, will understand the expected formatting from the placeholder alone.
+Be sure to show an example of the proper expected formatting. While a placeholder can sometimes be a useful affordance, when used alone, it's not reliable enough to ensure users understand the expected format.
 
-This can be achieved by creating an "input hint" and linking that value to the input via the `aria-describedby` attribute.
+This can be achieved by creating an "input hint" and linking that value to the input via the `aria-describedby` attribute, as demonstrated in the examples above.

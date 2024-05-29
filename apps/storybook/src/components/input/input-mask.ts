@@ -3,8 +3,8 @@ import type { Alpine, ElementWithXAttributes } from "alpinejs"
 export default function (Alpine: Alpine) {
   Alpine.directive('input-mask', (el, directive) => {
     if (directive.value === 'input') inputMaskInput(el, Alpine)
-    if (directive.value === 'input-display') inputMaskInputDisplay(el, Alpine)
-    if (directive.value === 'mask-display') inputMaskMaskDisplay(el, Alpine)
+    if (directive.value === 'input-placeholder') inputMaskInputDisplay(el, Alpine)
+    if (directive.value === 'mask-placeholder') inputMaskMaskDisplay(el, Alpine)
     else inputMaskRoot(el, Alpine)
   })
 }
@@ -46,7 +46,7 @@ const inputMaskInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
 const inputMaskInputDisplay = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
     'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-input-mask:input-display" is missing a parent element with "x-input-mask".')
+      if (this.isInitialized === undefined) console.warn('"x-input-mask:input-placeholder" is missing a parent element with "x-input-mask".')
     },
     'x-text'() {
       return this.inputValue
@@ -57,7 +57,7 @@ const inputMaskInputDisplay = (el: ElementWithXAttributes<HTMLElement>, Alpine: 
 const inputMaskMaskDisplay = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
     'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-input-mask:mask-display" is missing a parent element with "x-input-mask".')
+      if (this.isInitialized === undefined) console.warn('"x-input-mask:mask-placeholder" is missing a parent element with "x-input-mask".')
     },
     'x-text'() {
       return this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
