@@ -16,66 +16,86 @@ import "@fontsource/source-sans-pro/900.css";
 import { getCollection } from "astro:content";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
-const allComponents = await getCollection('components')
+const allComponents = await getCollection("components");
 
 const { title } = Astro.props;
-const {pathname} = Astro.url
-
+const { pathname } = Astro.url;
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body class="h-full font-public-sans">
-    <GlobalNav className="desktop:border-b-2 desktop:border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0" />
-		<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-28">
-      <nav id="sidenav" aria-label="Side navigation" class="p-2 h-full overflow-y-auto">
-        <ul class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12">
-          {allComponents.map(comps => (
-            <li class="border-t border-t-gray-10">
-              <a
-                href={`/components/${comps.slug}`}
-                class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-                aria-current={pathname === `/components/${comps.slug}` ? 'page' : false}
-                >{comps.data.title}</a>
-            </li>
-          ))}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="h-full font-public-sans">
+    <GlobalNav
+      className="desktop:border-b-2 desktop:border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
+    />
+    <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-28">
+      <nav
+        id="sidenav"
+        aria-label="Side navigation"
+        class="p-2 h-full overflow-y-auto"
+      >
+        <ul
+          class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+        >
+          {
+            allComponents.map((comps) => (
+              <li class="border-t border-t-gray-10">
+                <a
+                  href={`/components/${comps.slug}`}
+                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                  aria-current={
+                    pathname === `/components/${comps.slug}` ? "page" : false
+                  }
+                >
+                  {comps.data.title}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </nav>
     </div>
     <div class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-28">
       <slot />
     </div>
-	</body>
+  </body>
   <script>
-    (function() {
+    (function () {
       // Scroll the active sidebar link into view
-      const sidenav = document.querySelector('#sidenav') as HTMLElement
-      const sidenavActiveLink = sidenav?.querySelector('[aria-current=page]') as HTMLElement
+      const sidenav = document.querySelector("#sidenav") as HTMLElement;
+      const sidenavActiveLink = sidenav?.querySelector(
+        "[aria-current=page]"
+      ) as HTMLElement;
 
       if (!sidenav || !sidenavActiveLink) {
-        return
+        return;
       }
 
-      const sidenavHeight = sidenav.clientHeight
-      const sidenavActiveLinkTop = sidenavActiveLink.offsetTop
-      const sidenavActiveLinkHeight = sidenavActiveLink.clientHeight
-      const viewportTop = sidenavActiveLinkTop
-      const viewportBottom = viewportTop - sidenavHeight + sidenavActiveLinkHeight
+      const sidenavHeight = sidenav.clientHeight;
+      const sidenavActiveLinkTop = sidenavActiveLink.offsetTop;
+      const sidenavActiveLinkHeight = sidenavActiveLink.clientHeight;
+      const viewportTop = sidenavActiveLinkTop;
+      const viewportBottom =
+        viewportTop - sidenavHeight + sidenavActiveLinkHeight;
 
-      if (sidenav.scrollTop > viewportTop || sidenav.scrollTop < viewportBottom) {
-        sidenav.scrollTop = viewportTop - (sidenavHeight / 2) + (sidenavActiveLinkHeight / 2)
+      if (
+        sidenav.scrollTop > viewportTop ||
+        sidenav.scrollTop < viewportBottom
+      ) {
+        sidenav.scrollTop =
+          viewportTop - sidenavHeight / 2 + sidenavActiveLinkHeight / 2;
       }
-    })()
+    })();
   </script>
 </html>

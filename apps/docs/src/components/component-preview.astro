@@ -1,76 +1,103 @@
 ---
-import fs from 'fs';
-import { Code } from 'astro:components'
-import type { CollectionEntry } from 'astro:content';
-import graphPaper from '#assets/img/graph-paper.svg'
-import { renderTwigTemplate } from '#utils/functions';
+import fs from "fs";
+import { Code } from "astro:components";
+import type { CollectionEntry } from "astro:content";
+import graphPaper from "#assets/img/graph-paper.svg";
+import { renderTwigTemplate } from "#utils/functions";
 
 type Props = {
-  component: CollectionEntry<"demos">['data']['component'],
-  variant: CollectionEntry<"demos">['data']['variant'],
+  component: CollectionEntry<"demos">["data"]["component"];
+  variant: CollectionEntry<"demos">["data"]["variant"];
+};
+
+const { component, variant } = Astro.props;
+
+const propsPath = `./src/__demos__/${component}/${component}-props.json`;
+const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`;
+
+let componentProps = "";
+if (fs.existsSync(propsPath)) {
+  componentProps = JSON.parse(fs.readFileSync(propsPath, "utf8"));
 }
 
-const { component, variant } = Astro.props
-
-const propsPath  = `./src/__demos__/${component}/${component}-props.json`
-const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`
-
-let componentProps = ""
-if(fs.existsSync(propsPath)){
-  componentProps = JSON.parse(fs.readFileSync(propsPath, 'utf8'))
-}
-
-const componentCode = fs.readFileSync(componentPath, 'utf-8')
-const template =  await renderTwigTemplate({
-  path: componentPath, 
-  props: componentProps || ''
-})
+const componentCode = fs.readFileSync(componentPath, "utf-8");
+const template = await renderTwigTemplate({
+  path: componentPath,
+  props: componentProps || "",
+});
 ---
 
-<div 
-  x-data="{ exampleSize: '1056px', updateWidth(value) { this.exampleSize = value; } }" 
-  class="not-prose w-full max-w-6xl mt-6 mb-12">
+<div
+  x-data="{ exampleSize: '1056px', updateWidth(value) { this.exampleSize = value; } }"
+  class="not-docs-prose w-full max-w-6xl mt-6 mb-12"
+>
   <div class="outline outline-1 outline-gray-cool-20 rounded-t">
     <div class="flex w-full overflow-hidden">
-      <div class="text-black text-sm px-4 flex items-center justify-center h-12">
+      <div
+        class="text-black text-sm px-4 flex items-center justify-center h-12"
+      >
         <div class="w-24">
           <span class="font-semibold">Breakpoints</span>
         </div>
         <div class="ml-60 w-24 h-full">
-          <div class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2">
+          <div
+            class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2"
+          >
             <p class="font-semibold leading-none mb-0.5">Mobile</p>
             <span class="text-sm text-gray-cool-50 leading-none">320px</span>
           </div>
         </div>
         <div class="ml-16 w-24 h-full">
-          <div class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2">
+          <div
+            class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2"
+          >
             <p class="font-semibold leading-none mb-0.5">Mobile Lg</p>
             <span class="text-sm text-gray-cool-50 leading-none">480px</span>
           </div>
         </div>
         <div class="ml-16 w-24 h-full">
-          <div class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2">
+          <div
+            class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2"
+          >
             <p class="font-semibold leading-none mb-0.5">Tablet</p>
             <span class="text-sm text-gray-cool-50 leading-none">640px</span>
           </div>
         </div>
         <div class="ml-72 w-24 h-full">
-          <div class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2">
+          <div
+            class="h-full border-l border-l-gray-cool-20 flex flex-col justify-center pl-2"
+          >
             <p class="font-semibold leading-none mb-0.5">Desktop</p>
             <span class="text-sm text-gray-cool-50 leading-none">1024px</span>
           </div>
         </div>
       </div>
     </div>
-    <div class="bg-gray-cool-4 min-w-80 outline outline-1 outline-gray-cool-20" style={{backgroundImage: `url(${graphPaper.src})`}}>
+    <div
+      class="bg-gray-cool-4 min-w-80 outline outline-1 outline-gray-cool-20"
+      style={{ backgroundImage: `url(${graphPaper.src})` }}
+    >
       <div data-part="splitter-root">
-        <div data-part="splitter-panel" data-value="a" data-size="100" class="overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4">
+        <div
+          data-part="splitter-panel"
+          data-value="a"
+          data-size="100"
+          class="overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4"
+        >
           <!-- Example start -->
           <Fragment set:html={template} />
           <!-- Example end -->
         </div>
-        <button type="button" data-part="splitter-resizer" data-value="a:b" class="items-center p-2 group outline-none hidden tablet:flex">
-          <div class="flex max-h-32 h-full rounded-full w-1.5 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"></div>
+        <button
+          type="button"
+          data-part="splitter-resizer"
+          data-value="a:b"
+          class="items-center p-2 group outline-none hidden tablet:flex"
+        >
+          <div
+            class="flex max-h-32 h-full rounded-full w-1.5 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"
+          >
+          </div>
         </button>
         <div data-part="splitter-panel" data-value="b" data-size="0">
           <!-- Intentionally empty -->
@@ -78,26 +105,54 @@ const template =  await renderTwigTemplate({
       </div>
     </div>
   </div>
-  <div x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }" x-init="codeHeight = $refs.code.offsetHeight;">
-    <div class="relative overflow-hidden outline outline-1 outline-gray-cool-20 rounded-b">
+  <div
+    x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }"
+    x-init="codeHeight = $refs.code.offsetHeight;"
+  >
+    <div
+      class="relative overflow-hidden outline outline-1 outline-gray-cool-20 rounded-b"
+    >
       <div class="border-b border-b-gray-cool-20">
         <div class="flex justify-between">
           <div class="px-3 border-r border-r-gray-cool-20 flex items-center">
             <span class="text-black text-sm font-semibold">Twig</span>
           </div>
           <div>
-            <button type="button" class="flex items-center justify-center h-10 px-3 border-l border-l-gray-cool-20">
-              <span aria-hidden="true" class="icon-[material-symbols--file-copy] align-middle size-4"></span>
+            <button
+              type="button"
+              class="flex items-center justify-center h-10 px-3 border-l border-l-gray-cool-20"
+            >
+              <span
+                aria-hidden="true"
+                class="icon-[material-symbols--file-copy] align-middle size-4"
+              ></span>
               <span class="text-sm pl-1">Copy</span>
             </button>
           </div>
         </div>
       </div>
-      <div :class="codeHeight < 400 || isCodeExpanded ? 'h-auto' : 'h-96'" class="overflow-hidden" x-ref="code">
-        <Code code={componentCode} lang="twig" theme="light-plus" class="p-4 text-sm" style="background-color: #f7f9fa" />
+      <div
+        :class="codeHeight < 400 || isCodeExpanded ? 'h-auto' : 'h-96'"
+        class="overflow-hidden"
+        x-ref="code"
+      >
+        <Code
+          code={componentCode}
+          lang="twig"
+          theme="light-plus"
+          class="p-4 text-sm"
+          style="background-color: #f7f9fa"
+        />
       </div>
-      <button x-show="codeHeight > 400 && !isCodeExpanded" type="button" @click="toggleExpanded()" class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0">
-        <div class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v">
+      <button
+        x-show="codeHeight > 400 && !isCodeExpanded"
+        type="button"
+        @click="toggleExpanded()"
+        class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0"
+      >
+        <div
+          class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"
+        >
           <span>Expand Code</span>
         </div>
       </button>

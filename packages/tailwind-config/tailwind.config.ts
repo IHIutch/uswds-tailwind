@@ -637,6 +637,13 @@ const config = {
               lineHeight: theme('lineHeight.normal'),
               paddingLeft: theme('spacing.6'),
             },
+            'li': {
+              marginTop: theme('spacing.1'),
+              marginBottom: theme('spacing.1'),
+            },
+            'li::marker': {
+              color: 'inherit',
+            },
             'ul ul': {
               marginTop: theme('spacing.1'),
               paddingLeft: theme('spacing.10')
@@ -647,6 +654,7 @@ const config = {
             },
             'ul li': {
               marginBottom: theme('spacing.1'),
+              paddingLeft: '0'
             },
             'ol ol': {
               marginTop: theme('spacing.1'),
@@ -658,6 +666,7 @@ const config = {
             },
             'ol li': {
               marginBottom: theme('spacing.1'),
+              paddingLeft: '0'
             },
             'ol:last-child': {
               marginBottom: '0',
@@ -679,31 +688,19 @@ const config = {
               margin: theme('spacing.5') + ' 0',
               textAlign: 'left',
             },
-            '> table tbody th': {
-              textAlign: 'left',
-            },
-            '> table thead th': {
-              backgroundColor: theme('colors.gray-cool-10'),
-              color: theme('colors.gray-90'),
-              backgroundClip: 'padding-box',
-              fontWeight: theme('fontWeight.bold'),
-              lineHeight: theme('lineHeight.tight'),
-            },
-            '> table thead td': {
-              backgroundColor: theme('colors.gray-cool-10'),
-              color: theme('colors.gray-90'),
+            '> table th': {
+              backgroundColor: theme('colors.white'),
+              border: '1px solid ' + theme('colors.gray-90'),
+              fontWeight: theme('fontWeight.normal'),
+              padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+              verticalAlign: 'middle'
             },
             '> table td': {
               backgroundColor: theme('colors.white'),
               border: '1px solid ' + theme('colors.gray-90'),
               fontWeight: theme('fontWeight.normal'),
               padding: theme('spacing.2') + ' ' + theme('spacing.4'),
-            },
-            '> table th': {
-              backgroundColor: theme('colors.white'),
-              border: '1px solid ' + theme('colors.gray-90'),
-              fontWeight: theme('fontWeight.normal'),
-              padding: theme('spacing.2') + ' ' + theme('spacing.4'),
+              verticalAlign: 'middle'
             },
             '> table caption': {
               textAlign: 'left',
@@ -725,6 +722,20 @@ const config = {
               left: '0',
               position: 'absolute',
               width: '100%',
+            },
+            '> table tbody th': {
+              textAlign: 'left',
+            },
+            '> table thead th': {
+              backgroundColor: theme('colors.gray-cool-10'),
+              color: theme('colors.gray-90'),
+              backgroundClip: 'padding-box',
+              fontWeight: theme('fontWeight.bold'),
+              lineHeight: theme('lineHeight.tight'),
+            },
+            '> table thead td': {
+              backgroundColor: theme('colors.gray-cool-10'),
+              color: theme('colors.gray-90'),
             },
 
             // Text styles
@@ -840,78 +851,6 @@ const config = {
             'content-visibility': 'hidden',
           },
         },
-      })
-      addComponents({
-        '.props-table': {
-          'table': {
-            fontSize: theme('fontSize.sm'),
-            lineHeight: theme('lineHeight.normal'),
-            borderCollapse: 'collapse',
-            borderSpacing: '0',
-            color: theme('colors.gray-90'),
-            textAlign: 'left',
-            // width: '100%',
-          },
-          'table code': {
-            fontFamily: theme('fontFamily.roboto-mono'),
-            color: theme('colors.black'),
-            fontWeight: 'normal',
-            backgroundColor: theme('colors.gray-cool-5'),
-            paddingTop: '2px',
-            paddingRight: theme('spacing.2'),
-            paddingBottom: '2px',
-            paddingLeft: theme('spacing.2'),
-            letterSpacing: theme('letterSpacing.wide'),
-            whiteSpace: 'nowrap'
-          },
-          'table kbd': {
-            fontFamily: theme('fontFamily.roboto-mono'),
-          },
-          'table tbody th': {
-            textAlign: 'left',
-          },
-          'table thead th': {
-            fontWeight: theme('fontWeight.bold'),
-            lineHeight: theme('lineHeight.tight'),
-          },
-          'table thead td, table thead th': {
-            color: theme('colors.gray-90'),
-          },
-          'table th': {
-            backgroundColor: theme('colors.white'),
-            borderBottom: '1px solid ' + theme('colors.gray-90'),
-            fontWeight: theme('fontWeight.normal'),
-            padding: theme('spacing.2') + ' ' + theme('spacing.4'),
-          },
-          'table td': {
-            backgroundColor: theme('colors.white'),
-            borderBottom: '1px solid ' + theme('colors.gray-90'),
-            fontWeight: theme('fontWeight.normal'),
-            padding: theme('spacing.2') + ' ' + theme('spacing.4'),
-            verticalAlign: 'top'
-          },
-          'table caption': {
-            textAlign: 'left',
-            fontSize: theme('fontSize.base')?.[0],
-            fontWeight: theme('fontWeight.bold'),
-            marginBottom: theme('spacing.3'),
-          },
-          'table th[data-sortable]': {
-            paddingRight: theme('spacing.10'),
-            position: 'relative',
-          },
-          'table th[data-sortable]::after': {
-            borderBottomColor: 'transparent',
-            borderBottomStyle: 'solid',
-            borderBottomWidth: '1px',
-            bottom: '0',
-            content: '""',
-            height: '0',
-            left: '0',
-            position: 'absolute',
-            width: '100%',
-          },
-        }
       })
     })
   ],

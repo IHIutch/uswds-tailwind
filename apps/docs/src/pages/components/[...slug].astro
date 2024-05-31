@@ -1,27 +1,25 @@
 ---
-import { getCollection } from 'astro:content'
-import Layout from '#layouts/base-layout.astro';
-import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
-import PropsTable from '#components/props-table.astro';
-import ContentList from '#components/content-list.astro';
-import TableOfContents from '#components/table-of-contents.astro';
-
+import { getCollection } from "astro:content";
+import Layout from "#layouts/base-layout.astro";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import ContentList from "#components/content-list.astro";
+import TableOfContents from "#components/table-of-contents.astro";
 
 export const getStaticPaths = (async () => {
-  const allComponents = await getCollection('components')
+  const allComponents = await getCollection("components");
   return allComponents.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
-  }))
-}) satisfies GetStaticPaths
+  }));
+}) satisfies GetStaticPaths;
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { entry } = Astro.props
-const { Content, headings } = await entry.render()
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render();
 
-const activeHeading = ''
-const visibleHeadings = headings.filter((h) => h.depth <= 3)
+const activeHeading = "";
+const visibleHeadings = headings.filter((h) => h.depth <= 3);
 ---
 
 <Layout title={entry.data.title}>
@@ -33,11 +31,14 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3)
           <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
           <p class="text-xl font-light max-w-prose">{entry.data.description}</p>
         </div>
-        <div class="prose max-w-none [&_>_*:not(.not-prose)]:max-w-prose">
-          <Content components={{
-            PropsTable,
-            ContentList
-          }} />
+        <div
+          class="docs-prose max-w-none [&_>_*:not(.not-docs-prose)]:max-w-prose"
+        >
+          <Content
+            components={{
+              ContentList,
+            }}
+          />
         </div>
       </div>
     </div>
@@ -45,6 +46,6 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3)
 
   <script>
     import { initSplitter } from "#utils/zag/splitter";
-    initSplitter()
+    initSplitter();
   </script>
 </Layout>
