@@ -1,75 +1,108 @@
 ---
-import type { NavLinks } from "types"
-import DesktopNav from "./desktop-nav.astro"
-import MobileNav from "./mobile-nav.astro"
-import { getCollection } from "astro:content"
+import type { NavLinks } from "types";
+import DesktopNav from "./desktop-nav.astro";
+import MobileNav from "./mobile-nav.astro";
+import { getCollection } from "astro:content";
 
 type Props = {
-  className?: string
-}
+  className?: string;
+};
 
-const allComponents = await getCollection('components')
+const allComponents = await getCollection("components");
 const desktopLinks: NavLinks = {
   primary: [
-  {
-    label: 'Home',
-    href: '/'
-  },
-  {
-    label: 'Getting Started',
-    href: '/getting-started'
-  },
-  {
-    label: 'Components',
-    href: '/components',
-  },
-  {
-    label: 'Colors',
-    href: '/colors'
-  }
-]}
+    {
+      label: "Home",
+      href: "/",
+    },
+    {
+      label: "Getting Started",
+      href: "/getting-started",
+    },
+    {
+      label: "Components",
+      href: "/components",
+    },
+    // {
+    //   label: "JavaScript",
+    //   href: "/javascript",
+    // },
+    {
+      label: "Colors",
+      href: "/colors",
+    },
+    {
+      label: "Typography",
+      href: "/typography",
+    },
+    {
+      label: "About",
+      href: "/about",
+    },
+  ],
+};
 
 const mobileLinks: NavLinks = {
   primary: [
-  {
-    label: 'Home',
-    href: '/'
-  },
-  {
-    label: 'Getting Started',
-    href: '/getting-started'
-  },
-  {
-    label: 'Components',
-    // href: '/components',
-    children: allComponents.map(c => ({
-      label: c.data.title,
-      href: `/components/${c.slug}`,
-    }))
-  },
-  {
-    label: 'Colors',
-    href: '/colors'
-  }
-]}
+    {
+      label: "Home",
+      href: "/",
+    },
+    {
+      label: "Getting Started",
+      href: "/getting-started",
+    },
+    {
+      label: "Components",
+      // href: '/components',
+      children: allComponents.map((c) => ({
+        label: c.data.title,
+        href: `/components/${c.slug}`,
+      })),
+    },
+    // {
+    //   label: "JavaScript",
+    //   href: "/javascript",
+    // },
+    {
+      label: "Colors",
+      href: "/colors",
+    },
+    {
+      label: "Typography",
+      href: "/typography",
+    },
+    {
+      label: "About",
+      href: "/about",
+    },
+  ],
+};
 
-const {className} = Astro.props
+const { className } = Astro.props;
 ---
 
 <header class={className}>
-	<div class="desktop:px-8">
-    <div class="max-w-5xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10">
-      <div class="desktop:text-2xl ml-4 desktop:ml-0 h-auto desktop:h-16 flex items-center">
+  <div class="desktop:px-8">
+    <div
+      class="max-w-5xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10"
+    >
+      <div
+        class="desktop:text-2xl ml-4 desktop:ml-0 h-auto desktop:h-16 flex items-center"
+      >
         <em class="font-bold not-italic">
-          <a class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v" href="/">USWDS + Tailwind</a>
+          <a
+            class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v"
+            href="/">USWDS + Tailwind</a
+          >
         </em>
       </div>
       <div class="desktop:hidden">
-        <MobileNav primary={mobileLinks.primary}/>
+        <MobileNav primary={mobileLinks.primary} />
       </div>
     </div>
   </div>
-	<div class="hidden desktop:block border-t border-t-gray-cool-10">
+  <div class="hidden desktop:block border-t border-t-gray-cool-10">
     <DesktopNav primary={desktopLinks.primary} />
-	</div>
+  </div>
 </header>
