@@ -33,7 +33,7 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3)
           <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
           <p class="text-xl font-light max-w-prose">{entry.data.description}</p>
         </div>
-        <div class="usa-prose max-w-none [&_>_*:not(.not-usa-prose)]:max-w-prose">
+        <div class="prose max-w-none [&_>_*:not(.not-prose)]:max-w-prose">
           <Content components={{
             PropsTable,
             ContentList

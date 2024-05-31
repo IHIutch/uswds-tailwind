@@ -819,9 +819,7 @@ const config = {
   plugins: [
     tailwindAnimate,
     tailwaindContainerQueries,
-    tailwindTypography({
-      className: 'usa-prose'
-    }),
+    tailwindTypography(),
     addDynamicIconSelectors({
       scale: 0
     }),
