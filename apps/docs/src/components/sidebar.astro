@@ -1,0 +1,96 @@
+---
+import { getCollection } from "astro:content";
+
+const allComponents = await getCollection("components");
+
+type Props = {
+  pathname: string;
+};
+
+const { pathname } = Astro.props;
+---
+
+<nav
+  id="sidenav"
+  aria-label="Side navigation"
+  class="p-2 h-full overflow-y-auto"
+>
+  <ul
+    class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+  >
+    {
+      allComponents.map((comps) => (
+        <li class="border-t border-t-gray-10">
+          <a
+            href={`/components/${comps.slug}`}
+            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+            aria-current={
+              pathname === `/components/${comps.slug}` ? "page" : false
+            }
+          >
+            {comps.data.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+<script>
+  type ScrollTopJSON =
+    | undefined
+    | {
+        scrollTop: number;
+      };
+  const key = "sidebar-scroll-state";
+  const getSideNavEl = () => document.querySelector("#sidenav") as HTMLElement;
+
+  document.addEventListener("astro:page-load", () => {
+    const sidenav = getSideNavEl();
+    const sidenavActiveLink = sidenav?.querySelector(
+      "[aria-current=page]"
+    ) as HTMLElement;
+
+    // Restore state from previous navigation
+    const savedStateJson = sessionStorage.getItem(key);
+
+    if (savedStateJson) {
+      let savedState: ScrollTopJSON;
+
+      try {
+        savedState = JSON.parse(savedStateJson) as ScrollTopJSON;
+      } catch (e) {
+        console.error("Error parsing saved position:", e);
+      }
+
+      if (savedState) {
+        sidenav.scrollTop = savedState.scrollTop;
+      }
+
+      if (sidenavActiveLink) {
+        // intersection observer might be more performant?
+        const sidebarRect = sidenav.getBoundingClientRect();
+        const liRect = sidenavActiveLink.getBoundingClientRect();
+        if (
+          liRect.top < sidebarRect.top ||
+          liRect.bottom > sidebarRect.bottom
+        ) {
+          sidenavActiveLink.scrollIntoView({
+            behavior: "instant",
+            block: "nearest",
+          });
+        }
+      }
+    }
+  });
+  document.addEventListener("astro:before-preparation", () => {
+    // Save user state before navigating
+    const sidenav = getSideNavEl();
+
+    sessionStorage.setItem(
+      key,
+      JSON.stringify({
+        scrollTop: sidenav.scrollTop,
+      })
+    );
+  });
+</script>
