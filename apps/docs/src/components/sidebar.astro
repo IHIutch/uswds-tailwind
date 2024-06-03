@@ -52,34 +52,23 @@ const { pathname } = Astro.props;
 
     // Restore state from previous navigation
     const savedStateJson = sessionStorage.getItem(key);
+    let savedState: ScrollTopJSON;
 
     if (savedStateJson) {
-      let savedState: ScrollTopJSON;
-
       try {
-        savedState = JSON.parse(savedStateJson) as ScrollTopJSON;
+        savedState = JSON.parse(savedStateJson);
       } catch (e) {
         console.error("Error parsing saved position:", e);
       }
+    }
 
-      if (savedState) {
-        sidenav.scrollTop = savedState.scrollTop;
-      }
-
-      if (sidenavActiveLink) {
-        // intersection observer might be more performant?
-        const sidebarRect = sidenav.getBoundingClientRect();
-        const liRect = sidenavActiveLink.getBoundingClientRect();
-        if (
-          liRect.top < sidebarRect.top ||
-          liRect.bottom > sidebarRect.bottom
-        ) {
-          sidenavActiveLink.scrollIntoView({
-            behavior: "instant",
-            block: "nearest",
-          });
-        }
-      }
+    if (savedState) {
+      sidenav.scrollTop = savedState.scrollTop;
+    } else {
+      sidenavActiveLink.scrollIntoView({
+        behavior: "instant",
+        block: "center",
+      });
     }
   });
   document.addEventListener("astro:before-preparation", () => {
