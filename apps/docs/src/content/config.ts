@@ -8,6 +8,14 @@ const componentsCollection = defineCollection({
   }),
 })
 
+const contentCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string()
+  }),
+})
+
 const componentVariantsCollection = defineCollection({
   type: 'data',
   schema: z.object({
@@ -21,4 +29,5 @@ const componentVariantsCollection = defineCollection({
 export const collections = {
   components: componentsCollection,
   demos: componentVariantsCollection,
+  content: contentCollection
 }
