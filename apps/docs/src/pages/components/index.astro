@@ -1,6 +1,0 @@
----
-import { getCollection } from "astro:content";
-
-const allComponents = await getCollection('components')
-return Astro.redirect(`/components/${allComponents[0].slug}`);
----

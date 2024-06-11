@@ -18,5 +18,8 @@ export default defineConfig({
         dark: 'github-dark',
       },
     }
+  },
+  redirects: {
+    '/components': '/components/accordion'
   }
 });
