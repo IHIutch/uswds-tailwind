@@ -4,7 +4,7 @@ import { addDynamicIconSelectors } from '@iconify/tailwind'
 import tailwindForms from '@tailwindcss/forms'
 import tailwindTypography from '@tailwindcss/typography'
 import tailwindAnimate from "tailwindcss-animate"
-import tailwaindContainerQueries from "@tailwindcss/container-queries"
+import tailwindContainerQueries from "@tailwindcss/container-queries"
 import plugin from 'tailwindcss/plugin'
 import type { PluginUtils } from "tailwindcss/types/config";
 
@@ -559,7 +559,7 @@ const config = {
       "open-sans": ' "Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif,  "Apple Color Emoji",  "Segoe UI Emoji","Segoe UI Symbol"',
       "public-sans": ' "Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
       "merriweather": '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
-      "source-sans-pro": '"Source Sans Pro", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
+      "source-sans": '"Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
       "roboto-mono": '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
     },
     extend: {
@@ -573,7 +573,7 @@ const config = {
         DEFAULT: {
           css: {
             maxWidth: theme('maxWidth.prose'),
-            fontFamily: theme('fontFamily.source-sans-pro'),
+            fontFamily: theme('fontFamily.source-sans'),
             fontSize: theme('fontSize.base')[0],
             lineHeight: theme('lineHeight.normal'),
             color: theme('colors.black'),
@@ -595,19 +595,29 @@ const config = {
             'code::after': {
               content: 'none',
             },
-            'code:not([data-rehype-pretty-code-figure] code)': {
-              color: theme('colors.black'),
-              fontWeight: 'normal',
-              backgroundColor: theme('colors.gray-cool-5'),
-              paddingTop: '2px',
-              paddingRight: theme('spacing.2'),
-              paddingBottom: '2px',
-              paddingLeft: theme('spacing.2'),
-              letterSpacing: theme('letterSpacing.wide'),
-            },
-            'strong code:not([data-rehype-pretty-code-figure] code)': {
-              fontWeight: 'bolder',
-            },
+            // 'pre:not(.astro-code) code': {
+            //   color: theme('colors.black'),
+            //   fontWeight: 'normal',
+            //   backgroundColor: theme('colors.gray-cool-5'),
+            //   paddingTop: '2px',
+            //   paddingRight: theme('spacing.2'),
+            //   paddingBottom: '2px',
+            //   paddingLeft: theme('spacing.2'),
+            //   letterSpacing: theme('letterSpacing.wide'),
+            // },
+            // 'code:not([data-rehype-pretty-code-figure] code)': {
+            //   color: theme('colors.black'),
+            //   fontWeight: 'normal',
+            //   backgroundColor: theme('colors.gray-cool-5'),
+            //   paddingTop: '2px',
+            //   paddingRight: theme('spacing.2'),
+            //   paddingBottom: '2px',
+            //   paddingLeft: theme('spacing.2'),
+            //   letterSpacing: theme('letterSpacing.wide'),
+            // },
+            // 'strong code:not([data-rehype-pretty-code-figure] code)': {
+            //   fontWeight: 'bolder',
+            // },
 
             'a': {
               color: theme('colors.blue-60v'),
@@ -815,7 +825,7 @@ const config = {
               fontWeight: theme('fontWeight.bold'),
             },
             'h6': {
-              fontFamily: theme('fontFamily.source-sans-pro'),
+              fontFamily: theme('fontFamily.source-sans'),
               fontSize: theme('fontSize.sm')[0],
               lineHeight: theme('lineHeight.none'),
               fontWeight: theme('fontWeight.normal'),
@@ -829,7 +839,7 @@ const config = {
   },
   plugins: [
     tailwindAnimate,
-    tailwaindContainerQueries,
+    tailwindContainerQueries,
     tailwindTypography(),
     addDynamicIconSelectors({
       scale: 0
@@ -838,7 +848,7 @@ const config = {
       strategy: 'class'
     }),
 
-    plugin(function ({ addVariant, addUtilities, addComponents, theme }) {
+    plugin(function ({ addVariant, addUtilities }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
       addVariant('valid', ['&[data-valid]'])

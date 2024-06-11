@@ -44,10 +44,10 @@ importers:
       '@fontsource-variable/roboto-mono':
         specifier: ^5.0.17
         version: 5.0.17
+      '@fontsource-variable/source-sans-3':
+        specifier: ^5.0.21
+        version: 5.0.21
       '@fontsource/merriweather':
-        specifier: ^5.0.8
-        version: 5.0.8
-      '@fontsource/source-sans-pro':
         specifier: ^5.0.8
         version: 5.0.8
       '@tailwindcss/typography':
@@ -117,10 +117,10 @@ importers:
       '@fontsource-variable/roboto-mono':
         specifier: ^5.0.17
         version: 5.0.17
+      '@fontsource-variable/source-sans-3':
+        specifier: ^5.0.21
+        version: 5.0.21
       '@fontsource/merriweather':
-        specifier: ^5.0.8
-        version: 5.0.8
-      '@fontsource/source-sans-pro':
         specifier: ^5.0.8
         version: 5.0.8
       '@storybook/test':
@@ -2217,12 +2217,12 @@ packages:
     resolution: {integrity: sha512-+FyoiEmO2r/kiwPnsPtATK2ROMgNwCnVSvvs+K38GMLIgLSSk4cNqU3GCqJDMSvAPHMYd0gFPGKStFh+yLqd9Q==}
     dev: false
 
-  /@fontsource/merriweather@5.0.8:
-    resolution: {integrity: sha512-4vvR6psdKcGzaFCQL8fGCqMI/mOLKD+mhmUe3iQilx/4VFkIcF7wswWHZ7KCPeF24edX8yd0QXX0DQ1CenMrYA==}
+  /@fontsource-variable/source-sans-3@5.0.21:
+    resolution: {integrity: sha512-HG2YLa3xs6+wrQrJoiborhX3q5spamGR1xe2QFkEbhD1QEKQ6goXKa+wccybDUrCBrKVOOeNqZQr5DkW0bqb1g==}
     dev: false
 
-  /@fontsource/source-sans-pro@5.0.8:
-    resolution: {integrity: sha512-5U2UvIYRkCMozZ388gCE73PEpa2MFgN/0t9O4a1FF7bGT/MIneQWSL1XpWZ8iMVYdh6ntxRf3iFA6slCIuFgkg==}
+  /@fontsource/merriweather@5.0.8:
+    resolution: {integrity: sha512-4vvR6psdKcGzaFCQL8fGCqMI/mOLKD+mhmUe3iQilx/4VFkIcF7wswWHZ7KCPeF24edX8yd0QXX0DQ1CenMrYA==}
     dev: false
 
   /@iconify-json/fa6-brands@1.1.18:

@@ -42,8 +42,8 @@
     "@fontsource-variable/open-sans": "^5.0.21",
     "@fontsource-variable/public-sans": "^5.0.17",
     "@fontsource-variable/roboto-mono": "^5.0.17",
+    "@fontsource-variable/source-sans-3": "^5.0.21",
     "@fontsource/merriweather": "^5.0.8",
-    "@fontsource/source-sans-pro": "^5.0.8",
     "@storybook/test": "^8.0.8",
     "alpinejs": "^3.13.3"
   }
