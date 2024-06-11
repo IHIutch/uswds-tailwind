@@ -83,24 +83,41 @@ const { className } = Astro.props;
 ---
 
 <header class={className}>
-  <div class="desktop:px-8">
+  <div
+    class="max-w-6xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10 desktop:px-8"
+  >
     <div
-      class="max-w-5xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10"
+      class="desktop:text-2xl ml-4 desktop:ml-0 h-auto desktop:h-16 flex items-center"
     >
-      <div
-        class="desktop:text-2xl ml-4 desktop:ml-0 h-auto desktop:h-16 flex items-center"
-      >
-        <em class="font-bold not-italic">
-          <a
-            class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v"
-            href="/">USWDS + Tailwind</a
-          >
-        </em>
-      </div>
-      <div class="desktop:hidden">
-        <MobileNav primary={mobileLinks.primary} />
-      </div>
+      <em class="font-bold not-italic">
+        <a
+          class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v"
+          href="/">USWDS + Tailwind</a
+        >
+      </em>
     </div>
+    <div class="desktop:hidden">
+      <MobileNav primary={mobileLinks.primary} />
+    </div>
+
+    <section aria-label="search component" class="hidden desktop:block">
+      <form role="search" class="max-w-64">
+        <label for="nav-search" class="sr-only">Search</label>
+        <div class="relative flex items-center">
+          <input
+            id="nav-search"
+            type="search"
+            class="p-2 bg-transparent max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+          />
+          <button
+            aria-label="search"
+            class="flex items-center rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+          >
+            <div class="icon-[material-symbols--search] size-6"></div>
+          </button>
+        </div>
+      </form>
+    </section>
   </div>
   <div class="hidden desktop:block border-t border-t-gray-cool-10">
     <DesktopNav primary={desktopLinks.primary} />

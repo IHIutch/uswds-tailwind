@@ -1,67 +1,83 @@
 ---
-import type { NavLinks } from 'types'
+import type { NavLinks } from "types";
 
-type Props = NavLinks
+type Props = NavLinks;
 
-const { primary, secondary } = Astro.props
-
+const { primary, secondary } = Astro.props;
 ---
 
-<div class="desktop:px-8">
-  <nav class="max-w-5xl mx-auto relative">
-    {primary && primary.length > 0 ? (
-      <ul class="flex -ml-4">
-        {primary.map(item => (
-          <li class="leading-none">
-            {item.children !== undefined ? (
-              <div x-data="{}" x-dropdown>
-                <button x-dropdown:trigger class="relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1" class:list={item.isActive ? 'after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1': ''}>
-                  <span>{item.label}</span>
-                  <div aria-hidden="true" class="hidden mobile-lg:inline-flex">
-                    <span class="icon-[material-symbols--keyboard-arrow-down] group-aria-expanded:icon-[material-symbols--keyboard-arrow-up] align-middle size-4"></span>
+<div>
+  <nav class="max-w-6xl mx-auto relative">
+    {
+      primary && primary.length > 0 ? (
+        <ul class="flex -ml-4 desktop:px-8">
+          {primary.map((item) => (
+            <li class="leading-none">
+              {item.children !== undefined ? (
+                <div x-data="{}" x-dropdown>
+                  <button
+                    x-dropdown:trigger
+                    class="relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1"
+                    class:list={
+                      item.isActive
+                        ? "after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1"
+                        : ""
+                    }
+                  >
+                    <span>{item.label}</span>
+                    <div
+                      aria-hidden="true"
+                      class="hidden mobile-lg:inline-flex"
+                    >
+                      <span class="icon-[material-symbols--keyboard-arrow-down] group-aria-expanded:icon-[material-symbols--keyboard-arrow-up] align-middle size-4" />
+                    </div>
+                  </button>
+                  <div
+                    x-dropdown:content
+                    class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug"
+                  >
+                    {item.children.map((child) => (
+                      <a
+                        x-dropdown:item
+                        href={child.href}
+                        class="flex text-white py-2 px-4 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+                      >
+                        {child.label}
+                      </a>
+                    ))}
                   </div>
-                </button>
-                <div x-dropdown:content class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug">
-                  {item.children.map((child) => (
-                    <a x-dropdown:item href={child.href} class="flex text-white py-2 px-4 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v">{child.label}</a>
-                  ))}
                 </div>
-              </div>
-            ) : (
-              <a href={item.href} class="p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v">{item.label}</a>
-            )}
-          </li>
-        ))}
-      </ul>
-    ) : null}
-
-
-
-    <div class="right-0 bottom-16 absolute min-w-64 flex flex-col items-end">
-
-      {secondary && secondary?.length > 0 ? (
-        <ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 first:*:pl-0">
-          {secondary.map(item => (
-            <li class="inline-flex">
-              <a href={item.href} class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v">{item.label}</a>
+              ) : (
+                <a
+                  href={item.href}
+                  class="p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v"
+                >
+                  {item.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
-      ) : null}
+      ) : null
+    }
 
-
-      <section aria-label="search component">
-        <form role="search" class="max-w-64">
-          <label for="nav-search" class="sr-only">Search</label>
-          <div class="relative flex items-center">
-            <input id="nav-search" type="search" class="p-2 bg-transparent max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"/>
-            <button aria-label="search" class="flex items-center rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
-              <div class="icon-[material-symbols--search] size-6"></div>
-            </button>
-          </div>
-        </form>
-      </section>
+    <div class="right-0 bottom-16 absolute min-w-64 flex flex-col items-end">
+      {
+        secondary && secondary?.length > 0 ? (
+          <ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 first:*:pl-0">
+            {secondary.map((item) => (
+              <li class="inline-flex">
+                <a
+                  href={item.href}
+                  class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : null
+      }
     </div>
-
   </nav>
 </div>
