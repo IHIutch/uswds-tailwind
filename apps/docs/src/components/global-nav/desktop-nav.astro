@@ -4,6 +4,14 @@ import type { NavLinks } from "types";
 type Props = NavLinks;
 
 const { primary, secondary } = Astro.props;
+const { pathname } = Astro.url;
+
+const isActivePath = (href: string) => {
+  if (pathname !== "/") {
+    return href !== "/" && pathname.startsWith(href);
+  }
+  return href === "/";
+};
 ---
 
 <div class="desktop:px-8">
@@ -41,6 +49,10 @@ const { primary, secondary } = Astro.props;
                         x-dropdown:item
                         href={child.href}
                         class="flex text-white py-2 px-4 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+                        aria-current={
+                          pathname === child.href ? "page" : undefined
+                        }
+                        data-active={isActivePath(child.href)}
                       >
                         {child.label}
                       </a>
@@ -50,7 +62,9 @@ const { primary, secondary } = Astro.props;
               ) : (
                 <a
                   href={item.href}
-                  class="p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v"
+                  class="relative p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v data-[active]:after:bg-blue-60v data-[active]:after:absolute data-[active]:after:-bottom-0.5 data-[active]:after:inset-x-4 data-[active]:after:h-1"
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  data-active={isActivePath(item.href)}
                 >
                   {item.label}
                 </a>

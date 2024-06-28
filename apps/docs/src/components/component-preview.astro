@@ -9,9 +9,10 @@ import { renderTwigTemplate } from "#utils/functions";
 type Props = {
   component: CollectionEntry<"demos">["data"]["component"];
   variant: CollectionEntry<"demos">["data"]["variant"];
+  minHeight?: string;
 };
 
-const { component, variant } = Astro.props;
+const { component, variant, minHeight } = Astro.props;
 
 const propsPath = `./src/__demos__/${component}/${component}-props.json`;
 const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`;
@@ -85,9 +86,11 @@ const template = await renderTwigTemplate({
           data-size="100"
           class="overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4"
         >
-          <!-- Example start -->
-          <Fragment set:html={template} />
-          <!-- Example end -->
+          <div x-data="{}" style={{ minHeight: minHeight || "none" }}>
+            <!-- Example start -->
+            <Fragment set:html={template} />
+            <!-- Example end -->
+          </div>
         </div>
         <button
           type="button"

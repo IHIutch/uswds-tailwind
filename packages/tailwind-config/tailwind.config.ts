@@ -556,8 +556,8 @@ const config = {
       // widescreen: "1400px",
     },
     fontFamily: {
-      "open-sans": ' "Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif,  "Apple Color Emoji",  "Segoe UI Emoji","Segoe UI Symbol"',
-      "public-sans": ' "Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+      "open-sans": '"Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+      "public-sans": '"Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
       "merriweather": '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
       "source-sans": '"Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
       "roboto-mono": '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
