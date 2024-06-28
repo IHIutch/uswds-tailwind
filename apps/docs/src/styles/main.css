@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.docs-prose {
+  &
+    :where(h1):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ),
+  &
+    :where(h2):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ),
+  &
+    :where(h3):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ),
+  &
+    :where(h4):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ),
+  &
+    :where(h5):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ),
+  &
+    :where(h6):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ),
+  &
+    :where(p):not(
+      :where([class~="not-docs-prose"], [class~="not-docs-prose"] *)
+    ) {
+    @apply max-w-prose;
+  }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply scroll-mt-36;
+}
+
+.expressive-code {
+  & .copy button {
+    opacity: 1 !important;
+  }
+}
+
+.not-docs-prose .expressive-code {
+  & .frame {
+    & pre {
+      @apply border-0 rounded-none;
+    }
+  }
+}

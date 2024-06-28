@@ -1,6 +1,11 @@
 ---
+import { ViewTransitions } from "astro:transitions";
+import { getCollection } from "astro:content";
+
 import GlobalNav from "#components/global-nav/index.astro";
 // import Sidebar from "#components/sidebar.astro";
+
+import "#styles/main.css";
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
 import "@fontsource-variable/roboto-mono";
@@ -10,8 +15,6 @@ import "@fontsource/merriweather/300.css";
 import "@fontsource/merriweather/400.css";
 import "@fontsource/merriweather/700.css";
 import "@fontsource/merriweather/900.css";
-import { ViewTransitions } from "astro:transitions";
-import { getCollection } from "astro:content";
 
 interface Props {
   title: string;
@@ -41,16 +44,23 @@ const allComponents = await getCollection("components");
     <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-28">
       <!-- <Sidebar pathname={pathname} /> -->
       <nav
-        id="sidenav"
         aria-label="Side navigation"
-        class="p-2 h-full overflow-y-auto"
+        class="px-4 pt-12 pb-6 h-full overflow-y-auto"
+        id="sidenav"
       >
+        <div class="mb-3 flex items-center pl-4">
+          <!-- <span
+            aria-hidden
+            class="icon-[material-symbols--category-rounded] size-6 text-blue-60v"
+          ></span> -->
+          <span class="font-bold text-lg">Components</span>
+        </div>
         <ul
-          class="border-b border-b-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+          class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
         >
           {
             allComponents.map((comps) => (
-              <li class="border-t border-t-gray-10">
+              <li class="">
                 <a
                   href={`/components/${comps.slug}`}
                   class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"

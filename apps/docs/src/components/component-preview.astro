@@ -1,6 +1,7 @@
 ---
-import fs from "fs";
-import { Code } from "astro:components";
+import fs from "node:fs";
+import { Code } from "astro-expressive-code/components";
+
 import type { CollectionEntry } from "astro:content";
 import graphPaper from "#assets/img/graph-paper.svg";
 import { renderTwigTemplate } from "#utils/functions";
@@ -113,11 +114,11 @@ const template = await renderTwigTemplate({
       class="relative overflow-hidden outline outline-1 outline-gray-cool-20 rounded-b"
     >
       <div class="border-b border-b-gray-cool-20">
-        <div class="flex justify-between">
+        <div class="flex justify-between h-10">
           <div class="px-3 border-r border-r-gray-cool-20 flex items-center">
             <span class="text-black text-sm font-semibold">Twig</span>
           </div>
-          <div>
+          <!-- <div>
             <button
               type="button"
               class="flex items-center justify-center h-10 px-3 border-l border-l-gray-cool-20"
@@ -128,7 +129,7 @@ const template = await renderTwigTemplate({
               ></span>
               <span class="text-sm pl-1">Copy</span>
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div
@@ -137,18 +138,17 @@ const template = await renderTwigTemplate({
         x-ref="code"
       >
         <Code
+          class="[&_pre]:rounded-none"
           code={componentCode}
           lang="twig"
-          theme="light-plus"
-          class="p-4 text-sm"
-          style="background-color: #f7f9fa"
+          wrap
         />
       </div>
       <button
         x-show="codeHeight > 400 && !isCodeExpanded"
         type="button"
         @click="toggleExpanded()"
-        class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0"
+        class="group rounded flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0"
       >
         <div
           class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"

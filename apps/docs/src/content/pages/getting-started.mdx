@@ -3,6 +3,12 @@ title: "Getting Started"
 description: "Getting started with USWDS + Tailwind is fast and easy. Following the guidance below, you should be able to get up and running in just a few minutes."
 ---
 
+import ProcessList from '#components/process-list.astro';
+import ProcessStep from '#components/process-list-step.astro'
+
+<ProcessList>
+{/* Step 1 */}
+<ProcessStep class="first:*:mt-0 before:top-0">
 ## Setup
 
 ### Initialize your project
@@ -11,6 +17,7 @@ description: "Getting started with USWDS + Tailwind is fast and easy. Following 
 mkdir my-project && cd my-project
 npm init -y
 ```
+
 
 ### Install dependencies
 
@@ -46,7 +53,9 @@ npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsourc
 ```bash
 npm i -D @iconify/tailwind @iconify-json/fa6-brands @iconify-json/material-symbols
 ```
+</ProcessStep>
 
+<ProcessStep class="first:*:mt-0 before:top-0">
 ## Project structure
 
 Now that we've installed our necessary dependencies, let's build out our project structure and finish setting up our various configurations.
@@ -73,14 +82,16 @@ my-project/
 ├── .postcssrc
 └── tailwind.config.js
 ```
-
+</ProcessStep>
+{/* Step 3 */}
+<ProcessStep class="first:*:mt-0 before:top-0">
 ## Configure project
 
 ### Parcel
 
 Parcel allows us to configure our project directly in the `package.json` file, add the following:
 
-```json
+```json title="package.json"
 {
   // ...
   "scripts": {
@@ -90,34 +101,34 @@ Parcel allows us to configure our project directly in the `package.json` file, a
   // ...
   "targets": {
     "js": {
-      "source": "./src/assets/js/main.js",
-      "distDir": "./build/js"
+      "source": "src/assets/js/main.js",
+      "distDir": "build/js"
     },
     "css": {
-      "source": "./src/assets/css/styles.css",
-      "distDir": "./build/css"
+      "source": "src/assets/css/styles.css",
+      "distDir": "build/css"
     }
   },
   "browserslist": [
-    "> 0.5%", 
-    "last 2 versions", 
-    "IE 11", 
+    "> 0.5%",
+    "last 2 versions",
+    "IE 11",
     "not dead"
   ]
 }
 ```
 
-This adds a `dev` script that we can use to compile our assets during development and a `build` script that optimizes our assets for production. 
+This adds a `dev` script that we can use to compile our assets during development and a `build` script that optimizes our assets for production.
 
-`targets` tells Parcel where to look for and send our built assets. 
+`targets` tells Parcel where to look for and send our built assets.
 
 Finally, `browserslist` tells Parcel what browsers are supported and how to properly build our assets. For more information on our default setting, head to [browserslist](https://browsersl.ist/#q=%3E+0.5%25%2C+last+2+versions%2C+IE+11%2C+not+dead&region=US).
 
 ### PostCSS
 
-In the `.postcssrc.json` file, add the following: 
+In the `.postcssrc.json` file, add the following:
 
-```json
+```json title=".postcssrc.json"
 {
   "plugins": {
     "tailwindcss": {}
@@ -127,11 +138,11 @@ In the `.postcssrc.json` file, add the following:
 
 ### Tailwind
 
-Start by configuring `tailwind.config.js`. This configures all of the USWDS colors, breakpoint and container query prefixes, and more. 
+Start by configuring `tailwind.config.js`. This configures all of the USWDS colors, breakpoint and container query prefixes, and more.
 
 Note that some breakpoint and container query sizes are commented out; while additional sizes are supported, it is encouraged use as few media queries as possible to limit the complexity of your application as it grows. By default, USWDS only uses the `mobile-lg`, `tablet`, and `desktop` breakpoints and container query sizes.
 
-```js
+```js title="tailwind.config.js"
 /** @type {import('tailwindcss').Config} */
 import { addDynamicIconSelectors } from '@iconify/tailwind'
 import tailwindForms from '@tailwindcss/forms'
@@ -141,7 +152,7 @@ import tailwindContainerQueries from "@tailwindcss/container-queries"
 import plugin from 'tailwindcss/plugin'
 
 module.exports = {
-  content: ["./src/**/*.{html,twig,php}"],
+  content: ["src/**/*.{html,twig,php}"],
   theme: {
     colors: {
       transparent: 'transparent',
@@ -922,9 +933,9 @@ module.exports = {
 
 ### CSS
 
-Then, add the `@tailwind` directives for each of Tailwind's layers to your `./src/assets/css/styles.css` file.
+Then, add the `@tailwind` directives for each of Tailwind's layers to your `src/assets/css/styles.css` file.
 
-```css title="./src/assets/css/styles.css"
+```css title="src/assets/css/styles.css"
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -932,9 +943,9 @@ Then, add the `@tailwind` directives for each of Tailwind's layers to your `./sr
 
 ### JavaScript
 
-Now, update your `./src/assets/js/main.js` file to import your CSS, fonts, and `Alpine`:
+Now, update your `src/assets/js/main.js` file to import your CSS, fonts, and `Alpine`:
 
-```js title="./src/assets/js/main.js"
+```js title="src/assets/js/main.js"
 // Only import the fonts you need!
 import "@fontsource-variable/open-sans";
 import "@fontsource-variable/public-sans";
@@ -962,28 +973,29 @@ if (typeof window.Alpine === "undefined") {
 ```
 
 
-Finally, update your `./src/index.html` with the following:
+Finally, update your `src/index.html` with the following:
 
-```html title="./src/index.html"
+```html title="src/index.html"
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>USWDS + Tailwind</title>
-		<link rel="stylesheet" href="./build/css/styles.css">
-		<script defer src="./build/js/main.js"></script>
-	</head>
-	<body class="font-source-sans">
-		<div class="max-w-prose py-4 px-3 mx-auto">
-			<h1 class="text-4xl font-bold">Welcome to USWDS + Tailwind!</h1>
-			<button type="button" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Default</button>
-		</div>
-	</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>USWDS + Tailwind</title>
+    <link rel="stylesheet" href="build/css/styles.css">
+    <script defer src="build/js/main.js"></script>
+  </head>
+  <body class="font-source-sans">
+    <div class="max-w-prose py-4 px-3 mx-auto">
+      <h1 class="text-4xl font-bold">Welcome to USWDS + Tailwind!</h1>
+      <button type="button" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Default</button>
+    </div>
+  </body>
 </html>
 ```
 
 Awesome, now everything is set up. You can run `npm run dev` and open the `index.html` file to see your project in action!
+
 
 ### .gitignore
 
@@ -991,12 +1003,14 @@ Before we push our code to our repository, we'll want to add a `.gitignore` file
 
 Our `.gitignore` should include the following:
 
-```ignore
+```shell title=.gitignore
 node_modules
 
 .parcel-cache
 
-build
+build 
 ```
 
 **Note:** If you're manually compiling your CSS and JavaScript assets locally before a deployment, don't add the `build` directory to your `.gitignore`.
+</ProcessStep>
+</ProcessList>
