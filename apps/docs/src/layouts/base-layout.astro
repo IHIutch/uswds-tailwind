@@ -38,10 +38,12 @@ const allComponents = await getCollection("components");
     <ViewTransitions />
   </head>
   <body class="h-full font-public-sans">
-    <GlobalNav
-      className="desktop:border-b-2 desktop:border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
-    />
-    <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 z-10 top-28">
+    <div class="relative">
+      <GlobalNav
+        className="desktop:border-b-2 desktop:border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
+      />
+    </div>
+    <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
       <!-- <Sidebar pathname={pathname} /> -->
       <nav
         aria-label="Side navigation"
@@ -76,10 +78,7 @@ const allComponents = await getCollection("components");
         </ul>
       </nav>
     </div>
-    <div
-      class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-28"
-      transition:animate="fade"
-    >
+    <div class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-28">
       <slot />
     </div>
 
