@@ -5,9 +5,10 @@ type Props = {
   class?: string;
   code: string;
   lang: string;
+  title?: string;
 };
 
-const { code, lang, class: className } = Astro.props;
+const { code, lang, title, class: className } = Astro.props;
 ---
 
 <div
@@ -20,13 +21,13 @@ const { code, lang, class: className } = Astro.props;
     class="overflow-hidden not-docs-prose"
     x-ref="code"
   >
-    <Code class="[&_pre]:rounded-none" code={code} lang={lang} wrap />
+    <Code title={title} code={code} lang={lang} wrap />
   </div>
   <button
     x-show="codeHeight > 400 && !isCodeExpanded"
     type="button"
     @click="toggleExpanded()"
-    class="group rounded flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0"
+    class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0 border-gray-cool-20 border-b border-x rounded-b"
   >
     <div
       class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"

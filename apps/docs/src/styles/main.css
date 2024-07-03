@@ -58,14 +58,6 @@ h6 {
   }
 }
 
-.not-docs-prose .expressive-code {
-  & .frame {
-    & pre {
-      @apply border-0 rounded-none border-gray-cool-5;
-    }
-  }
-}
-
 .expressive-code {
   --ec-brdWd: 1px;
   --ec-frm-edTabBarBg: #edeff0;

@@ -142,7 +142,7 @@ Start by configuring `tailwind.config.js`. This configures all of the USWDS colo
 
 Note that some breakpoint and container query sizes are commented out; while additional sizes are supported, it is encouraged use as few media queries as possible to limit the complexity of your application as it grows. By default, USWDS only uses the `mobile-lg`, `tablet`, and `desktop` breakpoints and container query sizes.
 
-```js title="tailwind.config.js"
+<CollapsibleCode title="tailwind.config.js" lang="js" class="rounded" code={`
 /** @type {import('tailwindcss').Config} */
 import { addDynamicIconSelectors } from '@iconify/tailwind'
 import tailwindForms from '@tailwindcss/forms'
@@ -929,7 +929,7 @@ module.exports = {
     })
   ],
 }
-```
+`} />
 
 ### CSS
 

@@ -1,6 +1,5 @@
 ---
 import fs from "node:fs";
-import { Code } from "astro-expressive-code/components";
 
 import type { CollectionEntry } from "astro:content";
 import graphPaper from "#assets/img/graph-paper.svg";
@@ -131,7 +130,11 @@ const template = await renderTwigTemplate({
           </div> -->
         </div>
       </div>
-      <CollapsibleCode class="rounded-b" code={componentCode} lang="twig" />
+      <CollapsibleCode
+        class="rounded-b [&_pre]:!rounded-none [&_pre]:!border-0 [&_button]:!border-0"
+        code={componentCode}
+        lang="twig"
+      />
     </div>
   </div>
 </div>
