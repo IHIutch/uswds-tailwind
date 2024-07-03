@@ -1,10 +1,11 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "#layouts/base-layout.astro";
+import BaseLayout from "#layouts/base-layout.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import ContentList from "#components/content-list.astro";
 import TableOfContents from "#components/table-of-contents.astro";
 import ComponentPreview from "#components/component-preview.astro";
+import ContentLayout from "#layouts/content-layout.astro";
 
 export const getStaticPaths = (async () => {
   const allComponents = await getCollection("components");
@@ -23,33 +24,36 @@ const activeHeading = "";
 const visibleHeadings = headings.filter((h) => h.depth <= 3);
 ---
 
-<Layout title={entry.data.title}>
-  <div class="flex w-full">
-    <TableOfContents headings={visibleHeadings} />
-    <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
-      <div class="flex flex-col mx-auto max-w-6xl">
-        <div class="mb-16">
-          <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
-          <p class="text-xl font-light max-w-prose">{entry.data.description}</p>
-        </div>
-        <div
-          class="docs-prose max-w-none [&_>_*:not(.not-docs-prose)]:max-w-prose"
-        >
-          <Content
-            components={{
-              ContentList,
-              ComponentPreview,
-            }}
-          />
+<BaseLayout title={entry.data.title}>
+  <ContentLayout>
+    <div class="flex w-full">
+      <TableOfContents headings={visibleHeadings} />
+      <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
+        <div class="flex flex-col mx-auto max-w-6xl">
+          <div class="mb-16">
+            <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
+            <p class="text-xl font-light max-w-prose">
+              {entry.data.description}
+            </p>
+          </div>
+          <div
+            class="docs-prose max-w-none [&_>_*:not(.not-docs-prose)]:max-w-prose"
+          >
+            <Content
+              components={{
+                ContentList,
+                ComponentPreview,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <script>
-    import { initSplitter } from "#utils/zag/splitter";
-    document.addEventListener("astro:page-load", () => {
-      initSplitter();
-    });
-  </script>
-</Layout>
+    <script>
+      import { initSplitter } from "#utils/zag/splitter";
+      document.addEventListener("astro:page-load", () => {
+        initSplitter();
+      });
+    </script>
+  </ContentLayout>
+</BaseLayout>
