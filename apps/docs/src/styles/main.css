@@ -47,12 +47,35 @@ h6 {
   & .copy button {
     opacity: 1 !important;
   }
+
+  & .frame.has-title pre {
+    @apply !rounded-b;
+  }
+
+  & .frame.has-title:not(.is-terminal) .header::before,
+  .frame.has-title:not(.is-terminal) .title {
+    @apply !rounded-t;
+  }
 }
 
 .not-docs-prose .expressive-code {
   & .frame {
     & pre {
-      @apply border-0 rounded-none;
+      @apply border-0 rounded-none border-gray-cool-5;
     }
   }
+}
+
+.expressive-code {
+  --ec-brdWd: 1px;
+  --ec-frm-edTabBarBg: #edeff0;
+  --ec-frm-edTabBarBrdCol: #c6cace;
+  --ec-brdCol: #c6cace;
+}
+
+::view-transition-group(header) {
+  z-index: 2;
+}
+::view-transition-group(content) {
+  z-index: 1;
 }

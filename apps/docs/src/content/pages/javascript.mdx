@@ -1,0 +1,73 @@
+---
+title: "JavaScript"
+description: "USWDS + Tailwind relies on Alpine.js plugins to power components' functionality. You can install each them independently, as you need them."
+---
+
+import accordion from '#utils/alpine/accordion?raw'
+import characterCount from '#utils/alpine/character-count?raw'
+import collapse from '#utils/alpine/collapse?raw'
+import combobox from '#utils/alpine/combobox?raw'
+import dropdown from '#utils/alpine/dropdown?raw'
+import fileInput from '#utils/alpine/file-input?raw'
+import inputMask from '#utils/alpine/input-mask?raw'
+import modal from '#utils/alpine/modal?raw'
+import tooltip from '#utils/alpine/tooltip?raw'
+
+
+## Install and import
+You can initialize your Alpine plugins like so:
+
+```js title="src/assets/js/main.js"
+import Alpine from 'alpinejs'
+import customPlugin from 'path/to/plugin.js'
+ 
+Alpine.plugin(customPlugin)
+```
+
+## Alpine Plugins
+
+Install the built-in Alpine plugins with the following:
+
+```bash
+npm i @alpinejs/anchor @alpinejs/focus @alpinejs/mask
+```
+
+## Custom Plugins
+
+Install the custom plugins by copying and pasting the following code. Not all of the plugins are required and you can install or omit them as necessary for your project.
+
+### Accordion
+
+<CollapsibleCode code={accordion} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Character Count
+
+<CollapsibleCode code={characterCount} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Collapse
+
+<CollapsibleCode code={collapse} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Combobox
+
+<CollapsibleCode code={combobox} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Dropdown
+
+<CollapsibleCode code={dropdown} lang="ts" class="rounded border border-gray-cool-20" />
+
+### File Input
+
+<CollapsibleCode code={fileInput} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Input Mask
+
+<CollapsibleCode code={inputMask} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Modal
+
+<CollapsibleCode code={modal} lang="ts" class="rounded border border-gray-cool-20" />
+
+### Tooltip
+
+<CollapsibleCode code={tooltip} lang="ts" class="rounded border border-gray-cool-20" />
