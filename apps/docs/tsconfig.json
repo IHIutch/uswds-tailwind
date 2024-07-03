@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "/Users/jbhutch/Sites/uswds-alpine/apps/docs/src",
     "paths": {
       "#assets/*": [
         "assets/*"
@@ -28,5 +28,7 @@
         "utils/*"
       ]
     },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   }
 }

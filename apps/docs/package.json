@@ -1,5 +1,5 @@
 {
-  "name": "starlight-test",
+  "name": "uswds-tailwind",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -16,7 +16,9 @@
     "@astrojs/alpinejs": "^0.4.0",
     "@astrojs/check": "^0.5.10",
     "@astrojs/mdx": "^2.3.0",
+    "@astrojs/react": "^3.6.0",
     "@astrojs/tailwind": "^5.1.0",
+    "@docsearch/react": "^3.6.0",
     "@fontsource-variable/open-sans": "^5.0.21",
     "@fontsource-variable/public-sans": "^5.0.17",
     "@fontsource-variable/roboto-mono": "^5.0.17",
@@ -24,11 +26,15 @@
     "@fontsource/merriweather": "^5.0.8",
     "@tailwindcss/nesting": "0.0.0-insiders.565cd3e",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@zag-js/splitter": "^0.50.0",
     "alpinejs": "^3.13.5",
     "astro": "^4.6.0",
     "astro-expressive-code": "^0.35.3",
     "github-slugger": "^2.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.1",
     "twig": "^1.17.1",
     "typescript": "^5.3.3"

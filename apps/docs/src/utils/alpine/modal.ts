@@ -103,7 +103,7 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     'x-show'() {
       return this.isOpen
     },
-    'x-trap.inert.noscroll'() {
+    'x-trap.noscroll'() {
       return this.isOpen
     },
     '@keydown.escape.prevent.stop'() {

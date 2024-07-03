@@ -1,4 +1,5 @@
 ---
+import Search from "#components/search";
 import type { NavLinks } from "types";
 
 type Props = NavLinks;
@@ -33,11 +34,13 @@ const { primary, secondary } = Astro.props;
           <div class="icon-[material-symbols--close] size-6"></div>
         </button>
 
+        <Search client:load />
+
         <ul class="flex flex-col">
           {
             primary
               ? primary.map((item) => (
-                  <li class="border-t border-t-gray-10">
+                  <li class="border-y border-y-gray-10">
                     {item.children !== undefined ? (
                       <div x-accordion>
                         <div x-accordion:item>
@@ -98,25 +101,6 @@ const { primary, secondary } = Astro.props;
               </ul>
             ) : null
           }
-
-          <section aria-label="search component">
-            <form role="search">
-              <label for="mobile-nav-search" class="sr-only">Search</label>
-              <div class="relative flex items-center">
-                <input
-                  id="mobile-nav-search"
-                  type="search"
-                  class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-                />
-                <button
-                  aria-label="search"
-                  class="rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                >
-                  <div class="icon-[material-symbols--search] size-6"></div>
-                </button>
-              </div>
-            </form>
-          </section>
         </div>
       </nav>
     </div>
