@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": "/Users/jbhutch/Sites/uswds-alpine/apps/docs/src",
+    "baseUrl": "src",
     "paths": {
       "#assets/*": [
         "assets/*"
