@@ -53,7 +53,9 @@ const isActivePath = (href: string) => {
                         aria-current={
                           pathname === child.href ? "page" : undefined
                         }
-                        data-active={isActivePath(child.href)}
+                        data-active={
+                          isActivePath(child.href) ? true : undefined
+                        }
                       >
                         {child.label}
                       </a>
@@ -65,7 +67,7 @@ const isActivePath = (href: string) => {
                   href={item.href}
                   class="relative p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v data-[active]:after:bg-blue-60v data-[active]:after:absolute data-[active]:after:-bottom-0.5 data-[active]:after:inset-x-4 data-[active]:after:h-1"
                   aria-current={pathname === item.href ? "page" : undefined}
-                  data-active={isActivePath(item.href)}
+                  data-active={isActivePath(item.href) ? true : undefined}
                 >
                   {item.label}
                 </a>
