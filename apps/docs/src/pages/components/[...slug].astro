@@ -4,6 +4,7 @@ import Layout from "#layouts/base-layout.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import ContentList from "#components/content-list.astro";
 import TableOfContents from "#components/table-of-contents.astro";
+import ComponentPreview from "#components/component-preview.astro";
 
 export const getStaticPaths = (async () => {
   const allComponents = await getCollection("components");
@@ -37,6 +38,7 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3);
           <Content
             components={{
               ContentList,
+              ComponentPreview,
             }}
           />
         </div>
@@ -46,6 +48,8 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3);
 
   <script>
     import { initSplitter } from "#utils/zag/splitter";
-    initSplitter();
+    document.addEventListener("astro:page-load", () => {
+      initSplitter();
+    });
   </script>
 </Layout>

@@ -1,0 +1,37 @@
+---
+import { Code } from "astro-expressive-code/components";
+
+type Props = {
+  class?: string;
+  code: string;
+  lang: string;
+};
+
+const { code, lang, class: className } = Astro.props;
+---
+
+<div
+  x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }"
+  x-init="codeHeight = $refs.code.offsetHeight;"
+  class:list={["relative overflow-hidden", className]}
+>
+  <div
+    :class="codeHeight < 400 || isCodeExpanded ? 'h-auto' : 'h-96'"
+    class="overflow-hidden not-docs-prose"
+    x-ref="code"
+  >
+    <Code class="[&_pre]:rounded-none" code={code} lang={lang} wrap />
+  </div>
+  <button
+    x-show="codeHeight > 400 && !isCodeExpanded"
+    type="button"
+    @click="toggleExpanded()"
+    class="group rounded flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0"
+  >
+    <div
+      class="flex items-center gap-2 rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"
+    >
+      <span>Expand Code</span>
+    </div>
+  </button>
+</div>

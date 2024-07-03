@@ -23,10 +23,10 @@ const desktopLinks: NavLinks = {
       label: "Components",
       href: "/components",
     },
-    // {
-    //   label: "JavaScript",
-    //   href: "/javascript",
-    // },
+    {
+      label: "JavaScript",
+      href: "/javascript",
+    },
     {
       label: "Colors",
       href: "/colors",
@@ -60,10 +60,10 @@ const mobileLinks: NavLinks = {
         href: `/components/${c.slug}`,
       })),
     },
-    // {
-    //   label: "JavaScript",
-    //   href: "/javascript",
-    // },
+    {
+      label: "JavaScript",
+      href: "/javascript",
+    },
     {
       label: "Colors",
       href: "/colors",
@@ -82,7 +82,7 @@ const mobileLinks: NavLinks = {
 const { className } = Astro.props;
 ---
 
-<header class={className}>
+<header class:list={className}>
   <div class="desktop:px-8">
     <div
       class="max-w-5xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10"
