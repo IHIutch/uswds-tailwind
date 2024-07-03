@@ -21,9 +21,6 @@ interface Props {
 }
 
 const { title } = Astro.props;
-const { pathname } = Astro.url;
-
-const allComponents = await getCollection("components");
 ---
 
 <!doctype html>
@@ -43,93 +40,6 @@ const allComponents = await getCollection("components");
         className="desktop:border-b-2 desktop:border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
       />
     </div>
-    <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
-      <!-- <Sidebar pathname={pathname} /> -->
-      <nav
-        aria-label="Side navigation"
-        class="px-4 pt-12 pb-6 h-full overflow-y-auto"
-        id="sidenav"
-      >
-        <div class="mb-3 flex items-center pl-4">
-          <!-- <span
-            aria-hidden
-            class="icon-[material-symbols--category-rounded] size-6 text-blue-60v"
-          ></span> -->
-          <span class="font-bold text-lg">Components</span>
-        </div>
-        <ul
-          class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
-        >
-          {
-            allComponents.map((comps) => (
-              <li class="">
-                <a
-                  href={`/components/${comps.slug}`}
-                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-                  aria-current={
-                    pathname === `/components/${comps.slug}` ? "page" : false
-                  }
-                >
-                  {comps.data.title}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-    </div>
-    <div class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-28">
-      <slot />
-    </div>
-
-    <script>
-      type ScrollTopJSON =
-        | undefined
-        | {
-            scrollTop: number;
-          };
-      const key = "sidebar-scroll-state";
-      const getSideNavEl = () =>
-        document.querySelector("#sidenav") as HTMLElement;
-
-      document.addEventListener("astro:page-load", () => {
-        const sidenav = getSideNavEl();
-        const sidenavActiveLink = sidenav?.querySelector(
-          "[aria-current=page]"
-        ) as HTMLElement;
-
-        // Restore state from previous navigation
-        const savedStateJson = sessionStorage.getItem(key);
-        let savedState: ScrollTopJSON;
-
-        if (savedStateJson) {
-          try {
-            savedState = JSON.parse(savedStateJson);
-          } catch (e) {
-            console.error("Error parsing saved position:", e);
-          }
-        }
-
-        if (savedState) {
-          sidenav.scrollTop = savedState.scrollTop;
-        } else {
-          sidenavActiveLink.scrollIntoView({
-            behavior: "instant",
-            block: "center",
-          });
-        }
-      });
-      document.addEventListener("astro:before-swap", () => {
-        // Save user state before navigating
-        const sidenav = getSideNavEl();
-
-        sessionStorage.setItem(
-          key,
-          JSON.stringify({
-            scrollTop: sidenav.scrollTop,
-          })
-        );
-      });
-    </script>
+    <slot />
   </body>
 </html>
