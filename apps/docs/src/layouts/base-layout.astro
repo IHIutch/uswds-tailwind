@@ -32,6 +32,15 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <!-- Fathom - beautiful, simple website analytics -->
+    <script
+      is:inline
+      src="https://cdn.usefathom.com/script.js"
+      data-site="JRNISGUF"
+      defer></script>
+    <!-- / Fathom -->
+
     <ViewTransitions />
   </head>
   <body class="h-full font-public-sans">
