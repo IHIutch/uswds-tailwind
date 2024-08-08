@@ -32,6 +32,19 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
+    <script is:inline>
+      document.documentElement.classList.add("uswds-ready");
+
+      var fallback = setTimeout(function () {
+        document.documentElement.classList.remove("uswds-ready");
+      }, 3000);
+
+      window.addEventListener("alpine:init", () => {
+        clearTimeout(fallback);
+        document.documentElement.classList.add("uswds-ready");
+      });
+    </script>
+
     <!-- Fathom - beautiful, simple website analytics -->
     <script
       is:inline

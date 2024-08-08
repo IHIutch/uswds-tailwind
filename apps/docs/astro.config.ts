@@ -22,9 +22,11 @@ export default defineConfig({
       },
       codeBackground: '#f7f9fa'
     }
-  }), tailwind(), mdx(), alpinejs({
+  }), tailwind(), mdx(),
+  alpinejs({
     entrypoint: "/src/utils/alpine/entrypoint"
-  }), react()],
+  }),
+  react()],
   // markdown: {
   //   shikiConfig: {
   //     themes: {

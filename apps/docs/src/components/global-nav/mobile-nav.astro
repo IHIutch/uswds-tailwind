@@ -17,6 +17,7 @@ const { primary, secondary } = Astro.props;
   <div>
     <div
       x-modal:dialog
+      x-cloak
       class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in duration-300 ease-in-out slide-in-from-right"
     >
       <nav
@@ -107,6 +108,7 @@ const { primary, secondary } = Astro.props;
 
     <div
       x-modal:backdrop
+      x-cloak
       class="fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
     >
     </div>

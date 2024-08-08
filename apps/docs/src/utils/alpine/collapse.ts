@@ -68,9 +68,6 @@ const collapseContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine
     ':id'() {
       return this.$id('collapse')
     },
-    'x-cloak'() {
-      return true
-    },
     'x-show'() {
       return this.isOpen
     },

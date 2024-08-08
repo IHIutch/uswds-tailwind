@@ -90,9 +90,6 @@ const accordionContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
     'x-init'() {
       if (this.value === undefined) console.warn('"x-accordion:content" is missing a parent element with "x-accordion".')
     },
-    'x-cloak'() {
-      return true
-    },
     ':id'() {
       return this.$id('accordion')
     },

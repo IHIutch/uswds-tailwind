@@ -71,3 +71,7 @@ h6 {
 ::view-transition-group(content) {
   z-index: 1;
 }
+
+.uswds-ready [x-cloak] {
+  display: none !important;
+}
