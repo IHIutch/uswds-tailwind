@@ -75,7 +75,7 @@ const allComponents = await getCollection("components");
     if (savedState) {
       sidenav.scrollTop = savedState.scrollTop;
     } else {
-      sidenavActiveLink.scrollIntoView({
+      sidenavActiveLink?.scrollIntoView({
         behavior: "instant",
         block: "center",
       });

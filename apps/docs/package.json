@@ -30,6 +30,7 @@
     "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@uidotdev/usehooks": "^2.4.1",
     "@zag-js/splitter": "^0.50.0",
     "alpinejs": "^3.14.1",
     "astro": "^4.11.4",
