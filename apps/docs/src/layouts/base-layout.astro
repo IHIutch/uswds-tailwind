@@ -46,12 +46,17 @@ const { title } = Astro.props;
     </script>
 
     <!-- Fathom - beautiful, simple website analytics -->
-    <script
-      is:inline
-      src="https://cdn.usefathom.com/script.js"
-      data-site="JRNISGUF"
-      data-spa="auto"
-      defer></script>
+    {
+      import.meta.env.PROD ? (
+        <script
+          is:inline
+          src="https://cdn.usefathom.com/script.js"
+          data-site="JRNISGUF"
+          data-spa="auto"
+          defer
+        />
+      ) : null
+    }
     <!-- / Fathom -->
     <ViewTransitions />
   </head>

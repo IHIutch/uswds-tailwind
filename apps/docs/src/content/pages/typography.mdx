@@ -1,0 +1,243 @@
+---
+title: "Typography"
+description: "Typography is understanding the relationship between font family, font size, and line height."
+---
+
+## Font Size Normalization
+
+Typefaces vary in optical size. This means that at any specific pixel value, an optically small typeface like Source Sans Pro will appear smaller than an optically large typeface like Merriweather. Optical size is a function of internal font metrics and typeface design choices like x-height.
+
+Using "font size" classes (e.g. `.text-lg`) automically applies the font normalization multiplier to both the `font-size` and `line-height` attributes.
+
+**Note:** Using "line height" classes (e.g. `.leading-tight`) does not apply the multiplier, so use with caution.
+
+### Native Size
+
+<div class="grid desktop:grid-cols-3 grid-cols-2 desktop:gap-4 tablet:gap-x-8 gap-4 mt-4 not-docs-prose" aria-hidden="true">
+  <div>
+    <p class="font-medium mb-1">Open Sans</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Open Sans Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Public Sans</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Public Sans Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Merriweather</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Merriweather', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Source Sans</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Source Sans 3 Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Roboto Mono</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Roboto Mono Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Georgia</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Georgia', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Helvetica</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Helvetica Neue', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Tahoma</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Tahoma', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Verdana</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative z-10">
+          <span role="presentation" class="text-8xl leading-none" style={{ fontFamily: 'Verdana', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+### Normalized Size
+
+<div class="grid desktop:grid-cols-3 grid-cols-2 desktop:gap-4 tablet:gap-x-8 gap-4 mt-4 not-docs-prose" aria-hidden="true">
+  <div>
+    <p class="font-medium mb-1">Open Sans</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-open-sans text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Open Sans Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Public Sans</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-public-sans text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Public Sans Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Merriweather</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-merriweather text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Merriweather', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Source Sans</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-source-sans text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Source Sans 3 Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Roboto Mono</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-roboto-mono text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Roboto Mono Variable', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Georgia</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-georgia text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Georgia', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Helvetica</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-helvetica text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Helvetica Neue', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Tahoma</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-tahoma text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Tahoma', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="font-medium mb-1">Verdana</p>
+    <div class="border border-blue-50v pb-8 rounded">
+      <div class="border-b border-blue-50v w-full relative flex items-baseline px-4 h-20">
+        <div class="text-8xl h-[1ex] border-t border-dashed border-t-blue-50v/40 absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <div class="relative">
+          <span role="presentation" class="font-verdana text-8xl leading-none relative z-10">Alg</span>
+          <span role="presentation" class="text-8xl leading-none text-red-cool-30v absolute left-0" style={{ fontFamily: 'Verdana', '--font-normalization': '1.0' }}>Alg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+## Normalization Chart
+
+| Supported typeface | Multiplier    | Initial size | Final size  |
+|--------------------|---------------|--------------|-------------|
+| Open Sans          | 1.01          | 16px         | {16*1.01}px |
+| Public Sans        | 1.0           | 16px         | {16*1.0}px  |
+| Merriweather       | 0.98          | 16px         | {16*0.98}px |
+| Source Sans Pro    | 1.06          | 16px         | {16*1.06}px |
+| Roboto Mono        | 0.95          | 16px         | {16*0.95}px |
+| Georgia            | 1.05          | 16px         | {16*1.05}px |
+| Helvetica          | 1.01          | 16px         | {16*1.01}px |
+| Tahoma             | 1.0           | 16px         | {16*1.0}px  |
+| Verdana            | 0.99          | 16px         | {16*0.99}px |

@@ -9,6 +9,10 @@ import plugin from 'tailwindcss/plugin'
 import type { PluginUtils } from "tailwindcss/types/config";
 
 const config = {
+  corePlugins: {
+    fontSize: false,
+    fontFamily: false,
+  },
   theme: {
     colors: {
       transparent: 'transparent',
@@ -556,12 +560,54 @@ const config = {
       // widescreen: "1400px",
     },
     fontFamily: {
-      "open-sans": '"Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
-      "public-sans": '"Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
-      "merriweather": '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
-      "source-sans": '"Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
-      "roboto-mono": '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
+      "open-sans": {
+        fontFamily: '"Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+        multiplier: "1.01",
+      },
+      "public-sans": {
+        fontFamily: '"Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+        multiplier: "1.0",
+      },
+      "merriweather": {
+        fontFamily: '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
+        multiplier: "0.98",
+      },
+      "source-sans": {
+        fontFamily: '"Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
+        multiplier: "1.06",
+      },
+      "roboto-mono": {
+        fontFamily: '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
+        multiplier: "0.95",
+      },
+      "georgia": {
+        fontFamily: '"Georgia", "Cambria", "Times New Roman", "Times", serif',
+        multiplier: "1.05",
+      },
+      "helvetica": {
+        fontFamily: '"Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
+        multiplier: "1.01",
+      },
+      "tahoma": {
+        fontFamily: '"Tahoma", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+        multiplier: "1.0",
+      },
+      "verdana": {
+        fontFamily: '"Verdana", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+        multiplier: "0.99",
+      },
     },
+    // fontNormalization: {
+    //   "georgia": "1.05",
+    //   "helvetica": "1.01",
+    //   "merriweather": "0.98",
+    //   "open-sans": "1.01",
+    //   "public-sans": "1.0",
+    //   "roboto-mono": "0.95",
+    //   "source-sans": "1.06",
+    //   "tahoma": "1.0",
+    //   "verdana": "0.99",
+    // },
     extend: {
       maxWidth: {
         prose: "68ex",
@@ -573,15 +619,18 @@ const config = {
         DEFAULT: {
           css: {
             maxWidth: theme('maxWidth.prose'),
-            fontFamily: theme('fontFamily.source-sans'),
-            fontSize: theme('fontSize.base')[0],
+            fontFamily: theme('fontFamily.source-sans').fontFamily,
+            '--font-normalization': theme('fontFamily.source-sans').multiplier,
+            fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
             lineHeight: theme('lineHeight.normal'),
             color: theme('colors.black'),
             'code': {
-              fontFamily: theme('fontFamily.roboto-mono'),
+              fontFamily: theme('fontFamily.roboto-mono').fontFamily,
+              '--font-normalization': theme('fontFamily.roboto-mono').multiplier,
             },
             'kbd': {
-              fontFamily: theme('fontFamily.roboto-mono'),
+              fontFamily: theme('fontFamily.roboto-mono').fontFamily,
+              '--font-normalization': theme('fontFamily.roboto-mono').multiplier,
               borderRadius: theme('rounded'),
               border: '0.5px solid ' + theme('colors.gray-cool-30'),
               color: theme('colors.black'),
@@ -690,7 +739,7 @@ const config = {
 
             // Table styles
             '> table': {
-              fontSize: theme('fontSize.base')[0],
+              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
               lineHeight: theme('lineHeight.normal'),
               borderCollapse: 'collapse',
               borderSpacing: '0',
@@ -714,7 +763,7 @@ const config = {
             },
             '> table caption': {
               textAlign: 'left',
-              fontSize: theme('fontSize.base')[0],
+              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
               fontWeight: theme('fontWeight.bold'),
               marginBottom: theme('spacing.3'),
             },
@@ -795,38 +844,44 @@ const config = {
               marginTop: theme('spacing.8'),
             },
             'h1': {
-              fontSize: theme('fontSize.4xl')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.4xl')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h2': {
-              fontSize: theme('fontSize.3xl')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.3xl')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h3': {
-              fontSize: theme('fontSize.xl')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.xl')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h4': {
-              fontSize: theme('fontSize.lg')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.lg')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h5': {
-              fontSize: theme('fontSize.base')[0],
-              fontFamily: theme('fontFamily.public-sans'),
+              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.public-sans').fontFamily,
+              '--font-normalization': theme('fontFamily.public-sans').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h6': {
-              fontFamily: theme('fontFamily.source-sans'),
-              fontSize: theme('fontSize.sm')[0],
+              fontSize: 'calc(' + theme('fontSize.sm')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.source-sans').fontFamily,
+              '--font-normalization': theme('fontFamily.source-sans').multiplier,
               lineHeight: theme('lineHeight.none'),
               fontWeight: theme('fontWeight.normal'),
               letterSpacing: theme('letterSpacing.wide'),
@@ -848,7 +903,7 @@ const config = {
       strategy: 'class'
     }),
 
-    plugin(function ({ addVariant, addUtilities }) {
+    plugin(function ({ theme, addVariant, addUtilities, addComponents, matchUtilities }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
       addVariant('valid', ['&[data-valid]'])
@@ -862,6 +917,89 @@ const config = {
           },
         },
       })
+
+      // const fonts = theme('fontFamily');
+      // const normalization = theme('fontNormalization');
+      // if (fonts) {
+      //   const fontClasses = Object.keys(fonts).map(fontName => {
+      //     return {
+      //       [`.font-${fontName}`]: {
+      //         '--font-normalization': normalization?.[fontName],
+      //         fontFamily: fonts?.[fontName],
+      //       },
+      //     };
+      //   });
+      //   console.log({ fonts, normalization, fontClasses })
+      //   addComponents(fontClasses)
+      // }
+
+      // const fontSizes = theme('fontSize')
+      // if (fontSizes) {
+      //   const textSizes = Object.keys(fontSizes).map(size => {
+      //     return {
+      //       [`.text-${size}`]: {
+      //         fontSize: `calc(${fontSizes[size][0]} * var(--font-normalization))`,
+      //         lineHeight: `calc(${fontSizes[size][1].lineHeight} * var(--font-normalization))`
+      //       },
+      //     };
+      //   });
+      //   console.log({ fonts, normalization, textSizes })
+      //   addComponents(textSizes)
+      // }
+
+      matchUtilities(
+        {
+          font: (value) => {
+            const { fontFamily, multiplier } = value
+
+            return {
+              '--font-normalization': multiplier,
+              fontFamily: fontFamily
+            }
+          },
+        },
+        {
+          values: theme('fontFamily'),
+        }
+      )
+
+      matchUtilities(
+        {
+          text: (value, { modifier }) => {
+            let [fontSize, options] = Array.isArray(value) ? value : [value]
+
+            // if (modifier) {
+            //   return {
+            //     'font-size': `calc(${fontSize} * var(--font-normalization))`,
+            //     'line-height': `calc(${modifier} * var(--font-normalization))`,
+            //   }
+            // }
+
+            return {
+              'font-size': `calc(${fontSize} * var(--font-normalization))`,
+              ...(options?.lineHeight === undefined ? {} : { 'line-height': `calc(${options.lineHeight} * var(--font-normalization))` }),
+              ...(options?.letterSpacing === undefined ? {} : { 'letter-spacing': options.letterSpacing }),
+              ...(options?.fontWeight === undefined ? {} : { 'font-weight': options.fontWeight }),
+            }
+          },
+        },
+        {
+          values: theme('fontSize'),
+          modifiers: theme('lineHeight'),
+        }
+      )
+
+
+      // matchUtilities(
+      //   {
+      //     'font-normalization': (value) => {
+      //       return {
+      //         '--font-normalization': value
+      //       }
+      //     }
+      //   },
+      //   { values: theme('fontNormalization') }
+      // )
     })
   ],
 } satisfies Omit<Config, 'content'>

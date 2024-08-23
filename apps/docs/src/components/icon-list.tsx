@@ -103,6 +103,7 @@ export default function IconList() {
                   <div className="truncate text-ellipsis w-full">
                     <span aria-hidden className="text-xs">{'.icon-[material-symbols--' + mi + ']'}</span>
                     <span className="sr-only">{mi.replaceAll('-', ' ')}</span>
+                    {/* <span aria-live="assertive">Copied to clipboard!</span> */}
                   </div>
                 </button>
 
