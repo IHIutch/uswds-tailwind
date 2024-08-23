@@ -18,7 +18,6 @@ const config = {
       transparent: 'transparent',
       white: "#ffffff",
       black: "#000000",
-      // USWDS
       "red-cool-5": "#f8eff1",
       "red-cool-10": "#f3e1e4",
       "red-cool-20": "#ecbec6",
@@ -479,85 +478,28 @@ const config = {
       "gray-warm-70": "#454540",
       "gray-warm-80": "#2e2e2a",
       "gray-warm-90": "#171716",
-      // // Theme Aliases
-      // "base-lightest": theme("colors.gray-5"),
-      // "base-lighter": theme("colors.gray-cool-10"),
-      // "base-light": theme("colors.gray-cool-30"),
-      // // base: theme("colors.gray-cool-50"),
-      // "base-dark": theme("colors.gray-cool-60"),
-      // "base-darker": theme("colors.gray-cool-70"),
-      // "base-darkest": theme("colors.gray-90"),
-      // ink: theme("colors.gray-90"),
-      // "primary-lighter": theme("colors.blue-10"),
-      // "primary-light": theme("colors.blue-30"),
-      // primary: theme("colors.blue-60v"),
-      // "primary-vivid": theme("colors.blue-warm-60v"),
-      // "primary-dark": theme("colors.blue-warm-70v"),
-      // "primary-darker": theme("colors.blue-warm-80v"),
-      // "secondary-lighter": theme("colors.red-cool-10v"),
-      // "secondary-light": theme("colors.red-30"),
-      // secondary: theme("colors.red-50"),
-      // "secondary-vivid": theme("colors.red-cool-50v"),
-      // "secondary-dark": theme("colors.red-60v"),
-      // "secondary-darker": theme("colors.red-70v"),
-      // "accent-cool-lighter": theme("colors.blue-cool-5v"),
-      // "accent-cool-light": theme("colors.blue-cool-20v"),
-      // "accent-cool": theme("colors.cyan-30v"),
-      // "accent-cool-dark": theme("colors.blue-cool-40v"),
-      // "accent-cool-darker": theme("colors.blue-cool-60v"),
-      // "accent-warm-lighter": theme("colors.orange-10"),
-      // "accent-warm-light": theme("colors.orange-20v"),
-      // "accent-warm": theme("colors.orange-30v"),
-      // "accent-warm-dark": theme("colors.orange-50v"),
-      // "accent-warm-darker": theme("colors.orange-60"),
-      // // State Aliases
-      // "info-lighter": theme("colors.cyan-5"),
-      // "info-light": theme("colors.cyan-20"),
-      // info: theme("colors.cyan-30v"),
-      // "info-dark": theme("colors.cyan-40v"),
-      // "info-darker": theme("colors.blue-cool-60"),
-      // "error-lighter": theme("colors.red-warm-10"),
-      // "error-light": theme("colors.red-warm-30v"),
-      // error: theme("colors.red-warm-50v"),
-      // "error-dark": theme("colors.red-60v"),
-      // "error-darker": theme("colors.red-70"),
-      // "warning-lighter": theme("colors.yellow-5"),
-      // "warning-light": theme("colors.yellow-10v"),
-      // warning: theme("colors.gold-20v"),
-      // "warning-dark": theme("colors.gold-30v"),
-      // "warning-darker": theme("colors.gold-50v"),
-      // "success-lighter": theme("colors.green-cool-5"),
-      // "success-light": theme("colors.green-cool-20v"),
-      // success: theme("colors.green-cool-40v"),
-      // "success-dark": theme("colors.green-cool-50v"),
-      // "success-darker": theme("colors.green-cool-60v"),
-      // "disabled-light": theme("colors.gray-10"),
-      // disabled: theme("colors.gray-20"),
-      // "disabled-dark": theme("colors.gray-30"),
-      // emergency: theme("colors.red-warm-60v"),
-      // "emergency-dark": theme("colors.red-warm-80"),
     },
     screens: {
-      // card: "160px",
-      // "card-lg": "240px",
-      // mobile: "320px",
+      card: "160px",
+      "card-lg": "240px",
+      mobile: "320px",
       "mobile-lg": "480px",
       tablet: "640px",
-      // "tablet-lg": "880px",
+      "tablet-lg": "880px",
       desktop: "1024px",
       "desktop-lg": "1200px",
-      // widescreen: "1400px",
+      widescreen: "1400px",
     },
     containers: {
-      // card: "160px",
-      // "card-lg": "240px",
-      // mobile: "320px",
+      card: "160px",
+      "card-lg": "240px",
+      mobile: "320px",
       "mobile-lg": "480px",
       tablet: "640px",
-      // "tablet-lg": "880px",
+      "tablet-lg": "880px",
       desktop: "1024px",
       "desktop-lg": "1200px",
-      // widescreen: "1400px",
+      widescreen: "1400px",
     },
     fontFamily: {
       "open-sans": {
@@ -597,17 +539,6 @@ const config = {
         multiplier: "0.99",
       },
     },
-    // fontNormalization: {
-    //   "georgia": "1.05",
-    //   "helvetica": "1.01",
-    //   "merriweather": "0.98",
-    //   "open-sans": "1.01",
-    //   "public-sans": "1.0",
-    //   "roboto-mono": "0.95",
-    //   "source-sans": "1.06",
-    //   "tahoma": "1.0",
-    //   "verdana": "0.99",
-    // },
     extend: {
       maxWidth: {
         prose: "68ex",
@@ -644,30 +575,6 @@ const config = {
             'code::after': {
               content: 'none',
             },
-            // 'pre:not(.astro-code) code': {
-            //   color: theme('colors.black'),
-            //   fontWeight: 'normal',
-            //   backgroundColor: theme('colors.gray-cool-5'),
-            //   paddingTop: '2px',
-            //   paddingRight: theme('spacing.2'),
-            //   paddingBottom: '2px',
-            //   paddingLeft: theme('spacing.2'),
-            //   letterSpacing: theme('letterSpacing.wide'),
-            // },
-            // 'code:not([data-rehype-pretty-code-figure] code)': {
-            //   color: theme('colors.black'),
-            //   fontWeight: 'normal',
-            //   backgroundColor: theme('colors.gray-cool-5'),
-            //   paddingTop: '2px',
-            //   paddingRight: theme('spacing.2'),
-            //   paddingBottom: '2px',
-            //   paddingLeft: theme('spacing.2'),
-            //   letterSpacing: theme('letterSpacing.wide'),
-            // },
-            // 'strong code:not([data-rehype-pretty-code-figure] code)': {
-            //   fontWeight: 'bolder',
-            // },
-
             'a': {
               color: theme('colors.blue-60v'),
               textDecoration: 'underline',
@@ -903,7 +810,7 @@ const config = {
       strategy: 'class'
     }),
 
-    plugin(function ({ theme, addVariant, addUtilities, addComponents, matchUtilities }) {
+    plugin(function ({ theme, addVariant, addUtilities, matchUtilities }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
       addVariant('valid', ['&[data-valid]'])
@@ -917,35 +824,6 @@ const config = {
           },
         },
       })
-
-      // const fonts = theme('fontFamily');
-      // const normalization = theme('fontNormalization');
-      // if (fonts) {
-      //   const fontClasses = Object.keys(fonts).map(fontName => {
-      //     return {
-      //       [`.font-${fontName}`]: {
-      //         '--font-normalization': normalization?.[fontName],
-      //         fontFamily: fonts?.[fontName],
-      //       },
-      //     };
-      //   });
-      //   console.log({ fonts, normalization, fontClasses })
-      //   addComponents(fontClasses)
-      // }
-
-      // const fontSizes = theme('fontSize')
-      // if (fontSizes) {
-      //   const textSizes = Object.keys(fontSizes).map(size => {
-      //     return {
-      //       [`.text-${size}`]: {
-      //         fontSize: `calc(${fontSizes[size][0]} * var(--font-normalization))`,
-      //         lineHeight: `calc(${fontSizes[size][1].lineHeight} * var(--font-normalization))`
-      //       },
-      //     };
-      //   });
-      //   console.log({ fonts, normalization, textSizes })
-      //   addComponents(textSizes)
-      // }
 
       matchUtilities(
         {
@@ -965,15 +843,8 @@ const config = {
 
       matchUtilities(
         {
-          text: (value, { modifier }) => {
-            let [fontSize, options] = Array.isArray(value) ? value : [value]
-
-            // if (modifier) {
-            //   return {
-            //     'font-size': `calc(${fontSize} * var(--font-normalization))`,
-            //     'line-height': `calc(${modifier} * var(--font-normalization))`,
-            //   }
-            // }
+          text: (value) => {
+            const [fontSize, options] = Array.isArray(value) ? value : [value]
 
             return {
               'font-size': `calc(${fontSize} * var(--font-normalization))`,
@@ -985,21 +856,8 @@ const config = {
         },
         {
           values: theme('fontSize'),
-          modifiers: theme('lineHeight'),
         }
       )
-
-
-      // matchUtilities(
-      //   {
-      //     'font-normalization': (value) => {
-      //       return {
-      //         '--font-normalization': value
-      //       }
-      //     }
-      //   },
-      //   { values: theme('fontNormalization') }
-      // )
     })
   ],
 } satisfies Omit<Config, 'content'>

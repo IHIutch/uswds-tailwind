@@ -143,22 +143,26 @@ Start by configuring `tailwind.config.js`. This configures all of the USWDS colo
 Note that some breakpoint and container query sizes are commented out; while additional sizes are supported, it is encouraged use as few media queries as possible to limit the complexity of your application as it grows. By default, USWDS only uses the `mobile-lg`, `tablet`, and `desktop` breakpoints and container query sizes.
 
 <CollapsibleCode title="tailwind.config.js" lang="js" class="rounded" code={`
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
+
 import { addDynamicIconSelectors } from '@iconify/tailwind'
 import tailwindForms from '@tailwindcss/forms'
 import tailwindTypography from '@tailwindcss/typography'
 import tailwindAnimate from "tailwindcss-animate"
 import tailwindContainerQueries from "@tailwindcss/container-queries"
 import plugin from 'tailwindcss/plugin'
+import type { PluginUtils } from "tailwindcss/types/config";
 
-module.exports = {
-  content: ["src/**/*.{html,twig,php}"],
+const config = {
+  corePlugins: {
+    fontSize: false,
+    fontFamily: false,
+  },
   theme: {
     colors: {
       transparent: 'transparent',
       white: "#ffffff",
       black: "#000000",
-      // USWDS Colors
       "red-cool-5": "#f8eff1",
       "red-cool-10": "#f3e1e4",
       "red-cool-20": "#ecbec6",
@@ -621,33 +625,64 @@ module.exports = {
       "gray-warm-90": "#171716",
     },
     screens: {
-      // card: "160px",
-      // "card-lg": "240px",
-      // mobile: "320px",
+      card: "160px",
+      "card-lg": "240px",
+      mobile: "320px",
       "mobile-lg": "480px",
       tablet: "640px",
-      // "tablet-lg": "880px",
+      "tablet-lg": "880px",
       desktop: "1024px",
-      // "desktop-lg": "1200px",
-      // widescreen: "1400px",
+      "desktop-lg": "1200px",
+      widescreen: "1400px",
     },
     containers: {
-      // card: "160px",
-      // "card-lg": "240px",
-      // mobile: "320px",
+      card: "160px",
+      "card-lg": "240px",
+      mobile: "320px",
       "mobile-lg": "480px",
       tablet: "640px",
-      // "tablet-lg": "880px",
+      "tablet-lg": "880px",
       desktop: "1024px",
-      // "desktop-lg": "1200px",
-      // widescreen: "1400px",
+      "desktop-lg": "1200px",
+      widescreen: "1400px",
     },
     fontFamily: {
-      "open-sans": '"Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
-      "public-sans": '"Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
-      "merriweather": '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
-      "source-sans": '"Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
-      "roboto-mono": '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
+      "open-sans": {
+        fontFamily: '"Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+        multiplier: "1.01",
+      },
+      "public-sans": {
+        fontFamily: '"Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol"',
+        multiplier: "1.0",
+      },
+      "merriweather": {
+        fontFamily: '"Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif',
+        multiplier: "0.98",
+      },
+      "source-sans": {
+        fontFamily: '"Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
+        multiplier: "1.06",
+      },
+      "roboto-mono": {
+        fontFamily: '"Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace',
+        multiplier: "0.95",
+      },
+      "georgia": {
+        fontFamily: '"Georgia", "Cambria", "Times New Roman", "Times", serif',
+        multiplier: "1.05",
+      },
+      "helvetica": {
+        fontFamily: '"Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif',
+        multiplier: "1.01",
+      },
+      "tahoma": {
+        fontFamily: '"Tahoma", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+        multiplier: "1.0",
+      },
+      "verdana": {
+        fontFamily: '"Verdana", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+        multiplier: "0.99",
+      },
     },
     extend: {
       maxWidth: {
@@ -656,25 +691,22 @@ module.exports = {
       lineHeight: {
         tighter: '1.125'
       },
-      typography: ({ theme }) => ({
+      typography: ({ theme }: PluginUtils) => ({
         DEFAULT: {
           css: {
             maxWidth: theme('maxWidth.prose'),
-            fontFamily: theme('fontFamily.source-sans'),
-            fontSize: theme('fontSize.base')[0],
+            fontFamily: theme('fontFamily.source-sans').fontFamily,
+            '--font-normalization': theme('fontFamily.source-sans').multiplier,
+            fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
             lineHeight: theme('lineHeight.normal'),
             color: theme('colors.black'),
             'code': {
-              fontFamily: theme('fontFamily.roboto-mono'),
-            },
-            'code::before': {
-              content: 'none',
-            },
-            'code::after': {
-              content: 'none',
+              fontFamily: theme('fontFamily.roboto-mono').fontFamily,
+              '--font-normalization': theme('fontFamily.roboto-mono').multiplier,
             },
             'kbd': {
-              fontFamily: theme('fontFamily.roboto-mono'),
+              fontFamily: theme('fontFamily.roboto-mono').fontFamily,
+              '--font-normalization': theme('fontFamily.roboto-mono').multiplier,
               borderRadius: theme('rounded'),
               border: '0.5px solid ' + theme('colors.gray-cool-30'),
               color: theme('colors.black'),
@@ -682,7 +714,12 @@ module.exports = {
               background: theme('colors.gray-cool-2'),
               backgroundImage: 'linear-gradient(to bottom, ' + theme('colors.gray-cool-5') + ', ' + theme('colors.gray-cool-1') + ')'
             },
-
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
             'a': {
               color: theme('colors.blue-60v'),
               textDecoration: 'underline',
@@ -754,7 +791,7 @@ module.exports = {
 
             // Table styles
             '> table': {
-              fontSize: theme('fontSize.base')[0],
+              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
               lineHeight: theme('lineHeight.normal'),
               borderCollapse: 'collapse',
               borderSpacing: '0',
@@ -778,7 +815,7 @@ module.exports = {
             },
             '> table caption': {
               textAlign: 'left',
-              fontSize: theme('fontSize.base')[0],
+              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
               fontWeight: theme('fontWeight.bold'),
               marginBottom: theme('spacing.3'),
             },
@@ -859,38 +896,44 @@ module.exports = {
               marginTop: theme('spacing.8'),
             },
             'h1': {
-              fontSize: theme('fontSize.4xl')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.4xl')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h2': {
-              fontSize: theme('fontSize.3xl')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.3xl')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h3': {
-              fontSize: theme('fontSize.xl')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.xl')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h4': {
-              fontSize: theme('fontSize.lg')[0],
-              fontFamily: theme('fontFamily.merriweather'),
+              fontSize: 'calc(' + theme('fontSize.lg')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.merriweather').fontFamily,
+              '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h5': {
-              fontSize: theme('fontSize.base')[0],
-              fontFamily: theme('fontFamily.public-sans'),
+              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.public-sans').fontFamily,
+              '--font-normalization': theme('fontFamily.public-sans').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h6': {
-              fontFamily: theme('fontFamily.source-sans'),
-              fontSize: theme('fontSize.sm')[0],
+              fontSize: 'calc(' + theme('fontSize.sm')[0] + ' * var(--font-normalization))',
+              fontFamily: theme('fontFamily.source-sans').fontFamily,
+              '--font-normalization': theme('fontFamily.source-sans').multiplier,
               lineHeight: theme('lineHeight.none'),
               fontWeight: theme('fontWeight.normal'),
               letterSpacing: theme('letterSpacing.wide'),
@@ -912,7 +955,7 @@ module.exports = {
       strategy: 'class'
     }),
 
-    plugin(function ({ addVariant, addUtilities }) {
+    plugin(function ({ theme, addVariant, addUtilities, matchUtilities }) {
       addVariant('thumb', ['&::-webkit-slider-thumb', '&::-moz-range-thumb', '&::-ms-thumb'])
       addVariant('track', ['&::-webkit-slider-runnable-track', '&::-moz-range-track', '&::-ms-track'])
       addVariant('valid', ['&[data-valid]'])
@@ -926,9 +969,45 @@ module.exports = {
           },
         },
       })
+
+      matchUtilities(
+        {
+          font: (value) => {
+            const { fontFamily, multiplier } = value
+
+            return {
+              '--font-normalization': multiplier,
+              fontFamily: fontFamily
+            }
+          },
+        },
+        {
+          values: theme('fontFamily'),
+        }
+      )
+
+      matchUtilities(
+        {
+          text: (value) => {
+            const [fontSize, options] = Array.isArray(value) ? value : [value]
+
+            return {
+              'font-size': \`calc(\${fontSize} * var(--font-normalization))\`,
+              ...(options?.lineHeight === undefined ? {} : { 'line-height': \`calc(\${options.lineHeight} * var(--font-normalization))\` }),
+              ...(options?.letterSpacing === undefined ? {} : { 'letter-spacing': options.letterSpacing }),
+              ...(options?.fontWeight === undefined ? {} : { 'font-weight': options.fontWeight }),
+            }
+          },
+        },
+        {
+          values: theme('fontSize'),
+        }
+      )
     })
   ],
-}
+} satisfies Omit<Config, 'content'>
+
+export default config
 `} />
 
 ### CSS
