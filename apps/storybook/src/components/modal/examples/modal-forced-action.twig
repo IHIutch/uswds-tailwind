@@ -3,7 +3,7 @@
 	<button x-modal:trigger class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Open modal with forced action</button>
 
 	<div>
-		<div x-modal:dialog data-force-action class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center p-4 animate-in ease-in-out duration-150 fade-in">
+		<div x-cloak x-modal:dialog data-force-action class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center p-4 animate-in ease-in-out duration-150 fade-in">
 			<div x-modal:content class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg">
 				<div class="p-8 pt-10">
 					<h2 x-modal:title class="text-xl font-bold font-merriweather">Your session will end soon.</h2>
@@ -25,7 +25,7 @@
 		</div>
 
 		<template x-teleport="body">
-			<div x-modal:backdrop class="fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"></div>
+			<div x-cloak x-modal:backdrop class="fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"></div>
 		</template>
 
 	</div>
