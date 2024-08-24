@@ -29,10 +29,7 @@ const template = await renderTwigTemplate({
 });
 ---
 
-<div
-  x-data="{ exampleSize: '1056px', updateWidth(value) { this.exampleSize = value; } }"
-  class="not-docs-prose w-full max-w-6xl mt-6 mb-12"
->
+<div class="not-docs-prose w-full max-w-6xl mt-6 mb-12">
   <div class="outline outline-1 outline-gray-cool-20 rounded-t">
     <div class="flex w-full overflow-hidden">
       <div
@@ -86,7 +83,7 @@ const template = await renderTwigTemplate({
           data-size="100"
           class="overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4"
         >
-          <div x-data="{}" style={{ minHeight: minHeight || "none" }}>
+          <div x-data style={{ minHeight: minHeight || "none" }}>
             <!-- Example start -->
             <Fragment set:html={template} />
             <!-- Example end -->

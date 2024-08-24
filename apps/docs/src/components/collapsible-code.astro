@@ -11,22 +11,18 @@ type Props = {
 const { code, lang, title, class: className } = Astro.props;
 ---
 
-<div
-  x-data="{ codeHeight: 0, isCodeExpanded: false, toggleExpanded() { this.isCodeExpanded = !this.isCodeExpanded; } }"
-  x-init="codeHeight = $refs.code.offsetHeight;"
-  class:list={["relative overflow-hidden", className]}
->
+<div x-data="collapsible" class:list={["relative overflow-hidden", className]}>
   <div
-    :class="codeHeight < 400 || isCodeExpanded ? 'h-auto' : 'h-96'"
+    :class="isShowingClass"
     class="overflow-hidden not-docs-prose"
     x-ref="code"
   >
     <Code title={title} code={code} lang={lang} wrap />
   </div>
   <button
-    x-show="codeHeight > 400 && !isCodeExpanded"
+    x-show="isShowingButton"
     type="button"
-    @click="toggleExpanded()"
+    @click="toggleExpanded"
     class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0 border-gray-cool-20 border-b border-x rounded-b"
   >
     <div
@@ -36,3 +32,22 @@ const { code, lang, title, class: className } = Astro.props;
     </div>
   </button>
 </div>
+<script is:inline>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("collapsible", () => ({
+      init() {
+        this.isCodeExpanded = this.$refs.code.offsetHeight < 400;
+      },
+      isCodeExpanded: false,
+      toggleExpanded() {
+        this.isCodeExpanded = !this.isCodeExpanded;
+      },
+      get isShowingButton() {
+        return !this.isCodeExpanded;
+      },
+      get isShowingClass() {
+        return this.isCodeExpanded ? "h-auto" : "h-96";
+      },
+    }));
+  });
+</script>

@@ -71,8 +71,12 @@ const modalDescription = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
 
 const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'aria-haspopup': 'true',
-    'aria-hidden': 'true',
+    ':aria-haspopup'() {
+      return 'true'
+    },
+    ':aria-hidden'() {
+      return 'true'
+    },
     'x-show'() {
       return this.isOpen
     },
@@ -98,8 +102,12 @@ const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
     ':aria-describedby'() {
       return this.$id('modal-description')
     },
-    'aria-modal': 'true',
-    'role': 'dialog',
+    ':aria-modal'() {
+      return 'true'
+    },
+    ':role'() {
+      return 'dialog'
+    },
     'x-show'() {
       return this.isOpen
     },

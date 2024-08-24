@@ -9,10 +9,10 @@ import "@fontsource/merriweather/400.css";
 import "@fontsource/merriweather/700.css";
 import "@fontsource/merriweather/900.css";
 
-import Alpine from "alpinejs";
+import Alpine from "@alpinejs/csp";
 import focus from "@alpinejs/focus";
-import mask from '@alpinejs/mask'
-import anchor from '@alpinejs/anchor'
+import mask from "@alpinejs/mask";
+import anchor from "@alpinejs/anchor";
 
 import accordion from "../components/accordion/accordion";
 import inputMask from "../components/input/input-mask";

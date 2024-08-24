@@ -93,9 +93,6 @@ const accordionContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
     ':id'() {
       return this.$id('accordion')
     },
-    // 'x-show'() {
-    //   return this.value.includes(this.$id('accordion'))
-    // },
     ':hidden'() {
       return this.value.includes(this.$id('accordion')) ? false : 'until-found'
     }

@@ -60,7 +60,9 @@ const dropdownRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
 
 const dropdownContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'role': 'menu',
+    ':role'() {
+      return 'menu'
+    },
     ':aria-labelledby'() {
       return this.$id('dropown-trigger')
     },
@@ -106,7 +108,9 @@ const dropdownContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine
 
 const dropdownItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'role': 'menuitem',
+    ':role'() {
+      return 'menuitem'
+    },
     ':tabIndex'() {
       return -1
     },

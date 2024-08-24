@@ -1,8 +1,9 @@
 import type { Alpine } from 'alpinejs'
-import focus from '@alpinejs/focus'
-import mask from '@alpinejs/mask'
-import anchor from '@alpinejs/anchor'
-import accordion from '#utils/alpine/accordion'
+import focus from "@alpinejs/focus"
+import mask from "@alpinejs/mask"
+import anchor from "@alpinejs/anchor"
+
+import accordion from "#utils/alpine/accordion"
 import inputMask from "#utils/alpine/input-mask"
 import modal from "#utils/alpine/modal"
 import combobox from "#utils/alpine/combobox"

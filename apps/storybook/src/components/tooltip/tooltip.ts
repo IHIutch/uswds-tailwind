@@ -51,7 +51,9 @@ const tooltipContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
     ':aria-hidden'() {
       return this.isOpen ? 'false' : 'true'
     },
-    'role': 'tooltip',
+    ':role'() {
+      return 'tooltip'
+    },
     'x-init'() {
       if (this.isOpen === undefined) console.warn('"x-tooltip:content" is missing a parent element with "x-tooltip".')
     },

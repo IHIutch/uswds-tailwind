@@ -22,9 +22,6 @@ export default function (Alpine: Alpine) {
       get isLoaded() {
         return $data.isLoaded
       },
-      // get filteredOptions() {
-      //   return $data.filteredOptions
-      // },
       get noResults() {
         return $data.noResults
       }
@@ -67,9 +64,6 @@ const comboboxRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
         get noResults() {
           return this.isDirty && !this.allOptions.some(o => o.label.toLowerCase().startsWith(this.inputValue.toLowerCase()))
         },
-        // get filteredOptions() {
-        //   return this.allOptions.filter(o => this.isDirty ? o.label.toLowerCase().startsWith(this.inputValue.toLowerCase()) : true)
-        // },
         select(el: HTMLElement) {
           this.selectedEl = el
           this.inputEl.value = el.textContent;
@@ -154,10 +148,18 @@ const comboboxValues = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
 
 const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'type': 'text',
-    'role': 'combobox',
-    'autocapitalize': 'off',
-    'autocomplete': 'off',
+    ':type'() {
+      return 'text'
+    },
+    ':role'() {
+      return 'combobox'
+    },
+    ':autocapitalize'() {
+      return 'off'
+    },
+    ':autocomplete'() {
+      return 'off'
+    },
     ':id'() {
       return this.$id('combobox-input')
     },
@@ -209,11 +211,15 @@ const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
 
 const comboboxList = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'role': 'listbox',
+    ':role'() {
+      return 'listbox'
+    },
     ':id'() {
       return this.$id('combobox-list')
     },
-    'tabindex': '-1',
+    ':tabindex'() {
+      return '-1'
+    },
     ':aria-labelledby'() {
       return this.$id('combobox-label')
     },
@@ -243,15 +249,18 @@ const comboboxList = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
 
 const comboboxClearButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'type': 'button',
-    'aria-label': 'clear input',
-    'tabindex': '-1',
+    ':type'() {
+      return 'button'
+    },
+    ':aria-label'() {
+      return 'clear input'
+    },
+    ':tabindex'() {
+      return '-1'
+    },
     'x-show'() {
       return !!this.selectedValue
     },
-    // '@mousedown.prevent'() {
-    //   return true
-    // },
     '@mouseup.prevent'() {
       this.reset();
       this.$focus.focus(this.inputEl);
@@ -261,12 +270,15 @@ const comboboxClearButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Al
 
 const comboboxToggleButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'type': 'button',
-    'aria-label': 'toggle options',
-    'tabindex': '-1',
-    // '@mousedown.prevent'() {
-    //   return true
-    // },
+    ':type'() {
+      return 'button'
+    },
+    ':aria-label'() {
+      return 'toggle options'
+    },
+    ':tabindex'() {
+      return '-1'
+    },
     '@mouseup.prevent'() {
       this.isOpen = !this.isOpen;
       this.$focus.focus(this.inputEl)
@@ -276,7 +288,9 @@ const comboboxToggleButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: A
 
 const comboboxListItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
   Alpine.bind(el, {
-    'role': 'option',
+    ':role'() {
+      return 'option'
+    },
     ':id'() {
       return this.$id('combobox-item')
     },
