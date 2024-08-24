@@ -1,5 +1,4 @@
 ---
-import FontComparison from "#components/font-comparison.astro";
 import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
 import ContentLayout from "#layouts/content-layout.astro";
@@ -28,11 +27,7 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3);
               </p>
             </div>
             <div class="docs-prose max-w-none">
-              <Content
-                components={{
-                  FontComparison,
-                }}
-              />
+              <Content />
             </div>
           </div>
         </div>
