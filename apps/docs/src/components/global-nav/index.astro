@@ -104,7 +104,6 @@ const { className } = Astro.props;
             href="/"
           >
             <Image src={logo} class="h-10 w-auto" alt="Logo" />
-            <!-- <Image src={test2} class="h-10 w-auto" alt="Logo" /> -->
             <span>USWDS + Tailwind</span>
           </a>
         </em>
@@ -113,8 +112,8 @@ const { className } = Astro.props;
         </div>
       </div>
     </div>
-    <div class="hidden desktop:block border-t border-t-gray-cool-10">
-      <DesktopNav primary={desktopLinks.primary} />
-    </div>
+  </div>
+  <div class="hidden desktop:block border-t border-t-gray-cool-10">
+    <DesktopNav primary={desktopLinks.primary} />
   </div>
 </header>
