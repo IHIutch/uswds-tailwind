@@ -29,6 +29,8 @@ const {
 
 if (title) ogImageUrl.searchParams.set("title", title);
 if (description) ogImageUrl.searchParams.set("description", description);
+
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -105,9 +107,7 @@ if (description) ogImageUrl.searchParams.set("description", description);
   </head>
   <body class="h-full font-public-sans">
     <div class="relative">
-      <GlobalNav
-        className="desktop:border-b-2 desktop:border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
-      />
+      <GlobalNav />
     </div>
     <slot />
   </body>

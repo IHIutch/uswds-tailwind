@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "#layouts/base-layout.astro";
 import HomeLayout from "#layouts/home-layout.astro";
 import { Image } from "astro:assets";
@@ -14,16 +13,16 @@ import parcel from "#assets/img/parcel-logo.png";
     <div class="bg-blue-80v py-24">
       <div class="max-w-5xl mx-auto px-4">
         <h1
-          class="text-6xl max-w-2xl leading-tighter font-public-sans font-bold text-white mb-12"
+          class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl !leading-tighter font-public-sans font-bold text-white mb-12"
         >
           Build federal websites and applications faster than ever.
         </h1>
 
         <p
-          class="text-white/90 max-w-prose text-2xl font-public-sans leading-relaxed"
+          class="text-white/90 text-xl mobile-lg:text-2xl font-public-sans !leading-relaxed max-w-screen-tablet"
         >
-          Using the latest in modern tooling, build the same design system you
-          know and love with the speed and flexibility of industry leaders.
+          Build the same design system you know and love with the speed and
+          flexibility of modern tooling.
         </p>
       </div>
     </div>
@@ -166,7 +165,7 @@ import parcel from "#assets/img/parcel-logo.png";
         </div>
       </div>
     </div>
-    <div class="py-4 border-t border-t-gray-cool-5">
+    <div class="p-4 border-t border-t-gray-cool-5">
       <div class="max-w-5xl mx-auto flex justify-between">
         <p class="text-sm text-gray-cool-60">All rights reserved.</p>
         <p class="text-sm text-gray-cool-60">MIT License</p>
