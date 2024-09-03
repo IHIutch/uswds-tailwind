@@ -39,7 +39,7 @@ if (description) ogImageUrl.searchParams.set("description", description);
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{title || "USWDS + Tailwind"}</title>
     <meta property="og:image" content={ogImageUrl} />
 
     <script is:inline>
