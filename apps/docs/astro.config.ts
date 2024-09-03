@@ -45,5 +45,6 @@ export default defineConfig({
   redirects: {
     '/components': '/components/accordion'
   },
-  output: 'hybrid'
+  output: "hybrid",
+  adapter: vercel()
 });
