@@ -20,3 +20,9 @@ export type NavLinks = {
 }
 
 export type AttrMap = Record<string, any>
+
+export type ogImageProps = {
+  title?: string
+  description?: string,
+  isHome?: boolean
+}

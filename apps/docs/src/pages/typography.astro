@@ -10,11 +10,10 @@ const { Content, headings } = await post.render();
 const visibleHeadings = headings.filter((h) => h.depth <= 3);
 ---
 
-<BaseLayout title="Typography">
+<BaseLayout title={post.data.title} description={post.data.description}>
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={visibleHeadings} />
-
       <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
         <div class="flex flex-col mx-auto max-w-5xl">
           <div class="max-w-3xl">

@@ -24,7 +24,7 @@ const activeHeading = "";
 const visibleHeadings = headings.filter((h) => h.depth <= 3);
 ---
 
-<BaseLayout title={entry.data.title}>
+<BaseLayout title={entry.data.title} description={entry.data.description}>
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={visibleHeadings} />

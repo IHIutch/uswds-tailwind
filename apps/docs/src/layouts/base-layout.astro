@@ -16,10 +16,19 @@ import "@fontsource/merriweather/700.css";
 import "@fontsource/merriweather/900.css";
 
 interface Props {
-  title: string;
+  title?: string;
+  description?: string;
+  ogImageUrl?: URL;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description,
+  ogImageUrl = new URL("og.jpg", Astro.url.origin),
+} = Astro.props;
+
+if (title) ogImageUrl.searchParams.set("title", title);
+if (description) ogImageUrl.searchParams.set("description", description);
 ---
 
 <!doctype html>
@@ -31,6 +40,7 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta property="og:image" content={ogImageUrl} />
 
     <script is:inline>
       document.documentElement.classList.add("uswds-ready");
