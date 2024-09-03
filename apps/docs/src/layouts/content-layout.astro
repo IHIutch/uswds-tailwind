@@ -56,29 +56,31 @@ const allComponents = await getCollection("components");
 
   document.addEventListener("astro:page-load", () => {
     const sidenav = getSideNavEl();
-    const sidenavActiveLink = sidenav?.querySelector(
-      "[aria-current=page]"
-    ) as HTMLElement;
+    if (sidenav) {
+      const sidenavActiveLink = sidenav?.querySelector(
+        "[aria-current=page]"
+      ) as HTMLElement;
 
-    // Restore state from previous navigation
-    const savedStateJson = sessionStorage.getItem(key);
-    let savedState: ScrollTopJSON;
+      // Restore state from previous navigation
+      const savedStateJson = sessionStorage.getItem(key);
+      let savedState: ScrollTopJSON;
 
-    if (savedStateJson) {
-      try {
-        savedState = JSON.parse(savedStateJson);
-      } catch (e) {
-        console.error("Error parsing saved position:", e);
+      if (savedStateJson) {
+        try {
+          savedState = JSON.parse(savedStateJson);
+        } catch (e) {
+          console.error("Error parsing saved position:", e);
+        }
       }
-    }
 
-    if (savedState) {
-      sidenav.scrollTop = savedState.scrollTop;
-    } else {
-      sidenavActiveLink?.scrollIntoView({
-        behavior: "instant",
-        block: "center",
-      });
+      if (savedState) {
+        sidenav.scrollTop = savedState.scrollTop;
+      } else {
+        sidenavActiveLink?.scrollIntoView({
+          behavior: "instant",
+          block: "center",
+        });
+      }
     }
   });
   document.addEventListener("astro:before-swap", () => {
