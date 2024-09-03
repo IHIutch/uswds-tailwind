@@ -95,6 +95,9 @@ importers:
       astro-expressive-code:
         specifier: ^0.35.3
         version: 0.35.3(astro@4.11.4(@types/node@20.14.9)(typescript@5.5.3))
+      astro-seo:
+        specifier: ^0.8.4
+        version: 0.8.4(prettier@3.3.2)(typescript@5.5.3)
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -2808,6 +2811,9 @@ packages:
     resolution: {integrity: sha512-f1L1m3J3EzZHDEox6TXmuKo5fTSbaNxE/HU0S0UQmvlCowtOKnU/LOsoDwsbQSYGKz+fdLRPsCjFMiKqEoyfcw==}
     peerDependencies:
       astro: ^4.0.0-beta || ^3.3.0
+
+  astro-seo@0.8.4:
+    resolution: {integrity: sha512-Ou1vzQSXAxa0K8rtNtXNvSpYqOGEgMhh0immMxJeXmbVZac3UKCNWAoXWyOQDFYsZvBugCRSg0N1phBqPMVgCw==}
 
   astro@4.11.4:
     resolution: {integrity: sha512-jSCnPD+r4MO5Pxl04XfCydzZiL/p70q1ddYind02JDGQDLlps4d2s/AfT/7be12gf1PpR13ACcvO6aJFUIVQXA==}
@@ -9170,6 +9176,14 @@ snapshots:
     dependencies:
       astro: 4.11.4(@types/node@20.14.9)(typescript@5.5.3)
       rehype-expressive-code: 0.35.3
+
+  astro-seo@0.8.4(prettier@3.3.2)(typescript@5.5.3):
+    dependencies:
+      '@astrojs/check': 0.5.10(prettier@3.3.2)(typescript@5.5.3)
+    transitivePeerDependencies:
+      - prettier
+      - prettier-plugin-astro
+      - typescript
 
   astro@4.11.4(@types/node@20.14.9)(typescript@5.5.3):
     dependencies:

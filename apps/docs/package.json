@@ -37,6 +37,7 @@
     "alpinejs": "^3.14.1",
     "astro": "^4.11.4",
     "astro-expressive-code": "^0.35.3",
+    "astro-seo": "^0.8.4",
     "fuse.js": "^7.0.0",
     "github-slugger": "^2.0.0",
     "react": "^18.3.1",
