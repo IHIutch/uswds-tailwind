@@ -21,8 +21,10 @@ interface Props {
   ogImageUrl?: URL;
 }
 
+const SITE_NAME = "USWDS + Tailwind";
+
 const {
-  title,
+  title = SITE_NAME,
   description,
   ogImageUrl = new URL("og.jpg", Astro.url.origin),
 } = Astro.props;
@@ -30,7 +32,7 @@ const {
 if (title) ogImageUrl.searchParams.set("title", title);
 if (description) ogImageUrl.searchParams.set("description", description);
 
-const isHome = Astro.url.pathname === "/";
+const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
 ---
 
 <!doctype html>
@@ -39,13 +41,11 @@ const isHome = Astro.url.pathname === "/";
     <meta charset="UTF-8" />
     <SEO
       charset="UTF-8"
-      title={title}
-      titleTemplate="%s - USWDS + Tailwind"
-      titleDefault="USWDS + Tailwind"
+      title={metaTitle}
       description={description}
       openGraph={{
         basic: {
-          title: title || "USWDS + Tailwind",
+          title: metaTitle,
           type: "Website",
           image: ogImageUrl.toString(),
           url: Astro.url,
@@ -61,7 +61,7 @@ const isHome = Astro.url.pathname === "/";
       }}
       twitter={{
         card: "summary_large_image",
-        title,
+        title: metaTitle,
         description,
         image: ogImageUrl,
       }}
