@@ -10,10 +10,26 @@ import type { PluginUtils } from "tailwindcss/types/config";
 
 const config = {
   corePlugins: {
-    fontSize: false,
+    // fontSize: false,
     fontFamily: false,
+    // lineHeight: false
   },
   theme: {
+    fontSize: {
+      xs: ['0.75rem', { lineHeight: 'calc(1rem * var(--font-normalization))' }],
+      sm: ['0.875rem', { lineHeight: 'calc(1.25rem * var(--font-normalization))' }],
+      base: ['1rem', { lineHeight: 'calc(1.5rem * var(--font-normalization))' }],
+      lg: ['1.125rem', { lineHeight: 'calc(1.75rem * var(--font-normalization))' }],
+      xl: ['1.25rem', { lineHeight: 'calc(1.75rem * var(--font-normalization))' }],
+      '2xl': ['1.5rem', { lineHeight: 'calc(2rem * var(--font-normalization))' }],
+      '3xl': ['1.875rem', { lineHeight: 'calc(2.25rem * var(--font-normalization))' }],
+      '4xl': ['2.25rem', { lineHeight: 'calc(2.5rem * var(--font-normalization))' }],
+      '5xl': ['3rem', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '6xl': ['3.75rem', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '7xl': ['4.5rem', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '8xl': ['6rem', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '9xl': ['8rem', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+    },
     colors: {
       transparent: 'transparent',
       white: "#ffffff",
@@ -841,23 +857,36 @@ const config = {
         }
       )
 
-      matchUtilities(
-        {
-          text: (value) => {
-            const [fontSize, options] = Array.isArray(value) ? value : [value]
+      // matchUtilities(
+      //   {
+      //     text: (value) => {
+      //       const [fontSize, options] = Array.isArray(value) ? value : [value]
 
-            return {
-              'font-size': `calc(${fontSize} * var(--font-normalization))`,
-              ...(options?.lineHeight === undefined ? {} : { 'line-height': `calc(${options.lineHeight} * var(--font-normalization))` }),
-              ...(options?.letterSpacing === undefined ? {} : { 'letter-spacing': options.letterSpacing }),
-              ...(options?.fontWeight === undefined ? {} : { 'font-weight': options.fontWeight }),
-            }
-          },
-        },
-        {
-          values: theme('fontSize'),
-        }
-      )
+      //       return {
+      //         'font-size': `calc(${fontSize} * var(--font-normalization))`,
+      //         ...(options?.lineHeight === undefined ? {} : { 'line-height': `calc(${options.lineHeight} * var(--font-normalization))` }),
+      //         ...(options?.letterSpacing === undefined ? {} : { 'letter-spacing': options.letterSpacing }),
+      //         ...(options?.fontWeight === undefined ? {} : { 'font-weight': options.fontWeight }),
+      //       }
+      //     },
+      //   },
+      //   {
+      //     values: theme('fontSize'),
+      //   }
+      // )
+
+      // matchUtilities(
+      //   {
+      //     leading: (value) => {
+      //       return {
+      //         'line-height': value,
+      //       }
+      //     },
+      //   },
+      //   {
+      //     values: theme('lineHeight'),
+      //   }
+      // )
     })
   ],
 } satisfies Omit<Config, 'content'>
