@@ -64,7 +64,10 @@ if (description) ogImageUrl.searchParams.set("description", description);
         image: ogImageUrl,
       }}
       extend={{
-        link: [{ rel: "icon", type: "image/svg+xml", href: "/logo.svg" }],
+        link: [
+          { rel: "icon", type: "image/svg+xml", href: "/logo.svg" },
+          { rel: "sitemap", href: "/sitemap-index.xml" },
+        ],
         meta: [
           { name: "viewport", content: "width=device-width, initial-scale=1" },
           { name: "generator", content: Astro.generator },

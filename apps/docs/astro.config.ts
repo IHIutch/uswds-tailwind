@@ -6,27 +6,35 @@ import alpinejs from "@astrojs/alpinejs";
 import tailwindNesting from '@tailwindcss/nesting';
 import expressiveCode from "astro-expressive-code";
 import react from "@astrojs/react";
-
 import vercel from "@astrojs/vercel/serverless";
+
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://uswds-tailwind.com',
   trailingSlash: 'never',
-  integrations: [expressiveCode({
-    themes: ['light-plus', 'dark-plus'],
-    styleOverrides: {
-      frames: {
-        editorBackground: '#f7f9fa',
-        terminalBackground: '#f7f9fa',
-        terminalTitlebarBackground: '#ffffff',
-        frameBoxShadowCssValue: '0'
-      },
-      codeBackground: '#f7f9fa'
-    }
-  }), tailwind(), mdx(), alpinejs({
-    entrypoint: "/src/utils/alpine/entrypoint"
-  }), react()],
+  integrations: [
+    expressiveCode({
+      themes: ['light-plus', 'dark-plus'],
+      styleOverrides: {
+        frames: {
+          editorBackground: '#f7f9fa',
+          terminalBackground: '#f7f9fa',
+          terminalTitlebarBackground: '#ffffff',
+          frameBoxShadowCssValue: '0'
+        },
+        codeBackground: '#f7f9fa'
+      }
+    }),
+    tailwind(),
+    mdx(),
+    alpinejs({
+      entrypoint: "/src/utils/alpine/entrypoint"
+    }),
+    react(),
+    sitemap()
+  ],
   // markdown: {
   //   shikiConfig: {
   //     themes: {
