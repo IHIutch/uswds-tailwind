@@ -3,6 +3,8 @@ import type { NavLinks } from "types";
 import DesktopNav from "./desktop-nav.astro";
 import MobileNav from "./mobile-nav.astro";
 import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import logo from "#assets/img/logo.svg";
 
 type Props = {
   className?: string;
@@ -93,24 +95,26 @@ const { className } = Astro.props;
 <header class:list={className}>
   <div class="desktop:px-8">
     <div
-      class="max-w-5xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10 h-12 tablet:h-16"
+      class="max-w-5xl flex justify-between items-center mx-auto max-desktop:border-b max-desktop:border-b-gray-cool-10 h-12 desktop:h-16"
     >
-      <div
-        class="desktop:text-2xl ml-4 desktop:ml-0 h-auto desktop:h-16 flex items-center"
-      >
+      <div class="ml-4 desktop:ml-0 flex items-center">
         <em class="font-bold not-italic">
           <a
-            class="text-gray-90 focus:outline focus:outline-4 focus:outline-blue-40v"
-            href="/">USWDS + Tailwind</a
+            class="text-gray-90 text-xl flex gap-3 items-center focus:outline focus:outline-4 focus:outline-blue-40v"
+            href="/"
           >
+            <Image src={logo} class="h-10 w-auto" alt="Logo" />
+            <!-- <Image src={test2} class="h-10 w-auto" alt="Logo" /> -->
+            <span>USWDS + Tailwind</span>
+          </a>
         </em>
-      </div>
-      <div class="desktop:hidden">
-        <MobileNav primary={mobileLinks.primary} />
+        <div class="desktop:hidden">
+          <MobileNav primary={mobileLinks.primary} />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="hidden desktop:block border-t border-t-gray-cool-10">
-    <DesktopNav primary={desktopLinks.primary} />
+    <div class="hidden desktop:block border-t border-t-gray-cool-10">
+      <DesktopNav primary={desktopLinks.primary} />
+    </div>
   </div>
 </header>
