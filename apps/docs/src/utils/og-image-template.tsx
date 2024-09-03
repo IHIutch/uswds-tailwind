@@ -93,7 +93,7 @@ export default ({
           <p
             style={{
               display: 'block',
-              fontSize: '4.5rem',
+              fontSize: '5rem',
               lineHeight: '7rem',
               fontWeight: '400',
               lineClamp: 2,
