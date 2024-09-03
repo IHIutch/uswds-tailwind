@@ -23,7 +23,7 @@ const isActivePath = (href: string) => {
           {primary.map((item) => (
             <li class="leading-none">
               {item.children !== undefined ? (
-                <div x-dropdown>
+                <div x-data x-dropdown>
                   <button
                     x-dropdown:trigger
                     class="relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1"

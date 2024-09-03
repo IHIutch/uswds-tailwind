@@ -7,7 +7,7 @@ type Props = NavLinks;
 const { primary, secondary } = Astro.props;
 ---
 
-<div x-modal>
+<div x-data x-modal>
   <button
     x-modal:trigger
     class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-blue-40v"
