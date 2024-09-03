@@ -48,7 +48,7 @@ function init(splitterRootEl: HTMLElement) {
 
     if (prev) prev();
     let cleanups = [
-      attrs(splitterRootEl, api.rootProps),
+      attrs(splitterRootEl, api.getRootProps()),
       ...splitterPanels.map(item => attrs(item.el, api.getPanelProps({ id: item.id }))),
       ...splitterTriggers.map(item => attrs(item.el, api.getResizeTriggerProps({ id: item.id as `${string}:${string}` })))
     ];
