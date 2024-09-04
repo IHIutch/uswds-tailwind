@@ -79,7 +79,7 @@ const dropdownContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine
     'x-anchor.bottom-start'() {
       return this.triggerEl;
     },
-    '@keydown.escape.prevent'() {
+    '@keydown.prevent.escape'() {
       this.close()
       this.$focus.focus(this.triggerEl)
     },
@@ -121,10 +121,10 @@ const dropdownItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
       this.close()
       this.$focus.focus(this.triggerEl)
     },
-    '@keydown.space.stop.prevent'() {
+    '@keydown.stop.prevent.space'() {
       this.$event.target.click()
     },
-    '@keydown.enter.stop.prevent'() {
+    '@keydown.stop.prevent.enter'() {
       this.$event.target.click()
     },
   })

@@ -70,16 +70,16 @@ const accordionTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
     ':aria-expanded'() {
       return this.value.includes(this.$id('accordion'))
     },
-    '@keydown.down'() {
+    '@keydown.prevent.down'() {
       return this.$focus.within(this.rootEl).wrap().next()
     },
-    '@keydown.up'() {
+    '@keydown.prevent.up'() {
       return this.$focus.within(this.rootEl).wrap().previous()
     },
-    '@keydown.home'() {
+    '@keydown.prevent.home'() {
       return this.$focus.within(this.rootEl).first()
     },
-    '@keydown.end'() {
+    '@keydown.prevent.end'() {
       return this.$focus.within(this.rootEl).last()
     },
   })
