@@ -6,12 +6,17 @@ import { useDebounce } from '#utils/use-debounce';
 
 export default function IconList() {
   const [search, setSearch] = React.useState('')
-  // const [filteredIcons, setFilteredIcons] = React.useState<string[]>([])
   const debouncedSearch = useDebounce(search, 300);
 
   const [state, action, pending] = React.useActionState(
     withState(actions.getIcons),
-    { data: { icons: [] }, error: undefined }
+    {
+      data: {
+        filteredIcons: [],
+        totalIconCount: 0
+      },
+      error: undefined
+    }
   );
 
   const copyTextToClipboard = async (text: string) => {
@@ -23,7 +28,7 @@ export default function IconList() {
   }
 
   React.useEffect(() => {
-    let formData = new FormData();    //formdata object
+    let formData = new FormData();
     formData.append('search', debouncedSearch);
     action(formData)
   }, [debouncedSearch]);
@@ -33,7 +38,6 @@ export default function IconList() {
     <div className="border border-gray-cool-20">
       <div className="border-b border-gray-cool-20 p-4">
         <div className="mb-2">
-          {/* <form action={action}> */}
           <label htmlFor="icons" className="block">Type to filter icons</label>
           <div className="mt-2 relative">
             <input
@@ -44,16 +48,16 @@ export default function IconList() {
               className="p-2 w-full max-w-lg h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
             />
           </div>
-          {/* <button>search</button> */}
-          {/* </form> */}
         </div>
-        <p aria-live="polite" className="text-gray-50">Click an icon to copy its class name.</p>
+        {state.data?.totalIconCount
+          ? <p aria-live="polite" className="text-gray-50">Showing {state.data?.filteredIcons.length} of {state.data?.totalIconCount} Click an icon to copy its class name.</p>
+          : null}
       </div>
       <div className="bg-gray-cool-2 p-4">
         {
-          (state.data && state.data.icons.length > 0) ? (
+          (state.data && state.data.filteredIcons.length > 0) ? (
             <ul className="grid grid-cols-3 gap-3">
-              {state.data.icons.map((mi) => (
+              {state.data.filteredIcons.map((mi) => (
                 <li key={mi}>
                   <button
                     className="text-gray-cool-80 gap-2 border border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full"

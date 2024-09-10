@@ -61,7 +61,8 @@ export const server = {
       );
 
       return {
-        icons: Object.keys(filteredIconsJson?.icons || {}).sort((a, b) => a.localeCompare(b))
+        filteredIcons: Object.keys(filteredIconsJson?.icons || {}).sort((a, b) => a.localeCompare(b)),
+        totalIconCount: iconList.length
       }
     }
   })
