@@ -71,3 +71,7 @@ h6 {
 .uswds-ready [x-cloak] {
   display: none !important;
 }
+
+::-webkit-search-cancel-button {
+  @apply appearance-none;
+}

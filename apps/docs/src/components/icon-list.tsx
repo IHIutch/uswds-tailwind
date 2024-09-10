@@ -6,6 +6,7 @@ import { useDebounce } from '#utils/use-debounce';
 
 export default function IconList() {
   const [search, setSearch] = React.useState('')
+  const [isTypingOrSearching, setIsTypingOrSearching] = React.useState(false)
   const debouncedSearch = useDebounce(search, 300);
 
   const [state, action, pending] = React.useActionState(
@@ -33,24 +34,41 @@ export default function IconList() {
     action(formData)
   }, [debouncedSearch]);
 
+  React.useEffect(() => {
+    if (!pending) {
+      setIsTypingOrSearching(false)
+    }
+  }, [pending]);
 
   return (
     <div className="border border-gray-cool-20">
       <div className="border-b border-gray-cool-20 p-4">
         <div className="mb-2">
-          <label htmlFor="icons" className="block">Type to filter icons</label>
-          <div className="mt-2 relative">
+          <label htmlFor="icons" className="block">Search icons</label>
+          <div className="mt-2 relative max-w-lg">
+            <div className="absolute w-8 left-0 inset-y-0 flex items-center justify-center text-blue-60v pointer-events-none">
+              <div className="icon-[material-symbols--search] size-6"></div>
+            </div>
             <input
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value)
+                setIsTypingOrSearching(true)
+              }}
               id="icons"
               type="search"
               name="search"
-              className="p-2 w-full max-w-lg h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+              className="py-2 pl-8 pr-10 w-full h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 [-webkit-search-decoration:appearance-none]"
             />
+            {isTypingOrSearching
+              ? (
+                <div className="absolute w-10 right-0 inset-y-0 flex items-center justify-center animate-spin text-blue-60v">
+                  <div className="icon-[material-symbols--progress-activity] size-6"></div>
+                </div>
+              ) : null}
           </div>
         </div>
         {state.data?.totalIconCount
-          ? <p aria-live="polite" className="text-gray-50">Showing {state.data?.filteredIcons.length} of {state.data?.totalIconCount} Click an icon to copy its class name.</p>
+          ? <p aria-live="polite" className="text-gray-50">Showing {state.data?.filteredIcons.length} of {state.data?.totalIconCount}. Click an icon to copy its class name.</p>
           : null}
       </div>
       <div className="bg-gray-cool-2 p-4">
