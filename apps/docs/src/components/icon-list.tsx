@@ -1,12 +1,18 @@
 import * as React from 'react'
 import { icons as materialIcons } from "@iconify-json/material-symbols";
-import { useDebounce } from "@uidotdev/usehooks";
 import { actions } from 'astro:actions';
+import { experimental_withState as withState } from '@astrojs/react/actions';
+import { useDebounce } from '#utils/use-debounce';
 
 export default function IconList() {
   const [search, setSearch] = React.useState('')
-  const [filteredIcons, setFilteredIcons] = React.useState<string[]>([])
+  // const [filteredIcons, setFilteredIcons] = React.useState<string[]>([])
   const debouncedSearch = useDebounce(search, 300);
+
+  const [state, action, pending] = React.useActionState(
+    withState(actions.getIcons),
+    { data: { icons: [] }, error: undefined }
+  );
 
   const copyTextToClipboard = async (text: string) => {
     if ('clipboard' in navigator) {
@@ -17,13 +23,9 @@ export default function IconList() {
   }
 
   React.useEffect(() => {
-    async function handleSubmit(search: string) {
-      const { data } = await actions.getIcons({ search })
-      setFilteredIcons(data || [])
-    }
-
-    handleSubmit(debouncedSearch)
-
+    let formData = new FormData();    //formdata object
+    formData.append('search', debouncedSearch);
+    action(formData)
   }, [debouncedSearch]);
 
 
@@ -31,7 +33,7 @@ export default function IconList() {
     <div className="border border-gray-cool-20">
       <div className="border-b border-gray-cool-20 p-4">
         <div className="mb-2">
-          {/* <form onSubmit={submit}> */}
+          {/* <form action={action}> */}
           <label htmlFor="icons" className="block">Type to filter icons</label>
           <div className="mt-2 relative">
             <input
@@ -49,9 +51,9 @@ export default function IconList() {
       </div>
       <div className="bg-gray-cool-2 p-4">
         {
-          filteredIcons.length > 0 ? (
+          (state.data && state.data.icons.length > 0) ? (
             <ul className="grid grid-cols-3 gap-3">
-              {filteredIcons.map((mi) => (
+              {state.data.icons.map((mi) => (
                 <li key={mi}>
                   <button
                     className="text-gray-cool-80 gap-2 border border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full"

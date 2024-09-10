@@ -2,13 +2,14 @@ import type { IconSuffix } from "types";
 import { icons as materialIcons } from "@iconify-json/material-symbols";
 import Fuse from "fuse.js";
 import { getIcons, type IconifyIcon } from "@iconify/utils";
-import { defineAction } from 'astro:actions';
+import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 
 export const server = {
   getIcons: defineAction({
+    accept: "form",
     input: z.object({
-      search: z.string(),
+      search: z.string().nullable(),
     }),
     handler: async ({ search }) => {
       const SEARCH_LIMIT = 150
@@ -40,7 +41,7 @@ export const server = {
             ...testList['']
           })
 
-        return iconsBySuffix.sort((a, b) => a.localeCompare(b))
+        return iconsBySuffix
       }
 
       const iconList = getIconNamesBySuffix()
@@ -50,7 +51,7 @@ export const server = {
         ignoreLocation: true,
       });
 
-      const searchResults = fuse.search(search, {
+      const searchResults = fuse.search(search || '', {
         limit: SEARCH_LIMIT
       })
 
@@ -59,7 +60,9 @@ export const server = {
         : iconList.slice(0, SEARCH_LIMIT)
       );
 
-      return Object.keys(filteredIconsJson?.icons || {})
+      return {
+        icons: Object.keys(filteredIconsJson?.icons || {}).sort((a, b) => a.localeCompare(b))
+      }
     }
   })
 }
