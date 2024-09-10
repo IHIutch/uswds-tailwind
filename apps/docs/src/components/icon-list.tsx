@@ -7,6 +7,7 @@ import { useDebounce } from '#utils/use-debounce';
 export default function IconList() {
   const [search, setSearch] = React.useState('')
   const [isTypingOrSearching, setIsTypingOrSearching] = React.useState(false)
+  const [copiedIcon, setCopiedIcon] = React.useState<string | null>(null)
   const debouncedSearch = useDebounce(search, 300);
 
   const [state, action, pending] = React.useActionState(
@@ -20,11 +21,13 @@ export default function IconList() {
     }
   );
 
-  const copyTextToClipboard = async (text: string) => {
+  const copyTextToClipboard = async (iconName: string) => {
+    setCopiedIcon(iconName)
+    const iconString = 'icon-[material-symbols--' + iconName + ']'
     if ('clipboard' in navigator) {
-      return await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(iconString);
     } else {
-      return document.execCommand('copy', true, text);
+      document.execCommand('copy', true, iconString);
     }
   }
 
@@ -39,6 +42,17 @@ export default function IconList() {
       setIsTypingOrSearching(false)
     }
   }, [pending]);
+
+  React.useEffect(() => {
+    if (copiedIcon) {
+      const timer = setTimeout(() => {
+        setCopiedIcon(null);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [copiedIcon]);
+
+  console.log({ copiedIcon })
 
   return (
     <div className="border border-gray-cool-20">
@@ -78,8 +92,8 @@ export default function IconList() {
               {state.data.filteredIcons.map((mi) => (
                 <li key={mi}>
                   <button
-                    className="text-gray-cool-80 gap-2 border border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full"
-                    onClick={() => copyTextToClipboard('icon-[material-symbols--' + mi + ']')}
+                    className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full relative"
+                    onClick={() => copyTextToClipboard(mi)}
                     title={'.icon-[material-symbols--' + mi + ']'}
                   >
                     <div className="size-8">
@@ -94,10 +108,16 @@ export default function IconList() {
                       />
                     </div>
                     <div className="truncate text-ellipsis w-full">
-                      <span aria-hidden className="text-xs">{'.icon-[material-symbols--' + mi + ']'}</span>
-                      <span className="sr-only">{mi.replaceAll('-', ' ')}</span>
-                      {/* <span aria-live="assertive">Copied to clipboard!</span> */}
+                      <span className="text-xs">{'.icon-[material-symbols--' + mi + ']'}</span>
                     </div>
+                    {copiedIcon === mi
+                      ? (
+                        <div className="absolute inset-x-0 bottom-0 pb-1">
+                          <span aria-hidden="true" className="text-xs font-medium text-green">Copied to clipboard!</span>
+                          <span className="sr-only" aria-live="assertive">Copied {mi.replaceAll('-', ' ')} to clipboard!</span>
+                        </div>
+                      )
+                      : null}
                   </button>
                 </li>
               ))}
