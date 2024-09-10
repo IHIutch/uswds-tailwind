@@ -26,3 +26,6 @@ export type ogImageProps = {
   description?: string,
   isHome?: boolean
 }
+
+export type IconSuffix = '' | 'outline' | 'rounded' | 'outline-rounded' | 'sharp' | 'outline-sharp';
+
