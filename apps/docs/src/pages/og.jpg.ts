@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ url }) => {
     await generateOgImage({
       title: paramTitle || 'USWDS + Tailwind',
       description: paramDescription || 'Build federal websites and applications faster than ever using the latest in modern tooling.',
-      isHome: !paramTitle
+      isHome: paramTitle === 'USWDS + Tailwind'
     }),
     {
       headers: { 'Content-Type': 'image/jpg' },
