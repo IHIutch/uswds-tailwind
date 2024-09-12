@@ -3,11 +3,14 @@ import { icons as materialIcons } from "@iconify-json/material-symbols";
 import { actions } from 'astro:actions';
 import { experimental_withState as withState } from '@astrojs/react/actions';
 import { useDebounce } from '#utils/use-debounce';
+import { copyToClipboard } from '#utils/copy-to-clipboard';
 
 export default function IconList() {
   const [search, setSearch] = React.useState('')
   const [isTypingOrSearching, setIsTypingOrSearching] = React.useState(false)
   const [copiedIcon, setCopiedIcon] = React.useState<string | null>(null)
+  const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
+
   const debouncedSearch = useDebounce(search, 300);
 
   const [state, action, pending] = React.useActionState(
@@ -21,14 +24,10 @@ export default function IconList() {
     }
   );
 
-  const copyTextToClipboard = async (iconName: string) => {
+  const handleCopyToClipboard = (iconName: string) => {
+    copyToClipboard('icon-[material-symbols--' + iconName + ']')
     setCopiedIcon(iconName)
-    const iconString = 'icon-[material-symbols--' + iconName + ']'
-    if ('clipboard' in navigator) {
-      await navigator.clipboard.writeText(iconString);
-    } else {
-      document.execCommand('copy', true, iconString);
-    }
+    setCopyMessage(`material symbols ${iconName} copied to clipboard`)
   }
 
   React.useEffect(() => {
@@ -51,8 +50,6 @@ export default function IconList() {
       return () => clearTimeout(timer);
     }
   }, [copiedIcon]);
-
-  console.log({ copiedIcon })
 
   return (
     <div className="border border-gray-cool-20">
@@ -81,11 +78,16 @@ export default function IconList() {
               ) : null}
           </div>
         </div>
-        {state.data?.totalIconCount
-          ? <p aria-live="polite" className="text-gray-50">Showing {state.data?.filteredIcons.length} of {state.data?.totalIconCount}. Click an icon to copy its class name.</p>
-          : null}
+        <p aria-live="polite" className="text-gray-50">
+          {state.data?.totalIconCount
+            ? `Showing ${state.data?.filteredIcons.length} of ${state.data?.totalIconCount}. Click an icon to copy its class name.`
+            : null}
+        </p>
       </div>
       <div className="bg-gray-cool-2 p-4">
+        <p aria-live="polite" className="sr-only">
+          {copyMessage}
+        </p>
         {
           (state.data && state.data.filteredIcons.length > 0) ? (
             <ul className="grid grid-cols-3 gap-3">
@@ -93,8 +95,8 @@ export default function IconList() {
                 <li key={mi}>
                   <button
                     className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full relative"
-                    onClick={() => copyTextToClipboard(mi)}
-                    title={'.icon-[material-symbols--' + mi + ']'}
+                    onClick={() => handleCopyToClipboard(mi)}
+                  // title={'.icon-[material-symbols--' + mi + ']'}
                   >
                     <div className="size-8">
                       <svg
@@ -108,13 +110,14 @@ export default function IconList() {
                       />
                     </div>
                     <div className="truncate text-ellipsis w-full">
-                      <span className="text-xs">{'.icon-[material-symbols--' + mi + ']'}</span>
+                      <span className="text-xs" aria-hidden="true">{'.icon-[material-symbols--' + mi + ']'}</span>
+                      <span className="sr-only">Copy {mi} icon to clipboard</span>
                     </div>
                     {copiedIcon === mi
                       ? (
                         <div className="absolute inset-x-0 bottom-0 pb-1">
                           <span aria-hidden="true" className="text-xs font-medium text-green">Copied to clipboard!</span>
-                          <span className="sr-only" aria-live="assertive">Copied {mi.replaceAll('-', ' ')} to clipboard!</span>
+                          <span className="sr-only" aria-live="assertive"></span>
                         </div>
                       )
                       : null}

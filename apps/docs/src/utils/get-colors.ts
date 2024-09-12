@@ -3,10 +3,10 @@ type ColorArray = {
     label: string,
     colors: {
       level: string,
-      hex: string
+      hex: string,
+      name: string
     }[]
     order: number,
-    className: string
   }];
 };
 
@@ -14,7 +14,6 @@ export const getColors = () => Object.entries(colorsList).reduce((acc, [key, val
   const level = key.split('-').pop() || ''
   let [hue = '', temp = ''] = key.replace(`-${level}`, '').split('-')
 
-  const className = key.replace(`${level}`, '*')
   hue = hue.charAt(0).toUpperCase() + hue.slice(1)
   temp = temp.charAt(0).toUpperCase() + temp.slice(1)
 
@@ -33,15 +32,16 @@ export const getColors = () => Object.entries(colorsList).reduce((acc, [key, val
       label,
       colors: [{
         level,
-        hex: value
+        hex: value,
+        name: key
       }],
       order,
-      className
     })
   } else {
     found.colors.push({
       level,
-      hex: value
+      hex: value,
+      name: key
     })
   }
 
