@@ -32,6 +32,7 @@ const config = {
     },
     colors: {
       transparent: 'transparent',
+      current: 'currentColor',
       white: "#ffffff",
       black: "#000000",
       "red-cool-5": "#f8eff1",
