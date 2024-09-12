@@ -60,6 +60,9 @@ const tooltipContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
     'x-show'() {
       return this.isOpen
     },
+    'x-transition.opacity.80ms'() {
+      return true
+    },
     'x-bind'() {
       return {
         [`x-anchor.${this.position}.offset.5`]() {
@@ -83,6 +86,12 @@ const tooltipTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
       this.open()
     },
     '@mouseleave'() {
+      this.close()
+    },
+    '@focus'() {
+      this.open()
+    },
+    '@blur'() {
       this.close()
     }
   })
