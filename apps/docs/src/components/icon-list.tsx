@@ -108,7 +108,7 @@ const IconButton = ({ iconName }: { iconName: string }) => {
   return (
     <>
       <button
-        className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full relative"
+        className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full relative overflow-hidden"
         onClick={() => handleCopyToClipboard()}
       >
         <div className="size-8">

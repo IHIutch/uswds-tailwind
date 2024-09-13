@@ -1,15 +1,3 @@
-// <!-- ---
-// type Props = {
-//   hex: string;
-//   level: string;
-//   name: string;
-// };
-
-// const { hex, level, name } = Astro.props;
-
-// console.log({ name });
-// --- -->
-
 import { copyToClipboard } from '#utils/copy-to-clipboard'
 import * as React from 'react'
 
