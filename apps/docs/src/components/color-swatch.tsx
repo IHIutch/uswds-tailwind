@@ -26,16 +26,9 @@ export default function ColorSwatch({ hex, level, name }: {
     copyToClipboard(hex)
     setIsCopied(true)
     setCopyMessage(`${readableName} copied to clipboard`)
-  }
 
-  React.useEffect(() => {
-    if (isCopied) {
-      const timer = setTimeout(() => {
-        setIsCopied(false);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isCopied]);
+    setTimeout(() => setIsCopied(false), 1000)
+  }
 
   const readableName = name.replaceAll("-", " ").replace("v", " vivid")
 
