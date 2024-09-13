@@ -37,11 +37,13 @@ const { primary, secondary } = Astro.props;
 
         <Search client:load />
 
-        <ul class="flex flex-col">
+        <ul
+          class="flex flex-col divide-y divide-gray-10 border-y border-y-gray-10"
+        >
           {
             primary
               ? primary.map((item) => (
-                  <li class="border-y border-y-gray-10">
+                  <li class="">
                     {item.children !== undefined ? (
                       <div x-accordion>
                         <div x-accordion:item>
