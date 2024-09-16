@@ -1,6 +1,7 @@
 import { fn } from '@storybook/test';
 
-import '../src/assets/main';
+import '../build/js/main.js';
+import '../build/css/styles.css';
 
 const preview = {
   parameters: {
