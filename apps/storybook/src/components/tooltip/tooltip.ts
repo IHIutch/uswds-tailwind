@@ -85,8 +85,8 @@ const tooltipTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
     '@mouseover'() {
       this.open()
     },
-    '@mouseover'() {
-      this.open()
+    '@mouseleave'() {
+      this.close()
     },
     '@focus'() {
       this.open()
