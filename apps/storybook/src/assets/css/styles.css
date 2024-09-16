@@ -1,3 +1,13 @@
+@import "npm:@fontsource-variable/open-sans";
+@import "npm:@fontsource-variable/public-sans";
+@import "npm:@fontsource-variable/roboto-mono";
+@import "npm:@fontsource-variable/source-sans-3";
+
+@import "npm:@fontsource/merriweather/300.css";
+@import "npm:@fontsource/merriweather/400.css";
+@import "npm:@fontsource/merriweather/700.css";
+@import "npm:@fontsource/merriweather/900.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

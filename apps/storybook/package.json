@@ -7,7 +7,9 @@
     "build": "storybook build",
     "build-storybook": "pnpm build",
     "upgrade": "pnpm dlx sb@latest upgrade",
-    "chromatic": "npx chromatic --project-token=chpt_870c07f687e886f"
+    "chromatic": "npx chromatic --project-token=chpt_870c07f687e886f",
+    "parcel-dev": "parcel watch",
+    "parcel-build": "parcel build"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
     "@types/twig": "^1.12.16",
     "autoprefixer": "^10.4.19",
     "chromatic": "^11.5.4",
+    "parcel": "^2.12.0",
     "postcss": "^8.4.39",
     "storybook": "^8.3.0",
     "tailwindcss": "^3.4.4",
@@ -45,5 +48,21 @@
     "@fontsource-variable/source-sans-3": "^5.0.21",
     "@fontsource/merriweather": "^5.0.13",
     "@storybook/test": "^8.3.0"
-  }
+  },
+  "targets": {
+    "js": {
+      "source": "src/assets/js/main.js",
+      "distDir": "build/js"
+    },
+    "css": {
+      "source": "src/assets/css/styles.css",
+      "distDir": "build/css"
+    }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "IE 11",
+    "not dead"
+  ]
 }
