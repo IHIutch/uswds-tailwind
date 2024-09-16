@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>USWDS + Tailwind</title>
+    <link rel="stylesheet" href="../build/css/styles.css" />
+    <script>
+      document.documentElement.classList.add("uswds-ready");
+
+      var fallback = setTimeout(function () {
+        document.documentElement.classList.remove("uswds-ready");
+      }, 3000);
+
+      window.addEventListener("alpine:init", () => {
+        clearTimeout(fallback);
+        document.documentElement.classList.add("uswds-ready");
+      });
+    </script>
+    <script defer src="../build/js/main.js"></script>
+  </head>
+  <body x-data class="font-source-sans">
+    <div class="py-4 px-3 mx-auto max-w-screen-desktop">
+      <h1 class="text-4xl font-bold max-w-prose mb-4">
+        Kitchen Sink Example - Cards
+      </h1>
+
+      <div>
+        <h2 class="text-3xl font-bold mb-4">Cards Vertical</h2>
+        <ul class="@container grid grid-cols-6 gap-y-8 gap-x-4">
+          <li
+            class="bg-white flex flex-col col-span-6 @tablet:col-span-3 @desktop:col-span-2"
+          >
+            <div
+              class="border-x-2 border-t-2 border-gray-10 rounded-t px-6 pt-6 pb-2"
+            >
+              <h2 class="font-bold font-merriweather text-lg">Card</h2>
+            </div>
+            <div class="border-x-2 border-gray-10 px-6 py-2 grow">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
+                earum tenetur quo cupiditate, eaque qui officia recusandae.
+              </p>
+            </div>
+            <div
+              class="border-x-2 border-b-2 border-gray-10 rounded-b px-6 pb-6 pt-2"
+            >
+              <button
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >
+                Visit Florida Keys
+              </button>
+            </div>
+          </li>
+
+          <li
+            class="bg-white flex flex-col col-span-6 @tablet:col-span-3 @desktop:col-span-2"
+          >
+            <div class="border-x-2 border-gray-10 px-6 pt-6 pb-2">
+              <h2 class="font-bold font-merriweather text-lg">Card</h2>
+            </div>
+            <div
+              class="border-x-2 border-t-2 border-gray-10 rounded-t overflow-hidden -order-1"
+            >
+              <img
+                class="aspect-video object-cover"
+                src="/assets/images/preview.jpg"
+                alt=""
+              />
+            </div>
+            <div class="border-x-2 border-gray-10 px-6 py-2 grow">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
+                earum tenetur quo cupiditate, eaque qui officia recusandae.
+              </p>
+            </div>
+            <div
+              class="border-x-2 border-b-2 border-gray-10 rounded-b px-6 pb-6 pt-2"
+            >
+              <button
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >
+                Visit Florida Keys
+              </button>
+            </div>
+          </li>
+
+          <li
+            class="bg-white flex flex-col col-span-6 @tablet:col-span-3 @desktop:col-span-2"
+          >
+            <div
+              class="border-x-2 border-t-2 border-gray-10 rounded-t px-6 pt-6 pb-2"
+            >
+              <h2 class="font-bold font-merriweather text-lg">
+                Media with header first
+              </h2>
+            </div>
+            <div class="border-x-2 border-gray-10 overflow-hidden">
+              <img
+                class="aspect-video object-cover"
+                src="/assets/images/preview.jpg"
+                alt=""
+              />
+            </div>
+            <div class="border-x-2 border-gray-10 px-6 pt-4 pb-2 grow">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
+                earum tenetur quo cupiditate, eaque qui officia recusandae.
+              </p>
+            </div>
+            <div
+              class="border-x-2 border-b-2 border-gray-10 rounded-b px-6 pb-6 pt-2"
+            >
+              <button
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >
+                Visit Florida Keys
+              </button>
+            </div>
+          </li>
+
+          <li
+            class="bg-white flex flex-col col-span-6 @tablet:col-span-3 @desktop:col-span-2"
+          >
+            <div class="border-x-2 border-gray-10 px-6 pt-6 pb-2">
+              <h2 class="font-bold font-merriweather text-lg">Inset Media</h2>
+            </div>
+            <div
+              class="border-x-2 border-t-2 rounded-t border-gray-10 -order-1"
+            >
+              <img
+                class="aspect-video object-cover p-6 pb-0"
+                src="/assets/images/preview.jpg"
+                alt=""
+              />
+            </div>
+            <div class="border-x-2 border-gray-10 px-6 py-2 grow">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
+                earum tenetur quo cupiditate, eaque qui officia recusandae.
+              </p>
+            </div>
+            <div
+              class="border-x-2 border-b-2 border-gray-10 rounded-b px-6 pb-6 pt-2"
+            >
+              <button
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >
+                Visit Florida Keys
+              </button>
+            </div>
+          </li>
+
+          <li
+            class="bg-white flex flex-col col-span-6 @tablet:col-span-3 @desktop:col-span-2"
+          >
+            <div class="border-x-2 border-gray-10 px-6 pt-6 pb-2">
+              <h2 class="font-bold font-merriweather text-lg">Exdent Media</h2>
+            </div>
+            <div class="border-gray-10 rounded-t overflow-hidden -order-1">
+              <img
+                class="aspect-video object-cover"
+                src="/assets/images/preview.jpg"
+                alt=""
+              />
+            </div>
+            <div class="border-x-2 border-gray-10 px-6 py-2 grow">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
+                earum tenetur quo cupiditate, eaque qui officia recusandae.
+              </p>
+            </div>
+            <div
+              class="border-x-2 border-b-2 border-gray-10 rounded-b px-6 pb-6 pt-2"
+            >
+              <button
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >
+                Visit Florida Keys
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-3xl font-bold mb-4">Cards Horizontal</h2>
+        <ul class="@container grid grid-cols-2 gap-y-8 gap-x-4">
+          <li
+            class="bg-white flex flex-col @mobile-lg:flex-row col-span-2 @desktop:col-span-1"
+          >
+            <div
+              class="border-x-2 border-b-2 rounded-b @mobile-lg:border-x-0 @mobile-lg:rounded-b-none @mobile-lg:border-y-2 @mobile-lg:border-e-2 @mobile-lg:rounded-e border-gray-10 grow"
+            >
+              <div class="px-6 pt-6 pb-2">
+                <h2 class="font-bold font-merriweather text-lg">
+                  Default flag
+                </h2>
+              </div>
+              <div class="px-6 py-2 grow">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              </div>
+              <div class="px-6 pb-6 pt-2">
+                <button
+                  class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                >
+                  Visit Florida Keys
+                </button>
+              </div>
+            </div>
+            <div
+              class="border-x-2 border-t-2 rounded-t @mobile-lg:border-x-0 @mobile-lg:rounded-none @mobile-lg:border-y-2 @mobile-lg:border-s-2 border-gray-10 @mobile-lg:rounded-s overflow-hidden shrink-0 -order-1 @mobile-lg:order-0"
+            >
+              <img
+                class="aspect-video @mobile-lg:aspect-auto size-full @mobile-lg:w-60 object-cover"
+                src="/assets/images/preview.jpg"
+                alt=""
+              />
+            </div>
+          </li>
+
+          <li
+            class="bg-white flex flex-col @mobile-lg:flex-row col-span-2 @desktop:col-span-1"
+          >
+            <div
+              class="border-x-2 border-b-2 rounded-b @mobile-lg:border-x-0 @mobile-lg:rounded-b-none @mobile-lg:border-y-2 @mobile-lg:border-s-2 @mobile-lg:rounded-s border-gray-10 grow"
+            >
+              <div class="px-6 pt-6 pb-2">
+                <h2 class="font-bold font-merriweather text-lg">
+                  Flag media right inset
+                </h2>
+              </div>
+              <div class="px-6 py-2 grow">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              </div>
+              <div class="px-6 pb-6 pt-2">
+                <button
+                  class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                >
+                  Visit Florida Keys
+                </button>
+              </div>
+            </div>
+            <div
+              class="border-x-2 border-t-2 rounded-t @mobile-lg:border-x-0 @mobile-lg:rounded-none @mobile-lg:border-y-2 @mobile-lg:border-e-2 border-gray-10 @mobile-lg:rounded-e overflow-hidden shrink-0 -order-1 @mobile-lg:order-1"
+            >
+              <img
+                class="aspect-video @mobile-lg:aspect-auto size-full @mobile-lg:w-60 object-cover p-6 pb-0 @mobile-lg:pb-6 @mobile-lg:pl-0"
+                src="/assets/images/preview.jpg"
+                alt=""
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- end examples container -->
+    </div>
+  </body>
+</html>
