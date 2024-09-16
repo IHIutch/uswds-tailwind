@@ -10,9 +10,7 @@ import type { PluginUtils } from "tailwindcss/types/config";
 
 const config = {
   corePlugins: {
-    // fontSize: false,
     fontFamily: false,
-    // lineHeight: false
   },
   theme: {
     fontSize: {
@@ -569,7 +567,7 @@ const config = {
             maxWidth: theme('maxWidth.prose'),
             fontFamily: theme('fontFamily.source-sans').fontFamily,
             '--font-normalization': theme('fontFamily.source-sans').multiplier,
-            fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
+            fontSize: theme('fontSize.base')[0],
             lineHeight: theme('lineHeight.normal'),
             color: theme('colors.black'),
             'code': {
@@ -663,7 +661,7 @@ const config = {
 
             // Table styles
             '> table': {
-              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.base')[0],
               lineHeight: theme('lineHeight.normal'),
               borderCollapse: 'collapse',
               borderSpacing: '0',
@@ -687,7 +685,7 @@ const config = {
             },
             '> table caption': {
               textAlign: 'left',
-              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.base')[0],
               fontWeight: theme('fontWeight.bold'),
               marginBottom: theme('spacing.3'),
             },
@@ -768,42 +766,42 @@ const config = {
               marginTop: theme('spacing.8'),
             },
             'h1': {
-              fontSize: 'calc(' + theme('fontSize.4xl')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.4xl')[0],
               fontFamily: theme('fontFamily.merriweather').fontFamily,
               '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h2': {
-              fontSize: 'calc(' + theme('fontSize.3xl')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.3xl')[0],
               fontFamily: theme('fontFamily.merriweather').fontFamily,
               '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h3': {
-              fontSize: 'calc(' + theme('fontSize.xl')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.xl')[0],
               fontFamily: theme('fontFamily.merriweather').fontFamily,
               '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h4': {
-              fontSize: 'calc(' + theme('fontSize.lg')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.lg')[0],
               fontFamily: theme('fontFamily.merriweather').fontFamily,
               '--font-normalization': theme('fontFamily.merriweather').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h5': {
-              fontSize: 'calc(' + theme('fontSize.base')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.base')[0],
               fontFamily: theme('fontFamily.public-sans').fontFamily,
               '--font-normalization': theme('fontFamily.public-sans').multiplier,
               lineHeight: theme('lineHeight.tight'),
               fontWeight: theme('fontWeight.bold'),
             },
             'h6': {
-              fontSize: 'calc(' + theme('fontSize.sm')[0] + ' * var(--font-normalization))',
+              fontSize: theme('fontSize.sm')[0],
               fontFamily: theme('fontFamily.source-sans').fontFamily,
               '--font-normalization': theme('fontFamily.source-sans').multiplier,
               lineHeight: theme('lineHeight.none'),
@@ -857,37 +855,6 @@ const config = {
           values: theme('fontFamily'),
         }
       )
-
-      // matchUtilities(
-      //   {
-      //     text: (value) => {
-      //       const [fontSize, options] = Array.isArray(value) ? value : [value]
-
-      //       return {
-      //         'font-size': `calc(${fontSize} * var(--font-normalization))`,
-      //         ...(options?.lineHeight === undefined ? {} : { 'line-height': `calc(${options.lineHeight} * var(--font-normalization))` }),
-      //         ...(options?.letterSpacing === undefined ? {} : { 'letter-spacing': options.letterSpacing }),
-      //         ...(options?.fontWeight === undefined ? {} : { 'font-weight': options.fontWeight }),
-      //       }
-      //     },
-      //   },
-      //   {
-      //     values: theme('fontSize'),
-      //   }
-      // )
-
-      // matchUtilities(
-      //   {
-      //     leading: (value) => {
-      //       return {
-      //         'line-height': value,
-      //       }
-      //     },
-      //   },
-      //   {
-      //     values: theme('lineHeight'),
-      //   }
-      // )
     })
   ],
 } satisfies Omit<Config, 'content'>
