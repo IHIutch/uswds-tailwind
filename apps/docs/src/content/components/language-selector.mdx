@@ -31,7 +31,7 @@ description: "The consistent placement, interface, and behavior of the language 
 
   - #### `x-dropdown:trigger`
     
-    Custom **Alpine** directive that marks the **Dropdown Root**.
+    Custom **Alpine** directive that marks the **Dropdown Trigger**.
 
   - #### `aria-controls`
 
@@ -65,7 +65,7 @@ description: "The consistent placement, interface, and behavior of the language 
 
   - #### `x-dropdown:content`
     
-    Custom **Alpine** directive that marks the **Dropdown Root**.
+    Custom **Alpine** directive that marks the **Dropdown Content**.
 
   - #### `role`
 
@@ -89,4 +89,56 @@ description: "The consistent placement, interface, and behavior of the language 
 
     **Automatically handled with JavaScript.**
   
+</ContentList>
+
+### Item
+
+<ContentList>
+
+  - #### `x-dropdown:item`
+    
+    Custom **Alpine** directive that marks the **Dropdown Item**.
+
+  - #### `role`
+
+    **Type:** `string`<br/>**Value:** `'menuitem'`
+
+    **Automatically handled with JavaScript.**
+
+  - #### `tabindex`
+
+    **Type:** `number`<br/>**Value:** `-1`
+
+    Prevents users from tabbing to this element.
+
+    **Automatically handled with JavaScript.**
+  
+</ContentList>
+
+## Keyboard Interactions
+
+<ContentList>
+  - <kbd>Down Arrow</kbd>
+    
+    When focus is on **Dropdown Trigger**, opens and moves focus to **Dropdown Content**.
+
+    When focus is on the **Dropdown Content**, moves focus to first **Dropdown Item**.
+
+    When focus is on a **Dropdown Item**, moves focus to next **Dropdown Item**.
+
+  - <kbd>Up Arrow</kbd>
+  
+    When focus is on **Dropdown Trigger**, opens and moves focus to **Dropdown Content**.
+
+    When focus is on the **Dropdown Content**, moves focus to last **Dropdown Item**.
+
+    When focus is on a **Dropdown Item**, moves focus to previous **Dropdown Item**.
+
+  - <kbd>Enter</kbd>
+  
+    When focus is on an **Dropdown Item**, selects that item.
+
+  - <kbd>Escape</kbd>
+  
+    When the **Dropdown Content** is open, closes the **Dropdown Content** and moves focus to the **Dropdown Trigger**.
 </ContentList>

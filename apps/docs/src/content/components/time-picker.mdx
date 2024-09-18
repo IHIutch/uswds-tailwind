@@ -5,4 +5,37 @@ description: "A time picker helps users select a specific time."
 
 ## Example
 
-<ComponentPreview title="Time Picker" component="time-picker" variant="time-picker" />
+<ComponentPreview title="Time Picker" component="time-picker" variant="time-picker" resize={false} />
+
+## Keyboard Interactions
+
+<ContentList>
+  - <kbd>Down Arrow</kbd>
+  
+    When focus is on an **Combobox Input**, opens the **Combobox List** and moves focus on the currently selected that **Combobox Item**. Otherwise, moves focus to the first **Combobox Item**.
+
+    When focus is on an **Combobox Item**, moves focus to the previous focusable element.
+
+    When focus is on the first **Combobox Item** in a **Combobox List**, moves focus to the **Combobox Input**.
+
+  - <kbd>Up Arrow</kbd>
+  
+    When focus is on an **Combobox Input**, opens the **Combobox List** and moves focus on the currently selected that **Combobox Item**. Otherwise, moves to the last **Combobox Item**.
+
+    When focus is on an **Combobox Item**, moves focus to the next focusable element.
+
+    When focus is on the last **Combobox Item** in a **Combobox List**, focus moves to the **Combobox Input**.
+
+  - <kbd>Enter</kbd>
+  
+    When focus is on an **Combobox Item**, selects the current value and sets the cursor at the end of the selected value in the **Combobox Input**.
+
+  - <kbd>Escape</kbd>
+  
+    When the **Combobox List** is open, closes the **Combobox List** and moves focus to the **Combobox Input**.
+</ContentList>
+
+## Progressive Enhancement
+Because this component heavily relies on Javascript, in environments where Javascript isn't present or hasn't yet loaded, this component falls back to the native `<select>` element. When Javascript is loaded, the `<select>` element will be hidden and all options will be passed to the **Combobox** component.
+
+This ensures that users will always be able to interact with a functional component regardless of their connectivity or browser settings.
