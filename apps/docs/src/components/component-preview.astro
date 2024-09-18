@@ -10,9 +10,10 @@ type Props = {
   component: CollectionEntry<"demos">["data"]["component"];
   variant: CollectionEntry<"demos">["data"]["variant"];
   minHeight?: string;
+  resize?: boolean;
 };
 
-const { component, variant, minHeight } = Astro.props;
+const { component, variant, minHeight, resize = true } = Astro.props;
 
 const propsPath = `./src/__demos__/${component}/${component}-props.json`;
 const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`;
@@ -76,12 +77,15 @@ const template = await renderTwigTemplate({
       class="bg-gray-cool-4 min-w-80 outline outline-1 outline-gray-cool-20"
       style={{ backgroundImage: `url(${graphPaper.src})` }}
     >
-      <div data-part="splitter-root">
+      <div data-part={resize ? "splitter-root" : undefined}>
         <div
-          data-part="splitter-panel"
-          data-value="a"
-          data-size="100"
-          class="overflow-auto bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4"
+          data-part={resize ? "splitter-panel" : undefined}
+          data-value={resize ? "a" : undefined}
+          data-size={resize ? "100" : undefined}
+          class:list={[
+            "bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4",
+            { resize: "overflow-auto" },
+          ]}
         >
           <div x-data style={{ minHeight: minHeight || "none" }}>
             <!-- Example start -->
@@ -89,20 +93,25 @@ const template = await renderTwigTemplate({
             <!-- Example end -->
           </div>
         </div>
-        <button
-          type="button"
-          data-part="splitter-resizer"
-          data-value="a:b"
-          class="items-center p-2 group outline-none hidden tablet:flex"
-        >
-          <div
-            class="flex max-h-32 h-full rounded-full w-1.5 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"
-          >
-          </div>
-        </button>
-        <div data-part="splitter-panel" data-value="b" data-size="0">
-          <!-- Intentionally empty -->
-        </div>
+        {
+          resize ? (
+            <button
+              type="button"
+              data-part="splitter-resizer"
+              data-value="a:b"
+              class="items-center p-2 group outline-none hidden tablet:flex"
+            >
+              <div class="flex max-h-32 h-full rounded-full w-1.5 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v" />
+            </button>
+          ) : null
+        }
+        {
+          resize ? (
+            <div data-part="splitter-panel" data-value="b" data-size="0">
+              {/* <!-- Intentionally empty --> */}
+            </div>
+          ) : null
+        }
       </div>
     </div>
   </div>
