@@ -25,7 +25,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={headings} />
-      <div class="px-4 tablet:px-12 py-12 min-w-0 w-full">
+      <main id="main-content" class="px-4 tablet:px-12 py-12 min-w-0 w-full">
         <div class="flex flex-col mx-auto max-w-5xl">
           <div class="max-w-3xl">
             <div class="mb-16">
@@ -94,7 +94,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   </ContentLayout>
 </BaseLayout>

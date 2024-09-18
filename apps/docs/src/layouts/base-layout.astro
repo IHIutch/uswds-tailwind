@@ -107,12 +107,18 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
     <ViewTransitions />
   </head>
   <body class="h-full font-public-sans">
+    <a
+      class="sr-only rounded leading-none text-blue-60v px-5 py-3 bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v focus:top-0 focus:left-0 focus:h-auto focus:w-auto focus:m-0 focus:[clip:unset] bg-white z-50"
+      href="#main-content">Skip to main content</a
+    >
     <div class="relative">
       <GlobalNav />
     </div>
     <slot />
-    <div class="border-t border-t-gray-cool-5 bg-white px-4">
-      <div class="max-w-5xl mx-auto flex justify-between items-center h-16">
+    <div class="border-t border-t-gray-cool-5 bg-white">
+      <div
+        class="max-w-5xl mx-auto flex justify-between items-center h-16 px-4"
+      >
         <p class="text-sm text-gray-cool-60 flex gap-2">
           <span>All rights reserved</span>
           <span>|</span>
