@@ -5,6 +5,7 @@ import { Image } from "astro:assets";
 import tailwind from "#assets/img/tailwindcss-logo.svg";
 import alpine from "#assets/img/alpine-logo.svg";
 import parcel from "#assets/img/parcel-logo.png";
+import Footer from "#components/footer.astro";
 ---
 
 <BaseLayout
@@ -167,4 +168,7 @@ import parcel from "#assets/img/parcel-logo.png";
       </div>
     </div>
   </main>
+  <div class="border-t border-t-gray-cool-5">
+    <Footer class="max-w-5xl mx-auto" />
+  </div>
 </BaseLayout>

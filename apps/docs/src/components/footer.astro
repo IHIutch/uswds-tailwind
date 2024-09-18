@@ -1,5 +1,13 @@
-<div class="border-t border-t-gray-cool-5 bg-white z-10 relative">
-  <div class="max-w-5xl mx-auto flex justify-between items-center h-16 px-4">
+---
+type Props = {
+  class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<footer class:list={["", className]}>
+  <div class="flex justify-between items-center h-16 px-4">
     <p class="text-sm text-gray-cool-60 flex gap-2">
       <span>All rights reserved</span>
       <span>|</span>
@@ -17,4 +25,4 @@
       </a>
     </p>
   </div>
-</div>
+</footer>

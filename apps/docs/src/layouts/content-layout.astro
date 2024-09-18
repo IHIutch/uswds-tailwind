@@ -1,4 +1,5 @@
 ---
+import Footer from "#components/footer.astro";
 import { getCollection } from "astro:content";
 
 const { pathname } = Astro.url;
@@ -38,6 +39,7 @@ const allComponents = await getCollection("components");
 </div>
 <div class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-28">
   <slot />
+  <Footer class="max-w-5xl mx-auto border-t border-t-gray-cool-5" />
 </div>
 
 <script>
