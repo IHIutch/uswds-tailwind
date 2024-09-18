@@ -18,7 +18,7 @@ export default function Search() {
 
   return (
     <>
-      <button x-modal:close-button="true" aria-label="Search" type="button" className="group w-full max-w-64" onClick={handleOpen}>
+      <button x-modal:close-button="true" aria-label="Search" type="button" className="group w-full desktop:w-64 max-w-64 outline-none" onClick={handleOpen}>
         <div className="relative flex items-center">
           <div
             className="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"

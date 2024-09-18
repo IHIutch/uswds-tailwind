@@ -96,7 +96,19 @@ const isActivePath = (href: string) => {
         ) : null
       }
 
-      <Search client:load />
+      <div class="flex items-center gap-5">
+        <Search client:load />
+        <a
+          href="https://github.com/IHIutch/uswds-tailwind"
+          rel="noreferrer"
+          target="_blank"
+          class="inline-flex items-center text-black hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v"
+        >
+          <span class="sr-only">GitHub</span>
+          <span aria-hidden="true" class="icon-[fa6-brands--github] size-8"
+          ></span>
+        </a>
+      </div>
     </div>
   </nav>
 </div>
