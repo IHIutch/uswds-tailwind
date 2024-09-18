@@ -39,7 +39,7 @@ npm i -D tailwindcss @tailwindcss/container-queries @tailwindcss/forms @tailwind
 #### Alpine and plugins
 
 ```bash
-npm i alpinejs @alpinejs/anchor @alpinejs/focus @alpinejs/mask
+npm i @alpinejs/csp @alpinejs/anchor @alpinejs/focus @alpinejs/mask
 ```
 
 #### Install fonts
@@ -54,7 +54,7 @@ npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsourc
 npm i -D @iconify/tailwind @iconify-json/fa6-brands @iconify-json/material-symbols
 ```
 </ProcessStep>
-
+{/* Step 2 */}
 <ProcessStep class="first:*:mt-0 before:top-0">
 ## Project structure
 
@@ -143,24 +143,37 @@ Start by configuring `tailwind.config.js`. This configures all of the USWDS colo
 Note that some breakpoint and container query sizes are commented out; while additional sizes are supported, it is encouraged use as few media queries as possible to limit the complexity of your application as it grows. By default, USWDS only uses the `mobile-lg`, `tablet`, and `desktop` breakpoints and container query sizes.
 
 <CollapsibleCode title="tailwind.config.js" lang="js" class="rounded" code={`
-import type { Config } from "tailwindcss";
-
 import { addDynamicIconSelectors } from '@iconify/tailwind'
 import tailwindForms from '@tailwindcss/forms'
 import tailwindTypography from '@tailwindcss/typography'
 import tailwindAnimate from "tailwindcss-animate"
 import tailwindContainerQueries from "@tailwindcss/container-queries"
 import plugin from 'tailwindcss/plugin'
-import type { PluginUtils } from "tailwindcss/types/config";
 
 const config = {
+  content: ['./src/**/*.{html,twig,php}'],
   corePlugins: {
-    fontSize: false,
     fontFamily: false,
   },
   theme: {
+    fontSize: {
+      xs: ['calc(0.75rem * var(--font-normalization))', { lineHeight: 'calc(1rem * var(--font-normalization))' }],
+      sm: ['calc(0.875rem * var(--font-normalization))', { lineHeight: 'calc(1.25rem * var(--font-normalization))' }],
+      base: ['calc(1rem * var(--font-normalization))', { lineHeight: 'calc(1.5rem * var(--font-normalization))' }],
+      lg: ['calc(1.125rem * var(--font-normalization))', { lineHeight: 'calc(1.75rem * var(--font-normalization))' }],
+      xl: ['calc(1.25rem * var(--font-normalization))', { lineHeight: 'calc(1.75rem * var(--font-normalization))' }],
+      '2xl': ['calc(1.5rem * var(--font-normalization))', { lineHeight: 'calc(2rem * var(--font-normalization))' }],
+      '3xl': ['calc(1.875rem * var(--font-normalization))', { lineHeight: 'calc(2.25rem * var(--font-normalization))' }],
+      '4xl': ['calc(2.25rem * var(--font-normalization))', { lineHeight: 'calc(2.5rem * var(--font-normalization))' }],
+      '5xl': ['calc(3rem * var(--font-normalization))', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '6xl': ['calc(3.75rem * var(--font-normalization))', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '7xl': ['calc(4.5rem * var(--font-normalization))', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '8xl': ['calc(6rem * var(--font-normalization))', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+      '9xl': ['calc(8rem * var(--font-normalization))', { lineHeight: 'calc(1 * var(--font-normalization))' }],
+    },
     colors: {
       transparent: 'transparent',
+      current: 'currentColor',
       white: "#ffffff",
       black: "#000000",
       "red-cool-5": "#f8eff1",
@@ -691,7 +704,7 @@ const config = {
       lineHeight: {
         tighter: '1.125'
       },
-      typography: ({ theme }: PluginUtils) => ({
+      typography: ({ theme }) => ({
         DEFAULT: {
           css: {
             maxWidth: theme('maxWidth.prose'),
@@ -985,36 +998,29 @@ const config = {
           values: theme('fontFamily'),
         }
       )
-
-      matchUtilities(
-        {
-          text: (value) => {
-            const [fontSize, options] = Array.isArray(value) ? value : [value]
-
-            return {
-              'font-size': \`calc(\${fontSize} * var(--font-normalization))\`,
-              ...(options?.lineHeight === undefined ? {} : { 'line-height': \`calc(\${options.lineHeight} * var(--font-normalization))\` }),
-              ...(options?.letterSpacing === undefined ? {} : { 'letter-spacing': options.letterSpacing }),
-              ...(options?.fontWeight === undefined ? {} : { 'font-weight': options.fontWeight }),
-            }
-          },
-        },
-        {
-          values: theme('fontSize'),
-        }
-      )
     })
   ],
-} satisfies Omit<Config, 'content'>
+}
 
 export default config
 `} />
 
 ### CSS
 
-Then, add the `@tailwind` directives for each of Tailwind's layers to your `src/assets/css/styles.css` file.
+Then, import your fonts and `@tailwind` directives into your `src/assets/css/styles.css` file.
 
 ```css title="src/assets/css/styles.css"
+// Only import the fonts you need!
+@import "npm:@fontsource-variable/open-sans";
+@import "npm:@fontsource-variable/public-sans";
+@import "npm:@fontsource-variable/roboto-mono";
+@import "npm:@fontsource-variable/source-sans-3";
+
+@import "npm:@fontsource/merriweather/300.css";
+@import "npm:@fontsource/merriweather/400.css";
+@import "npm:@fontsource/merriweather/700.css";
+@import "npm:@fontsource/merriweather/900.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -1022,32 +1028,23 @@ Then, add the `@tailwind` directives for each of Tailwind's layers to your `src/
 
 ### JavaScript
 
-Now, update your `src/assets/js/main.js` file to import your CSS, fonts, and `Alpine`:
+Now, update your `src/assets/js/main.js` file to import `Alpine` and it's various plugins:
+
+<Alert>More information about component specific plugins can be found on the [JavaScript](/javascript) page.</Alert>
 
 ```js title="src/assets/js/main.js"
-// Only import the fonts you need!
-import "@fontsource-variable/open-sans";
-import "@fontsource-variable/public-sans";
-import "@fontsource-variable/roboto-mono";
-import '@fontsource-variable/source-sans-3';
-
-import "@fontsource/merriweather/300.css";
-import "@fontsource/merriweather/400.css";
-import "@fontsource/merriweather/700.css";
-import "@fontsource/merriweather/900.css";
-
-import Alpine "@alpinejs/csp";
-import focus from "@alpinejs/focus";
+import Alpine from "@alpinejs/csp";
+import focus from "@alpinejs/focus"
 import mask from '@alpinejs/mask'
 import anchor from '@alpinejs/anchor'
 
-Alpine.plugin(focus);
-Alpine.plugin(mask);
-Alpine.plugin(anchor);
+Alpine.plugin(focus)
+Alpine.plugin(mask)
+Alpine.plugin(anchor)
 
 if (typeof window.Alpine === "undefined") {
-  window.Alpine = Alpine;
-  Alpine.start();
+  window.Alpine = Alpine
+  Alpine.start()
 }
 ```
 
@@ -1058,27 +1055,43 @@ Finally, update your `src/index.html` with the following:
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>USWDS + Tailwind</title>
-    <link rel="stylesheet" href="build/css/styles.css">
-    <script defer src="build/js/main.js"></script>
+    <link rel="stylesheet" href="../build/css/styles.css" />
+    <script>
+      document.documentElement.classList.add("uswds-ready");
+
+      var fallback = setTimeout(function () {
+        document.documentElement.classList.remove("uswds-ready");
+      }, 3000);
+
+      window.addEventListener("alpine:init", () => {
+        clearTimeout(fallback);
+        document.documentElement.classList.add("uswds-ready");
+      });
+    </script>
+    <script defer src="../build/js/main.js"></script>
   </head>
-  <body class="font-source-sans">
-    <div class="max-w-prose py-4 px-3 mx-auto">
-      <h1 class="text-4xl font-bold">Welcome to USWDS + Tailwind!</h1>
-      <button type="button" class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">Default</button>
+  <body x-data class="font-source-sans">
+    <div class="py-4 px-3 mx-auto max-w-screen-desktop">
+      <h1 class="text-4xl font-bold max-w-prose mb-4">
+        Welcome to USWDS + Tailwind!
+      </h1>
+      <button
+        type="button"
+        class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      >
+        Default
+      </button>
     </div>
   </body>
 </html>
 ```
 
-Awesome, now everything is set up. You can run `npm run dev` and open the `index.html` file to see your project in action!
-
-
 ### .gitignore
 
-Before we push our code to our repository, we'll want to add a `.gitignore` file. This way, we dont push unnecessary or redundant code to our remote repository.
+Before we push any code to our repository, we'll want to add a `.gitignore` file. This way, we dont push unnecessary or redundant code to our remote repository.
 
 Our `.gitignore` should include the following:
 
@@ -1090,6 +1103,16 @@ node_modules
 build 
 ```
 
-**Note:** If you're manually compiling your CSS and JavaScript assets locally before a deployment, don't add the `build` directory to your `.gitignore`.
+<Alert type="warning">
+  If you're manually compiling your CSS and JavaScript assets locally before a deployment, don't add the `build` directory to your `.gitignore`.
+</Alert>
+
+</ProcessStep>
+{/* Step 4 */}
+<ProcessStep class="first:*:mt-0 before:top-0">
+## Complete!
+Awesome, now everything is set up! You can run `npm run dev` and open the `index.html` file to see your project in action!
+
+If you're using any of the interactive components that require JavaScript, head to the [JavaScript](/javascript) page to see how to implement the various plugins.
 </ProcessStep>
 </ProcessList>

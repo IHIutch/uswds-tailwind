@@ -1,4 +1,5 @@
 ---
+import Alert from "#components/alert.astro";
 import CollapsibleCode from "#components/collapsible-code.astro";
 import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
@@ -30,6 +31,7 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3);
               <Content
                 components={{
                   CollapsibleCode,
+                  Alert,
                 }}
               />
             </div>

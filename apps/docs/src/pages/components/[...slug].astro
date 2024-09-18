@@ -6,6 +6,7 @@ import ContentList from "#components/content-list.astro";
 import TableOfContents from "#components/table-of-contents.astro";
 import ComponentPreview from "#components/component-preview.astro";
 import ContentLayout from "#layouts/content-layout.astro";
+import Alert from "#components/alert.astro";
 
 export const getStaticPaths = (async () => {
   const allComponents = await getCollection("components");
@@ -43,6 +44,7 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3);
               components={{
                 ContentList,
                 ComponentPreview,
+                Alert,
               }}
             />
           </div>

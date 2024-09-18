@@ -29,6 +29,10 @@
     ) {
     @apply max-w-prose;
   }
+
+  & h4 > code {
+    @apply bg-gray-cool-5 py-0.5 px-1;
+  }
 }
 h1,
 h2,
