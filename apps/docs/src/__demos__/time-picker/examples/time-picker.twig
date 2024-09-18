@@ -21,7 +21,7 @@
 					</button>
 				</div>
 			</div>
-			<ul x-combobox:list class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full">
+			<ul x-combobox:list class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10">
 				<template x-for="option in $combobox.allOptions" :key="option.value">
 					<li x-combobox:item class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4" x-text="option.label"></li>
 				</template>
@@ -30,7 +30,7 @@
 						No results found
 					</li>
 				</template>
-		  </ul>
-    </div>
-  </template>
+			</ul>
+		</div>
+	</template>
 </div>

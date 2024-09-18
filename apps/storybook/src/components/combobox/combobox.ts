@@ -229,6 +229,9 @@ const comboboxList = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
     'x-show'() {
       return this.isOpen
     },
+    'x-anchor.bottom'() {
+      return this.inputEl;
+    },
     '@keydown.prevent.up'() {
       this.focusPrev()
     },
