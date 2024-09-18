@@ -202,9 +202,6 @@ const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
         this.selectedEl ? this.focusSelected() : this.focusFirst()
       })
     },
-    '@keydown.prevent.enter'() {
-      this.value()
-    },
   })
 }
 
@@ -328,11 +325,6 @@ const comboboxListItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpin
       this.isOpen = false;
     },
     '@keydown.prevent.enter'() {
-      this.select(el);
-      this.isDirty = false;
-      this.isOpen = false;
-    },
-    '@keydown.prevent.space'() {
       this.select(el);
       this.isDirty = false;
       this.isOpen = false;
