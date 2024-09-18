@@ -14,6 +14,7 @@ import "@fontsource/merriweather/300.css";
 import "@fontsource/merriweather/400.css";
 import "@fontsource/merriweather/700.css";
 import "@fontsource/merriweather/900.css";
+import Footer from "#components/footer.astro";
 
 interface Props {
   title?: string;
@@ -115,27 +116,6 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       <GlobalNav />
     </div>
     <slot />
-    <div class="border-t border-t-gray-cool-5 bg-white">
-      <div
-        class="max-w-5xl mx-auto flex justify-between items-center h-16 px-4"
-      >
-        <p class="text-sm text-gray-cool-60 flex gap-2">
-          <span>All rights reserved</span>
-          <span>|</span>
-          <span>MIT License</span>
-        </p>
-        <p class="text-sm">
-          <a
-            href="https://github.com/IHIutch/uswds-tailwind"
-            rel="noreferrer"
-            target="_blank"
-            class="inline-flex items-center text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
-          >
-            Contribute on GitHub
-            <span class="sr-only">External</span>
-          </a>
-        </p>
-      </div>
-    </div>
+    <Footer />
   </body>
 </html>

@@ -6,10 +6,10 @@ const { pathname } = Astro.url;
 const allComponents = await getCollection("components");
 ---
 
-<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28 bottom-16">
+<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
   <nav
     aria-label="Side navigation"
-    class="px-4 pt-12 pb-6 h-full overflow-y-auto"
+    class="px-4 pt-12 pb-16 h-full overflow-y-auto"
     id="sidenav"
   >
     <div class="mb-3 flex items-center pl-4">
