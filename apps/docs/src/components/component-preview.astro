@@ -84,7 +84,7 @@ const template = await renderTwigTemplate({
           data-size={resize ? "100" : undefined}
           class:list={[
             "bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4",
-            { resize: "overflow-auto" },
+            { "overflow-auto": resize },
           ]}
         >
           <div x-data style={{ minHeight: minHeight || "none" }}>
