@@ -7,7 +7,9 @@ const { class: className } = Astro.props;
 ---
 
 <footer class:list={["", className]}>
-  <div class="flex justify-between items-center h-16 px-4">
+  <div
+    class="flex gap-1 items-start px-4 max-tablet:py-4 max-tablet:flex-col tablet:justify-between tablet:items-center tablet:h-16"
+  >
     <p class="text-sm text-gray-cool-60 flex gap-2">
       <span>All rights reserved</span>
       <span>|</span>
