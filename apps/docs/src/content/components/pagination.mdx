@@ -49,7 +49,7 @@ Pagination is made up of the following elements:
 
   - #### `<li>`
 
-    Use an `<li>` **Pagination List Items**. This allows assistive technology to enumerate the items in the pagination and allows shortcuts between list items.
+    Use an `<li>` for **Pagination List Items**. This allows assistive technology to enumerate the items in the pagination and allows shortcuts between list items.
 
   - #### `aria-label`
 
@@ -73,6 +73,6 @@ Pagination is made up of the following elements:
     
     Allows screen readers to communicate that the element represents a link to the current page.
 
-    **Only use on the "current page" pagination item.**
+    <Alert type="warning">Only use the `aria-current` attribute on the link element describing the current page.</Alert>
 
 </ContentList>
