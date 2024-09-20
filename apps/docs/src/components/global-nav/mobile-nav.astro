@@ -97,10 +97,17 @@ const { primary, secondary } = Astro.props;
                   <li>
                     <a
                       href={item.href}
-                      class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v"
+                      class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
                       target={item.target}
+                      rel={item.target === "_blank" ? "noreferrer" : undefined}
                     >
                       {item.label}
+
+                      {item.target === "_blank" ? (
+                        <span class="sr-only">
+                          External, opens in a new tab
+                        </span>
+                      ) : null}
                     </a>
                   </li>
                 ))}
@@ -119,6 +126,7 @@ const { primary, secondary } = Astro.props;
             <span class="flex items-center gap-2">
               <span class="icon-[fa6-brands--github] size-5"></span>
               <span class="leading-[normal]">GitHub</span>
+              <span class="sr-only">External, opens in a new tab</span>
             </span>
             <span class="icon-[material-symbols--open-in-new] size-4"></span>
           </a>
