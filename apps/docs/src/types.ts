@@ -2,6 +2,7 @@ export type NavLinks = {
   primary?: ({
     href: string,
     label: string,
+    target?: astroHTML.JSX.AnchorHTMLAttributes['target'],
     isActive?: boolean,
     children?: undefined
   } | {
@@ -10,11 +11,13 @@ export type NavLinks = {
     children: {
       label: string,
       href: string,
+      target?: astroHTML.JSX.AnchorHTMLAttributes['target'],
       isActive?: boolean
     }[]
   })[]
   secondary?: {
     href: string,
+    target?: astroHTML.JSX.AnchorHTMLAttributes['target'],
     label: string,
   }[]
 }

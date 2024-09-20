@@ -65,6 +65,7 @@ const { primary, secondary } = Astro.props;
                                 <a
                                   href={child.href}
                                   class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v"
+                                  target={child.target}
                                 >
                                   {child.label}
                                 </a>
@@ -77,6 +78,7 @@ const { primary, secondary } = Astro.props;
                       <a
                         href={item.href}
                         class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v"
+                        target={item.target}
                       >
                         {item.label}
                       </a>
@@ -96,6 +98,7 @@ const { primary, secondary } = Astro.props;
                     <a
                       href={item.href}
                       class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v"
+                      target={item.target}
                     >
                       {item.label}
                     </a>

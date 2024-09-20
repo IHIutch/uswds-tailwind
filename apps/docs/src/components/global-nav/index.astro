@@ -84,6 +84,14 @@ const mobileLinks: NavLinks = {
     // },
   ],
 };
+
+const secondary: NavLinks["secondary"] = [
+  {
+    label: "Feedback",
+    href: "https://forms.reform.app/szenkB/uswds-tailwind-feedback/sxml6n",
+    target: "_blank",
+  },
+];
 ---
 
 <header
@@ -91,7 +99,7 @@ const mobileLinks: NavLinks = {
 >
   <div class="desktop:px-8">
     <div
-      class="max-w-5xl flex justify-between items-center mx-auto h-12 desktop:h-16"
+      class="max-w-5xl flex justify-between items-center mx-auto h-12 desktop:h-20"
     >
       <div class="ml-4 desktop:ml-0 flex items-center w-full">
         <em class="font-bold not-italic">
@@ -104,12 +112,12 @@ const mobileLinks: NavLinks = {
           </a>
         </em>
         <div class="desktop:hidden ml-auto">
-          <MobileNav primary={mobileLinks.primary} />
+          <MobileNav primary={mobileLinks.primary} secondary={secondary} />
         </div>
       </div>
     </div>
   </div>
   <div class="hidden desktop:block border-t border-t-gray-cool-10">
-    <DesktopNav primary={desktopLinks.primary} />
+    <DesktopNav primary={desktopLinks.primary} secondary={secondary} />
   </div>
 </header>

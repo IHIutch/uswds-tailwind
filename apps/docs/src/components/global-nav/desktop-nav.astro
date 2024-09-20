@@ -49,6 +49,7 @@ const isActivePath = (href: string) => {
                       <a
                         x-dropdown:item
                         href={child.href}
+                        target={child.target}
                         class="flex text-white py-2 px-4 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
                         aria-current={
                           pathname === child.href ? "page" : undefined
@@ -65,6 +66,7 @@ const isActivePath = (href: string) => {
               ) : (
                 <a
                   href={item.href}
+                  target={item.target}
                   class="relative p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v data-[active]:after:bg-blue-60v data-[active]:after:absolute data-[active]:after:-bottom-0.5 data-[active]:after:inset-x-4 data-[active]:after:h-1"
                   aria-current={pathname === item.href ? "page" : undefined}
                   data-active={isActivePath(item.href) ? true : undefined}
@@ -81,11 +83,12 @@ const isActivePath = (href: string) => {
     <div class="right-0 bottom-16 absolute min-w-64 flex flex-col items-end">
       {
         secondary && secondary?.length > 0 ? (
-          <ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 first:*:pl-0">
+          <ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 first:*:pl-0 mr-[52px]">
             {secondary.map((item) => (
               <li class="inline-flex">
                 <a
                   href={item.href}
+                  target={item.target}
                   class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v"
                 >
                   {item.label}
