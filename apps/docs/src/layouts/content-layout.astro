@@ -49,14 +49,12 @@ const allComponents = await getCollection("components");
         scrollTop: number;
       };
   const key = "sidebar-scroll-state";
-  const getSideNavEl = () => document.querySelector("#sidenav") as HTMLElement;
+  const getSideNavEl = () => document.querySelector("#sidenav");
 
   document.addEventListener("astro:page-load", () => {
     const sidenav = getSideNavEl();
     if (sidenav) {
-      const sidenavActiveLink = sidenav?.querySelector(
-        "[aria-current=page]"
-      ) as HTMLElement;
+      const sidenavActiveLink = sidenav?.querySelector("[aria-current=page]");
 
       // Restore state from previous navigation
       const savedStateJson = sessionStorage.getItem(key);
@@ -84,11 +82,13 @@ const allComponents = await getCollection("components");
     // Save user state before navigating
     const sidenav = getSideNavEl();
 
-    sessionStorage.setItem(
-      key,
-      JSON.stringify({
-        scrollTop: sidenav.scrollTop,
-      })
-    );
+    if (sidenav) {
+      sessionStorage.setItem(
+        key,
+        JSON.stringify({
+          scrollTop: sidenav.scrollTop,
+        })
+      );
+    }
   });
 </script>
