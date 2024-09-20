@@ -4,7 +4,8 @@ const componentsCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    description: z.string()
+    description: z.string(),
+    isPublished: z.boolean().optional()
   }),
 })
 

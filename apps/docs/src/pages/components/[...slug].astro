@@ -9,7 +9,10 @@ import ContentLayout from "#layouts/content-layout.astro";
 import Alert from "#components/alert.astro";
 
 export const getStaticPaths = (async () => {
-  const allComponents = await getCollection("components");
+  const allComponents = await getCollection(
+    "components",
+    (entry) => entry.data.isPublished !== false
+  );
   return allComponents.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },

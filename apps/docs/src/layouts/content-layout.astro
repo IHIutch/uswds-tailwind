@@ -4,7 +4,10 @@ import { getCollection } from "astro:content";
 
 const { pathname } = Astro.url;
 
-const allComponents = await getCollection("components");
+const allComponents = await getCollection(
+  "components",
+  (entry) => entry.data.isPublished !== false
+);
 ---
 
 <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
