@@ -27,4 +27,20 @@ export default (Alpine: Alpine) => {
   Alpine.plugin(tooltip)
   Alpine.plugin(characterCount)
   Alpine.plugin(fileInput)
+
+  Alpine.data("collapsible", () => ({
+    init() {
+      this.isCodeExpanded = this.$refs.code.offsetHeight < 400;
+    },
+    isCodeExpanded: false,
+    toggleExpanded() {
+      this.isCodeExpanded = !this.isCodeExpanded;
+    },
+    get isShowingButton() {
+      return !this.isCodeExpanded;
+    },
+    get isShowingClass() {
+      return this.isCodeExpanded ? "h-auto" : "h-96";
+    },
+  }));
 }
