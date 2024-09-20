@@ -67,6 +67,128 @@ import Footer from "#components/footer.astro";
             </div>
           </div>
         </div>
+        <div
+          class="grid tablet-lg:grid-cols-2 gap-4 tablet:px-16 desktop:px-28 mt-12"
+        >
+          <div class="rounded border p-4 bg-white">
+            <h3 class="text-lg font-bold mb-1">Compile Time</h3>
+            <div
+              aria-hidden="true"
+              class="grid grid-cols-[auto_1fr_auto] gap-2 mt-3"
+            >
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS + TW</span>
+              </div>
+              <div class="flex gap-2 items-center">
+                <div
+                  class="h-full bg-blue-50v rounded-sm"
+                  style={{ width: (639 / 4500) * 100 + "%" }}
+                >
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-cool-60"
+                    >7x faster</span
+                  >
+                </div>
+              </div>
+              <div>
+                <span class="text-sm">0.6s</span>
+              </div>
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS</span>
+              </div>
+              <div>
+                <div class="size-full bg-red-60 rounded-sm"></div>
+              </div>
+              <div>
+                <span class="text-sm">4.5s</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-cool-70 mt-4">
+              Using Parcel, we're able to compile all of our assets extremely
+              quickly. In fact, the CSS itself only takes around <em
+                class="font-bold">60ms</em
+              >!
+            </p>
+          </div>
+          <table class="sr-only">
+            <thead>
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">Compile Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>USWDS + Tailwind</td>
+                <td>0.6 seconds (7 times faster than USWDS)</td>
+              </tr>
+              <tr>
+                <td>USWDS</td>
+                <td>2.4 seconds</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rounded border p-4 bg-white">
+            <h3 class="text-lg font-bold mb-4">CSS Size</h3>
+            <div
+              aria-hidden="true"
+              class="grid grid-cols-[auto_1fr_auto] gap-2"
+            >
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS + TW</span>
+              </div>
+              <div class="flex gap-2 items-center">
+                <div
+                  class="h-full bg-blue-50v rounded-sm"
+                  style={{ width: (123 / 512) * 100 + "%" }}
+                >
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-cool-60"
+                    >4x smaller</span
+                  >
+                </div>
+              </div>
+              <div>
+                <span class="text-sm">123 KB</span>
+              </div>
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS</span>
+              </div>
+              <div>
+                <div class="size-full bg-red-60 rounded-sm"></div>
+              </div>
+              <div>
+                <span class="text-sm">512 KB</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-cool-70 mt-4">
+              Thanks to Tailwind's "just-in-time" compiler, we only generate the
+              CSS we actually use. This whole site only reaches around <em
+                class="font-bold">160 KB</em
+              >.
+            </p>
+          </div>
+          <table class="sr-only">
+            <thead>
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">CSS Size</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>USWDS + Tailwind</td>
+                <td>123 kilobytes (4 times smaller than USWDS)</td>
+              </tr>
+              <tr>
+                <td>USWDS</td>
+                <td>2.4 kilobytes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="py-16">
