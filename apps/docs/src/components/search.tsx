@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
 import { createPortal } from 'react-dom';
-import '@docsearch/css/dist/style.css'
 
 export default function Search() {
   const [isOpen, setIsOpen] = React.useState(false);

@@ -79,3 +79,18 @@ h6 {
 ::-webkit-search-cancel-button {
   @apply appearance-none;
 }
+
+:root {
+  --docsearch-primary-color: #005ea2;
+  --docsearch-muted-color: #565c65;
+  --docsearch-hit-color: #000000;
+  --docsearch-container-background: rgba(0, 0, 0, 0.7);
+}
+
+.DocSearch-Commands-Key {
+  @apply relative -top-0.5 flex items-center font-roboto-mono rounded text-gray-cool-70 bg-gray-cool-2 bg-gradient-to-b from-gray-cool-5 to-gray-cool-1 shadow-[0_2px_0_#c6cace,_0_3px_2px_#71767a,_0_2px_0_0_#ffffff_inset];
+
+  svg {
+    @apply relative top-0.5;
+  }
+}
