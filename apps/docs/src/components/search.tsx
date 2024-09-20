@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
 import { createPortal } from 'react-dom';
 
-export default function Search() {
+export default function Search({isMobile}: {isMobile: boolean}) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -17,7 +17,7 @@ export default function Search() {
 
   return (
     <>
-      <button x-modal:close-button="true" aria-label="Search" type="button" className="group w-full desktop:w-64 max-w-64 outline-none" onClick={handleOpen}>
+      <button onClick={handleOpen} x-modal:close-button={isMobile ? "true" : undefined} aria-label="Search" type="button" className="group w-full desktop:w-64 max-w-64 outline-none">
         <div className="relative flex items-center">
           <div
             className="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
