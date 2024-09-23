@@ -1,0 +1,75 @@
+---
+title: "About"
+description: "Learn about why this project exists, the inspiration behind it and the decisions that went into making it."
+---
+
+## Inspiration
+
+The USWDS has unified the federal government's digital experience [since 2015](https://18f.gsa.gov/2015/09/28/web-design-standards/), simplifying both design and development to create consistent, maintainable products. However, frontend development evolves rapidly, and as I worked with USWDS, its reliance on older tools and approaches like [BEM style naming](https://getbem.com/), SCSS, Gulp, and manually installed fonts and icons began to feel like they were slowing me down.
+
+Given the USWDS's existing utility classes, I saw an opportunity to modernize it by using [Tailwind CSS](https://tailwindcss.com/), which offers similar functionality out of the box. This project is an experiment; combining Tailwind's utility-first approach with the USWDS's design tokens. 
+
+Additionally, (while originally unintended) updating the JavaScript workflow with [Alpine.js](https://alpinejs.dev/) felt natural, allowing for declarative, streamlined event handling without needing to target custom classes.
+
+My hope is that this project makes working with the USWDS simpler, easier, and more efficient.
+
+## Tailwind CSS
+
+### Efficiency and Performance
+Tailwind optimizes our projects by generating only the necessary CSS, significantly reducing the CSS footprint compared to SCSS functions and nesting. This leads to faster load times and improved performance for end users by minimizing the resources they need to download. 
+
+By using Tailwind alone to build the componenents of the USWDS, we're able to ship only **123 KB**. If we use fewer components, we ship even less!
+
+### Enhanced Developer Experience
+I've got to say it: the USWDS has some really complicated SCSS. This makes it particularly difficult to work with and extend. 
+
+The USWDS relies heavily on BEM and nested styles which creates issues with CSS specificity. A utility class like `.text-white` ([10](https://polypane.app/css-specificity-calculator/#selector=.text-white)) is always going to have a lower specificity  than `.usa-footer__secondary-link a` ([11](https://polypane.app/css-specificity-calculator/#selector=.usa-footer__secondary-link%20a)). Building with only utilities allows us to avoid this problem altogether.
+
+### Advanced DevTools Integration
+We leverage Tailwind's powerful [DevTools](https://tailwindcss.com/docs/editor-setup), including class sorting, linting, and autocomplete, which streamline development even with our custom configuration.
+
+### Utility-First Flexibility
+Tailwind's extensive utility classes make it easy to implement unique design requirements, such as adjusting spacing or overriding font colors, with minimal effort.
+
+While there are plenty of good utilities in the USWDS, I'm often in need of ones that don't exist: `.space-y-4`, `.column-count-4`, `.gap-2`, etc. While these could be added, accounting for all these use cases would make the USWDS's generated CSS even bigger!
+
+### Wide Adoption and Excellent Documentation
+As the most widely used styling system globally, Tailwind benefits from a large community and comprehensive documentation. This reduces the learning curve for new developers and minimizes the need for internal documentation.
+
+## Iconify
+
+### Seamless Integration with Tailwind
+[Iconify](https://iconify.design/docs/usage/css/tailwind/#iconify-for-tailwind-css) complements Tailwind by allowing effortless addition of new icons, similar to changing font colors. Its robust library supports extensive icon options without increasing the project's complexity.
+
+### Optimized Rendering
+Iconify generates SVGs directly in our CSS, ensuring immediate rendering by browsers and eliminating the need for additional network requests for images or icon sprites (which come with their own, [specific challenges](https://github.com/unocss/unocss/pull/2675#issuecomment-1670898336)).
+
+### Simplified Icon Management
+Dynamic generation of icons with Iconify removes the burden of managing icon libraries, optimizing SVGs, or creating icon sprites, ensuring cross-browser compatibility effortlessly.
+
+## Fontsource
+
+### Reliable Self-Hosting
+[Fontsource](https://fontsource.org/) enables us to self-host fonts, providing greater control over font updates and rollbacks on a per-project basis without relying on external dependencies or manual downloads.
+
+### Enhanced Flexibility
+By installing fonts within projects, we're able to have greater flexibility over how we manage, update, or rollback fonts. Relying on updates from the USWDS means we're forced to update all or nothing. This puts extra stress on individual teams and on USDWS maintainers when consuming and publishing updates.
+
+## Parcel
+
+### Speed and Simplicity
+[Parcel](https://parceljs.org/) is a compiler and bundler that is extremely fast. It doesn't require an `index.html` or a custom configuration file. We can configure how we want Parcel to work right in our `package.json`.
+
+### Tailwind Compatibility
+Parcel integrates seamlessly with Tailwind by using [`lightningcss`](https://lightningcss.dev/) to generate efficient CSS. Tailwind is adopting the same tool for its CLI in a [coming release](https://tailwindcss.com/blog/tailwindcss-v4-alpha#unified-toolchain).
+
+## Alpine.js
+
+### Declarative and Intuitive Syntax
+Alpine.js complements Tailwind's declarative nature with a Vue-like syntax, making event binding and attribute manipulation straightforward and easy to understand.
+
+### Component Encapsulation
+Custom directives in Alpine.js allow us to build encapsulated components without worrying about event bubbling or behavior leakage, enhancing modularity and maintainability.
+
+### Rich Plugin Ecosystem
+Alpine.js offers a variety of plugins that simplify complex functionalities such as input masking, popovers, and focus management, accelerating development and reducing code complexity.

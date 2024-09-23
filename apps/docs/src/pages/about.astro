@@ -1,0 +1,41 @@
+---
+import CollapsibleCode from "#components/collapsible-code.astro";
+import TableOfContents from "#components/table-of-contents.astro";
+import BaseLayout from "#layouts/base-layout.astro";
+import ContentLayout from "#layouts/content-layout.astro";
+import { getEntry } from "astro:content";
+
+const post = await getEntry("pages", "about");
+const { Content, headings } = await post.render();
+
+const visibleHeadings = headings.filter((h) => h.depth <= 2);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <ContentLayout>
+    <div class="flex w-full">
+      <TableOfContents headings={visibleHeadings} />
+      <main id="main-content" class="px-4 tablet:px-12 py-12 min-w-0 w-full">
+        <div class="flex flex-col mx-auto max-w-5xl">
+          <div class="max-w-3xl">
+            <div class="mb-16">
+              <h1 class="text-4xl font-bold mb-4">
+                {post.data.title}
+              </h1>
+              <p class="text-xl font-light max-w-prose">
+                {post.data.description}
+              </p>
+            </div>
+            <div class="docs-prose max-w-none">
+              <Content
+                components={{
+                  CollapsibleCode,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </ContentLayout>
+</BaseLayout>
