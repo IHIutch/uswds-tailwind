@@ -18,26 +18,23 @@ const activeHeadingSlug = "";
       {
         headings.map((heading) => (
           <li
-            class="border-l-4 -ml-1"
-            class:list={
+            class="border-l-4"
+            class:list={[
               activeHeadingSlug === heading.slug
                 ? "border-black"
-                : "border-transparent"
-            }
+                : "border-transparent",
+              { "pl-3": heading.depth === 3 },
+              { "pl-6": heading.depth === 4 },
+            ]}
           >
-            <a
-              href={`#${heading.slug}`}
-              class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v leading-tighter text-sm"
-            >
-              <span
-                class:list={{
-                  "pl-3": heading.depth === 3,
-                  "pl-6": heading.depth === 4,
-                }}
+            <div class:list={{}}>
+              <a
+                href={`#${heading.slug}`}
+                class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v text-sm"
               >
-                {heading.text}
-              </span>
-            </a>
+                <span>{heading.text}</span>
+              </a>
+            </div>
           </li>
         ))
       }
