@@ -6,7 +6,10 @@ import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import logo from "#assets/img/logo.svg";
 
-const allComponents = await getCollection("components");
+const allComponents = await getCollection(
+  "components",
+  (entry) => entry.data.isPublished !== false
+);
 const desktopLinks: NavLinks = {
   primary: [
     {
