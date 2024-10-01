@@ -1,6 +1,11 @@
 {% macro button(page_number, href = '#', is_active = false, is_last = false) %}
 	<li class="h-10 min-w-10 inline-flex">
-		<a href="#" class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="{{ is_last ? 'Last page, page #{page_number}' : 'Page #{page_number}' }}" {{ is_active ? "aria-current='page'" }}>
+		<a 
+      href="#" 
+      class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" 
+      aria-label="{{ is_last ? 'Last page, page ' ~ page_number : 'Page ' ~ page_number }}" 
+      {{ is_active ? "aria-current='page'" }}
+    >
 			{{- page_number -}}
 		</a>
 	</li>
@@ -29,7 +34,7 @@
 		{% if pagination.current_page <= 5  %}
 
 			{% for i in range(1, 6) %}
-				{{ self.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
+				{{ self.button(i,'', i == pagination.current_page, false) }}
 			{% endfor %}
 			{{ self.ellipsis() }}
 
@@ -38,7 +43,7 @@
 			{{ self.button(1, '') }}
 			{{ self.ellipsis() }}
 			{% for i in range(pagination.current_page - 1, pagination.current_page + 2) %}
-				{{ self.button(i,'', i == pagination.current_page, i == pagination.page_count) }}
+				{{ self.button(i,'', i == pagination.current_page, false) }}
 			{% endfor %}
 			{{ self.ellipsis() }}
 
