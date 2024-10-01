@@ -7,7 +7,7 @@ description: "This project hopes to make it easier for federal product teams to 
 
 The USWDS has played an incredible role unifying the federal government's digital experience [since 2015](https://18f.gsa.gov/2015/09/28/web-design-standards/), simplifying both design and development to create consistent, maintainable products. However, frontend development evolves rapidly, and as I worked with USWDS, its reliance on older tools and approaches like [BEM style naming](https://getbem.com/), SCSS, Gulp, and manually installed fonts and icons began to feel like they were slowing me down.
 
-Given the USWDS's existing utility classes, I saw an opportunity to modernize it by using [Tailwind CSS](https://tailwindcss.com/), which offers similar functionality out of the box. This project is an experiment; combining Tailwind's utility-first approach with the USWDS's design tokens. 
+Given the USWDS's existing utility classes, I saw an opportunity to modernize it by using [Tailwind CSS](https://tailwindcss.com/), which offers similar functionality out of the box. This project is an experiment combining Tailwind's utility-first approach with the USWDS's design tokens. 
 
 Additionally, (while originally unintended) updating the JavaScript workflow with [Alpine.js](https://alpinejs.dev/) felt natural, allowing for declarative, streamlined event handling without needing to target custom classes.
 
@@ -18,12 +18,12 @@ My hope is that this project makes working with the USWDS a simpler, easier, and
 ### Efficiency and Performance
 Tailwind optimizes our projects by generating only the necessary CSS, significantly reducing the CSS footprint compared to SCSS functions and nesting. This leads to faster load times and improved performance for end users by minimizing the resources they need to download. 
 
-By using Tailwind alone to build the componenents of the USWDS, we're able to ship only **123 KB**. If we use fewer components, we ship even less!
+By using Tailwind alone to build the components of the USWDS, we're able to ship only **123 KB**. If we use fewer components, we ship even less!
 
 ### Enhanced Developer Experience
 I've got to say it: the USWDS has some really complicated SCSS. This makes it particularly difficult to work with and extend. 
 
-The USWDS relies heavily on BEM and nested styles which creates issues with CSS specificity. A utility class like `.text-white` ([10](https://polypane.app/css-specificity-calculator/#selector=.text-white)) is always going to have a lower specificity  than `.usa-footer__secondary-link a` ([11](https://polypane.app/css-specificity-calculator/#selector=.usa-footer__secondary-link%20a)). Building with only utilities allows us to avoid this problem altogether.
+The USWDS relies heavily on BEM and nested styles which creates issues with CSS specificity. For example, a utility class like "`.text-white`" is always going to have a lower specificity than "`.usa-footer__secondary-link a`" which means you won't be able to alter any predefined styles using a utility class. Building with only utilities allows us to avoid this problem altogether.
 
 ### Advanced DevTools Integration
 We leverage Tailwind's powerful [DevTools](https://tailwindcss.com/docs/editor-setup), including class sorting, linting, and autocomplete, which streamline development even with our custom configuration.
@@ -78,4 +78,4 @@ Alpine.js offers a variety of plugins that simplify complex functionalities such
 
 ## Twig
 
-You may have noticed that each of the component examples is written in [Twig](https://twig.symfony.com/), a templating language for PHP. This is because much of the federal government still uses Drupal as their primary CMS, which relies heavily on Twig to render content. In order to demonstrate the rendering of conditional attributes and specific markup, I chose to demonstrate it with a syntax I felt would be most widely understood. If you're only interested in the rendered HTML, you can "inspect" any of the examples and simply copy the code directly.
+You may have noticed that each of the component examples is written in [Twig](https://twig.symfony.com/), a templating language for PHP. This is because much of the federal government still uses Drupal as its primary CMS, which relies heavily on Twig to render content. In order to demonstrate the rendering of conditional attributes and specific markup, I chose to demonstrate it with a syntax I felt would be most widely understood. If you're only interested in the rendered HTML, you can "inspect" any of the examples and simply copy the code directly.
