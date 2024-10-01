@@ -2,9 +2,8 @@ import type { IconSuffix } from "types";
 import { icons as materialIcons } from "@iconify-json/material-symbols";
 import Fuse from "fuse.js";
 import { getIcons, type IconifyIcon } from "@iconify/utils";
-import { ActionError, defineAction } from 'astro:actions';
+import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-
 
 const SEARCH_LIMIT = 150
 
@@ -39,10 +38,18 @@ function getIconNamesBySuffix(suffix?: IconSuffix): string[] {
 }
 
 const iconList = getIconNamesBySuffix()
-const fuse = new Fuse(iconList, {
-  threshold: 0.25,
-  distance: 10,
+const iconSearchList = iconList.map(i => ({
+  id: i,
+  humanName: i.replaceAll('-', ' ')
+}))
+
+const fuse = new Fuse(iconSearchList, {
+  threshold: 0.2,
+  distance: 100,
   ignoreLocation: true,
+  keys: [
+    "humanName"
+  ]
 });
 
 export const server = {
@@ -55,9 +62,8 @@ export const server = {
       const searchResults = fuse.search(search || '', {
         limit: SEARCH_LIMIT
       })
-
       const filteredIconsJson = getIcons(materialIcons, search
-        ? searchResults.map(i => i.item)
+        ? searchResults.map(i => i.item.id)
         : iconList.sort().slice(0, SEARCH_LIMIT)
       );
 
