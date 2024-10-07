@@ -16,7 +16,6 @@ import "@fontsource/merriweather/300.css";
 import "@fontsource/merriweather/400.css";
 import "@fontsource/merriweather/700.css";
 import "@fontsource/merriweather/900.css";
-import Footer from "#components/footer.astro";
 
 interface Props {
   title?: string;
@@ -42,8 +41,8 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SEO
-      charset="UTF-8"
       title={metaTitle}
       description={description}
       openGraph={{
@@ -75,8 +74,9 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
           { rel: "sitemap", href: "/sitemap-index.xml" },
         ],
         meta: [
-          { name: "viewport", content: "width=device-width, initial-scale=1" },
           { name: "generator", content: Astro.generator },
+          { name: "theme-color", content: "#112f4e" },
+          { name: "color-scheme", content: "only light" },
         ],
       }}
     />
