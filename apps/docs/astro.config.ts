@@ -54,5 +54,9 @@ export default defineConfig({
     '/components': '/components/accordion'
   },
   output: "hybrid",
-  adapter: vercel()
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true
+    }
+  })
 });
