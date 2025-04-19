@@ -1,0 +1,14 @@
+{
+  "name": "@uswds-tailwind/theme",
+  "version": "0.0.3",
+  "style": "dist/index.css",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tailwindcss -i ./src/index.css -o ./dist/index.css"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.3"
+  }
+}

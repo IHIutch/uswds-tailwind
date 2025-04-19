@@ -1,19 +1,29 @@
 {
-  "name": "uswds-tailwind",
-  "private": true,
+  "name": "@uswds-tailwind/base",
   "type": "module",
+  "private": true,
+  "packageManager": "pnpm@9.5.0",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "storybook": "turbo storybook",
+    "publish": "turbo run publish",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "publish-packages": "turbo run build && changeset version && changeset version && changeset publish --tag alpha",
+    "test:e2e": "playwright test",
     "migrate": "turbo migrate"
   },
   "devDependencies": {
-    "turbo": "^2.0.6"
-  },
-  "packageManager": "pnpm@8.9.0",
-  "engines": {
-    "node": ">=18"
+    "@antfu/eslint-config": "^4.12.0",
+    "@changesets/cli": "^2.29.2",
+    "@playwright/test": "^1.51.1",
+    "eslint": "^9.24.0",
+    "playwright": "^1.39.0",
+    "tsdown": "^0.9.1",
+    "turbo": "^2.4.4"
   }
 }

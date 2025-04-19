@@ -6,17 +6,35 @@
   "tasks": {
     "build": {
       "outputs": [
-        "storybook-static/**",
-        ".astro/**"
+        ".astro/**",
+        "dist/**"
       ]
-    },
-    "migrate": {
-      "cache": false
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
-    "storybook": {}
+    "lint": {
+      "dependsOn": [
+        "^lint"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
+    },
+    "publish": {
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": []
+    },
+    "migrate": {
+      "cache": false
+    }
   }
 }

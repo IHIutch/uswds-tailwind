@@ -1,0 +1,27 @@
+{
+  "name": "@uswds-tailwind/compat",
+  "type": "module",
+  "version": "0.0.3",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@uswds-tailwind/modal-compat": "workspace:*",
+    "@zag-js/core": "^1.5.0",
+    "@zag-js/store": "^1.5.0",
+    "@zag-js/types": "^1.5.0",
+    "@zag-js/utils": "^1.5.0",
+    "nanoid": "^5.1.5"
+  }
+}

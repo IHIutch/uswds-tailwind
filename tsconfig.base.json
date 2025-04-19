@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    // Modern JavaScript support
+    "target": "es2020",
+    "lib": ["es2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "resolveJsonModule": true,
+    // Type checking
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+
+    // Output
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    // Module interop
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    // Other
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "dist", "**/node_modules", "**/dist"]
+}
