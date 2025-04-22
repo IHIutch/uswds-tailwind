@@ -1,4 +1,4 @@
-import { Modal } from './components/modal'
+import type { Modal } from './components/modal'
 
 declare global {
   interface Window {
