@@ -6,7 +6,7 @@ import alpinejs from "@astrojs/alpinejs";
 import tailwindNesting from '@tailwindcss/nesting';
 import expressiveCode from "astro-expressive-code";
 import react from "@astrojs/react";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 
 import sitemap from "@astrojs/sitemap";
 
@@ -53,7 +53,6 @@ export default defineConfig({
   redirects: {
     '/components': '/components/accordion'
   },
-  output: "hybrid",
   adapter: vercel({
     webAnalytics: {
       enabled: true

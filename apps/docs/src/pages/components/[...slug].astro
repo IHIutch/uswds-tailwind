@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "#layouts/base-layout.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import ContentList from "#components/content-list.astro";
@@ -11,10 +11,10 @@ import Alert from "#components/alert.astro";
 export const getStaticPaths = (async () => {
   const allComponents = await getCollection(
     "components",
-    (entry) => entry.data.isPublished !== false
+    (entry) => entry.data.isPublished !== false,
   );
   return allComponents.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 }) satisfies GetStaticPaths;
@@ -22,7 +22,7 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
+const { Content, headings } = await render(entry);
 
 const activeHeading = "";
 const visibleHeadings = headings.filter((h) => h.depth <= 3);

@@ -3,10 +3,15 @@ import Alert from "#components/alert.astro";
 import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
 import ContentLayout from "#layouts/content-layout.astro";
+import { render } from "astro:content";
 import { getEntry } from "astro:content";
 
 const post = await getEntry("pages", "typography");
-const { Content, headings } = await post.render();
+if (!post) {
+  throw new Error("Page not found");
+}
+
+const { Content, headings } = await render(post);
 
 const visibleHeadings = headings.filter((h) => h.depth <= 3);
 ---

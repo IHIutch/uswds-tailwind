@@ -1,7 +1,12 @@
+import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
 const componentsCollection = defineCollection({
-  type: 'content',
+  loader: glob({
+    base: './src/content/components',
+    pattern: '**\/[^_]*.(md|mdx)',
+  }),
+
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -10,7 +15,10 @@ const componentsCollection = defineCollection({
 })
 
 const contentCollection = defineCollection({
-  type: 'content',
+  loader: glob({
+    base: './src/content/pages',
+    pattern: '**\/[^_]*.(md|mdx)',
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string()
@@ -18,7 +26,10 @@ const contentCollection = defineCollection({
 })
 
 const componentVariantsCollection = defineCollection({
-  type: 'data',
+  loader: glob({
+    base: "./src/content/demos",
+    pattern: '**/*.json',
+  }),
   schema: z.object({
     component: z.string(),
     variant: z.string(),
@@ -30,5 +41,5 @@ const componentVariantsCollection = defineCollection({
 export const collections = {
   components: componentsCollection,
   demos: componentVariantsCollection,
-  content: contentCollection
+  pages: contentCollection
 }
