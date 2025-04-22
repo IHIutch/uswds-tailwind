@@ -6,7 +6,7 @@
         <li class="border-t border-t-gray-10">
           <a
             href="{{ item.href }}"
-            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
             {{ item.is_active ? "aria-current='page'" }}
             >
             {{- item.label -}}
@@ -17,7 +17,7 @@
             {% for child in item.children %}
               <li class="border-t border-t-gray-10">
                 <a href="{{ item.href }}"
-                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
                   {{ child.is_active ? "aria-current='true'" }}
                 >
                   {{- item.label -}}
@@ -37,7 +37,7 @@
         <li class="border-t border-t-gray-10">
           <a
             href="{{ item.href }}"
-            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+            class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
             {{ item.is_active ? "aria-current='page'" }}
             >
             {{- item.label -}}
@@ -48,7 +48,7 @@
           {% for child in item.children %}
             <li class="border-t border-t-gray-10">
               <a href="{{ child.href }}"
-                class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
                 {{ child.is_active ? "aria-current='true'" }}
               >
                 {{- child.label -}}
@@ -59,7 +59,7 @@
                   {% for grandchild in child.children %}
                   <li class="border-t border-t-gray-10">
                     <a href="{{ grandchild.href }}"
-                      class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                      class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
                       {{ grandchild.is_active ? "aria-current='true'" }}
                     >
                       {{- grandchild.label -}}

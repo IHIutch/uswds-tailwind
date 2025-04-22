@@ -1,10 +1,10 @@
 <div x-dropdown>
-	<button x-dropdown:trigger class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
+	<button x-dropdown:trigger class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
 		Languages
 	</button>
 	<div x-dropdown:content class="outline-none bg-blue-warm-80v w-60 divide-y divide-gray-cool-10 z-30">
 		{% for language in languages %}
-			<a x-dropdown:item href="#" class="block text-white p-2 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v">
+			<a x-dropdown:item href="#" class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v">
 				<span lang="{{- language.lang -}}">
 					<strong>{{- language.label -}}</strong>
 					{% if language.translation %}

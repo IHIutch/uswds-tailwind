@@ -1,14 +1,10 @@
-import { defineConfig } from 'astro/config';
-import mdx from "@astrojs/mdx";
-import tailwind from "@astrojs/tailwind";
-import alpinejs from "@astrojs/alpinejs";
-// @ts-expect-error
-import tailwindNesting from '@tailwindcss/nesting';
-import expressiveCode from "astro-expressive-code";
-import react from "@astrojs/react";
-import vercel from "@astrojs/vercel";
-
-import sitemap from "@astrojs/sitemap";
+import mdx from '@astrojs/mdx'
+import react from '@astrojs/react'
+import sitemap from '@astrojs/sitemap'
+import vercel from '@astrojs/vercel'
+import tailwindcss from '@tailwindcss/vite'
+import expressiveCode from 'astro-expressive-code'
+import { defineConfig } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,18 +18,14 @@ export default defineConfig({
           editorBackground: '#f7f9fa',
           terminalBackground: '#f7f9fa',
           terminalTitlebarBackground: '#ffffff',
-          frameBoxShadowCssValue: '0'
+          frameBoxShadowCssValue: '0',
         },
-        codeBackground: '#f7f9fa'
-      }
+        codeBackground: '#f7f9fa',
+      },
     }),
-    tailwind(),
     mdx(),
-    alpinejs({
-      entrypoint: "/src/utils/alpine/entrypoint"
-    }),
     react(),
-    sitemap()
+    sitemap(),
   ],
   // markdown: {
   //   shikiConfig: {
@@ -44,18 +36,14 @@ export default defineConfig({
   //   }
   // },
   vite: {
-    css: {
-      postcss: {
-        plugins: [tailwindNesting()]
-      }
-    }
+    plugins: [tailwindcss()],
   },
   redirects: {
-    '/components': '/components/accordion'
+    '/components': '/components/accordion',
   },
   adapter: vercel({
     webAnalytics: {
-      enabled: true
-    }
-  })
-});
+      enabled: true,
+    },
+  }),
+})

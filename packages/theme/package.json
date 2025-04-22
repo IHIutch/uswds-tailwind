@@ -1,14 +1,25 @@
 {
   "name": "@uswds-tailwind/theme",
   "version": "0.0.3",
-  "style": "dist/index.css",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tailwindcss -i ./src/index.css -o ./dist/index.css"
+  "style": "src/index.css",
+  "exports": {
+    ".": {
+      "style": "./src/index.css",
+      "import": "./src/tailwind.config.ts",
+      "require": "./src/tailwind.config.ts"
+    },
+    "./index.css": "./src/index.css",
+    "./tailwind.config.ts": "./src/tailwind.config.ts"
   },
+  "main": "src/tailwind.config.ts",
+  "files": [
+    "src/index.css",
+    "src/tailwind.config.ts"
+  ],
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.3"
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "tailwindcss": "^4.1.4",
+    "tailwindcss-animate": "^1.0.7"
   }
 }

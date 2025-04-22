@@ -10,7 +10,7 @@ const { primary, secondary } = Astro.props;
 <div x-data x-modal>
   <button
     x-modal:trigger
-    class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline focus:outline-4 focus:outline-blue-40v"
+    class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
     >Menu</button
   >
 
@@ -29,7 +29,7 @@ const { primary, secondary } = Astro.props;
         <button
           type="button"
           x-modal:close-button
-          class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           aria-label="Close"
         >
           <div class="icon-[material-symbols--close] size-6"></div>
@@ -49,7 +49,7 @@ const { primary, secondary } = Astro.props;
                         <div x-accordion:item>
                           <button
                             x-accordion:trigger
-                            class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
+                            class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
                             data-current={item.isActive ? true : undefined}
                           >
                             <span class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">
@@ -64,7 +64,7 @@ const { primary, secondary } = Astro.props;
                               <li class="border-t border-t-gray-10">
                                 <a
                                   href={child.href}
-                                  class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v"
+                                  class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
                                   target={child.target}
                                 >
                                   {child.label}
@@ -77,7 +77,7 @@ const { primary, secondary } = Astro.props;
                     ) : (
                       <a
                         href={item.href}
-                        class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-blue-40v"
+                        class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
                         target={item.target}
                       >
                         {item.label}
@@ -97,7 +97,7 @@ const { primary, secondary } = Astro.props;
                   <li>
                     <a
                       href={item.href}
-                      class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
+                      class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
                       target={item.target}
                       rel={item.target === "_blank" ? "noreferrer" : undefined}
                     >
@@ -121,7 +121,7 @@ const { primary, secondary } = Astro.props;
             href="https://github.com/IHIutch/uswds-tailwind"
             rel="noreferrer"
             target="_blank"
-            class="flex items-center justify-between rounded font-bold leading-none text-blue-60v px-5 py-3 bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+            class="flex items-center justify-between rounded font-bold leading-none text-blue-60v px-5 py-3 bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
           >
             <span class="flex items-center gap-2">
               <span class="icon-[fa6-brands--github] size-5"></span>

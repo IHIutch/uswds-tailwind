@@ -2,7 +2,7 @@
 	<li class="h-10 min-w-10 inline-flex">
 		<a 
       href="#" 
-      class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" 
+      class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" 
       aria-label="{{ is_last ? 'Last page, page ' ~ page_number : 'Page ' ~ page_number }}" 
       {{ is_active ? 'aria-current="page"' }}
     >
@@ -24,7 +24,7 @@
 
 		{% if pagination.current_page != 1 %}
 			<li class="h-10 min-w-10 hidden @tablet:inline-flex">
-				<a href="#" class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v">
+				<a href="#" class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v">
 					<span aria-hidden="true" class="icon-[material-symbols--chevron-left] align-middle size-4"></span>
 					Previous
 				</a>
@@ -73,7 +73,7 @@
 
 		{% if pagination.current_page != pagination.page_count %}
 			<li class="h-10 min-w-10 hidden @tablet:inline-flex">
-				<a href="#" class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline focus:outline-4 focus:outline-blue-40v">
+				<a href="#" class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v">
 					Next
 					<span aria-hidden="true" class="icon-[material-symbols--chevron-right] align-middle size-4"></span>
 				</a>

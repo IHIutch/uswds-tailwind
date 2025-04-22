@@ -26,7 +26,7 @@ const isActivePath = (href: string) => {
                 <div x-data x-dropdown>
                   <button
                     x-dropdown:trigger
-                    class="relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1"
+                    class="relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1"
                     class:list={
                       item.isActive
                         ? "after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1"
@@ -50,7 +50,7 @@ const isActivePath = (href: string) => {
                         x-dropdown:item
                         href={child.href}
                         target={child.target}
-                        class="flex text-white py-2 px-4 hover:underline focus:outline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+                        class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
                         aria-current={
                           pathname === child.href ? "page" : undefined
                         }
@@ -67,7 +67,7 @@ const isActivePath = (href: string) => {
                 <a
                   href={item.href}
                   target={item.target}
-                  class="relative p-4 flex font-bold text-gray-cool-60 focus:outline focus:outline-4 focus:outline-blue-40v hover:text-blue-60v data-[active]:after:bg-blue-60v data-[active]:after:absolute data-[active]:after:-bottom-0.5 data-[active]:after:inset-x-4 data-[active]:after:h-1"
+                  class="relative p-4 flex font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v data-[active]:after:bg-blue-60v data-[active]:after:absolute data-[active]:after:-bottom-0.5 data-[active]:after:inset-x-4 data-[active]:after:h-1"
                   aria-current={pathname === item.href ? "page" : undefined}
                   data-active={isActivePath(item.href) ? true : undefined}
                 >
@@ -90,7 +90,7 @@ const isActivePath = (href: string) => {
                   href={item.href}
                   target={item.target}
                   rel={item.target === "_blank" ? "noreferrer" : undefined}
-                  class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
+                  class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
                 >
                   {item.label}
                   {item.target === "_blank" ? (
@@ -109,7 +109,7 @@ const isActivePath = (href: string) => {
           href="https://github.com/IHIutch/uswds-tailwind"
           rel="noreferrer"
           target="_blank"
-          class="inline-flex items-center text-black hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v"
+          class="inline-flex items-center text-black hover:text-blue-70v focus:outline-4 focus:outline-blue-40v"
         >
           <span class="sr-only">GitHub</span>
           <span class="sr-only">External, opens in a new tab</span>

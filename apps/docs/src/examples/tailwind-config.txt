@@ -556,9 +556,6 @@ const config = {
       maxWidth: {
         prose: "68ex",
       },
-      lineHeight: {
-        tighter: '1.125'
-      },
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {

@@ -23,7 +23,7 @@ export default function ColorSwatch({ hex, level, name }: {
   return (
     <>
       <button
-        className="flex w-full text-left max-desktop:items-center flex-col tablet:flex-row desktop:flex-col rounded border border-gray-cool-10 overflow-hidden shadow focus:outline focus:outline-4 focus:outline-blue-40v"
+        className="flex w-full text-left max-desktop:items-center flex-col tablet:flex-row desktop:flex-col rounded border border-gray-cool-10 overflow-hidden shadow focus:outline-4 focus:outline-blue-40v"
         type="button"
         onClick={handleCopyToClipboard}
       >

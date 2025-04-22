@@ -13,7 +13,7 @@
     "publish": "turbo run publish",
     "changeset": "changeset",
     "version": "changeset version",
-    "publish-packages": "turbo run build && changeset version && changeset version && changeset publish --tag alpha",
+    "publish-packages": "turbo run build && changeset version && changeset publish --tag alpha",
     "test:e2e": "playwright test",
     "migrate": "turbo migrate"
   },

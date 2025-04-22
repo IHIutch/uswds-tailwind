@@ -8,33 +8,70 @@
   --font-normalization: --value(--font-*--multiplier);
 }
 
+@custom-variant thumb {
+  &::-webkit-slider-runnable-track,
+  &::-moz-range-track,
+  &::-ms-track {
+    @slot;
+  }
+}
+@custom-variant track {
+  &::-webkit-slider-runnable-track
+  &::-moz-range-track,
+  &::-ms-track {
+    @slot;
+  }
+}
+@custom-variant valid {
+  &[data-valid] {
+    @slot;
+  }
+}
+@custom-variant invalid {
+  &[data-invalid] {
+    @slot;
+  }
+}
+@custom-variant forced-colors {
+  @media (forced-colors: active) {
+    @slot;
+  }
+}
+
+[hidden="until-found"] {
+  @supports (content-visibility: hidden) {
+    display: inherit;
+    content-visibility: hidden;
+  }
+}
+
 @theme {
     --font-open-sans: "Open Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto,  Helvetica,  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --font-open-sans--multiplier: 1.01;
 
     --font-public-sans: "Public Sans Variable", -apple-system, "BlinkMacSystemFont", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --font-public-sans-multiplier: 1.0;
-    
+    --font-public-sans--multiplier: 1.0;
+
     --font-merriweather: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
-    --font-merriweather-multiplier: 0.98;
-    
+    --font-merriweather--multiplier: 0.98;
+
     --font-source-sans: "Source Sans 3 Variable", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
-    --font-source-sans-multiplier: 1.06;
-    
+    --font-source-sans--multiplier: 1.06;
+
     --font-roboto-mono: "Roboto Mono Variable", "Bitstream Vera Sans Mono", "Consolas", "Courier", monospace;
-    --font-roboto-mono-multiplier: 0.95;
-    
+    --font-roboto-mono--multiplier: 0.95;
+
     --font-georgia: "Georgia", "Cambria", "Times New Roman", "Times", serif;
-    --font-georgia-multiplier: 1.05;
-    
+    --font-georgia--multiplier: 1.05;
+
     --font-helvetica: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
-    --font-helvetica-multiplier: 1.01;
-    
+    --font-helvetica--multiplier: 1.01;
+
     --font-tahoma: "Tahoma", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --font-tahoma-multiplier: 1.0;
-    
+    --font-tahoma--multiplier: 1.0;
+
     --font-verdana: "Verdana", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --font-verdana-multiplier: 0.99;
+    --font-verdana--multiplier: 0.99;
 
     --container-card: 160px;
     --container-card-lg: 240px;
@@ -45,6 +82,8 @@
     --container-desktop: 1024px;
     --container-desktop-lg: 1200px;
     --container-widescreen: 1400px;
+
+    --container-prose: 68ex;
 
     --breakpoint-card: 160px;
     --breakpoint-card-lg: 240px;
@@ -58,8 +97,6 @@
 
     --color-transparent: transparent;
     --color-current: currentColor;
-    /* --color-white: #ffffff; */
-    /* --color-black: #000000; */
     --color-red-cool-5: #f8eff1;
     --color-red-cool-10: #f3e1e4;
     --color-red-cool-20: #ecbec6;
@@ -520,4 +557,36 @@
     --color-gray-warm-70: #454540;
     --color-gray-warm-80: #2e2e2a;
     --color-gray-warm-90: #171716;
+
+    --font-normalization: 1.0;
+    --text-xs: calc(0.75rem * var(--font-normalization));
+    --text-xs--line-height: calc(calc(1 / 0.75) * var(--font-normalization));
+    --text-sm: calc(0.875rem * var(--font-normalization));
+    --text-sm--line-height: calc(calc(1.25 / 0.875) * var(--font-normalization));
+    --text-base: calc(1rem * var(--font-normalization));
+    --text-base--line-height: calc(calc(1.5 / 1) * var(--font-normalization));
+    --text-lg: calc(1.125rem * var(--font-normalization));
+    --text-lg--line-height: calc(calc(1.75 / 1.125) * var(--font-normalization));
+    --text-xl: calc(1.25rem * var(--font-normalization));
+    --text-xl--line-height: calc(calc(1.75 / 1.25) * var(--font-normalization));
+    --text-2xl: calc(1.5rem * var(--font-normalization));
+    --text-2xl--line-height: calc(calc(2 / 1.5) * var(--font-normalization));
+    --text-3xl: calc(1.875rem * var(--font-normalization));
+    --text-3xl--line-height: calc(calc(2.25 / 1.875) * var(--font-normalization));
+    --text-4xl: calc(2.25rem * var(--font-normalization));
+    --text-4xl--line-height: calc(calc(2.5 / 2.25) * var(--font-normalization));
+    --text-5xl: calc(3rem * var(--font-normalization));
+    --text-5xl--line-height: calc(1 * var(--font-normalization));
+    --text-6xl: calc(3.75rem * var(--font-normalization));
+    --text-6xl--line-height: calc(1 * var(--font-normalization));
+    --text-7xl: calc(4.5rem * var(--font-normalization));
+    --text-7xl--line-height: calc(1 * var(--font-normalization));
+    --text-8xl: calc(6rem * var(--font-normalization));
+    --text-8xl--line-height: calc(1 * var(--font-normalization));
+    --text-9xl: calc(8rem * var(--font-normalization));
+    --text-9xl--line-height: calc(1 * var(--font-normalization));
 }
+
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin "tailwindcss-animate";

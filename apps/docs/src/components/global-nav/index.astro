@@ -62,7 +62,7 @@ const mobileLinks: NavLinks = {
       // href: '/components',
       children: allComponents.map((c) => ({
         label: c.data.title,
-        href: `/components/${c.slug}`,
+        href: `/components/${c.id}`,
       })),
     },
     {
@@ -107,7 +107,7 @@ const secondary: NavLinks["secondary"] = [
       <div class="ml-4 desktop:ml-0 flex items-center w-full">
         <em class="font-bold not-italic">
           <a
-            class="text-gray-90 text-xl flex gap-3 items-center focus:outline focus:outline-4 focus:outline-blue-40v"
+            class="text-gray-90 text-xl flex gap-3 items-center focus:outline-4 focus:outline-blue-40v"
             href="/"
           >
             <Image src={logo} class="h-8 w-auto" alt="Logo" />

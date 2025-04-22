@@ -57,7 +57,7 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
                 id="icons"
                 type="search"
                 name="search"
-                className="py-2 pl-8 pr-10 w-full h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 [-webkit-search-decoration:appearance-none]"
+                className="py-2 pl-8 pr-10 w-full h-8 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 [-webkit-search-decoration:appearance-none]"
               />
               {(isTyping || pending)
                 ? (
@@ -108,7 +108,7 @@ const IconButton = ({ iconName }: { iconName: string }) => {
   return (
     <>
       <button
-        className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full relative overflow-hidden"
+        className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline-4 focus:outline-blue-40v w-full relative overflow-hidden"
         onClick={() => handleCopyToClipboard()}
       >
         <div className="size-8">
