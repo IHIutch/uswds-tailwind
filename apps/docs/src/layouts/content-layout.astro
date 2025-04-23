@@ -6,8 +6,12 @@ const { pathname } = Astro.url;
 
 const allComponents = await getCollection(
   "components",
-  (entry) => entry.data.isPublished !== false
+  (entry) => entry.data.isPublished !== false,
 );
+
+const sortedComponents = allComponents.sort((a, b) => {
+  return a.data.title.localeCompare(b.data.title);
+});
 ---
 
 <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
@@ -23,7 +27,7 @@ const allComponents = await getCollection(
       class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
     >
       {
-        allComponents.map((comps) => (
+        sortedComponents.map((comps) => (
           <li>
             <a
               href={`/components/${comps.id}`}
@@ -90,7 +94,7 @@ const allComponents = await getCollection(
         key,
         JSON.stringify({
           scrollTop: sidenav.scrollTop,
-        })
+        }),
       );
     }
   });
