@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "@uswds-tailwind/theme";
-@config "../../tailwind.config.ts";
+@config "@uswds-tailwind/theme/tailwind.config.ts";
 
 @import "@fontsource-variable/open-sans";
 @import "@fontsource-variable/public-sans";
@@ -13,9 +13,9 @@
 @import "@fontsource/merriweather/900.css";
 
 @plugin "@iconify/tailwind4";
-/* @plugin "@tailwindcss/typography"{
+@plugin "@tailwindcss/typography"{
   className: docs-prose;
-} */
+}
 
 .docs-prose {
   &
