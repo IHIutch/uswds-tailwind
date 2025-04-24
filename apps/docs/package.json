@@ -11,12 +11,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/alpinejs": "^0.4.7",
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.2.5",
     "@astrojs/react": "^4.2.5",
     "@astrojs/sitemap": "^3.3.1",
     "@astrojs/vercel": "^8.1.4",
+    "@docsearch/css": "^3.9.0",
     "@docsearch/react": "^3.9.0",
     "@fontsource-variable/open-sans": "^5.2.5",
     "@fontsource-variable/public-sans": "^5.2.5",
@@ -24,20 +24,23 @@
     "@fontsource-variable/source-sans-3": "^5.2.6",
     "@fontsource/merriweather": "^5.2.6",
     "@iconify-json/material-symbols": "^1.2.20",
+    "@iconify/json": "^2.2.330",
+    "@iconify/tailwind4": "^1.0.6",
     "@iconify/utils": "^2.3.0",
     "@napi-rs/image": "^1.9.2",
     "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.4",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@uswds-tailwind/theme": "workspace:*",
     "@vercel/analytics": "^1.5.0",
     "@zag-js/splitter": "^0.50.0",
-    "alpinejs": "^3.14.9",
     "astro": "^5.7.5",
     "astro-expressive-code": "^0.41.2",
     "astro-seo": "^0.8.4",
     "fuse.js": "^7.1.0",
     "github-slugger": "^2.0.0",
+    "nanoid": "^5.1.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "satori": "^0.12.2",
@@ -48,6 +51,7 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@types/twig": "^1.12.16"
+    "@types/twig": "^1.12.16",
+    "@zag-js/types": "^0.50.0"
   }
 }

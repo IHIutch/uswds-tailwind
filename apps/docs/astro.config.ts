@@ -37,6 +37,9 @@ export default defineConfig({
   // },
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ['nanoid'],
+    },
   },
   redirects: {
     '/components': '/components/accordion',
