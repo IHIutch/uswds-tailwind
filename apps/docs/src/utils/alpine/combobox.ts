@@ -1,18 +1,25 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs";
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('combobox', (el, directive) => {
-    if (directive.value === 'input') comboboxInput(el, Alpine)
-    else if (directive.value === 'label') comboboxLabel(el, Alpine)
-    else if (directive.value === 'list') comboboxList(el, Alpine)
-    else if (directive.value === 'item') comboboxListItem(el, Alpine)
-    else if (directive.value === 'values') comboboxValues(el, Alpine)
-    else if (directive.value === 'clear') comboboxClearButton(el, Alpine)
-    else if (directive.value === 'toggle') comboboxToggleButton(el, Alpine)
+    if (directive.value === 'input')
+      comboboxInput(el, Alpine)
+    else if (directive.value === 'label')
+      comboboxLabel(el, Alpine)
+    else if (directive.value === 'list')
+      comboboxList(el, Alpine)
+    else if (directive.value === 'item')
+      comboboxListItem(el, Alpine)
+    else if (directive.value === 'values')
+      comboboxValues(el, Alpine)
+    else if (directive.value === 'clear')
+      comboboxClearButton(el, Alpine)
+    else if (directive.value === 'toggle')
+      comboboxToggleButton(el, Alpine)
     else comboboxRoot(el, Alpine)
   })
 
-  Alpine.magic('combobox', el => {
+  Alpine.magic('combobox', (el) => {
     const $data = Alpine.$data(el)
 
     return {
@@ -24,29 +31,29 @@ export default function (Alpine: Alpine) {
       },
       get noResults() {
         return $data.noResults
-      }
+      },
     }
   })
-
 }
 
-const comboboxRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-id'() {
+    'x-id': function () {
       return ['combobox-label', 'combobox-list', 'combobox-input']
     },
-    'x-init'() {
-      this.isLoaded = true;
-      this.$watch('isOpen', value => {
+    'x-init': function () {
+      this.isLoaded = true
+      this.$watch('isOpen', (value) => {
         if (value && this.selectedEl) {
           this.$nextTick(() => {
-            this.selectedEl.scrollIntoView();
+            this.selectedEl.scrollIntoView()
           })
         }
-        if (!value) this.activeEl = undefined
+        if (!value)
+          this.activeEl = undefined
       })
     },
-    'x-data'() {
+    'x-data': function () {
       return {
         listEl: undefined as HTMLElement | undefined,
         inputEl: undefined as HTMLElement | undefined,
@@ -66,53 +73,55 @@ const comboboxRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
         },
         select(el: HTMLElement) {
           this.selectedEl = el
-          this.inputEl.value = el.textContent;
-          this.isOpen = false;
-          this.isDirty = false;
-          this.$focus.focus(this.inputEl);
+          this.inputEl.value = el.textContent
+          this.isOpen = false
+          this.isDirty = false
+          this.$focus.focus(this.inputEl)
         },
         reset() {
-          this.inputEl.value = '';
-          this.inputValue = '';
-          this.isDirty = false;
-          this.selectedEl = undefined;
+          this.inputEl.value = ''
+          this.inputValue = ''
+          this.isDirty = false
+          this.selectedEl = undefined
         },
         focusFirst() {
           const el = this.$focus.within(this.listEl).getFirst()
           if (el) {
-            this.activeEl = el;
+            this.activeEl = el
             this.$focus.focus(el)
           }
         },
         focusLast() {
           const el = this.$focus.within(this.listEl).getLast()
           if (el) {
-            this.activeEl = el;
+            this.activeEl = el
             this.$focus.focus(el)
           }
         },
         focusNext() {
           const el = this.$focus.within(this.listEl).getNext()
           if (el) {
-            this.activeEl = el;
+            this.activeEl = el
             this.$focus.focus(el)
-          } else {
-            this.isOpen = false;
+          }
+          else {
+            this.isOpen = false
             this.$focus.focus(this.inputEl)
           }
         },
         focusPrev() {
           const el = this.$focus.within(this.listEl).getPrevious()
           if (el) {
-            this.activeEl = el;
+            this.activeEl = el
             this.$focus.focus(el)
-          } else {
-            this.isOpen = false;
+          }
+          else {
+            this.isOpen = false
             this.$focus.focus(this.inputEl)
           }
         },
         focusSelected() {
-          this.activeEl = this.selectedEl;
+          this.activeEl = this.selectedEl
           this.$focus.focus(this.selectedEl)
         },
         validateInput() {
@@ -120,15 +129,15 @@ const comboboxRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
           // If typed value matches an option value, set it as selectedEl
           if (this.isDirty) {
             const found = [...this.listEl.getElementsByTagName('LI')]
-              .find((li) => li.textContent === this.inputValue)
-            this.selectedEl = found ? found : this.selectedEl
+              .find(li => li.textContent === this.inputValue)
+            this.selectedEl = found || this.selectedEl
           }
-          this.isDirty = false;
+          this.isDirty = false
           this.inputEl.value = this.selectedValue
-        }
+        },
       }
     },
-    '@focusout'() {
+    '@focusout': function () {
       if (!el.contains(this.$event.relatedTarget)) {
         this.validateInput()
       }
@@ -136,68 +145,68 @@ const comboboxRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
   })
 }
 
-const comboboxValues = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxValues(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      el.id = '';
-      el.hidden = true;
-      this.allOptions = [...el.children].map((o) => ({ label: o.textContent, value: o.value }))
-    }
+    'x-init': function () {
+      el.id = ''
+      el.hidden = true
+      this.allOptions = [...el.children].map(o => ({ label: o.textContent, value: o.value }))
+    },
   })
 }
 
-const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxInput(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':type'() {
+    ':type': function () {
       return 'text'
     },
-    ':role'() {
+    ':role': function () {
       return 'combobox'
     },
-    ':autocapitalize'() {
+    ':autocapitalize': function () {
       return 'off'
     },
-    ':autocomplete'() {
+    ':autocomplete': function () {
       return 'off'
     },
-    ':id'() {
+    ':id': function () {
       return this.$id('combobox-input')
     },
-    ':aria-expanded'() {
+    ':aria-expanded': function () {
       return this.isOpen
     },
-    ':aria-activedescendant'() {
+    ':aria-activedescendant': function () {
       return this.activeEl ? this.activeEl.id : undefined
     },
-    ':aria-controls'() {
+    ':aria-controls': function () {
       return this.$id('combobox-list')
     },
-    ':aria-owns'() {
+    ':aria-owns': function () {
       return this.$id('combobox-list')
     },
-    'x-init'() {
-      this.inputEl = el;
+    'x-init': function () {
+      this.inputEl = el
     },
-    '@mousedown'() {
-      this.isOpen = true;
+    '@mousedown': function () {
+      this.isOpen = true
       this.activeEl = undefined
     },
-    '@input'() {
-      this.inputValue = el.value;
-      this.isOpen = true;
-      this.isDirty = true;
+    '@input': function () {
+      this.inputValue = el.value
+      this.isOpen = true
+      this.isDirty = true
       if (!el.value) {
         this.reset()
       }
     },
-    '@keydown.prevent.up'() {
-      this.isOpen = true;
+    '@keydown.prevent.up': function () {
+      this.isOpen = true
       this.$nextTick(() => {
         this.selectedEl ? this.focusSelected() : this.focusLast()
       })
     },
-    '@keydown.prevent.down'() {
-      this.isOpen = true;
+    '@keydown.prevent.down': function () {
+      this.isOpen = true
       this.$nextTick(() => {
         this.selectedEl ? this.focusSelected() : this.focusFirst()
       })
@@ -205,154 +214,153 @@ const comboboxInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
   })
 }
 
-
-const comboboxList = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxList(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':role'() {
+    ':role': function () {
       return 'listbox'
     },
-    ':id'() {
+    ':id': function () {
       return this.$id('combobox-list')
     },
-    ':tabindex'() {
+    ':tabindex': function () {
       return '-1'
     },
-    ':aria-labelledby'() {
+    ':aria-labelledby': function () {
       return this.$id('combobox-label')
     },
-    'x-init'() {
+    'x-init': function () {
       return this.listEl = el
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isOpen
     },
-    'x-anchor.bottom'() {
-      return this.inputEl;
+    'x-anchor.bottom': function () {
+      return this.inputEl
     },
-    '@keydown.prevent.up'() {
+    '@keydown.prevent.up': function () {
       this.focusPrev()
     },
-    '@keydown.prevent.down'() {
+    '@keydown.prevent.down': function () {
       this.focusNext()
     },
-    '@keydown.prevent.home'() {
+    '@keydown.prevent.home': function () {
       this.focusFirst()
     },
-    '@keydown.prevent.end'() {
+    '@keydown.prevent.end': function () {
       this.focusLast()
     },
-    '@keydown.prevent.shift.tab'() {
+    '@keydown.prevent.shift.tab': function () {
       return false
     },
   })
 }
 
-const comboboxClearButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxClearButton(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':type'() {
+    ':type': function () {
       return 'button'
     },
-    ':aria-label'() {
+    ':aria-label': function () {
       return 'clear input'
     },
-    ':tabindex'() {
+    ':tabindex': function () {
       return '-1'
     },
-    'x-show'() {
+    'x-show': function () {
       return !!this.selectedValue
     },
-    '@mouseup.prevent'() {
-      this.reset();
-      this.$focus.focus(this.inputEl);
-    }
+    '@mouseup.prevent': function () {
+      this.reset()
+      this.$focus.focus(this.inputEl)
+    },
   })
 }
 
-const comboboxToggleButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxToggleButton(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':type'() {
+    ':type': function () {
       return 'button'
     },
-    ':aria-label'() {
+    ':aria-label': function () {
       return 'toggle options'
     },
-    ':tabindex'() {
+    ':tabindex': function () {
       return '-1'
     },
-    '@mouseup.prevent'() {
-      this.isOpen = !this.isOpen;
+    '@mouseup.prevent': function () {
+      this.isOpen = !this.isOpen
       this.$focus.focus(this.inputEl)
-    }
+    },
   })
 }
 
-const comboboxListItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxListItem(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':role'() {
+    ':role': function () {
       return 'option'
     },
-    ':id'() {
+    ':id': function () {
       return this.$id('combobox-item')
     },
-    ':aria-selected'() {
-      return el === this.selectedEl;
+    ':aria-selected': function () {
+      return el === this.selectedEl
     },
-    ':data-active'() {
-      return el === this.activeEl;
+    ':data-active': function () {
+      return el === this.activeEl
     },
-    ':tabIndex'() {
-      return el === this.activeEl ? 0 : -1;
+    ':tabIndex': function () {
+      return el === this.activeEl ? 0 : -1
     },
-    'x-init'() {
+    'x-init': function () {
       this.$nextTick(() => {
         this.label = el.textContent
       })
     },
-    'x-data'() {
+    'x-data': function () {
       return {
-        label: ''
+        label: '',
       }
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isDirty ? this.$data.label.toLowerCase().startsWith(this.inputValue.toLowerCase()) : true
     },
-    '@mousedown.prevent'() {
+    '@mousedown.prevent': function () {
       return true
     },
-    '@mouseup.prevent'() {
-      this.select(el);
-      this.isDirty = false;
-      this.isOpen = false;
+    '@mouseup.prevent': function () {
+      this.select(el)
+      this.isDirty = false
+      this.isOpen = false
     },
-    '@keydown.prevent.enter'() {
-      this.select(el);
-      this.isDirty = false;
-      this.isOpen = false;
+    '@keydown.prevent.enter': function () {
+      this.select(el)
+      this.isDirty = false
+      this.isOpen = false
     },
-    '@mousemove.prevent'() {
+    '@mousemove.prevent': function () {
       this.activeEl = el
       this.$focus.focus(el)
     },
-    '@keydown.prevent.esc'() {
-      this.isOpen = false;
+    '@keydown.prevent.esc': function () {
+      this.isOpen = false
       this.$focus.focus(this.inputEl)
     },
   })
 }
 
-const comboboxLabel = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function comboboxLabel(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':id'() {
+    ':id': function () {
       return this.$id('combobox-label')
     },
-    ':for'() {
+    ':for': function () {
       return this.$id('combobox-input')
     },
-    'x-init'() {
+    'x-init': function () {
       this.labelEl = el
     },
-    '@click'() {
+    '@click': function () {
       this.isOpen = true
-    }
+    },
   })
 }

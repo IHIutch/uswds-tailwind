@@ -1,18 +1,20 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 const validPositions = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end']
 
 export default function (Alpine: Alpine) {
   Alpine.directive('tooltip', (el, directive) => {
-    if (directive.value === 'trigger') tooltipTrigger(el, Alpine)
-    else if (directive.value === 'content') tooltipContent(el, Alpine)
+    if (directive.value === 'trigger')
+      tooltipTrigger(el, Alpine)
+    else if (directive.value === 'content')
+      tooltipContent(el, Alpine)
     else tooltipRoot(el, Alpine)
   })
 }
 
-const tooltipRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function tooltipRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-data'() {
+    'x-data': function () {
       return {
         contentEl: undefined as HTMLElement | undefined,
         triggerEl: undefined as HTMLElement | undefined,
@@ -27,9 +29,9 @@ const tooltipRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
         },
       }
     },
-    'x-init'() {
-      this.rootEl = el;
-      this.isOpen = false;
+    'x-init': function () {
+      this.rootEl = el
+      this.isOpen = false
       if (el.dataset.position) {
         this.position = el.dataset.position
       }
@@ -37,62 +39,64 @@ const tooltipRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =>
         console.warn(`Tooltip "data-position" of "${el.dataset.position}" is invalid. Defaulting to "top".`)
       }
     },
-    'x-id'() {
+    'x-id': function () {
       return ['tooltip-content']
     },
   })
 }
 
-const tooltipContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function tooltipContent(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':id'() {
+    ':id': function () {
       return this.$id('tooltip-content')
     },
-    ':aria-hidden'() {
+    ':aria-hidden': function () {
       return this.isOpen ? 'false' : 'true'
     },
-    ':role'() {
+    ':role': function () {
       return 'tooltip'
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-tooltip:content" is missing a parent element with "x-tooltip".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-tooltip:content" is missing a parent element with "x-tooltip".')
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isOpen
     },
-    'x-transition.opacity.80ms'() {
+    'x-transition.opacity.80ms': function () {
       return true
     },
-    'x-bind'() {
+    'x-bind': function () {
       return {
         [`x-anchor.${this.position}.offset.5`]() {
-          return this.triggerEl;
+          return this.triggerEl
         },
-      };
+      }
     },
   })
 }
 
-const tooltipTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function tooltipTrigger(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':aria-describedby'() {
+    ':aria-describedby': function () {
       return this.$id('tooltip-content')
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-tooltip:trigger" is missing a parent element with "x-tooltip".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-tooltip:trigger" is missing a parent element with "x-tooltip".')
       this.triggerEl = el
     },
-    '@mouseover'() {
+    '@mouseover': function () {
       this.open()
     },
-    '@mouseleave'() {
+    '@mouseleave': function () {
       this.close()
     },
-    '@focus'() {
+    '@focus': function () {
       this.open()
     },
-    '@blur'() {
+    '@blur': function () {
       this.close()
-    }
+    },
   })
 }

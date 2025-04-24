@@ -1,12 +1,12 @@
 ---
 type Props = {
-  class?: string;
-};
+  class?: string
+}
 
 const { class: className } = Astro.props;
 ---
 
-<footer class:list={["", className]}>
+<footer class:list={['', className]}>
   <div
     class="flex gap-1 items-start px-4 max-tablet:py-4 max-tablet:flex-col tablet:justify-between tablet:items-center tablet:h-16"
   >

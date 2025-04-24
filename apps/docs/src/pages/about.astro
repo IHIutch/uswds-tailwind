@@ -1,18 +1,17 @@
 ---
-import CollapsibleCode from "#components/collapsible-code.astro";
-import TableOfContents from "#components/table-of-contents.astro";
-import BaseLayout from "#layouts/base-layout.astro";
-import ContentLayout from "#layouts/content-layout.astro";
-import { render } from "astro:content";
-import { getEntry } from "astro:content";
+import CollapsibleCode from '#components/collapsible-code.astro'
+import TableOfContents from '#components/table-of-contents.astro'
+import BaseLayout from '#layouts/base-layout.astro'
+import ContentLayout from '#layouts/content-layout.astro'
+import { getEntry, render } from 'astro:content'
 
-const post = await getEntry("pages", "about");
+const post = await getEntry('pages', 'about')
 if (!post) {
-  throw new Error("Page not found");
+  throw new Error('Page not found')
 }
 
-const { Content, headings } = await render(post);
-const visibleHeadings = headings.filter((h) => h.depth <= 2);
+const { Content, headings } = await render(post)
+const visibleHeadings = headings.filter(h => h.depth <= 2);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>

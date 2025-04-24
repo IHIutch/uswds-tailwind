@@ -1,20 +1,20 @@
 ---
-import ColorSwatch from "#components/color-swatch";
-import TableOfContents from "#components/table-of-contents.astro";
-import BaseLayout from "#layouts/base-layout.astro";
-import ContentLayout from "#layouts/content-layout.astro";
-import { getColors } from "#utils/get-colors";
-import type { MarkdownHeading } from "astro";
-import { slug } from "github-slugger";
+import type { MarkdownHeading } from 'astro'
+import ColorSwatch from '#components/color-swatch'
+import TableOfContents from '#components/table-of-contents.astro'
+import BaseLayout from '#layouts/base-layout.astro'
+import ContentLayout from '#layouts/content-layout.astro'
+import { getColors } from '#utils/get-colors'
+import { slug } from 'github-slugger'
 
-const formattedColors = getColors();
+const formattedColors = getColors()
 
 const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
-  (heading) => ({
+  heading => ({
     text: heading,
     slug: slug(heading),
     depth: 1,
-  })
+  }),
 );
 ---
 
@@ -37,7 +37,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
             </div>
             <div class="space-y-16 desktop:space-y-32">
               {
-                Object.keys(formattedColors).map((colorName) => (
+                Object.keys(formattedColors).map(colorName => (
                   <div>
                     <h2
                       id={slug(colorName)}
@@ -48,14 +48,14 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
                     <div class="grid grid-cols-6 desktop:grid-cols-1 gap-x-4 gap-y-8 desktop:gap-x-8">
                       {Object.values(formattedColors[colorName])
                         .sort((a, b) => a.order - b.order)
-                        .map((group) => (
+                        .map(group => (
                           <div
                             class:list={
                               formattedColors[colorName].length % 3 === 0
-                                ? "col-span-2"
+                                ? 'col-span-2'
                                 : formattedColors[colorName].length % 2 === 0
-                                  ? "col-span-3"
-                                  : "col-span-1"
+                                  ? 'col-span-3'
+                                  : 'col-span-1'
                             }
                           >
                             <div class="mb-1">
@@ -63,7 +63,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
                             </div>
                             <ul class="grid grid-cols-1 gap-y-3 gap-x-2 desktop:grid-cols-10">
                               {group.colors.length > 10
-                                ? group.colors.splice(0, 4).map((color) => (
+                                ? group.colors.splice(0, 4).map(color => (
                                     <li class="desktop:mb-3">
                                       <ColorSwatch
                                         hex={color.hex}
@@ -74,7 +74,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
                                     </li>
                                   ))
                                 : null}
-                              {group.colors.map((color) => (
+                              {group.colors.map(color => (
                                 <li class="desktop:row-start-2 desktop:-mt-3">
                                   <ColorSwatch
                                     hex={color.hex}

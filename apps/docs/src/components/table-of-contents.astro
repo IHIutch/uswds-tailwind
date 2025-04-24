@@ -1,12 +1,12 @@
 ---
-import type { MarkdownHeading } from "astro";
+import type { MarkdownHeading } from 'astro'
 
 type Props = {
-  headings: MarkdownHeading[];
-};
+  headings: MarkdownHeading[]
+}
 
-const { headings } = Astro.props;
-const activeHeadingSlug = "";
+const { headings } = Astro.props
+const activeHeadingSlug = '';
 ---
 
 <aside
@@ -16,15 +16,15 @@ const activeHeadingSlug = "";
     <h4 class="font-bold mb-2">On this page</h4>
     <ul class="border-l border-gray-cool-20">
       {
-        headings.map((heading) => (
+        headings.map(heading => (
           <li
             class="border-l-4"
             class:list={[
               activeHeadingSlug === heading.slug
-                ? "border-black"
-                : "border-transparent",
-              { "pl-3": heading.depth === 3 },
-              { "pl-6": heading.depth === 4 },
+                ? 'border-black'
+                : 'border-transparent',
+              { 'pl-3': heading.depth === 3 },
+              { 'pl-6': heading.depth === 4 },
             ]}
           >
             <div class:list={{}}>

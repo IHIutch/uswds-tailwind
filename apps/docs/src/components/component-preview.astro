@@ -1,37 +1,37 @@
 ---
-import fs from "node:fs";
+import type { CollectionEntry } from 'astro:content'
 
-import type { CollectionEntry } from "astro:content";
-import graphPaper from "#assets/img/graph-paper.svg";
-import { renderTwigTemplate } from "#utils/functions";
-import CollapsibleCode from "./collapsible-code.astro";
+import fs from 'node:fs'
+import graphPaper from '#assets/img/graph-paper.svg'
+import { renderTwigTemplate } from '#utils/functions'
+import CollapsibleCode from './collapsible-code.astro'
 
 type Props = {
-  component: CollectionEntry<"demos">["data"]["component"];
-  variant: CollectionEntry<"demos">["data"]["variant"];
-  minHeight?: string;
-  resize?: boolean;
-};
-
-const { component, variant, minHeight, resize = true } = Astro.props;
-
-const propsPath = `./src/__demos__/${component}/${component}-props.json`;
-const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`;
-
-let componentProps = "";
-if (fs.existsSync(propsPath)) {
-  componentProps = JSON.parse(fs.readFileSync(propsPath, "utf8"));
+  component: CollectionEntry<'demos'>['data']['component']
+  variant: CollectionEntry<'demos'>['data']['variant']
+  minHeight?: string
+  resize?: boolean
 }
 
-const componentCode = fs.readFileSync(componentPath, "utf-8");
+const { component, variant, minHeight, resize = true } = Astro.props
+
+const propsPath = `./src/__demos__/${component}/${component}-props.json`
+const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`
+
+let componentProps = ''
+if (fs.existsSync(propsPath)) {
+  componentProps = JSON.parse(fs.readFileSync(propsPath, 'utf8'))
+}
+
+const componentCode = fs.readFileSync(componentPath, 'utf-8')
 const template = await renderTwigTemplate({
   path: componentPath,
-  props: componentProps || "",
+  props: componentProps || '',
 });
 ---
 
 <div class="not-docs-prose w-full max-w-6xl mt-6 mb-12">
-  <div class="outline outline-1 outline-gray-cool-20 rounded-t">
+  <div class="outline-1 outline-gray-cool-20 rounded-t">
     <div class="flex w-full overflow-hidden">
       <div
         class="text-black text-sm px-4 flex items-center justify-center h-12"
@@ -74,27 +74,28 @@ const template = await renderTwigTemplate({
       </div>
     </div>
     <div
-      class="bg-gray-cool-4 min-w-80 outline outline-1 outline-gray-cool-20"
+      class="bg-gray-cool-4 min-w-80 outline-1 outline-gray-cool-20"
       style={{ backgroundImage: `url(${graphPaper.src})` }}
     >
-      <div data-part={resize ? "splitter-root" : undefined}>
+      <div data-part={resize ? 'splitter-root' : undefined}>
         <div
-          data-part={resize ? "splitter-panel" : undefined}
-          data-value={resize ? "a" : undefined}
-          data-size={resize ? "100" : undefined}
+          data-part={resize ? 'splitter-panel' : undefined}
+          data-value={resize ? 'a' : undefined}
+          data-size={resize ? '100' : undefined}
           class:list={[
-            "bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4",
-            { "overflow-auto": resize },
+            'bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4',
+            { 'overflow-auto': resize },
           ]}
         >
-          <div x-data style={{ minHeight: minHeight || "none" }}>
+          <div x-data style={{ minHeight: minHeight || 'none' }}>
             <!-- Example start -->
             <Fragment set:html={template} />
             <!-- Example end -->
           </div>
         </div>
         {
-          resize ? (
+          resize
+? (
             <button
               type="button"
               data-part="splitter-resizer"
@@ -103,7 +104,8 @@ const template = await renderTwigTemplate({
             >
               <div class="flex max-h-32 h-full rounded-full w-1.5 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v" />
             </button>
-          ) : null
+          )
+: null
         }
         {
           resize ? (
@@ -116,7 +118,7 @@ const template = await renderTwigTemplate({
     </div>
   </div>
   <div>
-    <div class="outline outline-1 outline-gray-cool-20 rounded-b">
+    <div class="outline-1 outline-gray-cool-20 rounded-b">
       <div class="border-b border-b-gray-cool-20">
         <div class="flex justify-between h-10">
           <div class="px-3 border-r border-r-gray-cool-20 flex items-center">

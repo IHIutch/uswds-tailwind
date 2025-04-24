@@ -1,16 +1,16 @@
 ---
-import Footer from "#components/footer.astro";
-import { getCollection } from "astro:content";
+import Footer from '#components/footer.astro'
+import { getCollection } from 'astro:content'
 
-const { pathname } = Astro.url;
+const { pathname } = Astro.url
 
 const allComponents = await getCollection(
-  "components",
-  (entry) => entry.data.isPublished !== false,
-);
+  'components',
+  entry => entry.data.isPublished !== false,
+)
 
 const sortedComponents = allComponents.sort((a, b) => {
-  return a.data.title.localeCompare(b.data.title);
+  return a.data.title.localeCompare(b.data.title)
 });
 ---
 
@@ -27,13 +27,13 @@ const sortedComponents = allComponents.sort((a, b) => {
       class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
     >
       {
-        sortedComponents.map((comps) => (
+        sortedComponents.map(comps => (
           <li>
             <a
               href={`/components/${comps.id}`}
               class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
               aria-current={
-                pathname === `/components/${comps.id}` ? "page" : false
+                pathname === `/components/${comps.id}` ? 'page' : false
               }
             >
               {comps.data.title}
@@ -53,49 +53,51 @@ const sortedComponents = allComponents.sort((a, b) => {
   type ScrollTopJSON =
     | undefined
     | {
-        scrollTop: number;
-      };
-  const key = "sidebar-scroll-state";
-  const getSideNavEl = () => document.querySelector("#sidenav");
+      scrollTop: number
+    }
+const key = 'sidebar-scroll-state'
+const getSideNavEl = () => document.querySelector('#sidenav')
 
-  document.addEventListener("astro:page-load", () => {
-    const sidenav = getSideNavEl();
-    if (sidenav) {
-      const sidenavActiveLink = sidenav?.querySelector("[aria-current=page]");
+document.addEventListener('astro:page-load', () => {
+  const sidenav = getSideNavEl()
+  if (sidenav) {
+    const sidenavActiveLink = sidenav?.querySelector('[aria-current=page]')
 
-      // Restore state from previous navigation
-      const savedStateJson = sessionStorage.getItem(key);
-      let savedState: ScrollTopJSON;
+    // Restore state from previous navigation
+    const savedStateJson = sessionStorage.getItem(key)
+    let savedState: ScrollTopJSON
 
-      if (savedStateJson) {
-        try {
-          savedState = JSON.parse(savedStateJson);
-        } catch (e) {
-          console.error("Error parsing saved position:", e);
-        }
+    if (savedStateJson) {
+      try {
+        savedState = JSON.parse(savedStateJson)
       }
-
-      if (savedState) {
-        sidenav.scrollTop = savedState.scrollTop;
-      } else {
-        sidenavActiveLink?.scrollIntoView({
-          behavior: "instant",
-          block: "center",
-        });
+      catch (e) {
+        console.error('Error parsing saved position:', e)
       }
     }
-  });
-  document.addEventListener("astro:before-swap", () => {
-    // Save user state before navigating
-    const sidenav = getSideNavEl();
 
-    if (sidenav) {
-      sessionStorage.setItem(
-        key,
-        JSON.stringify({
-          scrollTop: sidenav.scrollTop,
-        }),
-      );
+    if (savedState) {
+      sidenav.scrollTop = savedState.scrollTop
     }
-  });
+    else {
+      sidenavActiveLink?.scrollIntoView({
+        behavior: 'instant',
+        block: 'center',
+      })
+    }
+  }
+})
+document.addEventListener('astro:before-swap', () => {
+  // Save user state before navigating
+  const sidenav = getSideNavEl()
+
+  if (sidenav) {
+    sessionStorage.setItem(
+      key,
+      JSON.stringify({
+        scrollTop: sidenav.scrollTop,
+      }),
+    )
+  }
+})
 </script>

@@ -1,15 +1,15 @@
 ---
+import IconList from '#components/icon-list'
 // import TableOfContents from "#components/table-of-contents.astro";
-import BaseLayout from "#layouts/base-layout.astro";
-import ContentLayout from "#layouts/content-layout.astro";
-import IconList from "#components/icon-list";
-import { actions } from "astro:actions";
+import BaseLayout from '#layouts/base-layout.astro'
+import ContentLayout from '#layouts/content-layout.astro'
+import { actions } from 'astro:actions'
 
-let formData = new FormData();
-formData.append("search", "");
-const { data } = await Astro.callAction(actions.getIcons, formData);
+const formData = new FormData()
+formData.append('search', '')
+const { data } = await Astro.callAction(actions.getIcons, formData)
 
-const initialIcons = data?.filteredIcons || [];
+const initialIcons = data?.filteredIcons || []
 const totalIconCount = data?.totalIconCount || 0;
 ---
 

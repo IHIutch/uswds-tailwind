@@ -1,13 +1,15 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('collapse', (el, directive) => {
-    if (directive.value === 'trigger') collapseTrigger(el, Alpine)
-    else if (directive.value === 'content') collapseContent(el, Alpine)
+    if (directive.value === 'trigger')
+      collapseTrigger(el, Alpine)
+    else if (directive.value === 'content')
+      collapseContent(el, Alpine)
     else collapseRoot(el, Alpine)
   })
 
-  Alpine.magic('collapse', el => {
+  Alpine.magic('collapse', (el) => {
     let $data = Alpine.$data(el)
 
     return {
@@ -19,17 +21,17 @@ export default function (Alpine: Alpine) {
       },
       close() {
         return $data.close()
-      }
+      },
     }
   })
 }
 
-const collapseRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function collapseRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-id'() {
+    'x-id': function () {
       return ['collapse']
     },
-    'x-data'() {
+    'x-data': function () {
       return {
         isOpen: false,
         open() {
@@ -40,35 +42,35 @@ const collapseRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
         },
         toggle() {
           this.isOpen = !this.isOpen
-        }
+        },
       }
     },
-    ':data-open'() {
+    ':data-open': function () {
       return this.isOpen || undefined
-    }
+    },
   })
 }
 
-const collapseTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function collapseTrigger(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':aria-expanded'() {
+    ':aria-expanded': function () {
       return this.isOpen
     },
-    ':aria-controls'() {
+    ':aria-controls': function () {
       return this.$id('collapse')
     },
-    '@click'() {
+    '@click': function () {
       this.toggle()
     },
   })
 }
 
-const collapseContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function collapseContent(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':id'() {
+    ':id': function () {
       return this.$id('collapse')
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isOpen
     },
   })

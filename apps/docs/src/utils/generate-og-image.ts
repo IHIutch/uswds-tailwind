@@ -1,7 +1,8 @@
-import satori, { type SatoriOptions } from 'satori'
-import { Transformer } from '@napi-rs/image'
-import ogImageTemplate from './og-image-template'
+import type { SatoriOptions } from 'satori'
 import type { ogImageProps } from 'types'
+import { Transformer } from '@napi-rs/image'
+import satori from 'satori'
+import ogImageTemplate from './og-image-template'
 
 async function fetchFonts() {
   // Regular Font

@@ -1,14 +1,17 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('accordion', (el, directive) => {
-    if (directive.value === 'item') accordionItem(el, Alpine)
-    else if (directive.value === 'trigger') accordionTrigger(el, Alpine)
-    else if (directive.value === 'content') accordionContent(el, Alpine)
+    if (directive.value === 'item')
+      accordionItem(el, Alpine)
+    else if (directive.value === 'trigger')
+      accordionTrigger(el, Alpine)
+    else if (directive.value === 'content')
+      accordionContent(el, Alpine)
     else accordionRoot(el, Alpine)
   })
 
-  Alpine.magic('accordion', el => {
+  Alpine.magic('accordion', (el) => {
     let $data = Alpine.$data(el)
 
     return {
@@ -20,14 +23,14 @@ export default function (Alpine: Alpine) {
       },
       remove(id: string) {
         $data.remove(id)
-      }
+      },
     }
   })
 }
 
-const accordionRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function accordionRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-data'() {
+    'x-data': function () {
       return {
         rootEl: el,
         multiple: el.hasAttribute('data-multiple'),
@@ -39,62 +42,65 @@ const accordionRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) 
           return this.value = this.value.filter((v: string) => v !== id)
         },
       }
-    }
+    },
   })
 }
 
-const accordionItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function accordionItem(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.value === undefined) console.warn('"x-accordion:item" is missing a parent element with "x-accordion".')
+    'x-init': function () {
+      if (this.value === undefined)
+        console.warn('"x-accordion:item" is missing a parent element with "x-accordion".')
     },
-    'x-id'() {
+    'x-id': function () {
       return ['accordion']
     },
   })
 }
 
-const accordionTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function accordionTrigger(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.value === undefined) console.warn('"x-accordion:trigger" is missing a parent element with "x-accordion".')
+    'x-init': function () {
+      if (this.value === undefined)
+        console.warn('"x-accordion:trigger" is missing a parent element with "x-accordion".')
     },
-    '@click'() {
+    '@click': function () {
       return this.value.includes(this.$id('accordion'))
         ? this.remove(this.$id('accordion'))
         : this.add(this.$id('accordion'))
     },
-    ':aria-controls'() {
+    ':aria-controls': function () {
       return this.$id('accordion')
     },
-    ':aria-expanded'() {
+    ':aria-expanded': function () {
       return this.value.includes(this.$id('accordion'))
     },
-    '@keydown.prevent.down'() {
+    '@keydown.prevent.down': function () {
       return this.$focus.within(this.rootEl).wrap().next()
     },
-    '@keydown.prevent.up'() {
+    '@keydown.prevent.up': function () {
       return this.$focus.within(this.rootEl).wrap().previous()
     },
-    '@keydown.prevent.home'() {
+    '@keydown.prevent.home': function () {
       return this.$focus.within(this.rootEl).first()
     },
-    '@keydown.prevent.end'() {
+    '@keydown.prevent.end': function () {
       return this.$focus.within(this.rootEl).last()
     },
   })
 }
 
-const accordionContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function accordionContent(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.value === undefined) console.warn('"x-accordion:content" is missing a parent element with "x-accordion".')
+    'x-init': function () {
+      if (this.value === undefined)
+        console.warn('"x-accordion:content" is missing a parent element with "x-accordion".')
     },
-    ':id'() {
+    ':id': function () {
       return this.$id('accordion')
     },
-    ':hidden'() {
+    ':hidden': function () {
       return this.value.includes(this.$id('accordion')) ? false : 'until-found'
-    }
+    },
   })
 }

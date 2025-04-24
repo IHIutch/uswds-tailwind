@@ -1,8 +1,8 @@
 ---
-import Search from "#components/search";
-import type { NavLinks } from "types";
+import type { NavLinks } from 'types'
+import Search from '#components/search'
 
-type Props = NavLinks;
+type Props = NavLinks
 
 const { primary, secondary } = Astro.props;
 ---
@@ -11,7 +11,7 @@ const { primary, secondary } = Astro.props;
   <button
     x-modal:trigger
     class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
-    >Menu</button
+  >Menu</button
   >
 
   <div>
@@ -42,9 +42,10 @@ const { primary, secondary } = Astro.props;
         >
           {
             primary
-              ? primary.map((item) => (
+              ? primary.map(item => (
                   <li>
-                    {item.children !== undefined ? (
+                    {item.children !== undefined
+? (
                       <div x-accordion>
                         <div x-accordion:item>
                           <button
@@ -60,7 +61,7 @@ const { primary, secondary } = Astro.props;
                             </span>
                           </button>
                           <ul x-accordion:content>
-                            {item.children.map((child) => (
+                            {item.children.map(child => (
                               <li class="border-t border-t-gray-10">
                                 <a
                                   href={child.href}
@@ -74,7 +75,8 @@ const { primary, secondary } = Astro.props;
                           </ul>
                         </div>
                       </div>
-                    ) : (
+                    )
+: (
                       <a
                         href={item.href}
                         class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
@@ -91,28 +93,32 @@ const { primary, secondary } = Astro.props;
 
         <div class="flex flex-col gap-4">
           {
-            secondary && secondary.length > 0 ? (
+            secondary && secondary.length > 0
+? (
               <ul>
-                {secondary.map((item) => (
+                {secondary.map(item => (
                   <li>
                     <a
                       href={item.href}
                       class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
                       target={item.target}
-                      rel={item.target === "_blank" ? "noreferrer" : undefined}
+                      rel={item.target === '_blank' ? 'noreferrer' : undefined}
                     >
                       {item.label}
 
-                      {item.target === "_blank" ? (
+                      {item.target === '_blank'
+? (
                         <span class="sr-only">
                           External, opens in a new tab
                         </span>
-                      ) : null}
+                      )
+: null}
                     </a>
                   </li>
                 ))}
               </ul>
-            ) : null
+            )
+: null
           }
         </div>
 

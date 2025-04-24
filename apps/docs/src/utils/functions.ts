@@ -1,14 +1,14 @@
-import Twig from "twig"
+import Twig from 'twig'
 
-export const renderTwigTemplate = ({ path, props }: { path: string, props: {} }) => {
+export function renderTwigTemplate({ path, props }: { path: string, props: Record<string, any> }) {
   return new Promise((resolve, reject) => {
-    Twig.renderFile(path, props,
-      (err, html) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(html)
-        }
-      })
+    Twig.renderFile(path, props, (err, html) => {
+      if (err) {
+        reject(err)
+      }
+      else {
+        resolve(html)
+      }
+    })
   })
 }

@@ -1,21 +1,21 @@
 ---
-import { Code } from "astro-expressive-code/components";
+import { Code } from 'astro-expressive-code/components'
 
 type Props = {
-  class?: string;
-  code: string;
-  lang: string;
-  title?: string;
-};
+  class?: string
+  code: string
+  lang: string
+  title?: string
+}
 
 const { code, lang, title, class: className } = Astro.props;
 ---
 
-<div x-data="collapsible" class:list={["relative overflow-hidden", className]}>
+<div x-data="collapsible" class:list={['relative overflow-hidden', className]}>
   <div
     :class="isShowingClass"
-    class="overflow-hidden not-docs-prose"
-    x-ref="code"
+      class="overflow-hidden not-docs-prose"
+      x-ref="code"
   >
     <Code title={title} code={code} lang={lang} wrap />
   </div>

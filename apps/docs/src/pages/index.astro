@@ -1,11 +1,11 @@
 ---
-import BaseLayout from "#layouts/base-layout.astro";
-import { Image } from "astro:assets";
+import alpine from '#assets/img/alpine-logo.svg'
+import parcel from '#assets/img/parcel-logo.png'
 
-import tailwind from "#assets/img/tailwindcss-logo.svg";
-import alpine from "#assets/img/alpine-logo.svg";
-import parcel from "#assets/img/parcel-logo.png";
-import Footer from "#components/footer.astro";
+import tailwind from '#assets/img/tailwindcss-logo.svg'
+import Footer from '#components/footer.astro'
+import BaseLayout from '#layouts/base-layout.astro'
+import { Image } from 'astro:assets'
 ---
 
 <BaseLayout
@@ -14,8 +14,7 @@ import Footer from "#components/footer.astro";
   <main id="main-content" class="pt-12 desktop:pt-32">
     <div class="bg-blue-80v py-24">
       <div class="max-w-5xl mx-auto px-4">
-        <h1 class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl !leading-[1.125] font-public-sans font-bold text-white mb-12"
-        >
+        <h1 class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl !leading-[1.125] font-public-sans font-bold text-white mb-12">
           Build federal websites and applications faster than ever.
         </h1>
 
@@ -82,12 +81,11 @@ import Footer from "#components/footer.astro";
               <div class="flex gap-2 items-center">
                 <div
                   class="h-full bg-blue-50v rounded-sm"
-                  style={{ width: (639 / 4500) * 100 + "%" }}
+                  style={{ width: `${(639 / 4500) * 100}%` }}
                 >
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-cool-60"
-                    >7x faster</span
+                  <span class="text-sm font-medium text-gray-cool-60">7x faster</span
                   >
                 </div>
               </div>
@@ -107,7 +105,8 @@ import Footer from "#components/footer.astro";
             <p class="text-sm text-gray-cool-70 mt-4">
               Using Parcel, we're able to compile all of our assets extremely
               quickly. In fact, the CSS itself only takes around <em
-                class="font-bold">60ms</em
+                class="font-bold"
+                                                                 >60ms</em
               >!
             </p>
           </div>
@@ -141,12 +140,11 @@ import Footer from "#components/footer.astro";
               <div class="flex gap-2 items-center">
                 <div
                   class="h-full bg-blue-50v rounded-sm"
-                  style={{ width: (123 / 512) * 100 + "%" }}
+                  style={{ width: `${(123 / 512) * 100}%` }}
                 >
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-cool-60"
-                    >4x smaller</span
+                  <span class="text-sm font-medium text-gray-cool-60">4x smaller</span
                   >
                 </div>
               </div>
@@ -199,8 +197,7 @@ import Footer from "#components/footer.astro";
             <div
               class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
             >
-              <span class="icon-[material-symbols--accessibility-new] size-6"
-              ></span>
+              <span class="icon-[material-symbols--accessibility-new] size-6"></span>
             </div>
             <h3 class="text-xl font-semibold font-public-sans mb-2">
               Accessible

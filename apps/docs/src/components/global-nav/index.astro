@@ -1,98 +1,98 @@
 ---
-import type { NavLinks } from "types";
-import DesktopNav from "./desktop-nav.astro";
-import MobileNav from "./mobile-nav.astro";
-import { getCollection } from "astro:content";
-import { Image } from "astro:assets";
-import logo from "#assets/img/logo.svg";
+import type { NavLinks } from 'types'
+import logo from '#assets/img/logo.svg'
+import { Image } from 'astro:assets'
+import { getCollection } from 'astro:content'
+import DesktopNav from './desktop-nav.astro'
+import MobileNav from './mobile-nav.astro'
 
 const allComponents = await getCollection(
-  "components",
-  (entry) => entry.data.isPublished !== false
-);
+  'components',
+  entry => entry.data.isPublished !== false,
+)
 const desktopLinks: NavLinks = {
   primary: [
     {
-      label: "Home",
-      href: "/",
+      label: 'Home',
+      href: '/',
     },
     {
-      label: "Getting Started",
-      href: "/getting-started",
+      label: 'Getting Started',
+      href: '/getting-started',
     },
     {
-      label: "Components",
-      href: "/components",
+      label: 'Components',
+      href: '/components',
     },
     {
-      label: "JavaScript",
-      href: "/javascript",
+      label: 'JavaScript',
+      href: '/javascript',
     },
     {
-      label: "Colors",
-      href: "/colors",
+      label: 'Colors',
+      href: '/colors',
     },
     {
-      label: "Icons",
-      href: "/icons",
+      label: 'Icons',
+      href: '/icons',
     },
     {
-      label: "Typography",
-      href: "/typography",
+      label: 'Typography',
+      href: '/typography',
     },
     {
-      label: "About",
-      href: "/about",
+      label: 'About',
+      href: '/about',
     },
   ],
-};
+}
 
 const mobileLinks: NavLinks = {
   primary: [
     {
-      label: "Home",
-      href: "/",
+      label: 'Home',
+      href: '/',
     },
     {
-      label: "Getting Started",
-      href: "/getting-started",
+      label: 'Getting Started',
+      href: '/getting-started',
     },
     {
-      label: "Components",
+      label: 'Components',
       // href: '/components',
-      children: allComponents.map((c) => ({
+      children: allComponents.map(c => ({
         label: c.data.title,
         href: `/components/${c.id}`,
       })),
     },
     {
-      label: "JavaScript",
-      href: "/javascript",
+      label: 'JavaScript',
+      href: '/javascript',
     },
     {
-      label: "Colors",
-      href: "/colors",
+      label: 'Colors',
+      href: '/colors',
     },
     {
-      label: "Icons",
-      href: "/icons",
+      label: 'Icons',
+      href: '/icons',
     },
     {
-      label: "Typography",
-      href: "/typography",
+      label: 'Typography',
+      href: '/typography',
     },
     {
-      label: "About",
-      href: "/about",
+      label: 'About',
+      href: '/about',
     },
   ],
-};
+}
 
-const secondary: NavLinks["secondary"] = [
+const secondary: NavLinks['secondary'] = [
   {
-    label: "Feedback",
-    href: "https://forms.reform.app/szenkB/uswds-tailwind-feedback/sxml6n",
-    target: "_blank",
+    label: 'Feedback',
+    href: 'https://forms.reform.app/szenkB/uswds-tailwind-feedback/sxml6n',
+    target: '_blank',
   },
 ];
 ---

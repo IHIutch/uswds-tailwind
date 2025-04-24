@@ -1,41 +1,44 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('input-mask', (el, directive) => {
-    if (directive.value === 'input') inputMaskInput(el, Alpine)
-    if (directive.value === 'input-placeholder') inputMaskInputDisplay(el, Alpine)
-    if (directive.value === 'mask-placeholder') inputMaskMaskDisplay(el, Alpine)
+    if (directive.value === 'input')
+      inputMaskInput(el, Alpine)
+    if (directive.value === 'input-placeholder')
+      inputMaskInputDisplay(el, Alpine)
+    if (directive.value === 'mask-placeholder')
+      inputMaskMaskDisplay(el, Alpine)
     else inputMaskRoot(el, Alpine)
   })
 }
 
-const inputMaskRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function inputMaskRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-data'() {
+    'x-data': function () {
       return {
         maskPlaceholder: '',
         inputValue: '',
-        isInitialized: false
+        isInitialized: false,
       }
     },
-    'x-init'() {
+    'x-init': function () {
       this.isInitialized = true
     },
   })
 }
 
-const inputMaskInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function inputMaskInput(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-input-mask:input" is missing a parent element with "x-input-mask".')
+    'x-init': function () {
+      if (this.isInitialized === undefined)
+        console.warn('"x-input-mask:input" is missing a parent element with "x-input-mask".')
       if (el.placeholder) {
         this.maskPlaceholder = el.placeholder
         el.dataset.placeholder = el.placeholder
         el.removeAttribute('placeholder')
       }
-      return
     },
-    '@input'() {
+    '@input': function () {
       return this.$nextTick(() => {
         this.inputValue = el.value
       })
@@ -43,24 +46,26 @@ const inputMaskInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine)
   })
 }
 
-const inputMaskInputDisplay = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function inputMaskInputDisplay(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-input-mask:input-placeholder" is missing a parent element with "x-input-mask".')
+    'x-init': function () {
+      if (this.isInitialized === undefined)
+        console.warn('"x-input-mask:input-placeholder" is missing a parent element with "x-input-mask".')
     },
-    'x-text'() {
+    'x-text': function () {
       return this.inputValue
-    }
+    },
   })
 }
 
-const inputMaskMaskDisplay = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function inputMaskMaskDisplay(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-input-mask:mask-placeholder" is missing a parent element with "x-input-mask".')
+    'x-init': function () {
+      if (this.isInitialized === undefined)
+        console.warn('"x-input-mask:mask-placeholder" is missing a parent element with "x-input-mask".')
     },
-    'x-text'() {
+    'x-text': function () {
       return this.maskPlaceholder.split('').map((val, idx) => this.inputValue[idx] ? '' : val).join('')
-    }
+    },
   })
 }

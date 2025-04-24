@@ -1,27 +1,27 @@
-import { createNormalizer } from "@zag-js/types";
-import type { AttrMap } from "types";
+import { createNormalizer } from '@zag-js/types'
 
-const toStyleString = (style: any) => {
-  let string = '';
+function toStyleString(style: any) {
+  let string = ''
   for (let key in style) {
-    const value = style[key];
-    if (value === null || value === undefined) continue;
+    const value = style[key]
+    if (value === null || value === undefined)
+      continue
     if (!key.startsWith('--'))
-      key = key.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
-    string += `${key}:${value};`;
+      key = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`)
+    string += `${key}:${value};`
   }
-  return string;
-};
+  return string
+}
 
 export const normalizeProps = createNormalizer((props: any) => {
   return Object.entries(props).reduce<any>((acc, [key, value]) => {
     if (key === 'style' && typeof value === 'object') {
-      acc.style = toStyleString(value);
-      return acc;
+      acc.style = toStyleString(value)
+      return acc
     }
 
-    acc[key.toLowerCase()] = value;
+    acc[key.toLowerCase()] = value
 
-    return acc;
-  }, {});
-});
+    return acc
+  }, {})
+})

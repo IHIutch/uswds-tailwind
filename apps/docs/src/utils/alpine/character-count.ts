@@ -1,20 +1,23 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('character-count', (el, directive) => {
-    if (directive.value === 'input') characterCountInput(el, Alpine)
-    else if (directive.value === 'status') characterCountStatus(el, Alpine)
-    else if (directive.value === 'sr-status') srCharacterCountStatus(el, Alpine)
+    if (directive.value === 'input')
+      characterCountInput(el, Alpine)
+    else if (directive.value === 'status')
+      characterCountStatus(el, Alpine)
+    else if (directive.value === 'sr-status')
+      srCharacterCountStatus(el, Alpine)
     else characterCountRoot(el, Alpine)
   })
 }
 
-const characterCountRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function characterCountRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-id'() {
+    'x-id': function () {
       return ['character-count-input', 'character-count-status']
     },
-    'x-data'() {
+    'x-data': function () {
       return {
         isInitialized: false,
         maxLength: undefined,
@@ -32,54 +35,57 @@ const characterCountRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alp
         },
         get statusText() {
           if (this.maxLength) {
-            const difference = Math.abs(this.maxLength - this.charCount);
-            const characters = difference === 1 ? "character" : "characters";
+            const difference = Math.abs(this.maxLength - this.charCount)
+            const characters = difference === 1 ? 'character' : 'characters'
             const guidance = this.charCount === 0
-              ? "allowed"
+              ? 'allowed'
               : this.charCount > this.maxLength
-                ? "over limit"
-                : "left";
-            return `${difference} ${characters} ${guidance}`;
-          } else {
+                ? 'over limit'
+                : 'left'
+            return `${difference} ${characters} ${guidance}`
+          }
+          else {
             return undefined
           }
         },
         get isInvalid() {
-          return this.charsRemaining < 0 ? true : false
+          return this.charsRemaining < 0
         },
       }
     },
-    'x-init'() {
-      this.$watch('isInvalid', value => {
+    'x-init': function () {
+      this.$watch('isInvalid', (value) => {
         return value ? el.setAttribute('data-invalid', 'true') : el.removeAttribute('data-invalid')
       })
     },
   })
 }
 
-const characterCountInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
-
+function characterCountInput(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-character-count:input" is missing a parent element with "x-character-count".')
+    'x-init': function () {
+      if (this.isInitialized === undefined)
+        console.warn('"x-character-count:input" is missing a parent element with "x-character-count".')
       if (el.maxLength <= 0) {
         console.error(`Invalid or no "maxlength" attribute set on element #${el.id}`)
-      } else {
+      }
+      else {
         this.maxLength = Number(el.maxLength)
         el.removeAttribute('maxlength')
       }
 
-      this.$watch('isInvalid', value => {
+      this.$watch('isInvalid', (value) => {
         if (value) {
           el.setAttribute('data-invalid', 'true')
           el.setAttribute('aria-invalid', 'true')
-        } else {
+        }
+        else {
           el.removeAttribute('data-invalid')
           el.removeAttribute('aria-invalid')
         }
       })
     },
-    '@input'() {
+    '@input': function () {
       this.charCount = el.value.length
       this.charsRemaining = this.maxLength - this.charCount
       this.debouncedSetSrStatusText()
@@ -87,36 +93,36 @@ const characterCountInput = (el: ElementWithXAttributes<HTMLElement>, Alpine: Al
   })
 }
 
-const characterCountStatus = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function characterCountStatus(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-character-count:status" is missing a parent element with "x-character-count".')
+    'x-init': function () {
+      if (this.isInitialized === undefined)
+        console.warn('"x-character-count:status" is missing a parent element with "x-character-count".')
 
-      this.$watch('isInvalid', value => {
+      this.$watch('isInvalid', (value) => {
         return value ? el.setAttribute('data-invalid', 'true') : el.removeAttribute('data-invalid')
       })
     },
-    'x-text'() {
+    'x-text': function () {
       return this.statusText
-    }
+    },
   })
 }
 
-const srCharacterCountStatus = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function srCharacterCountStatus(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isInitialized === undefined) console.warn('"x-character-count:status" is missing a parent element with "x-character-count".')
+    'x-init': function () {
+      if (this.isInitialized === undefined)
+        console.warn('"x-character-count:status" is missing a parent element with "x-character-count".')
 
       this.srStatusText = this.statusText
 
-      this.$watch('isInvalid', value => {
+      this.$watch('isInvalid', (value) => {
         return value ? el.setAttribute('data-invalid', 'true') : el.removeAttribute('data-invalid')
       })
-
     },
-    'x-text'() {
+    'x-text': function () {
       return this.srStatusText
-    }
+    },
   })
 }
-

@@ -9,6 +9,7 @@ export default function ColorSwatch({ hex, level, name }: {
   const [isCopied, setIsCopied] = React.useState(false)
   const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
 
+  const readableName = name.replaceAll('-', ' ').replace('v', ' vivid')
 
   const handleCopyToClipboard = () => {
     copyToClipboard(hex)
@@ -17,8 +18,6 @@ export default function ColorSwatch({ hex, level, name }: {
 
     setTimeout(() => setIsCopied(false), 1000)
   }
-
-  const readableName = name.replaceAll("-", " ").replace("v", " vivid")
 
   return (
     <>
@@ -34,7 +33,11 @@ export default function ColorSwatch({ hex, level, name }: {
         </div>
         <div className="py-1 px-2 tablet:py-0 desktop:p-1 w-full">
           <p className="sr-only">
-            Copy {readableName} to clipboard
+            Copy
+            {' '}
+            {readableName}
+            {' '}
+            to clipboard
           </p>
           <p aria-hidden="true" className="text-sm font-medium leading-tight">
             {level}
@@ -47,9 +50,7 @@ export default function ColorSwatch({ hex, level, name }: {
           </p>
         </div>
       </button>
-      <span aria-live='polite' className='sr-only'>{copyMessage}</span>
+      <span aria-live="polite" className="sr-only">{copyMessage}</span>
     </>
   )
 }
-
-

@@ -1,14 +1,17 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs"
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('dropdown', (el, directive) => {
-    if (directive.value === 'trigger') dropdownTrigger(el, Alpine)
-    else if (directive.value === 'content') dropdownContent(el, Alpine)
-    else if (directive.value === 'item') dropdownItem(el, Alpine)
+    if (directive.value === 'trigger')
+      dropdownTrigger(el, Alpine)
+    else if (directive.value === 'content')
+      dropdownContent(el, Alpine)
+    else if (directive.value === 'item')
+      dropdownItem(el, Alpine)
     else dropdownRoot(el, Alpine)
   })
 
-  Alpine.magic('dropdown', el => {
+  Alpine.magic('dropdown', (el) => {
     const $data = Alpine.$data(el)
 
     return {
@@ -20,14 +23,14 @@ export default function (Alpine: Alpine) {
       },
       close() {
         return $data.close()
-      }
+      },
     }
   })
 }
 
-const dropdownRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function dropdownRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-data'() {
+    'x-data': function () {
       return {
         contentEl: undefined as HTMLElement | undefined,
         triggerEl: undefined as HTMLElement | undefined,
@@ -41,16 +44,16 @@ const dropdownRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
         },
         toggle() {
           return this.isOpen = !this.isOpen
-        }
+        },
       }
     },
-    'x-init'() {
-      this.rootEl = el;
+    'x-init': function () {
+      this.rootEl = el
     },
-    'x-id'() {
+    'x-id': function () {
       return ['dropdown-trigger', 'dropdown-content']
     },
-    '@focusout'() {
+    '@focusout': function () {
       if (!el.contains(this.$event.relatedTarget)) {
         this.close()
       }
@@ -58,118 +61,123 @@ const dropdownRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) =
   })
 }
 
-const dropdownContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function dropdownContent(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':role'() {
+    ':role': function () {
       return 'menu'
     },
-    ':aria-labelledby'() {
+    ':aria-labelledby': function () {
       return this.$id('dropown-trigger')
     },
-    ':tabIndex'() {
+    ':tabIndex': function () {
       return -1
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-dropdown:content" is missing a parent element with "x-dropdown".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-dropdown:content" is missing a parent element with "x-dropdown".')
       this.contentEl = el
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isOpen
     },
-    'x-anchor.bottom-start'() {
-      return this.triggerEl;
+    'x-anchor.bottom-start': function () {
+      return this.triggerEl
     },
-    '@keydown.prevent.escape'() {
+    '@keydown.prevent.escape': function () {
       this.close()
       this.$focus.focus(this.triggerEl)
     },
-    '@keydown.prevent.up'() {
+    '@keydown.prevent.up': function () {
       if (this.$focus.within(this.contentEl).getPrevious()) {
         this.$focus.within(this.contentEl).wrap().previous()
-      } else {
+      }
+      else {
         this.$focus.within(this.contentEl).last()
       }
     },
-    '@keydown.prevent.down'() {
+    '@keydown.prevent.down': function () {
       if (this.$focus.within(this.contentEl).getNext()) {
         this.$focus.within(this.contentEl).wrap().next()
-      } else {
+      }
+      else {
         this.$focus.within(this.contentEl).first()
       }
     },
-    '@keydown.prevent.home'() {
+    '@keydown.prevent.home': function () {
       this.$focus.within(this.contentEl).first()
     },
-    '@keydown.prevent.end'() {
+    '@keydown.prevent.end': function () {
       this.$focus.within(this.contentEl).last()
     },
   })
 }
 
-const dropdownItem = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function dropdownItem(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':role'() {
+    ':role': function () {
       return 'menuitem'
     },
-    ':tabIndex'() {
+    ':tabIndex': function () {
       return -1
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-dropdown:item" is missing a parent element with "x-dropdown".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-dropdown:item" is missing a parent element with "x-dropdown".')
     },
-    '@click'() {
+    '@click': function () {
       this.close()
       this.$focus.focus(this.triggerEl)
     },
-    '@keydown.stop.prevent.space'() {
+    '@keydown.stop.prevent.space': function () {
       this.$event.target.click()
     },
-    '@keydown.stop.prevent.enter'() {
+    '@keydown.stop.prevent.enter': function () {
       this.$event.target.click()
     },
   })
 }
 
-const dropdownTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function dropdownTrigger(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':aria-controls'() {
+    ':aria-controls': function () {
       return this.$id('dropdown-content')
     },
-    ':aria-expanded'() {
+    ':aria-expanded': function () {
       return this.isOpen
     },
-    ':aria-haspopup'() {
+    ':aria-haspopup': function () {
       return true
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-dropdown:trigger" is missing a parent element with "x-dropdown".')
-      this.triggerEl = el;
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-dropdown:trigger" is missing a parent element with "x-dropdown".')
+      this.triggerEl = el
     },
-    '@click'() {
+    '@click': function () {
       this.toggle()
     },
-    '@keydown.prevent.enter'() {
-      this.open();
+    '@keydown.prevent.enter': function () {
+      this.open()
       this.$focus.within(this.contentEl).first()
     },
-    '@keydown.prevent.space'() {
-      this.open();
+    '@keydown.prevent.space': function () {
+      this.open()
       this.$focus.within(this.contentEl).first()
     },
-    '@keydown.prevent.up'() {
-      this.open();
+    '@keydown.prevent.up': function () {
+      this.open()
       this.$focus.within(this.contentEl).last()
     },
-    '@keydown.prevent.down'() {
-      this.open();
+    '@keydown.prevent.down': function () {
+      this.open()
       this.$focus.within(this.contentEl).first()
     },
-    '@keydown.prevent.home'() {
-      this.open();
+    '@keydown.prevent.home': function () {
+      this.open()
       this.$focus.within(this.contentEl).first()
     },
-    '@keydown.prevent.end'() {
-      this.open();
+    '@keydown.prevent.end': function () {
+      this.open()
       this.$focus.within(this.contentEl).last()
     },
   })

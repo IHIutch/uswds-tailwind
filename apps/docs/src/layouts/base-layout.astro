@@ -1,37 +1,39 @@
 ---
-import { ClientRouter } from "astro:transitions";
-import GlobalNav from "#components/global-nav/index.astro";
-import { SEO } from "astro-seo";
+import GlobalNav from '#components/global-nav/index.astro'
+import { SEO } from 'astro-seo'
+import { ClientRouter } from 'astro:transitions'
 
-import "@docsearch/css/dist/style.css";
-import "#styles/main.css";
+import '@docsearch/css/dist/style.css'
+import '#styles/main.css'
 
-import "@fontsource-variable/open-sans";
-import "@fontsource-variable/public-sans";
-import "@fontsource-variable/roboto-mono";
-import "@fontsource-variable/source-sans-3";
+import '@fontsource-variable/open-sans'
+import '@fontsource-variable/public-sans'
+import '@fontsource-variable/roboto-mono'
+import '@fontsource-variable/source-sans-3'
 
-import "@fontsource/merriweather/300.css";
-import "@fontsource/merriweather/400.css";
-import "@fontsource/merriweather/700.css";
-import "@fontsource/merriweather/900.css";
+import '@fontsource/merriweather/300.css'
+import '@fontsource/merriweather/400.css'
+import '@fontsource/merriweather/700.css'
+import '@fontsource/merriweather/900.css'
 
 interface Props {
-  title?: string;
-  description: string;
-  ogImageUrl?: URL;
+  title?: string
+  description: string
+  ogImageUrl?: URL
 }
 
-const SITE_NAME = "USWDS + Tailwind";
+const SITE_NAME = 'USWDS + Tailwind'
 
 const {
   title = SITE_NAME,
   description,
-  ogImageUrl = new URL("og.jpg", Astro.url.origin),
-} = Astro.props;
+  ogImageUrl = new URL('og.jpg', Astro.url.origin),
+} = Astro.props
 
-if (title) ogImageUrl.searchParams.set("title", title);
-if (description) ogImageUrl.searchParams.set("description", description);
+if (title)
+ogImageUrl.searchParams.set('title', title)
+if (description)
+ogImageUrl.searchParams.set('description', description)
 
 const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
 ---
@@ -47,7 +49,7 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       openGraph={{
         basic: {
           title: metaTitle,
-          type: "Website",
+          type: 'Website',
           image: ogImageUrl.toString(),
           url: Astro.url,
         },
@@ -58,44 +60,45 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
         image: {
           width: 1200,
           height: 630,
-          alt: `Project logo resembling the American flag. White text on a dark blue background. Text reads: ${title || "USWDS + Tailwind"}. ${description}`,
+          alt: `Project logo resembling the American flag. White text on a dark blue background. Text reads: ${title || 'USWDS + Tailwind'}. ${description}`,
         },
       }}
       twitter={{
-        card: "summary_large_image",
+        card: 'summary_large_image',
         title: metaTitle,
         description,
         image: ogImageUrl,
       }}
       extend={{
         link: [
-          { rel: "icon", type: "image/svg+xml", href: "/logo.svg" },
-          { rel: "sitemap", href: "/sitemap-index.xml" },
+          { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+          { rel: 'sitemap', href: '/sitemap-index.xml' },
         ],
         meta: [
-          { name: "generator", content: Astro.generator },
-          { name: "theme-color", content: "#112f4e" },
-          { name: "color-scheme", content: "only light" },
+          { name: 'generator', content: Astro.generator },
+          { name: 'theme-color', content: '#112f4e' },
+          { name: 'color-scheme', content: 'only light' },
         ],
       }}
     />
 
     <script is:inline>
-      document.documentElement.classList.add("uswds-ready");
+document.documentElement.classList.add('uswds-ready')
 
-      var fallback = setTimeout(function () {
-        document.documentElement.classList.remove("uswds-ready");
-      }, 3000);
+const fallback = setTimeout(() => {
+  document.documentElement.classList.remove('uswds-ready')
+}, 3000)
 
-      window.addEventListener("alpine:init", () => {
-        clearTimeout(fallback);
-        document.documentElement.classList.add("uswds-ready");
-      });
-    </script>
+window.addEventListener('alpine:init', () => {
+  clearTimeout(fallback)
+  document.documentElement.classList.add('uswds-ready')
+})
+</script>
 
     <!-- Fathom - beautiful, simple website analytics -->
     {
-      import.meta.env.PROD ? (
+      import.meta.env.PROD
+? (
         <script
           is:inline
           src="https://cdn.usefathom.com/script.js"
@@ -103,7 +106,8 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
           data-spa="auto"
           defer
         />
-      ) : null
+      )
+: null
     }
     <!-- / Fathom -->
     <ClientRouter />
@@ -111,7 +115,8 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
   <body class="h-full font-public-sans">
     <a
       class="sr-only rounded leading-none text-blue-60v px-5 py-3 ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v focus:top-0 focus:left-0 focus:h-auto focus:w-auto focus:m-0 focus:[clip:unset] bg-white z-50"
-      href="#main-content">Skip to main content</a
+      href="#main-content"
+    >Skip to main content</a
     >
     <div class="relative">
       <GlobalNav />

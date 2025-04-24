@@ -1,43 +1,45 @@
+import { copyToClipboard } from '#utils/copy-to-clipboard'
+import { useDebounce } from '#utils/use-debounce'
+import { experimental_withState as withState } from '@astrojs/react/actions'
+import { icons as materialIcons } from '@iconify-json/material-symbols'
+import { actions } from 'astro:actions'
 import * as React from 'react'
-import { icons as materialIcons } from "@iconify-json/material-symbols";
-import { actions } from 'astro:actions';
-import { experimental_withState as withState } from '@astrojs/react/actions';
-import { useDebounce } from '#utils/use-debounce';
-import { copyToClipboard } from '#utils/copy-to-clipboard';
 
 export default function IconList({ initialIcons, totalIconCount }: { initialIcons: string[], totalIconCount: number }) {
   const [search, setSearch] = React.useState('')
   const [isTyping, setIsTyping] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement>(null)
 
-  const debouncedSearch = useDebounce(search, 300);
+  const debouncedSearch = useDebounce(search, 300)
 
   const [state, action, pending] = React.useActionState(
     withState(actions.getIcons),
     {
       data: {
         filteredIcons: initialIcons,
-        totalIconCount
+        totalIconCount,
       },
-      error: undefined
-    }
-  );
+      error: undefined,
+    },
+  )
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+    event.preventDefault()
+    const form = event.currentTarget
 
     if (debouncedSearch.trim()) {
       action(new FormData(form))
-    } else {
-      if (state?.data) state.data.filteredIcons = initialIcons;
+    }
+    else {
+      if (state?.data)
+        state.data.filteredIcons = initialIcons
     }
   }
 
   React.useEffect(() => {
     formRef.current?.requestSubmit()
     setIsTyping(false)
-  }, [debouncedSearch]);
+  }, [debouncedSearch])
 
   return (
     <div className="border border-gray-cool-20">
@@ -61,44 +63,53 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
               />
               {(isTyping || pending)
                 ? (
-                  <div className="absolute w-10 right-0 inset-y-0 flex items-center justify-center animate-spin text-blue-60v">
-                    <div className="icon-[material-symbols--progress-activity] size-6"></div>
-                  </div>
-                ) : null}
+                    <div className="absolute w-10 right-0 inset-y-0 flex items-center justify-center animate-spin text-blue-60v">
+                      <div className="icon-[material-symbols--progress-activity] size-6"></div>
+                    </div>
+                  )
+                : null}
             </div>
           </form>
         </div>
         <p aria-live="polite" className="text-gray-50">
-          Showing {state.data?.filteredIcons.length} of {totalIconCount}
+          Showing
+          {' '}
+          {state.data?.filteredIcons.length}
+          {' '}
+          of
+          {' '}
+          {totalIconCount}
         </p>
       </div>
       <div className="bg-gray-cool-2 p-4">
         {
-          (state.data && state.data?.filteredIcons.length > 0) ? (
-            <ul className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
-              {state.data?.filteredIcons.map((iconName) => (
-                <li key={iconName}>
-                  <IconButton iconName={iconName} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="text-center w-full py-4">
-              <span className="text-gray-cool-70">No icons matched your search</span>
-            </div>
-          )
+          (state.data && state.data?.filteredIcons.length > 0)
+            ? (
+                <ul className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
+                  {state.data?.filteredIcons.map(iconName => (
+                    <li key={iconName}>
+                      <IconButton iconName={iconName} />
+                    </li>
+                  ))}
+                </ul>
+              )
+            : (
+                <div className="text-center w-full py-4">
+                  <span className="text-gray-cool-70">No icons matched your search</span>
+                </div>
+              )
         }
       </div>
     </div>
   )
 }
 
-const IconButton = ({ iconName }: { iconName: string }) => {
+function IconButton({ iconName }: { iconName: string }) {
   const [isCopied, setIsCopied] = React.useState(false)
   const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
 
   const handleCopyToClipboard = () => {
-    copyToClipboard('icon-[material-symbols--' + iconName + ']')
+    copyToClipboard(`icon-[material-symbols--${iconName}]`)
     setIsCopied(true)
     setCopyMessage(`material symbols ${iconName} copied to clipboard`)
 
@@ -118,20 +129,25 @@ const IconButton = ({ iconName }: { iconName: string }) => {
             height="100%"
             viewBox="0 0 24 24"
             dangerouslySetInnerHTML={{
-              __html: materialIcons.icons[iconName].body
+              __html: materialIcons.icons[iconName].body,
             }}
           />
         </div>
         <div className="truncate text-ellipsis w-full">
-          <span className="text-xs" aria-hidden="true">{'.icon-[material-symbols--' + iconName + ']'}</span>
-          <span className="sr-only">Copy {iconName} icon to clipboard</span>
+          <span className="text-xs" aria-hidden="true">{`.icon-[material-symbols--${iconName}]`}</span>
+          <span className="sr-only">
+            Copy
+            {iconName}
+            {' '}
+            icon to clipboard
+          </span>
         </div>
         {isCopied
           ? (
-            <div className="absolute inset-x-0 bottom-0 pb-1">
-              <span aria-hidden="true" className="text-xs font-medium text-green">Copied to clipboard!</span>
-            </div>
-          )
+              <div className="absolute inset-x-0 bottom-0 pb-1">
+                <span aria-hidden="true" className="text-xs font-medium text-green">Copied to clipboard!</span>
+              </div>
+            )
           : null}
       </button>
       <span aria-live="polite" className="sr-only">{copyMessage}</span>

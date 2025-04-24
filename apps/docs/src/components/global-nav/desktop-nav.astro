@@ -1,36 +1,38 @@
 ---
-import Search from "#components/search";
-import type { NavLinks } from "types";
+import type { NavLinks } from 'types'
+import Search from '#components/search'
 
-type Props = NavLinks;
+type Props = NavLinks
 
-const { primary, secondary } = Astro.props;
-const { pathname } = Astro.url;
+const { primary, secondary } = Astro.props
+const { pathname } = Astro.url
 
-const isActivePath = (href: string) => {
-  if (pathname !== "/") {
-    return href !== "/" && pathname.startsWith(href);
+function isActivePath(href: string) {
+  if (pathname !== '/') {
+    return href !== '/' && pathname.startsWith(href)
   }
-  return href === "/";
-};
+  return href === '/'
+}
 ---
 
 <div class="desktop:px-8">
   <nav class="max-w-5xl mx-auto relative">
     {
-      primary && primary.length > 0 ? (
+      primary && primary.length > 0
+? (
         <ul class="flex -ml-4">
-          {primary.map((item) => (
+          {primary.map(item => (
             <li class="leading-none">
-              {item.children !== undefined ? (
+              {item.children !== undefined
+? (
                 <div x-data x-dropdown>
                   <button
                     x-dropdown:trigger
                     class="relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1"
                     class:list={
                       item.isActive
-                        ? "after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1"
-                        : ""
+                        ? 'after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1'
+                        : ''
                     }
                   >
                     <span>{item.label}</span>
@@ -45,14 +47,14 @@ const isActivePath = (href: string) => {
                     x-dropdown:content
                     class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug"
                   >
-                    {item.children.map((child) => (
+                    {item.children.map(child => (
                       <a
                         x-dropdown:item
                         href={child.href}
                         target={child.target}
                         class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
                         aria-current={
-                          pathname === child.href ? "page" : undefined
+                          pathname === child.href ? 'page' : undefined
                         }
                         data-active={
                           isActivePath(child.href) ? true : undefined
@@ -63,12 +65,13 @@ const isActivePath = (href: string) => {
                     ))}
                   </div>
                 </div>
-              ) : (
+              )
+: (
                 <a
                   href={item.href}
                   target={item.target}
                   class="relative p-4 flex font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v data-[active]:after:bg-blue-60v data-[active]:after:absolute data-[active]:after:-bottom-0.5 data-[active]:after:inset-x-4 data-[active]:after:h-1"
-                  aria-current={pathname === item.href ? "page" : undefined}
+                  aria-current={pathname === item.href ? 'page' : undefined}
                   data-active={isActivePath(item.href) ? true : undefined}
                 >
                   {item.label}
@@ -77,30 +80,35 @@ const isActivePath = (href: string) => {
             </li>
           ))}
         </ul>
-      ) : null
+      )
+: null
     }
 
     <div class="right-0 bottom-16 absolute min-w-64 flex flex-col items-end">
       {
-        secondary && secondary?.length > 0 ? (
+        secondary && secondary?.length > 0
+? (
           <ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 first:*:pl-0 mr-[52px]">
-            {secondary.map((item) => (
+            {secondary.map(item => (
               <li class="inline-flex">
                 <a
                   href={item.href}
                   target={item.target}
-                  rel={item.target === "_blank" ? "noreferrer" : undefined}
+                  rel={item.target === '_blank' ? 'noreferrer' : undefined}
                   class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
                 >
                   {item.label}
-                  {item.target === "_blank" ? (
+                  {item.target === '_blank'
+? (
                     <span class="sr-only">External, opens in a new tab</span>
-                  ) : null}
+                  )
+: null}
                 </a>
               </li>
             ))}
           </ul>
-        ) : null
+        )
+: null
       }
 
       <div class="flex items-center gap-5">
@@ -113,7 +121,9 @@ const isActivePath = (href: string) => {
         >
           <span class="sr-only">GitHub</span>
           <span class="sr-only">External, opens in a new tab</span>
-          <span aria-hidden="true" class="icon-[fa6-brands--github] size-8"
+          <span
+            aria-hidden="true"
+            class="icon-[fa6-brands--github] size-8"
           ></span>
         </a>
       </div>

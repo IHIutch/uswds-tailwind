@@ -1,18 +1,25 @@
-import type { Alpine, ElementWithXAttributes } from "alpinejs";
+import type { Alpine, ElementWithXAttributes } from 'alpinejs'
 
 export default function (Alpine: Alpine) {
   Alpine.directive('modal', (el, directive) => {
-    if (directive.value === 'title') modalTitle(el, Alpine)
-    else if (directive.value === 'description') modalDescription(el, Alpine)
-    else if (directive.value === 'backdrop') modalBackdrop(el, Alpine)
-    else if (directive.value === 'dialog') modalDialog(el, Alpine)
-    else if (directive.value === 'content') modalContent(el, Alpine)
-    else if (directive.value === 'trigger') modalTrigger(el, Alpine)
-    else if (directive.value === 'close-button') modalCloseButton(el, Alpine)
+    if (directive.value === 'title')
+      modalTitle(el, Alpine)
+    else if (directive.value === 'description')
+      modalDescription(el, Alpine)
+    else if (directive.value === 'backdrop')
+      modalBackdrop(el, Alpine)
+    else if (directive.value === 'dialog')
+      modalDialog(el, Alpine)
+    else if (directive.value === 'content')
+      modalContent(el, Alpine)
+    else if (directive.value === 'trigger')
+      modalTrigger(el, Alpine)
+    else if (directive.value === 'close-button')
+      modalCloseButton(el, Alpine)
     else modalRoot(el, Alpine)
   })
 
-  Alpine.magic('modal', el => {
+  Alpine.magic('modal', (el) => {
     const $data = Alpine.$data(el)
 
     return {
@@ -21,15 +28,14 @@ export default function (Alpine: Alpine) {
       },
       close() {
         return $data.close()
-      }
+      },
     }
   })
-
 }
 
-const modalRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalRoot(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-data'() {
+    'x-data': function () {
       return {
         isOpen: false,
         isDismissable: true,
@@ -38,119 +44,125 @@ const modalRoot = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
         },
         close() {
           return this.isOpen = false
-        }
+        },
       }
     },
-    'x-id'() {
+    'x-id': function () {
       return ['modal-title', 'modal-description']
     },
   })
 }
 
-const modalTitle = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalTitle(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':id'() {
+    ':id': function () {
       return this.$id('modal-title')
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:title" is missing a parent element with "x-modal".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-modal:title" is missing a parent element with "x-modal".')
     },
   })
 }
 
-const modalDescription = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalDescription(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':id'() {
+    ':id': function () {
       return this.$id('modal-description')
     },
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:description" is missing a parent element with "x-modal".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-modal:description" is missing a parent element with "x-modal".')
     },
   })
 }
 
-const modalBackdrop = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalBackdrop(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    ':aria-haspopup'() {
+    ':aria-haspopup': function () {
       return 'true'
     },
-    ':aria-hidden'() {
+    ':aria-hidden': function () {
       return 'true'
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isOpen
     },
-    '@click.stop.prevent'() {
-      if (this.isDismissable) this.close()
-      return
+    '@click.stop.prevent': function () {
+      if (this.isDismissable)
+        this.close()
     },
   })
 }
 
-const modalDialog = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalDialog(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-modal:dialog" is missing a parent element with "x-modal".')
       this.isDismissable = !el.hasAttribute('data-force-action')
     },
-    ':tabIndex'() {
+    ':tabIndex': function () {
       return -1
     },
-    ':aria-labelledby'() {
+    ':aria-labelledby': function () {
       return this.$id('modal-title')
     },
-    ':aria-describedby'() {
+    ':aria-describedby': function () {
       return this.$id('modal-description')
     },
-    ':aria-modal'() {
+    ':aria-modal': function () {
       return 'true'
     },
-    ':role'() {
+    ':role': function () {
       return 'dialog'
     },
-    'x-show'() {
+    'x-show': function () {
       return this.isOpen
     },
-    'x-trap.inert.noscroll'() {
+    'x-trap.inert.noscroll': function () {
       return this.isOpen
     },
-    '@keydown.stop.prevent.escape'() {
-      if (this.isDismissable) this.close()
-      return
+    '@keydown.stop.prevent.escape': function () {
+      if (this.isDismissable)
+        this.close()
     },
   })
 }
 
-const modalContent = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalContent(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:content" is missing a parent element with "x-modal".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-modal:content" is missing a parent element with "x-modal".')
     },
-    '@click.outside'() {
-      if (this.isDismissable) this.close()
-      return
+    '@click.outside': function () {
+      if (this.isDismissable)
+        this.close()
     },
   })
 }
 
-const modalTrigger = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalTrigger(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:trigger" is missing a parent element with "x-modal".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-modal:trigger" is missing a parent element with "x-modal".')
     },
-    '@click'() {
+    '@click': function () {
       this.isOpen ? this.close() : this.open()
-    }
+    },
   })
 }
 
-const modalCloseButton = (el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) => {
+function modalCloseButton(el: ElementWithXAttributes<HTMLElement>, Alpine: Alpine) {
   Alpine.bind(el, {
-    'x-init'() {
-      if (this.isOpen === undefined) console.warn('"x-modal:close-button" is missing a parent element with "x-modal".')
+    'x-init': function () {
+      if (this.isOpen === undefined)
+        console.warn('"x-modal:close-button" is missing a parent element with "x-modal".')
     },
-    '@click'() {
+    '@click': function () {
       this.close()
-    }
+    },
   })
 }

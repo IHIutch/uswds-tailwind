@@ -1,17 +1,17 @@
 import type { Alpine } from 'alpinejs'
-import focus from "@alpinejs/focus"
-import mask from "@alpinejs/mask"
-import anchor from "@alpinejs/anchor"
+import accordion from '#utils/alpine/accordion'
+import characterCount from '#utils/alpine/character-count'
+import collapse from '#utils/alpine/collapse'
 
-import accordion from "#utils/alpine/accordion"
-import inputMask from "#utils/alpine/input-mask"
-import modal from "#utils/alpine/modal"
-import combobox from "#utils/alpine/combobox"
-import collapse from "#utils/alpine/collapse"
-import dropdown from "#utils/alpine/dropdown"
-import tooltip from "#utils/alpine/tooltip"
-import characterCount from "#utils/alpine/character-count"
-import fileInput from "#utils/alpine/file-input"
+import combobox from '#utils/alpine/combobox'
+import dropdown from '#utils/alpine/dropdown'
+import fileInput from '#utils/alpine/file-input'
+import inputMask from '#utils/alpine/input-mask'
+import modal from '#utils/alpine/modal'
+import tooltip from '#utils/alpine/tooltip'
+import anchor from '@alpinejs/anchor'
+import focus from '@alpinejs/focus'
+import mask from '@alpinejs/mask'
 
 export default (Alpine: Alpine) => {
   Alpine.plugin(focus)
@@ -28,19 +28,19 @@ export default (Alpine: Alpine) => {
   Alpine.plugin(characterCount)
   Alpine.plugin(fileInput)
 
-  Alpine.data("collapsible", () => ({
+  Alpine.data('collapsible', () => ({
     init() {
-      this.isCodeExpanded = this.$refs.code.offsetHeight < 400;
+      this.isCodeExpanded = this.$refs.code.offsetHeight < 400
     },
     isCodeExpanded: false,
     toggleExpanded() {
-      this.isCodeExpanded = !this.isCodeExpanded;
+      this.isCodeExpanded = !this.isCodeExpanded
     },
     get isShowingButton() {
-      return !this.isCodeExpanded;
+      return !this.isCodeExpanded
     },
     get isShowingClass() {
-      return this.isCodeExpanded ? "h-auto" : "h-96";
+      return this.isCodeExpanded ? 'h-auto' : 'h-96'
     },
-  }));
+  }))
 }

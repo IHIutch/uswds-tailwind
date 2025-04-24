@@ -1,27 +1,27 @@
 ---
 type Props = {
-  type: "info" | "warning";
-};
+  type: 'info' | 'warning'
+}
 
-const { type = "info" } = Astro.props;
+const { type = 'info' } = Astro.props;
 ---
 
 <div class="not-docs-prose my-6">
   <div
     role="status"
     class:list={[
-      "@container border-l-8",
-      { "bg-cyan-5 border-l-cyan-30v": type === "info" },
-      { "bg-yellow-5 border-l-gold-20v": type === "warning" },
+      '@container border-l-8',
+      { 'bg-cyan-5 border-l-cyan-30v': type === 'info' },
+      { 'bg-yellow-5 border-l-gold-20v': type === 'warning' },
     ]}
   >
     <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
       <div class="absolute left-2 @desktop:left-6">
         <div
           class:list={[
-            "size-6",
-            { "icon-[material-symbols--info]": type === "info" },
-            { "icon-[material-symbols--warning]": type === "warning" },
+            'size-6',
+            { 'icon-[material-symbols--info]': type === 'info' },
+            { 'icon-[material-symbols--warning]': type === 'warning' },
           ]}
         >
         </div>
