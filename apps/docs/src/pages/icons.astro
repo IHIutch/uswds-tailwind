@@ -5,6 +5,8 @@ import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
 import { actions } from 'astro:actions'
 
+export const prerender = false
+
 const formData = new FormData()
 formData.append('search', '')
 const { data } = await Astro.callAction(actions.getIcons, formData)
