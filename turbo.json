@@ -5,6 +5,9 @@
   ],
   "tasks": {
     "build": {
+      "env": [
+        "ENABLE_EXPERIMENTAL_COREPACK"
+      ],
       "outputs": [
         ".astro/**",
         "dist/**"
