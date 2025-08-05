@@ -17,9 +17,9 @@
     "src/tailwind.config.ts"
   ],
   "dependencies": {
-    "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/typography": "^0.5.16",
-    "tailwindcss": "^4.1.4",
-    "tailwindcss-animate": "^1.0.7"
+    "@tailwindcss/forms": "catalog:",
+    "@tailwindcss/typography": "catalog:",
+    "tailwindcss": "catalog:",
+    "tailwindcss-animate": "catalog:"
   }
 }

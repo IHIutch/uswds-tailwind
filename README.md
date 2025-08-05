@@ -27,10 +27,21 @@ Ensure you have the following installed before contributing:
    git clone https://github.com/IHIutch/uswds-tailwind.git
    cd uswds-tailwind
    ```
-2. Install dependencies:
+2. Install dependencies and build packages:
    ```bash
    pnpm install
+   pnpm build
    ```
+
+> **Important**: Always run `pnpm build` after installing dependencies to ensure all packages are properly built and TypeScript declarations are generated.
+
+#### Troubleshooting
+
+If you encounter module import errors like `Cannot find module '@uswds-tailwind/character-count-compat'`:
+
+1. **Make sure you're in the workspace root**: `cd /path/to/uswds-tailwind`
+2. **Force rebuild**: Run `pnpm rebuild` to force rebuild all packages
+3. **Check turbo cache**: Turbo may be using cached results - the `rebuild` command bypasses cache
 
 ### Astro & Storybook Integration
 

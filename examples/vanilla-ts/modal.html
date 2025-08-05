@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="/vite.svg"
+  />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Vite + TS</title>
+  <link
+    href="./../src/styles.css"
+    rel="stylesheet"
+  >
+</head>
+
+<body class="font-open-sans">
+  <h1>Modal</h1>
+
+  <div
+    aria-hidden="true"
+    class="sr-only text-base"
+    id="stays-hidden"
+  >
+    Needs to stay set to aria-hidden="true" when modals are toggled
+  </div>
+
+  <div>
+    <button
+      data-part="modal-trigger"
+      data-target="modal"
+      class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Modal
+    </button>
+    <div
+      data-part="modal-backdrop"
+      data-value="modal"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-part="modal-positioner"
+      data-value="modal"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-part="modal-content"
+        class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="p-8 pt-10">
+          <h2
+            data-part="modal-title"
+            class="text-xl font-bold font-merriweather"
+          >Are you sure you want to continue?</h2>
+          <p
+            data-part="modal-description"
+            class="mt-2 text-gray-600"
+          >You have unsaved changes that will be lost.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Continue
+                without saving</button>
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Go
+                back</button>
+            </div>
+          </div>
+          <button
+            data-part="modal-close-trigger"
+            type="button"
+            class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded hover:text-gray-90 active:text-gray-90 focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+            aria-label="Close this window"
+          >
+            <div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script
+    type="module"
+    src="./../src/index.ts"
+  ></script>
+</body>
+
+</html>

@@ -9,20 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource-variable/open-sans": "^5.2.5",
-    "@fontsource-variable/public-sans": "^5.2.5",
-    "@fontsource-variable/roboto-mono": "^5.2.5",
-    "@fontsource-variable/source-sans-3": "^5.2.6",
-    "@fontsource/merriweather": "^5.2.6",
-    "@iconify/json": "^2.2.326",
-    "@iconify/tailwind4": "^1.0.6",
-    "@tailwindcss/vite": "^4.1.3",
+    "@fontsource-variable/open-sans": "catalog:",
+    "@fontsource-variable/public-sans": "catalog:",
+    "@fontsource-variable/roboto-mono": "catalog:",
+    "@fontsource-variable/source-sans-3": "catalog:",
+    "@fontsource/merriweather": "catalog:",
+    "@iconify/json": "catalog:",
+    "@iconify/tailwind4": "catalog:",
+    "@tailwindcss/vite": "catalog:",
     "@uswds-tailwind/compat": "workspace:*",
     "@uswds-tailwind/theme": "workspace:*",
-    "tailwindcss": "^4.1.3"
+    "tailwindcss": "catalog:"
   },
   "devDependencies": {
-    "typescript": "^5.8.2",
-    "vite": "^6.2.1"
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }

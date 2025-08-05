@@ -1,5 +1,13 @@
 # @uswds-tailwind/compat
 
+## 0.0.4
+
+### Patch Changes
+
+- 9e8882a: Updates character count machine
+- Updated dependencies [9e8882a]
+  - @uswds-tailwind/character-count-compat@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes

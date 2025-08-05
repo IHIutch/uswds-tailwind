@@ -13,19 +13,19 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsdown ./src/index.ts",
+    "build": "tsdown",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@zag-js/anatomy": "^1.5.0",
-    "@zag-js/aria-hidden": "^1.5.0",
-    "@zag-js/core": "^1.5.0",
-    "@zag-js/dismissable": "^1.5.0",
-    "@zag-js/dom-query": "^1.5.0",
-    "@zag-js/focus-trap": "^1.5.0",
-    "@zag-js/remove-scroll": "^1.5.0",
-    "@zag-js/types": "^1.5.0",
-    "@zag-js/utils": "^1.5.0"
+    "@zag-js/anatomy": "catalog:",
+    "@zag-js/aria-hidden": "catalog:",
+    "@zag-js/core": "catalog:",
+    "@zag-js/dismissable": "catalog:",
+    "@zag-js/dom-query": "catalog:",
+    "@zag-js/focus-trap": "catalog:",
+    "@zag-js/remove-scroll": "catalog:",
+    "@zag-js/types": "catalog:",
+    "@zag-js/utils": "catalog:"
   }
 }

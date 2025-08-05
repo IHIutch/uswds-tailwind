@@ -5,6 +5,9 @@
   ],
   "tasks": {
     "build": {
+      "dependsOn": [
+        "^build"
+      ],
       "env": [
         "ENABLE_EXPERIMENTAL_COREPACK"
       ],

@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/compat",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -17,11 +17,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@uswds-tailwind/accordion-compat": "workspace:*",
+    "@uswds-tailwind/character-count-compat": "workspace:*",
+    "@uswds-tailwind/collapse-compat": "workspace:*",
+    "@uswds-tailwind/dropdown-compat": "workspace:*",
+    "@uswds-tailwind/file-input-compat": "workspace:*",
+    "@uswds-tailwind/input-mask-compat": "workspace:*",
     "@uswds-tailwind/modal-compat": "workspace:*",
-    "@zag-js/core": "^1.5.0",
-    "@zag-js/store": "^1.5.0",
-    "@zag-js/types": "^1.5.0",
-    "@zag-js/utils": "^1.5.0",
-    "nanoid": "^5.1.5"
+    "@zag-js/core": "catalog:",
+    "@zag-js/store": "catalog:",
+    "@zag-js/types": "catalog:",
+    "@zag-js/utils": "catalog:",
+    "nanoid": "catalog:"
   }
 }

@@ -1,0 +1,31 @@
+{
+  "name": "@uswds-tailwind/accordion-compat",
+  "type": "module",
+  "version": "0.0.1",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zag-js/anatomy": "catalog:",
+    "@zag-js/aria-hidden": "catalog:",
+    "@zag-js/core": "catalog:",
+    "@zag-js/dismissable": "catalog:",
+    "@zag-js/dom-query": "catalog:",
+    "@zag-js/focus-trap": "catalog:",
+    "@zag-js/remove-scroll": "catalog:",
+    "@zag-js/types": "catalog:",
+    "@zag-js/utils": "catalog:"
+  }
+}
