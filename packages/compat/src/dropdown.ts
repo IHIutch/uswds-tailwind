@@ -1,12 +1,11 @@
-import type { DropdownSchema } from '@uswds-tailwind/dropdown-compat'
 import * as dropdown from '@uswds-tailwind/dropdown-compat'
-import { Component } from './component'
+import { normalizeProps } from './lib//normalize-props'
+import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './normalize-props'
-import { spreadProps } from './spread-props'
+import { spreadProps } from './lib/spread-props'
 
 export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
-  initMachine(context: dropdown.Props): VanillaMachine<DropdownSchema> {
+  initMachine(context: dropdown.Props): VanillaMachine<dropdown.DropdownSchema> {
     return new VanillaMachine(dropdown.machine, { ...context })
   }
 
@@ -18,18 +17,20 @@ export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
     spreadProps(this.rootEl, this.api.getRootProps())
     this.renderTrigger(this.trigger)
     this.renderContent(this.content)
-    this.items.forEach((item) => this.renderItem(item))
+    this.items.forEach(item => this.renderItem(item))
   }
 
   private get trigger() {
     const el = this.rootEl.querySelector<HTMLElement>('[data-part="dropdown-trigger"]')
-    if (!el) throw new Error('Expected trigger element to be defined')
+    if (!el)
+      throw new Error('Expected trigger element to be defined')
     return el
   }
 
   private get content() {
     const el = this.rootEl.querySelector<HTMLElement>('[data-part="dropdown-content"]')
-    if (!el) throw new Error('Expected content element to be defined')
+    if (!el)
+      throw new Error('Expected content element to be defined')
     return el
   }
 
@@ -55,11 +56,4 @@ export function dropdownInit() {
     const dd = new Dropdown(targetEl, { id: targetEl.id || 'dropdown' })
     dd.init()
   })
-}
-
-if (typeof window !== 'undefined') {
-  // @ts-ignore
-  window.Dropdown = Dropdown
-  // @ts-ignore
-  window.dropdownInit = dropdownInit
 }

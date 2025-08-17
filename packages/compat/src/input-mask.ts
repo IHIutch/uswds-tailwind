@@ -1,12 +1,11 @@
-import type { InputMaskSchema } from '@uswds-tailwind/input-mask-compat'
 import * as inputMask from '@uswds-tailwind/input-mask-compat'
-import { Component } from './component'
+import { normalizeProps } from './lib//normalize-props'
+import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './normalize-props'
-import { spreadProps } from './spread-props'
+import { spreadProps } from './lib/spread-props'
 
 export class InputMask extends Component<inputMask.Props, inputMask.Api> {
-  initMachine(context: inputMask.Props): VanillaMachine<InputMaskSchema> {
+  initMachine(context: inputMask.Props): VanillaMachine<inputMask.InputMaskSchema> {
     return new VanillaMachine(inputMask.machine, {
       ...context,
     })
@@ -25,7 +24,8 @@ export class InputMask extends Component<inputMask.Props, inputMask.Api> {
     const inputEl = this.rootEl.querySelector<HTMLInputElement>(
       `[data-part="input-mask-input"]`,
     )
-    if (!inputEl) throw new Error('Expected inputEl to be defined')
+    if (!inputEl)
+      throw new Error('Expected inputEl to be defined')
     return inputEl
   }
 
@@ -45,11 +45,4 @@ export function inputMaskInit() {
     })
     im.init()
   })
-}
-
-if (typeof window !== 'undefined') {
-  // @ts-ignore
-  window.InputMask = InputMask
-  // @ts-ignore
-  window.inputMaskInit = inputMaskInit
 }

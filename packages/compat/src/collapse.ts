@@ -1,12 +1,11 @@
-import type { CollapseSchema } from '@uswds-tailwind/collapse-compat'
 import * as collapse from '@uswds-tailwind/collapse-compat'
-import { Component } from './component'
+import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './normalize-props'
-import { spreadProps } from './spread-props'
+import { normalizeProps } from './lib/normalize-props'
+import { spreadProps } from './lib/spread-props'
 
 export class Collapse extends Component<collapse.Props, collapse.Api> {
-  initMachine(context: collapse.Props): VanillaMachine<CollapseSchema> {
+  initMachine(context: collapse.Props): VanillaMachine<collapse.CollapseSchema> {
     return new VanillaMachine(collapse.machine, {
       ...context,
     })
@@ -52,11 +51,4 @@ export function collapseInit() {
     })
     c.init()
   })
-}
-
-if (typeof window !== 'undefined') {
-  // @ts-ignore
-  window.Collapse = Collapse
-  // @ts-ignore
-  window.collapseInit = collapseInit
 }

@@ -1,13 +1,12 @@
-import type { AccordionSchema } from '@uswds-tailwind/accordion-compat'
 import * as accordion from '@uswds-tailwind/accordion-compat'
 import { nanoid } from 'nanoid'
-import { Component } from './component'
+import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './normalize-props'
-import { spreadProps } from './spread-props'
+import { normalizeProps } from './lib/normalize-props'
+import { spreadProps } from './lib/spread-props'
 
 export class Accordion extends Component<accordion.Props, accordion.Api> {
-  initMachine(context: accordion.Props): VanillaMachine<AccordionSchema> {
+  initMachine(context: accordion.Props): VanillaMachine<accordion.AccordionSchema> {
     return new VanillaMachine(accordion.machine, {
       ...context,
       multiple: this.rootEl.hasAttribute('data-multiple'),
