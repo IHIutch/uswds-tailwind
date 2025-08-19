@@ -1,13 +1,21 @@
 import * as fileInput from '@uswds-tailwind/file-input-compat'
+import { nanoid } from 'nanoid'
 import { normalizeProps } from './lib//normalize-props'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
 export class FileInput extends Component<fileInput.Props, fileInput.Api> {
-  initMachine(context: fileInput.Props): VanillaMachine<fileInput.FileInputSchema> {
+  initMachine(props: fileInput.Props): VanillaMachine<fileInput.FileInputSchema> {
+    const inputEl = this.input
+    const minSizeAttr = inputEl.getAttribute('data-min-size')
+    const maxSizeAttr = inputEl.getAttribute('data-max-size')
+
     return new VanillaMachine(fileInput.machine, {
-      ...context,
+      ...props,
+      accept: inputEl.getAttribute('accept') || undefined,
+      minSize: minSizeAttr ? Number.parseInt(minSizeAttr) : undefined,
+      maxSize: maxSizeAttr ? Number.parseInt(maxSizeAttr) : undefined,
     })
   }
 
@@ -57,9 +65,9 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
 
 export function fileInputInit() {
   document.querySelectorAll<HTMLElement>('[data-part="file-input-root"]').forEach((targetEl) => {
-    const instance = new FileInput(targetEl, {
-      id: targetEl.id || 'file-input',
+    const fileInput = new FileInput(targetEl, {
+      id: targetEl.id || nanoid(),
     })
-    instance.init()
+    fileInput.init()
   })
 }

@@ -28,18 +28,18 @@ export interface FileInputProps extends CommonProperties {
 }
 
 export interface FileInputSchema {
-  props: FileInputProps
+  props: Partial<FileInputProps>
   context: {
     isValid: boolean
     errorMessage: string
     isDragging: boolean
   }
   state: 'valid' | 'invalid'
-  action: 'setDragging' | 'validateFiles'
+  action: 'setDragging' | 'validateFiles' | 'toggleState'
   event:
-    | { type: 'DRAG_START' | 'DRAG_END' }
-    | { type: 'INVALID' | 'VALID' }
-    | { type: 'CHANGE', files: File[] }
+  | { type: 'DRAG_START' | 'DRAG_END' }
+  | { type: 'INVALID' | 'VALID' }
+  | { type: 'CHANGE', files: File[] }
 }
 
 export type FileInputService = Service<FileInputSchema>

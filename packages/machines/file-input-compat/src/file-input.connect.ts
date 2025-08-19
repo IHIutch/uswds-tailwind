@@ -29,6 +29,7 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.dropzone.attrs,
         'id': dom.getDropzoneId(scope),
+        'data-invalid': isInvalid ? 'true' : undefined,
         'data-dragging': isDragging ? 'true' : undefined,
         onDragover() {
           send({ type: 'DRAG_START' })
@@ -59,9 +60,10 @@ export function connect<T extends PropTypes>(
 
     getErrorMessageProps() {
       return normalize.element({
+        'data-invalid': isInvalid ? 'true' : undefined,
         ...parts.errorMessage.attrs,
-        id: dom.getErrorMessageId(scope),
-        textContent: context.get('errorMessage'),
+        'id': dom.getErrorMessageId(scope),
+        'textContent': context.get('errorMessage'),
       })
     },
   }

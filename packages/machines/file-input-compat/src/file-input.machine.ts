@@ -41,15 +41,15 @@ function isValidFileSize(file: File, minSize?: number, maxSize?: number) {
   if (isDefined(file.size)) {
     if (isDefined(minSize) && isDefined(maxSize)) {
       if (file.size > maxSize)
-        return { isValid: false, errorMessage: `The selected file must be smaller than ${minSize}.` }
+        return { isValid: false, errorMessage: `The selected file must be smaller than ${maxSize}.` }
       if (file.size < minSize)
-        return { isValid: false, errorMessage: `The selected file must be larger than ${maxSize}.` }
+        return { isValid: false, errorMessage: `The selected file must be larger than ${minSize}.` }
     }
     else if (isDefined(minSize) && file.size < minSize) {
-      return { isValid: false, errorMessage: `The selected file must be larger than ${maxSize}.` }
+      return { isValid: false, errorMessage: `The selected file must be larger than ${minSize}.` }
     }
     else if (isDefined(maxSize) && file.size > maxSize) {
-      return { isValid: false, errorMessage: `The selected file must be smaller than ${minSize}.` }
+      return { isValid: false, errorMessage: `The selected file must be smaller than ${maxSize}.` }
     }
   }
   return { isValid: true, errorMessage: null }
@@ -66,7 +66,7 @@ function validate(files: File[], accept?: string, minSize?: number, maxSize?: nu
     }
   })
   if (rejected.length > 0) {
-    return { isValid: false, errorMessage: rejected[0].errors[0] }
+    return { isValid: false, errorMessage: rejected[0]?.errors[0] || 'File validation failed' }
   }
   return { isValid: true, errorMessage: '' }
 }
@@ -74,9 +74,6 @@ function validate(files: File[], accept?: string, minSize?: number, maxSize?: nu
 export const machine = createMachine<FileInputSchema>({
   props({ props }) {
     return {
-      accept: props.accept,
-      minSize: props.minSize,
-      maxSize: props.maxSize,
       ...props,
     }
   },
@@ -95,24 +92,24 @@ export const machine = createMachine<FileInputSchema>({
 
   watch({ track, context, action }) {
     track([() => context.get('isValid')], () => {
-      action('toggleState')
+      action(['toggleState'])
     })
   },
 
   states: {
     valid: {
       on: {
-        CHANGE: { actions: 'handleChange' },
-        DRAG_START: { actions: 'startDragging' },
-        DRAG_END: { actions: 'endDragging' },
+        CHANGE: { actions: ['validateFiles'] },
+        DRAG_START: { actions: ['setDragging'] },
+        DRAG_END: { actions: ['setDragging'] },
         INVALID: { target: 'invalid' },
       },
     },
     invalid: {
       on: {
-        CHANGE: { actions: 'handleChange' },
-        DRAG_START: { actions: 'startDragging' },
-        DRAG_END: { actions: 'endDragging' },
+        CHANGE: { actions: ['validateFiles'] },
+        DRAG_START: { actions: ['setDragging'] },
+        DRAG_END: { actions: ['setDragging'] },
         VALID: { target: 'valid' },
       },
     },
@@ -120,13 +117,15 @@ export const machine = createMachine<FileInputSchema>({
 
   implementations: {
     actions: {
-      startDragging({ context }) {
-        context.set('isDragging', true)
+      setDragging({ context, event }) {
+        if (event.type === 'DRAG_START') {
+          context.set('isDragging', true)
+        }
+        else if (event.type === 'DRAG_END') {
+          context.set('isDragging', false)
+        }
       },
-      endDragging({ context }) {
-        context.set('isDragging', false)
-      },
-      handleChange({ context, prop, event, send }) {
+      validateFiles({ context, event, prop, send }) {
         const files = 'files' in event ? event.files : []
         const { isValid, errorMessage } = validate(files, prop('accept'), prop('minSize'), prop('maxSize'))
         context.set('isValid', isValid)
