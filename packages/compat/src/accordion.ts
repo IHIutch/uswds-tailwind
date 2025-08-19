@@ -6,9 +6,9 @@ import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
 
 export class Accordion extends Component<accordion.Props, accordion.Api> {
-  initMachine(context: accordion.Props): VanillaMachine<accordion.AccordionSchema> {
+  initMachine(props: accordion.Props): VanillaMachine<accordion.AccordionSchema> {
     return new VanillaMachine(accordion.machine, {
-      ...context,
+      ...props,
       multiple: this.rootEl.hasAttribute('data-multiple'),
     })
   }
@@ -43,12 +43,10 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
 }
 
 export function accordionInit() {
-  document
-    .querySelectorAll<HTMLElement>('[data-part="accordion-root"]')
-    .forEach((targetEl) => {
-      const acc = new Accordion(targetEl, {
-        id: targetEl.id || nanoid(),
-      })
-      acc.init()
+  document.querySelectorAll<HTMLElement>('[data-part="accordion-root"]').forEach((targetEl) => {
+    const accordion = new Accordion(targetEl, {
+      id: targetEl.id || nanoid(),
     })
+    accordion.init()
+  })
 }
