@@ -5,48 +5,49 @@ packages:
   - scripts/**
 
 catalog:
-  '@antfu/eslint-config': ^4.19.0
-  '@astrojs/check': ^0.9.4
-  '@astrojs/mdx': ^4.3.3
-  '@astrojs/react': ^4.3.0
-  '@astrojs/sitemap': ^3.4.2
-  '@astrojs/vercel': ^8.2.5
-  '@changesets/cli': ^2.29.5
-  '@docsearch/css': ^3.9.0
-  '@docsearch/react': ^3.9.0
-  '@fontsource-variable/open-sans': ^5.2.6
-  '@fontsource-variable/public-sans': ^5.2.6
-  '@fontsource-variable/roboto-mono': ^5.2.6
-  '@fontsource-variable/source-sans-3': ^5.2.8
-  '@fontsource/merriweather': ^5.2.9
-  '@iconify-json/material-symbols': ^1.2.30
-  '@iconify/json': ^2.2.366
-  '@iconify/tailwind4': ^1.0.6
-  '@iconify/utils': ^2.3.0
-  '@napi-rs/image': ^1.11.1
-  '@playwright/test': ^1.54.2
-  '@tailwindcss/cli': ^4.1.11
-  '@tailwindcss/forms': ^0.5.10
-  '@tailwindcss/typography': 0.5.16
-  '@tailwindcss/vite': ^4.1.11
-  '@types/fs-extra': 11.0.1
-  '@types/node': 18.16.19
-  '@types/prettier': 2.7.3
-  '@types/react': ^19.1.9
-  '@types/react-dom': ^19.1.7
-  '@types/twig': ^1.12.17
-  '@vercel/analytics': ^1.5.0
-  '@zag-js/anatomy': ^1.21.1
-  '@zag-js/aria-hidden': ^1.21.1
-  '@zag-js/core': ^1.21.1
-  '@zag-js/dismissable': ^1.21.1
-  '@zag-js/dom-query': ^1.21.1
-  '@zag-js/focus-trap': ^1.21.1
-  '@zag-js/remove-scroll': ^1.21.1
-  '@zag-js/splitter': ^1.21.1
-  '@zag-js/store': ^1.21.1
-  '@zag-js/types': ^1.21.1
-  '@zag-js/utils': ^1.21.1
+  "@antfu/eslint-config": ^4.19.0
+  "@astrojs/check": ^0.9.4
+  "@astrojs/mdx": ^4.3.3
+  "@astrojs/react": ^4.3.0
+  "@astrojs/sitemap": ^3.4.2
+  "@astrojs/vercel": ^8.2.5
+  "@changesets/cli": ^2.29.5
+  "@docsearch/css": ^3.9.0
+  "@docsearch/react": ^3.9.0
+  "@fontsource-variable/merriweather": ^5.2.4
+  "@fontsource-variable/open-sans": ^5.2.6
+  "@fontsource-variable/public-sans": ^5.2.6
+  "@fontsource-variable/roboto-mono": ^5.2.6
+  "@fontsource-variable/source-sans-3": ^5.2.8
+  "@fontsource/merriweather": ^5.2.9
+  "@iconify-json/material-symbols": ^1.2.30
+  "@iconify/json": ^2.2.366
+  "@iconify/tailwind4": ^1.0.6
+  "@iconify/utils": ^2.3.0
+  "@napi-rs/image": ^1.11.1
+  "@playwright/test": ^1.54.2
+  "@tailwindcss/forms": ^0.5.10
+  "@tailwindcss/typography": 0.5.16
+  "@tailwindcss/vite": ^4.1.11
+  "@types/fs-extra": 11.0.1
+  "@types/node": 18.16.19
+  "@types/prettier": 2.7.3
+  "@types/react": ^19.1.9
+  "@types/react-dom": ^19.1.7
+  "@types/twig": ^1.12.17
+  "@vercel/analytics": ^1.5.0
+  "@zag-js/anatomy": ^1.21.1
+  "@zag-js/aria-hidden": ^1.21.1
+  "@zag-js/core": ^1.21.1
+  "@zag-js/dismissable": 1.21.1
+  "@zag-js/dom-query": 1.21.1
+  "@zag-js/focus-trap": ^1.21.1
+  "@zag-js/popper": ^1.21.6
+  "@zag-js/remove-scroll": ^1.21.1
+  "@zag-js/splitter": ^1.21.1
+  "@zag-js/store": ^1.21.1
+  "@zag-js/types": ^1.21.1
+  "@zag-js/utils": ^1.21.1
   astro: ^5.12.8
   astro-expressive-code: ^0.41.3
   astro-seo: ^0.8.4
@@ -74,19 +75,9 @@ catalog:
   typescript: ^5.9.2
   vite: ^7.0.6
 
-catalogs:
-  conflicts_@tailwindcss/typography_h0_5_16:
-    '@tailwindcss/typography': ^0.5.16
-  conflicts_conflicts_tailwindcss_h4_1_4_catalog:
-    tailwindcss: catalog
-  conflicts_tailwindcss_h4_1_4:
-    tailwindcss: ^4.1.4
-  conflicts_conflicts_conflicts_tailwindcss_h4_1_4_catalog_h4_1_4:
-    tailwindcss: ^4.1.4
-
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
+  - "@parcel/watcher"
+  - "@tailwindcss/oxide"
   - esbuild
   - rolldown
   - sharp

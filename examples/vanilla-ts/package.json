@@ -9,11 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/merriweather": "catalog:",
     "@fontsource-variable/open-sans": "catalog:",
     "@fontsource-variable/public-sans": "catalog:",
     "@fontsource-variable/roboto-mono": "catalog:",
     "@fontsource-variable/source-sans-3": "catalog:",
-    "@fontsource/merriweather": "catalog:",
     "@iconify/json": "catalog:",
     "@iconify/tailwind4": "catalog:",
     "@tailwindcss/vite": "catalog:",

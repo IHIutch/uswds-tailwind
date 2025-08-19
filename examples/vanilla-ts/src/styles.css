@@ -2,12 +2,7 @@
 @import "@fontsource-variable/public-sans";
 @import "@fontsource-variable/roboto-mono";
 @import "@fontsource-variable/source-sans-3";
-
-@import "@fontsource/merriweather/300.css";
-@import "@fontsource/merriweather/400.css";
-@import "@fontsource/merriweather/700.css";
-@import "@fontsource/merriweather/900.css";
-
+@import "@fontsource-variable/merriweather";
 
 @import "tailwindcss";
 @import "@uswds-tailwind/theme";
