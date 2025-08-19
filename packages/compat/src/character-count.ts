@@ -1,13 +1,14 @@
 import * as characterCount from '@uswds-tailwind/character-count-compat'
+import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
 
 export class CharacterCount extends Component<characterCount.Props, characterCount.Api> {
-  initMachine(context: characterCount.Props): VanillaMachine<characterCount.CharacterCountSchema> {
+  initMachine(props: characterCount.Props): VanillaMachine<characterCount.CharacterCountSchema> {
     return new VanillaMachine(characterCount.machine, {
-      ...context,
+      ...props,
     })
   }
 
@@ -71,7 +72,7 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 export function characterCountInit() {
   document.querySelectorAll<HTMLElement>('[data-part="character-count-root"]').forEach((targetEl) => {
     const characterCount = new CharacterCount(targetEl, {
-      id: targetEl.id || 'character-count',
+      id: targetEl.id || nanoid(),
       maxLength: 25,
       getStatusText: (count, max) => {
         const diff = Math.abs(max - count)
