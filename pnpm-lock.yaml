@@ -418,9 +418,6 @@ importers:
       '@uswds-tailwind/collapse-compat':
         specifier: workspace:*
         version: link:../machines/collapse-compat
-      '@uswds-tailwind/date-picker-compat':
-        specifier: workspace:*
-        version: link:../machines/date-picker-compat
       '@uswds-tailwind/dropdown-compat':
         specifier: workspace:*
         version: link:../machines/dropdown-compat
@@ -433,6 +430,9 @@ importers:
       '@uswds-tailwind/modal-compat':
         specifier: workspace:*
         version: link:../machines/modal-compat
+      '@uswds-tailwind/table-compat':
+        specifier: workspace:*
+        version: link:../machines/table-compat
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
@@ -539,27 +539,6 @@ importers:
         specifier: 'catalog:'
         version: 1.21.1
 
-  packages/machines/date-picker-compat:
-    dependencies:
-      '@zag-js/anatomy':
-        specifier: 'catalog:'
-        version: 1.21.1
-      '@zag-js/core':
-        specifier: 'catalog:'
-        version: 1.21.1
-      '@zag-js/dismissable':
-        specifier: 'catalog:'
-        version: 1.21.1
-      '@zag-js/dom-query':
-        specifier: 'catalog:'
-        version: 1.21.1
-      '@zag-js/types':
-        specifier: 'catalog:'
-        version: 1.21.1
-      '@zag-js/utils':
-        specifier: 'catalog:'
-        version: 1.21.1
-
   packages/machines/dropdown-compat:
     dependencies:
       '@zag-js/anatomy':
@@ -648,6 +627,36 @@ importers:
         version: 1.21.1
 
   packages/machines/modal-compat:
+    dependencies:
+      '@zag-js/anatomy':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/aria-hidden':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/core':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/dismissable':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/dom-query':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/focus-trap':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/remove-scroll':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/types':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/utils':
+        specifier: 'catalog:'
+        version: 1.21.1
+
+  packages/machines/table-compat:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'

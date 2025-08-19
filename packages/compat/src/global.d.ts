@@ -4,14 +4,12 @@ import type { Collapse, collapseInit } from './collapse'
 import type { FileInput, fileInputInit } from './file-input'
 import type { InputMask, inputMaskInit } from './input-mask'
 import type { Modal, modalInit } from './modal'
+import type { Table, tableInit } from './table'
 
 declare global {
   interface Window {
     Accordion: typeof Accordion
     accordionInit: typeof accordionInit
-
-    Modal: typeof Modal
-    modalInit: typeof modalInit
 
     Collapse: typeof Collapse
     collapseInit: typeof collapseInit
@@ -19,10 +17,16 @@ declare global {
     CharacterCount: typeof CharacterCount
     characterCountInit: typeof characterCountInit
 
+    FileInput: typeof FileInput
+    fileInputInit: typeof fileInputInit
+
     InputMask: typeof InputMask
     inputMaskInit: typeof inputMaskInit
 
-    FileInput: typeof FileInput
-    fileInputInit: typeof fileInputInit
+    Modal: typeof Modal
+    modalInit: typeof modalInit
+
+    Table: typeof Table
+    tableInit: typeof tableInit
   }
 }

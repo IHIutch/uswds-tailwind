@@ -24,6 +24,7 @@
     "@uswds-tailwind/file-input-compat": "workspace:*",
     "@uswds-tailwind/input-mask-compat": "workspace:*",
     "@uswds-tailwind/modal-compat": "workspace:*",
+    "@uswds-tailwind/table-compat": "workspace:*",
     "@zag-js/core": "catalog:",
     "@zag-js/store": "catalog:",
     "@zag-js/types": "catalog:",
