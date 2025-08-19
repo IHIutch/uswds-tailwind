@@ -1,13 +1,14 @@
 import * as collapse from '@uswds-tailwind/collapse-compat'
+import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
 
 export class Collapse extends Component<collapse.Props, collapse.Api> {
-  initMachine(context: collapse.Props): VanillaMachine<collapse.CollapseSchema> {
+  initMachine(props: collapse.Props): VanillaMachine<collapse.CollapseSchema> {
     return new VanillaMachine(collapse.machine, {
-      ...context,
+      ...props,
     })
   }
 
@@ -46,9 +47,9 @@ export class Collapse extends Component<collapse.Props, collapse.Api> {
 
 export function collapseInit() {
   document.querySelectorAll<HTMLElement>('[data-part="collapse-root"]').forEach((targetEl) => {
-    const c = new Collapse(targetEl, {
-      id: targetEl.id || 'collapse',
+    const collapse = new Collapse(targetEl, {
+      id: targetEl.id || nanoid(),
     })
-    c.init()
+    collapse.init()
   })
 }

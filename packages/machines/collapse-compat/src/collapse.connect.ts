@@ -24,7 +24,7 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.root.attrs,
         'id': dom.getRootId(scope),
-        'data-open': isOpen ? '' : undefined,
+        'data-state': isOpen ? 'open' : 'closed',
       })
     },
 
@@ -44,8 +44,8 @@ export function connect<T extends PropTypes>(
     getContentProps() {
       return normalize.element({
         ...parts.content.attrs,
-        id: dom.getContentId(scope),
-        hidden: !isOpen,
+        'id': dom.getContentId(scope),
+        'data-state': isOpen ? 'open' : 'closed',
       })
     },
   }

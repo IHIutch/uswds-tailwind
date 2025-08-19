@@ -23,7 +23,7 @@ export interface CollapseProps extends CommonProperties {
 }
 
 export interface CollapseSchema {
-  props: CollapseProps
+  props: Partial<CollapseProps>
   state: 'open' | 'closed'
   action: 'invokeOnOpen' | 'invokeOnClose' | 'toggleVisibility'
   event: { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
