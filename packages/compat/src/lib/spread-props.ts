@@ -1,73 +1,74 @@
 export interface Attrs {
-    [key: string]: any // Change 'any' to the specific type you want to allow for attributes
+  [key: string]: any // Change 'any' to the specific type you want to allow for attributes
 }
 
 const prevAttrsMap = new WeakMap<HTMLElement, Attrs>()
 
 export function spreadProps(node: HTMLElement, attrs: Attrs): () => void {
-    const oldAttrs = prevAttrsMap.get(node) || {}
+  const oldAttrs = prevAttrsMap.get(node) || {}
 
-    const attrKeys = Object.keys(attrs)
+  const attrKeys = Object.keys(attrs)
 
-    const addEvt = (e: string, f: EventListener) => {
-        node.addEventListener(e.toLowerCase(), f)
+  const addEvt = (e: string, f: EventListener) => {
+    node.addEventListener(e.toLowerCase(), f)
+  }
+
+  const remEvt = (e: string, f: EventListener) => {
+    node.removeEventListener(e.toLowerCase(), f)
+  }
+
+  const onEvents = (attr: string) => attr.startsWith('on')
+  const others = (attr: string) => !attr.startsWith('on') && !attr.startsWith('data-part')
+
+  const setup = (attr: string) => addEvt(attr.substring(2), attrs[attr])
+  const teardown = (attr: string) => remEvt(attr.substring(2), attrs[attr])
+
+  const apply = (attrName: string) => {
+    let value = attrs[attrName]
+
+    const oldValue = oldAttrs[attrName]
+    if (value === oldValue)
+      return
+
+    if (typeof value === 'boolean') {
+      value = value || undefined
     }
 
-    const remEvt = (e: string, f: EventListener) => {
-        node.removeEventListener(e.toLowerCase(), f)
+    if (value != null) {
+      if (['value', 'checked', 'htmlFor'].includes(attrName)) {
+        ; (node as any)[attrName] = value // Using 'any' here because TypeScript can't narrow the type based on the array check
+      }
+      else if (attrName.toLowerCase() === 'textcontent') {
+        node.textContent = value
+      }
+      else {
+        node.setAttribute(attrName.toLowerCase(), value)
+      }
+      return
     }
 
-    const onEvents = (attr: string) => attr.startsWith('on')
-    const others = (attr: string) => !attr.startsWith('on') && !attr.startsWith('data-part')
+    node.removeAttribute(attrName.toLowerCase())
+  }
 
-    const setup = (attr: string) => addEvt(attr.substring(2), attrs[attr])
-    const teardown = (attr: string) => remEvt(attr.substring(2), attrs[attr])
+  // reconcile old attributes
 
-    const apply = (attrName: string) => {
-        let value = attrs[attrName]
-
-        const oldValue = oldAttrs[attrName]
-        if (value === oldValue)
-            return
-
-        if (typeof value === 'boolean') {
-            value = value || undefined
-        }
-
-        if (value != null) {
-            if (['value', 'checked', 'htmlFor'].includes(attrName)) {
-                ; (node as any)[attrName] = value // Using 'any' here because TypeScript can't narrow the type based on the array check
-            } else if (attrName.toLowerCase() === 'textcontent') {
-                node.textContent = value;
-            } else {
-                node.setAttribute(attrName.toLowerCase(), value)
-            }
-            return
-        }
-
-        node.removeAttribute(attrName.toLowerCase())
+  for (const key in oldAttrs) {
+    if (attrs[key] == null) {
+      node.removeAttribute(key.toLowerCase())
     }
+  }
 
-    // reconcile old attributes
+  const oldEvents = Object.keys(oldAttrs).filter(onEvents)
+  oldEvents.forEach((evt) => {
+    remEvt(evt.substring(2), oldAttrs[evt])
+  })
 
-    for (const key in oldAttrs) {
-        if (attrs[key] == null) {
-            node.removeAttribute(key.toLowerCase())
-        }
-    }
+  attrKeys.filter(onEvents).forEach(setup)
+  attrKeys.filter(others).forEach(apply)
 
-    const oldEvents = Object.keys(oldAttrs).filter(onEvents)
-    oldEvents.forEach((evt) => {
-        remEvt(evt.substring(2), oldAttrs[evt])
-    })
+  prevAttrsMap.set(node, attrs)
 
-    attrKeys.filter(onEvents).forEach(setup)
-    attrKeys.filter(others).forEach(apply)
-
-    prevAttrsMap.set(node, attrs)
-
-    return function cleanup() {
-        attrKeys.filter(onEvents).forEach(teardown)
-    }
+  return function cleanup() {
+    attrKeys.filter(onEvents).forEach(teardown)
+  }
 }
-  

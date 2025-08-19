@@ -201,7 +201,7 @@ export class VanillaMachine<T extends MachineSchema> {
         // @ts-expect-error any
         = this.machine.states[currentState].on?.[event.type]
         // @ts-expect-error any
-        ?? this.machine.on?.[event.type]
+          ?? this.machine.on?.[event.type]
 
       const transition = this.choose(transitions)
       if (!transition)
