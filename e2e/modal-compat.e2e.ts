@@ -3,13 +3,10 @@ import { expect, test } from '@playwright/test'
 
 const getTriggerEl = (page: Page) => page.locator('[data-part="modal-trigger"]')
 const getContentEl = (page: Page) => page.locator('[data-part="modal-content"]')
-// const getBackdropEl = (page: Page) => page.locator('[data-part="modal-backdrop"]')
 const getPositionerEl = (page: Page) => page.locator('[data-part="modal-positioner"]')
-// const getTitleEl = (page: Page) => page.locator('[data-part="modal-title"]')
-// const getDescriptionEl = (page: Page) => page.locator('[data-part="modal-description"]')
 const getCloseTriggerEl = (page: Page) => page.locator('[data-part="modal-close-trigger"]')
 
-test.describe('Modal Component Tests', () => {
+test.describe('Modal Compatibility Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/modal/')
   })

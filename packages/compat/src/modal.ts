@@ -6,9 +6,9 @@ import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
 export class Modal extends Component<modal.Props, modal.Api> {
-  initMachine(context: modal.Props): VanillaMachine<modal.ModalSchema> {
+  initMachine(props: modal.Props): VanillaMachine<modal.ModalSchema> {
     return new VanillaMachine(modal.machine, {
-      ...context,
+      ...props,
       role: this.content.getAttribute('role') === 'alertdialog' ? 'alertdialog' : 'dialog',
       closeOnEscape: !this.content.hasAttribute('data-static'),
       closeOnInteractOutside: !this.content.hasAttribute('data-static'),
@@ -85,7 +85,7 @@ export class Modal extends Component<modal.Props, modal.Api> {
 export function modalInit() {
   document.querySelectorAll<HTMLElement>('[data-part="modal-trigger"]').forEach((targetEl) => {
     const modal = new Modal(targetEl, {
-      id: nanoid(),
+      id: targetEl.id || nanoid(),
     })
     modal.init()
   })
