@@ -1,5 +1,8 @@
 import type { DropdownSchema } from './dropdown.types'
 import { createMachine } from '@zag-js/core'
+import { trackDismissableElement } from '@zag-js/dismissable'
+import { getPlacement } from '@zag-js/popper'
+import * as dom from './dropdown.dom'
 
 export const machine = createMachine<DropdownSchema>({
   props({ props }) {
@@ -25,6 +28,7 @@ export const machine = createMachine<DropdownSchema>({
 
   states: {
     open: {
+      effects: ['trackInteractOutside', 'trackPositioning'],
       entry: ['invokeOnOpen'],
       on: {
         'CLOSE': { target: 'closed', actions: ['invokeOnClose'] },
@@ -49,6 +53,65 @@ export const machine = createMachine<DropdownSchema>({
       },
       invokeOnClose({ prop }) {
         prop('onOpenChange')?.({ open: false })
+      },
+      // closeRootMenu({ refs }) {
+      //   closeRootMenu({ parent: refs.get('parent') })
+      // },
+    },
+    effects: {
+      trackPositioning({ context, prop, scope }) {
+        const positioning = {
+          ...prop('positioning'),
+        }
+        context.set('currentPlacement', positioning.placement!)
+        const getContentEl = () => dom.getContentEl(scope)
+        const getTriggerEl = () => dom.getTriggerEl(scope)
+
+        return getPlacement(getTriggerEl, getContentEl, {
+          ...positioning,
+          gutter: 0,
+          defer: true,
+          onComplete(data) {
+            context.set('currentPlacement', data.placement)
+          },
+        })
+      },
+      trackInteractOutside({ scope, prop, send }) {
+        const getContentEl = () => dom.getContentEl(scope)
+        const restoreFocus = true
+        return trackDismissableElement(getContentEl, {
+          defer: true,
+          exclude: [dom.getTriggerEl(scope)],
+          onInteractOutside: prop('onInteractOutside'),
+          onFocusOutside(event) {
+            prop('onFocusOutside')?.(event)
+
+            // const target = getEventTarget(event.detail.originalEvent)
+            // const isWithinContextTrigger = contains(dom.getContextTriggerEl(scope), target)
+            // if (isWithinContextTrigger) {
+            //   event.preventDefault()
+            //   return
+            // }
+          },
+          onEscapeKeyDown(event) {
+            prop('onEscapeKeyDown')?.(event)
+            // closeRootMenu({ parent: refs.get('parent') })
+          },
+          onPointerDownOutside(event) {
+            prop('onPointerDownOutside')?.(event)
+
+            // const target = getEventTarget(event.detail.originalEvent)
+            // const isWithinContextTrigger = contains(dom.getContextTriggerEl(scope), target)
+            // if (isWithinContextTrigger && event.detail.contextmenu) {
+            //   event.preventDefault()
+            //   return
+            // }
+            // restoreFocus = !event.detail.focusable
+          },
+          onDismiss() {
+            send({ type: 'CLOSE', src: 'interact-outside', restoreFocus })
+          },
+        })
       },
     },
   },

@@ -1,6 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { DropdownApi, DropdownSchema } from './dropdown.types'
+import { getPlacementStyles } from '@zag-js/popper'
 import { parts } from './dropdown.anatomy'
 import * as dom from './dropdown.dom'
 
@@ -36,6 +37,11 @@ export function connect<T extends PropTypes>(
 
   const open = state.matches('open')
 
+  const popperStyles = getPlacementStyles({
+    ...prop('positioning'),
+    placement: 'bottom',
+  })
+
   return {
     open,
     setOpen(next) {
@@ -49,7 +55,7 @@ export function connect<T extends PropTypes>(
         ...parts.root.attrs,
         id: dom.getRootId(scope),
         dir: prop('dir'),
-        onFocusout(event) {
+        onFocusout(event: FocusEvent) {
           const related = event.relatedTarget as HTMLElement | null
           const root = dom.getRootEl(scope)
           if (root && related && !root.contains(related)) {
@@ -71,7 +77,7 @@ export function connect<T extends PropTypes>(
         onClick() {
           send({ type: 'TOGGLE' })
         },
-        onKeydown(event) {
+        onKeyDown(event) {
           switch (event.key) {
             case 'Enter':
             case ' ': {
@@ -116,9 +122,9 @@ export function connect<T extends PropTypes>(
         'dir': prop('dir'),
         'role': 'menu',
         'hidden': !open,
-        'tabIndex': -1,
+        'tabIndex': 0,
         'data-state': open ? 'open' : 'closed',
-        onKeydown(event) {
+        onKeyDown(event) {
           switch (event.key) {
             case 'Escape': {
               event.preventDefault()
@@ -148,6 +154,7 @@ export function connect<T extends PropTypes>(
             }
           }
         },
+        'style': popperStyles.floating,
       })
     },
 
@@ -161,10 +168,10 @@ export function connect<T extends PropTypes>(
           send({ type: 'CLOSE' })
           dom.getTriggerEl(scope)?.focus()
         },
-        onKeydown(event) {
+        onKeyDown(event) {
           if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault()
-            ;(event.currentTarget as HTMLElement).click()
+            event.preventDefault();
+            (event.currentTarget as HTMLElement).click()
           }
         },
       })

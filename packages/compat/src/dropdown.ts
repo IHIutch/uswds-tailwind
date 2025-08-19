@@ -1,12 +1,15 @@
 import * as dropdown from '@uswds-tailwind/dropdown-compat'
+import { nanoid } from 'nanoid'
 import { normalizeProps } from './lib//normalize-props'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
 export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
-  initMachine(context: dropdown.Props): VanillaMachine<dropdown.DropdownSchema> {
-    return new VanillaMachine(dropdown.machine, { ...context })
+  initMachine(props: dropdown.Props): VanillaMachine<dropdown.DropdownSchema> {
+    return new VanillaMachine(dropdown.machine, {
+      ...props,
+    })
   }
 
   initApi() {
@@ -53,7 +56,9 @@ export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
 
 export function dropdownInit() {
   document.querySelectorAll<HTMLElement>('[data-part="dropdown-root"]').forEach((targetEl) => {
-    const dd = new Dropdown(targetEl, { id: targetEl.id || 'dropdown' })
-    dd.init()
+    const dropdown = new Dropdown(targetEl, {
+      id: targetEl.id || nanoid(),
+    })
+    dropdown.init()
   })
 }

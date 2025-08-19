@@ -10,6 +10,11 @@ export const props = createProps<DropdownProps>()([
   'open',
   'defaultOpen',
   'onOpenChange',
+  'onInteractOutside',
+  'onFocusOutside',
+  'positioning',
+  'onEscapeKeyDown',
+  'onPointerDownOutside',
 ])
 
 export const splitProps = createSplitProps<Partial<DropdownProps>>(props)
