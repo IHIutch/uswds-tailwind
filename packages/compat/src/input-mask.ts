@@ -1,13 +1,19 @@
 import * as inputMask from '@uswds-tailwind/input-mask-compat'
+import { nanoid } from 'nanoid'
 import { normalizeProps } from './lib//normalize-props'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
 export class InputMask extends Component<inputMask.Props, inputMask.Api> {
-  initMachine(context: inputMask.Props): VanillaMachine<inputMask.InputMaskSchema> {
+  initMachine(props: inputMask.Props): VanillaMachine<inputMask.InputMaskSchema> {
+    const mask = this.rootEl.getAttribute('data-mask')
+    const regex = this.rootEl.getAttribute('data-regex')
+
     return new VanillaMachine(inputMask.machine, {
-      ...context,
+      ...props,
+      mask: mask || undefined,
+      regex: regex || undefined,
     })
   }
 
@@ -36,13 +42,9 @@ export class InputMask extends Component<inputMask.Props, inputMask.Api> {
 
 export function inputMaskInit() {
   document.querySelectorAll<HTMLElement>('[data-part="input-mask-root"]').forEach((targetEl) => {
-    const mask = targetEl.getAttribute('data-mask') || ''
-    const regex = targetEl.getAttribute('data-regex') || undefined
-    const im = new InputMask(targetEl, {
-      id: targetEl.id || 'input-mask',
-      mask,
-      regex: regex || undefined,
+    const inputMask = new InputMask(targetEl, {
+      id: targetEl.id || nanoid(),
     })
-    im.init()
+    inputMask.init()
   })
 }
