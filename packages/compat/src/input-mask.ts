@@ -7,13 +7,13 @@ import { spreadProps } from './lib/spread-props'
 
 export class InputMask extends Component<inputMask.Props, inputMask.Api> {
   initMachine(props: inputMask.Props): VanillaMachine<inputMask.InputMaskSchema> {
-    const mask = this.rootEl.getAttribute('data-mask')
-    const regex = this.rootEl.getAttribute('data-regex')
+    const inputEl = this.input
 
     return new VanillaMachine(inputMask.machine, {
       ...props,
-      mask: mask || undefined,
-      regex: regex || undefined,
+      pattern: inputEl.getAttribute('pattern') || undefined,
+      placeholder: inputEl.getAttribute('placeholder') || undefined,
+      charset: inputEl.getAttribute('data-charset') || undefined,
     })
   }
 
@@ -24,6 +24,7 @@ export class InputMask extends Component<inputMask.Props, inputMask.Api> {
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
     this.renderInput(this.input)
+    this.renderPlaceholder()
   }
 
   private get input() {
@@ -35,8 +36,34 @@ export class InputMask extends Component<inputMask.Props, inputMask.Api> {
     return inputEl
   }
 
+  private get placeholder() {
+    return this.rootEl.querySelector<HTMLElement>(
+      `[data-part="placeholder"]`,
+    )
+  }
+
   private renderInput(inputEl: HTMLElement) {
     spreadProps(inputEl, this.api.getInputProps())
+  }
+
+  private renderPlaceholder() {
+    const placeholderEl = this.placeholder
+    if (placeholderEl) {
+      placeholderEl.textContent = this.api.getDynamicPlaceholder()
+      const spaceSaver = placeholderEl.querySelector('[data-part="input-mask"]')
+
+      if (spaceSaver) {
+        spaceSaver.textContent = this.api.getValue()
+      }
+      else {
+        const spanEl = document.createElement('span')
+        spanEl.textContent = this.api.getValue()
+        spanEl.style.visibility = 'hidden'
+        spanEl.setAttribute('data-part', 'input-mask')
+
+        placeholderEl.insertBefore(spanEl, placeholderEl.firstChild)
+      }
+    }
   }
 }
 

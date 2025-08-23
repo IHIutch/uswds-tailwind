@@ -5,8 +5,10 @@ import { createSplitProps } from '@zag-js/utils'
 export const props = createProps<InputMaskProps>()([
   'id',
   'getRootNode',
-  'mask',
-  'regex',
+  'pattern',
+  'placeholder',
+  'charset',
+  'maxlength',
 ])
 
 export const splitProps = createSplitProps<Partial<InputMaskProps>>(props)

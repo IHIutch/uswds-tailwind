@@ -1,13 +1,9 @@
 import type { InputMaskSchema } from './input-mask.types'
 import { createMachine } from '@zag-js/core'
-import Inputmask from 'inputmask'
-import * as dom from './input-mask.dom'
 
 export const machine = createMachine<InputMaskSchema>({
   props({ props }) {
     return {
-      mask: '',
-      regex: undefined,
       ...props,
     }
   },
@@ -16,17 +12,18 @@ export const machine = createMachine<InputMaskSchema>({
     return 'idle'
   },
 
-  context({ bindable }) {
+  context({ bindable, prop }) {
+    const placeholder = prop('placeholder') || ''
     return {
       value: bindable(() => ({ defaultValue: '' })),
+      dynamicPlaceholder: bindable(() => ({ defaultValue: placeholder })),
     }
   },
 
   states: {
     idle: {
-      effects: ['setupMask'],
       on: {
-        INPUT: { actions: ['setValue'] },
+        INPUT: { actions: ['setValue', 'updatePlaceholder'] },
       },
     },
   },
@@ -34,22 +31,15 @@ export const machine = createMachine<InputMaskSchema>({
   implementations: {
     actions: {
       setValue({ context, event }) {
-        if ('value' in event) {
+        if (event && 'value' in event) {
           context.set('value', event.value)
         }
       },
-    },
-    effects: {
-      setupMask({ scope, prop }) {
-        const inputEl = dom.getInputEl(scope)
-        if (!inputEl)
-          return
-        const mask = prop('regex') ? { regex: prop('regex')! } : prop('mask')
-        const im = new Inputmask(mask as any)
-        im.mask(inputEl)
-        return () => {
-          im.remove()
-        }
+      
+      updatePlaceholder({ context, prop }) {
+        const placeholder = prop('placeholder') || ''
+        const value = context.get('value')
+        context.set('dynamicPlaceholder', placeholder.slice(value.length))
       },
     },
   },

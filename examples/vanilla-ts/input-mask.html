@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="/vite.svg"
+  />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Vite + TS</title>
+  <link
+    href="./src/styles.css"
+    rel="stylesheet"
+  >
+</head>
+
+<body class="font-source-sans p-4">
+  <div class="space-y-12">
+
+    <div
+      class="max-w-xs"
+      data-part="input-mask-root"
+    >
+      <label
+        for="ssn"
+        class="block"
+      >Social Security Number</label>
+      <div
+        id="input-hint"
+        class="text-gray-50"
+      >For example, 123 45 6789</div>
+      <div class="mt-2 relative">
+        <div
+          aria-hidden="true"
+          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
+        >
+          <span
+            data-part="placeholder"
+            class="text-gray-50"
+          ></span>
+        </div>
+        <input
+          data-part="input-mask-input"
+          id="ssn"
+          pattern="^(?!(000|666|9))\d{3} (?!00)\d{2} (?!0000)\d{4}$"
+          placeholder="___ __ ____"
+          aria-describedby="input-hint"
+          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+        />
+      </div>
+    </div>
+
+    <div
+      class="max-w-xs"
+      data-part="input-mask-root"
+    >
+      <label
+        for="phone"
+        class="block"
+      >US Telephone Number</label>
+      <div
+        id="input-hint-phone"
+        class="text-gray-50"
+      >For example, (123) 456-7890</div>
+      <div class="mt-2 relative">
+        <div
+          aria-hidden="true"
+          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
+        >
+          <span
+            data-part="placeholder"
+            class="text-gray-50"
+          ></span>
+        </div>
+        <input
+          data-part="input-mask-input"
+          id="phone"
+          pattern="\d{3}-\d{3}-\d{4}"
+          placeholder="___-___-____"
+          aria-describedby="input-hint-phone"
+          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+        />
+      </div>
+    </div>
+
+
+    <div
+      class="max-w-xs"
+      data-part="input-mask-root"
+    >
+      <label
+        for="zip"
+        class="block"
+      >ZIP Code</label>
+      <div
+        id="input-hint-zip"
+        class="text-gray-50"
+      >For example, 12345-6789</div>
+      <div class="mt-2 relative">
+        <div
+          aria-hidden="true"
+          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
+        >
+          <span
+            data-part="placeholder"
+            class="text-gray-50"
+          ></span>
+        </div>
+        <input
+          data-part="input-mask-input"
+          pattern="^[0-9]{5}(?:-[0-9]{4})?$"
+          placeholder="_____-____"
+          id="zip"
+          aria-describedby="input-hint-zip"
+          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+        />
+      </div>
+    </div>
+
+    <div
+      class="max-w-xs"
+      data-part="input-mask-root"
+    >
+      <label
+        for="alpha"
+        class="block"
+      >Alphanumeric</label>
+      <div
+        id="input-hint-alpha"
+        class="text-gray-50"
+      >For example, A1B 2C3</div>
+      <div class="mt-2 relative">
+        <div
+          aria-hidden="true"
+          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
+        >
+          <span
+            data-part="placeholder"
+            class="text-gray-50"
+          ></span>
+        </div>
+        <input
+          data-part="input-mask-input"
+          pattern="\w\d\w \d\w\d"
+          placeholder="___ ___"
+          data-charset="A#A #A#"
+          id="alpha"
+          aria-describedby="input-hint-alpha"
+          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+        />
+      </div>
+    </div>
+
+  </div>
+
+  <script
+    type="module"
+    src="./src/index.ts"
+  ></script>
+</body>
+
+</html>

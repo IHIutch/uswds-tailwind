@@ -159,9 +159,6 @@ catalogs:
     github-slugger:
       specifier: ^2.0.0
       version: 2.0.0
-    inputmask:
-      specifier: ^5.0.9
-      version: 5.0.9
     nanoid:
       specifier: ^5.1.5
       version: 5.1.5
@@ -592,9 +589,6 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.21.1
-      inputmask:
-        specifier: 'catalog:'
-        version: 5.0.9
 
   packages/machines/modal:
     dependencies:
@@ -3494,9 +3488,6 @@ packages:
 
   inline-style-parser@0.2.4:
     resolution: {integrity: sha512-0aO8FkhNZlj/ZIbNi7Lxxr12obT7cL1moPfE4tg1LkX7LlLfC6DeX4l2ZEud1ukP9jNQyNnfzQVqwbwmAATY4Q==}
-
-  inputmask@5.0.9:
-    resolution: {integrity: sha512-s0lUfqcEbel+EQXtehXqwCJGShutgieOaIImFKC/r4reYNvX3foyrChl6LOEvaEgxEbesePIrw1Zi2jhZaDZbQ==}
 
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
@@ -8515,8 +8506,6 @@ snapshots:
   indent-string@5.0.0: {}
 
   inline-style-parser@0.2.4: {}
-
-  inputmask@5.0.9: {}
 
   iron-webcrypto@1.2.1: {}
 
