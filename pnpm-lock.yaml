@@ -415,6 +415,9 @@ importers:
       '@uswds-tailwind/collapse-compat':
         specifier: workspace:*
         version: link:../machines/collapse-compat
+      '@uswds-tailwind/date-picker-compat':
+        specifier: workspace:*
+        version: link:../machines/date-picker-compat
       '@uswds-tailwind/dropdown-compat':
         specifier: workspace:*
         version: link:../machines/dropdown-compat
@@ -527,6 +530,27 @@ importers:
         specifier: 'catalog:'
         version: 1.21.1
       '@zag-js/remove-scroll':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/types':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/utils':
+        specifier: 'catalog:'
+        version: 1.21.1
+
+  packages/machines/date-picker-compat:
+    dependencies:
+      '@zag-js/anatomy':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/core':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/dismissable':
+        specifier: 'catalog:'
+        version: 1.21.1
+      '@zag-js/dom-query':
         specifier: 'catalog:'
         version: 1.21.1
       '@zag-js/types':

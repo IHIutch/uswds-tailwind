@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="/vite.svg"
+  />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Date Range Picker - USWDS Tailwind</title>
+  <link
+    href="./../src/styles.css"
+    rel="stylesheet"
+  >
+</head>
+
+<body class="font-source-sans p-4">
+  <h1 class="text-3xl font-bold mb-8">USWDS Date Range Picker</h1>
+
+  <div class="space-y-8">
+
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Basic Date Range Picker</h2>
+      <div
+        data-part="date-range-picker-root"
+        id="date-picker-1"
+      >
+        <!-- Start Date Input -->
+        <div class="max-w-mobile-lg relative">
+          <label
+            for="start-date-1"
+            class="text-sm font-medium text-gray-900 min-w-0 shrink-0"
+          >Start Date</label>
+          <div class="flex flex-1">
+            <input
+              id="start-date-1"
+              data-part="date-range-picker-start-input"
+              type="text"
+              placeholder="MM/DD/YYYY"
+              class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+            />
+            <button
+              data-part="date-picker-trigger"
+              data-target="start"
+              class="cursor-pointer w-12 bg-transparent hover:bg-gray-10! data-[state=open]:bg-gray-5 active:bg-gray-30 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 flex items-center justify-center"
+              aria-label="Open calendar for start date"
+            >
+              <span class="icon-[material-symbols--calendar-today] size-7"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- End Date Input -->
+        <div class="max-w-mobile-lg relative">
+          <label
+            for="end-date-1"
+            class="text-sm font-medium text-gray-900 min-w-0 shrink-0"
+          >End Date</label>
+          <div class="flex flex-1 relative">
+            <input
+              id="end-date-1"
+              data-part="date-range-picker-end-input"
+              type="text"
+              placeholder="MM/DD/YYYY"
+              class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+            />
+            <button
+              data-part="date-picker-trigger"
+              data-target="end"
+              class="cursor-pointer w-12 bg-transparent hover:bg-gray-10! data-[state=open]:bg-gray-5 active:bg-gray-30 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 flex items-center justify-center"
+              aria-label="Open calendar for end date"
+            >
+              <span class="icon-[material-symbols--calendar-today] size-7"></span>
+            </button>
+
+            <div
+              data-part="date-picker-content"
+              class="bg-gray-5 w-mobile absolute top-10 right-0 not-data-[state=open]:hidden"
+            >
+              <!-- Date Grid View -->
+              <div data-part="date-picker-day">
+                <div class="flex w-full justify-between">
+                  <div class="flex">
+                    <button
+                      data-part="date-picker-nav-prev"
+                      data-unit="year"
+                      class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                    >
+                      <span class="icon-[material-symbols--keyboard-double-arrow-left] size-6"></span>
+                    </button>
+                    <button
+                      data-part="date-picker-nav-prev"
+                      data-unit="month"
+                      class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                    >
+                      <span class="icon-[material-symbols--keyboard-arrow-left] size-6"></span>
+                    </button>
+                  </div>
+
+                  <div class="flex grow-1 justify-center">
+                    <button
+                      data-part="date-view-trigger"
+                      data-value="month"
+                      class="h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4"
+                    ></button>
+                    <button
+                      data-part="date-view-trigger"
+                      data-value="year"
+                      class="h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4"
+                    ></button>
+                  </div>
+
+                  <div class="flex">
+                    <button
+                      data-part="date-picker-nav-next"
+                      data-unit="month"
+                      class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                    >
+                      <span class="icon-[material-symbols--keyboard-arrow-right] size-6"></span>
+                    </button>
+                    <button
+                      data-part="date-picker-nav-next"
+                      data-unit="year"
+                      class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                    >
+                      <span class="icon-[material-symbols--keyboard-double-arrow-right] size-6"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Calendar table layout -->
+                <table class="w-full">
+                  <!-- Table header with day names -->
+                  <thead>
+                    <tr>
+                      <!-- Day header template (will be cloned 7 times) -->
+                      <th
+                        data-part="date-picker-day-header"
+                        class="text-center py-1.5 font-normal"
+                      ></th>
+                    </tr>
+                  </thead>
+                  <!-- Table body with date buttons -->
+                  <tbody>
+                    <tr>
+                      <!-- Date button template (will be cloned 35-42 times) -->
+                      <td>
+                        <button
+                          data-part="date-picker-date-button"
+                          class="w-full py-1.5 hover:bg-gray-10 cursor-pointer text-center data-[month-context=prev]:text-gray-warm-60 data-[month-context=next]:text-gray-warm-60 data-[focus]:outline-2 data-[focus]:outline-blue-warm-80v data-[focus]:-outline-offset-2 focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! data-[range-start]:bg-blue-warm-60v data-[range-start]:text-white data-[range-start]:rounded-s-sm data-[range-end]:bg-blue-warm-60v data-[range-end]:text-white data-[range-end]:rounded-e-sm data-[in-range]:bg-blue-warm-10v data-[in-range]:text-ink data-[range-hover]:bg-blue-warm-10v active:bg-gray-30 data-selected:active:bg-blue-warm-70v disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent"
+                        ></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Month Selection View -->
+              <div
+                data-part="date-picker-month"
+                class="py-5 px-1.5"
+              >
+                <!-- Month selection table -->
+                <table class="w-full">
+                  <tbody>
+                    <tr>
+                      <!-- Month button template (will be cloned 12 times) -->
+                      <td class="w-1/3">
+                        <button
+                          data-part="date-picker-month-button"
+                          class="size-full text-center py-2.5 hover:bg-gray-10 cursor-pointer data-[focus]:outline-2 data-[focus]:outline-blue-warm-80v data-[focus]:-outline-offset-2 data-[selected]:bg-blue-warm-60v data-[selected]:text-white focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! leading-none disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent"
+                        ></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Year Selection View -->
+              <div
+                data-part="date-picker-year"
+                class="py-5 px-1.5"
+              >
+                <div class="flex items-center">
+                  <button
+                    data-part="date-picker-nav-prev"
+                    data-unit="decade"
+                    class="hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0"
+                  >
+                    <span class="icon-[material-symbols--keyboard-arrow-left] size-8"></span>
+                  </button>
+                  <!-- Year selection table -->
+                  <table class="w-full">
+                    <tbody>
+                      <tr>
+                        <!-- Year button template (will be cloned 12+ times) -->
+                        <td class="w-1/4">
+                          <button
+                            data-part="date-picker-year-button"
+                            class="size-full text-center py-2.5 hover:bg-gray-10 cursor-pointer data-[focus]:outline-2 data-[focus]:outline-blue-warm-80v data-[focus]:-outline-offset-2 data-[selected]:bg-blue-warm-60v data-[selected]:text-white focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! leading-none disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent"
+                          ></button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button
+                    data-part="date-picker-nav-next"
+                    data-unit="decade"
+                    class="hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0"
+                  >
+                    <span class="icon-[material-symbols--keyboard-arrow-right] size-8"></span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+  </div>
+
+  <script
+    type="module"
+    src="../src/index.ts"
+  ></script>
+</body>
+
+</html>

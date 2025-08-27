@@ -20,6 +20,7 @@
     "@uswds-tailwind/accordion-compat": "workspace:*",
     "@uswds-tailwind/character-count-compat": "workspace:*",
     "@uswds-tailwind/collapse-compat": "workspace:*",
+    "@uswds-tailwind/date-picker-compat": "workspace:*",
     "@uswds-tailwind/dropdown-compat": "workspace:*",
     "@uswds-tailwind/file-input-compat": "workspace:*",
     "@uswds-tailwind/input-mask-compat": "workspace:*",

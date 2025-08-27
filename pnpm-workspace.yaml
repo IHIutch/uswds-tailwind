@@ -51,6 +51,7 @@ catalog:
   astro: ^5.12.8
   astro-expressive-code: ^0.41.3
   astro-seo: ^0.8.4
+  date-fns: ^4.1.0
   eslint: ^9.32.0
   find-up: 6.3.0
   fs-extra: 11.1.1

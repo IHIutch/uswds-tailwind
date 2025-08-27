@@ -62,7 +62,7 @@ export const machine = createMachine<CharacterCountSchema>({
 
   implementations: {
     actions: {
-      updateCharCount({ context, event, prop }) {
+      updateCharCount({ context, event }) {
         if ('value' in event) {
           context.set('charCount', event.value)
         }

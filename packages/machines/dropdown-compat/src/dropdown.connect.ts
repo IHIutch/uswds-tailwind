@@ -1,28 +1,28 @@
-import type { Service } from '@zag-js/core'
+import type { Scope, Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { DropdownApi, DropdownSchema } from './dropdown.types'
 import { getPlacementStyles } from '@zag-js/popper'
 import { parts } from './dropdown.anatomy'
 import * as dom from './dropdown.dom'
 
-function focusFirst(ctx: any) {
+function focusFirst(ctx: Scope) {
   const items = dom.getItemEls(ctx)
   items[0]?.focus()
 }
 
-function focusLast(ctx: any) {
+function focusLast(ctx: Scope) {
   const items = dom.getItemEls(ctx)
   items[items.length - 1]?.focus()
 }
 
-function focusNext(ctx: any) {
+function focusNext(ctx: Scope) {
   const items = dom.getItemEls(ctx)
   const idx = items.indexOf(document.activeElement as HTMLElement)
   const next = items[idx + 1] || items[0]
   next?.focus()
 }
 
-function focusPrev(ctx: any) {
+function focusPrev(ctx: Scope) {
   const items = dom.getItemEls(ctx)
   const idx = items.indexOf(document.activeElement as HTMLElement)
   const prev = items[idx - 1] || items[items.length - 1]

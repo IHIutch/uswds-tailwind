@@ -1,4 +1,4 @@
-import { accordionInit, characterCountInit, collapseInit, dropdownInit, fileInputInit, inputMaskInit, modalInit, tableInit } from '@uswds-tailwind/compat'
+import { accordionInit, characterCountInit, collapseInit, datePickerInit, dateRangePickerInit, dropdownInit, fileInputInit, inputMaskInit, modalInit, tableInit } from '@uswds-tailwind/compat'
 
 document.addEventListener('DOMContentLoaded', () => {
   modalInit()
@@ -9,4 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   dropdownInit()
   fileInputInit()
   tableInit()
+  datePickerInit()
+  dateRangePickerInit()
 })
