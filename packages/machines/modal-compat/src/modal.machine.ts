@@ -7,22 +7,27 @@ import { preventBodyScroll } from '@zag-js/remove-scroll'
 import * as dom from './modal.dom'
 
 export const machine = createMachine<ModalSchema>({
-  props({ props, scope }) {
+  props({ props }) {
     return {
       role: 'dialog',
       modal: true,
       trapFocus: true,
       preventScroll: true,
       closeOnEscape: true,
-      closeOnInteractOutside: true,
       restoreFocus: true,
-      initialFocusEl: () => dom.getContentEl(scope),
+      forceAction: false,
       ...props,
     }
   },
 
   initialState({ prop }) {
     return prop('open') ? 'open' : 'closed'
+  },
+
+  context({ bindable, prop }) {
+    return {
+      isOpen: bindable(() => ({ defaultValue: prop('open') })),
+    }
   },
 
   states: {
@@ -49,12 +54,22 @@ export const machine = createMachine<ModalSchema>({
         contentEl?.focus()
       },
       hideNonModals({ scope }) {
-        const nonModals = dom.getNonModals(scope)
-        nonModals.forEach(el => el.setAttribute('aria-hidden', 'true'))
+        const positionerEl = dom.getPositionerEl(scope)
+        const backdropEl = dom.getBackdropEl(scope)
+        const nonModals = Array.from(scope.getDoc().body.children).filter(
+          el => el !== positionerEl && el !== backdropEl && !el.hasAttribute('aria-hidden'),
+        )
+        nonModals.forEach((el) => {
+          el.setAttribute('aria-hidden', 'true')
+          el.setAttribute('data-modal-hidden', 'true')
+        })
       },
       restoreNonModals({ scope }) {
-        const hiddenNonModals = dom.getHiddenNonModals(scope)
-        hiddenNonModals.forEach(el => el.removeAttribute('aria-hidden'))
+        const hiddenNonModals = Array.from(scope.getDoc().querySelectorAll('[data-modal-hidden]'))
+        hiddenNonModals.forEach((el) => {
+          el.removeAttribute('aria-hidden')
+          el.removeAttribute('data-modal-hidden')
+        })
       },
     },
 
@@ -62,22 +77,16 @@ export const machine = createMachine<ModalSchema>({
       trackDismissableElement({ scope, send, prop }) {
         const getContentEl = () => dom.getContentEl(scope)
         return trackDismissableElement(getContentEl, {
-          defer: true,
-          pointerBlocking: prop('modal'),
-          onInteractOutside(event) {
-            prop('onInteractOutside')?.(event)
-            if (!prop('closeOnInteractOutside')) {
-              event.preventDefault()
-            }
-          },
+          // defer: true,
+          // pointerBlocking: prop('modal'),
           onEscapeKeyDown(event) {
             prop('onEscapeKeyDown')?.(event)
-            if (!prop('closeOnEscape')) {
+            if (prop('forceAction')) {
               event.preventDefault()
             }
           },
           onDismiss() {
-            send({ type: 'CLOSE', src: 'interact-outside' })
+            send({ type: 'CLOSE' })
           },
         })
       },
@@ -95,7 +104,7 @@ export const machine = createMachine<ModalSchema>({
         return trapFocus(contentEl, {
           preventScroll: true,
           returnFocusOnDeactivate: !!prop('restoreFocus'),
-          initialFocus: prop('initialFocusEl'),
+          initialFocus: contentEl || undefined,
         })
       },
 

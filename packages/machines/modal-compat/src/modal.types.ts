@@ -49,10 +49,6 @@ export interface ModalProps
    */
   'modal'?: boolean | undefined
   /**
-   * Element to receive focus when the modal is opened
-   */
-  'initialFocusEl'?: (() => MaybeElement) | undefined
-  /**
    * Element to receive focus when the modal is closed
    */
   'finalFocusEl'?: (() => MaybeElement) | undefined
@@ -60,16 +56,6 @@ export interface ModalProps
    * Whether to restore focus to the element that had focus before the modal was opened
    */
   'restoreFocus'?: boolean | undefined
-  /**
-   * Whether to close the modal when the outside is clicked
-   * @default true
-   */
-  'closeOnInteractOutside'?: boolean | undefined
-  /**
-   * Whether to close the modal when the escape key is pressed
-   * @default true
-   */
-  'closeOnEscape'?: boolean | undefined
   /**
    * Human readable label for the modal, in event the modal title is not rendered
    */
@@ -93,22 +79,25 @@ export interface ModalProps
    * Function to call when the modal's open state changes
    */
   'onOpenChange'?: ((details: OpenChangeDetails) => void) | undefined
+  /**
+   * Whether the modal should close when the `Escape` key is pressed or the backdrop is clicked
+   * @default false
+   */
+  'forceAction'?: boolean | undefined
 }
 
 type PropsWithDefault
-  = | 'closeOnInteractOutside'
-    | 'closeOnEscape'
-    | 'role'
-    | 'modal'
-    | 'trapFocus'
-    | 'restoreFocus'
-    | 'preventScroll'
-    | 'initialFocusEl'
+  = | 'role'
+  | 'modal'
+  | 'trapFocus'
+  | 'restoreFocus'
+  | 'preventScroll'
+  | 'forceAction'
 
 export interface ModalSchema {
   props: RequiredBy<ModalProps, PropsWithDefault>
   context: {
-    rendered: { title: boolean, description: boolean }
+    isOpen: boolean
   }
   effect: 'trackDismissableElement' | 'preventScroll' | 'trapFocus' | 'hideContentBelow'
   state: 'open' | 'closed'
@@ -134,9 +123,9 @@ export interface ModalApi<T extends PropTypes = PropTypes> {
    */
   setOpen: (open: boolean) => void
 
-  getTriggerProps: () => T['button']
+  getTriggerProps: (element: HTMLButtonElement | HTMLAnchorElement) => T['button']
   getBackdropProps: () => T['element']
   getPositionerProps: () => T['element']
   getContentProps: () => T['element']
-  getCloseTriggerProps: () => T['button']
+  getCloseTriggerProps: (element: HTMLButtonElement | HTMLAnchorElement) => T['button']
 }

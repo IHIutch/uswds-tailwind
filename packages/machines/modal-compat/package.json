@@ -21,7 +21,6 @@
     "@zag-js/aria-hidden": "catalog:",
     "@zag-js/core": "catalog:",
     "@zag-js/dismissable": "catalog:",
-    "@zag-js/dom-query": "catalog:",
     "@zag-js/focus-trap": "catalog:",
     "@zag-js/remove-scroll": "catalog:",
     "@zag-js/types": "catalog:",

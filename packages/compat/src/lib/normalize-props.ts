@@ -42,6 +42,12 @@ export const normalizeProps = createNormalizer((props: any) => {
       return acc
     }
 
+    // Preserve JavaScript event handlers (onClick, onFocus, etc.)
+    if (key.startsWith('on') && typeof value === 'function') {
+      acc[key] = value
+      return acc
+    }
+
     acc[key.toLowerCase()] = value
 
     return acc

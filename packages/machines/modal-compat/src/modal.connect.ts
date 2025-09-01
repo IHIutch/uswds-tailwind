@@ -13,16 +13,18 @@ export function connect<T extends PropTypes>(
 
   return {
     open,
-    setOpen(nextOpen: boolean) {
+    setOpen(nextOpen) {
       send({ type: nextOpen ? 'OPEN' : 'CLOSE' })
     },
-    getTriggerProps() {
+    getTriggerProps(buttonEl) {
       return normalize.button({
         ...parts.trigger.attrs,
+        'id': dom.getTriggerId(scope),
         'aria-haspopup': 'dialog',
         'aria-expanded': open,
         'aria-controls': dom.getContentId(scope),
         'data-state': open ? 'open' : 'closed',
+        'role': buttonEl?.tagName === 'A' ? 'button' : undefined,
         onClick() {
           send({ type: 'TOGGLE' })
         },
@@ -43,9 +45,6 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.positioner.attrs,
         id: dom.getPositionerId(scope),
-        style: {
-          pointerEvents: open ? undefined : 'none',
-        },
       })
     },
     getBackdropProps() {

@@ -6,13 +6,29 @@ import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
 export class Modal extends Component<modal.Props, modal.Api> {
+  static instances = new Map<string, Modal>()
+
+  static getInstance(id: string) {
+    return Modal.instances.get(id)
+  }
+
+  async open() {
+    this.api.setOpen(true)
+    await new Promise<void>(resolve => queueMicrotask(resolve))
+  }
+
+  async close() {
+    this.api.setOpen(false)
+    await new Promise<void>(resolve => queueMicrotask(resolve))
+  }
+
   initMachine(props: modal.Props): VanillaMachine<modal.ModalSchema> {
+    document.body.appendChild(this.backdrop)
+
     return new VanillaMachine(modal.machine, {
       ...props,
       role: this.content.getAttribute('role') === 'alertdialog' ? 'alertdialog' : 'dialog',
-      closeOnEscape: !this.content.hasAttribute('data-static'),
-      closeOnInteractOutside: !this.content.hasAttribute('data-static'),
-      initialFocusEl: () => this.closeTriggers[0] || this.content,
+      forceAction: this.content.hasAttribute('data-force-action'),
     })
   }
 
@@ -21,8 +37,7 @@ export class Modal extends Component<modal.Props, modal.Api> {
   }
 
   render() {
-    spreadProps(this.rootEl, this.api.getTriggerProps())
-
+    spreadProps(this.rootEl, this.api.getTriggerProps(this.rootEl as HTMLButtonElement | HTMLAnchorElement))
     this.renderPositioner(this.positioner)
     this.renderBackdrop(this.backdrop)
     this.renderContent(this.content)
@@ -78,15 +93,17 @@ export class Modal extends Component<modal.Props, modal.Api> {
   }
 
   private renderCloseTrigger(closeTriggerEl: HTMLButtonElement) {
-    spreadProps(closeTriggerEl, this.api.getCloseTriggerProps())
+    spreadProps(closeTriggerEl, this.api.getCloseTriggerProps(closeTriggerEl))
   }
 }
 
 export function modalInit() {
   document.querySelectorAll<HTMLElement>('[data-part="modal-trigger"]').forEach((targetEl) => {
+    const id = targetEl.id || nanoid()
     const modal = new Modal(targetEl, {
-      id: targetEl.id || nanoid(),
+      id,
     })
+    Modal.instances.set(id, modal)
     modal.init()
   })
 }

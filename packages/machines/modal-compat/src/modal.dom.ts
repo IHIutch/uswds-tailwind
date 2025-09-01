@@ -11,13 +11,3 @@ export const getPositionerEl = (ctx: Scope) => ctx.getById(getPositionerId(ctx))
 export const getBackdropEl = (ctx: Scope) => ctx.getById(getBackdropId(ctx))
 export const getTriggerEl = (ctx: Scope) => ctx.getById(getTriggerId(ctx))
 export const getCloseTriggerEl = (ctx: Scope) => ctx.getById(getCloseTriggerId(ctx))
-
-export function getNonModals(ctx: Scope) {
-  return Array.from(ctx.getDoc().body.children).filter(
-    el => !el.classList.contains('dialog-wrapper') && !el.hasAttribute('aria-hidden'),
-  )
-}
-
-export function getHiddenNonModals(ctx: Scope) {
-  return Array.from(ctx.getDoc().querySelectorAll('[aria-hidden=\'true\']'))
-}

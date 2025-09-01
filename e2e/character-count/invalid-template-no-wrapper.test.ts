@@ -3,7 +3,7 @@ import { characterCountInit } from '../../packages/compat/src/character-count.js
 
 const TEMPLATE = `<div>
   <div>
-    <label class="usa-label"></label>
+    <label></label>
     <input maxlength="20" />
     <span></span>
   </div>
