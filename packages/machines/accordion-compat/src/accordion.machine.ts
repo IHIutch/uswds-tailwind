@@ -32,23 +32,17 @@ export const machine = createMachine<AccordionSchema>({
   implementations: {
     actions: {
       openItem({ context, event, prop }) {
-        if (event.type !== 'OPEN')
-          return
-        const id = event.id
+        const { id } = event
         const value = context.get('value')
         const next = prop('multiple') ? [...value, id] : [id]
         context.set('value', Array.from(new Set(next)))
       },
       closeItem({ context, event }) {
-        if (event.type !== 'CLOSE')
-          return
-        const id = event.id
+        const { id } = event
         context.set('value', context.get('value').filter(v => v !== id))
       },
       toggleItem({ context, event, prop }) {
-        if (event.type !== 'TOGGLE')
-          return
-        const id = event.id
+        const { id } = event
         const value = context.get('value')
         const isOpen = value.includes(id)
         if (isOpen) {

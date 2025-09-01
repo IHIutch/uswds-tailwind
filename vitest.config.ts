@@ -8,7 +8,6 @@ export default defineConfig({
       'node_modules/**',
       'dist/**',
       '.storybook/**',
-      'packages/**/test-patterns/**',
     ],
     browser: {
       provider: 'playwright', // or 'webdriverio'

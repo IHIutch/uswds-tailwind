@@ -46,7 +46,7 @@ export function connect<T extends PropTypes>(
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope, value),
         'aria-controls': dom.getContentId(scope, value),
-        'aria-expanded': open,
+        'aria-expanded': open ? 'true' : 'false',
         'data-state': open ? 'open' : 'closed',
         'type': 'button',
         onClick() {
@@ -84,11 +84,10 @@ export function connect<T extends PropTypes>(
 
     getContentProps({ value }) {
       const open = isItemOpen(value)
-      // @ts-expect-error normalize.element expects a boolean for `hidden`, but 'until-found' is a valid value in this context
       return normalize.element({
         ...parts.content.attrs,
         'id': dom.getContentId(scope, value),
-        'hidden': open ? false : 'until-found',
+        'hidden': !open,
         'data-state': open ? 'open' : 'closed',
       })
     },

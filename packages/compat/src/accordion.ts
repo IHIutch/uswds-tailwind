@@ -1,4 +1,5 @@
 import * as accordion from '@uswds-tailwind/accordion-compat'
+import { nextTick } from '@zag-js/dom-query'
 import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
@@ -6,7 +7,15 @@ import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
 
 export class Accordion extends Component<accordion.Props, accordion.Api> {
+  static instances = new Map<string, Accordion>()
+
+  static getInstance(id: string) {
+    return Accordion.instances.get(id)
+  }
+
   initMachine(props: accordion.Props): VanillaMachine<accordion.AccordionSchema> {
+    Accordion.instances.set(props.id, this)
+
     return new VanillaMachine(accordion.machine, {
       ...props,
       multiple: this.rootEl.hasAttribute('data-multiple'),
@@ -39,6 +48,21 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
       spreadProps(trigger, this.api.getTriggerProps({ value }))
     if (content)
       spreadProps(content, this.api.getContentProps({ value }))
+  }
+
+  async open(value: string) {
+    this.api.open(value)
+    await new Promise<void>(resolve => nextTick(resolve))
+  }
+
+  async close(value: string) {
+    this.api.close(value)
+    await new Promise<void>(resolve => nextTick(resolve))
+  }
+
+  async toggle(value: string) {
+    this.api.toggle(value)
+    await new Promise<void>(resolve => nextTick(resolve))
   }
 }
 
