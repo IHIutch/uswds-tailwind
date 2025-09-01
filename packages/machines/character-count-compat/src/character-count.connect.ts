@@ -1,6 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { CharacterCountApi, CharacterCountSchema } from './character-count.types'
+import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './character-count.anatomy'
 import * as dom from './character-count.dom'
 
@@ -13,8 +14,15 @@ export function connect<T extends PropTypes>(
   const isInvalid = state.matches('invalid')
 
   return {
-    // ...api,
+    maxLength: context.get('maxLength') || Infinity,
     isInvalid,
+
+    setCustomValidity(message: string) {
+      send({
+        type: 'SET_CUSTOM_VALIDITY',
+        value: message,
+      })
+    },
 
     getRootProps() {
       return normalize.element({
@@ -27,8 +35,9 @@ export function connect<T extends PropTypes>(
     getLabelProps() {
       return normalize.label({
         ...parts.label.attrs,
-        id: dom.getLabelId(scope),
-        htmlFor: dom.getInputId(scope),
+        'id': dom.getLabelId(scope),
+        'htmlFor': dom.getInputId(scope),
+        'data-invalid': isInvalid ? 'true' : undefined,
       })
     },
 
@@ -38,6 +47,8 @@ export function connect<T extends PropTypes>(
         'id': dom.getInputId(scope),
         'data-invalid': isInvalid ? 'true' : undefined,
         'aria-invalid': isInvalid ? 'true' : undefined,
+        'data-maxlength': context.get('maxLength'),
+        'maxLength': Infinity,
         onInput(event) {
           send({
             type: 'INPUT',
@@ -54,8 +65,6 @@ export function connect<T extends PropTypes>(
         'id': dom.getStatusId(scope),
         'aria-live': 'polite',
         'data-invalid': isInvalid ? 'true' : undefined,
-        //
-        'textContent': context.get('statusText'),
       })
     },
 
@@ -65,8 +74,7 @@ export function connect<T extends PropTypes>(
         'id': dom.getSrStatusId(scope),
         'aria-live': 'polite',
         'data-invalid': isInvalid ? 'true' : undefined,
-        //
-        'textContent': context.get('srStatusText'),
+        'style': visuallyHiddenStyle,
       })
     },
   }

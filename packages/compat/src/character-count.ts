@@ -6,9 +6,25 @@ import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
 
 export class CharacterCount extends Component<characterCount.Props, characterCount.Api> {
+  static instances: Map<string, CharacterCount> = new Map()
+
+  static getInstance(id: string) {
+    return CharacterCount.instances.get(id)
+  }
+
   initMachine(props: characterCount.Props): VanillaMachine<characterCount.CharacterCountSchema> {
+    CharacterCount.instances.set(props.id, this)
+
     return new VanillaMachine(characterCount.machine, {
       ...props,
+      maxLength: Number(this.input?.getAttribute('maxlength')),
+      getStatusText: (count, max) => {
+        const diff = Math.abs(max - count)
+        const characters = diff === 1 ? 'character' : 'characters'
+        const guidance
+          = count === 0 ? 'allowed' : count > max ? 'over limit' : 'left'
+        return `${diff} ${characters} ${guidance}`
+      },
     })
   }
 
@@ -62,10 +78,16 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   private renderStatus(statusEl: HTMLElement) {
     spreadProps(statusEl, this.api.getStatusProps())
+    statusEl.textContent = this.machine.ctx.get('statusText')
   }
 
   private renderSrStatus(srStatusEl: HTMLElement) {
     spreadProps(srStatusEl, this.api.getSrStatusProps())
+    srStatusEl.textContent = this.machine.ctx.get('srStatusText')
+  }
+
+  setCustomValidity(message: string) {
+    this.api.setCustomValidity(message)
   }
 }
 
@@ -73,15 +95,12 @@ export function characterCountInit() {
   document.querySelectorAll<HTMLElement>('[data-part="character-count-root"]').forEach((targetEl) => {
     const characterCount = new CharacterCount(targetEl, {
       id: targetEl.id || nanoid(),
-      maxLength: 25,
-      getStatusText: (count, max) => {
-        const diff = Math.abs(max - count)
-        const characters = diff === 1 ? 'character' : 'characters'
-        const guidance
-          = count === 0 ? 'allowed' : count > max ? 'over limit' : 'left'
-        return `${diff} ${characters} ${guidance}`
-      },
     })
     characterCount.init()
   })
+}
+
+if (typeof window !== 'undefined') {
+  window.CharacterCount = CharacterCount
+  window.characterCountInit = characterCountInit
 }

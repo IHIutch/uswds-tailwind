@@ -1,5 +1,6 @@
 import type { CharacterCountSchema } from './character-count.types'
 import { createMachine } from '@zag-js/core'
+import { getInputEl } from './character-count.dom'
 
 function debounce<T extends (...args: any[]) => void>(callback: T, wait: number) {
   let timeoutId: number | null = null
@@ -22,6 +23,7 @@ export const machine = createMachine<CharacterCountSchema>({
     return {
       maxLength: Infinity,
       getStatusText: () => '',
+      customValidation: 'The content is too long.',
       ...props,
     }
   },
@@ -36,6 +38,7 @@ export const machine = createMachine<CharacterCountSchema>({
       maxLength: bindable(() => ({ defaultValue: prop('maxLength') })),
       statusText: bindable(() => ({ defaultValue: prop('getStatusText')(0, prop('maxLength')) })),
       srStatusText: bindable(() => ({ defaultValue: prop('getStatusText')(0, prop('maxLength')) })),
+      customValidation: bindable(() => ({ defaultValue: prop('customValidation') })),
     }
   },
 
@@ -48,16 +51,19 @@ export const machine = createMachine<CharacterCountSchema>({
   states: {
     valid: {
       on: {
-        INPUT: { actions: ['updateCharCount', 'updateStatus'] },
         INVALID: { target: 'invalid' },
       },
     },
     invalid: {
       on: {
-        INPUT: { actions: ['updateCharCount', 'updateStatus'] },
         VALID: { target: 'valid' },
       },
     },
+  },
+
+  on: {
+    INPUT: { actions: ['updateCharCount', 'updateStatus'] },
+    SET_CUSTOM_VALIDITY: { actions: ['setCustomValidity'] },
   },
 
   implementations: {
@@ -83,15 +89,30 @@ export const machine = createMachine<CharacterCountSchema>({
           context.set('srStatusText', text)
         })
       },
-      toggleState({ context, send, prop }) {
+      toggleState({ context, send, prop, scope }) {
         const charCount = context.get('charCount')
         const maxLength = prop('maxLength')
+        const inputEl = getInputEl(scope)
+        const customValidation = context.get('customValidation')
+
         if (charCount > maxLength) {
           send({ type: 'INVALID' })
+          if (inputEl && !inputEl.validationMessage) {
+            inputEl.setCustomValidity(customValidation)
+          }
         }
         else {
           send({ type: 'VALID' })
+          if (inputEl && inputEl.validationMessage === customValidation) {
+            inputEl.setCustomValidity('')
+          }
         }
+      },
+      setCustomValidity({ context, event, scope }) {
+        context.set('customValidation', event.value)
+
+        const inputEl = getInputEl(scope)
+        inputEl?.setCustomValidity(event.value)
       },
     },
   },

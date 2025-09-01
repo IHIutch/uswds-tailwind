@@ -18,7 +18,7 @@ export interface CharacterCountProps extends CommonProperties {
    * The maximum number of characters allowed.
    *  @default Infinity
    */
-  maxLength: number
+  maxLength?: number
   /**
    * The debounce duration (in milliseconds) for updating the screen-reader status text.
    * @default 1000 (1 second)
@@ -30,24 +30,32 @@ export interface CharacterCountProps extends CommonProperties {
    * @param max - The maximum allowed characters.
    * @returns The status text to be displayed.
    */
-  getStatusText: (count: number, max: number) => string
+  getStatusText?: (count: number, max: number) => string
+  /**
+   * Custom validation message to display when the input is invalid.
+   */
+  customValidation?: string
 }
 
 export interface CharacterCountSchema {
-  props: RequiredBy<CharacterCountProps, 'maxLength' | 'getStatusText'> // Added getStatusText
+  props: RequiredBy<CharacterCountProps, 'maxLength' | 'getStatusText'>
   context: {
     charCount: number
     maxLength: number
     statusText: string
     srStatusText: string
+    customValidation: string
   }
   state: 'valid' | 'invalid'
-  action: 'updateCharCount' | 'updateStatus' | 'updateSrStatus' | 'toggleState'
+  action: 'updateCharCount' | 'updateStatus' | 'updateSrStatus' | 'toggleState' | 'setCustomValidity'
   event: {
     type: 'INVALID' | 'VALID'
   } | {
     type: 'INPUT'
     value: number
+  } | {
+    type: 'SET_CUSTOM_VALIDITY'
+    value: string
   }
 }
 
@@ -59,10 +67,19 @@ export type CharacterCountMachine = Machine<CharacterCountSchema>
  * ----------------------------------------------------------------------------- */
 
 export interface CharacterCountApi<T extends PropTypes = PropTypes> {
-  // /**
-  //  * The maximum number of characters allowed.
-  //  */
-  // maxLength: number
+  /**
+   * The maximum number of characters allowed.
+   */
+  maxLength: number
+  /**
+   * The current state of the input
+   */
+  isInvalid: boolean
+  /**
+   * Set a custom validation message for the input
+   * @param message - The custom validation message to set
+   */
+  setCustomValidity: (message: string) => void
   // /**
   //  * The debounce duration (in milliseconds) for updating the screen-reader status text.
   //  * @default 1000 (1 second)
@@ -75,10 +92,6 @@ export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   //  * @returns The status text to be displayed.
   //  */
   // getStatusText: (count: number, max: number) => string
-  /**
-   * The current state of the input
-   */
-  isInvalid: boolean
 
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
