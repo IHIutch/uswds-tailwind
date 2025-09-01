@@ -27,5 +27,6 @@ storybook-static
 .vercel
 .turbo
 
-build/**
-dist/**
+build
+dist
+__screenshots__

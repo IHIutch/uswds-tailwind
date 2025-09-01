@@ -1,6 +1,7 @@
 export * from './accordion'
 export * from './character-count'
 export * from './collapse'
+export * from './combobox'
 export * from './date-picker'
 export * from './date-range-picker'
 export * from './dropdown'
