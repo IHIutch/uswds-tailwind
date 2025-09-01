@@ -17,15 +17,19 @@
     "changeset": "changeset",
     "version": "changeset version",
     "publish-packages": "turbo run build && changeset version && changeset publish --tag alpha",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:browser": "vitest"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@changesets/cli": "catalog:",
     "@playwright/test": "catalog:",
+    "@vitest/browser": "catalog:",
+    "@zag-js/dom-query": "catalog:",
     "eslint": "catalog:",
     "playwright": "catalog:",
     "tsdown": "catalog:",
-    "turbo": "catalog:"
+    "turbo": "catalog:",
+    "vitest": "catalog:"
   }
 }
