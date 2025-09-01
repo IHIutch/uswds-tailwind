@@ -19,16 +19,16 @@ export interface AccordionProps extends CommonProperties {
 }
 
 export interface AccordionSchema {
-  props: RequiredBy<AccordionProps, 'multiple'> // Ensure multiple is always defined
+  props: RequiredBy<AccordionProps, 'multiple'>
   context: {
     value: string[]
   }
   state: 'idle'
   action: 'openItem' | 'closeItem' | 'toggleItem'
   event:
-    | { type: 'OPEN', id: string }
-    | { type: 'CLOSE', id: string }
-    | { type: 'TOGGLE', id: string }
+  | { type: 'OPEN', id: string }
+  | { type: 'CLOSE', id: string }
+  | { type: 'TOGGLE', id: string }
 }
 
 export type AccordionService = Service<AccordionSchema>

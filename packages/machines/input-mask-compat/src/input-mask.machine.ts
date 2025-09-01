@@ -35,7 +35,7 @@ export const machine = createMachine<InputMaskSchema>({
           context.set('value', event.value)
         }
       },
-      
+
       updatePlaceholder({ context, prop }) {
         const placeholder = prop('placeholder') || ''
         const value = context.get('value')

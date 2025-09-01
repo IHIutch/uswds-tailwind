@@ -28,8 +28,8 @@ export interface DropdownSchema {
   effect: 'trackInteractOutside' | 'trackPositioning'
   action: 'invokeOnOpen' | 'invokeOnClose'
   event:
-  | { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
-  | { type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
+    | { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
+    | { type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
 }
 
 export type DropdownService = Service<DropdownSchema>

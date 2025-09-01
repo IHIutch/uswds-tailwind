@@ -95,15 +95,15 @@ export interface ModalProps
   'onOpenChange'?: ((details: OpenChangeDetails) => void) | undefined
 }
 
-type PropsWithDefault =
-  | 'closeOnInteractOutside'
-  | 'closeOnEscape'
-  | 'role'
-  | 'modal'
-  | 'trapFocus'
-  | 'restoreFocus'
-  | 'preventScroll'
-  | 'initialFocusEl'
+type PropsWithDefault
+  = | 'closeOnInteractOutside'
+    | 'closeOnEscape'
+    | 'role'
+    | 'modal'
+    | 'trapFocus'
+    | 'restoreFocus'
+    | 'preventScroll'
+    | 'initialFocusEl'
 
 export interface ModalSchema {
   props: RequiredBy<ModalProps, PropsWithDefault>

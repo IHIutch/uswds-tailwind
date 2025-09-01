@@ -969,11 +969,13 @@ export const machine = createMachine<DatePickerSchema>({
             if (activeInput === 'start') {
               const startInputEl = dom.getStartInputEl(scope)
               startInputEl?.focus()
-            } else if (activeInput === 'end') {
+            }
+            else if (activeInput === 'end') {
               const endInputEl = dom.getEndInputEl(scope)
               endInputEl?.focus()
             }
-          } else {
+          }
+          else {
             // Single mode - focus the main input
             const inputEl = dom.getInputEl(scope)
             inputEl?.focus()

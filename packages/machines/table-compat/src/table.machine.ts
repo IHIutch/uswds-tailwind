@@ -33,8 +33,9 @@ export const machine = createMachine<SortableTableSchema>({
   implementations: {
     actions: {
       sort({ context, event }) {
-        if (event.type !== 'SORT') return
-        
+        if (event.type !== 'SORT')
+          return
+
         const currentColumn = context.get('sortedColumn')
         const currentDirection = context.get('sortDirection')
         const newColumn = event.columnIndex
@@ -43,7 +44,8 @@ export const machine = createMachine<SortableTableSchema>({
           // Same column - toggle direction
           const newDirection = currentDirection === 'asc' ? 'desc' : 'asc'
           context.set('sortDirection', newDirection)
-        } else {
+        }
+        else {
           // New column - start with ascending
           context.set('sortedColumn', newColumn)
           context.set('sortDirection', 'asc')

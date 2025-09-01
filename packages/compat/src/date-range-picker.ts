@@ -292,7 +292,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
     if (!tbody || !templateTd)
       return
 
-    tbody.innerHTML = ''
+    tbody.textContent = ''
 
     const calendarDate = this.machine.service.context.get('calendarDate') as Date
     const weeks = this.api.getWeeksInMonth(calendarDate)
@@ -375,7 +375,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
       // Get template button for attribute copying
       const templateButton = templateTd.querySelector('[data-part="date-picker-month-button"]') as HTMLButtonElement
 
-      tbody.innerHTML = ''
+      tbody.textContent = ''
 
       const monthsPerRow = 3
       const totalRows = Math.ceil(monthsGrid.length / monthsPerRow)
@@ -469,7 +469,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
       // Get template button for attribute copying
       const templateButton = templateTd.querySelector('[data-part="date-picker-year-button"]') as HTMLButtonElement
 
-      tbody.innerHTML = ''
+      tbody.textContent = ''
 
       const yearsPerRow = 3
       const totalRows = Math.ceil(yearsGrid.length / yearsPerRow)

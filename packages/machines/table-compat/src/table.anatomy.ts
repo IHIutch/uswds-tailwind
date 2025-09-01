@@ -3,7 +3,7 @@ import { createAnatomy } from '@zag-js/anatomy'
 export const anatomy = createAnatomy('sortable-table').parts(
   'root',
   'table',
-  'caption', 
+  'caption',
   'thead',
   'tbody',
   'tfoot',

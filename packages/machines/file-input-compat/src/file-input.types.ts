@@ -37,9 +37,9 @@ export interface FileInputSchema {
   state: 'valid' | 'invalid'
   action: 'setDragging' | 'validateFiles' | 'toggleState'
   event:
-  | { type: 'DRAG_START' | 'DRAG_END' }
-  | { type: 'INVALID' | 'VALID' }
-  | { type: 'CHANGE', files: File[] }
+    | { type: 'DRAG_START' | 'DRAG_END' }
+    | { type: 'INVALID' | 'VALID' }
+    | { type: 'CHANGE', files: File[] }
 }
 
 export type FileInputService = Service<FileInputSchema>

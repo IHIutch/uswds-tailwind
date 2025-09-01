@@ -87,74 +87,74 @@ export interface DatePickerSchema {
   effect: 'trackInteractOutside' | 'trackFocusVisible'
   action:
   // | 'updateInputValue'
-  | 'updateStartInputValue'
-  | 'updateEndInputValue'
-  | 'validateStartInput'
-  | 'validateEndInput'
-  | 'updateCalendarDate'
-  | 'selectDate'
-  | 'selectRangeStart'
-  | 'selectRangeEnd'
-  | 'clearRange'
-  | 'clearStartDate'
-  | 'clearEndDate'
+    | 'updateStartInputValue'
+    | 'updateEndInputValue'
+    | 'validateStartInput'
+    | 'validateEndInput'
+    | 'updateCalendarDate'
+    | 'selectDate'
+    | 'selectRangeStart'
+    | 'selectRangeEnd'
+    | 'clearRange'
+    | 'clearStartDate'
+    | 'clearEndDate'
   // | 'focusStartInput'
   // | 'focusEndInput'
-  | 'setActiveInput'
-  | 'selectMonth'
-  | 'selectYear'
-  | 'navigateDate'
-  | 'navigatePreviousMonth'
-  | 'navigateNextMonth'
-  | 'navigatePreviousYear'
-  | 'navigateNextYear'
-  | 'navigateMonthSelection'
-  | 'navigateYearSelection'
-  | 'navigatePreviousYearChunk'
-  | 'navigateNextYearChunk'
-  | 'focusCalendarDate'
-  | 'focusCurrentMonth'
-  | 'focusCurrentYear'
+    | 'setActiveInput'
+    | 'selectMonth'
+    | 'selectYear'
+    | 'navigateDate'
+    | 'navigatePreviousMonth'
+    | 'navigateNextMonth'
+    | 'navigatePreviousYear'
+    | 'navigateNextYear'
+    | 'navigateMonthSelection'
+    | 'navigateYearSelection'
+    | 'navigatePreviousYearChunk'
+    | 'navigateNextYearChunk'
+    | 'focusCalendarDate'
+    | 'focusCurrentMonth'
+    | 'focusCurrentYear'
   // | 'enableComponent'
   // | 'disableComponent'
-  | 'handleDateHover'
-  | 'setControlledValue'
-  | 'invokeOnValueChange'
-  | 'invokeOnOpenChange'
+    | 'handleDateHover'
+    | 'setControlledValue'
+    | 'invokeOnValueChange'
+    | 'invokeOnOpenChange'
   event:
-  | { type: 'TOGGLE' }
-  | { type: 'OPEN' }
-  | { type: 'CLOSE' }
-  | { type: 'ESCAPE' }
+    | { type: 'TOGGLE' }
+    | { type: 'OPEN' }
+    | { type: 'CLOSE' }
+    | { type: 'ESCAPE' }
   // | { type: 'INPUT_CHANGE', value: string }
-  | { type: 'START_INPUT_CHANGE', value: string }
-  | { type: 'END_INPUT_CHANGE', value: string }
-  | { type: 'INPUT_FOCUS' }
-  | { type: 'START_INPUT_FOCUS' }
-  | { type: 'END_INPUT_FOCUS' }
-  | { type: 'ENABLE' }
-  | { type: 'DISABLE' }
-  | { type: 'SELECT_DATE', date: Date }
-  | { type: 'SELECT_MONTH', month: number }
-  | { type: 'SELECT_YEAR', year: number }
-  | { type: 'SHOW_MONTH_SELECTION' }
-  | { type: 'SHOW_YEAR_SELECTION' }
-  | { type: 'NAVIGATE_DATE', direction: NavigationDirection, unit?: NavigationUnit, amount?: number }
-  | { type: 'NAVIGATE_PREVIOUS_MONTH' }
-  | { type: 'NAVIGATE_NEXT_MONTH' }
-  | { type: 'NAVIGATE_PREVIOUS_YEAR' }
-  | { type: 'NAVIGATE_NEXT_YEAR' }
-  | { type: 'NAVIGATE_MONTH', direction: NavigationDirection, amount?: number }
-  | { type: 'NAVIGATE_YEAR', direction: NavigationDirection, amount?: number }
-  | { type: 'NAVIGATE_PREVIOUS_YEAR_CHUNK' }
-  | { type: 'NAVIGATE_NEXT_YEAR_CHUNK' }
-  | { type: 'FOCUS_OUT', relatedTarget?: EventTarget | null, currentTarget?: EventTarget | null }
-  | { type: 'HOVER_DATE', date: Date }
-  | { type: 'START_RANGE', date: Date }
-  | { type: 'END_RANGE', date: Date }
-  | { type: 'CLEAR_RANGE' }
-  | { type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
-  | { type: 'CONTROLLED.VALUE_CHANGE', value: { start: string | null, end: string | null } }
+    | { type: 'START_INPUT_CHANGE', value: string }
+    | { type: 'END_INPUT_CHANGE', value: string }
+    | { type: 'INPUT_FOCUS' }
+    | { type: 'START_INPUT_FOCUS' }
+    | { type: 'END_INPUT_FOCUS' }
+    | { type: 'ENABLE' }
+    | { type: 'DISABLE' }
+    | { type: 'SELECT_DATE', date: Date }
+    | { type: 'SELECT_MONTH', month: number }
+    | { type: 'SELECT_YEAR', year: number }
+    | { type: 'SHOW_MONTH_SELECTION' }
+    | { type: 'SHOW_YEAR_SELECTION' }
+    | { type: 'NAVIGATE_DATE', direction: NavigationDirection, unit?: NavigationUnit, amount?: number }
+    | { type: 'NAVIGATE_PREVIOUS_MONTH' }
+    | { type: 'NAVIGATE_NEXT_MONTH' }
+    | { type: 'NAVIGATE_PREVIOUS_YEAR' }
+    | { type: 'NAVIGATE_NEXT_YEAR' }
+    | { type: 'NAVIGATE_MONTH', direction: NavigationDirection, amount?: number }
+    | { type: 'NAVIGATE_YEAR', direction: NavigationDirection, amount?: number }
+    | { type: 'NAVIGATE_PREVIOUS_YEAR_CHUNK' }
+    | { type: 'NAVIGATE_NEXT_YEAR_CHUNK' }
+    | { type: 'FOCUS_OUT', relatedTarget?: EventTarget | null, currentTarget?: EventTarget | null }
+    | { type: 'HOVER_DATE', date: Date }
+    | { type: 'START_RANGE', date: Date }
+    | { type: 'END_RANGE', date: Date }
+    | { type: 'CLEAR_RANGE' }
+    | { type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
+    | { type: 'CONTROLLED.VALUE_CHANGE', value: { start: string | null, end: string | null } }
 }
 
 export type DatePickerService = Service<DatePickerSchema>
