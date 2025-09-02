@@ -7,8 +7,6 @@ export type {
   ElementIds,
   ModalMachine as Machine,
   ModalSchema,
-  OpenChangeDetails,
   ModalProps as Props,
   ModalService as Service,
 } from './modal.types'
-export type { FocusOutsideEvent, InteractOutsideEvent, PointerDownOutsideEvent } from '@zag-js/dismissable'

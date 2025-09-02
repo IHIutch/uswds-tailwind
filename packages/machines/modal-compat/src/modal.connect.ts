@@ -8,32 +8,28 @@ export function connect<T extends PropTypes>(
   service: Service<ModalSchema>,
   normalize: NormalizeProps<T>,
 ): ModalApi<T> {
-  const { state, send, prop, scope } = service
+  const { state, send, scope } = service
   const open = state.matches('open')
 
   return {
     open,
-    setOpen(nextOpen) {
-      send({ type: nextOpen ? 'OPEN' : 'CLOSE' })
-    },
     getTriggerProps(buttonEl) {
       return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope),
-        'aria-haspopup': 'dialog',
         'aria-expanded': open,
         'aria-controls': dom.getContentId(scope),
         'data-state': open ? 'open' : 'closed',
         'role': buttonEl?.tagName === 'A' ? 'button' : undefined,
         onClick() {
-          send({ type: 'TOGGLE' })
+          send({ type: 'OPEN' })
         },
       })
     },
     getContentProps() {
       return normalize.element({
         ...parts.content.attrs,
-        'role': prop('role'),
+        'role': 'dialog',
         'id': dom.getContentId(scope),
         'hidden': !open,
         'tabIndex': -1,
@@ -58,8 +54,7 @@ export function connect<T extends PropTypes>(
     getCloseTriggerProps() {
       return normalize.button({
         ...parts.closeTrigger.attrs,
-        'aria-label': 'Close dialog',
-        'id': dom.getCloseTriggerId(scope),
+        id: dom.getCloseTriggerId(scope),
         onClick() {
           send({ type: 'CLOSE' })
         },

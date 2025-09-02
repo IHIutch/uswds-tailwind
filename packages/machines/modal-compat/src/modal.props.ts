@@ -3,26 +3,11 @@ import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<ModalProps>()([
-  'aria-label',
-  'dir',
-  'finalFocusEl',
-  'getRootNode',
-  'id',
-  'ids',
-  'modal',
-  'onEscapeKeyDown',
-  'onFocusOutside',
-  'onInteractOutside',
-  'onOpenChange',
-  'onPointerDownOutside',
-  'defaultOpen',
-  'open',
-  'persistentElements',
-  'preventScroll',
-  'restoreFocus',
-  'role',
-  'trapFocus',
   'forceAction',
+  'ids',
+  'open',
+  'id',
+  'getRootNode',
 ])
 
 export const splitProps = createSplitProps<Partial<ModalProps>>(props)

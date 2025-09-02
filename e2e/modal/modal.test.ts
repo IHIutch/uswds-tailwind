@@ -1,4 +1,4 @@
-import { page, userEvent } from '@vitest/browser/context'
+import { userEvent } from '@vitest/browser/context'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { comboboxInit } from '../../packages/compat/src/combobox.js'
 import { Modal, modalInit } from '../../packages/compat/src/modal.js'
@@ -167,7 +167,7 @@ describe('modal', () => {
     })
 
     afterEach(async () => {
-      Modal.instances.forEach(modal => modal.close())
+      Modal.instances.forEach(modal => modal.machine.state.set('closed'))
     })
 
     it('makes the modal visible', () => {
@@ -181,9 +181,8 @@ describe('modal', () => {
 
     it('makes all other page content invisible to screen readers', () => {
       const activeContent = Array.from(document.querySelectorAll('body > :not([aria-hidden])'))
-      expect(activeContent.length).toBe(2)
-      expect(activeContent).toContain(positionerEl1)
-      expect(activeContent).toContain(backdropEl1)
+      expect(activeContent.length).toBe(1)
+      expect(activeContent[0]).toContain(positionerEl1)
     })
 
     it('allows event propagation and displays combobox list when toggle is clicked', async () => {
@@ -199,7 +198,7 @@ describe('modal', () => {
     })
 
     afterEach(async () => {
-      Modal.instances.forEach(modal => modal.close())
+      Modal.instances.forEach(modal => modal.machine.state.set('closed'))
     })
 
     it('hides the modal when close button is clicked', async () => {

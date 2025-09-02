@@ -12,22 +12,12 @@ export class Modal extends Component<modal.Props, modal.Api> {
     return Modal.instances.get(id)
   }
 
-  async open() {
-    this.api.setOpen(true)
-    await new Promise<void>(resolve => queueMicrotask(resolve))
-  }
-
-  async close() {
-    this.api.setOpen(false)
-    await new Promise<void>(resolve => queueMicrotask(resolve))
-  }
-
   initMachine(props: modal.Props): VanillaMachine<modal.ModalSchema> {
-    document.body.appendChild(this.backdrop)
+    Modal.instances.set(props.id, this)
 
+    document.body.appendChild(this.backdrop)
     return new VanillaMachine(modal.machine, {
       ...props,
-      role: this.content.getAttribute('role') === 'alertdialog' ? 'alertdialog' : 'dialog',
       forceAction: this.content.hasAttribute('data-force-action'),
     })
   }
@@ -99,11 +89,9 @@ export class Modal extends Component<modal.Props, modal.Api> {
 
 export function modalInit() {
   document.querySelectorAll<HTMLElement>('[data-part="modal-trigger"]').forEach((targetEl) => {
-    const id = targetEl.id || nanoid()
     const modal = new Modal(targetEl, {
-      id,
+      id: targetEl.id || nanoid(),
     })
-    Modal.instances.set(id, modal)
     modal.init()
   })
 }
