@@ -70,8 +70,9 @@ export function connect<T extends PropTypes>(
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope),
         'dir': prop('dir'),
+        'role': 'button',
         'aria-controls': dom.getContentId(scope),
-        'aria-expanded': open,
+        'aria-expanded': open ? 'true' : 'false',
         'aria-haspopup': 'menu',
         'data-state': open ? 'open' : 'closed',
         onClick() {

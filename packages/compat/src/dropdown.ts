@@ -6,7 +6,15 @@ import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
 export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
+  static instances = new Map<string, Dropdown>()
+
+  static getInstance(id: string) {
+    return Dropdown.instances.get(id)
+  }
+
   initMachine(props: dropdown.Props): VanillaMachine<dropdown.DropdownSchema> {
+    Dropdown.instances.set(props.id, this)
+    
     return new VanillaMachine(dropdown.machine, {
       ...props,
     })
