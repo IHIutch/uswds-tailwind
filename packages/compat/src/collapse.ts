@@ -6,7 +6,15 @@ import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
 
 export class Collapse extends Component<collapse.Props, collapse.Api> {
+  static instances = new Map<string, Collapse>()
+
+  static getInstance(id: string) {
+    return Collapse.instances.get(id)
+  }
+
   initMachine(props: collapse.Props): VanillaMachine<collapse.CollapseSchema> {
+    Collapse.instances.set(props.id, this)
+
     return new VanillaMachine(collapse.machine, {
       ...props,
     })

@@ -33,7 +33,7 @@ export function connect<T extends PropTypes>(
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope),
         'aria-controls': dom.getContentId(scope),
-        'aria-expanded': isOpen,
+        'aria-expanded': isOpen ? 'true' : 'false',
         'type': 'button',
         onClick() {
           send({ type: 'TOGGLE' })
@@ -46,6 +46,7 @@ export function connect<T extends PropTypes>(
         ...parts.content.attrs,
         'id': dom.getContentId(scope),
         'data-state': isOpen ? 'open' : 'closed',
+        'hidden': !isOpen,
       })
     },
   }
