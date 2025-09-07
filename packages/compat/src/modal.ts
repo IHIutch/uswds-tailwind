@@ -95,3 +95,8 @@ export function modalInit() {
     modal.init()
   })
 }
+
+if (typeof window !== 'undefined') {
+  window.Modal = Modal
+  window.modalInit = modalInit
+}

@@ -1,12 +1,15 @@
+
 @import "@fontsource-variable/open-sans";
 @import "@fontsource-variable/public-sans";
 @import "@fontsource-variable/roboto-mono";
 @import "@fontsource-variable/source-sans-3";
 @import "@fontsource-variable/merriweather";
 
+
 @import "tailwindcss";
 @import "@uswds-tailwind/theme";
 
 @plugin "@iconify/tailwind4" {
   scale: 0
+  square: false
 }

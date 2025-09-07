@@ -8,6 +8,8 @@ export const props = createProps<FileInputProps>()([
   'accept',
   'minSize',
   'maxSize',
+  'disabled',
+  'srStatusText',
 ])
 
 export const splitProps = createSplitProps<Partial<FileInputProps>>(props)

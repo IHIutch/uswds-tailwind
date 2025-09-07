@@ -1,140 +1,130 @@
-import type { FileInputSchema } from './file-input.types'
+import type { FileData, FileInputSchema } from './file-input.types'
 import { createMachine } from '@zag-js/core'
+import { getFileType, validate } from './file-input.utils'
 
-function isFileAccepted(file: File | null, accept: string | undefined) {
-  if (file && accept) {
-    const types = accept.split(',')
-
-    const fileName = file.name || ''
-    const mimeType = (file.type || '').toLowerCase()
-    const baseMimeType = mimeType.replace(/\/.*/, '')
-
-    return types.some((type) => {
-      const validType = type.trim().toLowerCase()
-
-      if (validType.charAt(0) === '.') {
-        return fileName.toLowerCase().endsWith(validType)
-      }
-
-      if (validType.endsWith('/*')) {
-        return baseMimeType === validType.replace(/\/.*/, '')
-      }
-
-      return mimeType === validType
-    })
+function debounce<T extends (...args: any[]) => void>(callback: T, wait: number) {
+  let timeoutId: number | null = null
+  return (...args: Parameters<T>) => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId)
+    }
+    timeoutId = window.setTimeout(() => {
+      callback(...args)
+    }, wait)
   }
-  return true
 }
 
-function isDefined<T>(v: T | undefined): v is T {
-  return v !== undefined && v !== null
-}
-
-function isValidFileType(file: File, accept: string | undefined) {
-  const isAcceptable = file.type === 'application/x-moz-file' || isFileAccepted(file, accept)
-  return isAcceptable
-    ? { isValid: true, errorMessage: null }
-    : { isValid: false, errorMessage: 'The selected file is an incorrect file type.' }
-}
-
-function isValidFileSize(file: File, minSize?: number, maxSize?: number) {
-  if (isDefined(file.size)) {
-    if (isDefined(minSize) && isDefined(maxSize)) {
-      if (file.size > maxSize)
-        return { isValid: false, errorMessage: `The selected file must be smaller than ${maxSize}.` }
-      if (file.size < minSize)
-        return { isValid: false, errorMessage: `The selected file must be larger than ${minSize}.` }
-    }
-    else if (isDefined(minSize) && file.size < minSize) {
-      return { isValid: false, errorMessage: `The selected file must be larger than ${minSize}.` }
-    }
-    else if (isDefined(maxSize) && file.size > maxSize) {
-      return { isValid: false, errorMessage: `The selected file must be smaller than ${maxSize}.` }
-    }
-  }
-  return { isValid: true, errorMessage: null }
-}
-
-function validate(files: File[], accept?: string, minSize?: number, maxSize?: number) {
-  const rejected: { file: File, errors: string[] }[] = []
-  files.forEach((file) => {
-    const { isValid: typeValid, errorMessage: typeError } = isValidFileType(file, accept)
-    const { isValid: sizeValid, errorMessage: sizeError } = isValidFileSize(file, minSize, maxSize)
-    if (!typeValid || !sizeValid) {
-      const errors = [typeError, sizeError].filter((e): e is string => e != null)
-      rejected.push({ file, errors })
-    }
-  })
-  if (rejected.length > 0) {
-    return { isValid: false, errorMessage: rejected[0]?.errors[0] || 'File validation failed' }
-  }
-  return { isValid: true, errorMessage: '' }
-}
+const debounced = debounce((fn) => {
+  fn()
+}, 1000)
 
 export const machine = createMachine<FileInputSchema>({
   props({ props }) {
     return {
+      srStatusText: 'No file selected.',
+      disabled: false,
+      minFileSize: 0,
+      maxFileSize: Number.POSITIVE_INFINITY,
       ...props,
     }
   },
 
   initialState() {
-    return 'valid'
+    return 'idle'
   },
 
-  context({ bindable }) {
+  context({ bindable, prop }) {
     return {
       isValid: bindable(() => ({ defaultValue: true })),
       errorMessage: bindable(() => ({ defaultValue: '' })),
       isDragging: bindable(() => ({ defaultValue: false })),
+      isDisabled: bindable(() => ({ defaultValue: prop('disabled') })),
+      srStatusText: bindable(() => ({ defaultValue: prop('srStatusText') })),
+      files: bindable<FileData[]>(() => ({ defaultValue: [] })),
     }
   },
 
-  watch({ track, context, action }) {
-    track([() => context.get('isValid')], () => {
-      action(['toggleState'])
+  watch({ track, context, send }) {
+    track([() => context.get('files').length], () => {
+      const files = context.get('files')
+      if (files.length === 0) {
+        send({ type: 'RESET_TO_IDLE' })
+      }
     })
   },
 
   states: {
+    idle: {
+      on: {
+        INVALID: { target: 'invalid' },
+        VALID: { target: 'valid' },
+      },
+    },
     valid: {
       on: {
-        CHANGE: { actions: ['validateFiles'] },
-        DRAG_START: { actions: ['setDragging'] },
-        DRAG_END: { actions: ['setDragging'] },
         INVALID: { target: 'invalid' },
+        RESET_TO_IDLE: { target: 'idle' },
       },
     },
     invalid: {
       on: {
-        CHANGE: { actions: ['validateFiles'] },
-        DRAG_START: { actions: ['setDragging'] },
-        DRAG_END: { actions: ['setDragging'] },
         VALID: { target: 'valid' },
+        RESET_TO_IDLE: { target: 'idle' },
       },
     },
+  },
+
+  on: {
+    CHANGE: { actions: ['validateFiles', 'updateSrStatus'] },
+    DRAG_START: { actions: ['setDragging'] },
+    DRAG_END: { actions: ['setDragging'] },
+    CHECK_EMPTY_FILES: { actions: ['checkEmptyFiles'] },
   },
 
   implementations: {
     actions: {
       setDragging({ context, event }) {
-        if (event.type === 'DRAG_START') {
-          context.set('isDragging', true)
-        }
-        else if (event.type === 'DRAG_END') {
-          context.set('isDragging', false)
-        }
+        context.set('isDragging', event.type === 'DRAG_START')
       },
       validateFiles({ context, event, prop, send }) {
-        const files = 'files' in event ? event.files : []
+        const files = (event.files || []) as File[]
         const { isValid, errorMessage } = validate(files, prop('accept'), prop('minSize'), prop('maxSize'))
         context.set('isValid', isValid)
         context.set('errorMessage', errorMessage)
-        send({ type: isValid ? 'VALID' : 'INVALID' })
+        if (isValid) {
+          const fileData = files.map(file => ({
+            name: file.name,
+            type: getFileType(file.name.split('.').pop()),
+          }))
+          context.set('files', fileData)
+          send({ type: 'VALID' })
+        }
+        else {
+          context.set('files', [])
+          send({ type: 'INVALID' })
+        }
       },
-      toggleState({ context, send }) {
-        const isValid = context.get('isValid')
-        send({ type: isValid ? 'VALID' : 'INVALID' })
+      updateSrStatus({ context, prop }) {
+        const files = context.get('files')
+        let text = prop('srStatusText')
+
+        if (files && files.length === 1 && files[0]) {
+          text = `You have selected the file: ${files[0].name}`
+        }
+        else if (files && files.length > 1) {
+          const fileNames = files.map(file => file.name).filter(Boolean)
+          text = `You have selected ${files.length} files: ${fileNames.join(', ')}`
+        }
+
+        debounced(() => {
+          context.set('srStatusText', text)
+        })
+      },
+      checkEmptyFiles({ context, send }) {
+        const files = context.get('files')
+        if (!files || files.length === 0) {
+          send({ type: 'RESET_TO_IDLE' })
+        }
       },
     },
   },

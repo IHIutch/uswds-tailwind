@@ -5,6 +5,13 @@ export const anatomy = createAnatomy('file-input').parts(
   'dropzone',
   'input',
   'errorMessage',
+  'instructions',
+  'srStatus',
+  'previewHeader',
+  'previewList',
+  'previewItem',
+  'previewItemIcon',
+  'previewItemContent',
 )
 
 export const parts = anatomy.build()

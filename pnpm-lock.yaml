@@ -622,6 +622,9 @@ importers:
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
+      '@zag-js/dom-query':
+        specifier: 'catalog:'
+        version: 1.21.1
       '@zag-js/types':
         specifier: 'catalog:'
         version: 1.21.1
