@@ -4,7 +4,7 @@ import { createMachine } from '@zag-js/core'
 export const machine = createMachine<SortableTableSchema>({
   props({ props }) {
     return {
-      id: '',
+      id: 'table',
       ...props,
     }
   },
@@ -16,15 +16,22 @@ export const machine = createMachine<SortableTableSchema>({
   context({ bindable }) {
     return {
       sortedColumn: bindable(() => ({ defaultValue: -1 })),
-      sortDirection: bindable(() => ({ defaultValue: 'none' as SortDirection })),
+      sortDirection: bindable<SortDirection>(() => ({ defaultValue: undefined })),
+      srStatus: bindable(() => ({ defaultValue: '' })),
     }
+  },
+
+  watch({ track, context, action }) {
+    track([() => context.get('sortedColumn'), () => context.get('sortDirection')], () => {
+      action(['updateSrStatus'])
+    })
   },
 
   states: {
     idle: {
       on: {
         SORT: {
-          actions: ['sort'],
+          actions: ['sort', 'updateSrStatus'],
         },
       },
     },
@@ -49,6 +56,18 @@ export const machine = createMachine<SortableTableSchema>({
           // New column - start with ascending
           context.set('sortedColumn', newColumn)
           context.set('sortDirection', 'asc')
+        }
+      },
+      updateSrStatus({ context }) {
+        const sortedColumn = context.get('sortedColumn')
+        const sortDirection = context.get('sortDirection')
+
+        if (sortedColumn !== -1 && sortDirection) {
+          const directionText = sortDirection === 'asc' ? 'ascending' : 'descending'
+          context.set('srStatus', `Table sorted by column ${sortedColumn + 1} in ${directionText} order`)
+        }
+        else {
+          context.set('srStatus', '')
         }
       },
     },

@@ -14,7 +14,7 @@ export type ElementIds = Partial<{
   tfoot: string
 }>
 
-export type SortDirection = 'asc' | 'desc' | 'none'
+export type SortDirection = 'asc' | 'desc' | undefined
 
 export type SortType = 'text' | 'number' | 'date'
 
@@ -31,20 +31,19 @@ export interface ColumnConfig {
   sortAttribute?: string
 }
 
-export interface SortableTableProps extends CommonProperties {
-  // No required props for the simplified version
-}
+export interface SortableTableProps extends CommonProperties { }
+
+// type PropsWithDefault = ''
 
 export interface SortableTableSchema {
   props: SortableTableProps
   context: {
-    /** Currently sorted column index (-1 if none) */
     sortedColumn: number
-    /** Current sort direction */
     sortDirection: SortDirection
+    srStatus: string
   }
   state: 'idle'
-  action: 'sort'
+  action: 'sort' | 'updateSrStatus'
   event: {
     type: 'SORT'
     columnIndex: number
@@ -88,4 +87,5 @@ export interface SortableTableApi<T extends PropTypes = PropTypes> {
   getHeaderCellProps: (columnIndex: number) => T['element']
   getSortButtonProps: (columnIndex: number) => T['button']
   getBodyCellProps: (columnIndex: number) => T['element']
+  getSrStatusProps: () => T['element']
 }

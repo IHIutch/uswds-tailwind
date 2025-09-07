@@ -1,15 +1,11 @@
 import { createAnatomy } from '@zag-js/anatomy'
 
-export const anatomy = createAnatomy('sortable-table').parts(
+export const anatomy = createAnatomy('table').parts(
   'root',
-  'table',
-  'caption',
-  'thead',
-  'tbody',
-  'tfoot',
   'headerCell',
+  'bodyCell',
   'sortButton',
-  'announcement',
+  'srStatus',
 )
 
 export const parts = anatomy.build()
