@@ -8,10 +8,10 @@ describe('file input initialized at file input', () => {
   let dragText: HTMLElement
   let statusMessage: HTMLElement
 
-  const template = (multiple: boolean = true) => `
+  const TEMPLATE = `
 <div data-part="file-input-root" id="test">
   <label>
-    Input accepts ${multiple ? 'multiple files' : 'single file'}
+    Input accepts multiple files
   </label>
   <div data-part="file-input-error-message"></div>
   <div>
@@ -29,13 +29,13 @@ describe('file input initialized at file input', () => {
         </div>
       </div>
       <div data-part="file-input-instructions">
-        <span>Drag ${multiple ? 'files' : 'file'} here or</span>
+        <span>Drag files here or</span>
         <span>choose from folder</span>
       </div>
       <input
         data-part="file-input-input"
         type="file"
-        ${multiple ? 'multiple' : ''}
+        multiple
       />
     </div>
   </div>
@@ -43,7 +43,7 @@ describe('file input initialized at file input', () => {
 `
 
   beforeEach(() => {
-    document.body.innerHTML = template(true)
+    document.body.innerHTML = TEMPLATE
     fileInputInit()
 
     dropZone = document.querySelector('[data-part="file-input-dropzone"]')!
@@ -79,19 +79,6 @@ describe('file input initialized at file input', () => {
 
     it('adds a default status message', () => {
       expect(statusMessage?.innerHTML?.trim()).toBe('No file selected.')
-    })
-  })
-
-  describe('single file input', () => {
-    beforeEach(() => {
-      document.body.innerHTML = template(false)
-      fileInputInit()
-
-      dragText = document.querySelector('span')!
-    })
-
-    it('uses singular "file" if there is not a "multiple" attribute', () => {
-      expect(dragText.innerHTML).toBe('Drag file here or')
     })
   })
 
