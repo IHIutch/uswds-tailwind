@@ -47,25 +47,25 @@ const TEMPLATE = `
       <tr>
         <td data-part="table-body-cell">Z</td>
         <td data-part="table-body-cell">2</td>
-        <td data-part="table-body-cell" data-value="2000">2,000</td>
+        <td data-part="table-body-cell" data-sort-value="2000">2,000</td>
         <td>Row 1</td>
       </tr>
       <tr>
         <td data-part="table-body-cell">Y</td>
         <td data-part="table-body-cell">3</td>
-        <td data-part="table-body-cell" data-value="0">Zero</td>
+        <td data-part="table-body-cell" data-sort-value="0">Zero</td>
         <td>Row 2</td>
       </tr>
       <tr>
         <td data-part="table-body-cell">X</td>
         <td data-part="table-body-cell">1</td>
-        <td data-part="table-body-cell" data-value="0.25">25%</td>
+        <td data-part="table-body-cell" data-sort-value="0.25">25%</td>
         <td>Row 3</td>
       </tr>
       <tr>
         <td data-part="table-body-cell">A</td>
         <td data-part="table-body-cell">4</td>
-        <td data-part="table-body-cell" data-value="-1">-1</td>
+        <td data-part="table-body-cell" data-sort-value="-1">-1</td>
         <td>Row 4</td>
       </tr>
     </tbody>
@@ -130,7 +130,7 @@ describe('sortable Table', () => {
     expect(getCellValuesByColumn(1)).toEqual(['1', '2', '3', '4'])
   })
 
-  it('sorts rows by "data-value" attribute on cells when clicked', async () => {
+  it('sorts rows by "data-sort-value" attribute on cells when clicked', async () => {
     await userEvent.click(dataSortValueSortButton)
     expect(getCellValuesByColumn(2)).toEqual(['-1', 'Zero', '25%', '2,000'])
   })

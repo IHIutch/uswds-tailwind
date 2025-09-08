@@ -105,8 +105,8 @@ export class Table extends Component<table.Props, table.Api> {
       if (!cellA || !cellB)
         return 0
 
-      const valueA = cellA.getAttribute('data-sort-value') || cellA.getAttribute('data-value') || cellA.textContent || ''
-      const valueB = cellB.getAttribute('data-sort-value') || cellB.getAttribute('data-value') || cellB.textContent || ''
+      const valueA = cellA.getAttribute('data-sort-value') || cellA.textContent || ''
+      const valueB = cellB.getAttribute('data-sort-value') || cellB.textContent || ''
 
       if (Number.isNaN(Number(valueA)) || Number.isNaN(Number(valueB))) {
         const result = valueA.localeCompare(valueB, navigator.language, {
