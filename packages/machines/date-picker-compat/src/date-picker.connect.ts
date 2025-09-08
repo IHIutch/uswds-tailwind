@@ -142,6 +142,10 @@ export function connect<T extends PropTypes>(
           const target = event.target as HTMLInputElement
           send({ type: 'START_INPUT_CHANGE', value: target.value })
         },
+        onBlur(event) {
+          const target = event.target as HTMLInputElement
+          send({ type: 'START_INPUT_CHANGE', value: target.value })
+        },
         onKeyDown(event) {
           if (disabled || readonly)
             return
@@ -304,7 +308,7 @@ export function connect<T extends PropTypes>(
         }
       }
       // Also check min/max date constraints
-      else if (!isDisabled) {
+      if (!isDisabled) {
         isDisabled = !!(
           (direction === 'prev' && unit === 'year' && minDate && calendarDate.getFullYear() <= minDate.getFullYear())
           || (direction === 'next' && unit === 'year' && maxDate && calendarDate.getFullYear() >= maxDate.getFullYear())
@@ -762,18 +766,18 @@ export function connect<T extends PropTypes>(
               break
             case 'Home': {
               event.preventDefault()
-              const focusedYear = context.get('focusedYear') ?? calendarDate.getFullYear()
-              const yearChunk = context.get('yearChunk')
-              const chunkStart = Math.floor(focusedYear / yearChunk) * yearChunk
-              send({ type: 'NAVIGATE_YEAR', direction: 'prev', amount: year - chunkStart })
+              // Move to beginning of current row in grid layout
+              // Since Up/Down moves by 3, the row width appears to be 3
+              const rowPosition = year % 3
+              send({ type: 'NAVIGATE_YEAR', direction: 'prev', amount: rowPosition })
               break
             }
             case 'End': {
               event.preventDefault()
-              const focusedYearEnd = context.get('focusedYear') ?? calendarDate.getFullYear()
-              const yearChunkEnd = context.get('yearChunk')
-              const chunkEnd = Math.floor(focusedYearEnd / yearChunkEnd) * yearChunkEnd + yearChunkEnd - 1
-              send({ type: 'NAVIGATE_YEAR', direction: 'next', amount: chunkEnd - year })
+              // Move to end of current row in grid layout  
+              // Since Up/Down moves by 3, the row width appears to be 3
+              const rowPosition = year % 3
+              send({ type: 'NAVIGATE_YEAR', direction: 'next', amount: 2 - rowPosition })
               break
             }
             case 'PageUp':

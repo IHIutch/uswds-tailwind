@@ -1,4 +1,5 @@
 import * as datePicker from '@uswds-tailwind/date-picker-compat'
+import { formatDate, parseDate } from '../../machines/date-picker-compat/src/date-picker.utils'
 import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
@@ -21,13 +22,25 @@ function copyAttributes(from: HTMLElement, to: HTMLElement) {
 
 export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   initMachine(props: datePicker.Props): VanillaMachine<datePicker.DatePickerSchema> {
+    const defaultValue = this.rootEl.getAttribute('data-default-value')
+    const inputValue = this.input?.value
+    const initialValue = inputValue || defaultValue || undefined
+    
+    // If we have a default value and no input value, set the input value directly
+    if (defaultValue && !inputValue && this.input) {
+      const parsedDate = parseDate(defaultValue, 'YYYY-MM-DD')
+      if (parsedDate) {
+        this.input.value = formatDate(parsedDate, 'MM/dd/yyyy')
+      }
+    }
+    
     return new VanillaMachine(datePicker.machine, {
       ...props,
       disabled: this.rootEl.hasAttribute('disabled'),
       readonly: this.rootEl.hasAttribute('readonly'),
       minDate: this.rootEl.getAttribute('data-min-date') || undefined,
       maxDate: this.rootEl.getAttribute('data-max-date') || undefined,
-      defaultStartValue: this.input?.value || undefined,
+      defaultStartValue: initialValue,
     })
   }
 
@@ -107,6 +120,23 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   private renderInput(el: HTMLInputElement) {
     spreadProps(el, this.api.getInputProps())
+    
+    // Explicitly set value from machine context to ensure it's applied
+    const startInputValue = this.machine.service.context.get('startInputValue')
+    if (startInputValue && el.value !== startInputValue) {
+      el.value = startInputValue
+    }
+    
+    // Set HTML5 validation message
+    const validationMessage = this.machine.service.context.get('validationMessage')
+    const startValidationMessage = this.machine.service.context.get('startValidationMessage')
+    const message = validationMessage || startValidationMessage
+    
+    if (message) {
+      el.setCustomValidity(message)
+    } else {
+      el.setCustomValidity('')
+    }
   }
 
   private renderTrigger(el: HTMLButtonElement) {

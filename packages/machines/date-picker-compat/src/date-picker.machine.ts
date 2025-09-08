@@ -47,20 +47,32 @@ export const machine = createMachine<DatePickerSchema>({
 
   context({ bindable, prop }) {
     const open = prop('open')
+    const minDateStr = prop('minDate')
+    const maxDateStr = prop('maxDate')
+    const minDate = minDateStr ? parseDate(minDateStr, 'YYYY-MM-DD') : null
+    const maxDate = maxDateStr ? parseDate(maxDateStr, 'YYYY-MM-DD') : null
+    
+    const defaultStartValue = prop('defaultStartValue')
+    const defaultEndValue = prop('defaultEndValue')
+    const defaultStartDate = defaultStartValue ? parseDate(defaultStartValue, 'YYYY-MM-DD') : null
+    const defaultEndDate = defaultEndValue ? parseDate(defaultEndValue, 'YYYY-MM-DD') : null
+    const defaultStartInputValue = defaultStartDate ? formatDate(defaultStartDate, 'MM/dd/yyyy') : ''
+    const defaultEndInputValue = defaultEndDate ? formatDate(defaultEndDate, 'MM/dd/yyyy') : ''
+    const defaultCalendarDate = defaultStartDate || today()
 
     return {
       open: bindable(() => ({ defaultValue: open })),
       selectionMode: bindable<SelectionMode>(() => ({ defaultValue: prop('selectionMode') ?? 'single' })),
-      calendarDate: bindable(() => ({ defaultValue: today() })),
-      startDate: bindable<Date | null>(() => ({ defaultValue: null })),
-      endDate: bindable<Date | null>(() => ({ defaultValue: null })),
+      calendarDate: bindable(() => ({ defaultValue: defaultCalendarDate })),
+      startDate: bindable<Date | null>(() => ({ defaultValue: defaultStartDate })),
+      endDate: bindable<Date | null>(() => ({ defaultValue: defaultEndDate })),
       hoverDate: bindable<Date | null>(() => ({ defaultValue: null })),
       activeInput: bindable<'start' | 'end' | null>(() => ({ defaultValue: null })),
-      minDate: bindable<Date | null>(() => ({ defaultValue: null })),
-      maxDate: bindable<Date | null>(() => ({ defaultValue: null })),
+      minDate: bindable<Date | null>(() => ({ defaultValue: minDate })),
+      maxDate: bindable<Date | null>(() => ({ defaultValue: maxDate })),
       // Range mode inputs
-      startInputValue: bindable(() => ({ defaultValue: '' })),
-      endInputValue: bindable(() => ({ defaultValue: '' })),
+      startInputValue: bindable(() => ({ defaultValue: defaultStartInputValue })),
+      endInputValue: bindable(() => ({ defaultValue: defaultEndInputValue })),
       isStartInputValid: bindable(() => ({ defaultValue: true })),
       isEndInputValid: bindable(() => ({ defaultValue: true })),
       startValidationMessage: bindable(() => ({ defaultValue: '' })),
@@ -297,28 +309,41 @@ export const machine = createMachine<DatePickerSchema>({
         const minDate = context.get('minDate')
         const maxDate = context.get('maxDate')
         const endDate = context.get('endDate')
+        const selectionMode = context.get('selectionMode')
 
         let isValid = true
         let validationMessage = ''
 
-        if (startDate && minDate && maxDate) {
-          if (!isWithinInterval(startDate, { start: minDate, end: maxDate })) {
+        if (startDate) {
+          // Check min/max date constraints
+          if (minDate && startDate < minDate) {
             isValid = false
-            validationMessage = 'Start date is outside allowed range'
+            validationMessage = 'Please enter a valid date'
           }
-          else if (endDate && startDate > endDate) {
+          else if (maxDate && startDate > maxDate) {
+            isValid = false
+            validationMessage = 'Please enter a valid date'
+          }
+          else if (selectionMode === 'range' && endDate && startDate > endDate) {
             isValid = false
             validationMessage = 'Start date must be before end date'
           }
         }
         else if (startInputValue) {
+          // Invalid date format
           isValid = false
-          validationMessage = 'Please enter a valid start date'
+          validationMessage = 'Please enter a valid date'
         }
 
         context.set('startDate', startDate)
         context.set('isStartInputValid', isValid)
         context.set('startValidationMessage', validationMessage)
+        
+        // For single mode (backward compatibility)
+        if (selectionMode === 'single') {
+          context.set('isInputValid', isValid)
+          context.set('validationMessage', validationMessage)
+        }
       },
 
       validateEndInput({ context }) {
@@ -356,31 +381,53 @@ export const machine = createMachine<DatePickerSchema>({
         const activeInput = context.get('activeInput')
         const startDate = context.get('startDate')
         const endDate = context.get('endDate')
+        const minDate = context.get('minDate')
+        const maxDate = context.get('maxDate')
+        let targetDate = today() // Default to today
 
         if (selectionMode === 'range') {
           // For range mode, focus the selected date based on active input
           if (activeInput === 'start' && startDate) {
-            context.set('calendarDate', startDate)
+            targetDate = startDate
           }
           else if (activeInput === 'end' && endDate) {
-            context.set('calendarDate', endDate)
+            targetDate = endDate
           }
           else if (startDate) {
             // Fallback to start date if available
-            context.set('calendarDate', startDate)
+            targetDate = startDate
           }
           else if (endDate) {
             // Fallback to end date if available
-            context.set('calendarDate', endDate)
+            targetDate = endDate
           }
         }
         else {
           // Single mode (backward compatibility)
           const isValid = context.get('isInputValid')
+          const startInputValue = context.get('startInputValue')
+          
           if (isValid && startDate) {
-            context.set('calendarDate', startDate)
+            targetDate = startDate
+          }
+          else if (startInputValue) {
+            // Try to parse the input value even if invalid
+            const parsedDate = parseDate(startInputValue, 'MM/dd/yyyy')
+            if (parsedDate) {
+              targetDate = parsedDate
+            }
           }
         }
+
+        // Apply min/max constraints to target date
+        if (minDate && targetDate < minDate) {
+          targetDate = minDate
+        }
+        if (maxDate && targetDate > maxDate) {
+          targetDate = maxDate
+        }
+
+        context.set('calendarDate', targetDate)
       },
 
       setControlledValue({ context, event }) {
@@ -459,6 +506,8 @@ export const machine = createMachine<DatePickerSchema>({
           context.set('startDate', date)
           context.set('startInputValue', formatDate(date, 'MM/dd/yyyy'))
           context.set('endDate', null)
+          context.set('isStartInputValid', true)
+          context.set('startValidationMessage', '')
         }
 
         context.set('hoverDate', null)
@@ -643,6 +692,18 @@ export const machine = createMachine<DatePickerSchema>({
       navigatePreviousMonth({ context }) {
         const calendarDate = context.get('calendarDate')
         let newDate = addMonths(calendarDate, -1)
+        
+        // Apply global min/max bounds first
+        const minDate = context.get('minDate')
+        const maxDate = context.get('maxDate')
+        
+        if (minDate && newDate < new Date(minDate.getFullYear(), minDate.getMonth(), 1)) {
+          // Cap at minimum date's month  
+          newDate = new Date(minDate.getFullYear(), minDate.getMonth(), 1)
+        }
+        if (maxDate && newDate > new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)) {
+          newDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)
+        }
 
         // Apply range constraints for month navigation
         const selectionMode = context.get('selectionMode')
@@ -687,6 +748,18 @@ export const machine = createMachine<DatePickerSchema>({
       navigateNextMonth({ context }) {
         const calendarDate = context.get('calendarDate')
         let newDate = addMonths(calendarDate, 1)
+        
+        // Apply global min/max bounds first
+        const minDate = context.get('minDate')
+        const maxDate = context.get('maxDate')
+        
+        if (maxDate && newDate > new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)) {
+          // Cap at maximum date's month
+          newDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1)
+        }
+        if (minDate && newDate < new Date(minDate.getFullYear(), minDate.getMonth(), 1)) {
+          newDate = new Date(minDate.getFullYear(), minDate.getMonth(), 1)
+        }
 
         // Apply range constraints for month navigation
         const selectionMode = context.get('selectionMode')
@@ -731,6 +804,18 @@ export const machine = createMachine<DatePickerSchema>({
       navigatePreviousYear({ context }) {
         const calendarDate = context.get('calendarDate')
         let newDate = addYears(calendarDate, -1)
+        
+        // Apply global min/max bounds first
+        const minDate = context.get('minDate')
+        const maxDate = context.get('maxDate')
+        
+        if (minDate && newDate.getFullYear() < minDate.getFullYear()) {
+          // Cap at minimum date's year
+          newDate = new Date(minDate.getFullYear(), newDate.getMonth(), newDate.getDate())
+        }
+        if (maxDate && newDate.getFullYear() > maxDate.getFullYear()) {
+          newDate = new Date(maxDate.getFullYear(), newDate.getMonth(), newDate.getDate())
+        }
 
         // Apply range constraints for year navigation
         const selectionMode = context.get('selectionMode')
@@ -759,6 +844,18 @@ export const machine = createMachine<DatePickerSchema>({
       navigateNextYear({ context }) {
         const calendarDate = context.get('calendarDate')
         let newDate = addYears(calendarDate, 1)
+        
+        // Apply global min/max bounds first
+        const minDate = context.get('minDate')
+        const maxDate = context.get('maxDate')
+        
+        if (maxDate && newDate.getFullYear() > maxDate.getFullYear()) {
+          // Cap at maximum date's year
+          newDate = new Date(maxDate.getFullYear(), newDate.getMonth(), newDate.getDate())
+        }
+        if (minDate && newDate.getFullYear() < minDate.getFullYear()) {
+          newDate = new Date(minDate.getFullYear(), newDate.getMonth(), newDate.getDate())
+        }
 
         // Apply range constraints for year navigation
         const selectionMode = context.get('selectionMode')
