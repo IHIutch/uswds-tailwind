@@ -22,7 +22,7 @@ export function connect<T extends PropTypes>(
 
   const open = !state.matches('closed')
   const view = state.matches('monthSelection') ? 'month' : state.matches('yearSelection') ? 'year' : 'date'
-  const disabled = !!prop('disabled')
+  const disabled = context.get('disabled')
   const readonly = !!prop('readonly')
 
   const selectionMode = context.get('selectionMode')
@@ -48,6 +48,7 @@ export function connect<T extends PropTypes>(
   const maxDate = context.get('maxDate')
   const monthLabels = context.get('monthLabels')
   const dayOfWeekLabels = context.get('dayOfWeekLabels')
+  const dayOfWeekAbbreviations = context.get('dayOfWeekAbbreviations')
 
   return {
     open,
@@ -774,7 +775,7 @@ export function connect<T extends PropTypes>(
             }
             case 'End': {
               event.preventDefault()
-              // Move to end of current row in grid layout  
+              // Move to end of current row in grid layout
               // Since Up/Down moves by 3, the row width appears to be 3
               const rowPosition = year % 3
               send({ type: 'NAVIGATE_YEAR', direction: 'next', amount: 2 - rowPosition })
@@ -795,7 +796,7 @@ export function connect<T extends PropTypes>(
 
     // Grid generation methods for template cloning
     getWeekDays() {
-      return dayOfWeekLabels.map((label, index) => ({
+      return dayOfWeekAbbreviations.map((label, index) => ({
         label,
         index,
         props: this.getDayOfWeekHeaderProps(index),

@@ -83,15 +83,18 @@ describe('date picker component - disabled initialization', () => {
   })
 
   it('should not display the calendar when the button is clicked as it is disabled', async () => {
-    await userEvent.click(button)
+    // Force click the disabled button
+    await userEvent.click(button, { force: true })
 
     expect(getCalendarEl().hidden).toBe(true)
   })
 
   it('should display the calendar when the button is clicked once the component is enabled', async () => {
-    const instance = DatePicker.getInstance(root.id)
+    const instanceId = root.id.split(':').pop() || root.id
+    const instance = DatePicker.getInstance(instanceId)
+    
     if (instance) {
-      instance.enable()
+      await instance.enable()
     }
     
     await userEvent.click(button)

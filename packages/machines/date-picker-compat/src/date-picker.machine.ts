@@ -62,6 +62,7 @@ export const machine = createMachine<DatePickerSchema>({
 
     return {
       open: bindable(() => ({ defaultValue: open })),
+      disabled: bindable(() => ({ defaultValue: prop('disabled') ?? false })),
       selectionMode: bindable<SelectionMode>(() => ({ defaultValue: prop('selectionMode') ?? 'single' })),
       calendarDate: bindable(() => ({ defaultValue: defaultCalendarDate })),
       startDate: bindable<Date | null>(() => ({ defaultValue: defaultStartDate })),
@@ -70,6 +71,8 @@ export const machine = createMachine<DatePickerSchema>({
       activeInput: bindable<'start' | 'end' | null>(() => ({ defaultValue: null })),
       minDate: bindable<Date | null>(() => ({ defaultValue: minDate })),
       maxDate: bindable<Date | null>(() => ({ defaultValue: maxDate })),
+      // Store original default date for fallback logic
+      defaultStartDate: bindable<Date | null>(() => ({ defaultValue: defaultStartDate })),
       // Range mode inputs
       startInputValue: bindable(() => ({ defaultValue: defaultStartInputValue })),
       endInputValue: bindable(() => ({ defaultValue: defaultEndInputValue })),
@@ -144,7 +147,7 @@ export const machine = createMachine<DatePickerSchema>({
 
     dateSelection: {
       effects: ['trackInteractOutside', 'trackFocusVisible'],
-      entry: ['focusCalendarDate', 'invokeOnOpenChange'],
+      entry: ['refreshLocaleStrings', 'focusCalendarDate', 'invokeOnOpenChange'],
       on: {
         'TOGGLE': { target: 'closed', actions: ['invokeOnOpenChange'] },
         'CLOSE': { target: 'closed', actions: ['invokeOnOpenChange'] },
@@ -284,6 +287,14 @@ export const machine = createMachine<DatePickerSchema>({
 
   implementations: {
     actions: {
+      // Locale handling
+      refreshLocaleStrings({ context }) {
+        const localeStrings = getLocaleStrings()
+        context.set('monthLabels', localeStrings.monthLabels)
+        context.set('dayOfWeekLabels', localeStrings.dayOfWeekLabels)
+        context.set('dayOfWeekAbbreviations', localeStrings.dayOfWeekAbbreviations)
+      },
+
       // Input handling
       // updateInputValue({ context, event }) {
       //   if (event.type !== 'INPUT_CHANGE')
@@ -383,7 +394,8 @@ export const machine = createMachine<DatePickerSchema>({
         const endDate = context.get('endDate')
         const minDate = context.get('minDate')
         const maxDate = context.get('maxDate')
-        let targetDate = today() // Default to today
+        const defaultStartDate = context.get('defaultStartDate')
+        let targetDate = defaultStartDate || today() // Default to default date, then today
 
         if (selectionMode === 'range') {
           // For range mode, focus the selected date based on active input
@@ -416,6 +428,10 @@ export const machine = createMachine<DatePickerSchema>({
             if (parsedDate) {
               targetDate = parsedDate
             }
+          }
+          // If no valid input, fall back to default date or today
+          else {
+            targetDate = defaultStartDate || today()
           }
         }
 

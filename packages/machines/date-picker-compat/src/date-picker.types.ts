@@ -40,6 +40,7 @@ export interface DatePickerProps extends DirectionProperty,
 export interface DatePickerContext {
   // Core dates
   calendarDate: Date
+  disabled: boolean
   startDate: Date | null
   endDate: Date | null
   hoverDate: Date | null
@@ -52,6 +53,9 @@ export interface DatePickerContext {
   // Constraints
   minDate: Date | null
   maxDate: Date | null
+
+  // Default values for fallback logic
+  defaultStartDate: Date | null
 
   // Input values for range mode
   startInputValue: string

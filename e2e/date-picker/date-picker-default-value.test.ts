@@ -90,7 +90,7 @@ describe('date picker component with default value', () => {
     await userEvent.click(button)
 
     expect(getCalendarEl().hidden).toBe(false)
-    
+
     const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
     expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-22')
   })

@@ -11,7 +11,7 @@ describe('date picker component with default date', () => {
     <div>
       <div>
         <label for="input-dates-of-use">Dates of use</label>
-        <div data-part="date-picker-root" data-default-date="2020-05-22">
+        <div data-part="date-picker-root" data-default-value="2020-05-22">
           <input data-part="date-picker-input" id="input-dates-of-use" name="input-dates-of-use" type="text">
           <button data-part="date-picker-trigger" type="button"></button>
           <div data-part="date-picker-content" hidden>
@@ -87,7 +87,7 @@ describe('date picker component with default date', () => {
     await userEvent.click(button)
 
     expect(getCalendarEl().hidden).toBe(false)
-    
+
     const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
     expect(focusedDate?.getAttribute('data-value')).toBe('2020-06-20')
   })
@@ -97,7 +97,7 @@ describe('date picker component with default date', () => {
     await userEvent.click(button)
 
     expect(getCalendarEl().hidden).toBe(false)
-    
+
     const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
     expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-22')
   })
@@ -107,7 +107,7 @@ describe('date picker component with default date', () => {
     await userEvent.click(button)
 
     expect(getCalendarEl().hidden).toBe(false)
-    
+
     const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
     expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-22')
   })
