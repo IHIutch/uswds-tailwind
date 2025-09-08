@@ -9,7 +9,7 @@ export function connect<T extends PropTypes>(
   service: Service<FileInputSchema>,
   normalize: NormalizeProps<T>,
 ): FileInputApi<T> {
-  const { state, send, scope, context } = service
+  const { state, send, scope, context, prop } = service
   const isInvalid = state.matches('invalid')
   const isDragging = context.get('isDragging')
   const isDisabled = context.get('isDisabled')
@@ -62,6 +62,7 @@ export function connect<T extends PropTypes>(
         'data-invalid': isInvalid ? 'true' : undefined,
         'aria-invalid': isInvalid ? 'true' : undefined,
         'data-dragging': isDragging ? 'true' : undefined,
+        'data-errormessage': isInvalid ? prop('errorMessage') : undefined,
         onChange(event) {
           if (!isDisabled) {
             const files = Array.from(event.currentTarget.files ?? [])
@@ -147,7 +148,7 @@ export function connect<T extends PropTypes>(
         ...parts.errorMessage.attrs,
         'data-invalid': isInvalid ? 'true' : undefined,
         'id': dom.getErrorMessageId(scope),
-        'textContent': context.get('errorMessage'),
+        'textContent': prop('errorMessage'),
       })
     },
   }

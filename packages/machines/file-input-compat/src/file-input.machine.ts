@@ -23,8 +23,7 @@ export const machine = createMachine<FileInputSchema>({
     return {
       srStatusText: 'No file selected.',
       disabled: false,
-      minFileSize: 0,
-      maxFileSize: Number.POSITIVE_INFINITY,
+      errorMessage: 'Error: This is not a valid file type.',
       ...props,
     }
   },
@@ -36,7 +35,6 @@ export const machine = createMachine<FileInputSchema>({
   context({ bindable, prop }) {
     return {
       isValid: bindable(() => ({ defaultValue: true })),
-      errorMessage: bindable(() => ({ defaultValue: '' })),
       isDragging: bindable(() => ({ defaultValue: false })),
       isDisabled: bindable(() => ({ defaultValue: prop('disabled') })),
       srStatusText: bindable(() => ({ defaultValue: prop('srStatusText') })),
@@ -88,9 +86,8 @@ export const machine = createMachine<FileInputSchema>({
       },
       validateFiles({ context, event, prop, send }) {
         const files = (event.files || []) as File[]
-        const { isValid, errorMessage } = validate(files, prop('accept'), prop('minSize'), prop('maxSize'))
+        const isValid = validate(files, prop('accept'))
         context.set('isValid', isValid)
-        context.set('errorMessage', errorMessage)
         if (isValid) {
           const fileData = files.map(file => ({
             name: file.name,

@@ -1,71 +1,41 @@
 function isFileAccepted(file: File | null, accept: string | undefined) {
   if (file && accept) {
-    const types = accept.split(',')
-
+    const acceptedFiles = accept.split(',')
     const fileName = file.name || ''
-    const mimeType = (file.type || '').toLowerCase()
-    const baseMimeType = mimeType.replace(/\/.*/, '')
+    const fileType = (file.type || '').toLowerCase()
 
-    return types.some((type) => {
-      const validType = type.trim().toLowerCase()
+    return acceptedFiles.some((acceptedType) => {
+      const fileTypePattern = acceptedType.trim()
 
-      if (validType.charAt(0) === '.') {
-        return fileName.toLowerCase().endsWith(validType)
-      }
+      const fileNameMatch = fileName.indexOf(fileTypePattern) > 0
 
-      if (validType.endsWith('/*')) {
-        return baseMimeType === validType.replace(/\/.*/, '')
-      }
+      const mimeTypePattern = fileTypePattern.replace(/\*/g, '')
+      const mimeTypeMatch = fileType.includes(mimeTypePattern)
 
-      return mimeType === validType
+      return fileNameMatch || mimeTypeMatch
     })
   }
   return true
 }
 
-function isDefined<T>(v: T | undefined): v is T {
-  return v !== undefined && v !== null
-}
-
 function isValidFileType(file: File, accept: string | undefined) {
   const isAcceptable = file.type === 'application/x-moz-file' || isFileAccepted(file, accept)
-  return isAcceptable
-    ? { isValid: true, errorMessage: null }
-    : { isValid: false, errorMessage: 'Error: This is not a valid file type.' }
+  return !!isAcceptable
 }
 
-function isValidFileSize(file: File, minSize?: number, maxSize?: number) {
-  if (isDefined(file.size)) {
-    if (isDefined(minSize) && isDefined(maxSize)) {
-      if (file.size > maxSize)
-        return { isValid: false, errorMessage: `The selected file must be smaller than ${maxSize}.` }
-      if (file.size < minSize)
-        return { isValid: false, errorMessage: `The selected file must be larger than ${minSize}.` }
-    }
-    else if (isDefined(minSize) && file.size < minSize) {
-      return { isValid: false, errorMessage: `The selected file must be larger than ${minSize}.` }
-    }
-    else if (isDefined(maxSize) && file.size > maxSize) {
-      return { isValid: false, errorMessage: `The selected file must be smaller than ${maxSize}.` }
-    }
-  }
-  return { isValid: true, errorMessage: null }
-}
-
-export function validate(files: File[], accept?: string, minSize?: number, maxSize?: number) {
+export function validate(files: File[], accept?: string) {
   const rejected: { file: File, errors: string[] }[] = []
   files.forEach((file) => {
-    const { isValid: typeValid, errorMessage: typeError } = isValidFileType(file, accept)
-    const { isValid: sizeValid, errorMessage: sizeError } = isValidFileSize(file, minSize, maxSize)
-    if (!typeValid || !sizeValid) {
-      const errors = [typeError, sizeError].filter((e): e is string => e != null)
+    const typeValid = isValidFileType(file, accept)
+    if (!typeValid) {
+      const errors = ['Invalid file type'].filter((e): e is string => e != null)
       rejected.push({ file, errors })
     }
   })
   if (rejected.length > 0) {
-    return { isValid: false, errorMessage: rejected[0]?.errors[0] || 'File validation failed' }
+    return false
   }
-  return { isValid: true, errorMessage: '' }
+  return true
 }
 
 export function getFileType(ext?: string) {

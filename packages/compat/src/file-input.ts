@@ -20,18 +20,13 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     FileInput.instances.set(props.id, this)
 
     const inputEl = this.input
-    const minSizeAttr = inputEl.getAttribute('data-min-size')
-    const maxSizeAttr = inputEl.getAttribute('data-max-size')
 
-    const machineProps = {
+    return new VanillaMachine(fileInput.machine, {
       ...props,
       accept: inputEl.getAttribute('accept') || undefined,
-      minSize: minSizeAttr ? Number.parseInt(minSizeAttr) : undefined,
-      maxSize: maxSizeAttr ? Number.parseInt(maxSizeAttr) : undefined,
       disabled: inputEl.disabled,
-    }
-
-    return new VanillaMachine(fileInput.machine, machineProps)
+      errorMessage: inputEl.getAttribute('data-errormessage') || undefined,
+    })
   }
 
   initApi() {
@@ -53,26 +48,22 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     if (!this._templates) {
       this._templates = new Map()
 
-      try {
-        const previewList = this.previewList
-        const templateItem = previewList.querySelector<HTMLElement>('[data-part="file-input-preview-item"]')
-        
-        if (templateItem) {
-          // Clone element with attributes only
-          this._templates.set('listItem', this.cloneElementWithAttributes(templateItem))
+      const templateItem = this.previewList.querySelector<HTMLElement>('[data-part="file-input-preview-item"]')
 
-          const icon = templateItem.querySelector<HTMLElement>('[data-part="file-input-preview-item-icon"]')
-          if (icon) {
-            this._templates.set('icon', this.cloneElementWithAttributes(icon))
-          }
+      if (!templateItem) {
+        throw new Error('Expected templateItem to be defined')
+      }
 
-          const content = templateItem.querySelector<HTMLElement>('[data-part="file-input-preview-item-content"]')
-          if (content) {
-            this._templates.set('content', this.cloneElementWithAttributes(content))
-          }
-        }
-      } catch (e) {
-        // Preview list might not exist, which is fine
+      this._templates.set('listItem', this.cloneElementWithAttributes(templateItem))
+
+      const icon = templateItem.querySelector<HTMLElement>('[data-part="file-input-preview-item-icon"]')
+      if (icon) {
+        this._templates.set('icon', this.cloneElementWithAttributes(icon))
+      }
+
+      const content = templateItem.querySelector<HTMLElement>('[data-part="file-input-preview-item-content"]')
+      if (content) {
+        this._templates.set('content', this.cloneElementWithAttributes(content))
       }
     }
   }
@@ -80,7 +71,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   render() {
     // Store templates on first render
     this.storeTemplates()
-    
+
     spreadProps(this.rootEl, this.api.getRootProps())
     spreadProps(this.dropzone, this.api.getDropzoneProps())
     spreadProps(this.input, this.api.getInputProps())
@@ -184,7 +175,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   private renderErrorMessage(el: HTMLElement | null) {
     if (el) {
       spreadProps(el, this.api.getErrorMessageProps())
-      el.textContent = this.machine.ctx.get('errorMessage')
+      el.textContent = this.machine.prop('errorMessage')
     }
   }
 

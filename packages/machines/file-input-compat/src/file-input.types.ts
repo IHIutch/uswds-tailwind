@@ -20,14 +20,6 @@ export interface FileInputProps extends CommonProperties {
    */
   accept?: string
   /**
-   * Minimum file size in bytes
-   */
-  minSize?: number
-  /**
-   * Maximum file size in bytes
-   */
-  maxSize?: number
-  /**
    * Whether the file input is disabled
    */
   disabled?: boolean
@@ -35,9 +27,13 @@ export interface FileInputProps extends CommonProperties {
    * Screen reader status text
    */
   srStatusText?: string
+  /**
+   * Custom error message for invalid file types
+   */
+  errorMessage?: string
 }
 
-type PropsWithDefault = 'disabled' | 'srStatusText'
+type PropsWithDefault = 'disabled' | 'srStatusText' | 'errorMessage'
 
 export interface FileData {
   name: string
@@ -48,7 +44,6 @@ export interface FileInputSchema {
   props: RequiredBy<FileInputProps, PropsWithDefault>
   context: {
     isValid: boolean
-    errorMessage: string
     isDragging: boolean
     isDisabled: boolean
     srStatusText: string

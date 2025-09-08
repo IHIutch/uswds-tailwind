@@ -8,6 +8,7 @@ describe('file Input - Accept Types', () => {
   let errorMessage: HTMLElement | null
 
   const defaultErrorMessage = 'Error: This is not a valid file type.'
+  const customErrorMessage = 'Please upload a valid file'
 
   const TEMPLATE = `
 <div data-part="file-input-root" id="test">
@@ -120,22 +121,30 @@ describe('file Input - Accept Types', () => {
       expect(rootEl.getAttribute('data-invalid')).toBe('true')
     })
 
-    it('should accept valid file types', async () => {
-      const validFile = createMockFile('document.pdf', size, 'application/pdf')
+    it('should allow a custom error message for invalid file type', async () => {
+      // Add custom error message to input
+      inputEl!.dataset.errormessage = customErrorMessage
+
+      // Reinitialize component to pick up the new attribute
+      document.body.innerHTML = TEMPLATE
+      const input = document.querySelector('[data-part="file-input-input"]') as HTMLInputElement
+      input.dataset.errormessage = customErrorMessage
+      fileInputInit()
+
+      rootEl = document.querySelector('[data-part="file-input-root"]')!
 
       // Get the FileInput instance
       const instance = FileInput.getInstance(rootEl.id.split(':')[1])
       expect(instance).toBeTruthy()
 
       // Use the public method to set files
-      await instance?.setFiles([validFile])
+      await instance?.setFiles([invalidFile])
 
       // Re-query elements after render
-      rootEl = document.querySelector('[data-part="file-input-root"]')!
       errorMessage = document.querySelector('[data-part="file-input-error-message"]')
 
-      expect(rootEl.getAttribute('data-invalid')).not.toBe('true')
-      expect(errorMessage?.textContent).toBe('')
+      expect(errorMessage?.textContent).toBe(customErrorMessage)
+      expect(rootEl.getAttribute('data-invalid')).toBe('true')
     })
   })
 })
