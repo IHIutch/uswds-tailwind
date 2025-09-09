@@ -1,9 +1,11 @@
 import { userEvent } from '@vitest/browser/context'
 import { visuallyHiddenStyle } from '@zag-js/dom-query'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { characterCountInit } from '../../packages/compat/src/character-count.js'
+import { expect, it } from 'vitest'
+import { createDisposableCharacterCount } from './_utils.js'
 
-const TEMPLATE = `<div data-part="character-count-root">
+const rootId = 'test'
+
+const TEMPLATE = `<div data-part="character-count-root" id="${rootId}">
     <label
       data-part="character-count-label"
       for="input-limit"
@@ -28,95 +30,104 @@ const TEMPLATE = `<div data-part="character-count-root">
       <span data-part="character-count-sr-status"></span>
     </div>`
 
-describe('character count component', () => {
-  const { body } = document
+it('hides the requirements hint for screen readers', () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const statusMessageSR = component.elements.getSrStatusEl()!
 
-  let root
-  let label
-  let input
-  let statusMessageVisual
-  let statusMessageSR
-
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    characterCountInit()
-
-    root = document.querySelector('[data-part="character-count-root"]')
-    label = root.querySelector('[data-part="character-count-label"]')
-    input = root.querySelector('[data-part="character-count-input"]')
-    statusMessageVisual = root.querySelector('[data-part="character-count-status"]')
-    statusMessageSR = root.querySelector('[data-part="character-count-sr-status"]')
+  Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
+    const elStyle = statusMessageSR.style[key]
+      .replace(/0px/g, '0')
+      .replace(/,\s*/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+    expect(elStyle).toBe(value)
   })
+})
 
-  it('hides the requirements hint for screen readers', () => {
-    Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
-      const elStyle = statusMessageSR.style[key]
-        .replace(/0px/g, '0')
-        .replace(/,\s*/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-      expect(elStyle).toBe(value)
-    })
-  })
+it('creates a visual status message on init', () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const visibleStatus = component.elements.getStatusEl()!
+  expect(visibleStatus).toBeInTheDocument()
+})
 
-  it('creates a visual status message on init', () => {
-    const visibleStatus = document.querySelectorAll('[data-part="character-count-status"]')
-    expect(visibleStatus.length).toBe(1)
-  })
+it('creates a screen reader status message on init', () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const srStatus = component.elements.getSrStatusEl()
+  expect(srStatus).toBeInTheDocument()
+})
 
-  it('creates a screen reader status message on init', () => {
-    const srStatus = document.querySelectorAll('[data-part="character-count-sr-status"]')
-    expect(srStatus.length).toBe(1)
-  })
+it('adds initial status message for the character count component', () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const visibleStatus = component.elements.getStatusEl()!
+  expect(visibleStatus.textContent).toBe('20 characters allowed')
+})
 
-  it('adds initial status message for the character count component', () => {
-    expect(statusMessageVisual.innerHTML).toBe('20 characters allowed')
-    expect(statusMessageSR.innerHTML).toBe('20 characters allowed')
-  })
+it('informs the user how many more characters they are allowed', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const visibleStatus = component.elements.getStatusEl()!
 
-  it('informs the user how many more characters they are allowed', async () => {
-    await userEvent.fill(input, '1')
+  await userEvent.fill(input, '1')
+  expect(visibleStatus.textContent).toBe('19 characters left')
+})
 
-    expect(statusMessageVisual.innerHTML).toBe('19 characters left')
-  })
+it('informs the user they are allowed a single character', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const visibleStatus = component.elements.getStatusEl()!
 
-  it('informs the user they are allowed a single character', async () => {
-    await userEvent.fill(input, '1234567890123456789')
+  await userEvent.fill(input, '1234567890123456789')
 
-    expect(statusMessageVisual.innerHTML).toBe('1 character left')
-  })
+  expect(visibleStatus.textContent).toBe('1 character left')
+})
 
-  it('informs the user they are over the limit by a single character', async () => {
-    await userEvent.fill(input, '123456789012345678901')
+it('informs the user they are over the limit by a single character', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const visibleStatus = component.elements.getStatusEl()!
 
-    expect(statusMessageVisual.innerHTML).toBe('1 character over limit')
-  })
+  await userEvent.fill(input, '123456789012345678901')
+  expect(visibleStatus.textContent).toBe('1 character over limit')
+})
 
-  it('informs the user how many characters they will need to remove', async () => {
-    await userEvent.fill(input, '1234567890123456789012345')
+it('informs the user how many characters they will need to remove', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const visibleStatus = component.elements.getStatusEl()!
 
-    expect(statusMessageVisual.innerHTML).toBe('5 characters over limit')
-  })
+  await userEvent.fill(input, '1234567890123456789012345')
+  expect(visibleStatus.textContent).toBe('5 characters over limit')
+})
 
-  it('should show the component and input as valid when the input is under the limit', async () => {
-    await userEvent.fill(input, '1')
+it('should show the component and input as valid when the input is under the limit', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const visibleStatus = component.elements.getStatusEl()!
+  await userEvent.fill(input, '1')
 
-    expect(input.validationMessage).toBe('')
-    expect(statusMessageVisual.getAttribute('data-invalid')).toBeFalsy()
-  })
+  expect(input.validationMessage).toBe('')
+  expect(visibleStatus.getAttribute('data-invalid')).toBeFalsy()
+})
 
-  it('should show the component and input as invalid when the input is over the limit', async () => {
-    await userEvent.fill(input, '123456789012345678901')
+it('should show the component and input as invalid when the input is over the limit', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const visibleStatus = component.elements.getStatusEl()!
+  const label = component.elements.getLabelEl()!
 
-    expect(input.validationMessage).toBe('The content is too long.')
-    expect(label.getAttribute('data-invalid')).toBeTruthy()
-    expect(input.getAttribute('data-invalid')).toBeTruthy()
-    expect(statusMessageVisual.getAttribute('data-invalid')).toBeTruthy()
-  })
+  await userEvent.fill(input, '123456789012345678901')
 
-  it('should not allow for innerHTML of child elements', async () => {
-    Array.from(statusMessageVisual.childNodes).forEach((childNode) => {
-      expect((childNode as Node).nodeType).toBe(Node.TEXT_NODE)
-    })
+  expect(input.validationMessage).toBe('The content is too long.')
+  expect(label.getAttribute('data-invalid')).toBeTruthy()
+  expect(input.getAttribute('data-invalid')).toBeTruthy()
+  expect(visibleStatus.getAttribute('data-invalid')).toBeTruthy()
+})
+
+it('should not allow for innerHTML of child elements', async () => {
+  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const visibleStatus = component.elements.getStatusEl()!
+
+  Array.from(visibleStatus.childNodes).forEach((childNode) => {
+    expect((childNode as Node).nodeType).toBe(Node.TEXT_NODE)
   })
 })

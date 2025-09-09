@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { expect, it } from 'vitest'
 import { characterCountInit } from '../../packages/compat/src/character-count.js'
 
 const TEMPLATE = `<div data-part="character-count-root">
@@ -8,11 +8,7 @@ const TEMPLATE = `<div data-part="character-count-root">
   </div>
 </div>`
 
-describe('character count component without message', () => {
-  const { body } = document
-
-  it('should throw an error when a character count component is created with no message element', () => {
-    body.innerHTML = TEMPLATE
-    expect(() => characterCountInit()).toThrow('Expected statusEl to be defined')
-  })
+it('should throw an error when a character count component is created with no message element', () => {
+  document.body.innerHTML = TEMPLATE
+  expect(() => characterCountInit()).toThrow('Expected statusEl to be defined')
 })

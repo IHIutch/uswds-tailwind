@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { expect, it } from 'vitest'
 import { characterCountInit } from '../../packages/compat/src/character-count.js'
 
-const TEMPLATE = `<div>
+const template = `<div>
   <div>
     <label></label>
     <input maxlength="20" />
@@ -9,12 +9,7 @@ const TEMPLATE = `<div>
   </div>
 </div>`
 
-describe('character count input without wrapping element', () => {
-  const { body } = document
-
-  it('should not initialize when no character count root element is found', () => {
-    body.innerHTML = TEMPLATE
-
-    expect(() => characterCountInit()).not.toThrow()
-  })
+it('should not initialize when no character count root element is found', () => {
+  document.body.innerHTML = template
+  expect(() => characterCountInit()).not.toThrow()
 })
