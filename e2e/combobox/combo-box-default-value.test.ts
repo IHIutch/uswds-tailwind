@@ -1,23 +1,25 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { comboboxInit } from '../../packages/compat/src/combobox.js'
+import { expect, it } from 'vitest'
+import { createDisposableCombobox } from './_utils.js'
 
-const TEMPLATE = `<div
-      class="max-w-lg"
-      data-part="combobox-root"
-      id="basic-combobox"
-      data-default-value="blackberry"
-    >
-      <label
-        class="combobox-label"
-        data-part="combobox-label"
-        class="block"
-      >Select a fruit:</label>
+const rootId = 'basic-combobox'
 
-      <select
-        name="fruit"
-        data-part="combobox-select"
-        hidden
-      >
+const template = `<div
+  class="max-w-lg"
+  data-part="combobox-root"
+  id="${rootId}"
+  data-default-value="blackberry"
+>
+  <label
+    class="combobox-label"
+    data-part="combobox-label"
+    class="block"
+  >Select a fruit:</label>
+
+  <select
+    name="fruit"
+    data-part="combobox-select"
+    hidden
+  >
         <option value>Select a fruit</option>
       <option value="apple">Apple</option>
       <option value="apricot">Apricot</option>
@@ -83,62 +85,46 @@ const TEMPLATE = `<div
       <option value="watermelon">Watermelon</option>
       <option value="white currant">White currant</option>
       <option value="yuzu">Yuzu</option>
-      </select>
+  </select>
 
-      <div class="relative mt-2">
-        <div class="flex w-full">
-          <input
-            required
-            data-part="combobox-input"
-            class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-          >
-          <div class="absolute z-10 inset-y-0 right-0 flex">
-            <button
-              class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
-              type="button"
-            >
-              <div class="icon-[material-symbols--close] size-6"></div>
-            </button>
-            <button
-              class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
-              type="button"
-            >
-              <div class="icon-[material-symbols--expand-more] size-8"></div>
-            </button>
-          </div>
-        </div>
-        <ul
-          data-part="combobox-list"
-          class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+  <div class="relative mt-2">
+    <div class="flex w-full">
+      <input
+        required
+        data-part="combobox-input"
+        class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+      >
+      <div class="absolute z-10 inset-y-0 right-0 flex">
+        <button
+          class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+          data-part="combobox-clear"
+          type="button"
         >
-        </ul>
+          <div class="icon-[material-symbols--close] size-6"></div>
+        </button>
+        <button
+          class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+          data-part="combobox-toggle"
+          type="button"
+        >
+          <div class="icon-[material-symbols--expand-more] size-8"></div>
+        </button>
       </div>
-      <!-- <div
-        class="combobox-status"
-        data-part="combobox-status"
-        role="status"
+    </div>
+    <ul
+      data-part="combobox-list"
+      class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+    >
+    </ul>
+  </div>
+</div>`
 
-      ></div> -->
-    </div>`
-
-describe('combo box component with default value attribute', () => {
-  const { body } = document
-
-  let input
-  let select
-
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    input = document.querySelector('[data-part="combobox-input"]')
-    select = document.querySelector('[data-part="combobox-select"]')
-  })
-
-  it('enhances a select element into a combo box component', () => {
-    expect(input).toBeTruthy() // adds an input element
-    expect(input.value).toBe('Blackberry') // updates the default value of the input
-    expect(select.value).toBe('blackberry') // updates the default value of the select
-  })
+it('enhances a select element into a combo box component', () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
+  const select = component.elements.getSelectEl()
+  
+  expect(input).toBeTruthy()
+  expect(input.value).toBe('Blackberry')
+  expect(select.value).toBe('blackberry')
 })

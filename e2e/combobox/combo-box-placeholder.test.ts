@@ -1,23 +1,25 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { comboboxInit } from '../../packages/compat/src/combobox.js'
+import { expect, it } from 'vitest'
+import { createDisposableCombobox } from './_utils.js'
 
-const TEMPLATE = `
+const rootId = 'basic-combobox'
+
+const template = `
 <div
-      class="max-w-lg"
-      data-part="combobox-root"
-      id="basic-combobox"
-      data-placeholder="Select one..."
+  class="max-w-lg"
+  data-part="combobox-root"
+  id="${rootId}"
+  data-placeholder="Select one..."
     >
-      <label
-        class="combobox-label"
-        data-part="combobox-label"
-        class="block"
-      >Select a fruit:</label>
+  <label
+    class="combobox-label"
+    data-part="combobox-label"
+    class="block"
+  >Select a fruit:</label>
 
-      <select
-        data-part="combobox-select"
-        hidden
-      >
+  <select
+    data-part="combobox-select"
+    hidden
+  >
         <option value>Select a fruit</option>
       <option value="apple">Apple</option>
       <option value="apricot">Apricot</option>
@@ -126,19 +128,12 @@ const TEMPLATE = `
       ></div> -->
     </div>`
 
-describe('combo box component with placeholder attribute', () => {
-  const { body } = document
 
-  let input
 
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    input = document.querySelector('[data-part="combobox-input"]')
-  })
+it('enhances a select element into a combo box component', () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
 
-  it('enhances a select element into a combo box component', () => {
-    expect(input).toBeTruthy() // adds an input element
-    expect(input.placeholder).toBe('Select one...') // transfers placeholder attribute from combo box
-  })
+  expect(input).toBeTruthy()
+  expect(input.placeholder).toBe('Select one...')
 })

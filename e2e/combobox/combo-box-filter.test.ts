@@ -1,11 +1,13 @@
 import { userEvent } from '@vitest/browser/context'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { comboboxInit } from '../../packages/compat/src/combobox.js'
+import { expect, it } from 'vitest'
+import { createDisposableCombobox } from './_utils.js'
 
-const TEMPLATE = `<div
-      class="max-w-lg"
-      data-part="combobox-root"
-      id="basic-combobox"
+const rootId = 'basic-combobox'
+
+const template = `<div
+  class="max-w-lg"
+  data-part="combobox-root"
+  id="${rootId}"
     >
       <label
         class="combobox-label"
@@ -95,25 +97,15 @@ const TEMPLATE = `<div
         role="status"
 
       ></div> -->
-    </div>`
+  </div>`
 
-describe('combo box component with filter attribute', () => {
-  const { body } = document
+it('should display and filter the option list after a character is typed', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
+  const list = component.elements.getListEl()
 
-  let input
-  let list
+  await userEvent.fill(input, 'st')
 
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    input = document.querySelector('[data-part="combobox-input"]')
-    list = document.querySelector('[data-part="combobox-list"]')
-  })
-
-  it('should display and filter the option list after a character is typed', async () => {
-    await userEvent.fill(input, 'st')
-
-    expect(list.hidden).toBe(false) // should display the option list
-    expect(list.children.length).toBe(2) // should filter the item by the string starting with the option
-  })
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(2)
 })

@@ -1,11 +1,14 @@
 import { userEvent } from '@vitest/browser/context'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { Combobox, comboboxInit } from '../../packages/compat/src/combobox.js'
+import { expect, it } from 'vitest'
+import { Combobox } from '../../packages/compat/src/combobox.js'
+import { createDisposableCombobox } from './_utils.js'
 
-const TEMPLATE = `<div
-      class="max-w-lg"
-      data-part="combobox-root"
-      id="basic-combobox"
+const rootId = 'basic-combobox'
+
+const template = `<div
+  class="max-w-lg"
+  data-part="combobox-root"
+  id="${rootId}"
     >
       <label
         class="combobox-label"
@@ -118,149 +121,134 @@ const TEMPLATE = `<div
         data-part="combobox-status"
         role="status"
 
-      ></div> -->
     </div>`
 
-describe('combo box component change event dispatch', () => {
-  const { body } = document
+it('enhances a select element into a combo box component', () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
+  const select = component.elements.getSelectEl()
+  const list = component.elements.getListEl()
 
-  // let root
-  let input
-  let select
-  let list
-  let inputChangeSpy
-  let selectChangeSpy
+  expect(input).toBeTruthy()
+  expect(select).toBeTruthy()
+  expect(list).toBeTruthy()
+})
 
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    // root = document.querySelector('[data-part="combobox-root"]')
-    input = document.querySelector('[data-part="combobox-input"]')
-    select = document.querySelector('[data-part="combobox-select"]')
-    list = document.querySelector('[data-part="combobox-list"]')
-    inputChangeSpy = vi.fn()
-    selectChangeSpy = vi.fn()
+it('should emit change events when selecting an item from the option list when clicking a list option', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    select.addEventListener('change', selectChangeSpy)
-    input.addEventListener('change', inputChangeSpy)
-  })
+  await userEvent.clear(input)
+  await userEvent.click(input)
+  await userEvent.click(list.children[0])
 
-  it('enhances a select element into a combo box component', () => {
-    expect(input).toBeTruthy()
-    expect(select).toBeTruthy()
-    expect(list).toBeTruthy()
-  })
+  expect(select.value).toBe('apple')
+  expect(input.value).toBe('Apple')
+})
 
-  it('should emit change events when selecting an item from the option list when clicking a list option', async () => {
-    await userEvent.clear(input)
+it('should emit change events when resetting input values when an incomplete item is submitted through enter', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.click(input)
-    await userEvent.click(list.children[0])
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('apple')
+  }
+  await userEvent.clear(input)
+  await userEvent.fill(input, 'a')
+  expect(list.hidden).toBe(false)
 
-    expect(select.value).toBe('apple') // should set that item to being the select option
-    expect(input.value).toBe('Apple') // should set that item to being the input value
+  input.focus()
+  await userEvent.keyboard('{Enter}')
 
-    // expect(selectChangeSpy).toHaveBeenCalled() // should have dispatched a change event from the select
-    // expect(inputChangeSpy).toHaveBeenCalled() // should have dispatched a change event from the input
-  })
+  expect(select.value).toBe('apple')
+  expect(input.value).toBe('Apple')
+})
 
-  it('should emit change events when resetting input values when an incomplete item is submitted through enter', async () => {
-    // select.value = 'apple'
-    const instance = Combobox.getInstance('basic-combobox')
-    if (instance) {
-      instance.api.setValue('apple')
-    }
-    await userEvent.clear(input)
-    await userEvent.fill(input, 'a')
-    expect(list.hidden).toBe(false) // should display the option list
+it('should emit change events when closing the list but not the clear the input value when escape is performed while the list is open', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    input.focus()
-    await userEvent.keyboard('{Enter}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('apple')
+  }
+  await userEvent.fill(input, 'a')
+  expect(list.hidden).toBe(false)
 
-    expect(select.value).toBe('apple')
-    expect(input.value).toBe('Apple') // should reset the value on the input
-    // selectChangeSpy will have been called from setValue('apple'), which is expected
-    // expect(inputChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-  })
+  input.focus()
+  await userEvent.keyboard('{Escape}')
 
-  it('should emit change events when closing the list but not the clear the input value when escape is performed while the list is open', async () => {
-    // select.value = 'apple'
+  expect(select.value).toBe('apple')
+  expect(input.value).toBe('Apple')
+})
 
-    const instance = Combobox.getInstance('basic-combobox')
-    if (instance) {
-      instance.api.setValue('apple')
-    }
-    await userEvent.fill(input, 'a')
-    expect(list.hidden).toBe(false) // should display the option list
+it('should emit change events when setting the input value when a complete selection is submitted by pressing enter', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    input.focus()
-    await userEvent.keyboard('{Escape}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('apple')
+  }
+  await userEvent.fill(input, 'fig')
+  expect(list.hidden).toBe(false)
 
-    expect(select.value).toBe('apple') // should not change the value of the select
-    expect(input.value).toBe('Apple') // should reset the value in the input
-    // expect(selectChangeSpy).not.toHaveBeenCalled() // should not have dispatched a change event
-    // expect(inputChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-  })
+  input.focus()
+  await userEvent.keyboard('{Enter}')
 
-  it('should emit change events when setting the input value when a complete selection is submitted by pressing enter', async () => {
-    // select.value = 'apple'
+  expect(select.value).toBe('fig')
+  expect(input.value).toBe('Fig')
+})
 
-    const instance = Combobox.getInstance('basic-combobox')
-    if (instance) {
-      instance.api.setValue('apple')
-    }
-    await userEvent.fill(input, 'fig')
-    expect(list.hidden).toBe(false) // should display the option list
+it('should emit change events when selecting the focused list item in the list when pressing enter on a focused item', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
 
-    input.focus()
-    await userEvent.keyboard('{Enter}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('grapefruit')
+  }
+  await userEvent.fill(input, 'emo')
 
-    expect(select.value).toBe('fig') // should set that item to being the select option
-    expect(input.value).toBe('Fig') // should set that item to being the input value
-    // expect(selectChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-    // expect(inputChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-  })
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Lemon')
+  await userEvent.keyboard('{Enter}')
 
-  it('should emit change events when selecting the focused list item in the list when pressing enter on a focused item', async () => {
-    // select.value = 'grapefruit'
+  expect(select.value).toBe('lemon')
+  expect(input.value).toBe('Lemon')
+})
 
-    const instance = Combobox.getInstance('basic-combobox')
-    if (instance) {
-      instance.api.setValue('grapefruit')
-    }
-    await userEvent.fill(input, 'emo')
+it('should emit change events when pressing escape from a focused item', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Lemon') // should focus the first item in the list
-    await userEvent.keyboard('{Enter}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('grapefruit')
+  }
+  await userEvent.fill(input, 'dew')
+  expect(!list.hidden && list.children.length).toBeTruthy()
 
-    expect(select.value).toBe('lemon') // select the first item in the list
-    expect(input.value).toBe('Lemon') // should set the value in the input
-    // expect(selectChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-    // expect(inputChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-  })
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Honeydew melon')
 
-  it('should emit change events when pressing escape from a focused item', async () => {
-    // select.value = 'grapefruit'
+  await userEvent.keyboard('{Escape}')
 
-    const instance = Combobox.getInstance('basic-combobox')
-    if (instance) {
-      instance.api.setValue('grapefruit')
-    }
-    await userEvent.fill(input, 'dew')
-    expect(!list.hidden && list.children.length).toBeTruthy() // should display the option list with options
-
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Honeydew melon') // should focus the first item in the list
-
-    await userEvent.keyboard('{Escape}')
-
-    expect(list.hidden).toBe(true) // should hide the option list
-    expect(select.value).toBe('grapefruit') // should not change the value of the select
-    expect(input.value).toBe('Grapefruit') // should reset the value in the input
-    // expect(selectChangeSpy).not.toHaveBeenCalled() // should not have dispatched a change event
-    // expect(inputChangeSpy).toHaveBeenCalled() // should have dispatched a change event
-  })
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('grapefruit')
+  expect(input.value).toBe('Grapefruit')
 })

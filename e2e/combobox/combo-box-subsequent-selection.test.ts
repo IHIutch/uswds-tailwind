@@ -1,12 +1,14 @@
 import { userEvent } from '@vitest/browser/context'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { comboboxInit } from '../../packages/compat/src/combobox.js'
+import { expect, it } from 'vitest'
+import { createDisposableCombobox } from './_utils.js'
 
-const TEMPLATE = `<div
-      class="max-w-lg"
-      data-part="combobox-root"
-      id="basic-combobox"
-      data-default-value="blackberry"
+const rootId = 'basic-combobox'
+
+const template = `<div
+  class="max-w-lg"
+  data-part="combobox-root"
+  id="${rootId}"
+  data-default-value="blackberry"
     >
       <label
         class="combobox-label"
@@ -124,69 +126,73 @@ const TEMPLATE = `<div
       ></div> -->
     </div>`
 
-describe('combo box component - subsequent selection', () => {
-  const { body } = document
+it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  let input
-  let select
-  let list
+  await userEvent.click(input)
 
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    input = document.querySelector('[data-part="combobox-input"]')
-    select = document.querySelector('[data-part="combobox-select"]')
-    list = document.querySelector('[data-part="combobox-list"]')
-  })
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(select.options.length - 1)
+  const highlightedOption = list.querySelector('[data-active]')
+  expect(highlightedOption).toBeTruthy()
+  expect(highlightedOption?.textContent).toBe('Blackberry')
+})
 
-  it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', async () => {
-    await userEvent.click(input)
+it('should display the filtered list when the input is dirty (characters inputted)', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    expect(list.hidden).toBe(false) // should show the option list
-    expect(list.children.length).toBe(select.options.length - 1) // should have all of the initial select items in the list except placeholder empty items
-    const highlightedOption = list.querySelector('[data-active]')
-    expect(highlightedOption).toBeTruthy() // should have an active item in the list
-    expect(highlightedOption.textContent).toBe('Blackberry') // should be the previously selected item
-  })
+  await userEvent.click(input)
+  expect(list.children.length).toBe(select.options.length - 1)
 
-  it('should display the filtered list when the input is dirty (characters inputted)', async () => {
-    await userEvent.click(input)
-    expect(list.children.length).toBe(select.options.length - 1) // should have all of the initial select items in the list except placeholder empty items
+  await userEvent.fill(input, 'COBOL')
 
-    await userEvent.fill(input, 'COBOL')
+  expect(list.children.length).toBe(1)
+})
 
-    // Input has been modified (no pristine state check needed)
-    expect(list.children.length).toBe(1) // should only show the filtered items
-  })
+it('should show a clear button when the input has a selected value present', () => {
+  using component = createDisposableCombobox(rootId, template)
 
-  it('should show a clear button when the input has a selected value present', () => {
-    const clearButton = document.querySelector('[data-part="combobox-clear"]')!
-    expect(clearButton).toBeTruthy() // clear input button is present
-  })
+  const clearButton = component.elements.getClearButtonEl()
+  expect(clearButton).toBeTruthy()
+})
 
-  it('should clear the input when the clear button is clicked', async () => {
-    expect(select.value).toBe('blackberry')
-    expect(input.value).toBe('Blackberry')
+it('should clear the input when the clear button is clicked', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
 
-    const clearButton = document.querySelector('[data-part="combobox-clear"]')!
-    await userEvent.click(clearButton)
+  expect(select.value).toBe('blackberry')
+  expect(input.value).toBe('Blackberry')
 
-    expect(select.value).toBe('') // should clear the value on the select
-    expect(input.value).toBe('') // should clear the value on the input
-    expect(document.activeElement).toBe(input) // should focus the input
-  })
+  const clearButton = document.querySelector('[data-part="combobox-clear"]')!
+  await userEvent.click(clearButton)
 
-  it('should update the filter and begin filtering once a pristine input value is changed', async () => {
-    await userEvent.fill(input, 'go')
-    await userEvent.click(input)
-    input.focus()
-    await userEvent.keyboard('{Enter}')
-    expect(input.value).toBe('Blackberry') // should set that item to the input value
-    await userEvent.click(input)
-    expect(list.children.length).toBe(select.options.length - 1) // should have all of the initial select items in the list except placeholder empty items
+  expect(select.value).toBe('')
+  expect(input.value).toBe('')
+  expect(document.activeElement).toBe(input)
+})
 
-    await userEvent.fill(input, 'Fig')
+it('should update the filter and begin filtering once a pristine input value is changed', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    expect(list.children.length).toBe(1) // should only show the filtered items
-  })
+  await userEvent.fill(input, 'go')
+  await userEvent.click(input)
+  input.focus()
+  await userEvent.keyboard('{Enter}')
+  expect(input.value).toBe('Blackberry')
+  await userEvent.click(input)
+  expect(list.children.length).toBe(select.options.length - 1)
+
+  await userEvent.fill(input, 'Fig')
+
+  expect(list.children.length).toBe(1)
 })

@@ -1,13 +1,15 @@
 import { userEvent } from '@vitest/browser/context'
 import { visuallyHiddenStyle } from '@zag-js/dom-query'
+import { expect, it } from 'vitest'
+import { Combobox } from '../../packages/compat/src/combobox.js'
+import { createDisposableCombobox } from './_utils.js'
 
-import { beforeEach, describe, expect, it } from 'vitest'
-import { Combobox, comboboxInit } from '../../packages/compat/src/combobox.js'
+const rootId = 'test'
 
 const TEMPLATE = `<div
       class="max-w-lg"
       data-part="combobox-root"
-      id="basic-combobox"
+      id="${rootId}"
     >
       <label
         class="combobox-label"
@@ -126,341 +128,440 @@ const TEMPLATE = `<div
       ></div> -->
     </div>`
 
-describe('combo box component', () => {
-  const { body } = document
+it('enhances a select element into a combo box component', () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  let input
-  let select
-  let list
-  let toggle
-  let comboboxId: string
-
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    input = document.querySelector('[data-part="combobox-input"]')
-    toggle = document.querySelector('[data-part="combobox-toggle"]')
-    select = document.querySelector('[data-part="combobox-select"]')
-    list = document.querySelector('[data-part="combobox-list"]')
-
-    comboboxId = input.id.split(':')[1] || input.id
+  expect(input).toBeTruthy()
+  Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
+    const elStyle = select.style[key]
+      .replace(/0px/g, '0')
+      .replace(/,\s*/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+    expect(elStyle).toBe(value)
   })
+  expect(list).toBeTruthy()
+  expect(list.hidden).toBe(true)
+  expect(select.getAttribute('required')).toBe(null)
+  expect(input.getAttribute('required')).toBe('')
+  expect(select.getAttribute('name')).toBe('fruit')
+  expect(input.getAttribute('name')).toBe(null)
+  expect(list.getAttribute('role')).toBe('listbox')
+  expect(select.getAttribute('aria-hidden')).toBeTruthy()
+  expect(select.getAttribute('tabindex')).toBe('-1')
+  expect(select.value).toBe('')
+  expect(input.value).toBe('')
+})
 
-  it('enhances a select element into a combo box component', () => {
-    expect(input).toBeTruthy()
-    Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
-      const elStyle = select.style[key]
-        .replace(/0px/g, '0')
-        .replace(/,\s*/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-      expect(elStyle).toBe(value)
-    })
-    expect(list).toBeTruthy()
-    expect(list.hidden).toBe(true)
-    expect(select.getAttribute('required')).toBe(null)
-    expect(input.getAttribute('required')).toBe('')
-    expect(select.getAttribute('name')).toBe('fruit')
-    expect(input.getAttribute('name')).toBe(null)
-    expect(list.getAttribute('role')).toBe('listbox')
-    expect(select.getAttribute('aria-hidden')).toBeTruthy()
-    expect(select.getAttribute('tabindex')).toBe('-1')
-    expect(select.value).toBe('')
-    expect(input.value).toBe('')
-  })
+it('should show the list by clicking the input', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  it('should show the list by clicking the input', async () => {
-    await userEvent.click(input)
-    expect(list.hidden).toBe(false)
-    expect(list.children.length).toBe(select.options.length - 1)
-  })
+  await userEvent.click(input)
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(select.options.length - 1)
+})
 
-  it('should show the list by clicking the toggle button', async () => {
-    await userEvent.click(toggle)
-    expect(list.hidden).toBe(false)
-  })
+it('should show the list by clicking the toggle button', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const toggle = component.elements.getToggleButtonEl()!
+  const list = component.elements.getListEl()!
 
-  it('should show the list by clicking when clicking the input twice', async () => {
-    await userEvent.dblClick(input)
-    expect(list.hidden).toBe(false)
-  })
+  await userEvent.click(toggle)
+  expect(list.hidden).toBe(false)
+})
 
-  it('should toggle the list and close by clicking when clicking the toggle button twice', async () => {
-    await userEvent.click(toggle)
-    await userEvent.click(toggle)
+it('should show the list by clicking when clicking the input twice', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    expect(list.hidden).toBe(true)
-  })
+  await userEvent.dblClick(input)
+  expect(list.hidden).toBe(false)
+})
 
-  it('should set up the list items for accessibility', async () => {
-    let i = 0
-    const len = list.children.length
-    await userEvent.click(input)
+it('should toggle the list and close by clicking when clicking the toggle button twice', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const toggle = component.elements.getToggleButtonEl()!
+  const list = component.elements.getListEl()!
 
+  await userEvent.click(toggle)
+  await userEvent.click(toggle)
+
+  expect(list.hidden).toBe(true)
+})
+
+it('should set up the list items for accessibility', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
+
+  let i = 0
+  await userEvent.click(input)
+  const len = list.children.length
+
+  expect(list.children[i].getAttribute('aria-selected')).toBe('false')
+  expect(list.children[i].getAttribute('tabindex')).toBe('0')
+  expect(list.children[i].getAttribute('role')).toBe('option')
+
+  for (i = 1; i < len; i += 1) {
     expect(list.children[i].getAttribute('aria-selected')).toBe('false')
-    expect(list.children[i].getAttribute('tabindex')).toBe('0')
+    expect(list.children[i].getAttribute('tabindex')).toBe('-1')
     expect(list.children[i].getAttribute('role')).toBe('option')
+  }
+})
 
-    for (i = 1; i < len; i += 1) {
-      expect(list.children[i].getAttribute('aria-selected')).toBe('false')
-      expect(list.children[i].getAttribute('tabindex')).toBe('-1')
-      expect(list.children[i].getAttribute('role')).toBe('option')
-    }
-  })
+it('should close the list by clicking away', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-  it('should close the list by clicking away', async () => {
-    await userEvent.click(input)
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  await userEvent.click(input)
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
 
-    expect(list.hidden).toBe(true)
-  })
+  expect(list.hidden).toBe(true)
+})
 
-  it('should select an item from the option list when clicking a list option', async () => {
-    await userEvent.click(input)
-    await userEvent.click(list.children[0])
+it('should select an item from the option list when clicking a list option', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    expect(select.value).toBe('apple')
-    expect(input.value).toBe('Apple')
-    expect(list.hidden).toBe(true)
-  })
+  await userEvent.click(input)
+  await userEvent.click(list.children[0])
 
-  it('should display and filter the option list after a character is typed', async () => {
-    await userEvent.fill(input, 'a')
+  expect(select.value).toBe('apple')
+  expect(input.value).toBe('Apple')
+  expect(list.hidden).toBe(true)
+})
 
-    expect(list.hidden).toBe(false)
-    expect(list.children.length).toBe(44)
-  })
+it('should display and filter the option list after a character is typed', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-  it('should sort matches by options that start with the query, then options that contain the query', async () => {
-    await userEvent.fill(input, 'tan')
+  await userEvent.fill(input, 'a')
 
-    expect(list.children.length).toBe(3)
-    expect(list.firstChild.dataset.value).toBe('tangelo')
-    expect(list.lastChild.dataset.value).toBe('rambutan')
-  })
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(44)
+})
 
-  it('should reset input values when an incomplete item is remaining on blur', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('apricot')
-    }
-    await userEvent.fill(input, 'a')
+it('should sort matches by options that start with the query, then options that contain the query', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    expect(list.hidden).toBe(false)
+  await userEvent.fill(input, 'tan')
 
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  expect(list.children.length).toBe(3)
+  expect(list.children[0].getAttribute('data-value')).toBe('tangelo')
+  expect(list.children[2].getAttribute('data-value')).toBe('rambutan')
+})
 
-    expect(list.hidden).toBe(true)
-    expect(select.value).toBe('apricot')
-    expect(input.value).toBe('Apricot')
-  })
+it('should reset input values when an incomplete item is remaining on blur', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  it('should reset input values when an incomplete item is submitted through enter', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('cantaloupe')
-    }
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('apricot')
+  }
+  await userEvent.fill(input, 'a')
 
-    await userEvent.fill(input, 'a')
-    expect(list.hidden).toBe(false)
-    input.focus()
-    await userEvent.keyboard('{Enter}')
+  expect(list.hidden).toBe(false)
 
-    expect(list.hidden).toBe(true)
-    expect(select.value).toBe('cantaloupe')
-    expect(input.value).toBe('Cantaloupe')
-  })
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
 
-  it.skip('should not allow enter to perform default action when the list is hidden', async () => {
-    expect(list.hidden).toBe(true)
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('apricot')
+  expect(input.value).toBe('Apricot')
+})
 
-    input.focus()
-    await userEvent.keyboard('{Enter}')
-  })
+it('should reset input values when an incomplete item is submitted through enter', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  it('should close the list and reset input value when escape is performed while the list is open', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('cherry')
-    }
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('cantaloupe')
+  }
 
-    await userEvent.fill(input, 'a')
-    expect(list.hidden).toBe(false)
-    input.focus()
-    await userEvent.keyboard('{Escape}')
+  await userEvent.fill(input, 'a')
+  expect(list.hidden).toBe(false)
+  input.focus()
+  await userEvent.keyboard('{Enter}')
 
-    expect(list.hidden).toBe(true)
-    expect(select.value).toBe('cherry')
-    expect(input.value).toBe('Cherry')
-  })
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('cantaloupe')
+  expect(input.value).toBe('Cantaloupe')
+})
 
-  it('should reset the input value when a complete selection is left on blur from the input element', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('coconut')
-    }
-    await userEvent.fill(input, 'date')
-    expect(list.hidden).toBe(false)
+it.skip('should not allow enter to perform default action when the list is hidden', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  expect(list.hidden).toBe(true)
 
-    expect(list.hidden).toBe(true)
-    expect(select.value).toBe('coconut')
-    expect(input.value).toBe('Coconut')
-  })
+  input.focus()
+  await userEvent.keyboard('{Enter}')
+})
 
-  it('should set the input value when a complete selection is submitted by pressing enter', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('cranberry')
-    }
+it('should close the list and reset input value when escape is performed while the list is open', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.fill(input, 'grape')
-    expect(list.hidden).toBe(false)
-    input.focus()
-    await userEvent.keyboard('{Enter}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('cherry')
+  }
 
-    expect(list.hidden).toBe(true)
-    expect(select.value).toBe('grape')
-    expect(input.value).toBe('Grape')
-  })
+  await userEvent.fill(input, 'a')
+  expect(list.hidden).toBe(false)
+  input.focus()
+  await userEvent.keyboard('{Escape}')
 
-  it('should show the no results item when a nonexistent option is typed', async () => {
-    await userEvent.fill(input, 'Bibbidi-Bobbidi-Boo')
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('cherry')
+  expect(input.value).toBe('Cherry')
+})
 
-    expect(list.hidden).toBe(false)
-    expect(list.children.length).toBe(1)
-    expect(list.children[0].textContent).toBe('No results found')
-  })
+it('should reset the input value when a complete selection is left on blur from the input element', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  it('status should not allow innerHTML', async () => {
-    await userEvent.fill(input, 'Ap')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('coconut')
+  }
+  await userEvent.fill(input, 'date')
+  expect(list.hidden).toBe(false)
 
-    expect(list.hidden).toBe(false)
-  })
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
 
-  it('should show the list when pressing down from an empty input', async () => {
-    expect(list.hidden).toBe(true)
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('coconut')
+  expect(input.value).toBe('Coconut')
+})
 
-    input.focus()
-    await userEvent.keyboard('{ArrowDown}')
-    expect(list.hidden).toBe(false)
-  })
+it('should set the input value when a complete selection is submitted by pressing enter', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
 
-  it('should focus the first item in the list when pressing down from the input', async () => {
-    await userEvent.fill(input, 'grape')
-    expect(list.hidden).toBe(false)
-    expect(list.children.length).toBe(2)
-    input.focus()
-    await userEvent.keyboard('{ArrowDown}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('cranberry')
+  }
 
-    const focusedOption = document.activeElement
+  await userEvent.fill(input, 'grape')
+  expect(list.hidden).toBe(false)
+  input.focus()
+  await userEvent.keyboard('{Enter}')
 
-    expect(focusedOption?.textContent).toBe('Grape')
-  })
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('grape')
+  expect(input.value).toBe('Grape')
+})
 
-  it('should select the focused list item in the list when pressing enter on a focused item', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('pineapple')
-    }
-    await userEvent.fill(input, 'berry')
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Blackberry')
+it('should show the no results item when a nonexistent option is typed', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.keyboard('{Enter}')
+  await userEvent.fill(input, 'Bibbidi-Bobbidi-Boo')
 
-    expect(select.value).toBe('blackberry')
-    expect(input.value).toBe('Blackberry')
-  })
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(1)
+  expect(list.children[0].textContent).toBe('No results found')
+})
 
-  it('should select the focused list item in the list when pressing space on a focused item', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('cantaloupe')
-    }
-    await userEvent.fill(input, 'berry')
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Blackberry')
+it('status should not allow innerHTML', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.keyboard('{Space}')
+  await userEvent.fill(input, 'Ap')
 
-    expect(select.value).toBe('blackberry')
-    expect(input.value).toBe('Blackberry')
-  })
+  expect(list.hidden).toBe(false)
+})
 
-  it('should not select the focused list item in the list when blurring component from a focused item', async () => {
-    await userEvent.fill(input, 'la')
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Blackberry')
+it('should show the list when pressing down from an empty input', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.keyboard('{Escape}')
+  expect(list.hidden).toBe(true)
 
-    expect(select.value).toBe('')
-    expect(input.value).toBe('')
-  })
+  input.focus()
+  await userEvent.keyboard('{ArrowDown}')
+  expect(list.hidden).toBe(false)
+})
 
-  it('should focus the last item in the list when pressing down many times from the input', async () => {
-    await userEvent.fill(input, 'la')
-    expect(list.hidden).toBe(false)
-    expect(list.children.length).toBe(2)
-    await userEvent.keyboard('{ArrowDown}')
+it('should focus the first item in the list when pressing down from the input', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
 
-    await userEvent.keyboard('{ArrowDown}')
+  await userEvent.fill(input, 'grape')
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(2)
+  input.focus()
+  await userEvent.keyboard('{ArrowDown}')
 
-    await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
 
-    const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Grape')
+})
 
-    expect(focusedOption?.textContent).toBe('Plantain')
-  })
+it('should select the focused list item in the list when pressing enter on a focused item', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
 
-  it('should not select the focused item in the list when pressing escape from the focused item', async () => {
-    const instance = Combobox.getInstance(comboboxId)
-    if (instance) {
-      instance.api.setValue('pineapple')
-    }
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('pineapple')
+  }
+  await userEvent.fill(input, 'berry')
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Blackberry')
 
-    await userEvent.fill(input, 'la')
-    expect(!list.hidden && list.children.length).toBeTruthy()
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Blackberry')
-    await userEvent.keyboard('{Escape}')
+  await userEvent.keyboard('{Enter}')
 
-    expect(list.hidden).toBe(true)
-    expect(select.value).toBe('pineapple')
-    expect(input.value).toBe('Pineapple')
-  })
+  expect(select.value).toBe('blackberry')
+  expect(input.value).toBe('Blackberry')
+})
 
-  it('should focus the input and hide the list when pressing up from the first item in the list', async () => {
-    await userEvent.fill(input, 'la')
-    expect(list.hidden).toBe(false)
-    expect(list.children.length).toBe(2)
-    await userEvent.keyboard('{ArrowDown}')
-    const focusedOption = document.activeElement
-    expect(focusedOption?.textContent).toBe('Blackberry')
+it('should select the focused list item in the list when pressing space on a focused item', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
 
-    await userEvent.keyboard('{ArrowUp}')
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('cantaloupe')
+  }
+  await userEvent.fill(input, 'berry')
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Blackberry')
 
-    expect(list.hidden).toBe(true)
-    expect(document.activeElement).toBe(input)
-  })
+  await userEvent.keyboard('{Space}')
 
-  it('should not allow for innerHTML of child elements ', async () => {
-    await userEvent.fill(input, 'apricot')
-    expect(list.hidden).toBe(false)
-    Array.from(list.children).forEach((listItem) => {
-      Array.from((listItem as Element).childNodes).forEach((childNode) => {
-        expect(childNode.nodeType).toBe(Node.TEXT_NODE)
-      })
+  expect(select.value).toBe('blackberry')
+  expect(input.value).toBe('Blackberry')
+})
+
+it('should not select the focused list item in the list when blurring component from a focused item', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+
+  await userEvent.fill(input, 'la')
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Blackberry')
+
+  await userEvent.keyboard('{Escape}')
+
+  expect(select.value).toBe('')
+  expect(input.value).toBe('')
+})
+
+it('should focus the last item in the list when pressing down many times from the input', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
+
+  await userEvent.fill(input, 'la')
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(2)
+  await userEvent.keyboard('{ArrowDown}')
+
+  await userEvent.keyboard('{ArrowDown}')
+
+  await userEvent.keyboard('{ArrowDown}')
+
+  const focusedOption = document.activeElement
+
+  expect(focusedOption?.textContent).toBe('Plantain')
+})
+
+it('should not select the focused item in the list when pressing escape from the focused item', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const select = component.elements.getSelectEl()!
+  const list = component.elements.getListEl()!
+
+  const instance = Combobox.getInstance(rootId)
+  if (instance) {
+    instance.api.setValue('pineapple')
+  }
+
+  await userEvent.fill(input, 'la')
+  expect(!list.hidden && list.children.length).toBeTruthy()
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Blackberry')
+  await userEvent.keyboard('{Escape}')
+
+  expect(list.hidden).toBe(true)
+  expect(select.value).toBe('pineapple')
+  expect(input.value).toBe('Pineapple')
+})
+
+it('should focus the input and hide the list when pressing up from the first item in the list', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
+
+  await userEvent.fill(input, 'la')
+  expect(list.hidden).toBe(false)
+  expect(list.children.length).toBe(2)
+  await userEvent.keyboard('{ArrowDown}')
+  const focusedOption = document.activeElement
+  expect(focusedOption?.textContent).toBe('Blackberry')
+
+  await userEvent.keyboard('{ArrowUp}')
+
+  expect(list.hidden).toBe(true)
+  expect(document.activeElement).toBe(input)
+})
+
+it('should not allow for innerHTML of child elements ', async () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+  const list = component.elements.getListEl()!
+
+  await userEvent.fill(input, 'apricot')
+  expect(list.hidden).toBe(false)
+  Array.from(list.children).forEach((listItem) => {
+    Array.from((listItem as Element).childNodes).forEach((childNode) => {
+      expect(childNode.nodeType).toBe(Node.TEXT_NODE)
     })
   })
+})
 
-  it('should have attribute type of string', () => {
-    expect(typeof (input.getAttribute('aria-label') || '')).toBe('string')
-  })
+it('should have attribute type of string', () => {
+  using component = createDisposableCombobox(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+
+  expect(typeof (input.getAttribute('aria-label') || '')).toBe('string')
 })

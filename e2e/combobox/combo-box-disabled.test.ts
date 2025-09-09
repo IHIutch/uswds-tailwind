@@ -1,12 +1,15 @@
 import { userEvent } from '@vitest/browser/context'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { comboboxInit } from '../../packages/compat/src/combobox.js'
+import { expect, it } from 'vitest'
+import { Combobox } from '../../packages/compat/src/combobox.js'
+import { createDisposableCombobox } from './_utils.js'
 
-const TEMPLATE = `<div
-      class="max-w-lg"
-      data-part="combobox-root"
-      id="basic-combobox"
-      data-disabled
+const rootId = 'basic-combobox'
+
+const template = `<div
+  class="max-w-lg"
+  data-part="combobox-root"
+  id="${rootId}"
+  data-disabled
     >
       <label
         class="combobox-label"
@@ -126,43 +129,43 @@ const TEMPLATE = `<div
       ></div> -->
     </div>`
 
-describe('combo box component - disabled enhancement', () => {
-  const { body } = document
+it('enhances a select element into a combo box component', () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
+  const select = component.elements.getSelectEl()
 
-  let root
-  let input
-  let select
-  let toggle
-  let list
+  expect(input).toBeTruthy()
+  expect(input).toBeDisabled()
+  expect(select).toBeEnabled()
+})
 
-  beforeEach(async () => {
-    body.innerHTML = TEMPLATE
-    comboboxInit()
-    root = document.querySelector('[data-part="combobox-root"]')
-    input = document.querySelector('[data-part="combobox-input"]')
-    select = document.querySelector('[data-part="combobox-select"]')
-    toggle = root.querySelector('[data-part="combobox-toggle"]')
-    list = document.querySelector('[data-part="combobox-list"]')
-  })
+it('should not show the list when clicking the disabled input', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
+  const list = component.elements.getListEl()
 
-  it('enhances a select element into a combo box component', () => {
-    expect(input).toBeTruthy() // adds an input element
-    expect(input).toBeDisabled() // transfers disabled attribute to combo box
-    expect(select).toBeEnabled() // removes disabled attribute from select
-  })
+  await userEvent.click(input, { force: true })
+  expect(list.hidden).toBe(true)
+})
 
-  it('should not show the list when clicking the disabled input', async () => {
-    await userEvent.click(input, { force: true })
-    expect(list.hidden).toBe(true) // should not display the option list
-  })
+it('should not show the list when clicking the disabled button', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const root = component.elements.getRootEl()
+  const toggle = root!.querySelector('[data-part="combobox-toggle"]')!
+  const list = component.elements.getListEl()
 
-  it('should not show the list when clicking the disabled button', async () => {
-    await userEvent.click(toggle, { force: true })
-    expect(list.hidden).toBe(true) // should not display the option list
-  })
+  await userEvent.click(toggle, { force: true })
+  expect(list.hidden).toBe(true)
+})
 
-  // it('should show the list when clicking the input once the component has been enabled', async () => {
-  //   await userEvent.click(input)
-  //   expect(list.hidden).toBe(false) // should display the option list
-  // })
+it('should show the list when clicking the input once the component has been enabled', async () => {
+  using component = createDisposableCombobox(rootId, template)
+  const input = component.elements.getInputEl()
+  const list = component.elements.getListEl()
+
+  // Expose a public method to enable the combobox
+  // Combobox.getInstance(rootId).enable()
+
+  await userEvent.click(input)
+  expect(list.hidden).toBe(false)
 })
