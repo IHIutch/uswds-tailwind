@@ -82,6 +82,12 @@ export interface DatePickerContext {
   isInputValid: boolean
   validationMessage: string
 
+  // Cross-input constraints for range mode
+  startInputMaxDate: string
+  startInputRangeDate: string
+  endInputMinDate: string
+  endInputRangeDate: string
+
   // Localization
   monthLabels: string[]
   dayOfWeekLabels: string[]
@@ -133,6 +139,8 @@ export interface DatePickerSchema {
   | 'invokeOnValueChange'
   | 'invokeOnOpenChange'
   | 'focusInput'
+  | 'updateEndInputConstraints'
+  | 'updateStartInputConstraints'
   event:
   | { type: 'TOGGLE' }
   | { type: 'OPEN' }

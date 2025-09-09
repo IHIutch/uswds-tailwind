@@ -1,6 +1,5 @@
 import * as datePicker from '@uswds-tailwind/date-picker-compat'
 import { nanoid } from 'nanoid'
-import { formatDate, parseDate } from '../../machines/date-picker-compat/src/date-picker.utils'
 import { Component } from './lib/component'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
@@ -29,18 +28,10 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   initMachine(props: datePicker.Props): VanillaMachine<datePicker.DatePickerSchema> {
     DatePicker.instances.set(props.id, this)
-    
+
     const defaultValue = this.rootEl.getAttribute('data-default-value') || this.rootEl.getAttribute('data-default-date')
     const inputValue = this.input?.value
     const initialValue = inputValue || defaultValue || undefined
-
-    // If we have a default value and no input value, set the input value directly
-    if (defaultValue && !inputValue && this.input) {
-      const parsedDate = parseDate(defaultValue, 'YYYY-MM-DD')
-      if (parsedDate) {
-        this.input.value = formatDate(parsedDate, 'MM/dd/yyyy')
-      }
-    }
 
     return new VanillaMachine(datePicker.machine, {
       ...props,

@@ -32,7 +32,6 @@ export function connect<T extends PropTypes>(
   const activeInput = context.get('activeInput')
   const calendarDate = context.get('calendarDate')
   const rangeDate = context.get('rangeDate')
-  
 
   // Range mode values
   const startInputValue = context.get('startInputValue')
@@ -45,6 +44,12 @@ export function connect<T extends PropTypes>(
   // Single mode values (backward compatibility)
   const isInputValid = context.get('isInputValid')
   const validationMessage = context.get('validationMessage')
+
+  // Cross-input constraints for range mode
+  const startInputMaxDate = context.get('startInputMaxDate')
+  const startInputRangeDate = context.get('startInputRangeDate')
+  const endInputMinDate = context.get('endInputMinDate')
+  const endInputRangeDate = context.get('endInputRangeDate')
 
   const minDate = context.get('minDate')
   const maxDate = context.get('maxDate')
@@ -409,7 +414,7 @@ export function connect<T extends PropTypes>(
       const isFocused = isSameDay(date, calendarDate)
       const month = date.getMonth()
       const currentMonth = calendarDate.getMonth()
-      
+
       // rangeDate mode constraints (legacy behavior)
       if (rangeDate && !isRangeMode) {
         // Always disable the range date itself
@@ -940,6 +945,8 @@ export function connect<T extends PropTypes>(
         return this.getInputProps()
       }
 
+      const startInputMax = endDate || maxDate
+
       return normalize.input({
         ...parts.input.attrs,
         'id': `${dom.getInputId(scope)}-start`,
@@ -951,6 +958,9 @@ export function connect<T extends PropTypes>(
         'aria-describedby': startValidationMessage ? `${dom.getStatusId(scope)}-start` : undefined,
         'placeholder': 'MM/dd/yyyy',
         'aria-label': 'Start date',
+        'max': startInputMax ? formatDate(startInputMax, 'yyyy-MM-dd') : undefined,
+        'min': minDate ? formatDate(minDate, 'yyyy-MM-dd') : undefined,
+        // 'data-range-date': startInputRangeDate || '',
         onChange(event) {
           const target = event.target as HTMLInputElement
           send({ type: 'START_INPUT_CHANGE', value: target.value })
@@ -994,6 +1004,8 @@ export function connect<T extends PropTypes>(
         return {}
       }
 
+      const endInputMin = startDate || minDate
+
       return normalize.input({
         ...parts.input.attrs,
         'id': `${dom.getInputId(scope)}-end`,
@@ -1005,6 +1017,9 @@ export function connect<T extends PropTypes>(
         'aria-describedby': endValidationMessage ? `${dom.getStatusId(scope)}-end` : undefined,
         'placeholder': 'MM/dd/yyyy',
         'aria-label': 'End date',
+        'max': maxDate ? formatDate(maxDate, 'yyyy-MM-dd') : undefined,
+        'min': endInputMin ? formatDate(endInputMin, 'yyyy-MM-dd') : undefined,
+        // 'data-range-date': endInputRangeDate || '',
         onChange(event) {
           const target = event.target as HTMLInputElement
           send({ type: 'END_INPUT_CHANGE', value: target.value })

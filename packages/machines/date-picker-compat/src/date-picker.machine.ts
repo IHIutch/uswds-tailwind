@@ -86,6 +86,11 @@ export const machine = createMachine<DatePickerSchema>({
       // Single mode inputs (backward compatibility)
       isInputValid: bindable(() => ({ defaultValue: true })),
       validationMessage: bindable(() => ({ defaultValue: '' })),
+      // Cross-input constraints for range mode
+      startInputMaxDate: bindable(() => ({ defaultValue: '' })),
+      startInputRangeDate: bindable(() => ({ defaultValue: '' })),
+      endInputMinDate: bindable(() => ({ defaultValue: '' })),
+      endInputRangeDate: bindable(() => ({ defaultValue: '' })),
       focusedMonth: bindable<number | null>(() => ({ defaultValue: null })),
       focusedYear: bindable<number | null>(() => ({ defaultValue: null })),
       monthLabels: bindable(() => ({ defaultValue: getLocaleStrings().monthLabels })),
@@ -124,10 +129,10 @@ export const machine = createMachine<DatePickerSchema>({
           actions: ['updateCalendarDate'],
         },
         'START_INPUT_CHANGE': {
-          actions: ['updateStartInputValue', 'validateStartInput', 'updateCalendarDate'],
+          actions: ['updateStartInputValue', 'validateStartInput', 'updateCalendarDate', 'updateEndInputConstraints'],
         },
         'END_INPUT_CHANGE': {
-          actions: ['updateEndInputValue', 'validateEndInput'],
+          actions: ['updateEndInputValue', 'validateEndInput', 'updateStartInputConstraints'],
         },
         'INPUT_FOCUS': {
           target: 'dateSelection',
@@ -218,10 +223,10 @@ export const machine = createMachine<DatePickerSchema>({
           actions: ['navigateNextYear'],
         },
         'START_INPUT_CHANGE': {
-          actions: ['updateStartInputValue', 'validateStartInput', 'updateCalendarDate'],
+          actions: ['updateStartInputValue', 'validateStartInput', 'updateCalendarDate', 'updateEndInputConstraints'],
         },
         'END_INPUT_CHANGE': {
-          actions: ['updateEndInputValue', 'validateEndInput'],
+          actions: ['updateEndInputValue', 'validateEndInput', 'updateStartInputConstraints'],
         },
         'START_INPUT_FOCUS': {
           actions: ['setActiveInput'],
@@ -1221,6 +1226,52 @@ export const machine = createMachine<DatePickerSchema>({
       invokeOnOpenChange({ state, prop }) {
         const open = !state.matches('closed')
         prop('onOpenChange')?.({ open })
+      },
+
+      updateEndInputConstraints({ context }) {
+        const selectionMode = context.get('selectionMode')
+        if (selectionMode !== 'range') return
+
+        const startInputValue = context.get('startInputValue')
+        const isStartInputValid = context.get('isStartInputValid')
+        
+        // When start input has a valid value, set constraints on end input
+        if (isStartInputValid && startInputValue) {
+          const startDate = parseDate(startInputValue, 'MM/dd/yyyy')
+          if (startDate) {
+            const dateString = formatDate(startDate, 'yyyy-MM-dd')
+            context.set('endInputMinDate', dateString)
+            context.set('endInputRangeDate', dateString)
+            return
+          }
+        }
+
+        // Clear constraints when start input is invalid or empty
+        context.set('endInputMinDate', '')
+        context.set('endInputRangeDate', '')
+      },
+
+      updateStartInputConstraints({ context }) {
+        const selectionMode = context.get('selectionMode')
+        if (selectionMode !== 'range') return
+
+        const endInputValue = context.get('endInputValue')
+        const isEndInputValid = context.get('isEndInputValid')
+        
+        // When end input has a valid value, set constraints on start input
+        if (isEndInputValid && endInputValue) {
+          const endDate = parseDate(endInputValue, 'MM/dd/yyyy')
+          if (endDate) {
+            const dateString = formatDate(endDate, 'yyyy-MM-dd')
+            context.set('startInputMaxDate', dateString)
+            context.set('startInputRangeDate', dateString)
+            return
+          }
+        }
+
+        // Clear constraints when end input is invalid or empty
+        context.set('startInputMaxDate', '')
+        context.set('startInputRangeDate', '')
       },
     },
 
