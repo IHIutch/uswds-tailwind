@@ -48,6 +48,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
       readonly: this.rootEl.hasAttribute('readonly') || this.input.hasAttribute('readonly'),
       minDate: this.rootEl.getAttribute('data-min-date') || undefined,
       maxDate: this.rootEl.getAttribute('data-max-date') || undefined,
+      rangeDate: this.rootEl.getAttribute('data-range-date') || undefined,
       defaultStartValue: initialValue,
     })
   }

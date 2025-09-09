@@ -10,6 +10,7 @@ export const props: (keyof DatePickerProps)[] = [
   'defaultEndValue',
   'minDate',
   'maxDate',
+  'rangeDate',
   'disabled',
   'readonly',
   'selectionMode',

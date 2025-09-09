@@ -31,6 +31,8 @@ export function connect<T extends PropTypes>(
   const hoverDate = context.get('hoverDate')
   const activeInput = context.get('activeInput')
   const calendarDate = context.get('calendarDate')
+  const rangeDate = context.get('rangeDate')
+  
 
   // Range mode values
   const startInputValue = context.get('startInputValue')
@@ -407,6 +409,28 @@ export function connect<T extends PropTypes>(
       const isFocused = isSameDay(date, calendarDate)
       const month = date.getMonth()
       const currentMonth = calendarDate.getMonth()
+      
+      // rangeDate mode constraints (legacy behavior)
+      if (rangeDate && !isRangeMode) {
+        // Always disable the range date itself
+        if (isSameDay(date, rangeDate)) {
+          isDisabled = true
+        }
+        // Always disable the selected end date
+        else if (startDate && isSameDay(date, startDate)) {
+          isDisabled = true
+        }
+        // Disable dates outside the range when both dates are set
+        else if (startDate) {
+          const rangeStart = rangeDate < startDate ? rangeDate : startDate
+          const rangeEnd = rangeDate < startDate ? startDate : rangeDate
+          // Disable dates outside the range (before start or after end)
+          if (date < rangeStart || date > rangeEnd) {
+            isDisabled = true
+          }
+          // Dates within the range (between endpoints) should remain enabled
+        }
+      }
 
       // Range-specific states
       const isRangeStart = isRangeMode && startDate && isSameDay(date, startDate)
@@ -423,6 +447,20 @@ export function connect<T extends PropTypes>(
       const isActiveInputDate = isRangeMode && (
         (activeInput === 'start' && startDate && isSameDay(date, startDate))
         || (activeInput === 'end' && endDate && isSameDay(date, endDate))
+      )
+
+      // Range date functionality (legacy behavior: rangeDate is start, user selects end)
+      const isRangeDateStart = rangeDate && isSameDay(date, rangeDate)
+      const isRangeDateEnd = rangeDate && startDate && isSameDay(date, startDate)
+      const isInRangeDate = rangeDate && (
+        // Show in-range during hover (between rangeDate and hovered date)
+        (hoverDate && !startDate && (
+          (date > rangeDate && date < hoverDate) || (date > hoverDate && date < rangeDate)
+        ) && !isSameDay(date, rangeDate) && !isSameDay(date, hoverDate))
+        // Show in-range for selected range (between rangeDate and selected end date)
+        || (startDate && !isSameDay(date, rangeDate) && !isSameDay(date, startDate) && (
+          (date > rangeDate && date < startDate) || (date > startDate && date < rangeDate)
+        ))
       )
 
       const monthContext = month < currentMonth
@@ -442,14 +480,17 @@ export function connect<T extends PropTypes>(
         'data-year': date.getFullYear(),
         'data-selected': isSelected,
         'data-today': isToday,
-        'data-disabled': isDisabled,
+        'data-disabled': isDisabled || isRangeMode,
         'data-focus': isFocused,
         'data-month-context': monthContext,
-        'data-range-start': isRangeStart || undefined,
-        'data-range-end': isRangeEnd || undefined,
+        'data-range-start': (isRangeStart && startDate) || (isRangeEnd && endDate) || undefined,
+        'data-range-end': (isRangeEnd && endDate) || (isRangeDateEnd && rangeDate) || undefined,
         'data-in-range': isInRange || undefined,
         'data-range-hover': isInHoverRange || undefined,
         'data-active-input': isActiveInputDate ? activeInput : undefined,
+        // Legacy rangeDate attributes (for backward compatibility with existing tests)
+        'data-range-date': isRangeDateStart || undefined,
+        'data-within-range': isInRangeDate || undefined,
         onClick() {
           if (isDisabled)
             return
@@ -494,7 +535,9 @@ export function connect<T extends PropTypes>(
             }
             case 'End': {
               event.preventDefault()
-              send({ type: 'NAVIGATE_DATE', direction: 'next', unit: 'day', amount: 6 - date.getDay() })
+              // Move to end of week (Saturday). Legacy endOfWeek: 6 - dayOfWeek
+              const daysUntilSaturday = 6 - date.getDay()
+              send({ type: 'NAVIGATE_DATE', direction: 'next', unit: 'day', amount: daysUntilSaturday })
               break
             }
             case 'PageUp':

@@ -66,10 +66,10 @@ export function getFocusedYearButtonEl(ctx: Scope, targetYear: number) {
 // Range picker specific DOM helpers
 export function getStartInputEl(ctx: Scope) {
   const root = getRootEl(ctx)
-  return root?.querySelector('[data-part="date-range-picker-start-input"]')
+  return root?.querySelector<HTMLInputElement>('[data-part="date-range-picker-start-input"]')
 }
 
 export function getEndInputEl(ctx: Scope) {
   const root = getRootEl(ctx)
-  return root?.querySelector('[data-part="date-range-picker-end-input"]')
+  return root?.querySelector<HTMLInputElement>('[data-part="date-range-picker-end-input"]')
 }
