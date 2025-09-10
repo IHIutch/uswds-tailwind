@@ -1,15 +1,10 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { fileInputInit } from '../../packages/compat/src/file-input.js'
+import { expect, it } from 'vitest'
+import { createDisposableFileInput } from './_utils.js'
 
-describe('file input initialized at file input', () => {
-  let dropZone: HTMLElement
-  let inputEl: HTMLInputElement
-  let box: HTMLElement
-  let dragText: HTMLElement
-  let statusMessage: HTMLElement
+const rootId = 'test'
 
-  const TEMPLATE = `
-<div data-part="file-input-root" id="test">
+const TEMPLATE = `
+<div data-part="file-input-root" id="${rootId}">
   <label>
     Input accepts multiple files
   </label>
@@ -42,50 +37,48 @@ describe('file input initialized at file input', () => {
 </div>
 `
 
-  beforeEach(() => {
-    document.body.innerHTML = TEMPLATE
-    fileInputInit()
+it('target ui is created', () => {
+  using component = createDisposableFileInput(rootId, TEMPLATE)
+  const dropZone = component.elements.getDropzoneEl()
+  expect(dropZone).toBeTruthy()
+  expect(dropZone?.getAttribute('data-part')).toBe('file-input-dropzone')
+})
 
-    dropZone = document.querySelector('[data-part="file-input-dropzone"]')!
-    inputEl = document.querySelector('[data-part="file-input-input"]')!
-    dragText = document.querySelector('span')!
-    box = dropZone.querySelector('div')!
-    statusMessage = document.querySelector('[aria-live="polite"]')!
-  })
+it('input element exists', () => {
+  using component = createDisposableFileInput(rootId, TEMPLATE)
+  const inputEl = component.elements.getInputEl()
+  expect(inputEl).toBeTruthy()
+  expect(inputEl?.getAttribute('data-part')).toBe('file-input-input')
+})
 
-  describe('file input component builds successfully', () => {
-    it('target ui is created', () => {
-      expect(dropZone).toBeTruthy()
-      expect(dropZone?.getAttribute('data-part')).toBe('file-input-dropzone')
-    })
+it('box is created', () => {
+  using component = createDisposableFileInput(rootId, TEMPLATE)
+  const dropZone = component.elements.getDropzoneEl()!
+  const box = dropZone.querySelector('div')!
+  expect(box).toBeTruthy()
+})
 
-    it('input element exists', () => {
-      expect(inputEl).toBeTruthy()
-      expect(inputEl?.getAttribute('data-part')).toBe('file-input-input')
-    })
+it('pluralizes "files" if there is a "multiple" attribute', () => {
+  using component = createDisposableFileInput(rootId, TEMPLATE)
+  const dragText = component.elements.getInstructionsEl()
+  expect(dragText?.textContent).toContain('Drag files here or')
+})
 
-    it('box is created', () => {
-      expect(box).toBeTruthy()
-    })
+it('creates a status message element', () => {
+  using component = createDisposableFileInput(rootId, TEMPLATE)
+  const statusMessage = component.elements.getSrStatusEl()
+  expect(statusMessage).toBeTruthy()
+  expect(statusMessage?.getAttribute('aria-live')).toBe('polite')
+})
 
-    it('pluralizes "files" if there is a "multiple" attribute', () => {
-      expect(dragText?.innerHTML).toBe('Drag files here or')
-    })
+it('adds a default status message', () => {
+  using component = createDisposableFileInput(rootId, TEMPLATE)
+  const statusMessage = component.elements.getSrStatusEl()
+  expect(statusMessage?.innerHTML?.trim()).toBe('No file selected.')
+})
 
-    it('creates a status message element', () => {
-      expect(statusMessage).toBeTruthy()
-      expect(statusMessage?.getAttribute('aria-live')).toBe('polite')
-    })
-
-    it('adds a default status message', () => {
-      expect(statusMessage?.innerHTML?.trim()).toBe('No file selected.')
-    })
-  })
-
-  describe('disabled file input', () => {
-    beforeEach(() => {
-      document.body.innerHTML = `
-<div data-part="file-input-root" id="test2">
+const disabledTemplate = `
+<div data-part="file-input-root" id="disabled-test">
   <label>
     Input in a disabled state
   </label>
@@ -117,17 +110,10 @@ describe('file input initialized at file input', () => {
   </div>
 </div>
 `
-      fileInputInit()
-      inputEl = document.querySelector('[data-part="file-input-input"]')!
-    })
 
-    it('has disabled styling', () => {
-      // The component should have disabled class when input is disabled
-      expect(inputEl?.disabled).toBe(true)
-    })
+it('has disabled styling', () => {
+  using component = createDisposableFileInput('disabled-test', disabledTemplate)
+  const inputEl = component.elements.getInputEl()
 
-    it('input is disabled', () => {
-      expect(inputEl?.disabled).toBe(true)
-    })
-  })
+  expect(inputEl).toBeDisabled()
 })
