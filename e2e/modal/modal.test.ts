@@ -1,38 +1,60 @@
 import { userEvent } from '@vitest/browser/context'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { expect, it } from 'vitest'
 import { comboboxInit } from '../../packages/compat/src/combobox.js'
-import { Modal, modalInit } from '../../packages/compat/src/modal.js'
+import { modalInit } from '../../packages/compat/src/modal.js'
+import { createDisposableComponent } from '../_utils.js'
 
-describe('modal', () => {
-  let positionerEl1: HTMLElement
-  let positionerEl2: HTMLElement
-  let triggerEl1: HTMLElement
-  let triggerEl2: HTMLElement
-  let backdropEl1: HTMLElement
-  let backdropEl2: HTMLElement
-  let contentEl1: HTMLElement
-  let contentEl2: HTMLElement
-  let closeTriggerEl2: HTMLElement
-  let comboboxToggleEl: HTMLElement
-  let comboboxListEl: HTMLElement
+const modal1 = 'modal-1'
+const modal2 = 'modal-2'
+const comboboxId = 'nested-combobox'
 
-  const template = `
+function createDisposableModalSetup(template: string) {
+  return createDisposableComponent(
+    template,
+    () => {
+      modalInit()
+      comboboxInit()
+    },
+    () => {
+      const getPositionerEl = (id: string) => document.getElementById(`modal:${id}:positioner`)
+      const getBackdropEl = (id: string) => document.getElementById(`modal:${id}:backdrop`)
+      const getContentEl = (id: string) => document.getElementById(`modal:${id}:content`)
+      const getTriggerEl = (id: string) => document.getElementById(`modal:${id}:trigger`)
+      const getCloseTriggerEl = (id: string) => document.getElementById(`modal:${id}:close`)
+
+      const getComboboxTriggerEl = () => document.getElementById(`combobox:${comboboxId}:toggle-button`) as HTMLButtonElement
+      const getComboboxListEl = () => document.getElementById(`combobox:${comboboxId}:list`) as HTMLUListElement
+
+      return {
+        getTriggerEl,
+        getPositionerEl,
+        getBackdropEl,
+        getContentEl,
+        getCloseTriggerEl,
+        getComboboxTriggerEl,
+        getComboboxListEl,
+      }
+    },
+  )
+}
+
+const template = `
   <div aria-hidden="true" id="stays-hidden">
     Needs to stay set to aria-hidden="true" when modals are toggled
   </div>
 
   <div id="other-content"></div>
 
-  <a id="open-button1" data-part="modal-trigger" data-target="modal-1">
+  <a data-part="modal-trigger" id="${modal1}" data-target="${modal1}">
     Open modal
   </a>
-  <button id="open-button2" type="button" data-part="modal-trigger" data-target="modal-2">
+  <button type="button" data-part="modal-trigger" id="${modal2}" data-target="${modal2}">
     Open modal
   </button>
 
   <!-- Modal 1 -->
-  <div data-part="modal-backdrop" data-value="modal-1" style="position: fixed; inset: 0; background:red; z-index: 1;"></div>
-  <div data-part="modal-positioner" data-value="modal-1" style="position: relative; z-index: 2;">
+  <div data-part="modal-backdrop" data-value="${modal1}"></div>
+  <div data-part="modal-positioner" data-value="${modal1}">
     <div data-part="modal-content" aria-labelledby="modal-sm-heading-1" aria-describedby="describe-1">
       <div>
         <h2 id="modal-sm-heading-1">
@@ -45,8 +67,8 @@ describe('modal', () => {
           </p>
         </div>
 
-        <label for="nestedCB" data-part="combobox-label">Combobox label</label>
-        <div data-part="combobox-root" id="nestedCB">
+        <label for="${comboboxId}" data-part="combobox-label">Combobox label</label>
+        <div data-part="combobox-root" id="${comboboxId}">
           <select data-part="combobox-select" name="options">
             <option value="">- Select -</option>
             <option value="value1">Option A</option>
@@ -75,9 +97,9 @@ describe('modal', () => {
   </div>
 
   <!-- Modal 2 -->
-  <div data-part="modal-backdrop" data-value="modal-2" style="position: fixed; inset: 0; background:green; z-index: 1;"></div>
-  <div data-part="modal-positioner" data-value="modal-2" style="position:relative; z-index: 2;">
-    <div data-part="modal-content" aria-labelledby="modal-sm-heading-2" aria-describedby="describe-2">
+  <div data-part="modal-backdrop" data-value="${modal2}"></div>
+  <div data-part="modal-positioner" data-value="${modal2}">
+    <div data-part="modal-content">
       <div>
         <h2 id="modal-sm-heading-2">
           You have unsaved changes
@@ -106,124 +128,153 @@ describe('modal', () => {
   </div>
 `
 
-  beforeEach(() => {
-    document.body.innerHTML = template
-    modalInit()
-    comboboxInit()
+it('creates new parent elements', () => {
+  using modal = createDisposableModalSetup(template)
+  const content = modal.elements.getContentEl(modal1)
+  const backdrop = modal.elements.getBackdropEl(modal1)
+  const positioner = modal.elements.getPositionerEl(modal1)
 
-    triggerEl1 = document.querySelector('[data-part="modal-trigger"][data-target="modal-1"]')!
-    positionerEl1 = document.querySelector('[data-part="modal-positioner"][data-value="modal-1"]')!
-    backdropEl1 = document.querySelector('[data-part="modal-backdrop"][data-value="modal-1"]')!
+  expect(content).toBeTruthy()
+  expect(backdrop).toBeTruthy()
+  expect(positioner).toBeTruthy()
+})
 
-    triggerEl2 = document.querySelector('[data-part="modal-trigger"][data-target="modal-2"]')!
-    positionerEl2 = document.querySelector('[data-part="modal-positioner"][data-value="modal-2"]')!
-    backdropEl2 = document.querySelector('[data-part="modal-backdrop"][data-value="modal-2"]')!
-    contentEl1 = positionerEl1.querySelector('[data-part="modal-content"]')!
-    contentEl2 = positionerEl2.querySelector('[data-part="modal-content"]')!
-    closeTriggerEl2 = positionerEl2.querySelector('[data-part="modal-close-trigger"]')!
+it('adds role="dialog" to modal content', () => {
+  using modal = createDisposableModalSetup(template)
+  const content = modal.elements.getContentEl(modal1)!
+  expect(content.getAttribute('role')).toBe('dialog')
+})
 
-    comboboxToggleEl = document.querySelector('[data-part="combobox-toggle"]')!
-    comboboxListEl = document.querySelector('[data-part="combobox-list"]')!
-  })
+it('keeps aria-labelledby, aria-describedby on the content', () => {
+  using modal = createDisposableModalSetup(template)
+  const content = modal.elements.getContentEl(modal1)!
+  expect(content.getAttribute('aria-describedby')).toBe('describe-1')
+  expect(content.getAttribute('aria-labelledby')).toBe('modal-sm-heading-1')
+})
 
-  describe('builds the modal HTML', () => {
-    it('creates new parent elements', () => {
-      expect(contentEl1).toBeTruthy()
-      expect(backdropEl1).toBeTruthy()
-      expect(positionerEl1).toBeTruthy()
-    })
+it('sets tabindex="-1" to the modal content', () => {
+  using modal = createDisposableModalSetup(template)
+  const content = modal.elements.getContentEl(modal1)!
+  expect(content.getAttribute('tabindex')).toBe('-1')
+})
 
-    it('adds role="dialog" to modal content', () => {
-      expect(contentEl1.getAttribute('role')).toBe('dialog')
-    })
+it('moves the modal to the bottom of the DOM', () => {
+  using modal = createDisposableModalSetup(template)
+  const backdrop = modal.elements.getBackdropEl(modal2)!
+  expect(document.body.lastElementChild).toBe(backdrop)
+})
 
-    it('keeps aria-labelledby, aria-describedby on the content', () => {
-      expect(contentEl1.getAttribute('aria-describedby')).toBe('describe-1')
-      expect(contentEl1.getAttribute('aria-labelledby')).toBe('modal-sm-heading-1')
-    })
+it('adds role="button" to any <a> opener, but not <button>', () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
 
-    it('sets tabindex="-1" to the modal content', () => {
-      expect(contentEl1.getAttribute('tabindex')).toBe('-1')
-    })
+  expect(trigger1.getAttribute('role')).toBe('button')
+  expect(trigger2.getAttribute('role')).toBeFalsy()
+})
 
-    it('moves the modal to the bottom of the DOM', () => {
-      expect(document.body.lastElementChild?.getAttribute('data-part')).toBe('modal-backdrop')
-    })
+it('adds aria-controls to each opener', () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
 
-    it('adds role="button" to any <a> opener, but not <button>', () => {
-      expect(triggerEl1.getAttribute('role')).toBe('button')
-      expect(triggerEl2.getAttribute('role')).toBeFalsy()
-    })
+  const content1 = modal.elements.getContentEl(modal1)!
+  const content2 = modal.elements.getContentEl(modal2)!
 
-    it('adds aria-controls to each opener', () => {
-      expect(triggerEl1.getAttribute('aria-controls')).toBe(contentEl1.id)
-      expect(triggerEl2.getAttribute('aria-controls')).toBe(contentEl2.id)
-    })
-  })
+  expect(content1.id).toBe(`modal:${modal1}:content`)
+  expect(content2.id).toBe(`modal:${modal2}:content`)
+  expect(trigger1.getAttribute('aria-controls')).toBe(`modal:${modal1}:content`)
+  expect(trigger2.getAttribute('aria-controls')).toBe(`modal:${modal2}:content`)
+})
 
-  describe('when opened', () => {
-    beforeEach(async () => {
-      await userEvent.click(triggerEl1)
-    })
+it('makes the modal visible', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const content1 = modal.elements.getContentEl(modal1)!
 
-    afterEach(async () => {
-      Modal.instances.forEach(modal => modal.machine.state.set('closed'))
-    })
+  await userEvent.click(trigger1)
+  expect(content1.getAttribute('hidden')).toBeFalsy()
+})
 
-    it('makes the modal visible', () => {
-      expect(contentEl1.getAttribute('hidden')).toBeFalsy()
-    })
+it('focuses the modal content when opened', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const content1 = modal.elements.getContentEl(modal1)!
 
-    it('focuses the modal content when opened', () => {
-      const activeEl = document.activeElement
-      expect(activeEl).toBe(contentEl1)
-    })
+  await userEvent.click(trigger1)
 
-    it('makes all other page content invisible to screen readers', () => {
-      const activeContent = Array.from(document.querySelectorAll('body > :not([aria-hidden])'))
-      expect(activeContent.length).toBe(1)
-      expect(activeContent[0]).toContain(positionerEl1)
-    })
+  const activeEl = document.activeElement
+  expect(activeEl).toBe(content1)
+})
 
-    it('allows event propagation and displays combobox list when toggle is clicked', async () => {
-      await userEvent.click(comboboxToggleEl)
+it('makes all other page content invisible to screen readers', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const positioner1 = modal.elements.getPositionerEl(modal1)!
 
-      expect(comboboxListEl.hasAttribute('hidden')).toBeFalsy()
-    })
-  })
+  await userEvent.click(trigger1)
 
-  describe('when closing', () => {
-    beforeEach(async () => {
-      await userEvent.click(triggerEl2)
-    })
+  const activeContent = Array.from(document.querySelectorAll('body > :not([aria-hidden])'))
+  expect(activeContent.length).toBe(1)
+  expect(activeContent[0]).toContain(positioner1)
+})
 
-    afterEach(async () => {
-      Modal.instances.forEach(modal => modal.machine.state.set('closed'))
-    })
+it('allows event propagation and displays combobox list when toggle is clicked', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const comboboxTrigger = modal.elements.getComboboxTriggerEl()!
+  const comboboxList = modal.elements.getComboboxListEl()!
 
-    it('hides the modal when close button is clicked', async () => {
-      await userEvent.click(closeTriggerEl2)
-      expect(contentEl2.getAttribute('hidden')).toBeTruthy()
-    })
+  await userEvent.click(trigger1)
+  await userEvent.click(comboboxTrigger)
 
-    it('closes the modal when the overlay is clicked', async () => {
-      await userEvent.click(backdropEl2, { force: true, position: { x: 0, y: 0 } })
-      expect(contentEl2.getAttribute('hidden')).toBeTruthy()
-    })
+  expect(comboboxList.hasAttribute('hidden')).toBeFalsy()
+})
 
-    it('sends focus to the element that opened it', async () => {
-      await userEvent.click(closeTriggerEl2)
-      const activeEl = document.activeElement
-      expect(activeEl === triggerEl2).toBeTruthy()
-    })
+it('hides the modal when close button is clicked', async () => {
+  using modal = createDisposableModalSetup(template)
 
-    it('restores other page content screen reader visibility', async () => {
-      await userEvent.click(closeTriggerEl2)
-      const activeContent = document.querySelectorAll('body > :not([aria-hidden])')
-      const staysHidden = document.getElementById('stays-hidden')
-      expect(activeContent.length).toBe(7)
-      expect(staysHidden?.hasAttribute('aria-hidden')).toBeTruthy()
-      expect(document.getElementById('other-content')?.hasAttribute('aria-hidden')).toBeFalsy()
-    })
-  })
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
+  const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
+  const content2 = modal.elements.getContentEl(modal2)!
+
+  await userEvent.click(trigger2)
+  await userEvent.click(closeTrigger2)
+  expect(content2.getAttribute('hidden')).toBeTruthy()
+})
+
+it('closes the modal when the overlay is clicked', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
+  const backdrop2 = modal.elements.getBackdropEl(modal2)!
+  const content2 = modal.elements.getContentEl(modal2)!
+
+  await userEvent.click(trigger2)
+  await userEvent.click(backdrop2, { force: true, position: { x: 0, y: 0 } })
+  expect(content2.getAttribute('hidden')).toBeTruthy()
+})
+
+it('sends focus to the element that opened it', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
+  const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
+
+  await userEvent.click(trigger2)
+  await userEvent.click(closeTrigger2)
+  const activeEl = document.activeElement
+  expect(activeEl === trigger2).toBeTruthy()
+})
+
+it('restores other page content screen reader visibility', async () => {
+  using modal = createDisposableModalSetup(template)
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
+  const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
+
+  await userEvent.click(trigger2)
+  await userEvent.click(closeTrigger2)
+  const activeContent = document.querySelectorAll('body > :not([aria-hidden])')
+  const staysHidden = document.getElementById('stays-hidden')
+  expect(activeContent.length).toBe(7)
+  expect(staysHidden?.hasAttribute('aria-hidden')).toBeTruthy()
+  expect(document.getElementById('other-content')?.hasAttribute('aria-hidden')).toBeFalsy()
 })
