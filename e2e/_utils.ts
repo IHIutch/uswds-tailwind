@@ -1,5 +1,4 @@
 export function createDisposableComponent<T>(
-  id: string,
   template: string,
   initializer: () => void,
   getElements: () => T,
@@ -9,6 +8,6 @@ export function createDisposableComponent<T>(
 
   return {
     elements: getElements(),
-    [Symbol.dispose]: () => { document.body.innerHTML = '' },
+    [Symbol.dispose]: () => { },
   }
 }

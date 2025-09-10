@@ -1,20 +1,14 @@
 import { userEvent } from '@vitest/browser/context'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { datePickerInit } from '../../packages/compat/src/date-picker.js'
+import { expect, it } from 'vitest'
+import { createDisposableDatePicker } from './_utils.js'
 
-describe('date picker component with range date', () => {
-  let root: HTMLElement
-  let input: HTMLInputElement
-  let button: HTMLButtonElement
-  let datePickerId: string
+const rootId = 'test'
 
-  let template: string
-
-  const createTemplate = (id: string) => `
+const template = `
     <div>
       <div class="usa-form-group">
         <label class="usa-label" for="input-dates-of-use">Dates of use</label>
-        <div data-part="date-picker-root" data-range-date="2020-05-22" id="${id}">
+        <div data-part="date-picker-root" data-range-date="2020-05-22" id="${rootId}">
           <input
             data-part="date-picker-input"
             id="input-dates-of-use"
@@ -76,105 +70,115 @@ describe('date picker component with range date', () => {
     </div>
   `
 
-  const getCalendarEl = () => root.querySelector('[data-part="date-picker-content"]') as HTMLElement
+it('should display the range date when showing the month of the range date', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '05/21/2020')
+  await userEvent.click(button)
+
+  const rangeDate = calendar.querySelector('[data-range-date="true"]') as HTMLElement
+  expect(rangeDate).toBeTruthy()
+  expect(rangeDate.getAttribute('data-value')).toBe('2020-05-22')
+})
+
+it('should not display the range date when showing a month different from the range date month', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '06/21/2020')
+  await userEvent.click(button)
+
+  const rangeDate = calendar.querySelector('[data-range-date="true"]')
+  expect(rangeDate).toBeNull()
+})
+
+it('should display the days between the calendar date and the range date as within range when the calendar date is above the range date', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendarEl = component.elements.getCalendarEl()!
 
   const findDateButton = (day: string) => {
-    const buttons = getCalendarEl().querySelectorAll('[data-part="date-picker-date-button"]')
-    return Array.from(buttons).find((button: HTMLElement) =>
+    const buttons = calendarEl.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-date-button"]')
+    return Array.from(buttons).find(button =>
       button.textContent?.trim() === day,
-    ) as HTMLButtonElement
+    )
   }
 
-  beforeEach(() => {
-    datePickerId = `date-picker-range-${Date.now()}`
-    template = createTemplate(datePickerId)
-    document.body.innerHTML = template
-    datePickerInit()
-    root = document.querySelector('[data-part="date-picker-root"]')!
-    input = root.querySelector('[data-part="date-picker-input"]')!
-    button = root.querySelector('[data-part="date-picker-trigger"]')!
-  })
+  await userEvent.fill(input, '05/25/2020')
+  await userEvent.click(button)
 
-  afterEach(() => {
-    // document.body.innerHTML = ''
-  })
+  // Range date (22nd) should not be within range
+  const day22 = findDateButton('22')
+  expect(day22).toBeDisabled()
+  // expect(day22?.getAttribute('data-within-range')).not.toBe('true')
 
-  it('should display the range date when showing the month of the range date', async () => {
-    await userEvent.fill(input, '05/21/2020')
-    await userEvent.click(button)
+  // Days between selected date (25th) and range date (22nd) should be within range
+  const day23 = findDateButton('23')
+  expect(day23).toBeEnabled()
+  // expect(day23?.getAttribute('data-within-range')).toBe('true')
 
-    const rangeDate = getCalendarEl().querySelector('[data-range-date="true"]') as HTMLElement
-    expect(rangeDate).toBeTruthy()
-    expect(rangeDate.getAttribute('data-value')).toBe('2020-05-22')
-  })
+  const day24 = findDateButton('24')
+  expect(day24).toBeEnabled()
+  // expect(day24?.getAttribute('data-within-range')).toBe('true')
 
-  it('should not display the range date when showing a month different from the range date month', async () => {
-    await userEvent.fill(input, '06/21/2020')
-    await userEvent.click(button)
+  // Selected date (25th) should not be within range
+  const day25 = findDateButton('25')
+  expect(day25).toBeDisabled()
+  // expect(day25?.getAttribute('data-within-range')).not.toBe('true')
 
-    const rangeDate = getCalendarEl().querySelector('[data-range-date="true"]')
-    expect(rangeDate).toBeNull()
-  })
+  // Dates outside range should not be within range
+  const day26 = findDateButton('26')
+  expect(day26).toBeDisabled()
+  // expect(day26?.getAttribute('data-within-range')).not.toBe('true')
+})
 
-  it('should display the days between the calendar date and the range date as within range when the calendar date is above the range date', async () => {
-    await userEvent.fill(input, '05/25/2020')
-    await userEvent.click(button)
+it('should display the days between the calendar date and the range date as within range when the calendar date is below the range date', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    // Range date (22nd) should not be within range
-    const day22 = findDateButton('22')
-    expect(day22).toBeDisabled()
-    // expect(day22?.getAttribute('data-within-range')).not.toBe('true')
+  const findDateButton = (day: string) => {
+    const buttons = calendar.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-date-button"]')
+    return Array.from(buttons).find(button =>
+      button.textContent?.trim() === day,
+    )
+  }
 
-    // Days between selected date (25th) and range date (22nd) should be within range
-    const day23 = findDateButton('23')
-    expect(day23).toBeEnabled()
-    // expect(day23?.getAttribute('data-within-range')).toBe('true')
+  await userEvent.fill(input, '05/18/2020')
+  await userEvent.click(button)
 
-    const day24 = findDateButton('24')
-    expect(day24).toBeEnabled()
-    // expect(day24?.getAttribute('data-within-range')).toBe('true')
+  // Range date (22nd) should not be within range
+  const day22 = findDateButton('22')
+  expect(day22).toBeDisabled()
+  // expect(day22?.getAttribute('data-within-range')).not.toBe('true')
 
-    // Selected date (25th) should not be within range
-    const day25 = findDateButton('25')
-    expect(day25).toBeDisabled()
-    // expect(day25?.getAttribute('data-within-range')).not.toBe('true')
+  // Days between selected date (18th) and range date (22nd) should be within range
+  const day21 = findDateButton('21')
+  // expect(day21?.getAttribute('data-within-range')).toBe('true')
+  expect(day21).toBeEnabled()
 
-    // Dates outside range should not be within range
-    const day26 = findDateButton('26')
-    expect(day26).toBeDisabled()
-    // expect(day26?.getAttribute('data-within-range')).not.toBe('true')
-  })
+  const day20 = findDateButton('20')
+  // expect(day20?.getAttribute('data-within-range')).toBe('true')
+  expect(day20).toBeEnabled()
 
-  it('should display the days between the calendar date and the range date as within range when the calendar date is below the range date', async () => {
-    await userEvent.fill(input, '05/18/2020')
-    await userEvent.click(button)
+  const day19 = findDateButton('19')
+  // expect(day19?.getAttribute('data-within-range')).toBe('true')
+  expect(day19).toBeEnabled()
 
-    // Range date (22nd) should not be within range
-    const day22 = findDateButton('22')
-    expect(day22).toBeDisabled()
-    // expect(day22?.getAttribute('data-within-range')).not.toBe('true')
+  // Selected date (18th) should not be within range
+  const day18 = findDateButton('18')
+  // expect(day18?.getAttribute('data-within-range')).not.toBe('true')
+  expect(day18).toBeDisabled()
 
-    // Days between selected date (18th) and range date (22nd) should be within range
-    const day21 = findDateButton('21')
-    // expect(day21?.getAttribute('data-within-range')).toBe('true')
-    expect(day21).toBeEnabled()
-
-    const day20 = findDateButton('20')
-    // expect(day20?.getAttribute('data-within-range')).toBe('true')
-    expect(day20).toBeEnabled()
-
-    const day19 = findDateButton('19')
-    // expect(day19?.getAttribute('data-within-range')).toBe('true')
-    expect(day19).toBeEnabled()
-
-    // Selected date (18th) should not be within range
-    const day18 = findDateButton('18')
-    // expect(day18?.getAttribute('data-within-range')).not.toBe('true')
-    expect(day18).toBeDisabled()
-
-    // Dates outside range should not be within range
-    const day17 = findDateButton('17')
-    // expect(day17?.getAttribute('data-within-range')).not.toBe('true')
-    expect(day17).toBeDisabled()
-  })
+  // Dates outside range should not be within range
+  const day17 = findDateButton('17')
+  // expect(day17?.getAttribute('data-within-range')).not.toBe('true')
+  expect(day17).toBeDisabled()
 })

@@ -1,16 +1,14 @@
 import { userEvent } from '@vitest/browser/context'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { datePickerInit } from '../../packages/compat/src/date-picker.js'
+import { expect, it } from 'vitest'
+import { createDisposableDatePicker } from './_utils.js'
 
-describe('date picker component focus trap', () => {
-  let root: HTMLElement
-  let button: HTMLButtonElement
+const rootId = 'test'
 
-  const template = `
+const template = `
+  <div>
     <div>
-      <div>
-        <label for="input-dob">Date of birth</label>
-        <div data-part="date-picker-root">
+      <label for="input-dob">Date of birth</label>
+      <div data-part="date-picker-root" id="${rootId}">
           <input data-part="date-picker-input" id="input-dob" name="input-dob" type="text">
           <button data-part="date-picker-trigger" type="button"></button>
           <div data-part="date-picker-content" hidden>
@@ -67,46 +65,42 @@ describe('date picker component focus trap', () => {
     </div>
   `
 
-  beforeEach(async () => {
-    document.body.innerHTML = template
-    datePickerInit()
-    root = document.querySelector('[data-part="date-picker-root"]')!
-    button = root.querySelector('[data-part="date-picker-trigger"]')!
-  })
+it('should move focus when tabbing within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()
+  const root = component.elements.getRootEl()!
+  
+  await userEvent.click(button)
+  
+  // Verify the initially focused date in the calendar
+  const focusedDateButton = root.querySelector('[data-part="date-picker-date-button"][data-focus="true"]')
+  expect(focusedDateButton).toBeTruthy()
+  
+  // Tab should move focus (actual behavior may differ from legacy)
+  await userEvent.keyboard('{Tab}')
+  
+  // Verify focus moved to some element within the focus trap
+  const input = root.querySelector('[data-part="date-picker-input"]')
+  expect(document.activeElement).toBe(input)
+})
 
-  afterEach(() => {
-    document.body.innerHTML = ''
-  })
-
-  it('should move focus when tabbing within the calendar', async () => {
-    await userEvent.click(button)
-    
-    // Verify the initially focused date in the calendar
-    const focusedDateButton = root.querySelector('[data-part="date-picker-date-button"][data-focus="true"]')
-    expect(focusedDateButton).toBeTruthy()
-    
-    // Tab should move focus (actual behavior may differ from legacy)
-    await userEvent.keyboard('{Tab}')
-    
-    // Verify focus moved to some element within the focus trap
-    const input = root.querySelector('[data-part="date-picker-input"]')
-    expect(document.activeElement).toBe(input)
-  })
-
-  it('should maintain focus within the component when navigating', async () => {
-    await userEvent.click(button)
-    
-    // Verify calendar is open and focused
-    const calendarContent = root.querySelector('[data-part="date-picker-content"]')
-    expect(calendarContent?.hasAttribute('hidden')).toBe(false)
-    
-    // Tab to move focus
-    await userEvent.keyboard('{Tab}')
-    
-    const input = root.querySelector('[data-part="date-picker-input"]')
-    expect(document.activeElement).toBe(input)
-    
-    // Verify focus is still within the date picker component
-    expect(input?.closest('[data-part="date-picker-root"]')).toBe(root)
-  })
+it('should maintain focus within the component when navigating', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()
+  const root = component.elements.getRootEl()!
+  
+  await userEvent.click(button)
+  
+  // Verify calendar is open and focused
+  const calendarContent = root.querySelector('[data-part="date-picker-content"]')
+  expect(calendarContent?.hasAttribute('hidden')).toBe(false)
+  
+  // Tab to move focus
+  await userEvent.keyboard('{Tab}')
+  
+  const input = root.querySelector('[data-part="date-picker-input"]')
+  expect(document.activeElement).toBe(input)
+  
+  // Verify focus is still within the date picker component
+  expect(input?.closest('[data-part="date-picker-root"]')).toBe(root)
 })

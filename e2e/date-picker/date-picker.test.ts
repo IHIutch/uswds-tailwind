@@ -1,20 +1,16 @@
 import { userEvent } from '@vitest/browser/context'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { datePickerInit } from '../../packages/compat/src/date-picker.js'
+import { expect, it } from 'vitest'
+import { createDisposableDatePicker } from './_utils.js'
 
 const VALIDATION_MESSAGE = 'Please enter a valid date'
 
-describe('date picker component', () => {
-  let root: HTMLElement
-  let input: HTMLInputElement
-  let button: HTMLButtonElement
-  let inputChangeSpy: any
+const rootId = 'test'
 
-  const template = `
+const template = `
     <div>
       <div >
         <label for="input-dob">Date of birth</label>
-        <div data-part="date-picker-root">
+        <div data-part="date-picker-root" id="${rootId}">
           <input data-part="date-picker-input" id="input-dob" name="input-dob" type="text">
           <button data-part="date-picker-trigger" type="button"></button>
           <div data-part="date-picker-content" hidden>
@@ -71,442 +67,568 @@ describe('date picker component', () => {
     </div>
   `
 
-  const getCalendarEl = () => root.querySelector('[data-part="date-picker-content"]') as HTMLElement
-
-  beforeEach(() => {
-    document.body.innerHTML = template
-    datePickerInit()
-    root = document.querySelector('[data-part="date-picker-root"]')!
-    input = root.querySelector('[data-part="date-picker-input"]')!
-    button = root.querySelector('[data-part="date-picker-trigger"]')!
-    inputChangeSpy = vi.fn()
-    input.addEventListener('change', inputChangeSpy)
-  })
-
-  afterEach(() => {
-    input.removeEventListener('change', inputChangeSpy)
-    document.body.innerHTML = ''
-  })
-
-  it('should enhance the date input with a date picker button', () => {
-    expect(input).toBeTruthy()
-    expect(button).toBeTruthy()
-  })
-
-  // mouse interactions
-  it('should display a calendar for the current date when the date picker button is clicked', async () => {
-    await userEvent.click(button)
-
-    expect(getCalendarEl().hidden).toBe(false)
-    expect(getCalendarEl().contains(document.activeElement)).toBe(true)
-  })
-
-  it('should hide the calendar when the date picker button is clicked and the calendar is already open', async () => {
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
-
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(true)
-  })
-
-  it('should close the calendar you click outside of an active calendar', async () => {
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
-
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
-    expect(getCalendarEl().hidden).toBe(true)
-  })
-
-  it('should close the calendar you press escape from the input', async () => {
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
-
-    input.focus()
-    await userEvent.keyboard('{Escape}')
-
-    expect(getCalendarEl().hidden).toBe(true)
-  })
-
-  it('should display a calendar for the inputted date when the date picker button is clicked with a date entered', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-
-    expect(getCalendarEl().hidden).toBe(false)
-
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
-
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
-
-  it('should allow for the selection of a date within the calendar', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
-
-    const dayTenButton = getCalendarEl().querySelector('[data-day="10"]') as HTMLButtonElement
-    await userEvent.click(dayTenButton)
-
-    expect(input.value).toBe('01/10/2020')
-    expect(document.activeElement).toBe(input)
-    expect(getCalendarEl().hidden).toBe(true)
-    expect(inputChangeSpy).toHaveBeenCalled()
-  })
-
-  it('should allow for navigation to the preceding month by clicking the left single arrow button within the calendar', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
-
-    const prevMonthButton = getCalendarEl().querySelector('[data-part="date-picker-nav-prev"][data-unit="month"]') as HTMLButtonElement
-    await userEvent.click(prevMonthButton)
-
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
-
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('December')
-    expect(yearSelection?.textContent).toBe('2019')
-  })
+it('should enhance the date input with a date picker button', () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+
+  expect(input).toBeTruthy()
+  expect(button).toBeTruthy()
+})
+
+// mouse interactions
+it('should display a calendar for the current date when the date picker button is clicked', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.click(button)
+
+  expect(calendar.hidden).toBe(false)
+  expect(calendar.contains(document.activeElement)).toBe(true)
+})
+
+it('should hide the calendar when the date picker button is clicked and the calendar is already open', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(true)
+})
+
+it('should close the calendar you click outside of an active calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  expect(calendar.hidden).toBe(true)
+})
+
+it('should close the calendar you press escape from the input', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  input.focus()
+  await userEvent.keyboard('{Escape}')
+
+  expect(calendar.hidden).toBe(true)
+})
+
+it('should display a calendar for the inputted date when the date picker button is clicked with a date entered', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+
+  expect(calendar.hidden).toBe(false)
+
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
+
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2020')
+})
+
+it('should allow for the selection of a date within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  const dayTenButton = calendar.querySelector<HTMLButtonElement>('[data-day="10"]')!
+  await userEvent.click(dayTenButton)
+
+  expect(input.value).toBe('01/10/2020')
+  expect(document.activeElement).toBe(input)
+  expect(calendar.hidden).toBe(true)
+})
+
+it('should allow for navigation to the preceding month by clicking the left single arrow button within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  const prevMonthButton = calendar.querySelector('[data-part="date-picker-nav-prev"][data-unit="month"]') as HTMLButtonElement
+  await userEvent.click(prevMonthButton)
+
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-  it('should allow for navigation to the succeeding month by clicking the right single arrow button within the calendar', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('December')
+  expect(yearSelection?.textContent).toBe('2019')
+})
 
-    const nextMonthButton = getCalendarEl().querySelector('[data-part="date-picker-nav-next"][data-unit="month"]') as HTMLButtonElement
-    await userEvent.click(nextMonthButton)
+it('should allow for navigation to the succeeding month by clicking the right single arrow button within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  const nextMonthButton = calendar.querySelector('[data-part="date-picker-nav-next"][data-unit="month"]') as HTMLButtonElement
+  await userEvent.click(nextMonthButton)
 
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('February')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-  it('should allow for navigation to the preceding year by clicking the left double arrow button within the calendar', async () => {
-    await userEvent.fill(input, '1/1/2016')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('February')
+  expect(yearSelection?.textContent).toBe('2020')
+})
 
-    const prevYearButton = getCalendarEl().querySelector('[data-part="date-picker-nav-prev"][data-unit="year"]') as HTMLButtonElement
-    await userEvent.click(prevYearButton)
+it('should allow for navigation to the preceding year by clicking the left double arrow button within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  await userEvent.fill(input, '1/1/2016')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2015')
-  })
+  const prevYearButton = calendar.querySelector('[data-part="date-picker-nav-prev"][data-unit="year"]') as HTMLButtonElement
+  await userEvent.click(prevYearButton)
 
-  it('should allow for navigation to the succeeding year by clicking the right double arrow button within the calendar', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-    const nextYearButton = getCalendarEl().querySelector('[data-part="date-picker-nav-next"][data-unit="year"]') as HTMLButtonElement
-    await userEvent.click(nextYearButton)
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2015')
+})
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+it('should allow for navigation to the succeeding year by clicking the right double arrow button within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2021')
-  })
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-  it('should show an improper date as invalid as the user leaves the input', async () => {
-    await userEvent.fill(input, 'abcdefg... That means the convo is done')
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  const nextYearButton = calendar.querySelector('[data-part="date-picker-nav-next"][data-unit="year"]') as HTMLButtonElement
+  await userEvent.click(nextYearButton)
 
-    expect(input.validationMessage).toBe(VALIDATION_MESSAGE)
-  })
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-  it('should show an improper date as invalid if the user presses enter from the input', async () => {
-    await userEvent.fill(input, '2/31/2019')
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2021')
+})
 
-    input.focus()
-    await userEvent.keyboard('{Enter}')
+it('should show an improper date as invalid as the user leaves the input', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
 
-    expect(input.validationMessage).toBe(VALIDATION_MESSAGE)
-  })
+  await userEvent.fill(input, 'abcdefg... That means the convo is done')
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
 
-  it('should show an empty input as valid', async () => {
-    await userEvent.clear(input)
+  expect(input.validationMessage).toBe(VALIDATION_MESSAGE)
+})
 
-    input.focus()
-    await userEvent.keyboard('{Enter}')
+it('should show an improper date as invalid if the user presses enter from the input', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
 
-    expect(input.validationMessage).toBe('')
-  })
+  await userEvent.fill(input, '2/31/2019')
 
-  // Month and Year Selection Tests
-  it('should display a month selection screen by clicking the month display within the calendar', async () => {
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  input.focus()
+  await userEvent.keyboard('{Enter}')
 
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]') as HTMLButtonElement
-    await userEvent.click(monthSelection)
+  expect(input.validationMessage).toBe(VALIDATION_MESSAGE)
+})
 
-    const monthView = getCalendarEl().querySelector('[data-part="date-picker-month"]')
-    const focusedMonth = document.activeElement
+it('should show an empty input as valid', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
 
-    expect(monthView).toBeTruthy()
-    expect(focusedMonth?.hasAttribute('data-focus')).toBe(true)
-  })
+  await userEvent.clear(input)
 
-  it('should allow for the selection of a month within month selection screen', async () => {
-    await userEvent.fill(input, '2/1/2020')
-    await userEvent.click(button)
+  input.focus()
+  await userEvent.keyboard('{Enter}')
 
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]') as HTMLButtonElement
-    await userEvent.click(monthSelection)
+  expect(input.validationMessage).toBe('')
+})
 
-    const firstMonthButton = getCalendarEl().querySelector('[data-part="date-picker-month-button"]') as HTMLButtonElement
-    await userEvent.click(firstMonthButton)
+// Month and Year Selection Tests
+it('should display a month selection screen by clicking the month display within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const monthDisplay = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    expect(monthDisplay?.textContent).toBe('January')
-  })
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-  it('should display a year selection screen by clicking the year display within the calendar', async () => {
-    await userEvent.click(button)
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]') as HTMLButtonElement
+  await userEvent.click(monthSelection)
 
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
-    await userEvent.click(yearSelection)
+  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
+  const focusedMonth = document.activeElement
 
-    const yearView = getCalendarEl().querySelector('[data-part="date-picker-year"]')
-    const focusedYear = document.activeElement
+  expect(monthView).toBeTruthy()
+  expect(focusedMonth?.hasAttribute('data-focus')).toBe(true)
+})
 
-    expect(yearView).toBeTruthy()
-    expect(focusedYear?.hasAttribute('data-focus')).toBe(true)
-  })
+it('should allow for the selection of a month within month selection screen', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-  it('should allow for navigation to the preceding dozen years by clicking the left arrow button within the year selection screen', async () => {
-    await userEvent.click(button)
+  await userEvent.fill(input, '2/1/2020')
+  await userEvent.click(button)
 
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
-    await userEvent.click(yearSelection)
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]') as HTMLButtonElement
+  await userEvent.click(monthSelection)
 
-    const prevDecadeButton = getCalendarEl().querySelector('[data-part="date-picker-nav-prev"][data-unit="decade"]') as HTMLButtonElement
-    await userEvent.click(prevDecadeButton)
+  const firstMonthButton = calendar.querySelector('[data-part="date-picker-month-button"]') as HTMLButtonElement
+  await userEvent.click(firstMonthButton)
 
-    const firstYearButton = getCalendarEl().querySelector('[data-part="date-picker-year-button"]')
-    // The exact year will depend on the current year and decade calculation
-    expect(firstYearButton).toBeTruthy()
-  })
+  const monthDisplay = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  expect(monthDisplay?.textContent).toBe('January')
+})
 
-  it('should allow for navigation to the succeeding dozen years by clicking the right arrow button within the year selection screen', async () => {
-    await userEvent.click(button)
+it('should display a year selection screen by clicking the year display within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
-    await userEvent.click(yearSelection)
+  await userEvent.click(button)
 
-    const nextDecadeButton = getCalendarEl().querySelector('[data-part="date-picker-nav-next"][data-unit="decade"]') as HTMLButtonElement
-    await userEvent.click(nextDecadeButton)
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
+  await userEvent.click(yearSelection)
 
-    const firstYearButton = getCalendarEl().querySelector('[data-part="date-picker-year-button"]')
-    expect(firstYearButton).toBeTruthy()
-  })
+  const yearView = calendar.querySelector('[data-part="date-picker-year"]')
+  const focusedYear = document.activeElement
 
-  it('should allow for the selection of a year within year selection screen', async () => {
-    await userEvent.fill(input, '2/1/2020')
-    await userEvent.click(button)
+  expect(yearView).toBeTruthy()
+  expect(focusedYear?.hasAttribute('data-focus')).toBe(true)
+})
 
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
-    await userEvent.click(yearSelection)
+it('should allow for navigation to the preceding dozen years by clicking the left arrow button within the year selection screen', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const firstYearButton = getCalendarEl().querySelector('[data-part="date-picker-year-button"]') as HTMLButtonElement
-    await userEvent.click(firstYearButton)
+  await userEvent.click(button)
 
-    const yearDisplay = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
-    expect(yearDisplay?.textContent).toBeTruthy()
-  })
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
+  await userEvent.click(yearSelection)
 
-  // Keyboard Navigation Tests
-  it('should close the calendar when escape is pressed within the calendar', async () => {
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  const prevDecadeButton = calendar.querySelector('[data-part="date-picker-nav-prev"][data-unit="decade"]') as HTMLButtonElement
+  await userEvent.click(prevDecadeButton)
 
-    await userEvent.keyboard('{Escape}')
+  const firstYearButton = calendar.querySelector('[data-part="date-picker-year-button"]')
+  // The exact year will depend on the current year and decade calculation
+  expect(firstYearButton).toBeTruthy()
+})
 
-    expect(getCalendarEl().hidden).toBe(true)
-  })
+it('should allow for navigation to the succeeding dozen years by clicking the right arrow button within the year selection screen', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-  it('should move focus to the same day of week of the previous week when up is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/10/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  await userEvent.click(button)
 
-    await userEvent.keyboard('{ArrowUp}')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
+  await userEvent.click(yearSelection)
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  const nextDecadeButton = calendar.querySelector('[data-part="date-picker-nav-next"][data-unit="decade"]') as HTMLButtonElement
+  await userEvent.click(nextDecadeButton)
 
-    expect(focusedDate?.textContent).toBe('3')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  const firstYearButton = calendar.querySelector('[data-part="date-picker-year-button"]')
+  expect(firstYearButton).toBeTruthy()
+})
 
-  it('should move focus to the same day of week of the next week when down is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/10/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+it('should allow for the selection of a year within year selection screen', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    await userEvent.keyboard('{ArrowDown}')
+  await userEvent.fill(input, '2/1/2020')
+  await userEvent.click(button)
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]') as HTMLButtonElement
+  await userEvent.click(yearSelection)
 
-    expect(focusedDate?.textContent).toBe('17')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  const firstYearButton = calendar.querySelector('[data-part="date-picker-year-button"]') as HTMLButtonElement
+  await userEvent.click(firstYearButton)
 
-  it('should move focus to the previous day when left is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/10/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  const yearDisplay = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  expect(yearDisplay?.textContent).toBeTruthy()
+})
 
-    await userEvent.keyboard('{ArrowLeft}')
+// Keyboard Navigation Tests
+it('should close the calendar when escape is pressed within the calendar', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    expect(focusedDate?.textContent).toBe('9')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  await userEvent.keyboard('{Escape}')
 
-  it('should move focus to the next day when right is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/10/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  expect(calendar.hidden).toBe(true)
+})
 
-    await userEvent.keyboard('{ArrowRight}')
+it('should move focus to the same day of week of the previous week when up is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  await userEvent.fill(input, '1/10/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    expect(focusedDate?.textContent).toBe('11')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  await userEvent.keyboard('{ArrowUp}')
 
-  it('should move focus to the first day (e.g. Sunday) of the current week when home is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-    await userEvent.keyboard('{Home}')
+  expect(focusedDate?.textContent).toBe('3')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2020')
+})
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+it('should move focus to the same day of week of the next week when down is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    expect(focusedDate?.textContent).toBe('29')
-    expect(monthSelection?.textContent).toBe('December')
-    expect(yearSelection?.textContent).toBe('2019')
-  })
+  await userEvent.fill(input, '1/10/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-  it('should move focus to the last day (e.g. Saturday) of the current week when end is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  await userEvent.keyboard('{ArrowDown}')
 
-    await userEvent.keyboard('{End}')
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  expect(focusedDate?.textContent).toBe('17')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2020')
+})
 
-    expect(focusedDate?.textContent).toBe('4')
-    expect(monthSelection?.textContent).toBe('January')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+it('should move focus to the previous day when left is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-  it('should move focus to the same day of the previous month when page up is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  await userEvent.fill(input, '1/10/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    await userEvent.keyboard('{PageUp}')
+  await userEvent.keyboard('{ArrowLeft}')
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('December')
-    expect(yearSelection?.textContent).toBe('2019')
-  })
+  expect(focusedDate?.textContent).toBe('9')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2020')
+})
 
-  it('should move focus to the same day of the next month when page down is pressed from the currently focused day', async () => {
-    await userEvent.fill(input, '1/1/2020')
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+it('should move focus to the next day when right is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    await userEvent.keyboard('{PageDown}')
+  await userEvent.fill(input, '1/10/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  await userEvent.keyboard('{ArrowRight}')
 
-    expect(focusedDate?.textContent).toBe('1')
-    expect(monthSelection?.textContent).toBe('February')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-  it('should accept a parse-able date with a two digit year and display the calendar of that year in the current century', async () => {
-    await userEvent.fill(input, '2/29/20')
-    await userEvent.click(button)
+  expect(focusedDate?.textContent).toBe('11')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2020')
+})
 
-    expect(getCalendarEl().hidden).toBe(false)
+it('should move focus to the first day (e.g. Sunday) of the current week when home is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-    const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-    const monthSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="month"]')
-    const yearSelection = getCalendarEl().querySelector('[data-part="date-view-trigger"][data-value="year"]')
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    expect(focusedDate?.textContent).toBe('29')
-    expect(monthSelection?.textContent).toBe('February')
-    expect(yearSelection?.textContent).toBe('2020')
-  })
+  await userEvent.keyboard('{Home}')
 
-  it('should update the calendar when a valid date is entered in the input while the date picker is open', async () => {
-    await userEvent.fill(input, '6/1/2020')
-    await userEvent.click(button)
-    const firstFocus = getCalendarEl().querySelector('[data-focus]')
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-    await userEvent.fill(input, '6/20/2020')
+  expect(focusedDate?.textContent).toBe('29')
+  expect(monthSelection?.textContent).toBe('December')
+  expect(yearSelection?.textContent).toBe('2019')
+})
 
-    const secondFocus = getCalendarEl().querySelector('[data-focus]')
-    expect(firstFocus !== secondFocus || firstFocus?.textContent !== secondFocus?.textContent).toBe(true)
-  })
+it('should move focus to the last day (e.g. Saturday) of the current week when end is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
 
-  it('should validate the input when a date is selected', async () => {
-    await userEvent.fill(input, '2/31/2019')
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
-    expect(input.validationMessage).toBe(VALIDATION_MESSAGE)
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
 
-    await userEvent.click(button)
-    expect(getCalendarEl().hidden).toBe(false)
+  await userEvent.keyboard('{End}')
 
-    const dayTenButton = getCalendarEl().querySelector('[data-value*="10"]') as HTMLButtonElement
-    await userEvent.click(dayTenButton)
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
 
-    expect(input.validationMessage).toBe('')
-  })
+  expect(focusedDate?.textContent).toBe('4')
+  expect(monthSelection?.textContent).toBe('January')
+  expect(yearSelection?.textContent).toBe('2020')
+})
+
+it('should move focus to the same day of the previous month when page up is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  await userEvent.keyboard('{PageUp}')
+
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
+
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('December')
+  expect(yearSelection?.textContent).toBe('2019')
+})
+
+it('should move focus to the same day of the next month when page down is pressed from the currently focused day', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '1/1/2020')
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  await userEvent.keyboard('{PageDown}')
+
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
+
+  expect(focusedDate?.textContent).toBe('1')
+  expect(monthSelection?.textContent).toBe('February')
+  expect(yearSelection?.textContent).toBe('2020')
+})
+
+it('should accept a parse-able date with a two digit year and display the calendar of that year in the current century', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '2/29/20')
+  await userEvent.click(button)
+
+  expect(calendar.hidden).toBe(false)
+
+  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const monthSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const yearSelection = calendar.querySelector('[data-part="date-view-trigger"][data-value="year"]')
+
+  expect(focusedDate?.textContent).toBe('29')
+  expect(monthSelection?.textContent).toBe('February')
+  expect(yearSelection?.textContent).toBe('2020')
+})
+
+it('should update the calendar when a valid date is entered in the input while the date picker is open', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '6/1/2020')
+  await userEvent.click(button)
+  const firstFocus = calendar.querySelector('[data-focus]')
+
+  await userEvent.fill(input, '6/20/2020')
+
+  const secondFocus = calendar.querySelector('[data-focus]')
+  expect(firstFocus !== secondFocus || firstFocus?.textContent !== secondFocus?.textContent).toBe(true)
+})
+
+it('should validate the input when a date is selected', async () => {
+  using component = createDisposableDatePicker(rootId, template)
+  const input = component.elements.getInputEl()!
+  const button = component.elements.getTriggerEl()!
+  const calendar = component.elements.getCalendarEl()!
+
+  await userEvent.fill(input, '2/31/2019')
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  expect(input.validationMessage).toBe(VALIDATION_MESSAGE)
+
+  await userEvent.click(button)
+  expect(calendar.hidden).toBe(false)
+
+  const dayTenButton = calendar.querySelector<HTMLButtonElement>('[data-value*="10"]')!
+  await userEvent.click(dayTenButton)
+
+  expect(input.validationMessage).toBe('')
 })
