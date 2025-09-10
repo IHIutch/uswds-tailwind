@@ -1,9 +1,11 @@
 import { userEvent } from '@vitest/browser/context'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { Collapse, collapseInit } from '../../packages/compat/src/collapse.js'
+import { expect, it } from 'vitest'
+import { createDisposableCollapse } from './_utils.js'
+
+const rootId = 'test'
 
 const TEMPLATE = `
-  <section data-part="collapse-root">
+  <section data-part="collapse-root" id="${rootId}">
     <button data-part="collapse-trigger">
       Here's how you know
     </button>
@@ -14,42 +16,29 @@ const TEMPLATE = `
   </section>
 `
 
-describe('collapse', () => {
-  // let collapseId: string
-  let root: HTMLElement
-  let button: HTMLElement
-  let content: HTMLElement
+it('initializes closed', () => {
+  using component = createDisposableCollapse(rootId, TEMPLATE)
 
-  beforeEach(() => {
-    document.body.innerHTML = TEMPLATE
-    collapseInit()
+  expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('closed')
+  expect(component.elements.getTriggerEl()?.getAttribute('aria-expanded')).toBe('false')
+  expect(component.elements.getContentEl()?.hasAttribute('hidden')).toBeTruthy()
+})
 
-    root = document.querySelector('[data-part="collapse-root"]')!
-    button = root.querySelector('[data-part="collapse-trigger"]')!
-    content = root.querySelector('[data-part="collapse-content"]')!
-    // collapseId = root.id.split(':')[1]
-  })
+it('opens when you click the button', async () => {
+  using component = createDisposableCollapse(rootId, TEMPLATE)
+  await userEvent.click(component.elements.getTriggerEl()!)
 
-  it('initializes closed', () => {
-    expect(root.getAttribute('data-state')).toBe('closed')
-    expect(button.getAttribute('aria-expanded')).toBe('false')
-    expect(content.hasAttribute('hidden')).toBeTruthy()
-  })
+  expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('open')
+  expect(component.elements.getTriggerEl()?.getAttribute('aria-expanded')).toBe('true')
+  expect(component.elements.getContentEl()?.hasAttribute('hidden')).toBeFalsy()
+})
 
-  it('opens when you click the button', async () => {
-    await userEvent.click(button)
+it('closes when you click the button again', async () => {
+  using component = createDisposableCollapse(rootId, TEMPLATE)
+  await userEvent.click(component.elements.getTriggerEl()!)
+  await userEvent.click(component.elements.getTriggerEl()!)
 
-    expect(root.getAttribute('data-state')).toBe('open')
-    expect(button.getAttribute('aria-expanded')).toBe('true')
-    expect(content.hasAttribute('hidden')).toBeFalsy()
-  })
-
-  it('closes when you click the button again', async () => {
-    await userEvent.click(button)
-    await userEvent.click(button)
-
-    expect(root.getAttribute('data-state')).toBe('closed')
-    expect(button.getAttribute('aria-expanded')).toBe('false')
-    expect(content.hasAttribute('hidden')).toBeTruthy()
-  })
+  expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('closed')
+  expect(component.elements.getTriggerEl()?.getAttribute('aria-expanded')).toBe('false')
+  expect(component.elements.getContentEl()?.hasAttribute('hidden')).toBeTruthy()
 })
