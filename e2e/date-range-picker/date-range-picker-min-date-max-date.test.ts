@@ -1,18 +1,12 @@
 import { userEvent } from '@vitest/browser/context'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { dateRangePickerInit } from '../../packages/compat/src/date-range-picker.js'
+import { expect, it } from 'vitest'
+import { createDisposableDateRangePicker } from './_utils.js'
 
-describe('date range picker component with min date and max date', () => {
-  let root: HTMLElement
-  let startInput: HTMLInputElement
-  let endInput: HTMLInputElement
-  let dateRangePickerId: string
+const rootId = 'test'
 
-  let template: string
-
-  const createTemplate = (id: string) => `
+const template = `
     <div>
-      <div data-part="date-range-picker-root" data-min-date="2020-05-22" data-max-date="2021-06-20" id="${id}">
+      <div data-part="date-range-picker-root" data-min-date="2020-05-22" data-max-date="2021-06-20" id="${rootId}">
         <div class="usa-form-group">
           <label class="usa-label" for="appointment-date-start">Appointment Date Start</label>
           <div class="usa-hint">mm/dd/yyyy</div>
@@ -96,86 +90,100 @@ describe('date range picker component with min date and max date', () => {
     </div>
   `
 
-  beforeEach(() => {
-    dateRangePickerId = `date-range-picker-min-max-${Date.now()}`
-    template = createTemplate(dateRangePickerId)
-    document.body.innerHTML = template
-    dateRangePickerInit()
-    root = document.querySelector('[data-part="date-range-picker-root"]')!
-    startInput = root.querySelector('[data-part="date-range-picker-start-input"]')!
-    endInput = root.querySelector('[data-part="date-range-picker-end-input"]')!
-  })
 
-  // afterEach(() => {
-  //   document.body.innerHTML = ''
-  // })
+it('should enhance the date picker and identify the start and end date pickers', () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  expect(startInput).toBeTruthy()
+  expect(endInput).toBeTruthy()
 
-  it('should enhance the date picker and identify the start and end date pickers', () => {
-    expect(startInput).toBeTruthy()
-    expect(endInput).toBeTruthy()
+  // Both inputs should have the default min/max date constraints
+  expect(startInput.min).toBe('2020-05-22')
+  expect(startInput.max).toBe('2021-06-20')
+  expect(endInput.min).toBe('2020-05-22')
+  expect(endInput.max).toBe('2021-06-20')
+})
 
-    // Both inputs should have the default min/max date constraints
-    expect(startInput.min).toBe('2020-05-22')
-    expect(startInput.max).toBe('2021-06-20')
-    expect(endInput.min).toBe('2020-05-22')
-    expect(endInput.max).toBe('2021-06-20')
-  })
+it('should not update the range end date picker properties when the range start date picker has an empty value', async () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  // Set initial value then clear it
+  await userEvent.fill(startInput, '12/12/2020')
+  await userEvent.clear(startInput)
 
-  it('should not update the range end date picker properties when the range start date picker has an empty value', async () => {
-    // Set initial value then clear it
-    await userEvent.fill(startInput, '12/12/2020')
-    await userEvent.clear(startInput)
+  // End input should maintain default min/max dates (not be cleared)
+  expect(endInput.min).toBe('2020-05-22')
+  expect(endInput.max).toBe('2021-06-20')
+  // expect(endInput.getAttribute('data-range-date')).toBeFalsy()
+})
 
-    // End input should maintain default min/max dates (not be cleared)
-    expect(endInput.min).toBe('2020-05-22')
-    expect(endInput.max).toBe('2021-06-20')
-    // expect(endInput.getAttribute('data-range-date')).toBeFalsy()
-  })
+it('should update the range end date picker properties to have a min date and range date when the range start date picker has an updated valid value', async () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  await userEvent.fill(startInput, '12/12/2020')
 
-  it('should update the range end date picker properties to have a min date and range date when the range start date picker has an updated valid value', async () => {
-    await userEvent.fill(startInput, '12/12/2020')
+  // End input should get updated min date but keep the default max date
+  expect(endInput.min).toBe('2020-12-12')
+  expect(endInput.max).toBe('2021-06-20')
+  // expect(endInput.getAttribute('data-range-date')).toBe('2020-12-12')
+})
 
-    // End input should get updated min date but keep the default max date
-    expect(endInput.min).toBe('2020-12-12')
-    expect(endInput.max).toBe('2021-06-20')
-    // expect(endInput.getAttribute('data-range-date')).toBe('2020-12-12')
-  })
+it('should reset the range end date picker properties when the range start date picker has an updated invalid value', async () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  await userEvent.fill(startInput, 'ab/dc/efg')
 
-  it('should reset the range end date picker properties when the range start date picker has an updated invalid value', async () => {
-    await userEvent.fill(startInput, 'ab/dc/efg')
+  // End input should revert to default min/max dates
+  expect(endInput.min).toBe('2020-05-22')
+  expect(endInput.max).toBe('2021-06-20')
+  // expect(endInput.getAttribute('data-range-date')).toBeFalsy()
+})
 
-    // End input should revert to default min/max dates
-    expect(endInput.min).toBe('2020-05-22')
-    expect(endInput.max).toBe('2021-06-20')
-    // expect(endInput.getAttribute('data-range-date')).toBeFalsy()
-  })
+it('should not update the range start date picker properties when the range end date picker has an empty value', async () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  // Set initial value then clear it
+  await userEvent.fill(endInput, '12/11/2020')
+  await userEvent.clear(endInput)
 
-  it('should not update the range start date picker properties when the range end date picker has an empty value', async () => {
-    // Set initial value then clear it
-    await userEvent.fill(endInput, '12/11/2020')
-    await userEvent.clear(endInput)
+  // Start input should maintain default min/max dates (not be cleared)
+  expect(startInput.min).toBe('2020-05-22')
+  expect(startInput.max).toBe('2021-06-20')
+  // expect(startInput.getAttribute('data-range-date')).toBe('')
+})
 
-    // Start input should maintain default min/max dates (not be cleared)
-    expect(startInput.min).toBe('2020-05-22')
-    expect(startInput.max).toBe('2021-06-20')
-    // expect(startInput.getAttribute('data-range-date')).toBe('')
-  })
+it('should update the range start date picker properties to have a max date and range date when the range end date picker has an updated valid value', async () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  await userEvent.fill(endInput, '12/11/2020')
 
-  it('should update the range start date picker properties to have a max date and range date when the range end date picker has an updated valid value', async () => {
-    await userEvent.fill(endInput, '12/11/2020')
+  // Start input should get updated max date but keep the default min date
+  expect(startInput.min).toBe('2020-05-22')
+  expect(startInput.max).toBe('2020-12-11')
+  // expect(startInput.getAttribute('data-range-date')).toBe('2020-12-11')
+})
 
-    // Start input should get updated max date but keep the default min date
-    expect(startInput.min).toBe('2020-05-22')
-    expect(startInput.max).toBe('2020-12-11')
-    // expect(startInput.getAttribute('data-range-date')).toBe('2020-12-11')
-  })
+it('should not update the range start date picker properties when the range end date picker has an updated invalid value', async () => {
+  using component = createDisposableDateRangePicker(rootId, template)
+  const startInput = component.elements.getStartInputEl()!
+  const endInput = component.elements.getEndInputEl()!
+  
+  await userEvent.fill(endInput, '35/35/3535')
 
-  it('should not update the range start date picker properties when the range end date picker has an updated invalid value', async () => {
-    await userEvent.fill(endInput, '35/35/3535')
-
-    // Start input should revert to default min/max dates
-    expect(startInput.min).toBe('2020-05-22')
-    expect(startInput.max).toBe('2021-06-20')
-    // expect(startInput.getAttribute('data-range-date')).toBe('')
-  })
+  // Start input should revert to default min/max dates
+  expect(startInput.min).toBe('2020-05-22')
+  expect(startInput.max).toBe('2021-06-20')
+  // expect(startInput.getAttribute('data-range-date')).toBe('')
 })
