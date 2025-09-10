@@ -3,7 +3,6 @@ import { createDisposableComponent } from '../_utils'
 
 export function createDisposableCombobox(id: string, template: string) {
   return createDisposableComponent(
-    id,
     template,
     comboboxInit,
     () => {

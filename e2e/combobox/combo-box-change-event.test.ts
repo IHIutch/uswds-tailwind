@@ -155,9 +155,8 @@ it('should emit change events when resetting input values when an incomplete ite
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('apple')
-  }
+  instance?.api.setValue('apple')
+
   await userEvent.clear(input)
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
@@ -176,9 +175,7 @@ it('should emit change events when closing the list but not the clear the input 
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('apple')
-  }
+  instance?.api.setValue('apple')
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
 
@@ -196,9 +193,7 @@ it('should emit change events when setting the input value when a complete selec
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('apple')
-  }
+  instance?.api.setValue('apple')
   await userEvent.fill(input, 'fig')
   expect(list.hidden).toBe(false)
 
@@ -215,9 +210,7 @@ it('should emit change events when selecting the focused list item in the list w
   const select = component.elements.getSelectEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('grapefruit')
-  }
+  instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'emo')
 
   await userEvent.keyboard('{ArrowDown}')
@@ -236,9 +229,7 @@ it('should emit change events when pressing escape from a focused item', async (
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('grapefruit')
-  }
+  instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'dew')
   expect(!list.hidden && list.children.length).toBeTruthy()
 

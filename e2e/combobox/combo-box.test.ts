@@ -271,9 +271,8 @@ it('should reset input values when an incomplete item is remaining on blur', asy
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('apricot')
-  }
+  instance?.api.setValue('apricot')
+
   await userEvent.fill(input, 'a')
 
   expect(list.hidden).toBe(false)
@@ -292,9 +291,7 @@ it('should reset input values when an incomplete item is submitted through enter
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('cantaloupe')
-  }
+  instance?.api.setValue('cantaloupe')
 
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
@@ -324,9 +321,7 @@ it('should close the list and reset input value when escape is performed while t
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('cherry')
-  }
+  instance?.api.setValue('cherry')
 
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
@@ -345,9 +340,8 @@ it('should reset the input value when a complete selection is left on blur from 
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('coconut')
-  }
+  instance?.api.setValue('coconut')
+
   await userEvent.fill(input, 'date')
   expect(list.hidden).toBe(false)
 
@@ -365,9 +359,7 @@ it('should set the input value when a complete selection is submitted by pressin
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('cranberry')
-  }
+  instance?.api.setValue('cranberry')
 
   await userEvent.fill(input, 'grape')
   expect(list.hidden).toBe(false)
@@ -435,9 +427,7 @@ it('should select the focused list item in the list when pressing enter on a foc
   const select = component.elements.getSelectEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('pineapple')
-  }
+  instance?.api.setValue('pineapple')
   await userEvent.fill(input, 'berry')
   await userEvent.keyboard('{ArrowDown}')
   const focusedOption = document.activeElement
@@ -455,9 +445,8 @@ it('should select the focused list item in the list when pressing space on a foc
   const select = component.elements.getSelectEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('cantaloupe')
-  }
+  instance?.api.setValue('cantaloupe')
+
   await userEvent.fill(input, 'berry')
   await userEvent.keyboard('{ArrowDown}')
   const focusedOption = document.activeElement
@@ -511,9 +500,7 @@ it('should not select the focused item in the list when pressing escape from the
   const list = component.elements.getListEl()!
 
   const instance = Combobox.getInstance(rootId)
-  if (instance) {
-    instance.api.setValue('pineapple')
-  }
+  instance?.api.setValue('pineapple')
 
   await userEvent.fill(input, 'la')
   expect(!list.hidden && list.children.length).toBeTruthy()
