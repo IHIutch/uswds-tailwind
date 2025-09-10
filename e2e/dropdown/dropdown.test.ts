@@ -1,81 +1,87 @@
 import { userEvent } from '@vitest/browser/context'
-import { beforeEach, describe, expect, it } from 'vitest'
-import { dropdownInit } from '../../packages/compat/src/dropdown.js'
+import { expect, it } from 'vitest'
+import { createDisposableDropdown } from './_utils.js'
 
-describe('dropdown (language selector)', () => {
-  let dropdownId: string
-  let languageButton: HTMLElement
-  let languageList: HTMLElement
+const rootId = 'test'
 
-  const template = `
-    <nav data-part="dropdown-root" id="dropdown-test" class="usa-language">
-      <button data-part="dropdown-trigger" type="button" class="usa-accordion__button usa-language__link">
-        <span>Languages</span>
-      </button>
-      <ul data-part="dropdown-content" class="usa-language__submenu" id="language-options">
-        <li data-part="dropdown-item" data-value="english">
-          <a href="javascript:void(0)" class="usa-language__link">English</a>
-        </li>
-        <li data-part="dropdown-item" data-value="spanish">
-          <a href="javascript:void(0)" class="usa-language__link">Español</a>
-        </li>
-        <li data-part="dropdown-item" data-value="french">
-          <a href="javascript:void(0)" class="usa-language__link">Français</a>
-        </li>
-      </ul>
-    </nav>
-  `
+const template = `
+  <nav data-part="dropdown-root" id="${rootId}" class="usa-language">
+    <button data-part="dropdown-trigger" type="button" class="usa-accordion__button usa-language__link">
+      <span>Languages</span>
+    </button>
+    <ul data-part="dropdown-content" class="usa-language__submenu" id="language-options">
+      <li data-part="dropdown-item" data-value="english">
+        <a href="javascript:void(0)" class="usa-language__link">English</a>
+      </li>
+      <li data-part="dropdown-item" data-value="spanish">
+        <a href="javascript:void(0)" class="usa-language__link">Español</a>
+      </li>
+      <li data-part="dropdown-item" data-value="french">
+        <a href="javascript:void(0)" class="usa-language__link">Français</a>
+      </li>
+    </ul>
+  </nav>
+`
 
-  beforeEach(() => {
-    document.body.innerHTML = template
-    dropdownInit()
+it('shows the language dropdown when the language button is clicked', async () => {
+  using component = createDisposableDropdown(rootId, template)
+  const content = component.elements.getContentEl()!
+  const trigger = component.elements.getTriggerEl()
 
-    const rootEl = document.querySelector('[data-part="dropdown-root"]')!
-    dropdownId = rootEl.id.split(':')[1]
-    languageButton = document.querySelector('[data-part="dropdown-trigger"]')!
-    languageList = document.querySelector('[data-part="dropdown-content"]')!
-  })
+  await userEvent.click(trigger)
+  expect(content.getAttribute('hidden')).toBe(null)
+})
 
-  it('shows the language dropdown when the language button is clicked', async () => {
-    await userEvent.click(languageButton)
-    expect(languageList.getAttribute('hidden')).toBe(null)
-  })
+it('hides the visible language menu when the body is clicked', async () => {
+  using component = createDisposableDropdown(rootId, template)
+  const content = component.elements.getContentEl()!
+  const trigger = component.elements.getTriggerEl()
 
-  it('hides the visible language menu when the body is clicked', async () => {
-    await userEvent.click(languageButton)
-    expect(languageList.getAttribute('hidden')).toBe(null)
+  await userEvent.click(trigger)
+  expect(content.getAttribute('hidden')).toBe(null)
 
-    await userEvent.click(document.body, { position: { x: 0, y: 0 } })
-    expect(languageList.hasAttribute('hidden')).toBe(true)
-  })
+  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  expect(content.hasAttribute('hidden')).toBe(true)
+})
 
-  it('collapses dropdown when a language link is clicked', async () => {
-    const languageLink = document.querySelector('[data-part="dropdown-item"] a')!
+it('collapses dropdown when a language link is clicked', async () => {
+  using component = createDisposableDropdown(rootId, template)
+  const languageLink = component.elements.getContentEl()!.querySelector('a')!
+  const trigger = component.elements.getTriggerEl()
 
-    await userEvent.click(languageButton)
-    expect(languageButton.getAttribute('aria-expanded')).toBe('true')
+  await userEvent.click(trigger)
+  expect(trigger.getAttribute('aria-expanded')).toBe('true')
 
-    await userEvent.click(languageLink)
-    expect(languageButton.getAttribute('aria-expanded')).toBe('false')
-  })
+  await userEvent.click(languageLink)
+  expect(trigger.getAttribute('aria-expanded')).toBe('false')
+})
 
-  it('collapses dropdown when the Escape key is hit', async () => {
-    await userEvent.click(languageButton)
-    expect(languageButton.getAttribute('aria-expanded')).toBe('true')
+it('collapses dropdown when the Escape key is hit', async () => {
+  using component = createDisposableDropdown(rootId, template)
+  const trigger = component.elements.getTriggerEl()
 
-    await userEvent.keyboard('{Escape}')
-    expect(languageButton.getAttribute('aria-expanded')).toBe('false')
-  })
+  await userEvent.click(trigger)
+  expect(trigger.getAttribute('aria-expanded')).toBe('true')
 
-  it('contains a role of button', () => {
-    expect(languageButton.getAttribute('role')).toBe('button')
-  })
+  await userEvent.keyboard('{Escape}')
+  expect(trigger.getAttribute('aria-expanded')).toBe('false')
+})
 
-  it('contains aria-controls of language-options', () => {
-    expect(languageButton.getAttribute('aria-controls')).toBe(`dropdown:${dropdownId}:content`)
-  })
+it('contains a role of button', () => {
+  using component = createDisposableDropdown(rootId, template)
+  const trigger = component.elements.getTriggerEl()
 
-  it('contains an id of language-options', () => {
-    expect(languageList.getAttribute('id')).toBe(`dropdown:${dropdownId}:content`)
-  })
+  expect(trigger.getAttribute('role')).toBe('button')
+})
+
+it('contains aria-controls of language-options', () => {
+  using component = createDisposableDropdown(rootId, template)
+  const trigger = component.elements.getTriggerEl()
+
+  expect(trigger.getAttribute('aria-controls')).toBe(`dropdown:${rootId}:content`)
+})
+
+it('contains an id of language-options', () => {
+  using component = createDisposableDropdown(rootId, template)
+  expect(component.elements.getContentEl()?.getAttribute('id')).toBe(`dropdown:${rootId}:content`)
 })
