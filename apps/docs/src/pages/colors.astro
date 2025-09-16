@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import ColorSwatch from "#components/color-swatch";
 import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
@@ -14,7 +16,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
     text: heading,
     slug: slug(heading),
     depth: 1,
-  })
+  }),
 );
 ---
 
