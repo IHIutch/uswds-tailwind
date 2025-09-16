@@ -4,45 +4,50 @@ import { getCollection } from "astro:content";
 
 const { pathname } = Astro.url;
 
-const allComponents = await getCollection(
+const components = await getCollection(
   "components",
-  (entry) => entry.data.isPublished !== false
+  (entry) => entry.data.isPublished !== false,
+);
+const allComponents = components.sort((a, b) =>
+  a.data.title.localeCompare(b.data.title),
 );
 ---
 
-<div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
-  <nav
-    aria-label="Side navigation"
-    class="px-4 pt-12 pb-16 h-full overflow-y-auto"
-    id="sidenav"
-  >
-    <div class="mb-3 flex items-center pl-4">
-      <span class="font-bold text-lg">Components</span>
-    </div>
-    <ul
-      class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+<div class="relative h-full min-h-0 flex">
+  <div class="hidden desktop:block w-64 absolute inset-y-0 left-0 top-0 h-full">
+    <nav
+      aria-label="Side navigation"
+      class="px-4 pt-12 pb-16 h-full overflow-y-auto"
+      id="sidenav"
     >
-      {
-        allComponents.map((comps) => (
-          <li>
-            <a
-              href={`/components/${comps.slug}`}
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-              aria-current={
-                pathname === `/components/${comps.slug}` ? "page" : false
-              }
-            >
-              {comps.data.title}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
-</div>
-<div class="desktop:pl-64 desktop-lg:pr-64 pt-16 desktop:pt-32">
-  <slot />
-  <Footer class="max-w-6xl mx-auto border-t border-t-gray-cool-5" />
+      <div class="mb-3 flex items-center pl-4">
+        <span class="font-bold text-lg">Components</span>
+      </div>
+      <ul
+        class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+      >
+        {
+          allComponents.map((comps) => (
+            <li>
+              <a
+                href={`/components/${comps.id}`}
+                class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
+                aria-current={
+                  pathname === `/components/${comps.id}` ? "page" : false
+                }
+              >
+                {comps.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+  <div class="desktop:pl-64 desktop-lg:pr-64 overflow-auto w-full">
+    <slot />
+    <Footer class="max-w-6xl mx-auto border-t border-t-gray-cool-5" />
+  </div>
 </div>
 
 <script>
@@ -90,7 +95,7 @@ const allComponents = await getCollection(
         key,
         JSON.stringify({
           scrollTop: sidenav.scrollTop,
-        })
+        }),
       );
     }
   });

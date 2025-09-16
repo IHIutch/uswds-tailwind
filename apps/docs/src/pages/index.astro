@@ -11,286 +11,289 @@ import Footer from "#components/footer.astro";
 <BaseLayout
   description="Build federal websites and applications faster than ever using modern tooling."
 >
-  <main id="main-content" class="pt-12 desktop:pt-32">
-    <div class="bg-blue-80v py-24">
-      <div class="max-w-5xl mx-auto px-4">
-        <h1
-          class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl !leading-tighter font-public-sans font-bold text-white mb-12"
-        >
-          Build federal websites and applications faster than ever.
-        </h1>
-
-        <p
-          class="text-white/90 text-xl mobile-lg:text-2xl font-public-sans !leading-relaxed max-w-screen-tablet"
-        >
-          Get started using the comprehensive design system, built with the
-          speed and flexibility of modern tooling, as quickly as you can copy &
-          paste.
-        </p>
-      </div>
-    </div>
-    <div class="bg-gray-cool-3 py-16">
-      <div class="max-w-5xl mx-auto px-4">
-        <h2
-          class="text-center text-2xl font-semibold font-public-sans text-gray-cool-60 mb-8"
-        >
-          Industry Leading Dev Tools
-        </h2>
-        <div class="flex flex-wrap">
-          <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
-            <div class="pb-6 tablet:p-3 pt-0">
-              <Image
-                loading="eager"
-                class="h-10 max-w-56 object-contain mx-auto"
-                src={tailwind}
-                alt="Tailwind Logo"
-              />
-            </div>
-          </div>
-          <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
-            <div class="py-6 tablet:p-3">
-              <Image
-                loading="eager"
-                class="h-10 max-w-56 object-contain mx-auto"
-                src={alpine}
-                alt="Alpine Logo"
-              />
-            </div>
-          </div>
-          <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
-            <div class="pt-6 tablet:p-3 pb-0">
-              <Image
-                loading="eager"
-                class="h-10 max-w-56 object-contain mx-auto"
-                src={parcel}
-                alt="Parcel Logo"
-              />
-            </div>
-          </div>
+  <div class="h-full overflow-auto">
+    <main id="main-content">
+      <div class="bg-blue-80v py-24">
+        <div class="max-w-5xl mx-auto px-4">
+          <h1
+            class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl !leading-tighter font-public-sans font-bold text-white mb-12"
+          >
+            Build federal websites and applications faster than ever.
+          </h1>
+          <p
+            class="text-white/90 text-xl mobile-lg:text-2xl font-public-sans !leading-relaxed max-w-screen-tablet"
+          >
+            Get started using the comprehensive design system, built with the
+            speed and flexibility of modern tooling, as quickly as you can copy
+            & paste.
+          </p>
         </div>
-        <div
-          class="grid tablet-lg:grid-cols-2 gap-4 tablet:px-16 desktop:px-28 mt-12 overflow-hidden"
-        >
-          <div class="rounded border p-4 bg-white">
-            <h3 class="text-lg font-bold mb-1">Compile Time</h3>
-            <div
-              aria-hidden="true"
-              class="grid grid-cols-[auto_1fr_auto] gap-2 mt-3"
-            >
-              <div class="text-sm flex items-center justify-end">
-                <span class="font-medium">USWDS + TW</span>
+      </div>
+      <div class="bg-gray-cool-3 py-16">
+        <div class="max-w-5xl mx-auto px-4">
+          <h2
+            class="text-center text-2xl font-semibold font-public-sans text-gray-cool-60 mb-8"
+          >
+            Industry Leading Dev Tools
+          </h2>
+          <div class="flex flex-wrap">
+            <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
+              <div class="pb-6 tablet:p-3 pt-0">
+                <Image
+                  loading="eager"
+                  class="h-10 max-w-56 object-contain mx-auto"
+                  src={tailwind}
+                  alt="Tailwind Logo"
+                />
               </div>
-              <div class="flex gap-2 items-center">
-                <div
-                  class="h-full bg-blue-50v rounded-sm"
-                  style={{ width: (639 / 4500) * 100 + "%" }}
-                >
+            </div>
+            <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
+              <div class="py-6 tablet:p-3">
+                <Image
+                  loading="eager"
+                  class="h-10 max-w-56 object-contain mx-auto"
+                  src={alpine}
+                  alt="Alpine Logo"
+                />
+              </div>
+            </div>
+            <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
+              <div class="pt-6 tablet:p-3 pb-0">
+                <Image
+                  loading="eager"
+                  class="h-10 max-w-56 object-contain mx-auto"
+                  src={parcel}
+                  alt="Parcel Logo"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid tablet-lg:grid-cols-2 gap-4 tablet:px-16 desktop:px-28 mt-12 overflow-hidden"
+          >
+            <div class="rounded border p-4 bg-white">
+              <h3 class="text-lg font-bold mb-1">Compile Time</h3>
+              <div
+                aria-hidden="true"
+                class="grid grid-cols-[auto_1fr_auto] gap-2 mt-3"
+              >
+                <div class="text-sm flex items-center justify-end">
+                  <span class="font-medium">USWDS + TW</span>
+                </div>
+                <div class="flex gap-2 items-center">
+                  <div
+                    class="h-full bg-blue-50v rounded-sm"
+                    style={{ width: (639 / 4500) * 100 + "%" }}
+                  >
+                  </div>
+                  <div>
+                    <span class="text-sm font-medium text-gray-cool-60"
+                      >7x faster</span
+                    >
+                  </div>
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-cool-60"
-                    >7x faster</span
-                  >
+                  <span class="text-sm">0.6s</span>
                 </div>
-              </div>
-              <div>
-                <span class="text-sm">0.6s</span>
-              </div>
-              <div class="text-sm flex items-center justify-end">
-                <span class="font-medium">USWDS</span>
-              </div>
-              <div>
-                <div class="size-full bg-red-60 rounded-sm"></div>
-              </div>
-              <div>
-                <span class="text-sm">4.5s</span>
-              </div>
-            </div>
-            <p class="text-sm text-gray-cool-70 mt-4">
-              Using Parcel, we're able to compile all of our assets extremely
-              quickly. In fact, the CSS itself only takes around <em
-                class="font-bold">60ms</em
-              >!
-            </p>
-          </div>
-          <table class="sr-only whitespace-normal">
-            <thead>
-              <tr>
-                <th scope="col">Project Name</th>
-                <th scope="col">Compile Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>USWDS + Tailwind</td>
-                <td>0.6 seconds (7 times faster than USWDS)</td>
-              </tr>
-              <tr>
-                <td>USWDS</td>
-                <td>2.4 seconds</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="rounded border p-4 bg-white">
-            <h3 class="text-lg font-bold mb-4">CSS Size</h3>
-            <div
-              aria-hidden="true"
-              class="grid grid-cols-[auto_1fr_auto] gap-2"
-            >
-              <div class="text-sm flex items-center justify-end">
-                <span class="font-medium">USWDS + TW</span>
-              </div>
-              <div class="flex gap-2 items-center">
-                <div
-                  class="h-full bg-blue-50v rounded-sm"
-                  style={{ width: (123 / 512) * 100 + "%" }}
-                >
+                <div class="text-sm flex items-center justify-end">
+                  <span class="font-medium">USWDS</span>
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-cool-60"
-                    >4x smaller</span
-                  >
+                  <div class="size-full bg-red-60 rounded-sm"></div>
+                </div>
+                <div>
+                  <span class="text-sm">4.5s</span>
                 </div>
               </div>
-              <div>
-                <span class="text-sm">123 KB</span>
+              <p class="text-sm text-gray-cool-70 mt-4">
+                Using Parcel, we're able to compile all of our assets extremely
+                quickly. In fact, the CSS itself only takes around <em
+                  class="font-bold">60ms</em
+                >!
+              </p>
+            </div>
+            <table class="sr-only whitespace-normal">
+              <thead>
+                <tr>
+                  <th scope="col">Project Name</th>
+                  <th scope="col">Compile Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>USWDS + Tailwind</td>
+                  <td>0.6 seconds (7 times faster than USWDS)</td>
+                </tr>
+                <tr>
+                  <td>USWDS</td>
+                  <td>2.4 seconds</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="rounded border p-4 bg-white">
+              <h3 class="text-lg font-bold mb-4">CSS Size</h3>
+              <div
+                aria-hidden="true"
+                class="grid grid-cols-[auto_1fr_auto] gap-2"
+              >
+                <div class="text-sm flex items-center justify-end">
+                  <span class="font-medium">USWDS + TW</span>
+                </div>
+                <div class="flex gap-2 items-center">
+                  <div
+                    class="h-full bg-blue-50v rounded-sm"
+                    style={{ width: (123 / 512) * 100 + "%" }}
+                  >
+                  </div>
+                  <div>
+                    <span class="text-sm font-medium text-gray-cool-60"
+                      >4x smaller</span
+                    >
+                  </div>
+                </div>
+                <div>
+                  <span class="text-sm">123 KB</span>
+                </div>
+                <div class="text-sm flex items-center justify-end">
+                  <span class="font-medium">USWDS</span>
+                </div>
+                <div>
+                  <div class="size-full bg-red-60 rounded-sm"></div>
+                </div>
+                <div>
+                  <span class="text-sm">512 KB</span>
+                </div>
               </div>
-              <div class="text-sm flex items-center justify-end">
-                <span class="font-medium">USWDS</span>
-              </div>
-              <div>
-                <div class="size-full bg-red-60 rounded-sm"></div>
-              </div>
-              <div>
-                <span class="text-sm">512 KB</span>
-              </div>
+              <p class="text-sm text-gray-cool-70 mt-4">
+                Thanks to Tailwind's "just-in-time" compiler, we only generate
+                the CSS we actually use. For example, the CSS of this site only
+                reaches around <em class="font-bold">160 KB</em>.
+              </p>
             </div>
-            <p class="text-sm text-gray-cool-70 mt-4">
-              Thanks to Tailwind's "just-in-time" compiler, we only generate the
-              CSS we actually use. For example, the CSS of this site only
-              reaches around <em class="font-bold">160 KB</em>.
-            </p>
-          </div>
-          <table class="sr-only whitespace-normal">
-            <thead>
-              <tr>
-                <th scope="col">Project Name</th>
-                <th scope="col">CSS Size</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>USWDS + Tailwind</td>
-                <td>123 kilobytes (4 times smaller than USWDS)</td>
-              </tr>
-              <tr>
-                <td>USWDS</td>
-                <td>2.4 kilobytes</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="py-16">
-      <div class="max-w-5xl mx-auto px-4">
-        <div class="grid desktop:grid-cols-3 tablet:grid-cols-2 gap-8">
-          <div
-            class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
-          >
-            <div
-              class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
-            >
-              <span class="icon-[material-symbols--accessibility-new] size-6"
-              ></span>
-            </div>
-            <h3 class="text-xl font-semibold font-public-sans mb-2">
-              Accessible
-            </h3>
-            <p class="text-gray-cool-70">
-              Strictly follows WAI-ARIA and Section 508 standards for all
-              components.
-            </p>
-          </div>
-          <div
-            class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
-          >
-            <div
-              class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
-            >
-              <span class="icon-[material-symbols--palette] size-6"></span>
-            </div>
-            <h3 class="text-xl font-semibold font-public-sans mb-2">
-              Tokenized
-            </h3>
-            <p class="text-gray-cool-70">
-              Customize any part of our components to match your design needs.
-            </p>
-          </div>
-          <div
-            class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
-          >
-            <div
-              class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
-            >
-              <span class="icon-[material-symbols--dashboard] size-6"></span>
-            </div>
-            <h3 class="text-xl font-semibold font-public-sans mb-2">
-              Composable
-            </h3>
-            <p class="text-gray-cool-70">
-              Designed with composition in mind. Compose new designs with ease.
-            </p>
-          </div>
-          <div
-            class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
-          >
-            <div
-              class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
-            >
-              <span class="icon-[material-symbols--dark-mode] size-6"></span>
-            </div>
-            <h3 class="text-xl font-semibold font-public-sans mb-2">
-              Flexible
-            </h3>
-            <p class="text-gray-cool-70">
-              Optimized for multiple color modes including high-contrast.
-            </p>
-          </div>
-          <div
-            class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
-          >
-            <div
-              class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
-            >
-              <span class="icon-[material-symbols--psychology] size-6"></span>
-            </div>
-            <h3 class="text-xl font-semibold font-public-sans mb-2">
-              Developer Experience
-            </h3>
-            <p class="text-gray-cool-70">
-              Boost your productivity by leveraging familiar VSCode extensions.
-            </p>
-          </div>
-          <div
-            class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
-          >
-            <div
-              class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
-            >
-              <span class="icon-[material-symbols--bolt] size-6"></span>
-            </div>
-            <h3 class="text-xl font-semibold font-public-sans mb-2">
-              Lightweight
-            </h3>
-            <p class="text-gray-cool-70">
-              Reduce your footprint allowing and increase overall UX.
-            </p>
+            <table class="sr-only whitespace-normal">
+              <thead>
+                <tr>
+                  <th scope="col">Project Name</th>
+                  <th scope="col">CSS Size</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>USWDS + Tailwind</td>
+                  <td>123 kilobytes (4 times smaller than USWDS)</td>
+                </tr>
+                <tr>
+                  <td>USWDS</td>
+                  <td>2.4 kilobytes</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+      <div class="py-16">
+        <div class="max-w-5xl mx-auto px-4">
+          <div class="grid desktop:grid-cols-3 tablet:grid-cols-2 gap-8">
+            <div
+              class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
+            >
+              <div
+                class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
+              >
+                <span class="icon-[material-symbols--accessibility-new] size-6"
+                ></span>
+              </div>
+              <h3 class="text-xl font-semibold font-public-sans mb-2">
+                Accessible
+              </h3>
+              <p class="text-gray-cool-70">
+                Strictly follows WAI-ARIA and Section 508 standards for all
+                components.
+              </p>
+            </div>
+            <div
+              class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
+            >
+              <div
+                class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
+              >
+                <span class="icon-[material-symbols--palette] size-6"></span>
+              </div>
+              <h3 class="text-xl font-semibold font-public-sans mb-2">
+                Tokenized
+              </h3>
+              <p class="text-gray-cool-70">
+                Customize any part of our components to match your design needs.
+              </p>
+            </div>
+            <div
+              class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
+            >
+              <div
+                class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
+              >
+                <span class="icon-[material-symbols--dashboard] size-6"></span>
+              </div>
+              <h3 class="text-xl font-semibold font-public-sans mb-2">
+                Composable
+              </h3>
+              <p class="text-gray-cool-70">
+                Designed with composition in mind. Compose new designs with
+                ease.
+              </p>
+            </div>
+            <div
+              class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
+            >
+              <div
+                class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
+              >
+                <span class="icon-[material-symbols--dark-mode] size-6"></span>
+              </div>
+              <h3 class="text-xl font-semibold font-public-sans mb-2">
+                Flexible
+              </h3>
+              <p class="text-gray-cool-70">
+                Optimized for multiple color modes including high-contrast.
+              </p>
+            </div>
+            <div
+              class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
+            >
+              <div
+                class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
+              >
+                <span class="icon-[material-symbols--psychology] size-6"></span>
+              </div>
+              <h3 class="text-xl font-semibold font-public-sans mb-2">
+                Developer Experience
+              </h3>
+              <p class="text-gray-cool-70">
+                Boost your productivity by leveraging familiar VSCode
+                extensions.
+              </p>
+            </div>
+            <div
+              class="px-4 py-6 border border-gray-cool-20 rounded-lg shadow bg-white"
+            >
+              <div
+                class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
+              >
+                <span class="icon-[material-symbols--bolt] size-6"></span>
+              </div>
+              <h3 class="text-xl font-semibold font-public-sans mb-2">
+                Lightweight
+              </h3>
+              <p class="text-gray-cool-70">
+                Reduce your footprint allowing and increase overall UX.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="border-t border-t-gray-cool-5">
+      <Footer class="max-w-5xl mx-auto" />
     </div>
-  </main>
-  <div class="border-t border-t-gray-cool-5">
-    <Footer class="max-w-5xl mx-auto" />
   </div>
 </BaseLayout>

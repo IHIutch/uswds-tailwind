@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 import GlobalNav from "#components/global-nav/index.astro";
 import { SEO } from "astro-seo";
@@ -107,16 +107,34 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       ) : null
     }
     <!-- / Fathom -->
-    <ViewTransitions />
+    <ClientRouter />
   </head>
-  <body class="h-full font-public-sans">
+  <body class="h-full font-public-sans fixed inset-0 flex flex-col">
     <a
       class="sr-only rounded leading-none text-blue-60v px-5 py-3 bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v focus:top-0 focus:left-0 focus:h-auto focus:w-auto focus:m-0 focus:[clip:unset] bg-white z-50"
       href="#main-content">Skip to main content</a
     >
-    <div class="relative">
-      <GlobalNav />
+
+    <GlobalNav />
+    <div class="h-full flex flex-col min-h-0 flex-1 overflow-hidden">
+      <div class="@container bg-cyan-5 border-l-8 border-l-cyan-30v">
+        <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
+          <div class="absolute left-2 @desktop:left-6">
+            <div class="icon-[material-symbols--info] size-6"></div>
+          </div>
+          <p class="leading-normal">
+            <b>v2 is coming soon!</b> I'd really appreciate your feedback if you'd
+            be willing to take a
+            <a
+              href="https://forms.reform.app/szenkB/v2-feedback"
+              target="_blank"
+              class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
+              ><span class="underline">quick survey</span>
+            </a>. Thanks!
+          </p>
+        </div>
+      </div>
+      <slot />
     </div>
-    <slot />
   </body>
 </html>
