@@ -1,8 +1,7 @@
-import type { Config } from "tailwindcss";
 import sharedConfig from "@repo/tailwind-config";
 import tailwindTypography from '@tailwindcss/typography'
 
-const config: Config = {
+const config = {
   content: ['./src/**/*.{astro,html,ts,tsx,twig,mdx,md}'],
   presets: [sharedConfig],
   plugins: [

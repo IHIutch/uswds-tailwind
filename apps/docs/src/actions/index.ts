@@ -1,7 +1,7 @@
 import type { IconSuffix } from "types";
 import { icons as materialIcons } from "@iconify-json/material-symbols";
 import Fuse from "fuse.js";
-import { getIcons, type IconifyIcon } from "@iconify/utils";
+import { getIcons as getIconifyIcons, type IconifyIcon } from "@iconify/utils";
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 
@@ -62,7 +62,7 @@ export const server = {
       const searchResults = fuse.search(search || '', {
         limit: SEARCH_LIMIT
       })
-      const filteredIconsJson = getIcons(materialIcons, search
+      const filteredIconsJson = getIconifyIcons(materialIcons, search
         ? searchResults.map(i => i.item.id)
         : iconList.sort().slice(0, SEARCH_LIMIT)
       );

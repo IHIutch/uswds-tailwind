@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
 import { createPortal } from 'react-dom';
 
-export default function Search({isMobile}: {isMobile: boolean}) {
+export default function Search({isMobile}: {isMobile?: boolean}) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleOpen = () => {

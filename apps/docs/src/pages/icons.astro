@@ -1,13 +1,18 @@
 ---
+export const prerender = false;
+
 // import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from "#layouts/base-layout.astro";
 import ContentLayout from "#layouts/content-layout.astro";
 import IconList from "#components/icon-list";
 import { actions } from "astro:actions";
 
-let formData = new FormData();
+// Create FormData for the action
+const formData = new FormData();
 formData.append("search", "");
-const { data } = await Astro.callAction(actions.getIcons, formData);
+
+// Use actions.getIcons directly with FormData
+const { data } = await actions.getIcons(formData);
 
 const initialIcons = data?.filteredIcons || [];
 const totalIconCount = data?.totalIconCount || 0;
