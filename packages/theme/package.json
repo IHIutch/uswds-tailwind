@@ -17,6 +17,7 @@
     "src/tailwind.config.ts"
   ],
   "dependencies": {
+    "@iconify/tailwind4": "catalog:",
     "@tailwindcss/forms": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "tailwindcss": "catalog:",

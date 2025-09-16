@@ -2,10 +2,65 @@
   "name": "@uswds-tailwind/compat",
   "type": "module",
   "version": "0.0.4",
+  "sideEffects": [
+    "./dist/init-auto.js"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./init-all": {
+      "types": "./dist/init-all.d.ts",
+      "import": "./dist/init-all.js"
+    },
+    "./auto": {
+      "types": "./dist/init-auto.d.ts",
+      "import": "./dist/init-auto.js"
+    },
+    "./accordion": {
+      "types": "./dist/accordion.d.ts",
+      "import": "./dist/accordion.js"
+    },
+    "./character-count": {
+      "types": "./dist/character-count.d.ts",
+      "import": "./dist/character-count.js"
+    },
+    "./collapse": {
+      "types": "./dist/collapse.d.ts",
+      "import": "./dist/collapse.js"
+    },
+    "./combobox": {
+      "types": "./dist/combobox.d.ts",
+      "import": "./dist/combobox.js"
+    },
+    "./date-picker": {
+      "types": "./dist/date-picker.d.ts",
+      "import": "./dist/date-picker.js"
+    },
+    "./date-range-picker": {
+      "types": "./dist/date-range-picker.d.ts",
+      "import": "./dist/date-range-picker.js"
+    },
+    "./dropdown": {
+      "types": "./dist/dropdown.d.ts",
+      "import": "./dist/dropdown.js"
+    },
+    "./file-input": {
+      "types": "./dist/file-input.d.ts",
+      "import": "./dist/file-input.js"
+    },
+    "./input-mask": {
+      "types": "./dist/input-mask.d.ts",
+      "import": "./dist/input-mask.js"
+    },
+    "./modal": {
+      "types": "./dist/modal.d.ts",
+      "import": "./dist/modal.js"
+    },
+    "./table": {
+      "types": "./dist/table.d.ts",
+      "import": "./dist/table.js"
     }
   },
   "files": [

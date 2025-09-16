@@ -1,15 +1,9 @@
-import { accordionInit, characterCountInit, collapseInit, comboboxInit, datePickerInit, dateRangePickerInit, dropdownInit, fileInputInit, inputMaskInit, modalInit, tableInit } from '@uswds-tailwind/compat'
+// Option 1: Auto-initialize all components
+import '@uswds-tailwind/compat/auto'
 
-document.addEventListener('DOMContentLoaded', () => {
-  modalInit()
-  accordionInit()
-  characterCountInit()
-  comboboxInit()
-  collapseInit()
-  inputMaskInit()
-  dropdownInit()
-  fileInputInit()
-  tableInit()
-  datePickerInit()
-  dateRangePickerInit()
-})
+// Option 2: Manual initialization with full control
+// import { modalInit, accordionInit } from '@uswds-tailwind/compat'
+// document.addEventListener('DOMContentLoaded', () => {
+//   modalInit()
+//   accordionInit()
+// })

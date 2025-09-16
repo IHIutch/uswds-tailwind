@@ -1,3 +1,4 @@
+// Export all components individually
 export * from './accordion'
 export * from './character-count'
 export * from './collapse'

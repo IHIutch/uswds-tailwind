@@ -3,71 +3,112 @@ title: "JavaScript"
 description: "USWDS + Tailwind relies on Alpine.js plugins to power components' functionality. You can install each them independently, as you need them."
 ---
 
-import accordion from '#utils/alpine/accordion?raw'
-import characterCount from '#utils/alpine/character-count?raw'
-import collapse from '#utils/alpine/collapse?raw'
-import combobox from '#utils/alpine/combobox?raw'
-import dropdown from '#utils/alpine/dropdown?raw'
-import fileInput from '#utils/alpine/file-input?raw'
-import inputMask from '#utils/alpine/input-mask?raw'
-import modal from '#utils/alpine/modal?raw'
-import tooltip from '#utils/alpine/tooltip?raw'
-
-
 ## Install and import
-You can initialize your Alpine plugins like so:
+You can initialize your components like so:
 
 ```js title="src/assets/js/main.js"
-import Alpine from '@alpinejs/csp'
-import customPlugin from 'path/to/plugin.js'
- 
-Alpine.plugin(customPlugin)
+// Option 1: Auto-initialize all components
+import '@uswds-tailwind/compat/auto'
+
+// Option 2: Manual initialization with only the components you need
+import { modalInit, accordionInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  modalInit()
+  accordionInit()
+})
 ```
 
-## Alpine Plugins
-
-If you haven't done so already, install the default Alpine plugins with the following:
-
-```bash
-npm i @alpinejs/anchor @alpinejs/focus @alpinejs/mask
-```
-
-## Custom Plugins
+## JavaScript Components
 
 Install the custom plugins by copying and pasting the following code. Not all of the plugins are required and you can install or omit them as necessary for your project.
 
 ### Accordion
 
-<CollapsibleCode code={accordion} lang="ts" title="src/assets/js/accordion.ts" class="rounded" />
+```js
+import { accordionInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  accordionInit()
+})
+```
 
 ### Character Count
 
-<CollapsibleCode code={characterCount} lang="ts" title="src/assets/js/character-count.ts" class="rounded" />
+```js
+import { characterCountInit } from '@uswds-tailwind/compat'
 
-### Collapse
+document.addEventListener('DOMContentLoaded', () => {
+  characterCountInit()
+})
+```
 
-<CollapsibleCode code={collapse} lang="ts" title="src/assets/js/collapse.ts" class="rounded" />
+### Collapse 
+
+```js
+import { collapseInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  collapseInit()
+})
+```
 
 ### Combobox
 
-<CollapsibleCode code={combobox} lang="ts" title="src/assets/js/combobox.ts" class="rounded" />
+```js
+import { comboboxInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  comboboxInit()
+})
+```
 
 ### Dropdown
 
-<CollapsibleCode code={dropdown} lang="ts" title="src/assets/js/dropdown.ts" class="rounded" />
+```js
+import { dropdownInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  dropdownInit()
+})
+```
 
 ### File Input
 
-<CollapsibleCode code={fileInput} lang="ts" title="src/assets/js/file-input.ts" class="rounded" />
+```js
+import { fileInputInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  fileInputInit()
+})
+```
 
 ### Input Mask
 
-<CollapsibleCode code={inputMask} lang="ts" title="src/assets/js/input-mask.ts" class="rounded" />
+```js
+import { inputMaskInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  inputMaskInit()
+})
+```
 
 ### Modal
 
-<CollapsibleCode code={modal} lang="ts" title="src/assets/js/modal.ts" class="rounded" />
+```js
+import { modalInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  modalInit()
+})
+```
 
 ### Tooltip
 
-<CollapsibleCode code={tooltip} lang="ts" title="src/assets/js/tooltip.ts" class="rounded" />
+```js
+import { tooltipInit } from '@uswds-tailwind/compat'
+
+document.addEventListener('DOMContentLoaded', () => {
+  tooltipInit()
+})
+```

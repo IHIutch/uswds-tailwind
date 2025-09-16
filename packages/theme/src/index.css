@@ -587,8 +587,15 @@
     --text-9xl--line-height: calc(1 * var(--font-normalization));
 }
 
-@plugin "@tailwindcss/typography";
 @plugin "@tailwindcss/forms"{
   strategy: 'class',
 }
 @plugin "tailwindcss-animate";
+
+@plugin "@iconify/tailwind4" {
+  scale: 0
+  square: false
+}
+
+@plugin "@tailwindcss/typography";
+@config "@uswds-tailwind/theme/tailwind.config.ts";

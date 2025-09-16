@@ -10,7 +10,7 @@ import exampleTailwindConfig from "../../examples/tailwind-config.txt?raw"
 
 <ProcessList>
 {/* Step 1 */}
-<ProcessStep class="first:*:mt-0 before:top-0">
+<ProcessStep class="*:first:mt-0 before:top-0">
 ## Setup
 
 ### Initialize your project
@@ -25,29 +25,22 @@ npm init -y
 
 This project requires installing a few dependencies to get started:
 
-#### Parcel
+#### USWDS + Tailwind
 
 ```bash
-npm i parcel
+npm i @uswds-tailwind/compat @uswds-tailwind/theme
 ```
 
 #### Tailwind and plugins
 
 ```bash
-npm i tailwindcss @tailwindcss/container-queries @tailwindcss/forms @tailwindcss/typography tailwindcss-animate postcss
-```
-
-
-#### Alpine and plugins
-
-```bash
-npm i @alpinejs/csp @alpinejs/anchor @alpinejs/focus @alpinejs/mask
+npm i tailwindcss @tailwindcss/container-queries @tailwindcss/forms @tailwindcss/typography tailwindcss-animate
 ```
 
 #### Install fonts
 
 ```bash
-npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsource-variable/roboto-mono @fontsource-variable/source-sans-3 @fontsource/merriweather
+npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsource-variable/roboto-mono @fontsource-variable/source-sans-3 @fontsource-variable/merriweather
 ```
 
 #### Install icons
@@ -56,15 +49,16 @@ npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsourc
 npm i @iconify/tailwind @iconify-json/fa6-brands @iconify-json/material-symbols
 ```
 </ProcessStep>
+
 {/* Step 2 */}
-<ProcessStep class="first:*:mt-0 before:top-0">
+<ProcessStep class="*:first:mt-0 before:top-0">
 ## Project structure
 
 Now that we've installed our necessary dependencies, let's build out our project structure and finish setting up our various configurations.
 
 ```bash
 mkdir {src,src/assets,src/assets/js,src/assets/css}
-touch src/index.html src/assets/js/main.js src/assets/css/styles.css .postcssrc.json tailwind.config.js .gitignore
+touch src/index.html src/assets/js/main.js src/assets/css/styles.css .gitignore
 ```
 
 Your project structure should look like this:
@@ -80,113 +74,46 @@ my-project/
 |   |       └── styles.css
 |   └── index.html
 ├── package-lock.json
-├── package.json
-├── .postcssrc
-└── tailwind.config.js
+└── package.json
 ```
 </ProcessStep>
 {/* Step 3 */}
-<ProcessStep class="first:*:mt-0 before:top-0">
+<ProcessStep class="*:first:mt-0 before:top-0">
+
 ## Configure project
-
-### Parcel
-
-Parcel allows us to configure our project directly in the `package.json` file, add the following:
-
-```json title="package.json"
-{
-  // ...
-  "scripts": {
-    "dev": "parcel watch",
-    "build": "parcel build"
-  },
-  // ...
-  "targets": {
-    "js": {
-      "source": "src/assets/js/main.js",
-      "distDir": "build/js"
-    },
-    "css": {
-      "source": "src/assets/css/styles.css",
-      "distDir": "build/css"
-    }
-  },
-  "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "IE 11",
-    "not dead"
-  ]
-}
-```
-
-This adds a `dev` script that we can use to compile our assets during development and a `build` script that optimizes our assets for production.
-
-`targets` tells Parcel where to look for and send our built assets.
-
-Finally, `browserslist` tells Parcel what browsers are supported and how to properly build our assets. For more information on our default setting, head to [browserslist](https://browsersl.ist/#q=%3E+0.5%25%2C+last+2+versions%2C+IE+11%2C+not+dead&region=US).
-
-### PostCSS
-
-In the `.postcssrc.json` file, add the following:
-
-```json title=".postcssrc.json"
-{
-  "plugins": {
-    "tailwindcss": {}
-  }
-}
-```
-
-### Tailwind
-
-Start by configuring `tailwind.config.js`. This configures all of the USWDS colors, breakpoint and container query prefixes, and more.
-
-Note that some breakpoint and container query sizes are commented out; while additional sizes are supported, it is encouraged use as few media queries as possible to limit the complexity of your application as it grows. By default, the USWDS only uses the `mobile-lg`, `tablet`, and `desktop` breakpoints and container query sizes.
-
-<CollapsibleCode title="tailwind.config.js" lang="js" class="rounded" code={exampleTailwindConfig} />
 
 ### CSS
 
-Then, import your fonts and `@tailwind` directives into your `src/assets/css/styles.css` file.
+Then, import your fonts, Tailwind, and the `@uswds-tailwind/theme` directives into your `src/assets/css/styles.css` file.
 
 ```css title="src/assets/css/styles.css"
 /* Only import the fonts you need! */
-@import "npm:@fontsource-variable/open-sans";
-@import "npm:@fontsource-variable/public-sans";
-@import "npm:@fontsource-variable/roboto-mono";
-@import "npm:@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/open-sans";
+@import "@fontsource-variable/public-sans";
+@import "@fontsource-variable/roboto-mono";
+@import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/merriweather";
 
-@import "npm:@fontsource/merriweather/300.css";
-@import "npm:@fontsource/merriweather/400.css";
-@import "npm:@fontsource/merriweather/700.css";
-@import "npm:@fontsource/merriweather/900.css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "@uswds-tailwind/theme";
 ```
 
 ### JavaScript
 
-Now, update your `src/assets/js/main.js` file to import `Alpine` and it's various plugins:
+Now, update your `src/assets/js/main.js` file to initialize your JavaScript components.
 
 <Alert>More information about component specific plugins can be found on the [JavaScript](/javascript) page.</Alert>
 
 ```js title="src/assets/js/main.js"
-import Alpine from "@alpinejs/csp";
-import focus from "@alpinejs/focus"
-import mask from '@alpinejs/mask'
-import anchor from '@alpinejs/anchor'
+// Option 1: Auto-initialize all components
+import '@uswds-tailwind/compat/auto'
 
-Alpine.plugin(focus)
-Alpine.plugin(mask)
-Alpine.plugin(anchor)
-
-if (typeof window.Alpine === "undefined") {
-  window.Alpine = Alpine
-  Alpine.start()
-}
+// Option 2: Manual initialization with only the components you need
+import { modalInit, accordionInit } from '@uswds-tailwind/compat'
+document.addEventListener('DOMContentLoaded', () => {
+  modalInit()
+  accordionInit()
+})
 ```
 
 
@@ -250,7 +177,7 @@ build
 
 </ProcessStep>
 {/* Step 4 */}
-<ProcessStep class="first:*:mt-0 before:top-0">
+<ProcessStep class="*:first:mt-0 before:top-0">
 ## Complete!
 Awesome, now everything is set up! You can run `npm run dev` and open the `index.html` file to see your project in action!
 

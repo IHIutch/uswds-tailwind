@@ -6,9 +6,126 @@ settings:
 
 catalogs:
   default:
+    '@antfu/eslint-config':
+      specifier: ^4.19.0
+      version: 4.19.0
+    '@astrojs/check':
+      specifier: ^0.9.4
+      version: 0.9.4
+    '@astrojs/mdx':
+      specifier: ^4.3.3
+      version: 4.3.4
+    '@astrojs/react':
+      specifier: ^4.3.0
+      version: 4.3.0
+    '@astrojs/sitemap':
+      specifier: ^3.4.2
+      version: 3.5.1
+    '@astrojs/vercel':
+      specifier: ^8.2.5
+      version: 8.2.7
+    '@changesets/cli':
+      specifier: ^2.29.5
+      version: 2.29.5
+    '@docsearch/css':
+      specifier: ^3.9.0
+      version: 3.9.0
+    '@docsearch/react':
+      specifier: ^3.9.0
+      version: 3.9.0
+    '@fontsource-variable/merriweather':
+      specifier: ^5.2.4
+      version: 5.2.4
+    '@fontsource-variable/open-sans':
+      specifier: ^5.2.6
+      version: 5.2.6
+    '@fontsource-variable/public-sans':
+      specifier: ^5.2.6
+      version: 5.2.6
+    '@fontsource-variable/roboto-mono':
+      specifier: ^5.2.6
+      version: 5.2.6
+    '@fontsource-variable/source-sans-3':
+      specifier: ^5.2.8
+      version: 5.2.8
+    '@iconify-json/material-symbols':
+      specifier: ^1.2.30
+      version: 1.2.33
+    '@iconify/json':
+      specifier: ^2.2.366
+      version: 2.2.380
+    '@iconify/tailwind4':
+      specifier: ^1.0.6
+      version: 1.0.6
+    '@iconify/utils':
+      specifier: ^2.3.0
+      version: 2.3.0
+    '@napi-rs/image':
+      specifier: ^1.11.1
+      version: 1.11.2
+    '@playwright/test':
+      specifier: ^1.54.2
+      version: 1.54.2
+    '@tailwindcss/forms':
+      specifier: ^0.5.10
+      version: 0.5.10
+    '@tailwindcss/typography':
+      specifier: 0.5.16
+      version: 0.5.16
+    '@tailwindcss/vite':
+      specifier: ^4.1.11
+      version: 4.1.12
+    '@types/fs-extra':
+      specifier: 11.0.1
+      version: 11.0.1
+    '@types/node':
+      specifier: 18.16.19
+      version: 18.16.19
+    '@types/prettier':
+      specifier: 2.7.3
+      version: 2.7.3
+    '@types/react':
+      specifier: ^19.1.9
+      version: 19.1.12
+    '@types/react-dom':
+      specifier: ^19.1.7
+      version: 19.1.9
+    '@types/twig':
+      specifier: ^1.12.17
+      version: 1.12.17
+    '@vercel/analytics':
+      specifier: ^1.5.0
+      version: 1.5.0
+    '@vitest/browser':
+      specifier: ^3.2.4
+      version: 3.2.4
+    '@zag-js/anatomy':
+      specifier: ^1.21.1
+      version: 1.22.1
+    '@zag-js/aria-hidden':
+      specifier: 1.21.1
+      version: 1.21.1
     '@zag-js/core':
       specifier: ^1.21.1
       version: 1.21.1
+    '@zag-js/dismissable':
+      specifier: 1.21.1
+      version: 1.21.1
+    '@zag-js/dom-query':
+      specifier: 1.21.1
+      version: 1.21.1
+    '@zag-js/focus-trap':
+      specifier: ^1.21.1
+      version: 1.21.1
+    '@zag-js/popper':
+      specifier: ^1.21.6
+      version: 1.22.1
+    '@zag-js/remove-scroll':
+      specifier: ^1.21.1
+      version: 1.21.1
+    '@zag-js/splitter':
+      specifier: ^1.21.1
+      version: 1.22.1
     '@zag-js/store':
       specifier: ^1.21.1
       version: 1.22.1
@@ -18,9 +135,84 @@ catalogs:
     '@zag-js/utils':
       specifier: ^1.21.1
       version: 1.21.1
+    astro:
+      specifier: ^5.12.8
+      version: 5.13.5
+    astro-expressive-code:
+      specifier: ^0.41.3
+      version: 0.41.3
+    astro-seo:
+      specifier: ^0.8.4
+      version: 0.8.4
+    eslint:
+      specifier: ^9.32.0
+      version: 9.32.0
+    find-up:
+      specifier: 6.3.0
+      version: 6.3.0
+    fs-extra:
+      specifier: 11.1.1
+      version: 11.1.1
+    fuse.js:
+      specifier: ^7.1.0
+      version: 7.1.0
+    github-slugger:
+      specifier: ^2.0.0
+      version: 2.0.0
     nanoid:
       specifier: ^5.1.5
       version: 5.1.5
+    playwright:
+      specifier: ^1.54.2
+      version: 1.54.2
+    react:
+      specifier: 19.1.0
+      version: 19.1.0
+    react-dom:
+      specifier: 19.1.0
+      version: 19.1.0
+    satori:
+      specifier: ^0.12.2
+      version: 0.12.2
+    sharp:
+      specifier: ^0.34.3
+      version: 0.34.3
+    tailwindcss:
+      specifier: 4.1.11
+      version: 4.1.11
+    tailwindcss-animate:
+      specifier: ^1.0.7
+      version: 1.0.7
+    tiny-invariant:
+      specifier: ^1.3.3
+      version: 1.3.3
+    ts-morph:
+      specifier: 19.0.0
+      version: 19.0.0
+    ts-pattern:
+      specifier: 5.0.3
+      version: 5.0.3
+    tsdown:
+      specifier: ^0.12.9
+      version: 0.12.9
+    tsx:
+      specifier: ^4.20.3
+      version: 4.20.5
+    turbo:
+      specifier: ^2.5.5
+      version: 2.5.5
+    twig:
+      specifier: ^1.17.1
+      version: 1.17.1
+    typescript:
+      specifier: ^5.9.2
+      version: 5.9.2
+    vite:
+      specifier: ^7.0.6
+      version: 7.1.4
+    vitest:
+      specifier: ^3.2.4
+      version: 3.2.4
 
 importers:
 
@@ -80,6 +272,9 @@ importers:
       '@docsearch/react':
         specifier: 'catalog:'
         version: 3.9.0(@algolia/client-search@5.36.0)(@types/react@19.1.12)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)
+      '@fontsource-variable/merriweather':
+        specifier: 'catalog:'
+        version: 5.2.4
       '@fontsource-variable/open-sans':
         specifier: 'catalog:'
         version: 5.2.6
@@ -92,9 +287,6 @@ importers:
       '@fontsource-variable/source-sans-3':
         specifier: 'catalog:'
         version: 5.2.8
-      '@fontsource/merriweather':
-        specifier: 'catalog:'
-        version: 5.2.9
       '@iconify-json/material-symbols':
         specifier: 'catalog:'
         version: 1.2.33
@@ -276,7 +468,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/aria-hidden':
         specifier: 'catalog:'
         version: 1.21.1
@@ -303,7 +495,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/aria-hidden':
         specifier: 'catalog:'
         version: 1.21.1
@@ -333,7 +525,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/aria-hidden':
         specifier: 'catalog:'
         version: 1.21.1
@@ -363,7 +555,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
@@ -378,7 +570,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
@@ -399,7 +591,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
@@ -423,7 +615,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
@@ -441,7 +633,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/core':
         specifier: 'catalog:'
         version: 1.21.1
@@ -456,7 +648,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/aria-hidden':
         specifier: 'catalog:'
         version: 1.21.1
@@ -486,7 +678,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/aria-hidden':
         specifier: 'catalog:'
         version: 1.21.1
@@ -516,7 +708,7 @@ importers:
     dependencies:
       '@zag-js/anatomy':
         specifier: 'catalog:'
-        version: 1.21.1
+        version: 1.22.1
       '@zag-js/aria-hidden':
         specifier: 'catalog:'
         version: 1.21.1
@@ -544,6 +736,9 @@ importers:
 
   packages/theme:
     dependencies:
+      '@iconify/tailwind4':
+        specifier: 'catalog:'
+        version: 1.0.6(tailwindcss@4.1.11)
       '@tailwindcss/forms':
         specifier: 'catalog:'
         version: 0.5.10(tailwindcss@4.1.11)
@@ -1256,9 +1451,6 @@ packages:
 
   '@fontsource-variable/source-sans-3@5.2.8':
     resolution: {integrity: sha512-iRQD4k06Wxm1668+AbPBoVo+CbgRsOz2E0/XibDJ7kAm9UhdhmNmsMTvs9KEl/mQxUj/487tr9w47NoM/TMhZQ==}
-
-  '@fontsource/merriweather@5.2.9':
-    resolution: {integrity: sha512-amd5Wp7BM5U0HE/FUgsJmf/dvfqSKYf55HrxR1tMlpT3BqQmVZHB9RJDBpNqqf3/yF6fkryCbx5H9fEMa4mY3g==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2344,9 +2536,6 @@ packages:
 
   '@vue/shared@3.5.13':
     resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
-
-  '@zag-js/anatomy@1.21.1':
-    resolution: {integrity: sha512-KFDf1kMLJblsuzAPpfqt2Ti1B0jVtC3ZAQUYLixgUIzI+bnyq7T3IlPK38wpczqvruUijFSKtjS+tXBfR/P4fg==}
 
   '@zag-js/anatomy@1.22.1':
     resolution: {integrity: sha512-I5OvOuJBt6hEqbpqVkWCOEoDfGMnKuLx+S0h7Un5SyAwnif3F1dSqDYujU28bCy8FtKs36vsq/izxufXyiXSEg==}
@@ -6254,8 +6443,6 @@ snapshots:
 
   '@fontsource-variable/source-sans-3@5.2.8': {}
 
-  '@fontsource/merriweather@5.2.9': {}
-
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -7351,8 +7538,6 @@ snapshots:
       '@vue/shared': 3.5.13
 
   '@vue/shared@3.5.13': {}
-
-  '@zag-js/anatomy@1.21.1': {}
 
   '@zag-js/anatomy@1.22.1': {}
 

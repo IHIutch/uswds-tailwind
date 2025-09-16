@@ -1,21 +1,16 @@
 @import "tailwindcss";
 @import "@uswds-tailwind/theme";
-@config "@uswds-tailwind/theme/tailwind.config.ts";
 
 @import "@fontsource-variable/open-sans";
 @import "@fontsource-variable/public-sans";
 @import "@fontsource-variable/roboto-mono";
 @import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/merriweather";
 
-@import "@fontsource/merriweather/300.css";
-@import "@fontsource/merriweather/400.css";
-@import "@fontsource/merriweather/700.css";
-@import "@fontsource/merriweather/900.css";
-
-@plugin "@iconify/tailwind4";
 @plugin "@tailwindcss/typography"{
   className: docs-prose;
 }
+/* @config "@uswds-tailwind/theme/tailwind.config.ts"; */
 
 .docs-prose {
   &

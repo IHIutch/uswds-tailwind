@@ -1,8 +1,8 @@
 import type { Config, PluginUtils } from 'tailwindcss/plugin'
-import tailwindTypography from '@tailwindcss/typography'
+// import tailwindTypography from '@tailwindcss/typography'
 
 const config = {
-  plugins: [tailwindTypography()],
+  // plugins: [tailwindTypography()],
   theme: {
     extend: {
       typography: ({ theme }: PluginUtils) => ({
