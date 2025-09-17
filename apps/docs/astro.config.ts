@@ -14,7 +14,7 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://uswds-tailwind.com',
   trailingSlash: 'never',
-  output: 'server',
+  output: "static",
   integrations: [
     expressiveCode({
       themes: ['light-plus', 'dark-plus'],
