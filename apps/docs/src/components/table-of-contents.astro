@@ -6,7 +6,6 @@ type Props = {
 };
 
 const { headings } = Astro.props;
-const activeHeadingSlug = "";
 ---
 
 <aside
@@ -18,26 +17,108 @@ const activeHeadingSlug = "";
       {
         headings.map((heading) => (
           <li
-            class="border-l-4"
+            class="border-l-4 border-transparent data-[active]:border-black"
             class:list={[
-              activeHeadingSlug === heading.slug
-                ? "border-black"
-                : "border-transparent",
               { "pl-3": heading.depth === 3 },
               { "pl-6": heading.depth === 4 },
             ]}
           >
-            <div class:list={{}}>
-              <a
-                href={`#${heading.slug}`}
-                class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v text-sm"
-              >
-                <span>{heading.text}</span>
-              </a>
-            </div>
+            <a
+              href={`#${heading.slug}`}
+              class="block relative py-1.5 px-4 text-blue-60v hover:text-blue-70v hover:underline focus:outline focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v text-sm"
+            >
+              <span>{heading.text}</span>
+            </a>
           </li>
         ))
       }
     </ul>
   </div>
 </aside>
+
+<script>
+  function initTOC() {
+    const tocLinks =
+      document.querySelectorAll<HTMLAnchorElement>("aside a[href^='#']");
+    const headings = document.querySelectorAll("main :is(h2,h3,h4,h5,h6)[id]");
+
+    if (!headings.length || !tocLinks.length) return;
+
+    const visibleHeadings = new Set<string>();
+    let hasScrolled = false;
+    let currentActiveId = headings[0].id;
+    let lastScrollTop = 0;
+
+    const scrollContainer = document.querySelector("#content-container")!;
+    scrollContainer.addEventListener("scroll", () => (hasScrolled = true), {
+      once: true,
+    });
+
+    function setActiveHeading(activeId: string) {
+      tocLinks.forEach((link) => {
+        link
+          .closest("li")
+          ?.toggleAttribute(
+            "data-active",
+            link.getAttribute("href") === `#${activeId}`,
+          );
+      });
+    }
+
+    setActiveHeading(currentActiveId);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            visibleHeadings.add(entry.target.id);
+          } else {
+            visibleHeadings.delete(entry.target.id);
+          }
+        });
+
+        let activeId = currentActiveId;
+
+        if (!hasScrolled) {
+          activeId = headings[0].id;
+        } else if (visibleHeadings.size > 0) {
+          const isScrollingDown = scrollContainer.scrollTop >= lastScrollTop;
+          lastScrollTop = scrollContainer.scrollTop;
+
+          const headingsArray = Array.from(headings);
+          const visibleInOrder = isScrollingDown
+            ? headingsArray.filter((h) => visibleHeadings.has(h.id))
+            : headingsArray.filter((h) => visibleHeadings.has(h.id)).reverse();
+
+          if (visibleInOrder.length > 0) {
+            activeId = visibleInOrder[0].id;
+          }
+        }
+
+        if (
+          activeId !== currentActiveId &&
+          Array.from(tocLinks).some(
+            (link) => link.getAttribute("href") === `#${activeId}`,
+          )
+        ) {
+          currentActiveId = activeId;
+          setActiveHeading(currentActiveId);
+        }
+      },
+      {
+        rootMargin: "-100px 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    const tocHeadingIds = Array.from(tocLinks)
+      .map((link) => link.getAttribute("href")?.replace("#", ""))
+      .filter(Boolean);
+
+    Array.from(headings)
+      .filter((heading) => tocHeadingIds.includes(heading.id))
+      .forEach((heading) => observer.observe(heading));
+  }
+
+  document.addEventListener("DOMContentLoaded", initTOC);
+</script>

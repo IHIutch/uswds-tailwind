@@ -44,7 +44,10 @@ const allComponents = components.sort((a, b) =>
       </ul>
     </nav>
   </div>
-  <div class="desktop:pl-64 desktop-lg:pr-64 overflow-auto w-full">
+  <div
+    id="content-container"
+    class="desktop:pl-64 desktop-lg:pr-64 overflow-auto w-full"
+  >
     <slot />
     <Footer class="max-w-6xl mx-auto border-t border-t-gray-cool-5" />
   </div>
