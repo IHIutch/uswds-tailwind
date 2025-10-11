@@ -62,12 +62,18 @@ export const server = {
       const searchResults = fuse.search(search || '', {
         limit: SEARCH_LIMIT
       })
-      const filteredIconsJson = getIconifyIcons(materialIcons, search
+      const iconNames = search
         ? searchResults.map(i => i.item.id)
         : iconList.sort().slice(0, SEARCH_LIMIT)
-      );
+      
+      const filteredIconsJson = getIconifyIcons(materialIcons, iconNames);
 
-      const filteredIcons = Object.keys(filteredIconsJson?.icons || {}).sort()
+      const filteredIcons = Object.entries(filteredIconsJson?.icons || {})
+        .map(([name, iconData]) => ({
+          name,
+          body: iconData?.body || ''
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name))
 
       return {
         filteredIcons,

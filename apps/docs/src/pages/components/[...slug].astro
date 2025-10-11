@@ -4,7 +4,7 @@ import BaseLayout from "#layouts/base-layout.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import ContentList from "#components/content-list.astro";
 import TableOfContents from "#components/table-of-contents.astro";
-import ComponentPreview from "#components/component-preview.astro";
+import ComponentPreviewWrapper from "#components/component-preview-wrapper.astro";
 import ContentLayout from "#layouts/content-layout.astro";
 import Alert from "#components/alert.astro";
 
@@ -46,7 +46,7 @@ const visibleHeadings = headings.filter((h) => h.depth <= 3);
             <Content
               components={{
                 ContentList,
-                ComponentPreview,
+                ComponentPreview: ComponentPreviewWrapper,
                 Alert,
               }}
             />

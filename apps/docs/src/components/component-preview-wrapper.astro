@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getComponentData } from "#utils/functions";
+import ComponentPreview from "./component-preview.astro";
+
+type Props = {
+  component: CollectionEntry<"demos">["data"]["component"];
+  variant: CollectionEntry<"demos">["data"]["variant"];
+  minHeight?: string;
+  resize?: boolean;
+  title?: string;
+};
+
+const { component, variant, minHeight, resize = true, title } = Astro.props;
+
+// Load component data at build time
+const { props: componentProps, code: componentCode, path: componentPath, template } = await getComponentData(component, variant);
+---
+
+<ComponentPreview
+  component={component}
+  variant={variant}
+  minHeight={minHeight}
+  resize={resize}
+  componentCode={componentCode}
+  componentProps={componentProps}
+  componentPath={componentPath}
+  template={template}
+/>

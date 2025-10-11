@@ -14,7 +14,7 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://uswds-tailwind.com',
   trailingSlash: 'never',
-  output: "static",
+  output: "server",
   integrations: [
     expressiveCode({
       themes: ['light-plus', 'dark-plus'],
@@ -45,6 +45,11 @@ export default defineConfig({
   //   }
   // },
   vite: {
+    build: {
+      rollupOptions: {
+        external: ['@napi-rs/image-wasm32-wasi']
+      }
+    },
     css: {
       postcss: {
         plugins: [tailwindNesting()]

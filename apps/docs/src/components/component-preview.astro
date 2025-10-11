@@ -1,6 +1,4 @@
 ---
-import fs from "node:fs";
-
 import type { CollectionEntry } from "astro:content";
 import graphPaper from "#assets/img/graph-paper.svg";
 import { renderTwigTemplate } from "#utils/functions";
@@ -11,22 +9,23 @@ type Props = {
   variant: CollectionEntry<"demos">["data"]["variant"];
   minHeight?: string;
   resize?: boolean;
+  componentCode?: string;
+  componentProps?: any;
+  componentPath?: string;
+  template?: string;
 };
 
-const { component, variant, minHeight, resize = true } = Astro.props;
+const { component, variant, minHeight, resize = true, componentCode, componentProps, componentPath, template } = Astro.props;
 
-const propsPath = `./src/__demos__/${component}/${component}-props.json`;
-const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`;
+// If pre-loaded data isn't provided, we need the path for template rendering
+const actualComponentPath = componentPath || `./src/__demos__/${component}/examples/${variant}.twig`;
+const actualComponentProps = componentProps || "";
+const actualComponentCode = componentCode || "";
 
-let componentProps = "";
-if (fs.existsSync(propsPath)) {
-  componentProps = JSON.parse(fs.readFileSync(propsPath, "utf8"));
-}
-
-const componentCode = fs.readFileSync(componentPath, "utf-8");
-const template = await renderTwigTemplate({
-  path: componentPath,
-  props: componentProps || "",
+// Use pre-rendered template if provided, otherwise render at runtime
+const actualTemplate = template || await renderTwigTemplate({
+  path: actualComponentPath,
+  props: actualComponentProps,
 });
 ---
 
@@ -89,7 +88,7 @@ const template = await renderTwigTemplate({
         >
           <div x-data style={{ minHeight: minHeight || "none" }}>
             <!-- Example start -->
-            <Fragment set:html={template} />
+            <Fragment set:html={actualTemplate} />
             <!-- Example end -->
           </div>
         </div>
@@ -138,7 +137,7 @@ const template = await renderTwigTemplate({
       </div>
       <CollapsibleCode
         class="rounded-b [&_pre]:!rounded-none [&_pre]:!border-0 [&_button]:!border-0"
-        code={componentCode}
+        code={actualComponentCode}
         lang="twig"
       />
     </div>
