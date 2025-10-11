@@ -6,7 +6,7 @@ import alpinejs from "@astrojs/alpinejs";
 import tailwindNesting from '@tailwindcss/nesting';
 import expressiveCode from "astro-expressive-code";
 import react from "@astrojs/react";
-import vercel from "@astrojs/vercel";
+import cloudflare from '@astrojs/cloudflare'
 
 import sitemap from "@astrojs/sitemap";
 
@@ -54,9 +54,5 @@ export default defineConfig({
   redirects: {
     '/components': '/components/accordion'
   },
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true
-    }
-  })
+  adapter: cloudflare(),
 });
