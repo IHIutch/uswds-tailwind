@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "turbo build",
+    "build:docs": "cd apps/docs && pnpm build",
+    "deploy:docs": "cd apps/docs && pnpm wrangler deploy",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "storybook": "turbo storybook",
