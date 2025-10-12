@@ -13,8 +13,6 @@ import sitemap from "@astrojs/sitemap";
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://uswds-tailwind.com',
-  trailingSlash: 'never',
-  output: "server",
   integrations: [
     expressiveCode({
       themes: ['light-plus', 'dark-plus'],
@@ -44,20 +42,34 @@ export default defineConfig({
   //     }
   //   }
   // },
+  adapter: cloudflare({
+    imageService: 'compile',
+    // routes: {
+    //   extend: {
+    //     include: [{ pattern: '/actions/**' }],
+    //     exclude: [{ pattern: '/**' }]
+    //   }
+    // }
+  }),
   vite: {
-    build: {
-      rollupOptions: {
-        external: ['@napi-rs/image-wasm32-wasi']
-      }
-    },
     css: {
       postcss: {
         plugins: [tailwindNesting()]
+      }
+    },
+    // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#nodejs-compatibility
+    ssr: {
+      external: ['@napi-rs/image-wasm32-wasi', 'node:fs', 'node:path', 'twig']
+    },
+    build: {
+      // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#meaningful-error-messages
+      minify: false,
+      rollupOptions: {
+        external: ['@napi-rs/image-wasm32-wasi']
       }
     }
   },
   redirects: {
     '/components': '/components/accordion'
-  },
-  adapter: cloudflare(),
+  }
 });

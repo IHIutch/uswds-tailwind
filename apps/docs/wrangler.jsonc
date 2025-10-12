@@ -1,5 +1,6 @@
 {
   "name": "uswds-tailwind",
+  "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2025-09-18",
   "compatibility_flags": [
     "nodejs_compat"
