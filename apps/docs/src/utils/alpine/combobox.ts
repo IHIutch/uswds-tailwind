@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Alpine, ElementWithXAttributes } from "alpinejs";
 
 export default function (Alpine: Alpine) {

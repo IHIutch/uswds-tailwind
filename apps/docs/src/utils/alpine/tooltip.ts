@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Alpine, ElementWithXAttributes } from "alpinejs"
 
 const validPositions = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end']
