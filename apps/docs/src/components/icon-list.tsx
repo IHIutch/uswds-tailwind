@@ -1,62 +1,91 @@
 import * as React from 'react'
-import { useDebounce } from "#utils/use-debounce";
-import { copyToClipboard } from '#utils/copy-to-clipboard';
 import { actions } from 'astro:actions';
+import { withState } from '@astrojs/react/actions';
+import { useDebounce } from '#utils/use-debounce';
+import { copyToClipboard } from '#utils/copy-to-clipboard';
 
 type IconData = {
   name: string;
   svg: string;
 }
 
-export default function IconList() {
+export default function IconList({ initialIcons, totalIconCount }: { initialIcons: IconData[], totalIconCount: number }) {
   const [search, setSearch] = React.useState('')
-  const [filteredIcons, setFilteredIcons] = React.useState<IconData[]>([])
+  const [isTyping, setIsTyping] = React.useState(false)
+  const formRef = React.useRef<HTMLFormElement>(null)
 
   const debouncedSearch = useDebounce(search, 300);
 
-  React.useEffect(() => {
-    async function handleSubmit(search: string) {
-      const { data } = await actions.searchIcons({ query: search })
-      setFilteredIcons(data || [])
+  const [state, action, pending] = React.useActionState(
+    withState(async (formData: FormData) => {
+      const query = formData.get('search') as string;
+      return actions.searchIcons({ query });
+    }),
+    {
+      data: {
+        filteredIcons: initialIcons,
+        totalIconCount
+      },
+      error: undefined
     }
+  );
 
-    handleSubmit(debouncedSearch)
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+
+    if (debouncedSearch.trim()) {
+      action(new FormData(form))
+    } else {
+      if (state?.data) state.data.filteredIcons = initialIcons;
+    }
+  }
+
+  React.useEffect(() => {
+    formRef.current?.requestSubmit()
+    setIsTyping(false)
   }, [debouncedSearch]);
 
   return (
     <div className="border border-gray-cool-20">
       <div className="border-b border-gray-cool-20 p-4">
         <div className="mb-2">
-          <label htmlFor="icons" className="block">Type to filter icons</label>
-          <div className="mt-2 relative">
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              id="icons"
-              type="search"
-              name="search"
-              className="p-2 w-full max-w-lg h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-            />
-          </div>
+          <form onSubmit={handleSubmit} ref={formRef}>
+            <label htmlFor="icons" className="block">Search icons</label>
+            <div className="mt-2 relative max-w-lg">
+              <div className="absolute w-8 left-0 inset-y-0 flex items-center justify-center text-blue-60v pointer-events-none">
+                <div className="icon-[material-symbols--search] size-6"></div>
+              </div>
+              <input
+                onChange={(e) => {
+                  setSearch(e.target.value)
+                  setIsTyping(true)
+                }}
+                id="icons"
+                type="search"
+                name="search"
+                className="py-2 pl-8 pr-10 w-full h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 [-webkit-search-decoration:appearance-none]"
+              />
+              {(isTyping || pending)
+                ? (
+                  <div className="absolute w-10 right-0 inset-y-0 flex items-center justify-center animate-spin text-blue-60v">
+                    <div className="icon-[material-symbols--progress-activity] size-6"></div>
+                  </div>
+                ) : null}
+            </div>
+          </form>
         </div>
-        <p aria-live="polite" className="text-gray-50">Click an icon to copy its class name.</p>
+        <p aria-live="polite" className="text-gray-50">
+          Showing {state.data?.filteredIcons.length} of {totalIconCount}
+        </p>
       </div>
       <div className="bg-gray-cool-2 p-4">
         {
-          filteredIcons.length > 0 ? (
-            <ul className="grid grid-cols-3 gap-3">
-              {filteredIcons.map((icon) => (
+          (state.data && state.data?.filteredIcons.length > 0) ? (
+            <ul className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
+              {state.data?.filteredIcons.map((icon) => (
                 <li key={icon.name}>
-                  <button
-                    className="text-gray-cool-80 gap-2 border border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full"
-                    onClick={() => copyToClipboard('icon-[material-symbols--' + icon.name + ']')}
-                    title={'.icon-[material-symbols--' + icon.name + ']'}
-                  >
-                    <div className="size-8" dangerouslySetInnerHTML={{ __html: icon.svg }} />
-                    <div className="truncate text-ellipsis w-full">
-                      <span aria-hidden className="text-xs">{'.icon-[material-symbols--' + icon.name + ']'}</span>
-                      <span className="sr-only">{icon.name.replaceAll('-', ' ')}</span>
-                    </div>
-                  </button>
+                  <IconButton icon={icon} />
                 </li>
               ))}
             </ul>
@@ -68,5 +97,51 @@ export default function IconList() {
         }
       </div>
     </div>
+  )
+}
+
+const IconButton = ({ icon }: { icon: IconData }) => {
+  const [isCopied, setIsCopied] = React.useState(false)
+  const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
+
+  const handleCopyToClipboard = () => {
+    copyToClipboard('icon-[material-symbols--' + icon.name + ']')
+    setIsCopied(true)
+    setCopyMessage(`material symbols ${icon.name} copied to clipboard`)
+
+    setTimeout(() => setIsCopied(false), 1000)
+  }
+
+  return (
+    <>
+      <button
+        className="text-gray-cool-80 gap-1 border h-32 border-gray-cool-10 bg-white rounded flex flex-col items-center justify-center p-4 shadow hover:bg-gray-cool-2 focus:outline focus:outline-4 focus:outline-blue-40v w-full relative overflow-hidden"
+        onClick={() => handleCopyToClipboard()}
+      >
+        <div className="size-8">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            viewBox="0 0 24 24"
+            dangerouslySetInnerHTML={{
+              __html: icon.svg
+            }}
+          />
+        </div>
+        <div className="truncate text-ellipsis w-full">
+          <span className="text-xs" aria-hidden="true">{'.icon-[material-symbols--' + icon.name + ']'}</span>
+          <span className="sr-only">Copy {icon.name} icon to clipboard</span>
+        </div>
+        {isCopied
+          ? (
+            <div className="absolute inset-x-0 bottom-0 pb-1">
+              <span aria-hidden="true" className="text-xs font-medium text-green">Copied to clipboard!</span>
+            </div>
+          )
+          : null}
+      </button>
+      <span aria-live="polite" className="sr-only">{copyMessage}</span>
+    </>
   )
 }

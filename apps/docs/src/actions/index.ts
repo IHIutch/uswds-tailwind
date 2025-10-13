@@ -1,86 +1,82 @@
-import type { IconSuffix } from "types";
-// import { icons as materialIcons } from "@iconify-json/material-symbols";
-// import Fuse from "fuse.js";
-// import { getIcons as getIconifyIcons, type IconifyIcon } from "@iconify/utils";
-import { defineAction } from 'astro:actions';
-import { z } from 'astro:schema';
+import type { IconifyJSON } from '@iconify/types'
+import { defineAction } from 'astro:actions'
+import { z } from 'astro:schema'
+import Fuse from 'fuse.js'
 
-// const suffixes: Record<IconSuffix, string> = {
-//   'outline-rounded': 'Outline Rounded',
-//   'outline-sharp': 'Outline Sharp',
-//   'outline': 'Outline',
-//   'rounded': 'Rounded',
-//   'sharp': 'Sharp',
-//   '': "Filled",
-// };
+// Cache for all icons and Fuse instance to avoid repeated API calls and initialization
+let iconCache: string[] = []
+let fuseInstance: Fuse<{ id: string; humanName: string }> | null = null
 
-// const groupedIconList = Object.entries(materialIcons.icons).reduce((acc, [iconName, iconData]) => {
-//   const matchedSuffix = (Object.keys(suffixes) as IconSuffix[]).find(suffix => iconName.endsWith(suffix)) || '';
+async function initializeSearch(): Promise<{ icons: string[]; fuse: Fuse<{ id: string; humanName: string }> }> {
+  if (iconCache && fuseInstance) {
+    return { icons: iconCache, fuse: fuseInstance }
+  }
 
-//   if (!acc[matchedSuffix]) acc[matchedSuffix] = {}; // Initialize the object if it doesn't exist
+  // Fetch icons if not cached
+  if (!iconCache) {
+    const collection = await fetch(`https://api.iconify.design/collection?prefix=material-symbols`)
+    const collectionData = await collection.json() as { categories?: Record<string, string[]> }
+    iconCache = collectionData.categories ? Object.values(collectionData.categories || {}).flat().sort() : []
+  }
 
-//   acc[matchedSuffix][iconName] = iconData;
-//   return acc;
-// }, {} as Record<IconSuffix, Record<string, IconifyIcon | null>>);
+  // Initialize Fuse if not cached
+  if (!fuseInstance) {
+    const searchList = iconCache.map(name => ({
+      id: name,
+      humanName: name.replaceAll('-', ' ')
+    }))
 
-// function getIconNamesBySuffix(suffix?: IconSuffix): string[] {
-//   const iconsBySuffix = suffix
-//     ? Object.keys(groupedIconList[suffix])
-//     : Object.keys({
-//       ...groupedIconList['sharp'],
-//       ...groupedIconList['outline-sharp'],
-//       ...groupedIconList['']
-//     })
+    fuseInstance = new Fuse(searchList, {
+      threshold: 0.3,
+      distance: 100,
+      ignoreLocation: true,
+      keys: ['id', 'humanName']
+    })
+  }
 
-//   return iconsBySuffix
-// }
-
-// const iconList = getIconNamesBySuffix()
-// const iconSearchList = iconList.map(i => ({
-//   id: i,
-//   humanName: i.replaceAll('-', ' ')
-// }))
-
-// const fuse = new Fuse(iconSearchList, {
-//   threshold: 0.2,
-//   distance: 100,
-//   ignoreLocation: true,
-//   keys: [
-//     "humanName"
-//   ]
-// });
-
-// "https://api.iconify.design/collection?prefix=material-symbols"
-// "/keywords?prefix=hom&pretty=1"
-
-const SEARCH_LIMIT = 150
+  return { icons: iconCache, fuse: fuseInstance }
+}
 
 export const server = {
   searchIcons: defineAction({
-    accept: "form",
     input: z.object({
       query: z.string(),
     }),
     handler: async ({ query }) => {
-      const searchQuery = query.trim()
-      const searchUrl = new URL('https://api.iconify.design/search')
-      searchUrl.searchParams.set('query', searchQuery)
-      searchUrl.searchParams.set('prefix', 'material-symbols')
-      searchUrl.searchParams.set('limit', SEARCH_LIMIT.toString())
+      const trimmedQuery = query.trim()
+      const { icons, fuse } = await initializeSearch()
 
-      const searchResponse = await fetch(searchUrl)
-      const searchData = await searchResponse.json() as { icons?: string[] }
+      let iconNames: string[]
 
-      if (!searchData.icons) return []
+      if (trimmedQuery) {
+        // Use cached Fuse instance for fuzzy search
+        const results = fuse.search(trimmedQuery, { limit: 150 })
+        iconNames = results.map(result => result.item.id)
+      } else {
+        // Show first 150 icons alphabetically
+        iconNames = icons.slice(0, 150)
+      }
 
-      const iconPromises = searchData.icons.map(async (iconName: string) => {
-        const name = iconName.replace('material-symbols:', '')
-        const svgResponse = await fetch(`https://api.iconify.design/${iconName}.svg?height=100%`)
-        const svg = await svgResponse.text()
-        return { name, svg }
-      })
+      if (!iconNames.length) return {
+        filteredIcons: [],
+        totalIconCount: iconCache.length
+      }
 
-      return Promise.all(iconPromises)
+      // Get SVGs for each icon
+      // const filteredIcons = await Promise.all(
+      //   iconNames.map(async (name: string) => {
+      //     const svg = await fetch(`https://api.iconify.design/material-symbols:${name}.svg?height=unset`).then(r => r.text())
+      //     return { name, svg }
+      //   })
+      // )
+
+      const iconRes = await fetch(`https://api.iconify.design/material-symbols.json?icons=${iconNames.join(',')}`)
+      const filteredIcons = await iconRes.json() as IconifyJSON
+
+      return {
+        filteredIcons: Object.entries(filteredIcons?.icons || {}).map(([key, value]) => ({ name: key, svg: value.body })),
+        totalIconCount: (iconCache || []).length
+      }
     }
   })
 }
