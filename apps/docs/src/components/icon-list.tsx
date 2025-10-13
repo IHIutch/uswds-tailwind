@@ -4,12 +4,12 @@ import { withState } from '@astrojs/react/actions';
 import { useDebounce } from '#utils/use-debounce';
 import { copyToClipboard } from '#utils/copy-to-clipboard';
 
-type IconData = {
-  name: string;
-  svg: string;
+type Props = {
+  initialIcons: NonNullable<Awaited<ReturnType<typeof actions.searchIcons>>['data']>['filteredIcons'];
+  totalIconCount: NonNullable<Awaited<ReturnType<typeof actions.searchIcons>>['data']>['totalIconCount'];
 }
 
-export default function IconList({ initialIcons, totalIconCount }: { initialIcons: IconData[], totalIconCount: number }) {
+export default function IconList({ initialIcons, totalIconCount }: Props) {
   const [search, setSearch] = React.useState('')
   const [isTyping, setIsTyping] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement>(null)
@@ -17,10 +17,7 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
   const debouncedSearch = useDebounce(search, 300);
 
   const [state, action, pending] = React.useActionState(
-    withState(async (formData: FormData) => {
-      const query = formData.get('search') as string;
-      return actions.searchIcons({ query });
-    }),
+    withState(actions.searchIcons),
     {
       data: {
         filteredIcons: initialIcons,
@@ -100,7 +97,7 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
   )
 }
 
-const IconButton = ({ icon }: { icon: IconData }) => {
+const IconButton = ({ icon }: { icon: Props['initialIcons'][number] }) => {
   const [isCopied, setIsCopied] = React.useState(false)
   const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
 

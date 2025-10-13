@@ -39,6 +39,7 @@ async function initializeSearch(): Promise<{ icons: string[]; fuse: Fuse<{ id: s
 
 export const server = {
   searchIcons: defineAction({
+    accept: 'form',
     input: z.object({
       query: z.string(),
     }),
@@ -75,7 +76,7 @@ export const server = {
 
       return {
         filteredIcons: Object.entries(filteredIcons?.icons || {}).map(([key, value]) => ({ name: key, svg: value.body })),
-        totalIconCount: (iconCache || []).length
+        totalIconCount: iconCache.length
       }
     }
   })
