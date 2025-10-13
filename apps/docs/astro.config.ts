@@ -59,14 +59,11 @@ export default defineConfig({
     },
     // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#nodejs-compatibility
     ssr: {
-      external: ['@napi-rs/image-wasm32-wasi', 'node:fs', 'node:path', 'twig']
+      external: ['node:fs', 'node:path', 'twig']
     },
     build: {
       // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#meaningful-error-messages
       minify: false,
-      rollupOptions: {
-        external: ['@napi-rs/image-wasm32-wasi']
-      }
     }
   },
   redirects: {

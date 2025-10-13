@@ -1,7 +1,9 @@
-import satori, { type SatoriOptions } from 'satori'
-import { Transformer } from '@napi-rs/image'
+import { satori, type SatoriOptions } from "@cf-wasm/satori";
+
 import ogImageTemplate from './og-image-template'
 import type { ogImageProps } from 'types'
+// import sharp from "sharp";
+
 
 async function fetchFonts() {
   // Regular Font
@@ -53,15 +55,18 @@ const options: SatoriOptions = {
   ],
 }
 
-async function svgBufferToJpgBuffer(svg: string) {
-  const trasformer = Transformer.fromSvg(svg)
-  return await trasformer.jpeg()
-}
+// async function svgBufferToJpgBuffer(svg: string) {
+//   // const trasformer = Transformer.fromSvg(svg)
+//   // return await trasformer.jpeg()
+
+//   const transformer = sharp(Buffer.from(svg)).jpeg();
+//   return transformer.toBuffer();
+// }
 
 export async function generateOgImage(props: ogImageProps) {
   const svg = await satori(
     ogImageTemplate(props),
     options,
   )
-  return svgBufferToJpgBuffer(svg)
+  return svg;
 }
