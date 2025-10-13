@@ -17,7 +17,10 @@ export default function IconList({ initialIcons, totalIconCount }: Props) {
   const debouncedSearch = useDebounce(search, 300);
 
   const [state, action, pending] = React.useActionState(
-    withState(actions.searchIcons),
+    withState(async (formData: FormData) => {
+      const query = formData.get('query') as string;
+      return actions.searchIcons({ query });
+    }),
     {
       data: {
         filteredIcons: initialIcons,
@@ -32,7 +35,9 @@ export default function IconList({ initialIcons, totalIconCount }: Props) {
     const form = event.currentTarget;
 
     if (debouncedSearch.trim()) {
-      action(new FormData(form))
+      React.startTransition(() => {
+        action(new FormData(form))
+      });
     } else {
       if (state?.data) state.data.filteredIcons = initialIcons;
     }
@@ -60,7 +65,7 @@ export default function IconList({ initialIcons, totalIconCount }: Props) {
                 }}
                 id="icons"
                 type="search"
-                name="search"
+                name="query"
                 className="py-2 pl-8 pr-10 w-full h-8 border border-gray-60 focus:outline focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 [-webkit-search-decoration:appearance-none]"
               />
               {(isTyping || pending)
@@ -73,7 +78,7 @@ export default function IconList({ initialIcons, totalIconCount }: Props) {
           </form>
         </div>
         <p aria-live="polite" className="text-gray-50">
-          Showing {state.data?.filteredIcons.length} of {totalIconCount}
+          Showing {state.data?.filteredIcons.length} of {state.data?.totalIconCount}
         </p>
       </div>
       <div className="bg-gray-cool-2 p-4">

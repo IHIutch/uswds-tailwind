@@ -7,13 +7,13 @@ import ContentLayout from "#layouts/content-layout.astro";
 import IconList from "#components/icon-list";
 import { actions } from "astro:actions";
 
-const formData = new FormData();
-formData.append("query", "");
+// const formData = new FormData();
+// formData.append("query", "");
 
-const { data } = await Astro.callAction(actions.searchIcons, formData);
+const res = await Astro.callAction(actions.searchIcons, { query: "" });
 
-const initialIcons = data?.filteredIcons || [];
-const totalIconCount = data?.totalIconCount || 0;
+const initialIcons = res.data?.filteredIcons || [];
+const totalIconCount = res.data?.totalIconCount || 0;
 ---
 
 <BaseLayout

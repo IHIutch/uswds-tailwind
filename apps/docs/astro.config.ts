@@ -42,15 +42,7 @@ export default defineConfig({
   //     }
   //   }
   // },
-  adapter: cloudflare({
-    imageService: 'compile',
-    // routes: {
-    //   extend: {
-    //     include: [{ pattern: '/actions/**' }],
-    //     exclude: [{ pattern: '/**' }]
-    //   }
-    // }
-  }),
+  adapter: cloudflare(),
   vite: {
     css: {
       postcss: {

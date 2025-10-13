@@ -13,7 +13,7 @@ async function initializeSearch(): Promise<{ icons: string[]; fuse: Fuse<{ id: s
   }
 
   // Fetch icons if not cached
-  if (!iconCache) {
+  if (!iconCache.length) {
     const collection = await fetch(`https://api.iconify.design/collection?prefix=material-symbols`)
     const collectionData = await collection.json() as { categories?: Record<string, string[]> }
     iconCache = collectionData.categories ? Object.values(collectionData.categories || {}).flat().sort() : []
@@ -39,12 +39,11 @@ async function initializeSearch(): Promise<{ icons: string[]; fuse: Fuse<{ id: s
 
 export const server = {
   searchIcons: defineAction({
-    accept: 'form',
     input: z.object({
       query: z.string(),
     }),
     handler: async ({ query }) => {
-      const trimmedQuery = query.trim()
+      const trimmedQuery = query?.trim()
       const { icons, fuse } = await initializeSearch()
 
       let iconNames: string[]
