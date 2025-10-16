@@ -15,9 +15,11 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
   initMachine(props: characterCount.Props): VanillaMachine<characterCount.CharacterCountSchema> {
     CharacterCount.instances.set(props.id, this)
 
+    const maxLength = this.input?.getAttribute('maxlength')
+
     return new VanillaMachine(characterCount.machine, {
       ...props,
-      maxLength: Number(this.input?.getAttribute('maxlength')),
+      maxLength: maxLength ? Number(maxLength) : undefined,
       getStatusText: (count, max) => {
         const diff = Math.abs(max - count)
         const characters = diff === 1 ? 'character' : 'characters'

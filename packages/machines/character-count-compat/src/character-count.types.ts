@@ -16,7 +16,7 @@ export type ElementIds = Partial<{
 export interface CharacterCountProps extends CommonProperties {
   /**
    * The maximum number of characters allowed.
-   *  @default Infinity
+   *  @default undefined
    */
   maxLength?: number
   /**
@@ -38,7 +38,7 @@ export interface CharacterCountProps extends CommonProperties {
 }
 
 export interface CharacterCountSchema {
-  props: RequiredBy<CharacterCountProps, 'maxLength' | 'getStatusText'>
+  props: RequiredBy<CharacterCountProps, 'getStatusText'>
   context: {
     charCount: number
     maxLength: number

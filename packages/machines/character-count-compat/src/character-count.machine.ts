@@ -21,8 +21,13 @@ const debounced = debounce((fn) => {
 export const machine = createMachine<CharacterCountSchema>({
   props({ props }) {
     return {
-      maxLength: Infinity,
-      getStatusText: () => '',
+      getStatusText: (count, max) => {
+        const diff = Math.abs(max - count)
+        const characters = diff === 1 ? 'character' : 'characters'
+        const guidance
+          = count === 0 ? 'allowed' : count > max ? 'over limit' : 'left'
+        return `${diff} ${characters} ${guidance}`
+      },
       customValidation: 'The content is too long.',
       ...props,
     }
@@ -33,11 +38,12 @@ export const machine = createMachine<CharacterCountSchema>({
   },
 
   context({ bindable, prop }) {
+    const maxLength = prop('maxLength')
     return {
       charCount: bindable(() => ({ defaultValue: 0 })),
-      maxLength: bindable(() => ({ defaultValue: prop('maxLength') })),
-      statusText: bindable(() => ({ defaultValue: prop('getStatusText')(0, prop('maxLength')) })),
-      srStatusText: bindable(() => ({ defaultValue: prop('getStatusText')(0, prop('maxLength')) })),
+      maxLength: bindable(() => ({ defaultValue: maxLength })),
+      statusText: bindable(() => ({ defaultValue: maxLength ? prop('getStatusText')(0, maxLength) : '' })),
+      srStatusText: bindable(() => ({ defaultValue: maxLength ? prop('getStatusText')(0, maxLength) : '' })),
       customValidation: bindable(() => ({ defaultValue: prop('customValidation') })),
     }
   },
@@ -74,18 +80,24 @@ export const machine = createMachine<CharacterCountSchema>({
         }
       },
       updateStatus({ context, prop }) {
-        const text = prop('getStatusText')(
-          context.get('charCount'),
-          context.get('maxLength'),
-        )
+        let text = ''
+        if (prop('maxLength')) {
+          text = prop('getStatusText')(
+            context.get('charCount'),
+            context.get('maxLength'),
+          )
+        }
         context.set('statusText', text)
       },
       updateSrStatus({ context, prop }) {
         debounced(() => {
-          const text = prop('getStatusText')(
-            context.get('charCount'),
-            context.get('maxLength'),
-          )
+          let text = ''
+          if (prop('maxLength')) {
+            text = prop('getStatusText')(
+              context.get('charCount'),
+              context.get('maxLength'),
+            )
+          }
           context.set('srStatusText', text)
         })
       },
@@ -95,7 +107,7 @@ export const machine = createMachine<CharacterCountSchema>({
         const inputEl = getInputEl(scope)
         const customValidation = context.get('customValidation')
 
-        if (charCount > maxLength) {
+        if (maxLength && charCount > maxLength) {
           send({ type: 'INVALID' })
           if (inputEl && !inputEl.validationMessage) {
             inputEl.setCustomValidity(customValidation)
