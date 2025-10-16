@@ -34,6 +34,7 @@ export default defineConfig({
     react(),
     sitemap()
   ],
+  trailingSlash: 'always',
   // markdown: {
   //   shikiConfig: {
   //     themes: {
@@ -53,12 +54,8 @@ export default defineConfig({
     ssr: {
       external: ['node:fs', 'node:path', 'twig']
     },
-    build: {
-      // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#meaningful-error-messages
-      minify: false,
-    }
   },
   redirects: {
-    '/components': '/components/accordion'
+    "/components": "/components/accordion/"
   }
 });

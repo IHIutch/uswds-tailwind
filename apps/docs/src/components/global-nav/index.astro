@@ -18,31 +18,31 @@ const desktopLinks: NavLinks = {
     },
     {
       label: "Getting Started",
-      href: "/getting-started",
+      href: "/getting-started/",
     },
     {
       label: "Components",
-      href: "/components",
+      href: "/components/",
     },
     {
       label: "JavaScript",
-      href: "/javascript",
+      href: "/javascript/",
     },
     {
       label: "Colors",
-      href: "/colors",
+      href: "/colors/",
     },
     {
       label: "Icons",
-      href: "/icons",
+      href: "/icons/",
     },
     {
       label: "Typography",
-      href: "/typography",
+      href: "/typography/",
     },
     {
       label: "About",
-      href: "/about",
+      href: "/about/",
     },
   ],
 };
@@ -55,35 +55,35 @@ const mobileLinks: NavLinks = {
     },
     {
       label: "Getting Started",
-      href: "/getting-started",
+      href: "/getting-started/",
     },
     {
       label: "Components",
       // href: '/components',
       children: allComponents.map((c) => ({
         label: c.data.title,
-        href: `/components/${c.id}`,
+        href: `/components/${c.id}/`,
       })),
     },
     {
       label: "JavaScript",
-      href: "/javascript",
+      href: "/javascript/",
     },
     {
       label: "Colors",
-      href: "/colors",
+      href: "/colors/",
     },
     {
       label: "Icons",
-      href: "/icons",
+      href: "/icons/",
     },
     {
       label: "Typography",
-      href: "/typography",
+      href: "/typography/",
     },
     {
       label: "About",
-      href: "/about",
+      href: "/about/",
     },
   ],
 };
@@ -129,14 +129,12 @@ const secondary: NavLinks["secondary"] = [
         <div class="icon-[material-symbols--info] size-6"></div>
       </div>
       <p class="leading-normal">
-        <b>v2 is coming soon!</b> I'd really appreciate your feedback if you'd be
-        willing to take a
-        <a
+        <b>Help shape v2!</b> Take a <a
           href="https://forms.reform.app/szenkB/v2-feedback"
           target="_blank"
           class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
-          ><span class="underline">quick survey</span>
-        </a>. Thanks!
+          ><span class="underline">short survey</span>
+        </a> to make this tool better for everyone.
       </p>
     </div>
   </div>
