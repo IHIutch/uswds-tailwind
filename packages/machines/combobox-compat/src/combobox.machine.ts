@@ -19,6 +19,7 @@ export const machine = createMachine<ComboboxSchema>({
 
     return {
       value: bindable(() => ({ defaultValue: prop('value') || '' })),
+      disabled: bindable(() => ({ defaultValue: prop('disabled') || false })),
       inputValue: bindable(() => ({ defaultValue: options.find(o => o.value === prop('value'))?.label || '' })),
       filteredOptions: bindable(() => ({ defaultValue: options })),
       activeIndex: bindable(() => ({ defaultValue: -1 })),

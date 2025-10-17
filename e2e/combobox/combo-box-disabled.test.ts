@@ -163,8 +163,8 @@ it('should show the list when clicking the input once the component has been ena
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
 
-  // Expose a public method to enable the combobox
-  // Combobox.getInstance(rootId).enable()
+  const instance = Combobox.getInstance(rootId)
+  await instance?.enable()
 
   await userEvent.click(input)
   expect(list.hidden).toBe(false)

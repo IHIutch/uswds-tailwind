@@ -51,8 +51,7 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
       options,
       value: initialValue,
       placeholder: this.rootEl.getAttribute('data-placeholder') || '',
-      disabled: this.rootEl.hasAttribute('data-disabled') || this.rootEl.hasAttribute('disabled')
-        || (selectEl?.hasAttribute('disabled') ?? false),
+      disabled: this.rootEl.hasAttribute('data-disabled') || selectEl?.hasAttribute('disabled'),
       disableFiltering: this.rootEl.hasAttribute('data-disable-filtering'),
       showClearButton: this.clearButton !== null,
       showToggleButton: this.toggleButton !== null,
@@ -189,6 +188,18 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
 
   private renderToggleButton(buttonEl: HTMLButtonElement) {
     spreadProps(buttonEl, this.api.getToggleButtonProps())
+  }
+
+  async enable() {
+    this.machine.ctx.set('disabled', false)
+    await new Promise<void>(resolve => queueMicrotask(resolve))
+    this.render()
+  }
+
+  async disable() {
+    this.machine.ctx.set('disabled', true)
+    await new Promise<void>(resolve => queueMicrotask(resolve))
+    this.render()
   }
 }
 

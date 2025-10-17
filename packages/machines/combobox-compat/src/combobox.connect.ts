@@ -16,7 +16,7 @@ export function connect<T extends PropTypes>(
   const inputValue = context.get('inputValue')
   const filteredOptions = context.get('filteredOptions')
   const activeIndex = context.get('activeIndex')
-  const disabled = prop('disabled')
+  const disabled = context.get('disabled')
   const showClearButton = prop('showClearButton')
   const showToggleButton = prop('showToggleButton')
 
@@ -68,6 +68,7 @@ export function connect<T extends PropTypes>(
         'aria-describedby': dom.getLabelId(scope),
         'placeholder': prop('placeholder'),
         disabled,
+        'data-disabled': disabled ? '' : undefined,
         'value': inputValue,
         'autoComplete': 'off',
         onFocus() {
@@ -104,6 +105,7 @@ export function connect<T extends PropTypes>(
         'id': dom.getListId(scope),
         'role': 'listbox',
         'aria-labelledby': dom.getLabelId(scope),
+        'data-disabled': disabled ? '' : undefined,
         'hidden': !isOpen,
         'data-state': isOpen ? 'open' : 'closed',
       })
@@ -159,6 +161,7 @@ export function connect<T extends PropTypes>(
         'id': dom.getClearButtonId(scope),
         'type': 'button',
         'aria-label': 'Clear selection',
+        'data-disabled': disabled ? '' : undefined,
         'disabled': disabled || !hasSelection,
         'hidden': !showClearButton || !hasSelection,
         onClick() {
@@ -179,6 +182,7 @@ export function connect<T extends PropTypes>(
         'aria-label': isOpen ? 'Close options' : 'Open options',
         'aria-expanded': isOpen,
         'aria-controls': dom.getListId(scope),
+        'data-disabled': disabled ? '' : undefined,
         disabled,
         'hidden': !showToggleButton,
         'data-state': isOpen ? 'open' : 'closed',

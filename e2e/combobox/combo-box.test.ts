@@ -303,7 +303,7 @@ it('should reset input values when an incomplete item is submitted through enter
   expect(input.value).toBe('Cantaloupe')
 })
 
-it.skip('should not allow enter to perform default action when the list is hidden', async () => {
+it('should not allow enter to perform default action when the list is hidden', async () => {
   using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
