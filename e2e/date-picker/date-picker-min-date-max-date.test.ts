@@ -843,13 +843,16 @@ it('should open the calendar on the max date when the input date is after the ma
   expect(focusedDate?.getAttribute('data-value')).toBe('2021-06-20')
 })
 
-it.skip('should open the calendar on the max date when the input is empty and the current date is after the max date', async () => {
-  const component = createDisposableDatePicker(rootId, template)
+it('should open the calendar on the max date when the input is empty and the current date is after the max date', async () => {
+  const templateWithConstraints = template.replace(
+    'data-min-date="2020-05-22" data-max-date="2021-06-20"',
+    'data-min-date="2020-01-01" data-max-date="2020-02-14"'
+  )
+  
+  const component = createDisposableDatePicker(rootId, templateWithConstraints)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
-  // root.setAttribute('data-min-date', '2020-01-01')
-  // root.setAttribute('data-max-date', '2020-02-14')
   await userEvent.click(button)
 
   expect(calendar.hidden).toBe(false)
@@ -858,13 +861,16 @@ it.skip('should open the calendar on the max date when the input is empty and th
 })
 
 it('should update the calendar to the max date when the input is changed and the input date is after the max date', async () => {
-  const component = createDisposableDatePicker(rootId, template)
+  const templateWithConstraints = template.replace(
+    'data-min-date="2020-05-22" data-max-date="2021-06-20"',
+    'data-min-date="2020-01-01" data-max-date="2020-02-14"'
+  )
+  
+  const component = createDisposableDatePicker(rootId, templateWithConstraints)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
-  // root.setAttribute('data-min-date', '2020-01-01')
-  // root.setAttribute('data-max-date', '2020-02-14')
   await userEvent.fill(input, '01/20/2020')
   await userEvent.click(button)
 

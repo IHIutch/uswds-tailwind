@@ -495,16 +495,12 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   }
 
   async enable() {
-    this.rootEl.removeAttribute('disabled')
-    this.input.removeAttribute('disabled')
     this.machine.ctx.set('disabled', false)
     await new Promise<void>(resolve => queueMicrotask(resolve))
     this.render()
   }
 
   async disable() {
-    this.rootEl.setAttribute('disabled', '')
-    this.input.setAttribute('disabled', '')
     this.machine.ctx.set('disabled', true)
     await new Promise<void>(resolve => queueMicrotask(resolve))
     this.render()
