@@ -316,13 +316,14 @@ export const machine = createMachine<DatePickerSchema>({
         context.set('endInputValue', event.value)
       },
 
-      validateStartInput({ context }) {
+      validateStartInput({ context, scope }) {
         const startInputValue = context.get('startInputValue')
         const startDate = startInputValue ? parseDate(startInputValue, 'MM/dd/yyyy') : null
         const minDate = context.get('minDate')
         const maxDate = context.get('maxDate')
         const endDate = context.get('endDate')
         const selectionMode = context.get('selectionMode')
+        const startInputEl = dom.getStartInputEl(scope)
 
         let isValid = true
         let validationMessage = ''
@@ -357,14 +358,16 @@ export const machine = createMachine<DatePickerSchema>({
           context.set('isInputValid', isValid)
           context.set('validationMessage', validationMessage)
         }
+        startInputEl?.setCustomValidity(validationMessage)
       },
 
-      validateEndInput({ context }) {
+      validateEndInput({ context, scope }) {
         const endInputValue = context.get('endInputValue')
         const endDate = endInputValue ? parseDate(endInputValue, 'MM/dd/yyyy') : null
         const minDate = context.get('minDate')
         const maxDate = context.get('maxDate')
         const startDate = context.get('startDate')
+        const endInputEl = dom.getEndInputEl(scope)
 
         let isValid = true
         let validationMessage = ''
@@ -387,6 +390,7 @@ export const machine = createMachine<DatePickerSchema>({
         context.set('endDate', endDate)
         context.set('isEndInputValid', isValid)
         context.set('endValidationMessage', validationMessage)
+        endInputEl?.setCustomValidity(validationMessage)
       },
 
       updateCalendarDate({ context }) {
@@ -1230,11 +1234,12 @@ export const machine = createMachine<DatePickerSchema>({
 
       updateEndInputConstraints({ context }) {
         const selectionMode = context.get('selectionMode')
-        if (selectionMode !== 'range') return
+        if (selectionMode !== 'range')
+          return
 
         const startInputValue = context.get('startInputValue')
         const isStartInputValid = context.get('isStartInputValid')
-        
+
         // When start input has a valid value, set constraints on end input
         if (isStartInputValid && startInputValue) {
           const startDate = parseDate(startInputValue, 'MM/dd/yyyy')
@@ -1253,11 +1258,12 @@ export const machine = createMachine<DatePickerSchema>({
 
       updateStartInputConstraints({ context }) {
         const selectionMode = context.get('selectionMode')
-        if (selectionMode !== 'range') return
+        if (selectionMode !== 'range')
+          return
 
         const endInputValue = context.get('endInputValue')
         const isEndInputValid = context.get('isEndInputValid')
-        
+
         // When end input has a valid value, set constraints on start input
         if (isEndInputValid && endInputValue) {
           const endDate = parseDate(endInputValue, 'MM/dd/yyyy')
