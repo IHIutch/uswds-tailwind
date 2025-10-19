@@ -1,13 +1,14 @@
 {
   "name": "@uswds-tailwind/site",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "wrangler types && astro dev",
+    "start": "wrangler types && astro dev",
+    "build": "wrangler types && astro build",
+    "preview": "wrangler types && astro preview",
+    "deploy": "wrangler deploy",
     "astro": "astro"
   },
   "dependencies": {
@@ -16,7 +17,6 @@
     "@astrojs/mdx": "catalog:",
     "@astrojs/react": "catalog:",
     "@astrojs/sitemap": "catalog:",
-    "@astrojs/vercel": "catalog:",
     "@docsearch/css": "catalog:",
     "@docsearch/react": "catalog:",
     "@fontsource-variable/merriweather": "catalog:",
@@ -28,7 +28,6 @@
     "@iconify-json/material-symbols": "catalog:",
     "@iconify/tailwind4": "catalog:",
     "@iconify/utils": "catalog:",
-    "@napi-rs/image": "catalog:",
     "@stackblitz/sdk": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "@tailwindcss/vite": "catalog:",
@@ -41,14 +40,10 @@
     "astro-seo": "catalog:",
     "fuse.js": "catalog:",
     "github-slugger": "catalog:",
-    "nanoid": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "satori": "catalog:",
     "sharp": "catalog:",
     "tailwindcss": "catalog:",
-    "tiny-invariant": "catalog:",
-    "twig": "catalog:",
     "typescript": "catalog:"
   },
   "devDependencies": {

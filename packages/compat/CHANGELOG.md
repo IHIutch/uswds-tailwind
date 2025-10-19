@@ -1,5 +1,25 @@
 # @uswds-tailwind/compat
 
+## 0.1.0
+
+### Minor Changes
+
+- f1236e1: Basic working components with all USWDS tests passing
+
+### Patch Changes
+
+- Updated dependencies [f1236e1]
+  - @uswds-tailwind/character-count-compat@0.1.0
+  - @uswds-tailwind/date-picker-compat@0.1.0
+  - @uswds-tailwind/file-input-compat@0.1.0
+  - @uswds-tailwind/input-mask-compat@0.1.0
+  - @uswds-tailwind/accordion-compat@0.1.0
+  - @uswds-tailwind/collapse-compat@0.1.0
+  - @uswds-tailwind/combobox-compat@0.1.0
+  - @uswds-tailwind/dropdown-compat@0.1.0
+  - @uswds-tailwind/modal-compat@0.1.0
+  - @uswds-tailwind/table-compat@0.1.0
+
 ## 0.0.4
 
 ### Patch Changes
