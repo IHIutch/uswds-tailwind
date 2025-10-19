@@ -9,14 +9,13 @@
   "packageManager": "pnpm@10.18.3",
   "scripts": {
     "build": "turbo run build",
-    "build:force": "turbo run build --force",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "publish": "turbo run publish",
     "changeset": "changeset",
     "version": "changeset version",
-    "publish-packages": "turbo run build && changeset version && changeset publish --tag alpha",
+    "publish-packages": "changeset version && changeset publish --tag beta",
     "test:browser": "vitest"
   },
   "devDependencies": {

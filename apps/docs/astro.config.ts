@@ -1,3 +1,4 @@
+import cloudflare from '@astrojs/cloudflare'
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
@@ -8,7 +9,6 @@ import { defineConfig } from 'astro/config'
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://uswds-tailwind.com',
-  trailingSlash: 'never',
   integrations: [
     expressiveCode({
       themes: ['light-plus', 'dark-plus'],
@@ -34,10 +34,17 @@ export default defineConfig({
   //     }
   //   }
   // },
+  adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()],
+    // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#nodejs-compatibility
     ssr: {
-      noExternal: ['nanoid'],
+      external: ['node:fs', 'node:path', 'twig'],
+    },
+
+    build: {
+      // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#meaningful-error-messages
+      minify: false,
     },
   },
   redirects: {
