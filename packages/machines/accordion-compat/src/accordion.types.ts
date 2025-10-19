@@ -26,9 +26,9 @@ export interface AccordionSchema {
   state: 'idle'
   action: 'openItem' | 'closeItem' | 'toggleItem'
   event:
-  | { type: 'OPEN', id: string }
-  | { type: 'CLOSE', id: string }
-  | { type: 'TOGGLE', id: string }
+    | { type: 'OPEN', id: string }
+    | { type: 'CLOSE', id: string }
+    | { type: 'TOGGLE', id: string }
 }
 
 export type AccordionService = Service<AccordionSchema>

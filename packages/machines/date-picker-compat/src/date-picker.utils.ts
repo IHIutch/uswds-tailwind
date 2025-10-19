@@ -39,7 +39,7 @@ export function parseDate(dateString: string, dateFormat: DateFormat = 'YYYY-MM-
     month = Number(parts[0]) - 1 // Month is 0-indexed
     day = Number(parts[1])
     year = Number(parts[2])
-    
+
     // Handle short years like legacy: 1-2 digits get current century context
     if (parts[2].length < 3) {
       const currentYear = new Date().getFullYear()

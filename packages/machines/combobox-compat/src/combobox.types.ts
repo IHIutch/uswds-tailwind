@@ -76,39 +76,39 @@ export interface ComboboxSchema {
   }
   state: 'idle' | 'focused' | 'open'
   action:
-  | 'updateInputValue'
-  | 'filterOptions'
-  | 'selectOption'
-  | 'clearSelection'
-  | 'setOpen'
-  | 'setClosed'
-  | 'handleKeyDown'
-  | 'syncInputWithSelection'
-  | 'navigateNext'
-  | 'navigatePrev'
-  | 'selectActiveOrMatch'
-  | 'closeAndReset'
-  | 'resetInput'
-  | 'focusItem'
-  | 'setValue'
+    | 'updateInputValue'
+    | 'filterOptions'
+    | 'selectOption'
+    | 'clearSelection'
+    | 'setOpen'
+    | 'setClosed'
+    | 'handleKeyDown'
+    | 'syncInputWithSelection'
+    | 'navigateNext'
+    | 'navigatePrev'
+    | 'selectActiveOrMatch'
+    | 'closeAndReset'
+    | 'resetInput'
+    | 'focusItem'
+    | 'setValue'
   event:
-  | { type: 'FOCUS' }
-  | { type: 'BLUR' }
-  | { type: 'OPEN' }
-  | { type: 'CLOSE' }
-  | { type: 'INPUT_CHANGE', value: string }
-  | { type: 'SELECT_OPTION', option: ComboboxOption }
-  | { type: 'CLEAR_SELECTION' }
-  | { type: 'KEY_DOWN', key: string }
-  | { type: 'FOCUS_ITEM', index: number }
-  | { type: 'ARROW_DOWN' }
-  | { type: 'ARROW_UP' }
-  | { type: 'ENTER' }
-  | { type: 'ESCAPE' }
-  | { type: 'TAB' }
-  | { type: 'SPACE' }
-  | { type: 'RESET_INPUT' }
-  | { type: 'VALUE.SET', value: string }
+    | { type: 'FOCUS' }
+    | { type: 'BLUR' }
+    | { type: 'OPEN' }
+    | { type: 'CLOSE' }
+    | { type: 'INPUT_CHANGE', value: string }
+    | { type: 'SELECT_OPTION', option: ComboboxOption }
+    | { type: 'CLEAR_SELECTION' }
+    | { type: 'KEY_DOWN', key: string }
+    | { type: 'FOCUS_ITEM', index: number }
+    | { type: 'ARROW_DOWN' }
+    | { type: 'ARROW_UP' }
+    | { type: 'ENTER' }
+    | { type: 'ESCAPE' }
+    | { type: 'TAB' }
+    | { type: 'SPACE' }
+    | { type: 'RESET_INPUT' }
+    | { type: 'VALUE.SET', value: string }
 }
 
 export type ComboboxService = Service<ComboboxSchema>
