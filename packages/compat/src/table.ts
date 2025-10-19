@@ -1,6 +1,6 @@
 import * as table from '@uswds-tailwind/table-compat'
-import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
@@ -141,7 +141,7 @@ export class Table extends Component<table.Props, table.Api> {
 export function tableInit() {
   document.querySelectorAll<HTMLTableElement>('[data-part="table-root"]').forEach((targetEl) => {
     const table = new Table(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'table'),
     })
 
     table.init()

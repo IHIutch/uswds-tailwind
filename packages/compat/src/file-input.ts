@@ -1,8 +1,8 @@
 import * as fileInput from '@uswds-tailwind/file-input-compat'
 import { nextTick } from '@zag-js/dom-query'
-import { nanoid } from 'nanoid'
 import { normalizeProps } from './lib//normalize-props'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
@@ -193,7 +193,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
 
 export function fileInputInit() {
   document.querySelectorAll<HTMLElement>('[data-part="file-input-root"]').forEach((targetEl) => {
-    const id = targetEl.id || nanoid()
+    const id = targetEl.id || getId(targetEl, 'file-input')
     const fileInput = new FileInput(targetEl, { id })
     fileInput.init()
   })

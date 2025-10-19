@@ -1,6 +1,6 @@
 import * as datePicker from '@uswds-tailwind/date-picker-compat'
-import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
@@ -511,7 +511,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
 export function dateRangePickerInit() {
   document.querySelectorAll<HTMLElement>('[data-part="date-range-picker-root"]').forEach((targetEl) => {
     const dateRangePicker = new DateRangePicker(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'date-range-picker'),
     })
     dateRangePicker.init()
   })

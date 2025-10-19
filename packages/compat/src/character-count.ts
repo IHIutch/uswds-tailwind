@@ -1,6 +1,6 @@
 import * as characterCount from '@uswds-tailwind/character-count-compat'
-import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
@@ -96,7 +96,7 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 export function characterCountInit() {
   document.querySelectorAll<HTMLElement>('[data-part="character-count-root"]').forEach((targetEl) => {
     const characterCount = new CharacterCount(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'character-count'),
     })
     characterCount.init()
   })

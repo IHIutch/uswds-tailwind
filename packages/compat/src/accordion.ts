@@ -1,7 +1,7 @@
 import * as accordion from '@uswds-tailwind/accordion-compat'
 import { nextTick } from '@zag-js/dom-query'
-import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
@@ -69,7 +69,7 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
 export function accordionInit() {
   document.querySelectorAll<HTMLElement>('[data-part="accordion-root"]').forEach((targetEl) => {
     const accordion = new Accordion(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'accordion'),
     })
     accordion.init()
   })

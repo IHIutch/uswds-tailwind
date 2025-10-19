@@ -1,7 +1,7 @@
 import * as modal from '@uswds-tailwind/modal-compat'
-import { nanoid } from 'nanoid'
 import { normalizeProps } from './lib//normalize-props'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
@@ -90,7 +90,7 @@ export class Modal extends Component<modal.Props, modal.Api> {
 export function modalInit() {
   document.querySelectorAll<HTMLElement>('[data-part="modal-trigger"]').forEach((targetEl) => {
     const modal = new Modal(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'modal'),
     })
     modal.init()
   })

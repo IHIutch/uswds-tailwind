@@ -1,7 +1,7 @@
 import * as inputMask from '@uswds-tailwind/input-mask-compat'
-import { nanoid } from 'nanoid'
 import { normalizeProps } from './lib//normalize-props'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { spreadProps } from './lib/spread-props'
 
@@ -70,7 +70,7 @@ export class InputMask extends Component<inputMask.Props, inputMask.Api> {
 export function inputMaskInit() {
   document.querySelectorAll<HTMLElement>('[data-part="input-mask-root"]').forEach((targetEl) => {
     const inputMask = new InputMask(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'input-mask'),
     })
     inputMask.init()
   })

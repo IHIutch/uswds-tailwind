@@ -1,7 +1,7 @@
 import type { ComboboxOption, ComboboxSchema } from '@uswds-tailwind/combobox-compat'
 import * as combobox from '@uswds-tailwind/combobox-compat'
-import { nanoid } from 'nanoid'
 import { Component } from './lib/component'
+import { getId } from './lib/id-generator'
 import { VanillaMachine } from './lib/machine'
 import { normalizeProps } from './lib/normalize-props'
 import { spreadProps } from './lib/spread-props'
@@ -208,7 +208,7 @@ export function comboboxInit() {
     const selectEl = targetEl.querySelector<HTMLSelectElement>('[data-part="combobox-select"]')
 
     const combobox = new Combobox(targetEl, {
-      id: targetEl.id || nanoid(),
+      id: targetEl.id || getId(targetEl, 'combobox'),
       placeholder: targetEl.getAttribute('data-placeholder') || '',
       disabled: targetEl.hasAttribute('data-disabled') || targetEl.hasAttribute('disabled')
         || (selectEl?.hasAttribute('disabled') ?? false),
