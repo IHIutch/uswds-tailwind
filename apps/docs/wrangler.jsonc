@@ -1,0 +1,18 @@
+{
+  "name": "uswds-tailwind",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2025-09-18",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "disable_nodejs_process_v2"
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "drop-trailing-slash"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

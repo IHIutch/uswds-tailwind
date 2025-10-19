@@ -1,11 +1,15 @@
 import { copyToClipboard } from '#utils/copy-to-clipboard'
 import { useDebounce } from '#utils/use-debounce'
-import { experimental_withState as withState } from '@astrojs/react/actions'
-import { icons as materialIcons } from '@iconify-json/material-symbols'
+import { withState } from '@astrojs/react/actions'
 import { actions } from 'astro:actions'
 import * as React from 'react'
 
-export default function IconList({ initialIcons, totalIconCount }: { initialIcons: string[], totalIconCount: number }) {
+interface Props {
+  initialIcons: NonNullable<Awaited<ReturnType<typeof actions.searchIcons>>['data']>['filteredIcons']
+  totalIconCount: NonNullable<Awaited<ReturnType<typeof actions.searchIcons>>['data']>['totalIconCount']
+}
+
+export default function IconList({ initialIcons, totalIconCount }: Props) {
   const [search, setSearch] = React.useState('')
   const [isTyping, setIsTyping] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement>(null)
@@ -13,7 +17,10 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
   const debouncedSearch = useDebounce(search, 300)
 
   const [state, action, pending] = React.useActionState(
-    withState(actions.getIcons),
+    withState(async (formData: FormData) => {
+      const query = formData.get('query') as string
+      return actions.searchIcons({ query })
+    }),
     {
       data: {
         filteredIcons: initialIcons,
@@ -28,7 +35,9 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
     const form = event.currentTarget
 
     if (debouncedSearch.trim()) {
-      action(new FormData(form))
+      React.startTransition(() => {
+        action(new FormData(form))
+      })
     }
     else {
       if (state?.data)
@@ -58,7 +67,7 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
                 }}
                 id="icons"
                 type="search"
-                name="search"
+                name="query"
                 className="py-2 pl-8 pr-10 w-full h-8 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 [-webkit-search-decoration:appearance-none]"
               />
               {(isTyping || pending)
@@ -78,7 +87,7 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
           {' '}
           of
           {' '}
-          {totalIconCount}
+          {state.data?.totalIconCount}
         </p>
       </div>
       <div className="bg-gray-cool-2 p-4">
@@ -86,9 +95,9 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
           (state.data && state.data?.filteredIcons.length > 0)
             ? (
                 <ul className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
-                  {state.data?.filteredIcons.map(iconName => (
-                    <li key={iconName}>
-                      <IconButton iconName={iconName} />
+                  {state.data?.filteredIcons.map(icon => (
+                    <li key={icon.name}>
+                      <IconButton icon={icon} />
                     </li>
                   ))}
                 </ul>
@@ -104,14 +113,14 @@ export default function IconList({ initialIcons, totalIconCount }: { initialIcon
   )
 }
 
-function IconButton({ iconName }: { iconName: string }) {
+function IconButton({ icon }: { icon: Props['initialIcons'][number] }) {
   const [isCopied, setIsCopied] = React.useState(false)
   const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
 
   const handleCopyToClipboard = () => {
-    copyToClipboard(`icon-[material-symbols--${iconName}]`)
+    copyToClipboard(`icon-[material-symbols--${icon.name}]`)
     setIsCopied(true)
-    setCopyMessage(`material symbols ${iconName} copied to clipboard`)
+    setCopyMessage(`material symbols ${icon.name} copied to clipboard`)
 
     setTimeout(() => setIsCopied(false), 1000)
   }
@@ -129,15 +138,15 @@ function IconButton({ iconName }: { iconName: string }) {
             height="100%"
             viewBox="0 0 24 24"
             dangerouslySetInnerHTML={{
-              __html: materialIcons.icons[iconName].body,
+              __html: icon.svg,
             }}
           />
         </div>
         <div className="truncate text-ellipsis w-full">
-          <span className="text-xs" aria-hidden="true">{`.icon-[material-symbols--${iconName}]`}</span>
+          <span className="text-xs" aria-hidden="true">{`.icon-[material-symbols--${icon.name}]`}</span>
           <span className="sr-only">
             Copy
-            {iconName}
+            {icon.name}
             {' '}
             icon to clipboard
           </span>
