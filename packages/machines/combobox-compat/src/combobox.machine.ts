@@ -110,13 +110,11 @@ export const machine = createMachine<ComboboxSchema>({
         context.set('activeIndex', -1)
       },
       updateInputValue({ context, event, prop }) {
-        if ('value' in event) {
-          context.set('inputValue', event.value)
-          context.set('isDirty', true)
-          const onInputChange = prop('onInputChange')
-          if (onInputChange) {
-            onInputChange(event.value)
-          }
+        context.set('inputValue', event.value)
+        context.set('isDirty', true)
+        const onInputChange = prop('onInputChange')
+        if (onInputChange) {
+          onInputChange(event.value)
         }
       },
       syncInputWithSelection({ context, prop }) {

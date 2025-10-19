@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { DismissableElementHandlers } from '@zag-js/dismissable'
 import type { Placement, PositioningOptions } from '@zag-js/popper'
 import type { CommonProperties, DirectionProperty, PropTypes, RequiredBy } from '@zag-js/types'
@@ -27,9 +27,10 @@ export interface DropdownSchema {
   }
   effect: 'trackInteractOutside' | 'trackPositioning'
   action: 'invokeOnOpen' | 'invokeOnClose'
-  event:
+  event: EventObject & (
     | { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
     | { type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
+  )
 }
 
 export type DropdownService = Service<DropdownSchema>

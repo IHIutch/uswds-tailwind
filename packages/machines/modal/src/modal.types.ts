@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { DismissableElementHandlers, PersistentElementOptions } from '@zag-js/dismissable'
 import type { CommonProperties, DirectionProperty, MaybeElement, PropTypes, RequiredBy } from '@zag-js/types'
 
@@ -114,7 +114,7 @@ export interface ModalSchema {
   guard: 'isOpenControlled'
   effect: 'trackDismissableElement' | 'preventScroll' | 'trapFocus' | 'hideContentBelow'
   action: 'checkRenderedElements' | 'syncZIndex' | 'invokeOnClose' | 'invokeOnOpen' | 'toggleVisibility'
-  event: {
+  event: EventObject & {
     type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' | 'OPEN' | 'CLOSE' | 'TOGGLE'
   }
 }

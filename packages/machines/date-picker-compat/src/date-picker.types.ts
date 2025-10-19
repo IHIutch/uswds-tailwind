@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { DismissableElementHandlers } from '@zag-js/dismissable'
 import type { CommonProperties, DirectionProperty, PropTypes } from '@zag-js/types'
 
@@ -103,7 +103,6 @@ export interface DatePickerSchema {
   context: DatePickerContext
   effect: 'trackInteractOutside' | 'trackFocusVisible'
   action:
-  // | 'updateInputValue'
     | 'updateStartInputValue'
     | 'updateEndInputValue'
     | 'validateStartInput'
@@ -115,8 +114,6 @@ export interface DatePickerSchema {
     | 'clearRange'
     | 'clearStartDate'
     | 'clearEndDate'
-  // | 'focusStartInput'
-  // | 'focusEndInput'
     | 'setActiveInput'
     | 'selectMonth'
     | 'selectYear'
@@ -132,8 +129,6 @@ export interface DatePickerSchema {
     | 'focusCalendarDate'
     | 'focusCurrentMonth'
     | 'focusCurrentYear'
-  // | 'enableComponent'
-  // | 'disableComponent'
     | 'handleDateHover'
     | 'setControlledValue'
     | 'invokeOnValueChange'
@@ -141,12 +136,11 @@ export interface DatePickerSchema {
     | 'focusInput'
     | 'updateEndInputConstraints'
     | 'updateStartInputConstraints'
-  event:
+  event: EventObject & (
     | { type: 'TOGGLE' }
     | { type: 'OPEN' }
     | { type: 'CLOSE' }
     | { type: 'ESCAPE' }
-  // | { type: 'INPUT_CHANGE', value: string }
     | { type: 'START_INPUT_CHANGE', value: string }
     | { type: 'END_INPUT_CHANGE', value: string }
     | { type: 'INPUT_FOCUS' }
@@ -175,6 +169,7 @@ export interface DatePickerSchema {
     | { type: 'CLEAR_RANGE' }
     | { type: 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
     | { type: 'CONTROLLED.VALUE_CHANGE', value: { start: string | null, end: string | null } }
+    )
 }
 
 export type DatePickerService = Service<DatePickerSchema>

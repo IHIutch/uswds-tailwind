@@ -31,11 +31,8 @@ export const machine = createMachine<InputMaskSchema>({
   implementations: {
     actions: {
       setValue({ context, event }) {
-        if (event && 'value' in event) {
-          context.set('value', event.value)
-        }
+        context.set('value', event.value)
       },
-
       updatePlaceholder({ context, prop }) {
         const placeholder = prop('placeholder') || ''
         const value = context.get('value')

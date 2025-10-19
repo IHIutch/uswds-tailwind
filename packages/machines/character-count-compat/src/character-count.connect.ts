@@ -53,7 +53,6 @@ export function connect<T extends PropTypes>(
           send({
             type: 'INPUT',
             value: event.currentTarget.value.length,
-            // src: 'input.onInput'
           })
         },
       })

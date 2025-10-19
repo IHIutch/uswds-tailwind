@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
@@ -48,15 +48,7 @@ export interface CharacterCountSchema {
   }
   state: 'valid' | 'invalid'
   action: 'updateCharCount' | 'updateStatus' | 'updateSrStatus' | 'toggleState' | 'setCustomValidity'
-  event: {
-    type: 'INVALID' | 'VALID'
-  } | {
-    type: 'INPUT'
-    value: number
-  } | {
-    type: 'SET_CUSTOM_VALIDITY'
-    value: string
-  }
+  event: EventObject
 }
 
 export type CharacterCountService = Service<CharacterCountSchema>

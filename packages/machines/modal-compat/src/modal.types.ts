@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ export interface ModalSchema {
   effect: 'trackDismissableElement' | 'preventScroll' | 'trapFocus' | 'hideContentBelow'
   state: 'open' | 'closed'
   action: 'focusContent'
-  event: { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
+  event: EventObject & { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
 }
 
 export type ModalService = Service<ModalSchema>

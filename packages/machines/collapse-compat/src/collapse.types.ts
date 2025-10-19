@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes } from '@zag-js/types'
 
 export type ElementIds = Partial<{
@@ -26,7 +26,7 @@ export interface CollapseSchema {
   props: Partial<CollapseProps>
   state: 'open' | 'closed'
   action: 'invokeOnOpen' | 'invokeOnClose' | 'toggleVisibility'
-  event: { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
+  event: EventObject & { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
 }
 
 export type CollapseService = Service<CollapseSchema>

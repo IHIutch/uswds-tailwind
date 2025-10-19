@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes } from '@zag-js/types'
 
 export type ElementIds = Partial<{
@@ -33,7 +33,7 @@ export interface InputMaskSchema {
   }
   state: 'idle'
   action: 'setValue' | 'updatePlaceholder'
-  event: {
+  event: EventObject & {
     type: 'INPUT'
     value: string
   }

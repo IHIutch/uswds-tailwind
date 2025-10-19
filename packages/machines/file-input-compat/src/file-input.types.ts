@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 import type { getFileType } from './file-input.utils'
 
@@ -51,11 +51,12 @@ export interface FileInputSchema {
   }
   state: 'idle' | 'valid' | 'invalid'
   action: 'setDragging' | 'validateFiles' | 'updateSrStatus' | 'checkEmptyFiles'
-  event:
-  | { type: 'DRAG_START' | 'DRAG_END' }
-  | { type: 'INVALID' | 'VALID' }
-  | { type: 'CHANGE', files: File[] }
-  | { type: 'CHECK_EMPTY_FILES' | 'RESET_TO_IDLE' }
+  event: EventObject & (
+    | { type: 'DRAG_START' | 'DRAG_END' }
+    | { type: 'INVALID' | 'VALID' }
+    | { type: 'CHANGE', files: File[] }
+    | { type: 'CHECK_EMPTY_FILES' | 'RESET_TO_IDLE' }
+  )
 }
 
 export type FileInputService = Service<FileInputSchema>

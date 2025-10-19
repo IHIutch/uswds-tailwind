@@ -30,7 +30,7 @@ export function connect<T extends PropTypes>(
         value: context.get('value'),
         maxLength,
         placeholder: '',
-        onKeyUp(event: any) {
+        onKeyUp(event) {
           const inputElement = event.currentTarget as HTMLInputElement
           const currentValue = inputElement.value
 
@@ -42,7 +42,7 @@ export function connect<T extends PropTypes>(
 
           send({ type: 'INPUT', value: strippedValue })
         },
-        onInput(event: any) {
+        onInput(event) {
           const inputElement = event.currentTarget as HTMLInputElement
           const currentValue = inputElement.value
           send({ type: 'INPUT', value: currentValue })

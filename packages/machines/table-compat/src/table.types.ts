@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ export interface SortableTableSchema {
   }
   state: 'idle'
   action: 'sort' | 'updateSrStatus'
-  event: {
+  event: EventObject & {
     type: 'SORT'
     columnIndex: number
   }

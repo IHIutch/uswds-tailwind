@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
@@ -25,10 +25,11 @@ export interface AccordionSchema {
   }
   state: 'idle'
   action: 'openItem' | 'closeItem' | 'toggleItem'
-  event:
+  event: EventObject & (
     | { type: 'OPEN', id: string }
     | { type: 'CLOSE', id: string }
     | { type: 'TOGGLE', id: string }
+  )
 }
 
 export type AccordionService = Service<AccordionSchema>

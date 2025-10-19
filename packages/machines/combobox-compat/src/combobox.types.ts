@@ -1,4 +1,4 @@
-import type { Machine, Service } from '@zag-js/core'
+import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ export interface ComboboxSchema {
     | 'resetInput'
     | 'focusItem'
     | 'setValue'
-  event:
+  event: EventObject & (
     | { type: 'FOCUS' }
     | { type: 'BLUR' }
     | { type: 'OPEN' }
@@ -109,6 +109,7 @@ export interface ComboboxSchema {
     | { type: 'SPACE' }
     | { type: 'RESET_INPUT' }
     | { type: 'VALUE.SET', value: string }
+  )
 }
 
 export type ComboboxService = Service<ComboboxSchema>

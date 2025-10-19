@@ -75,9 +75,7 @@ export const machine = createMachine<CharacterCountSchema>({
   implementations: {
     actions: {
       updateCharCount({ context, event }) {
-        if ('value' in event) {
-          context.set('charCount', event.value)
-        }
+        context.set('charCount', event.value)
       },
       updateStatus({ context, prop }) {
         let text = ''
