@@ -24,7 +24,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
 
-const activeHeading = ''
+// const activeHeading = ''
 const visibleHeadings = headings.filter(h => h.depth <= 3);
 ---
 
@@ -54,12 +54,5 @@ const visibleHeadings = headings.filter(h => h.depth <= 3);
         </div>
       </main>
     </div>
-    <script>
-import { initSplitter } from '#utils/zag/splitter'
-
-document.addEventListener('astro:page-load', () => {
-  initSplitter()
-})
-</script>
   </ContentLayout>
 </BaseLayout>

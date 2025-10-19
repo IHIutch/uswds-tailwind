@@ -1,7 +1,6 @@
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
-import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import expressiveCode from 'astro-expressive-code'
 import { defineConfig } from 'astro/config'
@@ -44,9 +43,4 @@ export default defineConfig({
   redirects: {
     '/components': '/components/accordion',
   },
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true,
-    },
-  }),
 })

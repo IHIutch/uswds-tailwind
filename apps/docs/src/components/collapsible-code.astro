@@ -6,18 +6,18 @@ type Props = {
   code: string
   lang: string
   title?: string
+  wrap?: boolean
 }
 
-const { code, lang, title, class: className } = Astro.props;
+const { code, lang, title, wrap = true, class: className } = Astro.props;
 ---
 
-<div x-data="collapsible" class:list={['relative overflow-hidden', className]}>
+<div class:list={['relative overflow-hidden', className]}>
   <div
     :class="isShowingClass"
       class="overflow-hidden not-docs-prose"
-      x-ref="code"
   >
-    <Code title={title} code={code} lang={lang} wrap />
+    <Code title={title} code={code} lang={lang} wrap={wrap} />
   </div>
   <button
     x-show="isShowingButton"

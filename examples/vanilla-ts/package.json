@@ -14,7 +14,6 @@
     "@fontsource-variable/public-sans": "catalog:",
     "@fontsource-variable/roboto-mono": "catalog:",
     "@fontsource-variable/source-sans-3": "catalog:",
-    "@iconify/json": "catalog:",
     "@iconify/tailwind4": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@uswds-tailwind/compat": "workspace:*",
