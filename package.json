@@ -6,7 +6,7 @@
     "packages/theme",
     "packages/compat"
   ],
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.18.3",
   "scripts": {
     "build": "turbo run build",
     "build:force": "turbo run build --force",
