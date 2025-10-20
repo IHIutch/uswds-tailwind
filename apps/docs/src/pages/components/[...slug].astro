@@ -1,27 +1,27 @@
 ---
-import type { GetStaticPaths, InferGetStaticPropsType } from 'astro'
 import Alert from '#components/alert.astro'
 import ComponentPreview from '#components/component-preview.astro'
 import ContentList from '#components/content-list.astro'
 import TableOfContents from '#components/table-of-contents.astro'
 import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
-import { getCollection, render } from 'astro:content'
 
-export const getStaticPaths = (async () => {
-  const allComponents = await getCollection(
-    'components',
-    entry => entry.data.isPublished !== false,
-  )
-  return allComponents.map(entry => ({
-    params: { slug: entry.id },
-    props: { entry },
-  }))
-}) satisfies GetStaticPaths
+import { prefersMarkdown } from '#utils/handle-prefers-markdown'
+import { getEntry, render } from 'astro:content'
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>
+const { slug } = Astro.params
+if (!slug) {
+  throw new Error('Page not found')
+}
 
-const { entry } = Astro.props
+const entry = await getEntry('components', slug)
+if (!entry) {
+  throw new Error('Page not found')
+}
+
+if (prefersMarkdown(Astro)) {
+  return Astro.redirect(`/components/${entry.id}.md`)
+}
 const { Content, headings } = await render(entry)
 
 // const activeHeading = ''

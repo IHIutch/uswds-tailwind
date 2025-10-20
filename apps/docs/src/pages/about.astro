@@ -3,8 +3,12 @@ import CollapsibleCode from '#components/collapsible-code.astro'
 import TableOfContents from '#components/table-of-contents.astro'
 import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
+import { prefersMarkdown } from '#utils/handle-prefers-markdown'
 import { getEntry, render } from 'astro:content'
 
+if (prefersMarkdown(Astro)) {
+  return Astro.redirect('/about.md')
+}
 const post = await getEntry('pages', 'about')
 if (!post) {
   throw new Error('Page not found')

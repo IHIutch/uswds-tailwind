@@ -1,10 +1,17 @@
 ---
 import Alert from '#components/alert.astro'
 import CollapsibleCode from '#components/collapsible-code.astro'
+import ProcessStep from '#components/process-list-step.astro'
+import ProcessList from '#components/process-list.astro'
 import TableOfContents from '#components/table-of-contents.astro'
 import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
+import { prefersMarkdown } from '#utils/handle-prefers-markdown'
 import { getEntry, render } from 'astro:content'
+
+if (prefersMarkdown(Astro)) {
+  return Astro.redirect('/getting-started.md')
+}
 
 const post = await getEntry('pages', 'getting-started')
 if (!post) {
@@ -13,7 +20,8 @@ if (!post) {
 
 const { Content, headings } = await render(post)
 
-const visibleHeadings = headings.filter(h => h.depth <= 3);
+const visibleHeadings = headings.filter(h => h.depth <= 3)
+
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
@@ -36,6 +44,8 @@ const visibleHeadings = headings.filter(h => h.depth <= 3);
                 components={{
                   CollapsibleCode,
                   Alert,
+                  ProcessList,
+                  ProcessStep,
                 }}
               />
             </div>
