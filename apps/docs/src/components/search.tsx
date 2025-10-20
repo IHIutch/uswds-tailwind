@@ -45,9 +45,10 @@ export default function Search({ isMobile = false }: { isMobile?: boolean }) {
             <DocSearch.DocSearchModal
               initialScrollY={window.scrollY}
               appId="C7D4AGKF3W"
-              indexName="uswds-tailwind-vercel"
+              indices={['uswds-tailwind-vercel']}
               apiKey="28412ab462fa29c28f804fa3577d6b13"
               onClose={() => setIsOpen(false)}
+              onAskAiToggle={() => {}}
               placeholder="Search the docs..."
               hitComponent={Hit}
               transformItems={(items) => {
@@ -61,7 +62,7 @@ export default function Search({ isMobile = false }: { isMobile?: boolean }) {
 
                   if (item._highlightResult?.hierarchy?.lvl0?.value) {
                     item._highlightResult.hierarchy.lvl0.value
-                  = item._highlightResult.hierarchy.lvl0.value.replace(
+                      = item._highlightResult.hierarchy.lvl0.value.replace(
                         /&amp;/g,
                         '&',
                       )

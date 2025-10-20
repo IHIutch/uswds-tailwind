@@ -30,6 +30,7 @@
     "@iconify-json/fa6-brands": "catalog:",
     "@iconify-json/material-symbols": "catalog:",
     "@iconify/tailwind4": "catalog:",
+    "@iconify/types": "catalog:",
     "@iconify/utils": "catalog:",
     "@stackblitz/sdk": "catalog:",
     "@tailwindcss/typography": "catalog:",

@@ -5,7 +5,7 @@ packages:
   - scripts/**
 
 catalog:
-  '@antfu/eslint-config': ^4.19.0
+  '@antfu/eslint-config': ^6.0.0
   '@ark-ui/react': ^5.26.2
   '@astrojs/check': ^0.9.4
   '@astrojs/cloudflare': ^12.6.10
@@ -14,8 +14,8 @@ catalog:
   '@astrojs/sitemap': ^3.6.0
   '@cf-wasm/satori': ^0.1.31
   '@changesets/cli': 2.29.7
-  '@docsearch/css': ^3.9.0
-  '@docsearch/react': ^3.9.0
+  '@docsearch/css': ^4.2.0
+  '@docsearch/react': ^4.2.0
   '@fontsource-variable/merriweather': ^5.2.6
   '@fontsource-variable/open-sans': ^5.2.7
   '@fontsource-variable/public-sans': ^5.2.7
@@ -25,7 +25,8 @@ catalog:
   '@iconify-json/fa6-brands': 1.2.6
   '@iconify-json/material-symbols': 1.2.42
   '@iconify/tailwind4': ^1.0.6
-  '@iconify/utils': ^2.3.0
+  '@iconify/types': ^2.0.0
+  '@iconify/utils': ^3.0.2
   '@stackblitz/sdk': ^1.11.0
   '@tailwindcss/forms': ^0.5.10
   '@tailwindcss/typography': 0.5.16
