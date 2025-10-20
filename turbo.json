@@ -12,9 +12,7 @@
         "ENABLE_EXPERIMENTAL_COREPACK"
       ],
       "outputs": [
-        "apps/docs/dist/**",
-        "packages/compat/**/dist/**",
-        "packages/machines/**/dist/**"
+        "dist/**"
       ]
     },
     "dev": {
