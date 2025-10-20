@@ -27,6 +27,9 @@ catalogs:
     '@astrojs/sitemap':
       specifier: ^3.6.0
       version: 3.6.0
+    '@cf-wasm/satori':
+      specifier: ^0.1.31
+      version: 0.1.31
     '@changesets/cli':
       specifier: 2.29.7
       version: 2.29.7
@@ -252,7 +255,7 @@ importers:
         specifier: 'catalog:'
         version: 3.6.0
       '@cf-wasm/satori':
-        specifier: ^0.1.31
+        specifier: 'catalog:'
         version: 0.1.31
       '@docsearch/css':
         specifier: 'catalog:'
