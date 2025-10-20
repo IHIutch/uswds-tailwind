@@ -12,8 +12,9 @@
         "ENABLE_EXPERIMENTAL_COREPACK"
       ],
       "outputs": [
-        ".astro/**",
-        "dist/**"
+        "apps/docs/dist/**",
+        "packages/compat/**/dist/**",
+        "packages/machines/**/dist/**"
       ]
     },
     "dev": {
@@ -41,6 +42,12 @@
     },
     "migrate": {
       "cache": false
+    },
+    "deploy": {
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": []
     }
   }
 }
