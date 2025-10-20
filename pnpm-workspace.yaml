@@ -8,9 +8,11 @@ catalog:
   '@antfu/eslint-config': ^4.19.0
   '@ark-ui/react': ^5.26.2
   '@astrojs/check': ^0.9.4
+  '@astrojs/cloudflare': ^12.6.10
   '@astrojs/mdx': ^4.3.7
   '@astrojs/react': ^4.4.0
   '@astrojs/sitemap': ^3.6.0
+  '@cf-wasm/satori': ^0.1.31
   '@changesets/cli': 2.29.7
   '@docsearch/css': ^3.9.0
   '@docsearch/react': ^3.9.0
@@ -68,6 +70,7 @@ catalog:
   typescript: ^5.9.3
   vite: ^7.1.10
   vitest: ^3.2.4
+  wrangler: ^4.43.0
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
@@ -75,3 +78,4 @@ onlyBuiltDependencies:
   - esbuild
   - rolldown
   - sharp
+  - workerd

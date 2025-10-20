@@ -2,25 +2,25 @@
 // import type { CollectionEntry } from 'astro:content'
 
 // import fs from 'node:fs'
-import graphPaper from "#assets/img/graph-paper.svg";
-import ZagSplitter from "#components/zag-splitter";
+import graphPaper from '#assets/img/graph-paper.svg'
+import ZagSplitter from '#components/zag-splitter'
 // import { renderTwigTemplate } from '#utils/functions'
-import CollapsibleCode from "./collapsible-code.astro";
-import StackBlitzButton from "./stackblitz-button";
+import CollapsibleCode from './collapsible-code.astro'
+import StackBlitzButton from './stackblitz-button'
 
 type Props = {
   // component: CollectionEntry<'demos'>['data']['component']
   // variant: CollectionEntry<'demos'>['data']['variant']
-  minHeight?: string;
-  resize?: boolean;
+  minHeight?: string
+  resize?: boolean
   //
-  code: string;
-  componentName?: string;
-};
+  code: string
+  componentName?: string
+}
 
-const { minHeight, resize = true, code, componentName } = Astro.props;
+const { minHeight, resize = true, code, componentName } = Astro.props
 
-const markup = Array.isArray(code) ? code.join("\n") : code;
+const markup = Array.isArray(code) ? code.join('\n') : code;
 
 // const propsPath = `./src/__demos__/${component}/${component}-props.json`
 // const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`
@@ -85,7 +85,7 @@ const markup = Array.isArray(code) ? code.join("\n") : code;
       style={{ backgroundImage: `url(${graphPaper.src})` }}
     >
       <ZagSplitter resize={resize} client:load>
-        <div style={{ minHeight: minHeight || "none" }}>
+        <div style={{ minHeight: minHeight || 'none' }}>
           <!-- Example start -->
           <Fragment set:html={markup} />
           <!-- Example end -->

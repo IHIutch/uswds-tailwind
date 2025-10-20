@@ -14,9 +14,11 @@
   "dependencies": {
     "@ark-ui/react": "catalog:",
     "@astrojs/check": "catalog:",
+    "@astrojs/cloudflare": "catalog:",
     "@astrojs/mdx": "catalog:",
     "@astrojs/react": "catalog:",
     "@astrojs/sitemap": "catalog:",
+    "@cf-wasm/satori": "catalog:",
     "@docsearch/css": "catalog:",
     "@docsearch/react": "catalog:",
     "@fontsource-variable/merriweather": "catalog:",
@@ -46,7 +48,8 @@
     "react-dom": "catalog:",
     "sharp": "catalog:",
     "tailwindcss": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "wrangler": "catalog:"
   },
   "devDependencies": {
     "@types/twig": "catalog:",

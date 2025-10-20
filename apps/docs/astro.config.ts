@@ -22,6 +22,10 @@ export default defineConfig({
         },
         codeBackground: '#f7f9fa',
       },
+      shiki: {
+        bundledLangs: ['html', 'ts', 'js', 'css', 'json', 'bash', 'graphql'],
+        engine: 'javascript',
+      },
     }),
     mdx(),
     react(),
@@ -40,7 +44,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
     // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#nodejs-compatibility
     ssr: {
-      external: ['node:fs', 'node:path', 'twig'],
+      external: ['node:fs', 'node:path'],
     },
 
     build: {
