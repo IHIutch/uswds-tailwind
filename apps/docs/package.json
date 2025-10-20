@@ -52,6 +52,7 @@
     "wrangler": "catalog:"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "@types/twig": "catalog:",
     "@zag-js/types": "catalog:"
   }
