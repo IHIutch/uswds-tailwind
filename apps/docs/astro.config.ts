@@ -45,6 +45,7 @@ export default defineConfig({
     // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#nodejs-compatibility
     ssr: {
       external: ['node:fs', 'node:path'],
+      noExternal: ['@uswds-tailwind/compat'],
     },
 
     build: {
