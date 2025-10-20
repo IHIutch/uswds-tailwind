@@ -121,7 +121,7 @@ catalogs:
       specifier: ^1.26.3
       version: 1.26.3
     '@zag-js/store':
-      specifier: 1.26.3
+      specifier: ^1.26.3
       version: 1.26.3
     '@zag-js/types':
       specifier: ^1.26.3
@@ -138,6 +138,9 @@ catalogs:
     astro-seo:
       specifier: ^0.8.4
       version: 0.8.4
+    dedent:
+      specifier: ^1.7.0
+      version: 1.7.0
     eslint:
       specifier: ^9.38.0
       version: 9.38.0
@@ -306,7 +309,7 @@ importers:
         specifier: 'catalog:'
         version: 0.8.4(prettier@3.5.3)(typescript@5.9.3)
       dedent:
-        specifier: ^1.7.0
+        specifier: 'catalog:'
         version: 1.7.0
       fuse.js:
         specifier: 'catalog:'
