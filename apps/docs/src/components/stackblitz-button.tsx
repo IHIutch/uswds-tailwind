@@ -14,8 +14,8 @@ export default function StackBlitzButton({
     try {
       openInStackBlitz({
         htmlContent,
-        title: `${componentName} - USWDS Tailwind`,
-        description: description || `Interactive example of ${componentName} component using USWDS Tailwind`,
+        title: `${componentName} - USWDS + Tailwind`,
+        description: description || `Interactive example of ${componentName} component using USWDS + Tailwind`,
       })
     }
     catch (error) {

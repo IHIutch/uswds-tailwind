@@ -3,11 +3,6 @@ title: "Getting Started"
 description: "Getting started with USWDS + Tailwind is fast and easy. By copying and pasting the following snippets, you'll be up and running in minutes."
 ---
 
-import ProcessList from '#components/process-list.astro';
-import ProcessStep from '#components/process-list-step.astro'
-
-import exampleTailwindConfig from "../../examples/tailwind-config.txt?raw"
-
 <ProcessList>
 {/* Step 1 */}
 <ProcessStep class="*:first:mt-0 before:top-0">
@@ -34,19 +29,13 @@ npm i @uswds-tailwind/compat @uswds-tailwind/theme
 #### Tailwind and plugins
 
 ```bash
-npm i tailwindcss @tailwindcss/container-queries @tailwindcss/forms @tailwindcss/typography tailwindcss-animate
+npm i tailwindcss @tailwindcss/vite @iconify-json/fa-solid @iconify-json/fa6-brands @iconify-json/material-symbols
 ```
 
 #### Install fonts
 
 ```bash
 npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsource-variable/roboto-mono @fontsource-variable/source-sans-3 @fontsource-variable/merriweather
-```
-
-#### Install icons
-
-```bash
-npm i @iconify/tailwind @iconify-json/fa6-brands @iconify-json/material-symbols
 ```
 </ProcessStep>
 

@@ -25,7 +25,7 @@ const contentCollection = defineCollection({
   }),
 })
 
-const componentVariantsCollection = defineCollection({
+const demosCollection = defineCollection({
   loader: glob({
     base: './src/content/demos',
     pattern: '**/*.json',
@@ -40,6 +40,6 @@ const componentVariantsCollection = defineCollection({
 
 export const collections = {
   components: componentsCollection,
-  demos: componentVariantsCollection,
+  demos: demosCollection,
   pages: contentCollection,
 }
