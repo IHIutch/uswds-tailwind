@@ -11,11 +11,137 @@ A breadcrumb shows the location of the current page in the site structure. It's 
 
 ### Default
 
-<ComponentPreview title="Breadcumb Default" component="breadcrumb" variant="breadcrumb" />
+<ComponentPreview title="Breadcumb Default" code={`
+  <nav
+    aria-label="Breadcrumbs"
+    class="@container"
+  >
+    <ol class="list-none truncate p-2 -mx-1 block">
+      <li class="inline-flex sr-only @mobile-lg:not-sr-only @mobile-lg:whitespace-nowrap">
+        <a
+          href="about:blank"
+          class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"
+        >
+          <span>Home</span>
+        </a>
+        <span
+          aria-hidden="true"
+          class="hidden @mobile-lg:inline"
+        >
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex sr-only @mobile-lg:not-sr-only @mobile-lg:whitespace-nowrap">
+        <a
+          href="about:blank"
+          class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"
+        >
+          <span>Federal Contracting</span>
+        </a>
+        <span
+          aria-hidden="true"
+          class="hidden @mobile-lg:inline"
+        >
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex">
+        <span
+          aria-hidden="true"
+          class="@mobile-lg:hidden"
+        >
+          <span class="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>
+        </span>
+        <a
+          href="about:blank"
+          class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"
+        >
+          <span>Contracting assistance programs</span>
+        </a>
+        <span
+          aria-hidden="true"
+          class="hidden @mobile-lg:inline"
+        >
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline sr-only @mobile-lg:not-sr-only @mobile-lg:whitespace-nowrap">
+        <span
+          role="link"
+          aria-disabled="true"
+          aria-current="page"
+        >Economically disadvantaged women-owned small business federal contracting program</span>
+      </li>
+    </ol>
+  </nav>
+`} />
 
 ### Wrapping 
 
-<ComponentPreview title="Breadcrumb Wrapping" component="breadcrumb" variant="breadcrumb-wrapping" />
+<ComponentPreview title="Breadcrumb Wrapping" code={`
+  <nav
+    aria-label="Breadcrumbs"
+    class="@container leading-snug"
+  >
+    <ol class="list-none p-2 -mx-1 block">
+      <li class="inline-flex sr-only @mobile-lg:not-sr-only">
+        <a
+          href="about:blank"
+          class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"
+        >
+          <span>Home</span>
+        </a>
+        <span
+          aria-hidden="true"
+          class="hidden @mobile-lg:inline"
+        >
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex sr-only @mobile-lg:not-sr-only">
+        <a
+          href="about:blank"
+          class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"
+        >
+          <span>Federal Contracting</span>
+        </a>
+        <span
+          aria-hidden="true"
+          class="hidden @mobile-lg:inline"
+        >
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex">
+        <span
+          aria-hidden="true"
+          class="@mobile-lg:hidden"
+        >
+          <span class="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>
+        </span>
+        <a
+          href="about:blank"
+          class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline focus:outline-4 focus:outline-blue-40v underline"
+        >
+          <span>Contracting assistance programs</span>
+        </a>
+        <span
+          aria-hidden="true"
+          class="hidden @mobile-lg:inline"
+        >
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline sr-only @mobile-lg:not-sr-only">
+        <span
+          role="link"
+          aria-disabled="true"
+          aria-current="page"
+        >Economically disadvantaged women-owned small business federal contracting program</span>
+      </li>
+    </ol>
+  </nav>
+`} />
 
 ## Component API
 
