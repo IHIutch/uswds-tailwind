@@ -4,8 +4,9 @@
 // import fs from 'node:fs'
 import graphPaper from '#assets/img/graph-paper.svg'
 import ZagSplitter from '#components/zag-splitter'
+import { Code } from 'astro-expressive-code/components'
 // import { renderTwigTemplate } from '#utils/functions'
-import CollapsibleCode from './collapsible-code.astro'
+import CollapsibleCode from './collapsible-code'
 import StackBlitzButton from './stackblitz-button'
 
 type Props = {
@@ -15,10 +16,11 @@ type Props = {
   resize?: boolean
   //
   code: string
-  componentName?: string
+  title?: string
+
 }
 
-const { minHeight, resize = true, code, componentName } = Astro.props
+const { minHeight, resize = true, code, title } = Astro.props
 
 const markup = Array.isArray(code) ? code.join('\n') : code;
 
@@ -100,11 +102,11 @@ const markup = Array.isArray(code) ? code.join('\n') : code;
           <div class="px-3 border-r border-r-gray-cool-20 flex items-center">
             <span class="text-black text-sm font-semibold">HTML</span>
           </div>
-          <div class="pr-2 py-1 ml-auto">
+          <div class="pr-2 py-1.5 ml-auto">
             {
-              componentName && (
+              title && (
                 <StackBlitzButton
-                  componentName={componentName}
+                  componentName={title}
                   htmlContent={markup}
                   client:load
                 />
@@ -114,11 +116,11 @@ const markup = Array.isArray(code) ? code.join('\n') : code;
         </div>
       </div>
       <CollapsibleCode
-        class="rounded-b [&_pre]:!rounded-none [&_pre]:!border-0 [&_button]:!border-0"
-        code={markup}
-        lang="html"
-        wrap={false}
-      />
+        client:load
+        className="rounded-b [&_pre]:!border-0 [&_button]:!border-0"
+      >
+        <Code code={markup} lang="html" wrap={false} />
+      </CollapsibleCode>
     </div>
   </div>
 </div>

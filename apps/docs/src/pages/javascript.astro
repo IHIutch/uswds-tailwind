@@ -1,5 +1,4 @@
 ---
-import CollapsibleCode from '#components/collapsible-code.astro'
 import TableOfContents from '#components/table-of-contents.astro'
 import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
@@ -35,11 +34,7 @@ const visibleHeadings = headings.filter(h => h.depth <= 3);
               </p>
             </div>
             <div class="docs-prose max-w-none">
-              <Content
-                components={{
-                  CollapsibleCode,
-                }}
-              />
+              <Content />
             </div>
           </div>
         </div>

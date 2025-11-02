@@ -1,6 +1,5 @@
 ---
 import Alert from '#components/alert.astro'
-import CollapsibleCode from '#components/collapsible-code.astro'
 import ProcessStep from '#components/process-list-step.astro'
 import ProcessList from '#components/process-list.astro'
 import TableOfContents from '#components/table-of-contents.astro'
@@ -42,7 +41,6 @@ const visibleHeadings = headings.filter(h => h.depth <= 3)
             <div class="docs-prose max-w-none">
               <Content
                 components={{
-                  CollapsibleCode,
                   Alert,
                   ProcessList,
                   ProcessStep,
