@@ -5,9 +5,7 @@ import type { ExpressiveCodeBlockProps } from 'astro-expressive-code'
 // import fs from 'node:fs'
 import graphPaper from '#assets/img/graph-paper.svg'
 import ZagSplitter from '#components/zag-splitter'
-import {
-  Code,
-} from 'astro-expressive-code/components'
+import { Code } from 'astro-expressive-code/components'
 // import { renderTwigTemplate } from '#utils/functions'
 import CollapsibleCode from './collapsible-code'
 import StackBlitzButton from './stackblitz-button'
@@ -107,7 +105,7 @@ const markup = Array.isArray(code) ? code.join('\n') : code;
           <div class="px-3 border-r border-r-gray-cool-20 flex items-center">
             <span class="text-black text-sm font-semibold">HTML</span>
           </div>
-          <div class="pr-2 py-1.5 ml-auto">
+          <div class="pr-2 h-12 flex items-center ml-auto">
             {
               title && (
                 <StackBlitzButton
@@ -121,10 +119,17 @@ const markup = Array.isArray(code) ? code.join('\n') : code;
         </div>
       </div>
       <CollapsibleCode
-        client:load
         className="rounded-b [&_pre]:!border-0 [&_button]:!border-0"
+        client:load
       >
-        <Code code={markup} lang="html" mark={mark} ins={ins} del={del} wrap={false} />
+        <Code
+          code={markup}
+          lang="html"
+          mark={mark}
+          ins={ins}
+          del={del}
+          wrap={false}
+        />
       </CollapsibleCode>
     </div>
   </div>
