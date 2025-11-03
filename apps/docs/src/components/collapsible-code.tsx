@@ -16,11 +16,11 @@ export default function CollapsibleCode({ className, children }: {
     if ((wrapperRef.current?.offsetHeight || 0) > openSize) {
       collapsible.setOpen(false)
     }
-  }, [collapsible])
+  }, [collapsible.isUnmounted])
 
   return (
     <Collapsible.RootProvider value={collapsible} className={`relative overflow-hidden ${className}`}>
-      <Collapsible.Content style={{ maxHeight: `${openSize}px`, overflow: 'auto' }}>
+      <Collapsible.Content style={!wrapperRef.current ? { maxHeight: `${openSize}px`, overflow: 'auto' } : undefined}>
         <div
           className="overflow-hidden not-docs-prose"
           ref={wrapperRef}
