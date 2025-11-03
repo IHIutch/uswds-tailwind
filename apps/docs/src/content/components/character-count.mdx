@@ -8,7 +8,45 @@ This component requires the following JavaScript plugins:
 
 ## Example
 
-<ComponentPreview title="Character Count" component="character-count" variant="character-count" />
+<ComponentPreview title="Character Count" mark={[/data-part="[^\"]*"/g]} code={`
+  <div
+    class="max-w-xs"
+    data-part="character-count-root"
+  >
+    <label
+      data-part="character-count-label"
+      for="input-limit"
+      class="block"
+    >Text input</label>
+    <div>
+      <span
+        id="input-hint"
+        class="text-gray-50"
+      >This is an input with a character counter.</span>
+    </div>
+    <div class="mt-2 relative">
+      <input
+        data-part="character-count-input"
+        id="input-limit"
+        aria-describedby="input-hint character-count-hint"
+        class="p-2 w-full max-w-lg h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+        maxlength="20"
+      />
+    </div>
+    <div class="pt-2">
+      <span
+        id="character-count-hint"
+        class="sr-only"
+      >You can enter up to 25 characters</span>
+      <span
+        data-part="character-count-status"
+        aria-hidden="true"
+        class="text-gray-50 data-[invalid]:text-red-60v data-[invalid]:font-bold"
+      >25 characters allowed</span>
+      <span data-part="character-count-sr-status"></span>
+    </div>
+  </div>
+`} />
 
 ## Component API
 
