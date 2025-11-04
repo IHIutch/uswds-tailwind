@@ -27,7 +27,7 @@
 		<div class="mt-2 right-8 bottom-16 absolute min-w-64 flex flex-col items-end">
 
 			{% if navigation.secondary and navigation.secondary | length > 0 %}
-				<ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 first:*:pl-0">
+				<ul class="flex gap-2 mb-1 divide-x divide-gray-cool-10 *:pl-2 *:first:pl-0">
 					{% for secondary_item in navigation.secondary %}
 						<li class="inline-flex">
 							<a href="{{- secondary_item.href -}}" class="text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v">{{- secondary_item.label -}}</a>

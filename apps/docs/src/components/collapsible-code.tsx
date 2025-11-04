@@ -35,7 +35,7 @@ export default function CollapsibleCode({ className, children }: {
         hidden={collapsible.open}
       >
         <div
-          className="flex items-center gap-2 rounded font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"
+          className="flex items-center gap-2 rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v"
         >
           <span>Expand Code</span>
         </div>
