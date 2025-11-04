@@ -89,7 +89,11 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       });
     </script>
     <script>
-      import "@uswds-tailwind/compat/auto";
+      import { initAll } from "@uswds-tailwind/compat";
+      
+      document.addEventListener("astro:page-load", () => {
+        initAll();
+      });
     </script>
 
     <!-- Fathom - beautiful, simple website analytics -->
