@@ -7,24 +7,86 @@ description: "A site alert communicates urgent sitewide information."
 
 ### Default
 
-<ComponentPreview title="Site Alert Default" component="site-alert" variant="site-alert" />
+<ComponentPreview title="Site Alert Default" code={`
+  <section aria-label="Site alert" class="bg-cyan-5 border-l-8 border-l-cyan-30v">
+    <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
+      <div class="absolute left-2 @desktop:left-6 top-3">
+        <div class="icon-[material-symbols--info] size-8"></div>
+      </div>
+      <h3 class="text-2xl font-bold mb-2 leading-none">Emergency alert message</h3>
+      <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    </div>
+  </section>
+`} />
 
 ### Emergency
 
-<ComponentPreview title="Site Alert Emergency" component="site-alert" variant="site-alert-emergency" />
+<ComponentPreview title="Site Alert Emergency" code={`
+  <section aria-label="Site alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+    <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
+      <div class="absolute left-2 @desktop:left-6 top-3">
+        <div class="icon-[material-symbols--info] size-8"></div>
+      </div>
+      <h3 class="text-2xl font-bold mb-2 leading-none">Emergency alert message</h3>
+      <p class="leading-normal">Additional context and followup information including <a href="#" class="text-gray-10 underline">a link</a>.</p>
+    </div>
+  </section>
+`} />
 
 ### List
 
-<ComponentPreview title="Site Alert List" component="site-alert" variant="site-alert-list" />
+<ComponentPreview title="Site Alert List" code={`
+  <section aria-label="Site alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+    <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
+      <div class="absolute left-2 @desktop:left-6 top-3">
+        <div class="icon-[material-symbols--info] size-8"></div>
+      </div>
+      <h3 class="text-2xl font-bold mb-2 leading-none">Emergency alert message</h3>
+      <ul class="list-disc space-y-1 pl-4 mt-4">
+        <li>
+          The primary emergency message and <a class="text-gray-10 underline" href="#">a link</a> for supporting context.
+        </li>
+        <li>
+          Another message, <a class="text-gray-10 underline" href="#">and another link</a>.
+        </li>
+        <li>A final emergency message.</li>
+      </ul>
+    </div>
+  </section>
+`} />
 
 ### No Header
 
-<ComponentPreview title="Site Alert No Header" component="site-alert" variant="site-alert-no-header" />
+<ComponentPreview title="Site Alert No Header" component="site-alert" code={`
+  <section aria-label="Site alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+    <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
+      <div class="absolute left-2 @desktop:left-6 top-3">
+        <div class="icon-[material-symbols--info] size-8"></div>
+      </div>
+      <p class="leading-normal"><strong>Short alert message.</strong> Lorem ipsum dolor sit amet, <a href="#" class="text-gray-10 underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    </div>
+  </section>
+`} />
 
 ### No Icon
 
-<ComponentPreview title="Site Alert No Icon" component="site-alert" variant="site-alert-no-icon" />
+<ComponentPreview title="Site Alert No Icon" code={`
+  <section aria-label="Site alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+    <div class="py-4 pl-2 pr-4 @desktop:pl-8 @desktop:pr-16 relative max-w-5xl mx-auto">
+      <p class="leading-normal"><strong>Short alert message.</strong> Lorem ipsum dolor sit amet, <a href="#" class="text-gray-10 underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    </div>
+  </section>
+`} />
 
 ### Slim
 
-<ComponentPreview title="Site Alert Slim" component="site-alert" variant="site-alert-slim" />
+<ComponentPreview title="Site Alert Slim" code={`
+  <section aria-label="Site alert" class="bg-red-warm-60v border-l-8 border-red-warm-60v text-white">
+    <div class="py-2 pl-10 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
+      <div class="absolute left-2 @desktop:left-6">
+        <div class="icon-[material-symbols--error] size-6"></div>
+      </div>
+      <p class="leading-normal"><strong>Short alert message.</strong> Lorem ipsum dolor sit amet, <a href="#" class="text-gray-10 underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    </div>
+  </section>
+`} />

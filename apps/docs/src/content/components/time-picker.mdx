@@ -8,7 +8,108 @@ This component requires the following JavaScript plugin:
 
 ## Example
 
-<ComponentPreview title="Time Picker" component="time-picker" variant="time-picker" resize={false} />
+<ComponentPreview title="Time Picker" resize={false} code={`
+  <div
+    class="max-w-lg"
+    data-part="combobox-root"
+  >
+    <label
+      class="combobox-label"
+      data-part="combobox-label"
+      class="block"
+    >Appointment time</label>
+
+    <select
+      data-part="combobox-select"
+      hidden
+    >
+      <option value></option>
+      <option value="00:00">12:00am</option>
+      <option value="00:30">12:30am</option>
+      <option value="1:00">1:00am</option>
+      <option value="1:30">1:30am</option>
+      <option value="2:00">2:00am</option>
+      <option value="2:30">2:30am</option>
+      <option value="3:00">3:00am</option>
+      <option value="3:30">3:30am</option>
+      <option value="4:00">4:00am</option>
+      <option value="4:30">4:30am</option>
+      <option value="5:00">5:00am</option>
+      <option value="5:30">5:30am</option>
+      <option value="6:00">6:00am</option>
+      <option value="6:30">6:30am</option>
+      <option value="7:00">7:00am</option>
+      <option value="7:30">7:30am</option>
+      <option value="8:00">8:00am</option>
+      <option value="8:30">8:30am</option>
+      <option value="9:00">9:00am</option>
+      <option value="9:30">9:30am</option>
+      <option value="10:00">10:00am</option>
+      <option value="10:30">10:30am</option>
+      <option value="11:00">11:00am</option>
+      <option value="11:30">11:30am</option>
+      <option value="12:00">12:00pm</option>
+      <option value="12:30">12:30pm</option>
+      <option value="13:00">1:00pm</option>
+      <option value="13:30">1:30pm</option>
+      <option value="14:00">2:00pm</option>
+      <option value="14:30">2:30pm</option>
+      <option value="15:00">3:00pm</option>
+      <option value="15:30">3:30pm</option>
+      <option value="16:00">4:00pm</option>
+      <option value="16:30">4:30pm</option>
+      <option value="17:00">5:00pm</option>
+      <option value="17:30">5:30pm</option>
+      <option value="18:00">6:00pm</option>
+      <option value="18:30">6:30pm</option>
+      <option value="19:00">7:00pm</option>
+      <option value="19:30">7:30pm</option>
+      <option value="20:00">8:00pm</option>
+      <option value="20:30">8:30pm</option>
+      <option value="21:00">9:00pm</option>
+      <option value="21:30">9:30pm</option>
+      <option value="22:00">10:00pm</option>
+      <option value="22:30">10:30pm</option>
+      <option value="23:00">11:00pm</option>
+      <option value="23:30">11:30pm</option>
+    </select>
+
+    <div class="relative mt-2 max-w-40">
+      <div class="flex w-full">
+        <input
+          data-part="combobox-input"
+          class="pr-10 p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4"
+          required
+        >
+        <div class="absolute z-10 inset-y-0 right-0 flex">
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-clear"
+            type="button"
+          >
+            <div class="icon-[material-symbols--close] size-6"></div>
+          </button>
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-toggle"
+            type="button"
+          >
+            <div class="icon-[material-symbols--expand-more] size-8"></div>
+          </button>
+        </div>
+      </div>
+      <ul
+        data-part="combobox-list"
+        class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+      >
+        <li
+          data-part="combobox-item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+        ></li>
+      </ul>
+    </div>
+  </div>
+`} />
 
 ## Keyboard Interactions
 

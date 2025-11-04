@@ -7,11 +7,172 @@ description: "Pagination is navigation for paginated content."
 
 ### Bounded
 
-<ComponentPreview title="Pagination" component="pagination" variant="pagination" />
+<ComponentPreview title="Pagination" code={`
+  <nav
+    aria-label="Pagination"
+    class="@container flex justify-center"
+  >
+    <ul class="flex space-x-2">
+      <li class="h-10 min-w-10 hidden @tablet:inline-flex">
+        <a
+          href="#"
+          class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v"
+        >
+          <span
+            aria-hidden="true"
+            class="icon-[material-symbols--chevron-left] align-middle size-4"
+          ></span>
+          Previous
+        </a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 1"
+        >1</a>
+      </li>
+      <li
+        aria-label="ellipsis indicating non-visible pages"
+        class="h-10 min-w-10 p-2 select-none flex items-center justify-center"
+      >
+        <span>...</span>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 4"
+        >4</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 5"
+        >5</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 6"
+          aria-current="page"
+        >6</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 7"
+        >7</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Last page, page 8"
+        >8</a>
+      </li>
+      <li class="h-10 min-w-10 hidden @tablet:inline-flex">
+        <a
+          href="#"
+          class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v"
+        >
+          Next
+          <span
+            aria-hidden="true"
+            class="icon-[material-symbols--chevron-right] align-middle size-4"
+          ></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+`} />
 
 ### Unbounded
 
-<ComponentPreview title="Pagination Unbounded" component="pagination" variant="pagination-unbounded" />
+<ComponentPreview title="Pagination Unbounded" code={`
+  <nav
+    aria-label="Pagination"
+    class="@container flex justify-center"
+  >
+    <ul class="flex space-x-2">
+      <li class="h-10 min-w-10 hidden @tablet:inline-flex">
+        <a
+          href="#"
+          class="pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v"
+        >
+          <span
+            aria-hidden="true"
+            class="icon-[material-symbols--chevron-left] align-middle size-4"
+          ></span>
+          Previous
+        </a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 1"
+        >1</a>
+      </li>
+      <li
+        aria-label="ellipsis indicating non-visible pages"
+        class="h-10 min-w-10 p-2 select-none flex items-center justify-center"
+      >
+        <span>...</span>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 5"
+        >5</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 6"
+          aria-current="page"
+        >6</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 7"
+        >7</a>
+      </li>
+      <li class="h-10 min-w-10 inline-flex">
+        <a
+          href="#"
+          class="p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white"
+          aria-label="Page 8"
+        >8</a>
+      </li>
+      <li
+        aria-label="ellipsis indicating non-visible pages"
+        class="h-10 min-w-10 p-2 select-none flex items-center justify-center"
+      >
+        <span>...</span>
+      </li>
+      <li class="h-10 min-w-10 hidden @tablet:inline-flex">
+        <a
+          href="#"
+          class="pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v"
+        >
+          Next
+          <span
+            aria-hidden="true"
+            class="icon-[material-symbols--chevron-right] align-middle size-4"
+          ></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+`} />
 
 ## Component API
 

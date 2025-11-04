@@ -7,8 +7,166 @@ description: "Radio buttons allow users to select exactly one choice from a grou
 
 ### Default
 
-<ComponentPreview title="Radio Default" component="radio" variant="radio" />
+<ComponentPreview title="Radio Default" code={`
+  <form class="max-w-xs">
+    <fieldset>
+      <legend class="leading-snug max-w-56 mb-3">Select one historical figure</legend>
+      <div class="space-y-2"> <label
+          for="item-1"
+          class="flex"
+        >
+          <input
+            id="item-1"
+            type="radio"
+            value="Sojourner Truth"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed">Sojourner
+            Truth</div>
+        </label>
+        <label
+          for="item-2"
+          class="flex"
+        >
+          <input
+            id="item-2"
+            type="radio"
+            value="Frederick Douglass"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed">Frederick
+            Douglass</div>
+        </label>
+        <label
+          for="item-3"
+          class="flex"
+        >
+          <input
+            id="item-3"
+            type="radio"
+            value="Booker T. Washington"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed">Booker T.
+            Washington</div>
+        </label>
+        <label
+          for="item-4"
+          class="flex"
+        >
+          <input
+            disabled=""
+            id="item-4"
+            type="radio"
+            value="George Washington Carver"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed">George
+            Washington Carver</div>
+        </label>
+      </div>
+    </fieldset>
+  </form>
+`} />
 
 ### Tiled
 
-<ComponentPreview title="Radio Tile" component="radio" variant="radio-tile" />
+<ComponentPreview title="Radio Tile" code={`
+  <form class="max-w-xs">
+    <fieldset>
+      <legend class="leading-snug max-w-56 mb-3">Select any historical figure</legend>
+      <div class="space-y-2"> <label
+          for="item-5"
+          class="flex relative z-0 px-3 py-4"
+        >
+          <input
+            id="item-5"
+            type="radio"
+            value="Sojourner Truth"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div
+            class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white"
+          >Sojourner Truth <span class="block mt-1 text-sm">This is optional text that can be used to describe the label
+              in more detail.</span>
+          </div>
+        </label>
+        <label
+          for="item-6"
+          class="flex relative z-0 px-3 py-4"
+        >
+          <input
+            id="item-6"
+            type="radio"
+            value="Frederick Douglass"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div
+            class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white"
+          >Frederick Douglass </div>
+        </label>
+        <label
+          for="item-7"
+          class="flex relative z-0 px-3 py-4"
+        >
+          <input
+            id="item-7"
+            type="radio"
+            value="Booker T. Washington"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div
+            class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white"
+          >Booker T. Washington </div>
+        </label>
+        <label
+          for="item-8"
+          class="flex relative z-0 px-3 py-4"
+        >
+          <input
+            disabled
+            id="item-8"
+            type="radio"
+            value="George Washington Carver"
+            name="historical-figures"
+            class="sr-only peer"
+          >
+          <div
+            class="flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full before:peer-checked:bg-blue-60v before:peer-checked:peer-disabled:bg-gray-50"
+          ></div>
+          <div
+            class="pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white"
+          >George Washington Carver </div>
+        </label>
+      </div>
+    </fieldset>
+  </form>
+`} />
