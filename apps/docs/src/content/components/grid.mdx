@@ -7,25 +7,400 @@ description: "Use our flexible grid system to structure website content. The gri
 
 ### Grid Layout
 
-<ComponentPreview title="Grid" component="grid" variant="grid" />
+<ComponentPreview title="Grid" code={`
+  <div class="space-y-4">
+
+    <!-- Used to illustrate the 12 column layout -->
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12 divide-x divide-red-30 border-x border-x-red-30">
+      <div class="flex justify-center leading-none">1</div>
+      <div class="flex justify-center leading-none">2</div>
+      <div class="flex justify-center leading-none">3</div>
+      <div class="flex justify-center leading-none">4</div>
+      <div class="flex justify-center leading-none">5</div>
+      <div class="flex justify-center leading-none">6</div>
+      <div class="flex justify-center leading-none">7</div>
+      <div class="flex justify-center leading-none">8</div>
+      <div class="flex justify-center leading-none">9</div>
+      <div class="flex justify-center leading-none">10</div>
+      <div class="flex justify-center leading-none">11</div>
+      <div class="flex justify-center leading-none">12</div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-3">
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-4">
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-4">
+        .col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-4">
+        .col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-4">
+        .col-span-4
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid tablet:grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black tablet:col-span-4">
+        .tablet:col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black tablet:col-span-4">
+        .tablet:col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black tablet:col-span-4">
+        .tablet:col-span-4
+      </div>
+    </div>
+  </div>
+`} />
 
 ### Grid vs Flex
 
-<ComponentPreview title="Flex" component="grid" variant="grid-flex" />
+<ComponentPreview title="Flex" code={`
+  <div class="space-y-4">
+
+    <!-- Used to illustrate the 12 column layout -->
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12 divide-x divide-red-30 border-x border-x-red-30">
+      <div class="flex justify-center leading-none">1</div>
+      <div class="flex justify-center leading-none">2</div>
+      <div class="flex justify-center leading-none">3</div>
+      <div class="flex justify-center leading-none">4</div>
+      <div class="flex justify-center leading-none">5</div>
+      <div class="flex justify-center leading-none">6</div>
+      <div class="flex justify-center leading-none">7</div>
+      <div class="flex justify-center leading-none">8</div>
+      <div class="flex justify-center leading-none">9</div>
+      <div class="flex justify-center leading-none">10</div>
+      <div class="flex justify-center leading-none">11</div>
+      <div class="flex justify-center leading-none">12</div>
+    </div>
+
+    <div>
+      <div class="mx-auto max-w-screen-desktop">
+        grid
+      </div>
+      <div class="mx-auto max-w-screen-desktop grid grid-cols-3 gap-4">
+        <div class="bg-blue-warm-10 p-4 border border-black">
+          (col-span-1)
+        </div>
+        <div class="bg-blue-warm-10 p-4 border border-black">
+          (col-span-1)
+        </div>
+        <div class="bg-blue-warm-10 p-4 border border-black">
+          (col-span-1)
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mx-auto max-w-screen-desktop">
+        flex
+      </div>
+      <div class="mx-auto max-w-screen-desktop flex flex-wrap">
+        <div class="bg-red-warm-10 p-4 border border-black w-1/3">
+          .w-1/3
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/3">
+          .w-1/3
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/3">
+          .w-1/3
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mx-auto max-w-screen-desktop">
+        flex &amp; gap
+      </div>
+      <div class="mx-auto max-w-screen-desktop flex flex-wrap gap-4">
+        <div class="bg-red-warm-10 p-4 border border-black w-1/3">
+          .w-1/3
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/3">
+          .w-1/3
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/3">
+          .w-1/3
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mx-auto max-w-screen-desktop">
+        flex auto size
+      </div>
+      <div class="mx-auto max-w-screen-desktop flex flex-wrap">
+        <div class="bg-red-warm-10 p-4 border border-black">
+          (w-auto)
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black">
+          (w-auto)
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black">
+          (w-auto)
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/4">
+          .w-1/4
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/4">
+          .w-1/4
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/4">
+          .w-1/4
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black w-1/4">
+          .w-1/4
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mx-auto max-w-screen-desktop">
+        flex fill
+      </div>
+      <div class="mx-auto max-w-screen-desktop flex flex-wrap">
+        <div class="bg-red-warm-10 p-4 border border-black">
+          (w-auto)
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black flex-1">
+          .flex-1
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mx-auto max-w-screen-desktop">
+        flex fill multiple
+      </div>
+      <div class="mx-auto max-w-screen-desktop flex flex-wrap">
+        <div class="bg-red-warm-10 p-4 border border-black flex-1">
+          .flex-1
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black flex-1">
+          .flex-1
+        </div>
+        <div class="bg-red-warm-10 p-4 border border-black flex-1">
+          .flex-1
+        </div>
+      </div>
+    </div>
+
+  </div>
+`} />
 
 ### Gutters
 
-<ComponentPreview title="Grid Gutters" component="grid" variant="grid-gutters" />
+<ComponentPreview title="Grid Gutters" code={`
+  <div class="space-y-4">
+
+    <!-- Used to illustrate the 12 column layout -->
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12 divide-x divide-red-30 border-x border-x-red-30">
+      <div class="flex justify-center leading-none">1</div>
+      <div class="flex justify-center leading-none">2</div>
+      <div class="flex justify-center leading-none">3</div>
+      <div class="flex justify-center leading-none">4</div>
+      <div class="flex justify-center leading-none">5</div>
+      <div class="flex justify-center leading-none">6</div>
+      <div class="flex justify-center leading-none">7</div>
+      <div class="flex justify-center leading-none">8</div>
+      <div class="flex justify-center leading-none">9</div>
+      <div class="flex justify-center leading-none">10</div>
+      <div class="flex justify-center leading-none">11</div>
+      <div class="flex justify-center leading-none">12</div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-3 gap-4 bg-blue-warm-10">
+      <div class="bg-white p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-white p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-white p-4 border border-black">
+        (col-span-1)
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-3 gap-8 bg-blue-warm-10">
+      <div class="bg-white p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-white p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-white p-4 border border-black">
+        (col-span-1)
+      </div>
+    </div>
+
+  </div>
+`} />
 
 ### Column Offset
 
-<ComponentPreview title="Grid Offset" component="grid" variant="grid-offset" />
+<ComponentPreview title="Grid Offset" code={`
+  <div class="space-y-4">
+
+    <!-- Used to illustrate the 12 column layout -->
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12 divide-x divide-red-30 border-x border-x-red-30">
+      <div class="flex justify-center leading-none">1</div>
+      <div class="flex justify-center leading-none">2</div>
+      <div class="flex justify-center leading-none">3</div>
+      <div class="flex justify-center leading-none">4</div>
+      <div class="flex justify-center leading-none">5</div>
+      <div class="flex justify-center leading-none">6</div>
+      <div class="flex justify-center leading-none">7</div>
+      <div class="flex justify-center leading-none">8</div>
+      <div class="flex justify-center leading-none">9</div>
+      <div class="flex justify-center leading-none">10</div>
+      <div class="flex justify-center leading-none">11</div>
+      <div class="flex justify-center leading-none">12</div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-start-5 col-span-8">
+        .col-start-5.col-span-8
+      </div>
+    </div>
+  </div>
+`} />
 
 ### Column Wrapping
 
-<ComponentPreview title="Grid Wrapping" component="grid" variant="grid-wrapping" />
+<ComponentPreview title="Grid Wrapping" code={`
+  <div class="space-y-4">
+
+    <!-- Used to illustrate the 12 column layout -->
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12 divide-x divide-red-30 border-x border-x-red-30">
+      <div class="flex justify-center leading-none">1</div>
+      <div class="flex justify-center leading-none">2</div>
+      <div class="flex justify-center leading-none">3</div>
+      <div class="flex justify-center leading-none">4</div>
+      <div class="flex justify-center leading-none">5</div>
+      <div class="flex justify-center leading-none">6</div>
+      <div class="flex justify-center leading-none">7</div>
+      <div class="flex justify-center leading-none">8</div>
+      <div class="flex justify-center leading-none">9</div>
+      <div class="flex justify-center leading-none">10</div>
+      <div class="flex justify-center leading-none">11</div>
+      <div class="flex justify-center leading-none">12</div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-8">
+        .col-span-8
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-3">
+        .col-span-3
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-5">
+        .col-span-5
+      </div>
+    </div>
+  </div>
+`} />
 
 ### Responsive
 
-Unlike components, layouts use viewport media queries instead of container queries. In order to demonstrate this, change the width of the browser window instead of the component example window.
-<ComponentPreview title="Responsive Breakpoints" component="grid" variant="grid-responsive-breakpoints" />
+Unlike components, layouts use viewport media queries (`.desktop:*`) instead of container queries (`.@desktop:*`). In order to demonstrate this, change the width of the browser window instead of the component example window.
+
+<ComponentPreview title="Responsive Breakpoints" code={`
+  <div class="space-y-4">
+
+    <!-- Used to illustrate the 12 column layout -->
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12 divide-x divide-red-30 border-x border-x-red-30">
+      <div class="flex justify-center leading-none">1</div>
+      <div class="flex justify-center leading-none">2</div>
+      <div class="flex justify-center leading-none">3</div>
+      <div class="flex justify-center leading-none">4</div>
+      <div class="flex justify-center leading-none">5</div>
+      <div class="flex justify-center leading-none">6</div>
+      <div class="flex justify-center leading-none">7</div>
+      <div class="flex justify-center leading-none">8</div>
+      <div class="flex justify-center leading-none">9</div>
+      <div class="flex justify-center leading-none">10</div>
+      <div class="flex justify-center leading-none">11</div>
+      <div class="flex justify-center leading-none">12</div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black">
+        (col-span-1)
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-2">
+        .col-span-2
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-3">
+        .col-span-3
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-4">
+        .col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-2">
+        .col-span-2
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid tablet:grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black tablet:col-span-8">
+        .tablet:col-span-8
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black tablet:col-span-2">
+        .tablet:col-span-2
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black tablet:col-span-2">
+        .tablet:col-span-2
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-screen-desktop grid grid-cols-12">
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-full tablet:col-span-8">
+        .tablet:col-span-8
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-6 tablet:col-span-4">
+        .col-span-6.tablet:col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-6 tablet:col-span-4">
+        .col-span-6.tablet:col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-6 tablet:col-span-4">
+        .col-span-6.tablet:col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-6 tablet:col-span-4">
+        .col-span-6.tablet:col-span-4
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-6">
+        .col-span-6
+      </div>
+      <div class="bg-blue-warm-10 p-4 border border-black col-span-6">
+        .col-span-6
+      </div>
+    </div>
+  </div>
+`}  />
