@@ -12,7 +12,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@ark-ui/react": "catalog:",
     "@astrojs/check": "catalog:",
     "@astrojs/cloudflare": "catalog:",
     "@astrojs/mdx": "catalog:",
@@ -39,6 +38,9 @@
     "@types/react-dom": "catalog:",
     "@uswds-tailwind/compat": "workspace:*",
     "@uswds-tailwind/theme": "workspace:*",
+    "@zag-js/react": "catalog:",
+    "@zag-js/splitter": "catalog:",
+    "@zag-js/toggle": "catalog:",
     "astro": "catalog:",
     "astro-expressive-code": "catalog:",
     "astro-seo": "catalog:",
