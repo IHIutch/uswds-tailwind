@@ -31,7 +31,7 @@ export default function CollapsibleCode({ className, children }: {
       <button
         type="button"
         onClick={() => collapsible.setOpen(true)}
-        className="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0 border-gray-cool-20 border-b border-x rounded-b outline-none"
+        className="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0 border-gray-cool-20 border-b border-x rounded-b outline-hidden"
         hidden={collapsible.open}
       >
         <div

@@ -27,7 +27,7 @@ export default function Search({ isMobile = false }: { isMobile?: boolean }) {
 
   return (
     <>
-      <button onClick={handleOpen} x-modal:close-button={isMobile ? 'true' : undefined} aria-label="Search" type="button" className="group w-full desktop:w-64 max-w-64 outline-none">
+      <button onClick={handleOpen} x-modal:close-button={isMobile ? 'true' : undefined} aria-label="Search" type="button" className="group w-full desktop:w-64 max-w-64 outline-hidden">
         <div className="relative flex items-center">
           <div
             className="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"

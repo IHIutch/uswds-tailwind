@@ -11,7 +11,7 @@
 									<span class="icon-[material-symbols--keyboard-arrow-down] group-aria-expanded:icon-[material-symbols--keyboard-arrow-up] align-middle size-4"></span>
 								</div>
 							</button>
-							<div x-dropdown:content class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug">
+							<div x-dropdown:content class="outline-hidden z-10 bg-blue-warm-80v py-2 w-60 leading-snug">
 								{% for child in primary_item.children %}
 									<a x-dropdown:item href="{{- child.href -}}" class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v">{{- child.label -}}</a>
 								{% endfor %}
