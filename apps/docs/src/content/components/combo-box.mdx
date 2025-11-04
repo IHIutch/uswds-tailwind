@@ -6,9 +6,144 @@ description: "A combo box helps users select an item from a large list of option
 This component requires the following JavaScript plugins:
   - [Combobox](/javascript#combobox)
 
-## Example
+## Examples
 
-<ComponentPreview title="Combo Box" component="combobox" variant="combobox" resize={false} />
+### Default
+
+<ComponentPreview title="Combo Box" resize={false} mark={[/data-part="[^\"]*"/g]} code={`
+  <div
+    class="max-w-lg"
+    data-part="combobox-root"
+  >
+    <label
+      class="combobox-label"
+      data-part="combobox-label"
+      class="block"
+    >Select a fruit:</label>
+
+    <select
+      data-part="combobox-select"
+      hidden
+    >
+      <option value>Select a fruit</option>
+      <option value="apple">Apple</option>
+      <option value="apricot">Apricot</option>
+      <option value="avocado">Avocado</option>
+      <option value="banana">Banana</option>
+      <option value="blackberry">Blackberry</option>
+      <option value="blood orange">Blood orange</option>
+      <option value="blueberry">Blueberry</option>
+      <option value="boysenberry">Boysenberry</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="buddhas hand citron">Buddha's hand citron</option>
+    </select>
+
+    <div class="relative mt-2">
+      <div class="flex w-full">
+        <input
+          required
+          data-part="combobox-input"
+          class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+        >
+        <div class="absolute z-10 inset-y-0 right-0 flex">
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-clear"
+            type="button"
+          >
+            <div class="icon-[material-symbols--close] size-6"></div>
+          </button>
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-toggle"
+            type="button"
+          >
+            <div class="icon-[material-symbols--expand-more] size-8"></div>
+          </button>
+        </div>
+      </div>
+      <ul
+        data-part="combobox-list"
+        class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+      >
+        <li
+          data-part="combobox-item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+        ></li>
+      </ul>
+    </div>
+  </div>
+`} />
+
+### With Default Value
+
+<ComponentPreview title="Combo Box Default Value" resize={false} ins={[/data-default-value="[^\"]*"/g]} code={`
+  <div
+    class="max-w-lg"
+    data-part="combobox-root"
+    data-default-value="banana"
+  >
+    <label
+      class="combobox-label"
+      data-part="combobox-label"
+      class="block"
+    >Select a fruit:</label>
+
+    <select
+      data-part="combobox-select"
+      hidden
+    >
+      <option value>Select a fruit</option>
+      <option value="apple">Apple</option>
+      <option value="apricot">Apricot</option>
+      <option value="avocado">Avocado</option>
+      <option value="banana">Banana</option>
+      <option value="blackberry">Blackberry</option>
+      <option value="blood orange">Blood orange</option>
+      <option value="blueberry">Blueberry</option>
+      <option value="boysenberry">Boysenberry</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="buddhas hand citron">Buddha's hand citron</option>
+    </select>
+
+    <div class="relative mt-2">
+      <div class="flex w-full">
+        <input
+          required
+          data-part="combobox-input"
+          class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+        >
+        <div class="absolute z-10 inset-y-0 right-0 flex">
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-clear"
+            type="button"
+          >
+            <div class="icon-[material-symbols--close] size-6"></div>
+          </button>
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-toggle"
+            type="button"
+          >
+            <div class="icon-[material-symbols--expand-more] size-8"></div>
+          </button>
+        </div>
+      </div>
+      <ul
+        data-part="combobox-list"
+        class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+      >
+        <li
+          data-part="combobox-item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+        ></li>
+      </ul>
+    </div>
+  </div>
+`} />
 
 ## Component API
 
