@@ -32,7 +32,6 @@ catalog:
   '@tailwindcss/vite': 4.1.14
   '@types/fs-extra': 11.0.1
   '@types/node': ^22.18.11
-  '@types/prettier': 2.7.3
   '@types/react': ^19.2.2
   '@types/react-dom': ^19.2.2
   '@types/twig': ^1.12.17

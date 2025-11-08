@@ -26,20 +26,6 @@ type Props = {
 const { minHeight, resize = true, code, title, mark, ins, del } = Astro.props
 
 const markup = Array.isArray(code) ? code.join('\n') : code;
-
-// const propsPath = `./src/__demos__/${component}/${component}-props.json`
-// const componentPath = `./src/__demos__/${component}/examples/${variant}.twig`
-
-// let componentProps = ''
-// if (fs.existsSync(propsPath)) {
-//   componentProps = JSON.parse(fs.readFileSync(propsPath, 'utf8'))
-// }
-
-// const componentCode = fs.readFileSync(componentPath, 'utf-8')
-// const template = await renderTwigTemplate({
-//   path: componentPath,
-//   props: componentProps || '',
-// });
 ---
 
 <div class="not-docs-prose w-full max-w-6xl mt-6 mb-12">
