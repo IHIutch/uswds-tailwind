@@ -41,6 +41,9 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.positioner.attrs,
         id: dom.getPositionerId(scope),
+        style: {
+          pointerEvents: open ? undefined : 'none',
+        },
       })
     },
     getBackdropProps() {

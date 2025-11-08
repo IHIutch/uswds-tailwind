@@ -49,6 +49,11 @@ export const machine = createMachine<ModalSchema>({
       trackDismissableElement({ scope, send, prop }) {
         const getContentEl = () => dom.getContentEl(scope)
         return trackDismissableElement(getContentEl, {
+          onInteractOutside(event) {
+            if (prop('forceAction')) {
+              event.preventDefault()
+            }
+          },
           onEscapeKeyDown(event) {
             if (prop('forceAction')) {
               event.preventDefault()
