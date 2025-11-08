@@ -10,15 +10,197 @@ This component requires the following JavaScript plugin:
 
 ### Default
 
-<ComponentPreview title="Modal Default" code={`todo`} />
+<ComponentPreview title="Modal Default" code={`
+  <div>
+    <button
+      data-part="modal-trigger"
+      data-target="modal-default"
+      class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Open default modal
+    </button>
+    <div
+      data-part="modal-backdrop"
+      data-value="modal-default"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-part="modal-positioner"
+      data-value="modal-default"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-part="modal-content"
+        class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="p-8 pt-10">
+          <h2
+            data-part="modal-title"
+            class="text-xl font-bold font-merriweather"
+          >Are you sure you want to continue?</h2>
+          <p
+            data-part="modal-description"
+            class="mt-2"
+          >You have unsaved changes that will be lost.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Continue without saving</button>
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Go back</button>
+            </div>
+          </div>
+          <button
+            data-part="modal-close-trigger"
+            type="button"
+            class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded-sm hover:text-gray-90 active:text-gray-90 focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+            aria-label="Close this window"
+          >
+            <div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+`} />
 
 ### Large
 
-<ComponentPreview title="Modal Large" code={`todo`} />
+<ComponentPreview title="Modal Large" code={`
+  <div>
+    <button
+      data-part="modal-trigger"
+      data-target="modal-large"
+      class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Open large modal
+    </button>
+    <div
+      data-part="modal-backdrop"
+      data-value="modal-large"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-part="modal-positioner"
+      data-value="modal-large"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-part="modal-content"
+        class="@container relative w-full max-w-4xl rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="px-8 pb-16 pt-14 w-full max-w-2xl mx-auto">
+          <h2
+            data-part="modal-title"
+            class="text-3xl font-bold font-merriweather"
+          >Are you sure you want to continue?</h2>
+          <p
+            data-part="modal-description"
+            class="mt-4"
+          >You have unsaved changes that will be lost.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Continue without saving</button>
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Go back</button>
+            </div>
+          </div>
+          <button
+            data-part="modal-close-trigger"
+            type="button"
+            class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded-sm hover:text-gray-90 active:text-gray-90 focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+            aria-label="Close this window"
+          >
+            <div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+`} />
 
 ### Forced Action
 
-<ComponentPreview title="Modal Forced Action" code={`todo`} />
+<ComponentPreview title="Modal Forced Action" code={`
+<div>
+    <button
+      data-part="modal-trigger"
+      data-target="modal-forced-action"
+      class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Open modal with forced action
+    </button>
+    <div
+      data-part="modal-backdrop"
+      data-value="modal-forced-action"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-part="modal-positioner"
+      data-value="modal-forced-action"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-part="modal-content"
+        data-force-action="true"
+        class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="p-8 pt-10">
+          <h2
+            data-part="modal-title"
+            class="text-xl font-bold font-merriweather"
+          >Your session will end soon.</h2>
+          <p
+            data-part="modal-description"
+            class="mt-2"
+          >You've been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you'll be signed out automatically in 5 minutes.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Yes, stay signed in</button>
+              <button
+                data-part="modal-close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Sign out</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`} />
 
 ## Component API
 
