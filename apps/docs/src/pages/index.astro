@@ -1,10 +1,10 @@
 ---
-import tailwind from "#assets/img/tailwindcss-logo.svg";
-import tsdown from "#assets/img/tsdown-logo.svg";
-import zagjs from "#assets/img/zagjs-logo.svg";
-import Footer from "#components/footer.astro";
-import BaseLayout from "#layouts/base-layout.astro";
-import { Image } from "astro:assets";
+import tailwind from '#assets/img/tailwindcss-logo.svg'
+import tsdown from '#assets/img/tsdown-logo.svg'
+import zagjs from '#assets/img/zagjs-logo.svg'
+import Footer from '#components/footer.astro'
+import BaseLayout from '#layouts/base-layout.astro';
+// import { Image } from 'astro:assets';
 ---
 
 <BaseLayout
@@ -38,97 +38,40 @@ import { Image } from "astro:assets";
         <div class="flex flex-wrap">
           <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
             <div class="pb-6 tablet:p-3 pt-0">
-              <Image
+              <img
                 loading="eager"
                 class="h-10 max-w-56 object-contain mx-auto"
-                src={tailwind}
+                src={tailwind.src}
                 alt="Tailwind Logo"
               />
             </div>
           </div>
           <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
             <div class="py-6 tablet:p-3">
-              <Image
+              <img
                 loading="eager"
                 class="h-10 max-w-56 object-contain mx-auto"
-                src={zagjs}
+                src={zagjs.src}
                 alt="Zag.js"
               />
             </div>
           </div>
           <div class="mx-auto w-full tablet:w-1/2 desktop:w-1/3">
             <div class="pt-6 tablet:p-3 pb-0">
-              <Image
+              <img
                 loading="eager"
                 class="h-10 max-w-56 object-contain mx-auto"
-                src={tsdown}
+                src={tsdown.src}
                 alt="tsdown"
               />
             </div>
           </div>
         </div>
+      </div>
+      <div class="max-w-8xl mx-auto px-4">
         <div
-          class="grid tablet-lg:grid-cols-2 gap-4 tablet:px-16 desktop:px-28 mt-12 overflow-hidden"
+          class="grid tablet-lg:grid-cols-3 gap-4 tablet:px-16 desktop:px-28 mt-12 overflow-hidden"
         >
-          <div class="rounded-sm border p-4 bg-white">
-            <h3 class="text-lg font-bold mb-1">Compile Time</h3>
-            <div
-              aria-hidden="true"
-              class="grid grid-cols-[auto_1fr_auto] gap-2 mt-3"
-            >
-              <div class="text-sm flex items-center justify-end">
-                <span class="font-medium">USWDS + TW</span>
-              </div>
-              <div class="flex gap-2 items-center">
-                <div
-                  class="h-full bg-blue-50v rounded-sm"
-                  style={{ width: `${(639 / 4500) * 100}%` }}
-                >
-                </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-cool-60"
-                    >7x faster</span
-                  >
-                </div>
-              </div>
-              <div>
-                <span class="text-sm">0.6s</span>
-              </div>
-              <div class="text-sm flex items-center justify-end">
-                <span class="font-medium">USWDS</span>
-              </div>
-              <div>
-                <div class="size-full bg-red-60 rounded-sm"></div>
-              </div>
-              <div>
-                <span class="text-sm">4.5s</span>
-              </div>
-            </div>
-            <p class="text-sm text-gray-cool-70 mt-4">
-              Using Parcel, we're able to compile all of our assets extremely
-              quickly. In fact, the CSS itself only takes around <em
-                class="font-bold">60ms</em
-              >!
-            </p>
-          </div>
-          <table class="sr-only whitespace-normal">
-            <thead>
-              <tr>
-                <th scope="col">Project Name</th>
-                <th scope="col">Compile Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>USWDS + Tailwind</td>
-                <td>0.6 seconds (7 times faster than USWDS)</td>
-              </tr>
-              <tr>
-                <td>USWDS</td>
-                <td>2.4 seconds</td>
-              </tr>
-            </tbody>
-          </table>
           <div class="rounded-sm border p-4 bg-white">
             <h3 class="text-lg font-bold mb-4">CSS Size</h3>
             <div
@@ -145,8 +88,7 @@ import { Image } from "astro:assets";
                 >
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-cool-60"
-                    >4x smaller</span
+                  <span class="text-sm font-medium text-gray-cool-60">4x smaller</span
                   >
                 </div>
               </div>
@@ -164,9 +106,11 @@ import { Image } from "astro:assets";
               </div>
             </div>
             <p class="text-sm text-gray-cool-70 mt-4">
-              Thanks to Tailwind's "just-in-time" compiler, we only generate the
-              CSS we actually use. For example, the CSS of this site only
-              reaches around <em class="font-bold">160 KB</em>.
+              Tailwind's just-in-time compiler generates only the CSS you
+              actually use. For example, this site's CSS is only <strong
+                class="font-bold"
+                                                                 >160 KB</strong
+              >.
             </p>
           </div>
           <table class="sr-only whitespace-normal">
@@ -187,6 +131,117 @@ import { Image } from "astro:assets";
               </tr>
             </tbody>
           </table>
+          <div class="rounded-sm border p-4 bg-white">
+            <h3 class="text-lg font-bold mb-4">JS Size</h3>
+            <div
+              aria-hidden="true"
+              class="grid grid-cols-[auto_1fr_auto] gap-2"
+            >
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS + TW</span>
+              </div>
+              <div class="flex gap-2 items-center">
+                <div
+                  class="h-full bg-blue-50v rounded-sm"
+                  style={{ width: `${(66 / 243) * 100}%` }}
+                >
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-cool-60">3.5x smaller</span
+                  >
+                </div>
+              </div>
+              <div>
+                <span class="text-sm">66 KB</span>
+              </div>
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS</span>
+              </div>
+              <div>
+                <div class="size-full bg-red-60 rounded-sm"></div>
+              </div>
+              <div>
+                <span class="text-sm">243 KB</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-cool-70 mt-4">
+              Consistent and pure state logic achieves a significantly smaller bundle size while also ensuring framework-agnostic compatibility.
+            </p>
+          </div>
+          <table class="sr-only whitespace-normal">
+            <thead>
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">JavaScript Size</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>USWDS + Tailwind</td>
+                <td>66 kilobytes (3.5 times smaller than USWDS)</td>
+              </tr>
+              <tr>
+                <td>USWDS</td>
+                <td>243 kilobytes</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rounded-sm border p-4 bg-white">
+            <h3 class="text-lg font-bold mb-1">Compile Time</h3>
+            <div
+              aria-hidden="true"
+              class="grid grid-cols-[auto_1fr_auto] gap-2 mt-3"
+            >
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS + TW</span>
+              </div>
+              <div class="flex gap-2 items-center">
+                <div
+                  class="h-full bg-blue-50v rounded-sm"
+                  style={{ width: `${(700 / 4500) * 100}%` }}
+                >
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-cool-60">Over 6x faster</span
+                  >
+                </div>
+              </div>
+              <div>
+                <span class="text-sm">0.7s</span>
+              </div>
+              <div class="text-sm flex items-center justify-end">
+                <span class="font-medium">USWDS</span>
+              </div>
+              <div>
+                <div class="size-full bg-red-60 rounded-sm"></div>
+              </div>
+              <div>
+                <span class="text-sm">4.5s</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-cool-70 mt-4">
+              Using tsdown, a Rust-based bundler, we achieve blazing-fast build
+              speeds. The modular approach means you only ship what you use.
+            </p>
+          </div>
+          <table class="sr-only whitespace-normal">
+            <thead>
+              <tr>
+                <th scope="col">Project Name</th>
+                <th scope="col">Compile Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>USWDS + Tailwind</td>
+                <td>0.6 seconds (7 times faster than USWDS)</td>
+              </tr>
+              <tr>
+                <td>USWDS</td>
+                <td>2.4 seconds</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -199,8 +254,7 @@ import { Image } from "astro:assets";
             <div
               class="bg-blue-80v size-10 flex items-center justify-center rounded-full text-white mb-3"
             >
-              <span class="icon-[material-symbols--accessibility-new] size-6"
-              ></span>
+              <span class="icon-[material-symbols--accessibility-new] size-6"></span>
             </div>
             <h3 class="text-xl font-semibold font-public-sans mb-2">
               Accessible

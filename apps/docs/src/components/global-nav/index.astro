@@ -1,7 +1,7 @@
 ---
 import type { NavLinks } from 'types'
 import logo from '#assets/img/logo.svg'
-import { Image } from 'astro:assets'
+// import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import DesktopNav from './desktop-nav.astro'
 import MobileNav from './mobile-nav.astro'
@@ -110,7 +110,7 @@ const secondary: NavLinks['secondary'] = [
             class="text-gray-90 text-xl flex gap-3 items-center focus:outline-4 focus:outline-blue-40v"
             href="/"
           >
-            <Image src={logo} class="h-8 w-auto" alt="Logo" />
+            <img src={logo.src} class="h-8 w-auto" alt="" />
             <span>USWDS + Tailwind</span>
           </a>
         </em>
