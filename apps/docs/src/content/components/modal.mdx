@@ -10,7 +10,7 @@ This component requires the following JavaScript plugin:
 
 ### Default
 
-<ComponentPreview title="Modal Default" code={`
+<ComponentPreview title="Modal Default" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g, /data-target="[^\"]*"/g]} code={`
   <div>
     <button
       data-part="modal-trigger"
@@ -77,7 +77,7 @@ This component requires the following JavaScript plugin:
 
 ### Large
 
-<ComponentPreview title="Modal Large" code={`
+<ComponentPreview title="Modal Large" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g, /data-target="[^\"]*"/g]} code={`
   <div>
     <button
       data-part="modal-trigger"
@@ -144,8 +144,8 @@ This component requires the following JavaScript plugin:
 
 ### Forced Action
 
-<ComponentPreview title="Modal Forced Action" code={`
-<div>
+<ComponentPreview title="Modal Forced Action" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g, /data-target="[^\"]*"/g]} code={`
+  <div>
     <button
       data-part="modal-trigger"
       data-target="modal-forced-action"
