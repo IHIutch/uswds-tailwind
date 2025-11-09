@@ -17,6 +17,8 @@ export default function StackBlitzButton({
         title: `${componentName} - USWDS + Tailwind`,
         description: description || `Interactive example of ${componentName} component using USWDS + Tailwind`,
       })
+      // @ts-expect-error Fathom is loaded globally
+      window.fathom.trackEvent(`Stackblitz: ${componentName}`)
     }
     catch (error) {
       console.error('Failed to open StackBlitz:', error)
