@@ -1,13 +1,26 @@
----
-title: "Footer"
-description: "A footer serves site visitors who arrive at the bottom of a page without finding what they want."
----
+<!DOCTYPE html>
+<html lang="en">
 
-## Examples
+<head>
+  <meta charset="UTF-8" />
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="/vite.svg"
+  />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Vite + TS</title>
+  <link
+    href="./../src/styles.css"
+    rel="stylesheet"
+  >
+</head>
 
-### Default
+<body class="font-source-sans p-4">
 
-<ComponentPreview title="Footer" code={`
   <footer class="@container">
     <div class="px-4 py-5 @desktop:px-8">
       <a
@@ -362,7 +375,7 @@ description: "A footer serves site visitors who arrive at the bottom of a page w
           <div class="flex flex-wrap @mobile-lg:justify-end gap-2">
             <div>
               <a
-                href="#"
+                href=""
                 class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
               >
                 <div class="icon-[fa6-brands--facebook] size-full"></div>
@@ -371,7 +384,7 @@ description: "A footer serves site visitors who arrive at the bottom of a page w
             </div>
             <div>
               <a
-                href="#"
+                href=""
                 class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
               >
                 <div class="icon-[fa6-brands--twitter] size-full"></div>
@@ -380,7 +393,7 @@ description: "A footer serves site visitors who arrive at the bottom of a page w
             </div>
             <div>
               <a
-                href="#"
+                href=""
                 class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
               >
                 <div class="icon-[fa6-brands--youtube] size-full"></div>
@@ -389,7 +402,7 @@ description: "A footer serves site visitors who arrive at the bottom of a page w
             </div>
             <div>
               <a
-                href="#"
+                href=""
                 class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
               >
                 <div class="icon-[fa6-brands--instagram] size-full"></div>
@@ -398,7 +411,7 @@ description: "A footer serves site visitors who arrive at the bottom of a page w
             </div>
             <div>
               <a
-                href="#"
+                href=""
                 class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
               >
                 <div class="icon-[material-symbols--rss-feed] size-full"></div>
@@ -427,198 +440,12 @@ description: "A footer serves site visitors who arrive at the bottom of a page w
       </div>
     </div>
   </footer>
-`} />
 
-### Medium
 
-<ComponentPreview title="Footer Medium" code={`
-  <footer class="@container">
-    <div class="px-4 py-5 @desktop:px-8">
-      <a
-        href="#"
-        class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-      >Return to top</a>
-    </div>
-    <nav class="bg-gray-5 @desktop:px-4">
-      <ul
-        class="flex flex-col @mobile-lg:flex-row flex-wrap divide-y @mobile-lg:divide-y-0 divide-y-gray-30 border-y @mobile-lg:border-y-0 border-y-gray-30"
-      >
-        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="bg-gray-10 px-4 @desktop:px-8 py-5">
-      <div class="grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4">
-        <div class="flex flex-wrap flex-col @mobile-lg:flex-row @mobile-lg:items-center gap-4">
-          <div>
-            <img
-              src=""
-              alt=""
-              class="bg-white size-20 rounded-full object-cover"
-            >
-          </div>
-          <div>
-            <p class="text-xl font-bold">Name of agency</p>
-          </div>
-        </div>
-        <div class="@mobile-lg:text-right grow space-y-3">
-          <div class="flex flex-wrap @mobile-lg:justify-end gap-2">
-            <div>
-              <a
-                href="#"
-                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
-              >
-                <div class="icon-[fa6-brands--facebook] size-full"></div>
-                <span class="sr-only">Facebook</span>
-              </a>
-            </div>
-            <div>
-              <a
-                href="#"
-                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
-              >
-                <div class="icon-[fa6-brands--twitter] size-full"></div>
-                <span class="sr-only">Twitter</span>
-              </a>
-            </div>
-            <div>
-              <a
-                href="#"
-                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
-              >
-                <div class="icon-[fa6-brands--youtube] size-full"></div>
-                <span class="sr-only">YouTube</span>
-              </a>
-            </div>
-            <div>
-              <a
-                href="#"
-                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
-              >
-                <div class="icon-[fa6-brands--instagram] size-full"></div>
-                <span class="sr-only">Instagram</span>
-              </a>
-            </div>
-            <div>
-              <a
-                href="#"
-                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
-              >
-                <div class="icon-[material-symbols--rss-feed] size-full"></div>
-                <span class="sr-only">RSS</span>
-              </a>
-            </div>
-          </div>
-          <p class="text-xl font-bold">Agency Contact Center</p>
-          <address class="flex flex-wrap @mobile-lg:justify-end gap-x-4 @desktop:gap-x-8">
-            <div class="leading-tighter">
-              <a
-                href="tel:1-800-555-5555"
-                class="text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-              >(800) 555-GOVT
-              </a>
-            </div>
-            <div class="leading-tighter">
-              <a
-                href="mailto:info@agency.gov"
-                class="text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-              >info@agency.gov
-              </a>
-            </div>
-          </address>
-        </div>
-      </div>
-    </div>
-  </footer>
-`} />
+  <script
+    type="module"
+    src="./../src/index.ts"
+  ></script>
+</body>
 
-### Slim
-
-<ComponentPreview title="Footer Slim" code={`
-  <footer class="@container">
-    <div class="px-4 py-5 @desktop:px-8">
-      <a
-        href="#"
-        class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-      >Return to top</a>
-    </div>
-    <nav class="bg-gray-5 @desktop:px-4 grid @mobile-lg:grid-cols-3">
-      <ul
-        class="flex flex-wrap @mobile-lg:col-span-2 flex-col @mobile-lg:flex-row divide-y @mobile-lg:divide-y-0 divide-y-gray-30 border-y @mobile-lg:border-y-0 border-y-gray-30"
-      >
-        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
-          <a
-            href="#"
-            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >Primary link</a>
-        </li>
-      </ul>
-      <address class="flex flex-wrap p-4 @mobile-lg:p-0 gap-x-8 @mobile-lg:gap-x-0">
-        <div class="w-auto @mobile-lg:w-full @desktop:p-4 leading-tighter">
-          <a
-            href="tel:1-800-555-5555"
-            class="@mobile-lg:block @mobile-lg:p-4 @desktop:p-0 @desktop:inline text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >(800) 555-GOVT
-          </a>
-        </div>
-        <div class="w-auto @mobile-lg:w-full @desktop:p-4 leading-tighter">
-          <a
-            href="mailto:info@agency.gov"
-            class="@mobile-lg:block @mobile-lg:p-4 @desktop:p-0 @desktop:inline text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
-          >info@agency.gov
-          </a>
-        </div>
-      </address>
-    </nav>
-    <div class="bg-gray-10 px-4 @desktop:px-8 py-5">
-      <div class="flex flex-wrap @mobile-lg:items-center @mobile-lg:justify-between gap-4">
-        <img
-          src=""
-          alt=""
-          class="bg-white size-12 rounded-full object-cover"
-        >
-        <p class="text-xl font-bold">Agency Contact Center</p>
-      </div>
-    </div>
-  </footer>
-`} />
+</html>

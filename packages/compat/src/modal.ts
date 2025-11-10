@@ -15,7 +15,7 @@ export class Modal extends Component<modal.Props, modal.Api> {
   initMachine(props: modal.Props): VanillaMachine<modal.ModalSchema> {
     Modal.instances.set(props.id, this)
 
-    document.body.appendChild(this.backdrop)
+    // document.body.appendChild(this.backdrop)
     return new VanillaMachine(modal.machine, {
       ...props,
       forceAction: this.content.hasAttribute('data-force-action'),
