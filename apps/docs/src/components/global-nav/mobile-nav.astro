@@ -7,144 +7,144 @@ type Props = NavLinks
 const { primary, secondary } = Astro.props;
 ---
 
-<div x-data x-modal>
+<div>
   <button
-    x-modal:trigger
+    data-part="modal-trigger"
+    data-target="mobile-docs-menu"
     class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
   >Menu</button
   >
 
-  <div>
-    <div
-      x-modal:dialog
-      x-cloak
-      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in duration-300 ease-in-out slide-in-from-right"
+  <div
+    data-part="modal-backdrop"
+    data-value="mobile-docs-menu"
+    class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+  >
+  </div>
+
+  <div
+    data-part="modal-positioner"
+    data-value="mobile-docs-menu"
+    class="fixed z-50 inset-0 overflow-y-auto"
+  >
+    <nav
+      data-part="modal-content"
+      class="hidden data-[state=open]:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto animate-in duration-300 ease-in-out slide-in-from-right"
     >
-      <nav
-        x-modal:content
-        class="flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto"
+      <header data-part="modal-title" class="sr-only">Menu</header>
+
+      <button
+        type="button"
+        data-part="modal-close-trigger"
+        class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+        aria-label="Close"
       >
-        <header x-modal:title class="sr-only">Menu</header>
+        <div class="icon-[material-symbols--close] size-6"></div>
+      </button>
 
-        <button
-          type="button"
-          x-modal:close-button
-          class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          aria-label="Close"
-        >
-          <div class="icon-[material-symbols--close] size-6"></div>
-        </button>
+      <Search isMobile client:load />
 
-        <Search isMobile client:load />
-
-        <ul
-          class="flex flex-col divide-y divide-gray-10 border-y border-y-gray-10"
-        >
-          {
-            primary
-              ? primary.map(item => (
-                  <li>
-                    {item.children !== undefined
+      <ul
+        class="flex flex-col divide-y divide-gray-10 border-y border-y-gray-10"
+      >
+        {
+          primary
+            ? primary.map(item => (
+                <li>
+                  {item.children !== undefined
 ? (
-                      <div x-accordion>
-                        <div x-accordion:item>
-                          <button
-                            x-accordion:trigger
-                            class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
-                            data-current={item.isActive ? true : undefined}
-                          >
-                            <span class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">
-                              {item.label}
-                            </span>
-                            <span class="h-full flex items-center">
-                              <span class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]" />
-                            </span>
-                          </button>
-                          <ul x-accordion:content>
-                            {item.children.map(child => (
-                              <li class="border-t border-t-gray-10">
-                                <a
-                                  href={child.href}
-                                  class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-                                  target={child.target}
-                                >
-                                  {child.label}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    )
-: (
-                      <a
-                        href={item.href}
-                        class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-                        target={item.target}
+                    <div data-part="accordion-root">
+                      <div
+                        data-part="accordion-item"
+                        data-value={`nav-item-${item.label.replace(/\s+/g, '-').toLowerCase()}`}
                       >
-                        {item.label}
-                      </a>
-                    )}
-                  </li>
-                ))
-              : null
-          }
-        </ul>
-
-        <div class="flex flex-col gap-4">
-          {
-            secondary && secondary.length > 0
-? (
-              <ul>
-                {secondary.map(item => (
-                  <li>
+                        <button
+                          data-part="accordion-trigger"
+                          class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
+                          data-current={item.isActive ? true : undefined}
+                        >
+                          <span class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">
+                            {item.label}
+                          </span>
+                          <span class="h-full flex items-center">
+                            <span class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]" />
+                          </span>
+                        </button>
+                        <ul data-part="accordion-content">
+                          {item.children.map(child => (
+                            <li class="border-t border-t-gray-10">
+                              <a
+                                href={child.href}
+                                class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
+                                target={child.target}
+                              >
+                                {child.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )
+: (
                     <a
                       href={item.href}
-                      class="inline-flex items-center text-gray-50 text-sm leading-1 hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
+                      class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
                       target={item.target}
-                      rel={item.target === '_blank' ? 'noreferrer' : undefined}
                     >
                       {item.label}
-
-                      {item.target === '_blank'
-? (
-                        <span class="sr-only">
-                          External, opens in a new tab
-                        </span>
-                      )
-: null}
                     </a>
-                  </li>
-                ))}
-              </ul>
-            )
+                  )}
+                </li>
+              ))
+            : null
+        }
+      </ul>
+
+      <div class="flex flex-col gap-4">
+        {
+          secondary && secondary.length > 0
+? (
+            <ul>
+              {secondary.map(item => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="inline-flex items-center text-gray-50 text-sm hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px"
+                    target={item.target}
+                    rel={item.target === '_blank' ? 'noreferrer' : undefined}
+                  >
+                    {item.label}
+
+                    {item.target === '_blank'
+? (
+                      <span class="sr-only">External, opens in a new tab</span>
+                    )
+: null}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
 : null
-          }
-        </div>
+        }
+      </div>
 
-        <p class="text-center">
-          <a
-            href="https://github.com/IHIutch/uswds-tailwind"
-            rel="noreferrer"
-            target="_blank"
-            class="flex items-center justify-between rounded font-bold leading-none cursor-pointer text-blue-60v px-5 py-3 bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-          >
-            <span class="flex items-center gap-2">
-              <span class="icon-[fa6-brands--github] size-5"></span>
-              <span class="leading-[normal]">GitHub</span>
-              <span class="sr-only">External, opens in a new tab</span>
-            </span>
-            <span class="icon-[material-symbols--open-in-new] size-4"></span>
-          </a>
-        </p>
-      </nav>
-    </div>
-
-    <div
-      x-modal:backdrop
-      x-cloak
-      class="fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
-    >
-    </div>
+      <p class="text-center">
+        <a
+          href="https://github.com/IHIutch/uswds-tailwind"
+          rel="noreferrer"
+          target="_blank"
+          class="flex items-center justify-between rounded font-bold leading-none cursor-pointer text-blue-60v px-5 py-3 bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+        >
+          <span class="flex items-center gap-2">
+            <span class="icon-[fa6-brands--github] size-5"></span>
+            <span class="leading-[normal]">GitHub</span>
+            <span class="sr-only">External, opens in a new tab</span>
+          </span>
+          <span class="icon-[material-symbols--open-in-new] size-4"></span>
+        </a>
+      </p>
+    </nav>
   </div>
 </div>
