@@ -26,7 +26,7 @@
     <section>
       <div
         data-part="file-input-root"
-        class="relative z-0 max-w-lg data-[invalid]:border-l-4 data-[invalid]:red-60v data-[invalid]:-ml-5 data-[invalid]:pl-4"
+        class="relative z-0 max-w-lg data-[invalid]:border-l-4 data-[invalid]:border-l-red-60v data-[invalid]:pl-4"
       >
         <label
           class="block"
@@ -42,10 +42,9 @@
             data-part="file-input-dropzone"
             class="border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-2 data-[invalid]:border-red-60v mt-2 relative w-full"
           >
-            <!-- <div class="bg-white pointer-events-none absolute inset-0 z-20 group-data-[dragging]:bg-blue-10"></div> -->
             <div
               data-part="file-input-preview-list"
-              class="relative z-30 pointer-events-none hidden data-[active]:block"
+              class="relative z-30 pointer-events-none hidden data-[active]:block data-[active]:bg-blue-10"
             >
               <div class="flex justify-between items-center p-2">
                 <div
@@ -56,13 +55,13 @@
               </div>
               <div
                 data-part="file-input-preview-item"
-                class="flex gap-2"
+                class="flex gap-2 p-2 border-t border-t-white"
               >
                 <div
                   data-part="file-input-preview-item-icon"
-                  class="data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=doc]:icon-[fa-solid--file-word] data-[type=sheet]:icon-[fa-solid--file-excel] data-[type=vid]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file] size-6"
+                  class="size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=doc]:icon-[fa-solid--file-word] data-[type=sheet]:icon-[fa-solid--file-excel] data-[type=vid]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]"
                 ></div>
-                <div data-part="file-input-preview-item-content"></div>
+                <div data-part="file-input-preview-item-content" class="flex items-center"></div>
               </div>
             </div>
             <div

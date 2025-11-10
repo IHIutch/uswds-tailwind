@@ -6,9 +6,77 @@ description: "File input allows users to attach one or multiple files."
 This component requires the following JavaScript plugin:
   - [File Input](/javascript#file-input)
 
-## Example
+## Examples
 
-<ComponentPreview title="File Input" code={`todo`} />
+### Default
+
+<ComponentPreview title="File Input" code={`
+  <div
+    data-part="file-input-root"
+    class="relative z-0 max-w-lg data-[invalid]:border-l-4 data-[invalid]:border-l-red-60v data-[invalid]:pl-4"
+  >
+    <label
+      class="block"
+      for="file-input-single"
+    >Input accepts a single file</label>
+    <div
+      data-part="file-input-error-message"
+      class="hidden text-red-60v py-1 font-bold data-[invalid]:block"
+    ></div>
+    <div>
+      <div data-part="file-input-sr-status"></div>
+      <div
+        data-part="file-input-dropzone"
+        class="border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-2 data-[invalid]:border-red-60v mt-2 relative w-full"
+      >
+        <div
+          data-part="file-input-preview-list"
+          class="relative z-30 pointer-events-none hidden data-[active]:block data-[active]:bg-blue-10"
+        >
+          <div class="flex justify-between items-center p-2">
+            <div
+              data-part="file-input-preview-header"
+              class="font-bold"
+            ></div>
+            <span class="text-blue-60v underline">Change File</span>
+          </div>
+          <div
+            data-part="file-input-preview-item"
+            class="flex gap-2 p-2 border-t border-t-white"
+          >
+            <div
+              data-part="file-input-preview-item-icon"
+              class="size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=doc]:icon-[fa-solid--file-word] data-[type=sheet]:icon-[fa-solid--file-excel] data-[type=vid]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]"
+            ></div>
+            <div data-part="file-input-preview-item-content" class="flex items-center"></div>
+          </div>
+        </div>
+        <div
+          data-part="file-input-instructions"
+          class="py-8 px-4 pointer-events-none z-30 relative text-center data-[active]:hidden"
+        >
+          <span>Drag file here or</span>
+          <span class="text-blue-60v underline">choose from folder</span>
+        </div>
+        <input
+          data-part="file-input-input"
+          id="file-input-single"
+          class="cursor-pointer absolute inset-0 z-10 p-2 focus:outline-4 focus:outline-blue-40v [&::-webkit-file-upload-button]:hidden bg-white data-[dragging]:bg-blue-10 text-transparent"
+          type="file"
+          aria-label="Drag file here or choose from folder"
+        />
+      </div>
+    </div>
+  </div>
+`} />
+
+### Specific File Types
+
+<ComponentPreview title="File Input Specific Type" code={`Coming Soon`} />
+
+### Accept Multiple Files
+
+<ComponentPreview title="File Input Accept Multiple" ins={["multiple"]} code={`Coming Soon`} />
 
 ## Component API
 
