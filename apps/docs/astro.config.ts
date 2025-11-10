@@ -8,7 +8,7 @@ import { defineConfig } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://uswds-tailwind.com',
+  site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://v2.uswds-tailwind.com',
   output: 'server',
   integrations: [
     expressiveCode({
