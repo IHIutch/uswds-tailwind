@@ -76,7 +76,7 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       }}
     />
 
-    <script is:inline>
+    <!-- <script is:inline>
       document.documentElement.classList.add("uswds-ready");
 
       const fallback = setTimeout(() => {
@@ -87,12 +87,23 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
         clearTimeout(fallback);
         document.documentElement.classList.add("uswds-ready");
       });
-    </script>
+    </script> -->
     <script>
       import { initAll } from "@uswds-tailwind/compat";
 
       document.addEventListener("astro:page-load", () => {
         initAll();
+
+        const previewContainers = document.querySelectorAll(".not-docs-prose");
+        Array.from(previewContainers).forEach((previewContainer) => {
+          previewContainer.addEventListener("click", (event) => {
+            // Prevent all clicks within the component preview from executing
+            if (event.target && (event.target as HTMLElement).tagName === "A") {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          });
+        });
       });
     </script>
 
@@ -116,7 +127,7 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       class="sr-only rounded-sm leading-none text-blue-60v px-5 py-3 ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v focus:top-0 focus:left-0 focus:h-auto focus:w-auto focus:m-0 focus:[clip:unset] bg-white z-50"
       href="#main-content">Skip to main content</a
     >
-      <GlobalNav />
+    <GlobalNav />
     <slot />
   </body>
 </html>
