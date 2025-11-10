@@ -1,5 +1,4 @@
 import sdk from '@stackblitz/sdk'
-import { getStackBlitzConfigs, getStackBlitzDependencies } from '../utils/sync-stackblitz-deps'
 
 export default function StackBlitzButton({
   componentName,
@@ -36,10 +35,6 @@ export default function StackBlitzButton({
   )
 }
 
-interface StackBlitzProjectFiles {
-  [path: string]: string
-}
-
 export async function openInStackBlitz({
   htmlContent,
   title,
@@ -49,9 +44,6 @@ export async function openInStackBlitz({
   title: string
   description: string
 }) {
-  // Get up-to-date dependencies from vanilla-ts example
-  const { dependencies, devDependencies } = getStackBlitzDependencies()
-
   const packageJson = {
     name: 'uswds-tailwind-example',
     type: 'module',
@@ -62,23 +54,93 @@ export async function openInStackBlitz({
       build: 'tsc && vite build',
       preview: 'vite preview',
     },
-    dependencies,
-    devDependencies,
+    dependencies: {
+      '@fontsource-variable/merriweather': '^5.2.4',
+      '@fontsource-variable/open-sans': '^5.2.6',
+      '@fontsource-variable/public-sans': '^5.2.6',
+      '@fontsource-variable/roboto-mono': '^5.2.6',
+      '@fontsource-variable/source-sans-3': '^5.2.8',
+      '@tailwindcss/vite': '^4.1.11',
+      '@uswds-tailwind/compat': 'latest',
+      '@uswds-tailwind/theme': 'latest',
+      'tailwindcss': '^4.1.11',
+    },
+    devDependencies: {
+      typescript: '^5.9.2',
+      vite: '^7.0.6',
+    },
   }
 
-  // Get up-to-date configs from vanilla-ts example
-  const { tsconfig, viteConfig, styles, indexTs } = getStackBlitzConfigs()
+  const tsconfig = {
+    compilerOptions: {
+      target: 'ES2020',
+      lib: [
+        'ES2020',
+        'DOM',
+        'DOM.Iterable',
+      ],
+      useDefineForClassFields: true,
+      module: 'ESNext',
+      moduleResolution: 'bundler',
+      resolveJsonModule: true,
+      allowImportingTsExtensions: true,
+      strict: true,
+      noFallthroughCasesInSwitch: true,
+      noUnusedLocals: true,
+      noUnusedParameters: true,
+      noEmit: true,
+      isolatedModules: true,
+      skipLibCheck: true,
+    },
+    include: [
+      'src',
+    ],
+  }
 
-  // Process the HTML content to create a complete HTML document
-  const processedHTML = createCompleteHTML(htmlContent, title)
+  const styles = `@import "@fontsource-variable/open-sans";
+  @import "@fontsource-variable/public-sans";
+  @import "@fontsource-variable/roboto-mono";
+  @import "@fontsource-variable/source-sans-3";
+  @import "@fontsource-variable/merriweather";
 
-  const files: StackBlitzProjectFiles = {
+  @import "tailwindcss";
+  @import "@uswds-tailwind/theme";
+  `
+
+  const viteConfig = `import tailwindcss from '@tailwindcss/vite'
+  import { defineConfig } from 'vite'
+
+  export default defineConfig({
+    plugins: [
+      tailwindcss(),
+    ],
+  })
+  `
+  const indexTs = `import '@uswds-tailwind/compat/auto'`
+
+  const indexHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <link href="./src/styles.css" rel="stylesheet">
+</head>
+<body class="font-source-sans p-4">
+${htmlContent.trim()}
+
+  <script type="module" src="./src/index.ts"></script>
+</body>
+</html>`
+
+  const files = {
     'package.json': JSON.stringify(packageJson, null, 2),
     'tsconfig.json': JSON.stringify(tsconfig, null, 2),
     'vite.config.ts': viteConfig,
     'src/styles.css': styles,
     'src/index.ts': indexTs,
-    'index.html': processedHTML,
+    'index.html': indexHtml,
   }
 
   // Open in StackBlitz
@@ -94,33 +156,4 @@ export async function openInStackBlitz({
       newWindow: true,
     },
   )
-}
-
-/**
- * Creates a complete HTML document from component HTML content
- */
-function createCompleteHTML(componentHTML: string, title: string): string {
-  // Extract the body content from component HTML if it's a complete HTML document
-  const bodyMatch = componentHTML.match(/<body[^>]*>([\s\S]*?)<\/body>/i)
-  const bodyContent = bodyMatch ? bodyMatch[1] : componentHTML
-
-  // Extract any custom classes from the original body tag
-  const bodyClassMatch = componentHTML.match(/<body[^>]*class="([^"]*)"/)
-  const bodyClasses = bodyClassMatch ? bodyClassMatch[1] : 'font-source-sans p-4'
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title}</title>
-  <link href="./src/styles.css" rel="stylesheet">
-</head>
-<body class="${bodyClasses}">
-${bodyContent.trim()}
-
-  <script type="module" src="./src/index.ts"></script>
-</body>
-</html>`
 }
