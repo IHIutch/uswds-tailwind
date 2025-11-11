@@ -61,6 +61,10 @@
     "./table": {
       "types": "./dist/table.d.ts",
       "import": "./dist/table.js"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip.d.ts",
+      "import": "./dist/tooltip.js"
     }
   },
   "files": [
@@ -82,6 +86,7 @@
     "@uswds-tailwind/input-mask-compat": "workspace:*",
     "@uswds-tailwind/modal-compat": "workspace:*",
     "@uswds-tailwind/table-compat": "workspace:*",
+    "@uswds-tailwind/tooltip-compat": "workspace:*",
     "@zag-js/core": "catalog:",
     "@zag-js/store": "catalog:",
     "@zag-js/types": "catalog:",

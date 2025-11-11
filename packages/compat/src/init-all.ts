@@ -9,6 +9,7 @@ import { fileInputInit } from './file-input'
 import { inputMaskInit } from './input-mask'
 import { modalInit } from './modal'
 import { tableInit } from './table'
+import { tooltipInit } from './tooltip'
 
 // Auto-initialize all components when DOM is ready
 export function initAll() {
@@ -23,4 +24,5 @@ export function initAll() {
   inputMaskInit()
   modalInit()
   tableInit()
+  tooltipInit()
 }
