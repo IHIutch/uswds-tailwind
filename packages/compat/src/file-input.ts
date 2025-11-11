@@ -74,6 +74,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
 
     spreadProps(this.rootEl, this.api.getRootProps())
     spreadProps(this.dropzone, this.api.getDropzoneProps())
+    spreadProps(this.label, this.api.getLabelProps())
     spreadProps(this.input, this.api.getInputProps())
     spreadProps(this.instructions, this.api.getInstructionProps())
 
@@ -94,6 +95,10 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
 
   private get dropzone() {
     return this.getElement('file-input-dropzone')
+  }
+
+  private get label() {
+    return this.getElement('file-input-label')
   }
 
   private get input() {
@@ -129,9 +134,6 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     previewListEl.querySelectorAll('[data-part="file-input-preview-item"]').forEach(item => item.remove())
 
     files.forEach((file, i) => {
-      if (!file?.name)
-        return
-
       // Create elements using templates with fallbacks
       const listItemTemplate = this._templates?.get('listItem')
       const iconTemplate = this._templates?.get('icon')
@@ -175,7 +177,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   private renderErrorMessage(el: HTMLElement | null) {
     if (el) {
       spreadProps(el, this.api.getErrorMessageProps())
-      el.textContent = this.machine.prop('errorMessage')
+      el.textContent = this.api.isInvalid ? this.machine.prop('errorMessage') : ''
     }
   }
 

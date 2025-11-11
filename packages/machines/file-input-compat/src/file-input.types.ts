@@ -43,15 +43,16 @@ export interface FileData {
 export interface FileInputSchema {
   props: RequiredBy<FileInputProps, PropsWithDefault>
   context: {
-    isInvalid: boolean
+    isDragging: boolean
     isDisabled: boolean
     srStatusText: string
     files: FileData[]
   }
-  state: 'idle' | 'dragging'
+  state: 'idle' | 'valid' | 'invalid'
   action: 'validateFiles' | 'updateSrStatus' | 'checkEmptyFiles'
   event: EventObject & (
-    | { type: 'DRAG_START' | 'DRAG_END' }
+    | { type: 'VALID' }
+    | { type: 'INVALID' }
     | { type: 'CHANGE', files: File[] }
     | { type: 'RESET' }
   )
@@ -71,6 +72,7 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
 
   getRootProps: () => T['element']
   getDropzoneProps: () => T['element']
+  getLabelProps: () => T['label']
   getInputProps: () => T['input']
   getErrorMessageProps: () => T['element']
   getInstructionProps: () => T['element']

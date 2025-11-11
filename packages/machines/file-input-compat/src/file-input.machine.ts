@@ -34,6 +34,7 @@ export const machine = createMachine<FileInputSchema>({
 
   context({ bindable, prop }) {
     return {
+      isDragging: bindable(() => ({ defaultValue: false })),
       isInvalid: bindable(() => ({ defaultValue: false })),
       isDisabled: bindable(() => ({ defaultValue: prop('disabled') })),
       srStatusText: bindable(() => ({ defaultValue: prop('srStatusText') })),
@@ -53,12 +54,20 @@ export const machine = createMachine<FileInputSchema>({
   states: {
     idle: {
       on: {
-        DRAG_START: { target: 'dragging' },
+        INVALID: { target: 'invalid' },
+        VALID: { target: 'valid' },
       },
     },
-    dragging: {
+    valid: {
       on: {
-        DRAG_END: { target: 'idle' },
+        RESET: { target: 'idle' },
+        INVALID: { target: 'invalid' },
+      },
+    },
+    invalid: {
+      on: {
+        RESET: { target: 'idle' },
+        VALID: { target: 'valid' },
       },
     },
   },
@@ -71,7 +80,7 @@ export const machine = createMachine<FileInputSchema>({
 
   implementations: {
     actions: {
-      validateFiles({ context, event, prop }) {
+      validateFiles({ context, event, prop, send }) {
         const files = (event.files || []) as File[]
         const isValid = validate(files, prop('accept'))
         if (isValid) {
@@ -80,11 +89,11 @@ export const machine = createMachine<FileInputSchema>({
             type: getFileType(file.name.split('.').pop()),
           }))
           context.set('files', fileData)
-          context.set('isInvalid', false)
+          send({ type: 'VALID' })
         }
         else {
           context.set('files', [])
-          context.set('isInvalid', true)
+          send({ type: 'INVALID' })
         }
       },
       updateSrStatus({ context, prop }) {

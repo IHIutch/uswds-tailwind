@@ -3,6 +3,7 @@ import type { Scope } from '@zag-js/core'
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `fileInput:${ctx.id}`
 export const getDropzoneId = (ctx: Scope) => ctx.ids?.dropzone ?? `fileInput:${ctx.id}:dropzone`
 export const getInputId = (ctx: Scope) => ctx.ids?.input ?? `fileInput:${ctx.id}:input`
+export const getLabelId = (ctx: Scope) => ctx.ids?.label ?? `fileInput:${ctx.id}:label`
 export const getErrorMessageId = (ctx: Scope) => ctx.ids?.errorMessage ?? `fileInput:${ctx.id}:error-message`
 export const getInstructionsId = (ctx: Scope) => ctx.ids?.instructions ?? `fileInput:${ctx.id}:instructions`
 export const getSrStatusId = (ctx: Scope) => ctx.ids?.srStatus ?? `fileInput:${ctx.id}:sr-status`
@@ -14,6 +15,7 @@ export const getPreviewItemContentId = (ctx: Scope, value: string) => `fileInput
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
 export const getDropzoneEl = (ctx: Scope) => ctx.getById(getDropzoneId(ctx))
+export const getLabelEl = (ctx: Scope) => ctx.getById(getLabelId(ctx))
 export const getInputEl = (ctx: Scope) => ctx.getById<HTMLInputElement>(getInputId(ctx))
 export const getErrorMessageEl = (ctx: Scope) => ctx.getById(getErrorMessageId(ctx))
 export const getInstructionsEl = (ctx: Scope) => ctx.getById(getInstructionsId(ctx))

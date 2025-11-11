@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { FileInputApi, FileInputSchema } from './file-input.types'
-import { visuallyHiddenStyle } from '@zag-js/dom-query'
+import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
 
@@ -10,8 +10,9 @@ export function connect<T extends PropTypes>(
   normalize: NormalizeProps<T>,
 ): FileInputApi<T> {
   const { state, send, scope, context, prop } = service
-  const isDragging = state.matches('dragging')
-  const isInvalid = context.get('isInvalid')
+  const isDragging = context.get('isDragging')
+  const isInvalid = state.matches('invalid')
+  const isValid = state.matches('valid')
   const isDisabled = context.get('isDisabled')
 
   return {
@@ -23,9 +24,19 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.root.attrs,
         'id': dom.getRootId(scope),
-        'data-invalid': isInvalid ? 'true' : undefined,
-        'data-dragging': isDragging ? 'true' : undefined,
-        'data-disabled': isDisabled ? 'true' : undefined,
+        'data-invalid': dataAttr(isInvalid),
+        'data-valid': dataAttr(isValid),
+        'data-dragging': dataAttr(isDragging),
+        'data-disabled': dataAttr(isDisabled),
+      })
+    },
+
+    getLabelProps() {
+      return normalize.label({
+        ...parts.label.attrs,
+        'id': dom.getLabelId(scope),
+        'data-disabled': dataAttr(isDisabled),
+        'htmlFor': dom.getInputId(scope),
       })
     },
 
@@ -33,21 +44,22 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.dropzone.attrs,
         'id': dom.getDropzoneId(scope),
-        'data-invalid': isInvalid ? 'true' : undefined,
-        'data-dragging': isDragging ? 'true' : undefined,
+        'data-invalid': dataAttr(isInvalid),
+        'data-valid': dataAttr(isValid),
+        'data-dragging': dataAttr(isDragging),
         onDragover() {
           if (!isDisabled) {
-            send({ type: 'DRAG_START' })
+            context.set('isDragging', true)
           }
         },
         onDragleave() {
           if (!isDisabled) {
-            send({ type: 'DRAG_END' })
+            context.set('isDragging', false)
           }
         },
         onDrop(event) {
           if (!isDisabled) {
-            send({ type: 'DRAG_END' })
+            context.set('isDragging', false)
             const files = Array.from(event.dataTransfer?.files || [])
             send({ type: 'CHANGE', files })
           }
@@ -59,9 +71,10 @@ export function connect<T extends PropTypes>(
       return normalize.input({
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
-        'aria-invalid': isInvalid ? 'true' : undefined,
-        'data-invalid': isInvalid ? 'true' : undefined,
-        'data-dragging': isDragging ? 'true' : undefined,
+        'aria-invalid': ariaAttr(isInvalid),
+        'data-invalid': dataAttr(isInvalid),
+        'data-valid': dataAttr(isValid),
+        'data-dragging': dataAttr(isDragging),
         'data-errormessage': isInvalid ? prop('errorMessage') : undefined,
         onChange(event) {
           if (!isDisabled) {
@@ -82,7 +95,8 @@ export function connect<T extends PropTypes>(
         ...parts.instructions.attrs,
         'id': dom.getInstructionsId(scope),
         'aria-hidden': 'true',
-        'data-invalid': isInvalid ? 'true' : undefined,
+        'data-invalid': dataAttr(isInvalid),
+        'data-valid': dataAttr(isValid),
       })
     },
 
@@ -98,7 +112,10 @@ export function connect<T extends PropTypes>(
     getPreviewListProps() {
       return normalize.element({
         ...parts.previewList.attrs,
-        id: dom.getPreviewListId(scope),
+        'id': dom.getPreviewListId(scope),
+        'data-invalid': dataAttr(isInvalid),
+        'data-valid': dataAttr(isValid),
+        'data-dragging': dataAttr(isDragging),
       })
     },
 
@@ -149,7 +166,8 @@ export function connect<T extends PropTypes>(
     getErrorMessageProps() {
       return normalize.element({
         ...parts.errorMessage.attrs,
-        'data-invalid': isInvalid ? 'true' : undefined,
+        'data-invalid': dataAttr(isInvalid),
+        'data-valid': dataAttr(isValid),
         'id': dom.getErrorMessageId(scope),
       })
     },
