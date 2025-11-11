@@ -34,8 +34,7 @@ export const machine = createMachine<FileInputSchema>({
 
   context({ bindable, prop }) {
     return {
-      isValid: bindable(() => ({ defaultValue: true })),
-      isDragging: bindable(() => ({ defaultValue: false })),
+      isInvalid: bindable(() => ({ defaultValue: false })),
       isDisabled: bindable(() => ({ defaultValue: prop('disabled') })),
       srStatusText: bindable(() => ({ defaultValue: prop('srStatusText') })),
       files: bindable<FileData[]>(() => ({ defaultValue: [] })),
@@ -46,7 +45,7 @@ export const machine = createMachine<FileInputSchema>({
     track([() => context.get('files').length], () => {
       const files = context.get('files')
       if (files.length === 0) {
-        send({ type: 'RESET_TO_IDLE' })
+        send({ type: 'RESET' })
       }
     })
   },
@@ -54,51 +53,38 @@ export const machine = createMachine<FileInputSchema>({
   states: {
     idle: {
       on: {
-        INVALID: { target: 'invalid' },
-        VALID: { target: 'valid' },
+        DRAG_START: { target: 'dragging' },
       },
     },
-    valid: {
+    dragging: {
       on: {
-        INVALID: { target: 'invalid' },
-        RESET_TO_IDLE: { target: 'idle' },
-      },
-    },
-    invalid: {
-      on: {
-        VALID: { target: 'valid' },
-        RESET_TO_IDLE: { target: 'idle' },
+        DRAG_END: { target: 'idle' },
       },
     },
   },
 
   on: {
-    CHANGE: { actions: ['validateFiles', 'updateSrStatus'] },
-    DRAG_START: { actions: ['setDragging'] },
-    DRAG_END: { actions: ['setDragging'] },
-    CHECK_EMPTY_FILES: { actions: ['checkEmptyFiles'] },
+    CHANGE: {
+      actions: ['validateFiles', 'updateSrStatus'],
+    },
   },
 
   implementations: {
     actions: {
-      setDragging({ context, event }) {
-        context.set('isDragging', event.type === 'DRAG_START')
-      },
-      validateFiles({ context, event, prop, send }) {
+      validateFiles({ context, event, prop }) {
         const files = (event.files || []) as File[]
         const isValid = validate(files, prop('accept'))
-        context.set('isValid', isValid)
         if (isValid) {
           const fileData = files.map(file => ({
             name: file.name,
             type: getFileType(file.name.split('.').pop()),
           }))
           context.set('files', fileData)
-          send({ type: 'VALID' })
+          context.set('isInvalid', false)
         }
         else {
           context.set('files', [])
-          send({ type: 'INVALID' })
+          context.set('isInvalid', true)
         }
       },
       updateSrStatus({ context, prop }) {
@@ -120,7 +106,7 @@ export const machine = createMachine<FileInputSchema>({
       checkEmptyFiles({ context, send }) {
         const files = context.get('files')
         if (!files || files.length === 0) {
-          send({ type: 'RESET_TO_IDLE' })
+          send({ type: 'RESET' })
         }
       },
     },

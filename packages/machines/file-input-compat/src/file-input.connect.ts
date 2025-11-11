@@ -10,8 +10,8 @@ export function connect<T extends PropTypes>(
   normalize: NormalizeProps<T>,
 ): FileInputApi<T> {
   const { state, send, scope, context, prop } = service
-  const isInvalid = state.matches('invalid')
-  const isDragging = context.get('isDragging')
+  const isDragging = state.matches('dragging')
+  const isInvalid = context.get('isInvalid')
   const isDisabled = context.get('isDisabled')
 
   return {
@@ -59,14 +59,19 @@ export function connect<T extends PropTypes>(
       return normalize.input({
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
-        'data-invalid': isInvalid ? 'true' : undefined,
         'aria-invalid': isInvalid ? 'true' : undefined,
+        'data-invalid': isInvalid ? 'true' : undefined,
         'data-dragging': isDragging ? 'true' : undefined,
         'data-errormessage': isInvalid ? prop('errorMessage') : undefined,
         onChange(event) {
           if (!isDisabled) {
             const files = Array.from(event.currentTarget.files ?? [])
-            send({ type: 'CHANGE', files })
+            if (files.length) {
+              send({ type: 'CHANGE', files })
+            }
+            else {
+              send({ type: 'RESET' })
+            }
           }
         },
       })
@@ -78,7 +83,6 @@ export function connect<T extends PropTypes>(
         'id': dom.getInstructionsId(scope),
         'aria-hidden': 'true',
         'data-invalid': isInvalid ? 'true' : undefined,
-        'data-active': state.matches('idle') ? undefined : true,
       })
     },
 
@@ -94,8 +98,7 @@ export function connect<T extends PropTypes>(
     getPreviewListProps() {
       return normalize.element({
         ...parts.previewList.attrs,
-        'id': dom.getPreviewListId(scope),
-        'data-active': state.matches('idle') ? undefined : true,
+        id: dom.getPreviewListId(scope),
       })
     },
 
@@ -148,7 +151,6 @@ export function connect<T extends PropTypes>(
         ...parts.errorMessage.attrs,
         'data-invalid': isInvalid ? 'true' : undefined,
         'id': dom.getErrorMessageId(scope),
-        'textContent': prop('errorMessage'),
       })
     },
   }
