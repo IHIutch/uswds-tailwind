@@ -34,6 +34,7 @@ export interface TooltipSchema {
   props: RequiredBy<TooltipProps, 'placement'>
   context: {
     placement: TooltipPlacement
+    initialPlacement: TooltipPlacement
     content: string
     position: TooltipPosition
   }
