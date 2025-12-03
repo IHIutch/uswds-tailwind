@@ -56,6 +56,7 @@
     "@types/alpinejs__anchor": "^3.13.1",
     "@types/alpinejs__focus": "^3.13.4",
     "@types/alpinejs__mask": "^3.13.4",
-    "@types/twig": "^1.12.16"
+    "@types/twig": "^1.12.16",
+    "wrangler": "^4.52.1"
   }
 }
