@@ -17,12 +17,8 @@
     "typecheck": "turbo run typecheck",
     "changeset": "changeset",
     "version": "changeset version",
-    "publish-packages": "changeset version && changeset publish --tag beta",
-    "publish-packages-latest": "pnpm pre-exit && changeset version && changeset publish",
-    "publish-packages-dual": "pnpm publish-packages-beta && pnpm publish-packages-latest",
-    "pre-exit": "changeset pre exit",
-    "pre-enter": "changeset pre enter beta",
-    "release": "pnpm build && changeset publish",
+    "publish-beta": "pnpm build && changeset version && changeset publish --tag beta && pnpm promote-to-latest",
+    "promote-to-latest": "pnpm -r exec npm dist-tag add \\$npm_package_name@\\$npm_package_version latest",
     "test:browser": "vitest"
   },
   "devDependencies": {
