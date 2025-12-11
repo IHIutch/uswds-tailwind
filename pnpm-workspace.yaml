@@ -12,6 +12,7 @@ catalog:
   '@astrojs/react': ^4.4.0
   '@astrojs/sitemap': ^3.6.0
   '@cf-wasm/satori': ^0.1.31
+  '@changesets/changelog-github': ^0.5.0
   '@changesets/cli': 2.29.7
   '@docsearch/css': ^4.2.0
   '@docsearch/react': ^4.2.0
