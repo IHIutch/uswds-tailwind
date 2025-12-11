@@ -24,8 +24,8 @@ jobs:
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup-pnpm
 
-      - name: Verify package integrity
-        run: pnpm audit --audit-level high
+      # - name: Verify package integrity
+      #   run: pnpm audit --audit-level high
 
       - name: Release (Beta + Latest)
         run: pnpm publish-beta

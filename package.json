@@ -6,7 +6,7 @@
     "packages/theme",
     "packages/compat"
   ],
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@10.25.0",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -14,6 +14,7 @@
     "test": "turbo run test",
     "deploy": "turbo run deploy",
     "publish": "turbo run publish",
+    "typecheck": "turbo run typecheck",
     "changeset": "changeset",
     "version": "changeset version",
     "publish-packages": "changeset version && changeset publish --tag beta",

@@ -1,3 +1,7 @@
+catalogMode: prefer
+shellEmulator: true
+trustPolicy: no-downgrade
+
 packages:
   - apps/**
   - examples/**
@@ -5,17 +9,17 @@ packages:
   - scripts/**
 
 catalog:
-  '@antfu/eslint-config': ^6.0.0
-  '@astrojs/check': ^0.9.4
-  '@astrojs/cloudflare': ^12.6.10
-  '@astrojs/mdx': ^4.3.7
-  '@astrojs/react': ^4.4.0
+  '@antfu/eslint-config': ^6.6.1
+  '@astrojs/check': ^0.9.6
+  '@astrojs/cloudflare': ^12.6.12
+  '@astrojs/mdx': ^4.3.13
+  '@astrojs/react': ^4.4.2
   '@astrojs/sitemap': ^3.6.0
   '@cf-wasm/satori': ^0.1.31
-  '@changesets/changelog-github': ^0.5.0
+  '@changesets/changelog-github': ^0.5.2
   '@changesets/cli': 2.29.7
-  '@docsearch/css': ^4.2.0
-  '@docsearch/react': ^4.2.0
+  '@docsearch/css': ^4.3.2
+  '@docsearch/react': ^4.3.2
   '@fontsource-variable/merriweather': ^5.2.6
   '@fontsource-variable/open-sans': ^5.2.7
   '@fontsource-variable/public-sans': ^5.2.7
@@ -24,56 +28,56 @@ catalog:
   '@iconify-json/fa-solid': ^1.2.2
   '@iconify-json/fa6-brands': 1.2.6
   '@iconify-json/material-symbols': 1.2.42
-  '@iconify/tailwind4': ^1.0.6
+  '@iconify/tailwind4': ^1.2.0
   '@iconify/types': ^2.0.0
-  '@iconify/utils': ^3.0.2
+  '@iconify/utils': ^3.1.0
   '@stackblitz/sdk': ^1.11.0
   '@tailwindcss/forms': ^0.5.10
   '@tailwindcss/typography': 0.5.16
   '@tailwindcss/vite': 4.1.14
   '@types/fs-extra': 11.0.1
-  '@types/node': ^22.18.11
-  '@types/react': ^19.2.2
-  '@types/react-dom': ^19.2.2
+  '@types/node': ^22.19.2
+  '@types/react': ^19.2.7
+  '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
   '@vitest/browser': ^3.2.4
-  '@zag-js/anatomy': ^1.26.3
+  '@zag-js/anatomy': ^1.31.1
   '@zag-js/aria-hidden': 1.21.1
-  '@zag-js/core': ^1.26.3
+  '@zag-js/core': ^1.31.1
   '@zag-js/dismissable': 1.21.1
   '@zag-js/dom-query': 1.26.3
-  '@zag-js/focus-trap': ^1.26.3
-  '@zag-js/popper': ^1.26.3
-  '@zag-js/react': ^1.27.0
-  '@zag-js/remove-scroll': ^1.26.3
-  '@zag-js/splitter': ^1.27.0
-  '@zag-js/store': ^1.26.3
-  '@zag-js/toggle': ^1.27.0
-  '@zag-js/types': ^1.26.3
-  '@zag-js/utils': ^1.26.3
+  '@zag-js/focus-trap': ^1.31.1
+  '@zag-js/popper': ^1.31.1
+  '@zag-js/react': ^1.31.1
+  '@zag-js/remove-scroll': ^1.31.1
+  '@zag-js/splitter': ^1.31.1
+  '@zag-js/store': ^1.31.1
+  '@zag-js/toggle': ^1.31.1
+  '@zag-js/types': ^1.31.1
+  '@zag-js/utils': ^1.31.1
   astro: 5.14.5
-  astro-expressive-code: ^0.41.3
+  astro-expressive-code: ^0.41.4
   astro-seo: ^0.8.4
   dedent: ^1.7.0
-  eslint: ^9.38.0
+  eslint: ^9.39.1
   find-up: 6.3.0
   fs-extra: 11.1.1
   fuse.js: ^7.1.0
   github-slugger: ^2.0.0
   react: 19.1.0
   react-dom: 19.1.0
-  sharp: ^0.34.4
-  tailwindcss: ^4.1.14
+  sharp: ^0.34.5
+  tailwindcss: ^4.1.18
   tailwindcss-animate: ^1.0.7
   ts-morph: 19.0.0
   ts-pattern: 5.0.3
-  tsdown: ^0.15.8
-  tsx: ^4.20.6
-  turbo: ^2.5.8
+  tsdown: ^0.15.12
+  tsx: ^4.21.0
+  turbo: ^2.6.3
   typescript: ^5.9.3
-  vite: ^7.1.10
+  vite: ^7.2.7
   vitest: ^3.2.4
-  wrangler: ^4.43.0
+  wrangler: ^4.54.0
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
