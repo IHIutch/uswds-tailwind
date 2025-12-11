@@ -1,5 +1,11 @@
 # @uswds-tailwind/theme
 
+## 0.1.1
+
+### Patch Changes
+
+- Test publish workflow with minor update to theme package
+
 ## 0.1.0
 
 ### Minor Changes

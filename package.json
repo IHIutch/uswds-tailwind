@@ -9,6 +9,7 @@
   "packageManager": "pnpm@10.25.0",
   "scripts": {
     "build": "turbo run build",
+    "build-packages": "turbo run build --filter='!website'",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -17,8 +18,8 @@
     "typecheck": "turbo run typecheck",
     "changeset": "changeset",
     "version": "changeset version",
-    "publish-beta": "pnpm build && changeset version && changeset publish --tag beta && pnpm promote-to-latest",
-    "promote-to-latest": "pnpm -r exec npm dist-tag add \\$npm_package_name@\\$npm_package_version latest",
+    "publish-beta": "pnpm build-packages && changeset version && changeset publish --tag beta && pnpm promote-to-latest",
+    "promote-to-latest": "pnpm -r exec npm dist-tag add '$npm_package_name@$npm_package_version' latest",
     "test:browser": "vitest"
   },
   "devDependencies": {
