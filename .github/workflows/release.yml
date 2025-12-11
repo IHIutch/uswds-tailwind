@@ -13,7 +13,7 @@ jobs:
   release:
     name: Release (Beta + Latest)
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'jbhutch'
+    if: github.repository_owner == 'IHIutch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
