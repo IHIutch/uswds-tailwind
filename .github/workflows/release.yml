@@ -33,11 +33,11 @@ jobs:
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
-        # with:
+        with:
           # Note: pnpm install after versioning is necessary to refresh lockfile
-          # version: pnpm chgset:version
-          # publish: pnpm release
-          # commit: "chore: release"
-          # title: "[ci] release"
+          publish: pnpm release:beta
+          commit: "[ci] release"
+          title: "[ci] release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ''
