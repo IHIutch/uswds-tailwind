@@ -14,13 +14,14 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "deploy": "turbo run deploy",
-    "publish": "turbo run publish",
     "typecheck": "turbo run typecheck",
-    "changeset": "changeset",
-    "version": "changeset version",
-    "publish-beta": "pnpm build-packages && changeset version && changeset publish --tag beta && pnpm promote-to-latest",
-    "promote-to-latest": "pnpm -r exec npm dist-tag add '$npm_package_name@$npm_package_version' latest",
-    "test:browser": "vitest"
+    "chgset:run": "changeset",
+    "chgset:version": "changeset version",
+    "chgset": "pnpm chgset:run && pnpm chgset:version",
+    "test:browser": "vitest",
+    "release": "changeset publish",
+    "release:beta": "pnpm build-packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit",
+    "postrelease": "git push --follow-tags && gh release create --draft --generate-notes \"v$(cat package.json | jq -r .version)\""
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

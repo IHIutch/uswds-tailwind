@@ -1,5 +1,43 @@
 # @uswds-tailwind/compat
 
+## 0.1.2-beta.1
+
+### Patch Changes
+
+- Test
+
+- Updated dependencies []:
+  - @uswds-tailwind/character-count-compat@0.1.2-beta.1
+  - @uswds-tailwind/date-picker-compat@0.1.2-beta.1
+  - @uswds-tailwind/file-input-compat@0.1.2-beta.1
+  - @uswds-tailwind/input-mask-compat@0.1.2-beta.1
+  - @uswds-tailwind/accordion-compat@0.1.2-beta.1
+  - @uswds-tailwind/collapse-compat@0.1.2-beta.1
+  - @uswds-tailwind/combobox-compat@0.1.2-beta.1
+  - @uswds-tailwind/dropdown-compat@0.1.2-beta.1
+  - @uswds-tailwind/tooltip-compat@0.1.2-beta.1
+  - @uswds-tailwind/modal-compat@0.1.2-beta.1
+  - @uswds-tailwind/table-compat@0.1.2-beta.1
+
+## 0.1.2-beta.0
+
+### Patch Changes
+
+- Test
+
+- Updated dependencies []:
+  - @uswds-tailwind/character-count-compat@0.1.2-beta.0
+  - @uswds-tailwind/date-picker-compat@0.1.2-beta.0
+  - @uswds-tailwind/file-input-compat@0.1.2-beta.0
+  - @uswds-tailwind/input-mask-compat@0.1.2-beta.0
+  - @uswds-tailwind/accordion-compat@0.1.2-beta.0
+  - @uswds-tailwind/collapse-compat@0.1.2-beta.0
+  - @uswds-tailwind/combobox-compat@0.1.2-beta.0
+  - @uswds-tailwind/dropdown-compat@0.1.2-beta.0
+  - @uswds-tailwind/tooltip-compat@0.1.2-beta.0
+  - @uswds-tailwind/modal-compat@0.1.2-beta.0
+  - @uswds-tailwind/table-compat@0.1.2-beta.0
+
 ## 0.1.1
 
 ### Patch Changes
