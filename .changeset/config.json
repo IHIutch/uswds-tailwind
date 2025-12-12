@@ -1,10 +1,13 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
-  "changelog": "@changesets/cli/changelog",
+  "changelog": ["@changesets/changelog-github", {
+    "repo": "IHIutch/uswds-tailwind"
+  }],
   "commit": false,
   "fixed": [["@uswds-tailwind/**"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
-  "updateInternalDependencies": "patch"
+  "updateInternalDependencies": "patch",
+  "ignore": ["website"]
 }

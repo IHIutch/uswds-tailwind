@@ -6,21 +6,24 @@
     "packages/theme",
     "packages/compat"
   ],
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@10.25.0",
   "scripts": {
     "build": "turbo run build",
+    "build-packages": "turbo run build --filter='!website'",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "deploy": "turbo run deploy",
-    "publish": "turbo run publish",
+    "typecheck": "turbo run typecheck",
     "changeset": "changeset",
-    "version": "changeset version",
-    "publish-packages": "changeset version && changeset publish --tag beta",
-    "test:browser": "vitest"
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "test:browser": "vitest",
+    "release:beta": "pnpm build-packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
+    "@changesets/changelog-github": "catalog:",
     "@changesets/cli": "catalog:",
     "@vitest/browser": "catalog:",
     "@zag-js/dom-query": "catalog:",
