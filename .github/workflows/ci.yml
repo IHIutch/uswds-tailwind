@@ -72,7 +72,10 @@ jobs:
         uses: ./.github/actions/setup-pnpm
 
       - name: Build packages
-        run: pnpm build
+        run: pnpm build-packages
+
+      - name: Setup Playwright
+        run: pnpm exec playwright install
 
       - name: Run tests
         run: pnpm test:browser
