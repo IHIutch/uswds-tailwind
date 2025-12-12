@@ -38,6 +38,7 @@ jobs:
           publish: pnpm release:beta
           commit: "[ci] release"
           title: "[ci] release"
+          createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ''
