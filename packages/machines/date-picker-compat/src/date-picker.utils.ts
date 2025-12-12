@@ -41,7 +41,7 @@ export function parseDate(dateString: string, dateFormat: DateFormat = 'YYYY-MM-
     year = Number(parts[2])
 
     // Handle short years like legacy: 1-2 digits get current century context
-    if (parts[2].length < 3) {
+    if (parts[2] && parts[2].length < 3) {
       const currentYear = new Date().getFullYear()
       const currentYearStub = currentYear - (currentYear % (10 ** parts[2].length))
       year = currentYearStub + year

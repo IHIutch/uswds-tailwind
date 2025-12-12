@@ -8,6 +8,7 @@ export const props = createProps<CharacterCountProps>()([
   'maxLength',
   'statusSrDebounce',
   'getStatusText',
+  'customValidation',
 ])
 
 export const splitProps = createSplitProps<Partial<CharacterCountProps>>(props)

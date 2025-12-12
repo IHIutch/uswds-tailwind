@@ -6,7 +6,7 @@ export const props = createProps<ComboboxProps>()([
   'getRootNode',
   'options',
   'value',
-  'multiple',
+  // 'multiple',
   'disabled',
   'placeholder',
   'showClearButton',
