@@ -2,6 +2,11 @@ catalogMode: prefer
 shellEmulator: true
 trustPolicy: no-downgrade
 
+trustPolicyExclude:
+  - chokidar@4.0.3
+  - vite@6.4.1
+  - semver@6.3.1
+
 packages:
   - apps/**
   - examples/**
@@ -15,7 +20,7 @@ catalog:
   '@astrojs/mdx': ^4.3.13
   '@astrojs/react': ^4.4.2
   '@astrojs/sitemap': ^3.6.0
-  '@cf-wasm/satori': ^0.1.31
+  '@cf-wasm/satori': ^0.3.3
   '@changesets/changelog-github': ^0.5.2
   '@changesets/cli': 2.29.7
   '@docsearch/css': ^4.3.2
@@ -36,11 +41,12 @@ catalog:
   '@tailwindcss/typography': 0.5.16
   '@tailwindcss/vite': 4.1.14
   '@types/fs-extra': 11.0.1
-  '@types/node': ^22.19.2
+  '@types/node': ^25.0.1
   '@types/react': ^19.2.7
   '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
-  '@vitest/browser': ^3.2.4
+  '@vitest/browser': ^4.0.15
+  '@vitest/browser-playwright': ^4.0.15
   '@zag-js/anatomy': ^1.31.1
   '@zag-js/aria-hidden': 1.21.1
   '@zag-js/core': ^1.31.1
@@ -71,12 +77,12 @@ catalog:
   tailwindcss-animate: ^1.0.7
   ts-morph: 19.0.0
   ts-pattern: 5.0.3
-  tsdown: ^0.15.12
+  tsdown: ^0.17.3
   tsx: ^4.21.0
   turbo: ^2.6.3
   typescript: ^5.9.3
   vite: ^7.2.7
-  vitest: ^3.2.4
+  vitest: ^4.0.15
   wrangler: ^4.54.0
 
 onlyBuiltDependencies:

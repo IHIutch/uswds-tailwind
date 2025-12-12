@@ -27,6 +27,7 @@
     "@changesets/changelog-github": "catalog:",
     "@changesets/cli": "catalog:",
     "@vitest/browser": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
     "@zag-js/dom-query": "catalog:",
     "eslint": "catalog:",
     "tsdown": "catalog:",

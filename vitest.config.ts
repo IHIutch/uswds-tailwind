@@ -1,8 +1,12 @@
+import process from 'node:process'
+import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
 
   test: {
+    reporters: process.env.GITHUB_ACTIONS ? ['github-actions'] : ['dot'],
+
     testTimeout: 5000,
     globals: true,
     include: ['e2e/**/*.{test,spec}.ts'],
@@ -12,7 +16,8 @@ export default defineConfig({
       '.storybook/**',
     ],
     browser: {
-      provider: 'playwright', // or 'webdriverio'
+      provider: playwright(),
+      headless: !!process.env.GITHUB_ACTIONS,
       enabled: true,
       // at least one instance is required
       instances: [
