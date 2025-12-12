@@ -1,5 +1,11 @@
 # @uswds-tailwind/tooltip-compat
 
+## 0.1.3
+
+### Patch Changes
+
+- [`9af403f`](https://github.com/IHIutch/uswds-tailwind/commit/9af403f26f4559f01d2ed9e5b58207da3f85314f) Thanks [@IHIutch](https://github.com/IHIutch)! - test
+
 ## 0.1.2
 
 ### Patch Changes
