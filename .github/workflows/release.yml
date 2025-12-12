@@ -27,8 +27,17 @@ jobs:
       # - name: Verify package integrity
       #   run: pnpm audit --audit-level high
 
-      - name: Release (Beta + Latest)
-        run: pnpm publish-beta
+      # - name: Build packages
+      #   run: pnpm build-packages
+
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        # with:
+          # Note: pnpm install after versioning is necessary to refresh lockfile
+          # version: pnpm chgset:version
+          # publish: pnpm release
+          # commit: "chore: release"
+          # title: "[ci] release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
