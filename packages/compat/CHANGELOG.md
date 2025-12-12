@@ -1,5 +1,22 @@
 # @uswds-tailwind/compat
 
+## 0.2.0
+
+### Patch Changes
+
+- Updated dependencies [[`818caa3`](https://github.com/IHIutch/uswds-tailwind/commit/818caa3bf02c7b1356462c8ad453ef45639149ef)]:
+  - @uswds-tailwind/tooltip-compat@0.2.0
+  - @uswds-tailwind/accordion-compat@0.2.0
+  - @uswds-tailwind/character-count-compat@0.2.0
+  - @uswds-tailwind/collapse-compat@0.2.0
+  - @uswds-tailwind/combobox-compat@0.2.0
+  - @uswds-tailwind/date-picker-compat@0.2.0
+  - @uswds-tailwind/dropdown-compat@0.2.0
+  - @uswds-tailwind/file-input-compat@0.2.0
+  - @uswds-tailwind/input-mask-compat@0.2.0
+  - @uswds-tailwind/modal-compat@0.2.0
+  - @uswds-tailwind/table-compat@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes

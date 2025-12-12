@@ -33,7 +33,9 @@ jobs:
         with:
           # Note: pnpm install after versioning is necessary to refresh lockfile
           publish: pnpm changeset tag # https://github.com/changesets/action/issues/422#issuecomment-2742776221
-          version: pnpm changeset version
+          # version: pnpm changeset version
+          # commit: "[ci] release"
+          # title: "[ci] release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ''

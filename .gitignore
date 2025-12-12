@@ -30,3 +30,5 @@ storybook-static
 build
 dist
 __screenshots__
+
+.env
