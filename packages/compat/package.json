@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/compat",
   "type": "module",
-  "version": "0.1.2-beta.1",
+  "version": "0.1.2",
   "sideEffects": [
     "./dist/init-auto.js"
   ],

@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/dropdown-compat",
   "type": "module",
-  "version": "0.1.2-beta.1",
+  "version": "0.1.2",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
