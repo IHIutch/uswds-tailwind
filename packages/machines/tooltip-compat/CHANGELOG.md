@@ -1,5 +1,7 @@
 # @uswds-tailwind/tooltip-compat
 
+## 0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

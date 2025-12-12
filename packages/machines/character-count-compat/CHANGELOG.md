@@ -1,5 +1,11 @@
 # @uswds-tailwind/character-count-compat
 
+## 0.1.4
+
+### Patch Changes
+
+- [`6b37cc1`](https://github.com/IHIutch/uswds-tailwind/commit/6b37cc103b35451c0f4e68ebe2c550be7a7c7a52) Thanks [@IHIutch](https://github.com/IHIutch)! - Update types
+
 ## 0.1.3
 
 ### Patch Changes
