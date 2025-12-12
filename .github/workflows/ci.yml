@@ -59,7 +59,7 @@ jobs:
         uses: ./.github/actions/setup-pnpm
 
       - name: Run TypeScript check
-        run: turbo run typecheck
+        run: pnpm typecheck
 
   test:
     name: Test
