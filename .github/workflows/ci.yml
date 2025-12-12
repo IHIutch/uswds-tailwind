@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - next
+    tags:
+      - "!**"
   pull_request:
     branches:
       - main
@@ -18,6 +20,21 @@ permissions:
   contents: read
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup-pnpm
+
+      - name: Build packages
+        run: pnpm build-packages
+
+      - run: pnpm dlx pkg-pr-new publish ./packages/*
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
