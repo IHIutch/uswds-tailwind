@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   release:
-    name: Release (Beta + Latest)
+    name: Release
     runs-on: ubuntu-latest
     if: github.repository_owner == 'IHIutch'
     steps:

@@ -18,6 +18,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
+    "changeset:release": "changeset tag && changeset publish",
     "test:browser": "vitest",
     "release:beta": "pnpm build-packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit"
   },
