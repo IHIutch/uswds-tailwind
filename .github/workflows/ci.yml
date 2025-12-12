@@ -33,7 +33,7 @@ jobs:
       - name: Build packages
         run: pnpm build-packages
 
-      - run: pnpm dlx pkg-pr-new publish ./packages/*
+      - run: pnpm dlx pkg-pr-new publish ./packages/**/*
 
   lint:
     name: Lint
