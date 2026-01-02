@@ -3,68 +3,68 @@
   "type": "module",
   "version": "0.2.0",
   "sideEffects": [
-    "./dist/init-auto.js"
+    "./dist/init-auto.mjs"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     },
     "./init-all": {
-      "types": "./dist/init-all.d.ts",
-      "import": "./dist/init-all.js"
+      "types": "./dist/init-all.d.mts",
+      "import": "./dist/init-all.mjs"
     },
     "./auto": {
-      "types": "./dist/init-auto.d.ts",
-      "import": "./dist/init-auto.js"
+      "types": "./dist/init-auto.d.mts",
+      "import": "./dist/init-auto.mjs"
     },
     "./accordion": {
-      "types": "./dist/accordion.d.ts",
-      "import": "./dist/accordion.js"
+      "types": "./dist/accordion.d.mts",
+      "import": "./dist/accordion.mjs"
     },
     "./character-count": {
-      "types": "./dist/character-count.d.ts",
-      "import": "./dist/character-count.js"
+      "types": "./dist/character-count.d.mts",
+      "import": "./dist/character-count.mjs"
     },
     "./collapse": {
-      "types": "./dist/collapse.d.ts",
-      "import": "./dist/collapse.js"
+      "types": "./dist/collapse.d.mts",
+      "import": "./dist/collapse.mjs"
     },
     "./combobox": {
-      "types": "./dist/combobox.d.ts",
-      "import": "./dist/combobox.js"
+      "types": "./dist/combobox.d.mts",
+      "import": "./dist/combobox.mjs"
     },
     "./date-picker": {
-      "types": "./dist/date-picker.d.ts",
-      "import": "./dist/date-picker.js"
+      "types": "./dist/date-picker.d.mts",
+      "import": "./dist/date-picker.mjs"
     },
     "./date-range-picker": {
-      "types": "./dist/date-range-picker.d.ts",
-      "import": "./dist/date-range-picker.js"
+      "types": "./dist/date-range-picker.d.mts",
+      "import": "./dist/date-range-picker.mjs"
     },
     "./dropdown": {
-      "types": "./dist/dropdown.d.ts",
-      "import": "./dist/dropdown.js"
+      "types": "./dist/dropdown.d.mts",
+      "import": "./dist/dropdown.mjs"
     },
     "./file-input": {
-      "types": "./dist/file-input.d.ts",
-      "import": "./dist/file-input.js"
+      "types": "./dist/file-input.d.mts",
+      "import": "./dist/file-input.mjs"
     },
     "./input-mask": {
-      "types": "./dist/input-mask.d.ts",
-      "import": "./dist/input-mask.js"
+      "types": "./dist/input-mask.d.mts",
+      "import": "./dist/input-mask.mjs"
     },
     "./modal": {
-      "types": "./dist/modal.d.ts",
-      "import": "./dist/modal.js"
+      "types": "./dist/modal.d.mts",
+      "import": "./dist/modal.mjs"
     },
     "./table": {
-      "types": "./dist/table.d.ts",
-      "import": "./dist/table.js"
+      "types": "./dist/table.d.mts",
+      "import": "./dist/table.mjs"
     },
     "./tooltip": {
-      "types": "./dist/tooltip.d.ts",
-      "import": "./dist/tooltip.js"
+      "types": "./dist/tooltip.d.mts",
+      "import": "./dist/tooltip.mjs"
     }
   },
   "files": [

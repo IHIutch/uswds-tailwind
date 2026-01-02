@@ -4,10 +4,11 @@
   "version": "0.2.0",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     }
   },
+  "types": "dist/index.d.mts",
   "files": [
     "dist"
   ],

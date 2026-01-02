@@ -16,6 +16,7 @@ export default defineConfig({
     './src/input-mask.ts',
     './src/modal.ts',
     './src/table.ts',
+    './src/tooltip.ts',
   ],
   outDir: 'dist',
   dts: true,
