@@ -1,5 +1,5 @@
-import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { comboboxInit } from '../../packages/compat/src/combobox.js'
 import { modalInit } from '../../packages/compat/src/modal.js'
 import { createDisposableComponent } from '../_utils.js'

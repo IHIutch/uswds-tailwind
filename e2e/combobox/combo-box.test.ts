@@ -1,6 +1,6 @@
-import { userEvent } from '@vitest/browser/context'
 import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { Combobox } from '../../packages/compat/src/combobox.js'
 import { createDisposableCombobox } from './_utils.js'
 

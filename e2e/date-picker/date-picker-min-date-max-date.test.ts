@@ -1,5 +1,5 @@
-import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
 
 const rootId = 'test'
@@ -846,9 +846,9 @@ it('should open the calendar on the max date when the input date is after the ma
 it('should open the calendar on the max date when the input is empty and the current date is after the max date', async () => {
   const templateWithConstraints = template.replace(
     'data-min-date="2020-05-22" data-max-date="2021-06-20"',
-    'data-min-date="2020-01-01" data-max-date="2020-02-14"'
+    'data-min-date="2020-01-01" data-max-date="2020-02-14"',
   )
-  
+
   const component = createDisposableDatePicker(rootId, templateWithConstraints)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -863,9 +863,9 @@ it('should open the calendar on the max date when the input is empty and the cur
 it('should update the calendar to the max date when the input is changed and the input date is after the max date', async () => {
   const templateWithConstraints = template.replace(
     'data-min-date="2020-05-22" data-max-date="2021-06-20"',
-    'data-min-date="2020-01-01" data-max-date="2020-02-14"'
+    'data-min-date="2020-01-01" data-max-date="2020-02-14"',
   )
-  
+
   const component = createDisposableDatePicker(rootId, templateWithConstraints)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!

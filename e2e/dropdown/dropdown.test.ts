@@ -1,5 +1,5 @@
-import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableDropdown } from './_utils.js'
 
 const rootId = 'test'

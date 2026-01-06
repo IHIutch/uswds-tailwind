@@ -45,8 +45,8 @@ catalog:
   '@types/react': ^19.2.7
   '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
-  '@vitest/browser': ^4.0.15
-  '@vitest/browser-playwright': ^4.0.15
+  '@vitest/browser': ^4.0.16
+  '@vitest/browser-playwright': ^4.0.16
   '@zag-js/anatomy': ^1.31.1
   '@zag-js/aria-hidden': 1.21.1
   '@zag-js/core': ^1.31.1
@@ -82,7 +82,7 @@ catalog:
   turbo: ^2.6.3
   typescript: ^5.9.3
   vite: ^7.2.7
-  vitest: ^4.0.15
+  vitest: ^4.0.16
   wrangler: ^4.54.0
 
 onlyBuiltDependencies:

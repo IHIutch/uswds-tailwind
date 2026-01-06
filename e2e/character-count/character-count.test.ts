@@ -1,6 +1,6 @@
-import { userEvent } from '@vitest/browser/context'
 import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableCharacterCount } from './_utils.js'
 
 const rootId = 'test'

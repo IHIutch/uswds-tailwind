@@ -1,5 +1,5 @@
-import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { CharacterCount } from '../../packages/compat/src/character-count.js'
 import { createDisposableCharacterCount } from './_utils.js'
 

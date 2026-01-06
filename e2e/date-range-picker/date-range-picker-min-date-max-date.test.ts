@@ -1,5 +1,5 @@
-import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableDateRangePicker } from './_utils.js'
 
 const rootId = 'test'
@@ -90,12 +90,11 @@ const template = `
     </div>
   `
 
-
 it('should enhance the date picker and identify the start and end date pickers', () => {
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   expect(startInput).toBeTruthy()
   expect(endInput).toBeTruthy()
 
@@ -110,7 +109,7 @@ it('should not update the range end date picker properties when the range start 
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   // Set initial value then clear it
   await userEvent.fill(startInput, '12/12/2020')
   await userEvent.clear(startInput)
@@ -125,7 +124,7 @@ it('should update the range end date picker properties to have a min date and ra
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   await userEvent.fill(startInput, '12/12/2020')
 
   // End input should get updated min date but keep the default max date
@@ -138,7 +137,7 @@ it('should reset the range end date picker properties when the range start date 
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   await userEvent.fill(startInput, 'ab/dc/efg')
 
   // End input should revert to default min/max dates
@@ -151,7 +150,7 @@ it('should not update the range start date picker properties when the range end 
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   // Set initial value then clear it
   await userEvent.fill(endInput, '12/11/2020')
   await userEvent.clear(endInput)
@@ -166,7 +165,7 @@ it('should update the range start date picker properties to have a max date and 
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   await userEvent.fill(endInput, '12/11/2020')
 
   // Start input should get updated max date but keep the default min date
@@ -179,7 +178,7 @@ it('should not update the range start date picker properties when the range end 
   using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
-  
+
   await userEvent.fill(endInput, '35/35/3535')
 
   // Start input should revert to default min/max dates

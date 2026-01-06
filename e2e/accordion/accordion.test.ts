@@ -1,5 +1,5 @@
-import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { Accordion } from '../../packages/compat/src/accordion.js'
 import { createDisposableAccordion } from './_utils.js'
 
