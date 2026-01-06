@@ -2,7 +2,7 @@
 
 USWDS Tailwind is an open-source project designed to provide a modern approach to building application federal websites using Tailwind CSS and USWDS principles. This repository is actively maintained, and contributions from the community are welcome!
 
-![hero](https://uswds-tailwind.com/og.jpg)
+![hero](https://repository-images.githubusercontent.com/674037448/e36daf0e-292a-4143-8d9c-e54dd8935fe4)
 
 ## Documentation
 
