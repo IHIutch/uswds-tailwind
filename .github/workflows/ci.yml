@@ -13,7 +13,7 @@ on:
       - next
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -61,21 +61,21 @@ jobs:
       - name: Run TypeScript check
         run: pnpm typecheck
 
-  # test:
-  #   name: Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Setup Node.js and pnpm
-  #       uses: ./.github/actions/setup-pnpm
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup-pnpm
 
-  #     - name: Build packages
-  #       run: pnpm build-packages
+      - name: Build packages
+        run: pnpm build-packages
 
-  #     - name: Setup Playwright
-  #       run: pnpm dlx playwright install
+      - name: Setup Playwright
+        run: pnpm dlx playwright install
 
-  #     - name: Run tests
-  #       run: pnpm test:browser
+      - name: Run tests
+        run: pnpm test:browser
