@@ -1,9 +1,7 @@
 import * as datePicker from '@uswds-tailwind/date-picker-compat'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './lib/normalize-props'
-import { spreadProps } from './lib/spread-props'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 
 function copyAttributes(from: HTMLElement, to: HTMLElement) {
   // Only copy class and style attributes
@@ -196,15 +194,15 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
 
     const monthTrigger = this.dateGrid.querySelector<HTMLButtonElement>('[data-part="date-view-trigger"][data-value="month"]')
     if (monthTrigger) {
-      const calendarDate = this.machine.ctx.get('calendarDate')
-      const monthLabels = this.machine.ctx.get('monthLabels')
+      const calendarDate = this.machine.context.get('calendarDate')
+      const monthLabels = this.machine.context.get('monthLabels')
       monthTrigger.textContent = monthLabels[calendarDate.getMonth()]
       spreadProps(monthTrigger, this.api.getMonthYearSelectionProps('month'))
     }
 
     const yearTrigger = this.dateGrid.querySelector<HTMLButtonElement>('[data-part="date-view-trigger"][data-value="year"]')
     if (yearTrigger) {
-      const calendarDate = this.machine.ctx.get('calendarDate')
+      const calendarDate = this.machine.context.get('calendarDate')
       yearTrigger.textContent = calendarDate.getFullYear().toString()
       spreadProps(yearTrigger, this.api.getMonthYearSelectionProps('year'))
     }

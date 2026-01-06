@@ -1,9 +1,7 @@
 import * as table from '@uswds-tailwind/table-compat'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './lib/normalize-props'
-import { spreadProps } from './lib/spread-props'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 
 export class Table extends Component<table.Props, table.Api> {
   static instances = new Map<string, Table>()
@@ -89,7 +87,7 @@ export class Table extends Component<table.Props, table.Api> {
 
   private renderSrStatus(srStatusEl: HTMLElement) {
     spreadProps(srStatusEl, this.api.getSrStatusProps())
-    srStatusEl.textContent = this.machine.ctx.get('srStatus')
+    srStatusEl.textContent = this.machine.context.get('srStatus')
   }
 
   private sortTableRows() {

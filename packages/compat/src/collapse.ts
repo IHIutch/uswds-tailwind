@@ -1,9 +1,7 @@
 import * as collapse from '@uswds-tailwind/collapse-compat'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './lib/normalize-props'
-import { spreadProps } from './lib/spread-props'
 
 export class Collapse extends Component<collapse.Props, collapse.Api> {
   static instances = new Map<string, Collapse>()

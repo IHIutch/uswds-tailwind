@@ -1,9 +1,7 @@
 import * as tooltip from '@uswds-tailwind/tooltip-compat'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './lib/normalize-props'
-import { spreadProps } from './lib/spread-props'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 
 export class Tooltip extends Component<tooltip.Props, tooltip.Api> {
   static instances = new Map<string, Tooltip>()

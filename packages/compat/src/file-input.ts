@@ -1,10 +1,8 @@
 import * as fileInput from '@uswds-tailwind/file-input-compat'
 import { nextTick } from '@zag-js/dom-query'
-import { normalizeProps } from './lib//normalize-props'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { spreadProps } from './lib/spread-props'
 
 export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   static instances = new Map<string, FileInput>()
@@ -128,7 +126,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   private renderPreviewList(previewListEl: HTMLElement) {
     spreadProps(previewListEl, this.api.getPreviewListProps())
 
-    const files = this.machine.ctx.get('files') as fileInput.FileInputSchema['context']['files']
+    const files = this.machine.context.get('files') as fileInput.FileInputSchema['context']['files']
 
     // Clear existing items
     previewListEl.querySelectorAll('[data-part="file-input-preview-item"]').forEach(item => item.remove())
@@ -165,13 +163,13 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
 
   private renderPreviewHeader(el: HTMLElement) {
     spreadProps(el, this.api.getPreviewHeaderProps())
-    const fileCount = this.machine.ctx.get('files')?.length || 0
+    const fileCount = this.machine.context.get('files')?.length || 0
     el.textContent = fileCount === 1 ? 'Selected file' : `${fileCount} files selected`
   }
 
   private renderSrStatus(el: HTMLElement) {
     spreadProps(el, this.api.getSrStatusProps())
-    el.textContent = this.machine.ctx.get('srStatusText')
+    el.textContent = this.machine.context.get('srStatusText')
   }
 
   private renderErrorMessage(el: HTMLElement | null) {

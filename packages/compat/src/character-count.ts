@@ -1,9 +1,7 @@
 import * as characterCount from '@uswds-tailwind/character-count-compat'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { normalizeProps } from './lib/normalize-props'
-import { spreadProps } from './lib/spread-props'
 
 export class CharacterCount extends Component<characterCount.Props, characterCount.Api> {
   static instances: Map<string, CharacterCount> = new Map()
@@ -80,12 +78,12 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   private renderStatus(statusEl: HTMLElement) {
     spreadProps(statusEl, this.api.getStatusProps())
-    statusEl.textContent = this.machine.ctx.get('statusText')
+    statusEl.textContent = this.machine.context.get('statusText')
   }
 
   private renderSrStatus(srStatusEl: HTMLElement) {
     spreadProps(srStatusEl, this.api.getSrStatusProps())
-    srStatusEl.textContent = this.machine.ctx.get('srStatusText')
+    srStatusEl.textContent = this.machine.context.get('srStatusText')
   }
 
   setCustomValidity(message: string) {
