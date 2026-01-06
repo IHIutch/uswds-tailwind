@@ -23,6 +23,7 @@ export class Tooltip extends Component<tooltip.Props, tooltip.Api> {
     return new VanillaMachine(tooltip.machine, {
       ...props,
       placement,
+      content: this.trigger.getAttribute('title') || '',
     })
   }
 
@@ -56,6 +57,7 @@ export class Tooltip extends Component<tooltip.Props, tooltip.Api> {
 
   private renderContent(contentEl: HTMLElement) {
     spreadProps(contentEl, this.api.getContentProps())
+    contentEl.textContent = this.api.getContent()
   }
 }
 

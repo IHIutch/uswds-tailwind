@@ -20,6 +20,10 @@ export function connect<T extends PropTypes>(
       send({ type: 'SET_PLACEMENT', placement })
     },
 
+    getContent() {
+      return context.get('content')
+    },
+
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
@@ -73,6 +77,12 @@ export function connect<T extends PropTypes>(
           '--caret-top': placement === 'left' || placement === 'right' ? '50%' : placement === 'top' ? '100%' : '0',
           '--caret-left': placement === 'top' || placement === 'bottom' ? '50%' : placement === 'left' ? '100%' : '0',
           '--caret-translate': '-50%',
+        },
+        onMouseEnter() {
+          send({ type: 'OPEN' })
+        },
+        onMouseLeave() {
+          send({ type: 'CLOSE' })
         },
       })
     },

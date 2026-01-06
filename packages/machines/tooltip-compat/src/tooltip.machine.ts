@@ -7,6 +7,7 @@ export const machine = createMachine<TooltipSchema>({
   props({ props }) {
     return {
       placement: 'top',
+      content: '',
       ...props,
     }
   },
@@ -15,11 +16,13 @@ export const machine = createMachine<TooltipSchema>({
     return 'closed'
   },
 
+  entry: ['initialize'],
+
   context({ bindable, prop }) {
     return {
       placement: bindable<TooltipPlacement>(() => ({ defaultValue: prop('placement') })),
       initialPlacement: bindable<TooltipPlacement>(() => ({ defaultValue: prop('placement') })),
-      content: bindable<string>(() => ({ defaultValue: '' })),
+      content: bindable<string>(() => ({ defaultValue: prop('content') })),
       position: bindable<TooltipPosition>(() => ({
         defaultValue: { x: 0, y: 0 },
       })),
@@ -42,6 +45,13 @@ export const machine = createMachine<TooltipSchema>({
 
   implementations: {
     actions: {
+      initialize({ scope }) {
+        const triggerEl = getTriggerEl(scope)
+        if (triggerEl) {
+          triggerEl.removeAttribute('title')
+        }
+      },
+
       async getPosition({ scope, context }) {
         const rootEl = getRootEl(scope)
         const triggerEl = getTriggerEl(scope)

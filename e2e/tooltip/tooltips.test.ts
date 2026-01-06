@@ -6,12 +6,10 @@ const rootId = 'tooltip-test'
 
 const template = `
   <div data-part="tooltip-root" id="${rootId}">
-    <button data-part="tooltip-trigger" class="usa-button">
+    <button data-part="tooltip-trigger" class="usa-button" title="This is a tooltip">
       Button
     </button>
-    <div data-part="tooltip-content">
-      This is a tooltip
-    </div>
+    <div data-part="tooltip-content"></div>
   </div>
 `
 
@@ -90,19 +88,18 @@ it('tooltip is hidden on escape keydown', async () => {
 })
 
 it('should not allow for innerHTML of child elements', async () => {
+  const unsafeContent = 'Apricot &lt;img src=\'\' onerror=alert(\'ouch\')&gt;'
   const maliciousTemplate = `
   <div data-part="tooltip-root" id="${rootId}">
-    <button data-part="tooltip-trigger" class="usa-button">
+    <button data-part="tooltip-trigger" class="usa-button" title="${unsafeContent}">
       Button
     </button>
-    <div data-part="tooltip-content">
-      <img src='' onerror=alert('ouch') />
-    </div>
+    <div data-part="tooltip-content"></div>
   </div>
   `
 
   using component = createDisposableTooltip(rootId, maliciousTemplate)
   const content = component.elements.getContentEl()
 
-  expect(content.innerHTML).toBe('&lt;img src=\'\' onerror=alert(\'ouch\') /&gt;')
+  expect(content.innerHTML).toBe(unsafeContent)
 })

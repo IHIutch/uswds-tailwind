@@ -39,7 +39,7 @@ export interface TooltipSchema {
     position: TooltipPosition
   }
   state: 'closed' | 'open'
-  action: 'getPosition'
+  action: 'getPosition' | 'initialize'
   event:
     | { type: 'OPEN' }
     | { type: 'CLOSE' }
@@ -76,6 +76,11 @@ export interface TooltipApi<T extends PropTypes = PropTypes> {
    * @param placement - The new placement for the tooltip
    */
   setPlacement: (placement: TooltipPlacement) => void
+
+  /**
+   * Get the content of the tooltip
+   */
+  getContent: () => string
 
   getRootProps: () => T['element']
   getTriggerProps: () => T['button']
