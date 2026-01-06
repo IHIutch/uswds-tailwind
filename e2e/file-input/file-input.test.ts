@@ -5,7 +5,7 @@ const rootId = 'test'
 
 const TEMPLATE = `
 <div data-part="file-input-root" id="${rootId}">
-  <label>
+  <label data-part="file-input-label">
     Input accepts multiple files
   </label>
   <div data-part="file-input-error-message"></div>
@@ -79,7 +79,7 @@ it('adds a default status message', () => {
 
 const disabledTemplate = `
 <div data-part="file-input-root" id="disabled-test">
-  <label>
+  <label data-part="file-input-label">
     Input in a disabled state
   </label>
   <div data-part="file-input-error-message"></div>

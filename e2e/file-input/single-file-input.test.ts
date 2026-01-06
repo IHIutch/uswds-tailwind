@@ -5,7 +5,7 @@ const rootId = 'single-file-test'
 
 const template = `
   <div data-part="file-input-root" id="${rootId}">
-    <label>Single file input</label>
+    <label data-part="file-input-label">Single file input</label>
     <div data-part="file-input-error-message"></div>
     <div>
       <div data-part="file-input-sr-status" aria-live="polite">

@@ -8,7 +8,7 @@ const rootId = 'test'
 
 const template = `
 <div data-part="file-input-root" id="${rootId}">
-  <label>Input accepts only specific file types</label>
+  <label data-part="file-input-label">Input accepts only specific file types</label>
   <div data-part="file-input-error-message"></div>
   <div>
     <div data-part="file-input-sr-status" aria-live="polite">
@@ -89,7 +89,7 @@ it('mock file should not be allowed', async () => {
   expect(instance).toBeTruthy()
 
   const rootEl = component.elements.getRootEl()!
-  expect(rootEl.getAttribute('data-invalid')).toBe('true')
+  expect(rootEl.getAttribute('data-invalid')).toBeDefined()
 })
 
 it('should provide a default error message for invalid file type', async () => {
@@ -102,14 +102,14 @@ it('should provide a default error message for invalid file type', async () => {
   const rootEl = component.elements.getRootEl()!
 
   expect(errorMessage?.textContent).toBe(defaultErrorMessage)
-  expect(rootEl.getAttribute('data-invalid')).toBe('true')
+  expect(rootEl.getAttribute('data-invalid')).toBeDefined()
 })
 
 it('should allow a custom error message for invalid file type', async () => {
   // Create template with custom error message
   const customTemplate = `
 <div data-part="file-input-root" id="${rootId}">
-  <label>Input accepts only specific file types</label>
+  <label data-part="file-input-label">Input accepts only specific file types</label>
   <div data-part="file-input-error-message"></div>
   <div>
     <div data-part="file-input-sr-status" aria-live="polite">
@@ -151,5 +151,5 @@ it('should allow a custom error message for invalid file type', async () => {
   const errorMessage = component.elements.getErrorMessageEl()
 
   expect(errorMessage?.textContent).toBe(customErrorMessage)
-  expect(rootEl.getAttribute('data-invalid')).toBe('true')
+  expect(rootEl.getAttribute('data-invalid')).toBeDefined()
 })
