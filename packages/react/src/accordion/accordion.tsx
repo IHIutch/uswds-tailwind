@@ -40,52 +40,60 @@ function useAccordionContext() {
   return context
 }
 
-function AccordionRoot({ children, ...props }: AccordionRootProps) {
-  const service = useMachine(accordion.machine, {
-    id: React.useId(),
-    multiple: props.multiple,
-  })
+const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
+  ({ children, ...props }, ref) => {
+    const service = useMachine(accordion.machine, {
+      id: React.useId(),
+      multiple: props.multiple,
+    })
 
-  const api = accordion.connect(service, normalizeProps)
+    const api = accordion.connect(service, normalizeProps)
 
-  return (
-    <AccordionContext.Provider value={{ api }}>
-      <div {...api.getRootProps()} {...props}>
+    return (
+      <AccordionContext.Provider value={{ api }}>
+        <div {...api.getRootProps()} ref={ref} {...props}>
+          {children}
+        </div>
+      </AccordionContext.Provider>
+    )
+  }
+)
+
+const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
+  ({ value, children, ...props }, ref) => {
+    const { api } = useAccordionContext()
+
+    return (
+      <div {...api.getItemProps({ value })} ref={ref} {...props}>
         {children}
       </div>
-    </AccordionContext.Provider>
-  )
-}
+    )
+  }
+)
 
-function AccordionItem({ value, children, ...props }: AccordionItemProps) {
-  const { api } = useAccordionContext()
+const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerProps>(
+  ({ value, children, ...props }, ref) => {
+    const { api } = useAccordionContext()
 
-  return (
-    <div {...api.getItemProps({ value })} {...props}>
-      {children}
-    </div>
-  )
-}
+    return (
+      <button {...api.getTriggerProps({ value })} ref={ref} {...props}>
+        {children}
+      </button>
+    )
+  }
+)
 
-function AccordionTrigger({ value, children, ...props }: AccordionTriggerProps) {
-  const { api } = useAccordionContext()
+const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>(
+  ({ value, children, ...props }, ref) => {
+    const { api } = useAccordionContext()
 
-  return (
-    <button {...api.getTriggerProps({ value })} {...props}>
-      {children}
-    </button>
-  )
-}
-
-function AccordionContent({ value, children, ...props }: AccordionContentProps) {
-  const { api } = useAccordionContext()
-
-  return (
-    <div {...api.getContentProps({ value })} {...props}>
-      {children}
-    </div>
-  )
-}
+    return (
+      <div {...api.getContentProps({ value })} ref={ref} {...props}>
+        {children}
+      </div>
+    )
+  }
+)
 
 AccordionRoot.displayName = 'AccordionRoot'
 AccordionItem.displayName = 'AccordionItem'
