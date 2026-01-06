@@ -45,6 +45,7 @@ catalog:
   '@types/react': ^19.2.7
   '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
+  '@vitejs/plugin-react': ^4.7.0
   '@vitest/browser': ^4.0.16
   '@vitest/browser-playwright': ^4.0.16
   '@zag-js/anatomy': ^1.31.1

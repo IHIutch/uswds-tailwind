@@ -1,0 +1,35 @@
+{
+  "name": "react-ts",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/merriweather": "catalog:",
+    "@fontsource-variable/open-sans": "catalog:",
+    "@fontsource-variable/public-sans": "catalog:",
+    "@fontsource-variable/roboto-mono": "catalog:",
+    "@fontsource-variable/source-sans-3": "catalog:",
+    "@iconify-json/fa-solid": "catalog:",
+    "@iconify-json/fa6-brands": "catalog:",
+    "@iconify-json/material-symbols": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@uswds-tailwind/compat": "workspace:*",
+    "@uswds-tailwind/react": "workspace:*",
+    "@uswds-tailwind/theme": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

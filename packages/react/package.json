@@ -1,0 +1,43 @@
+{
+  "name": "@uswds-tailwind/react",
+  "type": "module",
+  "version": "0.1.0",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./accordion": {
+      "types": "./dist/accordion.d.mts",
+      "import": "./dist/accordion.mjs"
+    },
+    "./simple-accordion": {
+      "types": "./dist/simple-accordion.d.mts",
+      "import": "./dist/simple-accordion.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@uswds-tailwind/accordion-compat": "workspace:*",
+    "@uswds-tailwind/character-count-compat": "workspace:*",
+    "@uswds-tailwind/collapse-compat": "workspace:*",
+    "@uswds-tailwind/combobox-compat": "workspace:*",
+    "@zag-js/react": "catalog:",
+    "@zag-js/types": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "react": "catalog:",
+    "typescript": "catalog:"
+  }
+}
