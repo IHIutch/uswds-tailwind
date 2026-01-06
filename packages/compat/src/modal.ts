@@ -15,6 +15,8 @@ export class Modal extends Component<modal.Props, modal.Api> {
   initMachine(props: modal.Props): VanillaMachine<modal.ModalSchema> {
     Modal.instances.set(props.id, this)
 
+    // TODO: Commenting this out will cause a modal test to fail. Its unclear why USWDS appends the backdrop to the body. USWDS React does not do this.
+    // Appending the backdrop to the body seems to cause indexing issues.
     // document.body.appendChild(this.backdrop)
     return new VanillaMachine(modal.machine, {
       ...props,
