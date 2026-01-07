@@ -8,19 +8,16 @@
   ],
   "packageManager": "pnpm@10.25.0",
   "scripts": {
-    "build": "turbo run build",
-    "build-packages": "turbo run build --filter='!website'",
-    "dev": "turbo run dev",
+    "build:packages": "turbo run build --filter='./packages/*/*'",
+    "build:website": "turbo run build --filter='./apps/docs'",
+    "deploy:website": "turbo run deploy",
     "lint": "turbo run lint",
-    "test": "turbo run test",
-    "deploy": "turbo run deploy",
     "typecheck": "turbo run typecheck",
+    "test": "vitest",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
-    "changeset:release": "changeset tag && changeset publish",
-    "test:browser": "vitest",
-    "release:beta": "pnpm build-packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit"
+    "changeset:release": "changeset tag && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
