@@ -8,7 +8,7 @@ const items = [
 ]
 
 const meta = preview.meta({
-  title: 'Example/Accordion',
+  title: 'Components/Accordion',
   component: Accordion.Root,
   // subcomponents: { ...Accordion },
   argTypes: {

@@ -1,0 +1,116 @@
+import * as characterCount from '@uswds-tailwind/character-count-compat'
+import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import * as React from 'react'
+import { cx } from '../cva.config'
+
+export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.HTMLAttributes<HTMLElement>
+export type CharacterCountLabelProps = React.HTMLAttributes<HTMLLabelElement>
+export type CharacterCountInputProps = React.InputHTMLAttributes<HTMLInputElement>
+export type CharacterCountStatusProps = React.HTMLAttributes<HTMLElement>
+
+export interface CharacterCountContextProps {
+  api: characterCount.Api
+  service: characterCount.Service
+}
+
+const CharacterCountContext = React.createContext<CharacterCountContextProps | null>(null)
+
+function useCharacterCountContext() {
+  const context = React.useContext(CharacterCountContext)
+  if (!context) {
+    throw new Error('CharacterCount components must be used within a CharacterCountRoot')
+  }
+  return context
+}
+
+const CharacterCountRoot = React.forwardRef<any, CharacterCountRootProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const service = useMachine(characterCount.machine, {
+      id: React.useId(),
+      maxLength: props.maxLength,
+    })
+
+    const api = characterCount.connect(service, normalizeProps)
+    const mergedProps = mergeProps(api.getRootProps(), props)
+
+    return (
+      <CharacterCountContext.Provider value={{ api, service }}>
+        <div {...mergedProps} className={className} ref={forwardedRef} />
+      </CharacterCountContext.Provider>
+    )
+  },
+)
+
+const CharacterCountInput = React.forwardRef<any, CharacterCountInputProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useCharacterCountContext()
+
+    const mergedProps = mergeProps(api.getInputProps(), props)
+
+    return (
+      <input
+        {...mergedProps}
+        className={
+          cx(
+            'p-2 w-full max-w-lg h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4',
+            className,
+          )
+        }
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+const CharacterCountStatus = React.forwardRef<any, CharacterCountStatusProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api, service } = useCharacterCountContext()
+
+    const mergedProps = mergeProps(api.getStatusProps(), props)
+
+    return (
+      <div>
+        <span className="sr-only">
+          You can enter up to
+          {api.maxLength}
+          {' '}
+          characters
+        </span>
+        <span
+          {...mergedProps}
+          className={cx(
+            'text-gray-50 invalid:text-red-60v invalid:font-bold',
+            className,
+          )}
+          ref={forwardedRef}
+        >
+          {service.context.get('statusText')}
+        </span>
+        <span {...api.getSrStatusProps()}>{service.context.get('srStatusText')}</span>
+      </div>
+    )
+  },
+)
+
+const CharacterCountLabel = React.forwardRef<any, CharacterCountLabelProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useCharacterCountContext()
+
+    const mergedProps = mergeProps(api.getLabelProps(), props)
+
+    return (
+      <label
+        {...mergedProps}
+        className={cx('block', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+export const CharacterCount = {
+  Root: CharacterCountRoot,
+  Input: CharacterCountInput,
+  Status: CharacterCountStatus,
+  Label: CharacterCountLabel,
+}
