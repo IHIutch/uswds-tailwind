@@ -1,9 +1,0 @@
-@import "@fontsource-variable/open-sans";
-@import "@fontsource-variable/public-sans";
-@import "@fontsource-variable/roboto-mono";
-@import "@fontsource-variable/source-sans-3";
-@import "@fontsource-variable/merriweather";
-
-@import "tailwindcss";
-@source "../node_modules/@uswds-tailwind/react/src";
-@import "@uswds-tailwind/theme";
