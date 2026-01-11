@@ -1,5 +1,6 @@
 catalogMode: prefer
 shellEmulator: true
+
 trustPolicy: no-downgrade
 
 trustPolicyExclude:
@@ -50,7 +51,8 @@ catalog:
   '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
   '@uswds-tailwind/accordion-compat': ^0.2.0
-  '@vitejs/plugin-react': ^4.7.0
+  '@uswds-tailwind/theme': ^0.2.0
+  '@vitejs/plugin-react': 4.7.0
   '@vitest/browser': ^4.0.16
   '@vitest/browser-playwright': ^4.0.16
   '@zag-js/anatomy': ^1.31.1
@@ -81,8 +83,8 @@ catalog:
   fuse.js: ^7.1.0
   github-slugger: ^2.0.0
   globals: ^16.5.0
-  react: 19.1.0
-  react-dom: 19.1.0
+  react: ^19.2.3
+  react-dom: ^19.2.3
   sharp: ^0.34.5
   storybook: 10.1.11
   tailwind-merge: ^3.4.0
@@ -95,7 +97,7 @@ catalog:
   turbo: ^2.6.3
   typescript: ^5.9.3
   typescript-eslint: ^8.46.4
-  vite: ^7.2.7
+  vite: 7.2.7
   vitest: ^4.0.16
   wrangler: ^4.54.0
 

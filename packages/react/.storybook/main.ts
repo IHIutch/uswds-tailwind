@@ -1,12 +1,8 @@
-import type { StorybookConfig } from '@storybook/react-vite'
+import { defineMain } from '@storybook/react-vite/node'
 
-const config: StorybookConfig = {
-  stories: [
-    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-  ],
-  addons: [
-    '@storybook/addon-docs',
-  ],
+export default defineMain({
+  stories: ['../src/**/*.stories.@(ts|tsx|mdx)'],
+  addons: ['@storybook/addon-docs'],
   features: {
     // Helps show full source code in docs: https://tetra.chromatic.com/?path=/docs/components-accordion--docs
     experimentalCodeExamples: true,
@@ -15,5 +11,4 @@ const config: StorybookConfig = {
   typescript: {
     reactDocgen: 'react-docgen',
   },
-}
-export default config
+})

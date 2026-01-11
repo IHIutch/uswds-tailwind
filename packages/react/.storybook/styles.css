@@ -5,5 +5,5 @@
 @import "@fontsource-variable/merriweather";
 
 @import "tailwindcss";
-@source "../node_modules/@uswds-tailwind/react/src";
 @import "@uswds-tailwind/theme";
+@source "../node_modules/@uswds-tailwind/react/src";

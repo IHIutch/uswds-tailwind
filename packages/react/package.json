@@ -22,22 +22,38 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
+    "@fontsource-variable/merriweather": "catalog:",
+    "@fontsource-variable/open-sans": "catalog:",
+    "@fontsource-variable/public-sans": "catalog:",
+    "@fontsource-variable/roboto-mono": "catalog:",
+    "@fontsource-variable/source-sans-3": "catalog:",
+    "@iconify-json/fa-solid": "catalog:",
+    "@iconify-json/fa6-brands": "catalog:",
+    "@iconify-json/material-symbols": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/react-vite": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@uswds-tailwind/accordion-compat": "workspace:*",
     "@uswds-tailwind/character-count-compat": "workspace:*",
     "@uswds-tailwind/collapse-compat": "workspace:*",
     "@uswds-tailwind/combobox-compat": "workspace:*",
+    "@uswds-tailwind/theme": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
     "@zag-js/react": "catalog:",
     "@zag-js/types": "catalog:",
     "cva": "catalog:",
+    "storybook": "catalog:",
     "tailwind-merge": "catalog:",
-    "tailwindcss": "catalog:"
+    "tailwindcss": "catalog:",
+    "vite": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",
