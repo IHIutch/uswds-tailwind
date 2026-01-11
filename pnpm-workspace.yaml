@@ -6,6 +6,7 @@ trustPolicyExclude:
   - chokidar@4.0.3
   - vite@6.4.1
   - semver@6.3.1
+  - tailwind-merge@2.6.0
 
 packages:
   - apps/**
@@ -25,6 +26,7 @@ catalog:
   '@changesets/cli': 2.29.7
   '@docsearch/css': ^4.3.2
   '@docsearch/react': ^4.3.2
+  '@eslint/js': ^9.39.1
   '@fontsource-variable/merriweather': ^5.2.6
   '@fontsource-variable/open-sans': ^5.2.7
   '@fontsource-variable/public-sans': ^5.2.7
@@ -37,6 +39,8 @@ catalog:
   '@iconify/types': ^2.0.0
   '@iconify/utils': ^3.1.0
   '@stackblitz/sdk': ^1.11.0
+  '@storybook/addon-docs': 10.1.11
+  '@storybook/react-vite': 10.1.11
   '@tailwindcss/forms': ^0.5.10
   '@tailwindcss/typography': 0.5.16
   '@tailwindcss/vite': 4.1.14
@@ -45,6 +49,7 @@ catalog:
   '@types/react': ^19.2.7
   '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
+  '@uswds-tailwind/accordion-compat': ^0.2.0
   '@vitejs/plugin-react': ^4.7.0
   '@vitest/browser': ^4.0.16
   '@vitest/browser-playwright': ^4.0.16
@@ -65,16 +70,23 @@ catalog:
   astro: 5.14.5
   astro-expressive-code: ^0.41.4
   astro-seo: ^0.8.4
+  cva: ^1.0.0-beta.4
   dedent: ^1.7.0
   eslint: ^9.39.1
+  eslint-plugin-react-hooks: ^7.0.1
+  eslint-plugin-react-refresh: ^0.4.24
+  eslint-plugin-storybook: 10.1.11
   find-up: 6.3.0
   fs-extra: 11.1.1
   fuse.js: ^7.1.0
   github-slugger: ^2.0.0
+  globals: ^16.5.0
   react: 19.1.0
   react-dom: 19.1.0
   sharp: ^0.34.5
-  tailwindcss: ^4.1.18
+  storybook: 10.1.11
+  tailwind-merge: ^3.4.0
+  tailwindcss: 4.1.18
   tailwindcss-animate: ^1.0.7
   ts-morph: 19.0.0
   ts-pattern: 5.0.3
@@ -82,6 +94,7 @@ catalog:
   tsx: ^4.21.0
   turbo: ^2.6.3
   typescript: ^5.9.3
+  typescript-eslint: ^8.46.4
   vite: ^7.2.7
   vitest: ^4.0.16
   wrangler: ^4.54.0

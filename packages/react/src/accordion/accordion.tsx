@@ -1,36 +1,32 @@
-import type { ReactNode } from 'react'
 import * as accordion from '@uswds-tailwind/accordion-compat'
-import { normalizeProps, useMachine } from '@zag-js/react'
-import React from 'react'
 
-export interface AccordionRootProps extends Omit<accordion.Props, 'id'> {
-  className?: string
-  children: ReactNode
+import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import * as React from 'react'
+import { cx } from '../cva.config'
+
+export type AccordionRootProps = Omit<accordion.Props, 'id'> & React.HTMLAttributes<HTMLElement>
+
+export type AccordionItemProps = React.HTMLAttributes<HTMLElement> & {
+  value: string
 }
 
-export interface AccordionItemProps {
-  className?: string
-  value: string
-  children: ReactNode
-}
+export type AccordionTriggerProps = React.HTMLAttributes<HTMLButtonElement>
+export type AccordionContentProps = React.HTMLAttributes<HTMLElement>
 
-export interface AccordionTriggerProps {
-  className?: string
-  value: string
-  children: ReactNode
-}
-
-export interface AccordionContentProps {
-  className?: string
-  value: string
-  children: ReactNode
+export type AccordionItemIndicatorProps = Omit<React.HTMLAttributes<HTMLElement>, 'children'> & {
+  children?: React.ReactNode | ((context: ReturnType<typeof useAccordionItemContext>) => React.ReactNode)
 }
 
 export interface AccordionContextProps {
   api: accordion.Api
 }
 
+export interface AccordionItemContextProps {
+  value: string
+}
+
 const AccordionContext = React.createContext<AccordionContextProps | null>(null)
+const AccordionItemContext = React.createContext<AccordionItemContextProps | null>(null)
 
 function useAccordionContext() {
   const context = React.useContext(AccordionContext)
@@ -40,69 +36,114 @@ function useAccordionContext() {
   return context
 }
 
-const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
-  ({ children, ...props }, ref) => {
+function useAccordionItemContext() {
+  const { api } = useAccordionContext()
+  const context = React.useContext(AccordionItemContext)
+
+  if (!context) {
+    throw new Error('AccordionItem components must be used within an AccordionItem')
+  }
+  return {
+    value: context.value,
+    isOpen: api.isItemOpen(context.value),
+  }
+}
+
+const AccordionRoot = React.forwardRef<any, AccordionRootProps>(
+  ({ className, ...props }, forwardedRef) => {
     const service = useMachine(accordion.machine, {
       id: React.useId(),
       multiple: props.multiple,
     })
 
     const api = accordion.connect(service, normalizeProps)
+    const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (
       <AccordionContext.Provider value={{ api }}>
-        <div {...api.getRootProps()} ref={ref} {...props}>
-          {children}
-        </div>
+        <div {...mergedProps} className={cx('space-y-2', className)} ref={forwardedRef} />
       </AccordionContext.Provider>
     )
-  }
+  },
 )
 
-const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
-  ({ value, children, ...props }, ref) => {
+const AccordionItem = React.forwardRef<any, AccordionItemProps>(
+  ({ className, value, ...props }, forwardedRef) => {
     const { api } = useAccordionContext()
+    const mergedProps = mergeProps(api.getItemProps({ value }), props)
 
     return (
-      <div {...api.getItemProps({ value })} ref={ref} {...props}>
-        {children}
+      <AccordionItemContext.Provider value={{ value }}>
+        <div {...mergedProps} className={className} ref={forwardedRef} />
+      </AccordionItemContext.Provider>
+    )
+  },
+)
+
+const AccordionTrigger = React.forwardRef<any, AccordionTriggerProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useAccordionContext()
+    const { value } = useAccordionItemContext()
+
+    const mergedProps = mergeProps(api.getTriggerProps({ value }), props)
+
+    return (
+      <button
+        {...mergedProps}
+        className={cx(
+          'group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3',
+          className,
+        )}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+const AccordionContent = React.forwardRef<any, AccordionContentProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useAccordionContext()
+    const { value } = useAccordionItemContext()
+
+    const mergedProps = mergeProps(api.getContentProps({ value }), props)
+
+    return (
+      <div
+        {...mergedProps}
+        className={cx(
+          'py-6 px-4 not-data-[state=open]:hidden',
+          className,
+        )}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+const AccordionItemIndicator = React.forwardRef<any, AccordionItemIndicatorProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const content = typeof children === 'function'
+      ? children(useAccordionItemContext())
+      : children
+
+    return (
+      <div
+        className={
+          cx('h-full flex items-center ml-auto shrink-0', className)
+        }
+        {...props}
+        ref={forwardedRef}
+      >
+        {content || <div className="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]" />}
       </div>
     )
-  }
+  },
 )
-
-const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerProps>(
-  ({ value, children, ...props }, ref) => {
-    const { api } = useAccordionContext()
-
-    return (
-      <button {...api.getTriggerProps({ value })} ref={ref} {...props}>
-        {children}
-      </button>
-    )
-  }
-)
-
-const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>(
-  ({ value, children, ...props }, ref) => {
-    const { api } = useAccordionContext()
-
-    return (
-      <div {...api.getContentProps({ value })} ref={ref} {...props}>
-        {children}
-      </div>
-    )
-  }
-)
-
-AccordionRoot.displayName = 'AccordionRoot'
-AccordionItem.displayName = 'AccordionItem'
-AccordionTrigger.displayName = 'AccordionTrigger'
-AccordionContent.displayName = 'AccordionContent'
 
 export const Accordion = {
   Root: AccordionRoot,
   Item: AccordionItem,
+  ItemIndicator: AccordionItemIndicator,
   Trigger: AccordionTrigger,
   Content: AccordionContent,
 }
