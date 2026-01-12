@@ -10,7 +10,7 @@ export type AccordionItemProps = React.HTMLAttributes<HTMLElement> & {
   value: string
 }
 
-export type AccordionTriggerProps = React.HTMLAttributes<HTMLButtonElement>
+export type AccordionTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 export type AccordionContentProps = React.HTMLAttributes<HTMLElement>
 
 export type AccordionItemIndicatorProps = Omit<React.HTMLAttributes<HTMLElement>, 'children'> & {
