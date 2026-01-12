@@ -1,7 +1,6 @@
 import type { VariantProps } from 'cva'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
-import { Icon } from '../icon'
 
 export const alertVariants = cva({
   variants: {
@@ -55,14 +54,24 @@ const alertIndicatorVariants = cva({
       true: null,
       false: 'top-3',
     },
+    noIcon: {
+      true: 'hidden',
+    },
   },
   defaultVariants: {
     slim: false,
+    noIcon: false,
   },
 })
 
 const alertIconVariants = cva({
   variants: {
+    variant: {
+      info: 'icon-[material-symbols--info]',
+      warning: 'icon-[material-symbols--warning]',
+      success: 'icon-[material-symbols--check-circle]',
+      error: 'icon-[material-symbols--error]',
+    },
     slim: {
       true: 'size-6',
       false: 'size-8',
@@ -70,6 +79,7 @@ const alertIconVariants = cva({
   },
   defaultVariants: {
     slim: false,
+    variant: 'info',
   },
 })
 
@@ -121,23 +131,15 @@ function AlertDescription({ className, ...props }: React.HTMLAttributes<HTMLElem
   return <div {...props} className={className} />
 }
 
-const iconMap: Record<string, ({ className }: { className?: string }) => React.ReactNode> = {
-  info: ({ className }) => <Icon icon="info" className={className} />,
-  warning: ({ className }) => <Icon icon="warning" className={className} />,
-  success: ({ className }) => <Icon icon="check-circle" className={className} />,
-  error: ({ className }) => <Icon icon="warning" className={className} />,
-}
-
 function AlertIndicator({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) {
-  const { variant, slim } = useAlertContext()
-  const IconComponent = iconMap[variant || 'info']
+  const { variant, slim, noIcon } = useAlertContext()
 
   return (
     <div
       {...props}
-      className={alertIndicatorVariants({ slim, className })}
+      className={alertIndicatorVariants({ slim, className, noIcon })}
     >
-      {children || (IconComponent ? IconComponent({ className: alertIconVariants({ slim }) }) : null)}
+      {children || <div className={alertIconVariants({ variant, slim })} />}
     </div>
   )
 }
