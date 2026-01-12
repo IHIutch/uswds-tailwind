@@ -1,0 +1,9 @@
+{
+  "name": "storybook", // can be any
+  "compatibility_date": "2025-08-18",
+  "assets": {
+    "directory": "./storybook-static", // default build output directory
+    "binding": "ASSETS"
+  },
+  "main": "./.storybook/worker.js" // worker entry point
+}
