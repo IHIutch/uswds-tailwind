@@ -24,7 +24,6 @@ export const Basic = meta.story({
   // render: args => <AccordionBasic {...args} />,
   render: ({ maxLength }) => (
     <CharacterCount.Root maxLength={maxLength}>
-      <div>{maxLength}</div>
       <CharacterCount.Label>Character Count</CharacterCount.Label>
       <CharacterCount.Input className="mt-2" />
       <div className="mt-2">
