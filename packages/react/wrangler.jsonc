@@ -1,5 +1,5 @@
 {
-  "name": "storybook", // can be any
+  "name": "uswds-tailwind-react-storybook",
   "compatibility_date": "2025-08-18",
   "assets": {
     "directory": "./storybook-static", // default build output directory
