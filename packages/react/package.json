@@ -24,7 +24,8 @@
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "deploy-storybook": "pnpm build-storybook && pnpx wrangler deploy --assets=./storybook-static"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"
