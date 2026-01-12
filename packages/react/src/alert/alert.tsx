@@ -3,8 +3,6 @@ import * as React from 'react'
 import { cva, cx } from '../cva.config'
 import { Icon } from '../icon'
 
-export type AlertRootProps = React.HTMLAttributes<HTMLElement> & VariantProps<typeof alertVariants>
-
 export const alertVariants = cva({
   variants: {
     variant: {
@@ -25,6 +23,57 @@ export const alertVariants = cva({
   },
 })
 
+const alertContentVariants = cva({
+  base: 'pr-5 relative',
+  variants: {
+    slim: {
+      true: 'py-2',
+      false: 'py-4',
+    },
+    noIcon: {
+      true: 'pl-4',
+      false: 'pl-13',
+    },
+  },
+  compoundVariants: [
+    {
+      slim: false,
+      noIcon: false,
+      className: 'pl-15',
+    },
+  ],
+  defaultVariants: {
+    slim: false,
+    noIcon: false,
+  },
+})
+
+const alertIndicatorVariants = cva({
+  base: 'absolute left-4.5',
+  variants: {
+    slim: {
+      true: null,
+      false: 'top-3',
+    },
+  },
+  defaultVariants: {
+    slim: false,
+  },
+})
+
+const alertIconVariants = cva({
+  variants: {
+    slim: {
+      true: 'size-6',
+      false: 'size-8',
+    },
+  },
+  defaultVariants: {
+    slim: false,
+  },
+})
+
+export type AlertRootProps = React.HTMLAttributes<HTMLElement> & VariantProps<typeof alertVariants>
 export type AlertContextProps = VariantProps<typeof alertVariants>
 
 const AlertContext = React.createContext<AlertContextProps | null>(null)
@@ -51,19 +100,21 @@ function AlertContent({ className, ...props }: React.HTMLAttributes<HTMLElement>
   return (
     <div
       {...props}
-      className={cx(
-        'pr-5 relative',
-        slim ? 'py-2' : 'py-4',
-        noIcon ? 'pl-4' : 'pl-13',
-        !slim && !noIcon ? 'pl-15' : '',
-        className,
-      )}
+      className={alertContentVariants({ slim, noIcon, className })}
     />
   )
 }
 
 function AlertTitle({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return <div {...props} className={cx('text-2xl font-bold mb-2 leading-none', className)} />
+  return (
+    <div
+      {...props}
+      className={cx(
+        'text-2xl font-bold mb-2 leading-none',
+        className,
+      )}
+    />
+  )
 }
 
 function AlertDescription({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
@@ -84,13 +135,9 @@ function AlertIndicator({ className, children, ...props }: React.HTMLAttributes<
   return (
     <div
       {...props}
-      className={cx(
-        'absolute left-4.5',
-        slim ? '' : 'top-3',
-        className,
-      )}
+      className={alertIndicatorVariants({ slim, className })}
     >
-      {children || (IconComponent ? IconComponent({ className: slim ? 'size-6' : 'size-8' }) : null)}
+      {children || (IconComponent ? IconComponent({ className: alertIconVariants({ slim }) }) : null)}
     </div>
   )
 }
