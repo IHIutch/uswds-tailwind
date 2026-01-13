@@ -144,6 +144,6 @@ export const Accordion = {
   Root: AccordionRoot,
   Item: AccordionItem,
   ItemIndicator: AccordionItemIndicator,
-  Trigger: AccordionTrigger,
-  Content: AccordionContent,
+  ItemTrigger: AccordionTrigger,
+  ItemContent: AccordionContent,
 }

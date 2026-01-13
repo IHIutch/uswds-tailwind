@@ -32,13 +32,13 @@ export const Basic = meta.story({
     <Accordion.Root multiple={multiple}>
       {items.map(item => (
         <Accordion.Item key={item.title} value={item.title}>
-          <Accordion.Trigger>
+          <Accordion.ItemTrigger>
             {item.title}
             <Accordion.ItemIndicator />
-          </Accordion.Trigger>
-          <Accordion.Content>
+          </Accordion.ItemTrigger>
+          <Accordion.ItemContent>
             <div className="leading-normal max-w-prose">{item.content}</div>
-          </Accordion.Content>
+          </Accordion.ItemContent>
         </Accordion.Item>
       ))}
     </Accordion.Root>
@@ -53,13 +53,13 @@ export const Multiple = meta.story({
     <Accordion.Root multiple={multiple}>
       {items.map(item => (
         <Accordion.Item key={item.title} value={item.title}>
-          <Accordion.Trigger>
+          <Accordion.ItemTrigger>
             {item.title}
             <Accordion.ItemIndicator />
-          </Accordion.Trigger>
-          <Accordion.Content>
+          </Accordion.ItemTrigger>
+          <Accordion.ItemContent>
             <div className="leading-normal max-w-prose">{item.content}</div>
-          </Accordion.Content>
+          </Accordion.ItemContent>
         </Accordion.Item>
       ))}
     </Accordion.Root>
@@ -74,15 +74,15 @@ export const CustomIcons = meta.story({
     <Accordion.Root multiple={multiple}>
       {items.map(item => (
         <Accordion.Item key={item.title} value={item.title}>
-          <Accordion.Trigger>
+          <Accordion.ItemTrigger>
             {item.title}
             <Accordion.ItemIndicator>
               {({ isOpen }) => (<div>{isOpen ? '-' : '+'}</div>)}
             </Accordion.ItemIndicator>
-          </Accordion.Trigger>
-          <Accordion.Content>
+          </Accordion.ItemTrigger>
+          <Accordion.ItemContent>
             <div className="leading-normal max-w-prose">{item.content}</div>
-          </Accordion.Content>
+          </Accordion.ItemContent>
         </Accordion.Item>
       ))}
     </Accordion.Root>
