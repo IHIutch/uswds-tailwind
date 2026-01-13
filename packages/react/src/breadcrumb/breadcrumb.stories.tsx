@@ -5,11 +5,19 @@ const meta = preview.meta({
   title: 'Components/Breadcrumb',
   component: Breadcrumb.Root,
   argTypes: {
-    wrap: {
+    'wrap': {
       control: 'boolean',
       table: {
         defaultValue: {
           summary: 'false',
+        },
+      },
+    },
+    'aria-label': {
+      control: 'text',
+      table: {
+        defaultValue: {
+          summary: 'Breadcrumb',
         },
       },
     },
@@ -19,22 +27,24 @@ const meta = preview.meta({
 const items = [
   { label: 'Home', href: '#' },
   { label: 'Federal Contracting', href: '#' },
-  { label: 'Contracting assistance programs and other things', href: '#' },
+  { label: 'Contracting assistance programs', href: '#' },
   { label: 'Economically disadvantaged women-owned small business federal contracting program', href: '#' },
 ]
 
 export const Basic = meta.story({
   args: {
-    wrap: false,
+    'wrap': false,
+    'aria-label': 'Breadcrumb',
   },
-  render: ({ wrap }) => (
-    <Breadcrumb.Root wrap={wrap}>
+  render: ({ wrap, 'aria-label': ariaLabel }) => (
+    <Breadcrumb.Root wrap={wrap} aria-label={ariaLabel}>
+      <Breadcrumb.Previous />
       <Breadcrumb.List>
         {items.map((item, index) => {
           const last = index === items.length - 1
           return (
-            <Breadcrumb.Item key={index}>
-              <Breadcrumb.Link href={item.href} isCurrent={last}>
+            <Breadcrumb.Item key={index} isCurrent={last}>
+              <Breadcrumb.Link href={item.href}>
                 {item.label}
               </Breadcrumb.Link>
               {last ? null : <Breadcrumb.Separator />}
@@ -48,16 +58,18 @@ export const Basic = meta.story({
 
 export const Wrapping = meta.story({
   args: {
-    wrap: true,
+    'wrap': true,
+    'aria-label': 'Wrapping Breadcrumb',
   },
-  render: ({ wrap }) => (
-    <Breadcrumb.Root wrap={wrap}>
+  render: ({ wrap, 'aria-label': ariaLabel }) => (
+    <Breadcrumb.Root wrap={wrap} aria-label={ariaLabel}>
+      <Breadcrumb.Previous />
       <Breadcrumb.List>
         {items.map((item, index) => {
           const last = index === items.length - 1
           return (
-            <Breadcrumb.Item key={index}>
-              <Breadcrumb.Link href={item.href} isCurrent={last}>
+            <Breadcrumb.Item key={index} isCurrent={last}>
+              <Breadcrumb.Link href={item.href}>
                 {item.label}
               </Breadcrumb.Link>
               {last ? null : <Breadcrumb.Separator />}

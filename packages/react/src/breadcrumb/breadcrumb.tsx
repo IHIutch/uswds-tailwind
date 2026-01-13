@@ -1,13 +1,27 @@
 import * as React from 'react'
 import { cx } from '../cva.config'
 
-type BreadcrumbRootProps = React.HTMLAttributes<HTMLDivElement> & BreadcrumbContextProps
+type BreadcrumbRootProps = React.HTMLAttributes<HTMLDivElement> & BreadcrumbContextProps & {
+  'aria-label': string
+}
+type BreadcrumbListProps = React.HTMLAttributes<HTMLOListElement>
+type BreadcrumbItemProps = React.HTMLAttributes<HTMLElement> & BreadcrumbItemContextProps
+type BreadcrumbLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement>
+type BreadcrumbSeparatorProps = React.HTMLAttributes<HTMLSpanElement>
+type BreadcrumbPreviousProps = React.HTMLAttributes<HTMLSpanElement>
 
 interface BreadcrumbContextProps {
   wrap: boolean
+  separator?: React.ReactNode
+  previous?: React.ReactNode
+}
+
+interface BreadcrumbItemContextProps {
+  isCurrent?: boolean
 }
 
 const BreadcrumbContext = React.createContext<BreadcrumbContextProps | null>(null)
+const BreadcrumbItemContext = React.createContext<BreadcrumbItemContextProps | null>(null)
 
 function useBreadcrumbContext() {
   const context = React.useContext(BreadcrumbContext)
@@ -17,22 +31,35 @@ function useBreadcrumbContext() {
   return context
 }
 
-function BreadcrumbRoot({ wrap = false, className, ...props }: BreadcrumbRootProps) {
+function useBreadcrumbItemContext() {
+  const context = React.useContext(BreadcrumbItemContext)
+  if (!context) {
+    throw new Error('Breadcrumb components must be used within a BreadcrumbRoot')
+  }
+  return context
+}
+
+function BreadcrumbRoot({ wrap = false, className, separator, previous, ...props }: BreadcrumbRootProps) {
   return (
-    <BreadcrumbContext.Provider value={{ wrap }}>
-      <nav {...props} className={cx('@container block', className)} />
+    <BreadcrumbContext.Provider value={{
+      wrap,
+      separator,
+      previous,
+    }}
+    >
+      <nav {...props} className={cx('@container flex p-1 -mx-1', className)} />
     </BreadcrumbContext.Provider>
   )
 }
 
-function BreadcrumbList({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
+function BreadcrumbList({ className, ...props }: BreadcrumbListProps) {
   const { wrap } = useBreadcrumbContext()
   return (
     <ol
       {...props}
       className={
         cx(
-          'list-none p-2 -mx-1 block',
+          'list-none block',
           wrap ? '' : '@mobile-lg:truncate',
           className,
         )
@@ -42,34 +69,27 @@ function BreadcrumbList({ className, ...props }: React.HTMLAttributes<HTMLElemen
   )
 }
 
-function BreadcrumbItem({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) {
+function BreadcrumbItem({ className, children, isCurrent, ...props }: BreadcrumbItemProps) {
   const { wrap } = useBreadcrumbContext()
 
   return (
-    <li
-      {...props}
-      className={cx(
-        wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
-        '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
-        className,
-      )}
-    >
-      <span aria-hidden="true" className="@mobile-lg:hidden">
-        <span className="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>
-      </span>
-      {children}
-    </li>
+    <BreadcrumbItemContext.Provider value={{ isCurrent }}>
+      <li
+        {...props}
+        className={cx(
+          wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
+          '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
+          className,
+        )}
+      >
+        {children}
+      </li>
+    </BreadcrumbItemContext.Provider>
   )
 }
 
-type BreadcrumbLinkProps = {
-  isCurrent?: false
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>
-| {
-  isCurrent: true
-} & React.HTMLAttributes<HTMLSpanElement>
-
-function BreadcrumbLink({ className, children, isCurrent, ...props }: BreadcrumbLinkProps) {
+function BreadcrumbLink({ className, children, ...props }: BreadcrumbLinkProps) {
+  const { isCurrent } = useBreadcrumbItemContext()
   const Component = isCurrent ? 'span' : 'a'
 
   return (
@@ -88,7 +108,7 @@ function BreadcrumbLink({ className, children, isCurrent, ...props }: Breadcrumb
   )
 }
 
-function BreadcrumbSeparator({ className, children, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
+function BreadcrumbSeparator({ className, children, ...props }: BreadcrumbSeparatorProps) {
   return (
     <span
       aria-hidden="true"
@@ -102,10 +122,23 @@ function BreadcrumbSeparator({ className, children, ...props }: React.HTMLAttrib
   )
 }
 
+function BreadcrumbPrevious({ className, children, ...props }: BreadcrumbPreviousProps) {
+  return (
+    <span
+      aria-hidden="true"
+      className="@mobile-lg:hidden"
+      {...props}
+    >
+      {children || <span className="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>}
+    </span>
+  )
+}
+
 export const Breadcrumb = {
   Root: BreadcrumbRoot,
   List: BreadcrumbList,
   Item: BreadcrumbItem,
   Link: BreadcrumbLink,
   Separator: BreadcrumbSeparator,
+  Previous: BreadcrumbPrevious,
 }
