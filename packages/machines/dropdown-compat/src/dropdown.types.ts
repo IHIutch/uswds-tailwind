@@ -1,7 +1,5 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
-import type { DismissableElementHandlers } from '@zag-js/dismissable'
-import type { Placement, PositioningOptions } from '@zag-js/popper'
-import type { CommonProperties, DirectionProperty, PropTypes, RequiredBy } from '@zag-js/types'
+import type { PropTypes } from '@zag-js/types'
 
 export type ElementIds = Partial<{
   root: string
@@ -9,23 +7,16 @@ export type ElementIds = Partial<{
   content: string
 }>
 
-export interface DropdownProps extends DirectionProperty,
-  CommonProperties,
-  DismissableElementHandlers {
+export interface DropdownProps {
   ids?: ElementIds
   open?: boolean
   defaultOpen?: boolean
-  positioning?: PositioningOptions | undefined
   onOpenChange?: (details: { open: boolean }) => void
 }
 
 export interface DropdownSchema {
-  props: RequiredBy<DropdownProps, 'dir'>
+  props: DropdownProps
   state: 'open' | 'closed'
-  context: {
-    currentPlacement: Placement | undefined
-  }
-  effect: 'trackInteractOutside' | 'trackPositioning'
   action: 'invokeOnOpen' | 'invokeOnClose'
   event: EventObject & (
     | { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }

@@ -39,9 +39,6 @@ catalogs:
     '@docsearch/react':
       specifier: ^4.3.2
       version: 4.3.2
-    '@eslint/js':
-      specifier: ^9.39.1
-      version: 9.39.1
     '@fontsource-variable/merriweather':
       specifier: ^5.2.6
       version: 5.2.6
@@ -108,9 +105,6 @@ catalogs:
     '@types/twig':
       specifier: ^1.12.17
       version: 1.12.17
-    '@uswds-tailwind/accordion-compat':
-      specifier: ^0.2.0
-      version: 0.2.0
     '@uswds-tailwind/theme':
       specifier: ^0.2.0
       version: 0.2.0
@@ -139,9 +133,6 @@ catalogs:
       specifier: 1.26.3
       version: 1.26.3
     '@zag-js/focus-trap':
-      specifier: ^1.31.1
-      version: 1.31.1
-    '@zag-js/popper':
       specifier: ^1.31.1
       version: 1.31.1
     '@zag-js/react':
@@ -183,15 +174,6 @@ catalogs:
     eslint:
       specifier: ^9.39.1
       version: 9.39.1
-    eslint-plugin-react-hooks:
-      specifier: ^7.0.1
-      version: 7.0.1
-    eslint-plugin-react-refresh:
-      specifier: ^0.4.24
-      version: 0.4.26
-    eslint-plugin-storybook:
-      specifier: 10.1.11
-      version: 10.1.11
     find-up:
       specifier: 6.3.0
       version: 6.3.0
@@ -204,9 +186,6 @@ catalogs:
     github-slugger:
       specifier: ^2.0.0
       version: 2.0.0
-    globals:
-      specifier: ^16.5.0
-      version: 16.5.0
     react:
       specifier: ^19.2.3
       version: 19.2.3
@@ -246,9 +225,6 @@ catalogs:
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
-    typescript-eslint:
-      specifier: ^8.46.4
-      version: 8.52.0
     vite:
       specifier: 7.2.7
       version: 7.2.7
@@ -429,170 +405,6 @@ importers:
       '@zag-js/types':
         specifier: 'catalog:'
         version: 1.31.1
-
-  apps/storybook-react:
-    dependencies:
-      '@fontsource-variable/merriweather':
-        specifier: 'catalog:'
-        version: 5.2.6
-      '@fontsource-variable/open-sans':
-        specifier: 'catalog:'
-        version: 5.2.7
-      '@fontsource-variable/public-sans':
-        specifier: 'catalog:'
-        version: 5.2.7
-      '@fontsource-variable/roboto-mono':
-        specifier: 'catalog:'
-        version: 5.2.8
-      '@fontsource-variable/source-sans-3':
-        specifier: 'catalog:'
-        version: 5.2.9
-      '@iconify-json/fa-solid':
-        specifier: 'catalog:'
-        version: 1.2.2
-      '@iconify-json/fa6-brands':
-        specifier: 'catalog:'
-        version: 1.2.6
-      '@iconify-json/material-symbols':
-        specifier: 'catalog:'
-        version: 1.2.42
-      '@tailwindcss/vite':
-        specifier: 'catalog:'
-        version: 4.1.14(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))
-      '@uswds-tailwind/accordion-compat':
-        specifier: 'catalog:'
-        version: 0.2.0
-      '@uswds-tailwind/compat':
-        specifier: workspace:*
-        version: link:../../packages/compat
-      '@uswds-tailwind/react':
-        specifier: workspace:*
-        version: link:../../packages/react
-      '@uswds-tailwind/theme':
-        specifier: workspace:*
-        version: link:../../packages/theme
-      react:
-        specifier: 'catalog:'
-        version: 19.2.3
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.2.3(react@19.2.3)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.18
-    devDependencies:
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.39.1
-      '@storybook/addon-docs':
-        specifier: 'catalog:'
-        version: 10.1.11(@types/react@19.2.7)(esbuild@0.27.1)(rollup@4.52.5)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))
-      '@storybook/react-vite':
-        specifier: 'catalog:'
-        version: 10.1.11(esbuild@0.27.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rollup@4.52.5)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))
-      '@types/node':
-        specifier: 'catalog:'
-        version: 25.0.1
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.2.7
-      '@types/react-dom':
-        specifier: 'catalog:'
-        version: 19.2.3(@types/react@19.2.7)
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 4.7.0(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))
-      eslint:
-        specifier: 'catalog:'
-        version: 9.39.1(jiti@2.6.1)
-      eslint-plugin-react-hooks:
-        specifier: 'catalog:'
-        version: 7.0.1(eslint@9.39.1(jiti@2.6.1))
-      eslint-plugin-react-refresh:
-        specifier: 'catalog:'
-        version: 0.4.26(eslint@9.39.1(jiti@2.6.1))
-      eslint-plugin-storybook:
-        specifier: 'catalog:'
-        version: 10.1.11(eslint@9.39.1(jiti@2.6.1))(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
-      globals:
-        specifier: 'catalog:'
-        version: 16.5.0
-      storybook:
-        specifier: 'catalog:'
-        version: 10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      typescript-eslint:
-        specifier: 'catalog:'
-        version: 8.52.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
-      vite:
-        specifier: 'catalog:'
-        version: 7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2)
-
-  examples/react-ts:
-    dependencies:
-      '@fontsource-variable/merriweather':
-        specifier: 'catalog:'
-        version: 5.2.6
-      '@fontsource-variable/open-sans':
-        specifier: 'catalog:'
-        version: 5.2.7
-      '@fontsource-variable/public-sans':
-        specifier: 'catalog:'
-        version: 5.2.7
-      '@fontsource-variable/roboto-mono':
-        specifier: 'catalog:'
-        version: 5.2.8
-      '@fontsource-variable/source-sans-3':
-        specifier: 'catalog:'
-        version: 5.2.9
-      '@iconify-json/fa-solid':
-        specifier: 'catalog:'
-        version: 1.2.2
-      '@iconify-json/fa6-brands':
-        specifier: 'catalog:'
-        version: 1.2.6
-      '@iconify-json/material-symbols':
-        specifier: 'catalog:'
-        version: 1.2.42
-      '@tailwindcss/vite':
-        specifier: 'catalog:'
-        version: 4.1.14(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))
-      '@uswds-tailwind/compat':
-        specifier: workspace:*
-        version: link:../../packages/compat
-      '@uswds-tailwind/react':
-        specifier: workspace:*
-        version: link:../../packages/react
-      '@uswds-tailwind/theme':
-        specifier: workspace:*
-        version: link:../../packages/theme
-      react:
-        specifier: 'catalog:'
-        version: 19.2.3
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.2.3(react@19.2.3)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.18
-    devDependencies:
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.2.7
-      '@types/react-dom':
-        specifier: 'catalog:'
-        version: 19.2.3(@types/react@19.2.7)
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 4.7.0(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-      vite:
-        specifier: 'catalog:'
-        version: 7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2)
 
   examples/vanilla-ts:
     dependencies:
@@ -825,9 +637,6 @@ importers:
       '@zag-js/dom-query':
         specifier: 'catalog:'
         version: 1.26.3
-      '@zag-js/popper':
-        specifier: 'catalog:'
-        version: 1.31.1
       '@zag-js/types':
         specifier: 'catalog:'
         version: 1.31.1
@@ -1020,6 +829,9 @@ importers:
       '@uswds-tailwind/combobox-compat':
         specifier: workspace:*
         version: link:../machines/combobox-compat
+      '@uswds-tailwind/dropdown-compat':
+        specifier: workspace:*
+        version: link:../machines/dropdown-compat
       '@uswds-tailwind/theme':
         specifier: 'catalog:'
         version: 0.2.0
@@ -2363,15 +2175,6 @@ packages:
   '@expressive-code/plugin-text-markers@0.41.4':
     resolution: {integrity: sha512-lGqbjtIuiY+UZ+z61kKIJAZtF7H5xoT8lkxANmeoVaat+H47O5A+rr5WLmD45ezprO/NTogxHsaMfqRCuQ4vlw==}
 
-  '@floating-ui/core@1.7.3':
-    resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
-
-  '@floating-ui/dom@1.7.4':
-    resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
-
-  '@floating-ui/utils@0.2.10':
-    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
-
   '@fontsource-variable/merriweather@5.2.6':
     resolution: {integrity: sha512-bHCDt99f/M48eUcFA86uh/oSPyn8r/ZxXR9l578wqLvjTwDzXx8A/XOAI05WfJ3LnH1rDufQX5RJwiZtbXUCkw==}
 
@@ -3419,9 +3222,6 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@uswds-tailwind/accordion-compat@0.2.0':
-    resolution: {integrity: sha512-lXlrowBzS5dKCmqrrtsHZaQg7FCioaY5mQEJKEsa0hdyH18wgzEQFa105LowQApKqtu7GkppsDaj6P3EOlbDbA==}
-
   '@uswds-tailwind/theme@0.2.0':
     resolution: {integrity: sha512-0cgHyDnyGKWhNQo4eacyYFWsp9rHIoV27mQoIjw8lM5VwuxGNHtajOayUlbZijj5YkCiqOL+wbA0b8bzWY8Kew==}
 
@@ -3591,9 +3391,6 @@ packages:
 
   '@zag-js/interact-outside@1.21.1':
     resolution: {integrity: sha512-levryguVZWrjTXTEPH6X9ZZ47huMTgscnFmeFL+eRsnDuvUFq48jVgysECO4KHbZLJmcUTlSpRC3mrOSsksH/g==}
-
-  '@zag-js/popper@1.31.1':
-    resolution: {integrity: sha512-wLXcEqzn9MK1rGbsgnDH26o5ZWqR4oeb6ZepKKy0gcuJl/1S5/dr1VBvxJNMZlf9d6etvYklG5LRnIVkXCbrjA==}
 
   '@zag-js/react@1.31.1':
     resolution: {integrity: sha512-a7uYH+tcw1UYbcovyVBzlh6X8KztK/b1+s8sMs4Srhd24M+hZMetV94Z0bM1Km5aNAnoS4gkH3gtJjH0OphquQ==}
@@ -4411,12 +4208,6 @@ packages:
     engines: {node: ^18 || >=20}
     peerDependencies:
       eslint: '>=8.44.0'
-
-  eslint-plugin-storybook@10.1.11:
-    resolution: {integrity: sha512-mbq2r2kK5+AcLl0XDJ3to91JOgzCbHOqj+J3n+FRw6drk+M1boRqMShSoMMm0HdzXPLmlr7iur+qJ5ZuhH6ayQ==}
-    peerDependencies:
-      eslint: '>=8'
-      storybook: ^10.1.11
 
   eslint-plugin-toml@0.12.0:
     resolution: {integrity: sha512-+/wVObA9DVhwZB1nG83D2OAQRrcQZXy+drqUnFJKymqnmbnbfg/UPmEMCKrJNcEboUGxUjYrJlgy+/Y930mURQ==}
@@ -6357,13 +6148,6 @@ packages:
   typescript-auto-import-cache@0.3.6:
     resolution: {integrity: sha512-RpuHXrknHdVdK7wv/8ug3Fr0WNsNi5l5aB8MYYuXhq2UH5lnEB1htJ1smhtD5VeCsGr2p8mUDtd83LCQDFVgjQ==}
 
-  typescript-eslint@8.52.0:
-    resolution: {integrity: sha512-atlQQJ2YkO4pfTVQmQ+wvYQwexPDOIgo+RaVcD7gHgzy/IQA+XTyuxNM9M9TVXvttkF7koBHmcwisKdOAf2EcA==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-    peerDependencies:
-      eslint: ^8.57.0 || ^9.0.0
-      typescript: '>=4.8.4 <6.0.0'
-
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
@@ -8203,17 +7987,6 @@ snapshots:
     dependencies:
       '@expressive-code/core': 0.41.4
 
-  '@floating-ui/core@1.7.3':
-    dependencies:
-      '@floating-ui/utils': 0.2.10
-
-  '@floating-ui/dom@1.7.4':
-    dependencies:
-      '@floating-ui/core': 1.7.3
-      '@floating-ui/utils': 0.2.10
-
-  '@floating-ui/utils@0.2.10': {}
-
   '@fontsource-variable/merriweather@5.2.6': {}
 
   '@fontsource-variable/open-sans@5.2.7': {}
@@ -9181,17 +8954,6 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@uswds-tailwind/accordion-compat@0.2.0':
-    dependencies:
-      '@zag-js/anatomy': 1.31.1
-      '@zag-js/aria-hidden': 1.21.1
-      '@zag-js/core': 1.31.1
-      '@zag-js/dismissable': 1.21.1
-      '@zag-js/focus-trap': 1.31.1
-      '@zag-js/remove-scroll': 1.31.1
-      '@zag-js/types': 1.31.1
-      '@zag-js/utils': 1.31.1
-
   '@uswds-tailwind/theme@0.2.0':
     dependencies:
       '@iconify/tailwind4': 1.2.0(tailwindcss@4.1.18)
@@ -9464,12 +9226,6 @@ snapshots:
     dependencies:
       '@zag-js/dom-query': 1.21.1
       '@zag-js/utils': 1.21.1
-
-  '@zag-js/popper@1.31.1':
-    dependencies:
-      '@floating-ui/dom': 1.7.4
-      '@zag-js/dom-query': 1.31.1
-      '@zag-js/utils': 1.31.1
 
   '@zag-js/react@1.31.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
@@ -10446,10 +10202,12 @@ snapshots:
       zod-validation-error: 4.0.2(zod@4.1.12)
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   eslint-plugin-react-refresh@0.4.26(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.1(jiti@2.6.1)
+    optional: true
 
   eslint-plugin-regexp@2.10.0(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
@@ -10461,15 +10219,6 @@ snapshots:
       refa: 0.12.1
       regexp-ast-analysis: 0.7.1
       scslre: 0.3.0
-
-  eslint-plugin-storybook@10.1.11(eslint@9.39.1(jiti@2.6.1))(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3):
-    dependencies:
-      '@typescript-eslint/utils': 8.52.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
-      eslint: 9.39.1(jiti@2.6.1)
-      storybook: 10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
 
   eslint-plugin-toml@0.12.0(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
@@ -11014,11 +10763,13 @@ snapshots:
       property-information: 7.1.0
       space-separated-tokens: 2.0.2
 
-  hermes-estree@0.25.1: {}
+  hermes-estree@0.25.1:
+    optional: true
 
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
+    optional: true
 
   hex-rgb@4.3.0: {}
 
@@ -12880,17 +12631,6 @@ snapshots:
     dependencies:
       semver: 7.7.3
 
-  typescript-eslint@8.52.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3):
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
-      '@typescript-eslint/parser': 8.52.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
-      '@typescript-eslint/typescript-estree': 8.52.0(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.52.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
-      eslint: 9.39.1(jiti@2.6.1)
-      typescript: 5.9.3
-    transitivePeerDependencies:
-      - supports-color
-
   typescript@5.9.3: {}
 
   ufo@1.6.1: {}
@@ -13416,6 +13156,7 @@ snapshots:
   zod-validation-error@4.0.2(zod@4.1.12):
     dependencies:
       zod: 4.1.12
+    optional: true
 
   zod@3.22.3: {}
 
