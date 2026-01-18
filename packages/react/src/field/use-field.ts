@@ -2,6 +2,7 @@
 
 import { ariaAttr, getDocument } from '@zag-js/dom-query'
 import * as React from 'react'
+import { useFieldsetContext } from '../fieldset/fieldset'
 import { parts } from './field.anatomy'
 
 export interface ElementIds {
@@ -42,9 +43,9 @@ export interface UseFieldProps {
 export type UseFieldReturn = ReturnType<typeof useField>
 
 export function useField(props: UseFieldProps = {}) {
-  // const fieldset = useFieldsetContext()
+  const fieldset = useFieldsetContext()
 
-  const { ids, disabled = false, invalid = false, readOnly = false, required = false } = props
+  const { ids, disabled = Boolean(fieldset?.disabled), invalid = false, readOnly = false, required = false } = props
 
   const [hasErrorText, setHasErrorText] = React.useState(false)
   const [hasDescription, setHasDescription] = React.useState(false)
@@ -65,8 +66,8 @@ export function useField(props: UseFieldProps = {}) {
 
     const checkTextElements = () => {
       const doc = getDocument(rootNode)
-      setHasErrorText(!!doc.getElementById(errorTextId))
-      setHasDescription(!!doc.getElementById(descriptionId))
+      setHasErrorText(Boolean(doc.getElementById(errorTextId)))
+      setHasDescription(Boolean(doc.getElementById(descriptionId)))
     }
     checkTextElements()
 

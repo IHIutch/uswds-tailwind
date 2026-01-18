@@ -24,8 +24,8 @@ export const InputGroup = React.forwardRef<any, InputGroupProps>(
     return (
       <InputGroupContext.Provider
         value={{
-          hasStartElement: !!startElement,
-          hasEndElement: !!endElement,
+          hasStartElement: Boolean(startElement),
+          hasEndElement: Boolean(endElement),
         }}
       >
         <div
