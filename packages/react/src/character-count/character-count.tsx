@@ -2,6 +2,7 @@ import * as characterCount from '@uswds-tailwind/character-count-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { Input } from '../input/input'
 
 export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.HTMLAttributes<HTMLElement>
 export type CharacterCountLabelProps = React.HTMLAttributes<HTMLLabelElement>
@@ -42,20 +43,14 @@ const CharacterCountRoot = React.forwardRef<any, CharacterCountRootProps>(
 )
 
 const CharacterCountInput = React.forwardRef<any, CharacterCountInputProps>(
-  ({ className, ...props }, forwardedRef) => {
+  (props, forwardedRef) => {
     const { api } = useCharacterCountContext()
 
     const mergedProps = mergeProps(api.getInputProps(), props)
 
     return (
-      <input
+      <Input
         {...mergedProps}
-        className={
-          cx(
-            'p-2 w-full max-w-lg h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4',
-            className,
-          )
-        }
         ref={forwardedRef}
       />
     )
