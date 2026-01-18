@@ -1,6 +1,6 @@
 // This code is derived from https://github.com/chakra-ui/ark/blob/main/packages/react/src/components/field/use-field.ts
 
-import { ariaAttr, dataAttr, getDocument } from '@zag-js/dom-query'
+import { ariaAttr, getDocument } from '@zag-js/dom-query'
 import * as React from 'react'
 import { parts } from './field.anatomy'
 
@@ -43,7 +43,6 @@ export type UseFieldReturn = ReturnType<typeof useField>
 
 export function useField(props: UseFieldProps = {}) {
   // const fieldset = useFieldsetContext()
-  // const env = useEnvironmentContext()
 
   const { ids, disabled = false, invalid = false, readOnly = false, required = false } = props
 
@@ -92,10 +91,6 @@ export function useField(props: UseFieldProps = {}) {
         ...parts.root.attrs,
         id: rootId,
         ref: rootRef,
-        // 'role': 'group',
-        // 'data-disabled': dataAttr(disabled),
-        // 'data-invalid': dataAttr(invalid),
-        // 'data-readonly': dataAttr(readOnly),
       }) as React.HTMLAttributes<HTMLElement>,
     [disabled, invalid, readOnly, rootId],
   )
@@ -105,10 +100,6 @@ export function useField(props: UseFieldProps = {}) {
       ({
         ...parts.label.attrs,
         id: labelId,
-        // 'data-disabled': dataAttr(disabled),
-        // 'data-invalid': dataAttr(invalid),
-        // 'data-readonly': dataAttr(readOnly),
-        // 'data-required': dataAttr(required),
         htmlFor: id,
       }) as React.LabelHTMLAttributes<HTMLLabelElement>,
     [disabled, invalid, readOnly, required, id, labelId],
@@ -119,9 +110,6 @@ export function useField(props: UseFieldProps = {}) {
       ({
         'aria-describedby': labelIds,
         'aria-invalid': ariaAttr(invalid),
-        // 'data-invalid': dataAttr(invalid),
-        // 'data-required': dataAttr(required),
-        // 'data-readonly': dataAttr(readOnly),
         id,
         required,
         disabled,
@@ -162,7 +150,6 @@ export function useField(props: UseFieldProps = {}) {
       ({
         id: descriptionId,
         ...parts.description.attrs,
-        // 'data-disabled': dataAttr(disabled),
       }) as React.HTMLAttributes<HTMLSpanElement>,
     [disabled, descriptionId],
   )
@@ -172,19 +159,9 @@ export function useField(props: UseFieldProps = {}) {
       ({
         id: errorTextId,
         ...parts.errorText.attrs,
-        // 'aria-live': 'polite',
       }) as React.HTMLAttributes<HTMLSpanElement>,
     [errorTextId],
   )
-
-  // const getRequiredIndicatorProps = React.useMemo(
-  //   () => () =>
-  //     ({
-  //       'aria-hidden': true,
-  //       ...parts.requiredIndicator.attrs,
-  //     }) as React.HTMLAttributes<HTMLSpanElement>,
-  //   [],
-  // )
 
   return {
     ariaDescribedby: labelIds,
@@ -209,6 +186,5 @@ export function useField(props: UseFieldProps = {}) {
     getSelectProps,
     getDescriptionProps,
     getErrorTextProps,
-    // getRequiredIndicatorProps,
   }
 }
