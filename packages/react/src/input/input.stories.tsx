@@ -1,4 +1,5 @@
 import preview from '../../.storybook/preview'
+import { Field } from '../field/field'
 import { Input, Textarea } from './input'
 
 const meta = preview.meta({
@@ -21,6 +22,17 @@ export const ValidInput = meta.story({
 export const InvalidInput = meta.story({
   render: () => (
     <Input data-invalid />
+  ),
+})
+
+export const InputWithLabel = meta.story({
+  render: () => (
+    <Field.Root>
+      <Field.Label>
+        Input Label
+      </Field.Label>
+      <Input />
+    </Field.Root>
   ),
 })
 

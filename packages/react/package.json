@@ -49,6 +49,7 @@
     "@uswds-tailwind/dropdown-compat": "workspace:*",
     "@uswds-tailwind/theme": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "@zag-js/dom-query": "catalog:",
     "@zag-js/react": "catalog:",
     "@zag-js/types": "catalog:",
     "cva": "catalog:",

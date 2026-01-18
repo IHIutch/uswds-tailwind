@@ -59,7 +59,6 @@ catalog:
   '@zag-js/dismissable': 1.21.1
   '@zag-js/dom-query': 1.26.3
   '@zag-js/focus-trap': ^1.31.1
-  '@zag-js/popper': ^1.31.1
   '@zag-js/react': ^1.31.1
   '@zag-js/remove-scroll': ^1.31.1
   '@zag-js/splitter': ^1.31.1
