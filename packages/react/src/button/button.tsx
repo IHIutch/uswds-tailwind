@@ -10,11 +10,11 @@ export const buttonVariants = cva({
   ],
   variants: {
     variant: {
-      blue: 'text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v',
-      red: 'text-white bg-red-50 hover:bg-red-60v active:bg-red-70v',
-      cyan: 'text-gray-90 bg-cyan-30v hover:bg-blue-cool-40v active:bg-blue-cool-60v active:text-white',
-      orange: 'text-gray-90 bg-orange-30v hover:bg-orange-50v hover:text-white active:bg-orange-60 active:text-white',
-      gray: 'text-white bg-gray-50 hover:bg-gray-60 active:bg-gray-80',
+      blue: 'text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v',
+      red: 'text-white bg-red-50 hover:bg-red-60v active:bg-red-70v border-red-60v',
+      cyan: 'text-gray-90 bg-cyan-30v hover:bg-blue-cool-40v active:bg-blue-cool-60v active:text-white border-blue-cool-40v',
+      orange: 'text-gray-90 bg-orange-30v hover:bg-orange-50v hover:text-white active:bg-orange-60 active:text-white border-orange-50v',
+      gray: 'text-white bg-gray-50 hover:bg-gray-60 active:bg-gray-80 border-gray-60',
       outline: 'text-blue-60v bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v',
       inverse: 'text-gray-10 bg-transparent ring-inset ring-2 ring-gray-10 hover:ring-gray-5 hover:text-gray-5 active:ring-white active:text-white',
     },
