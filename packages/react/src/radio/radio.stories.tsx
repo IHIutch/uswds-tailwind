@@ -39,6 +39,9 @@ const meta = preview.meta({
 })
 
 export const Basic = meta.story({
+  args: {
+    tile: false,
+  },
   render: ({ tile }) => (
     <Fieldset.Root className="max-w-xs">
       <Fieldset.Legend>Select any historical figure</Fieldset.Legend>
