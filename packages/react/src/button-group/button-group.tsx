@@ -5,11 +5,11 @@ import { Button } from '../button/button'
 import { cva, cx } from '../cva.config'
 
 const buttonGroupRootVariant = cva({
-  base: 'flex',
+  base: 'flex @container',
   variants: {
     segmented: {
-      true: '@container',
-      false: '@max-mobile-lg:flex-col max-mobile-lg:flex-col flex-row gap-2',
+      // Combines a media query and a container query, in case the parent doesn't set a container, but it would be nice to not need both
+      false: 'max-mobile-lg:@max-mobile-lg:flex-col flex-row gap-2',
     },
   },
   defaultVariants: {
@@ -25,49 +25,39 @@ export function useButtonGroupContext() {
   return React.useContext(ButtonGroupContext)
 }
 
-type ButtonGroupRootProps = React.HTMLAttributes<HTMLUListElement> & ButtonGroupContextProps
+type ButtonGroupRootProps = React.HTMLAttributes<HTMLDivElement> & ButtonGroupContextProps
 
-export const ButtonGroupRoot = React.forwardRef<HTMLUListElement, ButtonGroupRootProps>(
+export const ButtonGroupRoot = React.forwardRef<HTMLDivElement, ButtonGroupRootProps>(
   ({ className, children, ...props }, forwardedRef) => {
     return (
       <ButtonGroupContext.Provider value={props}>
-        <ul
+        <div
           {...props}
+          role="group"
           className={cx(
             buttonGroupRootVariant({
               segmented: Boolean(props.segmented),
               className,
             }),
           )}
-          data-segmented={props.segmented}
           ref={forwardedRef}
         >
-          {React.Children.map(children, (child, index) => (
-            <li
-              key={index}
-              className={cx(
-                'flex',
-                props.segmented ? 'grow @tablet:grow-0 group' : '',
-              )}
-            >
-              {child}
-            </li>
-          ))}
-        </ul>
+          {children}
+        </div>
       </ButtonGroupContext.Provider>
     )
   },
 )
 
 const buttonGroupButtonVariant = cva({
-  base: 'grow',
+  base: 'grow @tablet:grow-0',
   variants: {
     segmented: {
-      true: 'group-first:rounded-s-sm group-first:border-s-0 group-last:rounded-e-sm group-last:border-e-0 rounded-none hover:z-10 focus:z-10',
+      true: 'first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10',
     },
     outline: {
-      true: 'group-not-first:-ms-0.5',
-      false: 'group-not-first:-ms-px',
+      true: 'not-first:-ms-0.5',
+      false: 'not-first:-ms-px',
     },
   },
   compoundVariants: [{
