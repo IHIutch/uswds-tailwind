@@ -1,6 +1,6 @@
 import preview from '../../.storybook/preview'
 import { Fieldset } from '../fieldset/fieldset'
-import { Checkbox } from './checkbox'
+import { RadioGroup } from './radio'
 
 const items = [
   {
@@ -24,8 +24,8 @@ const items = [
 ]
 
 const meta = preview.meta({
-  title: 'Components/Checkbox',
-  component: Checkbox.Root,
+  title: 'Components/Radio',
+  component: RadioGroup.Root,
   argTypes: {
     tile: {
       control: 'boolean',
@@ -39,23 +39,20 @@ const meta = preview.meta({
 })
 
 export const Basic = meta.story({
-  args: {
-    tile: false,
-  },
   render: ({ tile }) => (
     <Fieldset.Root className="max-w-xs">
       <Fieldset.Legend>Select any historical figure</Fieldset.Legend>
-      <Checkbox.Group>
+      <RadioGroup.Root tile={tile}>
         {items.map(item => (
-          <Checkbox.Root key={item.value} tile={tile}>
-            <Checkbox.Input value={item.value} disabled={item.isDisabled} />
-            <Checkbox.Control />
-            <Checkbox.Label>
+          <RadioGroup.Item key={item.value} value={item.value}>
+            <RadioGroup.ItemInput disabled={item.isDisabled} />
+            <RadioGroup.ItemControl />
+            <RadioGroup.ItemLabel>
               {item.label}
-            </Checkbox.Label>
-          </Checkbox.Root>
+            </RadioGroup.ItemLabel>
+          </RadioGroup.Item>
         ))}
-      </Checkbox.Group>
+      </RadioGroup.Root>
     </Fieldset.Root>
   ),
 })
@@ -64,24 +61,24 @@ export const Tile = meta.story({
   render: () => (
     <Fieldset.Root className="max-w-xs">
       <Fieldset.Legend>Select any historical figure</Fieldset.Legend>
-      <Checkbox.Group>
+      <RadioGroup.Root tile>
         {items.map(item => (
-          <Checkbox.Root key={item.value} tile>
-            <Checkbox.Input value={item.value} disabled={item.isDisabled} />
-            <Checkbox.Control />
-            <Checkbox.Label>
+          <RadioGroup.Item key={item.value} value={item.value}>
+            <RadioGroup.ItemInput disabled={item.isDisabled} />
+            <RadioGroup.ItemControl />
+            <RadioGroup.ItemLabel>
               {item.label}
               {item.description
                 ? (
-                    <Checkbox.Description>
+                    <RadioGroup.ItemDescription>
                       {item.description}
-                    </Checkbox.Description>
+                    </RadioGroup.ItemDescription>
                   )
                 : null}
-            </Checkbox.Label>
-          </Checkbox.Root>
+            </RadioGroup.ItemLabel>
+          </RadioGroup.Item>
         ))}
-      </Checkbox.Group>
+      </RadioGroup.Root>
     </Fieldset.Root>
   ),
 })
