@@ -8,8 +8,8 @@ const buttonGroupRootVariant = cva({
   base: 'flex @container',
   variants: {
     segmented: {
-      // Combines a media query and a container query, in case the parent doesn't set a container, but it would be nice to not need both
-      false: 'max-mobile-lg:@max-mobile-lg:flex-col flex-row gap-2',
+      // We use a container query and a media query, in case the parent doesn't set a container, but it would be nice to not need both
+      false: '@max-mobile-lg:flex-col max-mobile-lg:flex-col flex-row gap-2',
     },
   },
   defaultVariants: {
