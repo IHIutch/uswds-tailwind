@@ -19,6 +19,11 @@ export default definePreview({
         date: /Date$/i,
       },
     },
+    options: {
+      storySort: {
+        order: ['Introduction', 'Components', '*'],
+      },
+    },
   },
 
   addons: [addonDocs()],
