@@ -70,16 +70,7 @@ function useRadioGroupItemContext() {
 
 const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioRootProps>(
   ({ className, tile, ...props }, forwardedRef) => {
-    const radioGroup = useRadioGroup({
-      defaultValue: props.defaultValue,
-      value: props.value,
-      disabled: props.disabled,
-      readOnly: props.readOnly,
-      invalid: props.invalid,
-      ids: props.ids,
-      id: props.id,
-      name: props.name,
-    })
+    const radioGroup = useRadioGroup(props)
     const mergedProps = mergeProps(radioGroup.getRootProps(), props)
 
     return (
@@ -97,11 +88,7 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioRootProps>(
 const RadioGroupItem = React.forwardRef<HTMLLabelElement, RadioItemProps & RadioGroupItemContextProps>(
   ({ className, value, ...props }, forwardedRef) => {
     const radio = useRadioGroupContext()
-    const mergedProps = mergeProps(radio?.getItemProps({
-      value,
-      disabled: props.disabled,
-      invalid: props.invalid,
-    }), props)
+    const mergedProps = mergeProps(radio?.getItemProps({ value }), props)
 
     return (
       <RadioGroupItemContext.Provider value={{ value }}>
