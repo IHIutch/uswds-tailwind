@@ -15,10 +15,18 @@ export function useFieldContext() {
 const FieldRoot = React.forwardRef<any, FieldRootProps>(
   ({ className, ...props }, forwardedRef) => {
     const field = useField(props)
+    const mergedProps = mergeProps(field.getRootProps(), props)
 
     return (
       <FieldContext.Provider value={field}>
-        <div {...props} className={cx('max-w-mobile-lg', className)} ref={forwardedRef} />
+        <div
+          {...mergedProps}
+          className={cx(
+            'invalid:pl-4 invalid:-ml-5 invalid:border-red-60v invalid:border-l-4',
+            className,
+          )}
+          ref={forwardedRef}
+        />
       </FieldContext.Provider>
     )
   },
@@ -32,7 +40,7 @@ const FieldLabel = React.forwardRef<any, React.LabelHTMLAttributes<HTMLLabelElem
     return (
       <label
         {...mergedProps}
-        className={cx('block mb-2', className)}
+        className={cx('block invalid:font-bold', className)}
         ref={forwardedRef}
       />
     )
@@ -62,7 +70,7 @@ const FieldErrorMessage = React.forwardRef<any, React.HTMLAttributes<HTMLDivElem
     return (
       <div
         {...mergedProps}
-        className={cx('invalid:text-red-60v invalid:font-bold', className)}
+        className={cx('mt-0.5 invalid:text-red-60v invalid:font-bold', className)}
         ref={forwardedRef}
       />
     )

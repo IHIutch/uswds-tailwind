@@ -1,0 +1,117 @@
+import { ariaAttr, dataAttr } from '@zag-js/dom-query'
+import * as React from 'react'
+import { useFieldContext } from '../field/field'
+import { parts } from '../select/select.anatomy'
+
+export interface ElementIds {
+  root?: string | undefined
+  control?: string | undefined
+  icon?: string | undefined
+}
+
+export interface UseSelectProps {
+  /**
+   * The id of the field.
+   */
+  id?: string | undefined
+  /**
+   * The ids of the field parts.
+   */
+  ids?: ElementIds | undefined
+  /**
+   * Indicates whether the field is disabled.
+   */
+  disabled?: boolean | undefined
+  /**
+   * Indicates whether the field is invalid.
+   */
+  invalid?: boolean | undefined
+  /**
+   * Indicates whether the field is read-only.
+   */
+  readOnly?: boolean | undefined
+  /**
+   * Indicates whether the field is required.
+   */
+  required?: boolean | undefined
+  /**
+   * The name of the input fields in the radio
+   * (Useful for form submission).
+   */
+  name?: string | undefined
+}
+
+export type UseSelectReturn = ReturnType<typeof useSelect>
+
+export function useSelect(props: UseSelectProps = {}) {
+  const field = useFieldContext()
+
+  const { ids, disabled = field?.disabled, invalid = field?.invalid, readOnly = field?.readOnly, required = field?.required, name } = props
+  const uid = React.useId()
+  const id = props.id ?? uid
+
+  const rootRef = React.useRef<HTMLDivElement>(null)
+
+  const rootId = ids?.root ?? `select::${id}`
+  const fieldId = field?.ids.control ?? `select::${id}::select`
+  const iconId = ids?.icon ?? `select::${id}::icon`
+
+  const getRootProps = React.useMemo(
+    () => () =>
+      ({
+        ...parts.root.attrs,
+        'id': rootId,
+        'ref': rootRef,
+        'data-disabled': dataAttr(disabled),
+        'data-invalid': dataAttr(invalid),
+        // 'data-read-only': dataAttr(readOnly),
+        // 'data-required': dataAttr(required),
+      } as React.HTMLAttributes<HTMLDivElement>),
+    [disabled, invalid],
+  )
+
+  const getFieldProps = React.useMemo(
+    () => () =>
+      ({
+        'id': fieldId,
+        disabled,
+        readOnly,
+        required,
+        'name': name || id,
+        'aria-invalid': ariaAttr(invalid),
+        'data-invalid': dataAttr(invalid),
+        'data-disabled': dataAttr(disabled),
+      } as React.SelectHTMLAttributes<HTMLSelectElement>),
+    [required, readOnly, id, disabled, invalid],
+  )
+
+  const getIconProps = React.useMemo(
+    () => () =>
+      ({
+        ...parts.icon.attrs,
+        'id': iconId,
+        'aria-hidden': true,
+        'data-disabled': dataAttr(disabled),
+        'data-invalid': dataAttr(invalid),
+      } as React.HTMLAttributes<HTMLDivElement>),
+    [disabled, invalid, iconId],
+  )
+
+  return {
+    id,
+    ids: {
+      // label: ids?.label,
+      control: ids?.control,
+    },
+    disabled,
+    readOnly,
+    invalid,
+    required,
+    getRootProps,
+    getFieldProps,
+    getIconProps,
+    // dir,
+    // getRootNode,
+    // ...props,
+  }
+}

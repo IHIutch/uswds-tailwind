@@ -1,6 +1,6 @@
 // This code is derived from https://github.com/chakra-ui/ark/blob/main/packages/react/src/components/field/use-field.ts
 
-import { ariaAttr, getDocument } from '@zag-js/dom-query'
+import { ariaAttr, dataAttr, getDocument } from '@zag-js/dom-query'
 import * as React from 'react'
 import { useFieldsetContext } from '../fieldset/fieldset'
 import { parts } from './field.anatomy'
@@ -90,8 +90,10 @@ export function useField(props: UseFieldProps = {}) {
     () => () =>
       ({
         ...parts.root.attrs,
-        id: rootId,
-        ref: rootRef,
+        'id': rootId,
+        'ref': rootRef,
+        'data-disabled': dataAttr(disabled),
+        'data-invalid': dataAttr(invalid),
       }) as React.HTMLAttributes<HTMLElement>,
     [disabled, invalid, readOnly, rootId],
   )
@@ -100,8 +102,10 @@ export function useField(props: UseFieldProps = {}) {
     () => () =>
       ({
         ...parts.label.attrs,
-        id: labelId,
-        htmlFor: id,
+        'id': labelId,
+        'htmlFor': id,
+        'data-disabled': dataAttr(disabled),
+        'data-invalid': dataAttr(invalid),
       }) as React.LabelHTMLAttributes<HTMLLabelElement>,
     [disabled, invalid, readOnly, required, id, labelId],
   )
@@ -109,12 +113,14 @@ export function useField(props: UseFieldProps = {}) {
   const getControlProps = React.useMemo(
     () => () =>
       ({
-        'aria-describedby': labelIds,
-        'aria-invalid': ariaAttr(invalid),
         id,
         required,
         disabled,
         readOnly,
+        'aria-describedby': labelIds,
+        'aria-invalid': ariaAttr(invalid),
+        'data-invalid': dataAttr(invalid),
+        'data-disabled': dataAttr(disabled),
       }) as React.HTMLAttributes<HTMLElement>,
     [labelIds, invalid, required, readOnly, id, disabled],
   )
@@ -158,10 +164,11 @@ export function useField(props: UseFieldProps = {}) {
   const getErrorTextProps = React.useMemo(
     () => () =>
       ({
-        id: errorTextId,
+        'id': errorTextId,
         ...parts.errorText.attrs,
+        'data-invalid': dataAttr(invalid),
       }) as React.HTMLAttributes<HTMLSpanElement>,
-    [errorTextId],
+    [errorTextId, invalid],
   )
 
   return {
