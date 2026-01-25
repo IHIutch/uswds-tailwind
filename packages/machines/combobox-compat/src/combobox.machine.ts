@@ -7,6 +7,8 @@ export const machine = createMachine<ComboboxSchema>({
   props({ props }) {
     return {
       ...props,
+      showToggleButton: props.showToggleButton ?? true,
+      showClearButton: props.showClearButton ?? true,
     }
   },
 
