@@ -17,6 +17,14 @@ function useComboboxContext() {
   return context
 }
 
+/**
+ * Hook to access the combobox API from within a ComboboxRoot.
+ * Useful for rendering filtered options or accessing combobox state.
+ */
+export function useCombobox() {
+  return useComboboxContext()
+}
+
 function ComboboxRoot({ className, options, ...props }: React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>) {
   const service = useMachine(combobox.machine, {
     id: React.useId(),
@@ -49,11 +57,21 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttribut
   },
 )
 
-function ComboboxList({ className, ...props }: React.HTMLAttributes<HTMLUListElement>) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getListProps(), props)
+export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'children'> {
+  children?: React.ReactNode | (({ options}: { options: ComboboxContextProps['api']['filteredOptions'] }) => React.ReactNode)
+}
 
-  return <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)} />
+function ComboboxList({ className, children, ...props }: ComboboxListProps) {
+  const context = useComboboxContext()
+  const mergedProps = mergeProps(context.api.getListProps(), props)
+
+  const content = typeof children === 'function' ? children({ options: context.api.filteredOptions }) : children
+
+  return (
+    <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)}>
+      {content}
+    </ul>
+  )
 }
 
 export type ComboboxItemProps = React.LiHTMLAttributes<HTMLLIElement>
@@ -65,8 +83,19 @@ function ComboboxItem({ value, label, index, children, ...props }: ComboboxItemP
   const mergedProps = mergeProps(api.getItemProps({ value, label }, index), props)
 
   return (
-    <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-active:outline-4 data-active:outline-blue-40v data-active:-outline-offset-4', props.className)}>
+    <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)}>
       {children}
+    </li>
+  )
+}
+
+function ComboboxEmptyItem({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
+  const { api } = useComboboxContext()
+  const mergedProps = mergeProps(api.getEmptyItemProps(), props)
+
+  return (
+    <li {...mergedProps} className={cx('p-2 cursor-not-allowed hidden data-empty:block', mergedProps.className)}>
+      {children || 'No results found'}
     </li>
   )
 }
@@ -116,6 +145,7 @@ export const Combobox = {
   Input: ComboboxInput,
   List: ComboboxList,
   Item: ComboboxItem,
+  EmptyItem: ComboboxEmptyItem,
   IndicatorGroup: ComboboxIndicatorGroup,
   ClearButton: ComboboxClearButton,
   ToggleButton: ComboboxToggleButton,

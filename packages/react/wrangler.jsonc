@@ -5,5 +5,10 @@
     "directory": "./storybook-static", // default build output directory
     "binding": "ASSETS"
   },
-  "main": "./.storybook/worker.js" // worker entry point
+  "main": "./.storybook/worker.js", // worker entry point
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  }
 }

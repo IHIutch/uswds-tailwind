@@ -3,6 +3,23 @@ import { createMachine } from '@zag-js/core'
 import { raf } from '@zag-js/dom-query'
 import * as dom from './combobox.dom'
 
+/* -----------------------------------------------------------------------------
+ * Helper functions
+ * ----------------------------------------------------------------------------- */
+
+function findSelectedOption(options: ComboboxOption[], value: string): ComboboxOption | undefined {
+  return options.find(o => o.value === value)
+}
+
+function findSelectedIndex(options: ComboboxOption[], value: string): number {
+  const index = options.findIndex(o => o.value === value)
+  return index >= 0 ? index : 0
+}
+
+/* -----------------------------------------------------------------------------
+ * Machine definition
+ * ----------------------------------------------------------------------------- */
+
 export const machine = createMachine<ComboboxSchema>({
   props({ props }) {
     return {
@@ -18,11 +35,13 @@ export const machine = createMachine<ComboboxSchema>({
 
   context({ bindable, prop }) {
     const options = prop('options') || []
+    const initialValue = prop('value') || ''
+    const initialLabel = findSelectedOption(options, initialValue)?.label || ''
 
     return {
-      value: bindable(() => ({ defaultValue: prop('value') || '' })),
+      value: bindable(() => ({ defaultValue: initialValue })),
       disabled: bindable(() => ({ defaultValue: prop('disabled') || false })),
-      inputValue: bindable(() => ({ defaultValue: options.find(o => o.value === prop('value'))?.label || '' })),
+      inputValue: bindable(() => ({ defaultValue: initialLabel })),
       filteredOptions: bindable(() => ({ defaultValue: options })),
       activeIndex: bindable(() => ({ defaultValue: -1 })),
       isOpen: bindable(() => ({ defaultValue: false })),
@@ -44,34 +63,23 @@ export const machine = createMachine<ComboboxSchema>({
 
   states: {
     idle: {
-      entry: ['syncInputWithSelection', 'filterOptions'],
+      entry: ['setClosed', 'syncInputWithSelection'],
       on: {
         FOCUS: { target: 'focused' },
         OPEN: { target: 'open' },
-        INPUT_CHANGE: {
-          target: 'open',
-          actions: ['updateInputValue'],
-        },
+        INPUT_CHANGE: { target: 'open', actions: ['updateInputValue'] },
         CLEAR_SELECTION: { actions: ['clearSelection'] },
       },
     },
     focused: {
       on: {
-        BLUR: {
-          target: 'idle',
-          actions: ['resetInput'],
-        },
+        CLOSE: { target: 'idle' },
         OPEN: { target: 'open' },
-        INPUT_CHANGE: {
-          target: 'open',
-          actions: ['updateInputValue'],
-        },
+        INPUT_CHANGE: { target: 'open', actions: ['updateInputValue'] },
         KEY_DOWN: { actions: ['handleKeyDown'] },
         ARROW_DOWN: { actions: ['navigateNext'] },
-        ARROW_UP: { actions: ['navigatePrev'] },
         ENTER: { actions: ['selectActiveOrMatch'] },
         ESCAPE: { actions: ['closeAndReset'] },
-        TAB: { target: 'idle', actions: ['resetInput'] },
         SPACE: { actions: ['selectActiveOrMatch'] },
         CLEAR_SELECTION: { actions: ['clearSelection'] },
         FOCUS_ITEM: { actions: ['focusItem'] },
@@ -79,13 +87,8 @@ export const machine = createMachine<ComboboxSchema>({
     },
     open: {
       entry: ['setOpen', 'filterOptions'],
-      exit: ['setClosed'],
       on: {
-        CLOSE: { target: 'focused' },
-        BLUR: {
-          target: 'idle',
-          actions: ['resetInput'],
-        },
+        CLOSE: { target: 'idle' },
         INPUT_CHANGE: { actions: ['updateInputValue'] },
         SELECT_OPTION: { actions: ['selectOption'] },
         CLEAR_SELECTION: { actions: ['clearSelection'] },
@@ -94,9 +97,8 @@ export const machine = createMachine<ComboboxSchema>({
         ARROW_UP: { actions: ['navigatePrev'] },
         ENTER: { actions: ['selectActiveOrMatch'] },
         ESCAPE: { actions: ['closeAndReset'] },
-        TAB: { target: 'focused' },
         SPACE: { actions: ['selectActiveOrMatch'] },
-        RESET_INPUT: { actions: ['resetInput'] },
+        RESET_INPUT: { actions: ['syncInputWithSelection'] },
         FOCUS_ITEM: { actions: ['focusItem'] },
       },
     },
@@ -104,57 +106,50 @@ export const machine = createMachine<ComboboxSchema>({
 
   implementations: {
     actions: {
-      setOpen({ context }) {
+      setOpen({ context, prop }) {
         context.set('isOpen', true)
+
+        const value = context.get('value')
+        const options = prop('options') || []
+        const targetIndex = value ? findSelectedIndex(options, value) : 0
+
+        context.set('activeIndex', targetIndex)
       },
-      setClosed({ context }) {
+
+      setClosed({ context, prop }) {
+        const options = prop('options') || []
+
         context.set('isOpen', false)
         context.set('activeIndex', -1)
+        context.set('filteredOptions', options)
       },
+
       updateInputValue({ context, event, prop }) {
         context.set('inputValue', event.value)
         context.set('isDirty', true)
-        const onInputChange = prop('onInputChange')
-        if (onInputChange) {
-          onInputChange(event.value)
-        }
+        prop('onInputChange')?.(event.value)
       },
-      syncInputWithSelection({ context, prop }) {
-        const options = prop('options')
-        const value = context.get('value')
-        if (value !== '') {
-          const selected = options?.find(o => o.value === value)
-          if (selected) {
-            context.set('inputValue', selected.label)
-            context.set('isDirty', false)
-          }
-        }
-        else {
-          context.set('inputValue', '')
-          context.set('isDirty', false)
-        }
-      },
-      resetInput({ context, prop }) {
-        const options = prop('options')
-        const value = context.get('value')
-        const onInputChange = prop('onInputChange')
 
-        if (value !== '') {
-          const selected = options?.find(o => o.value === value)
-          if (selected) {
-            context.set('inputValue', selected.label)
-            context.set('isDirty', false)
-            if (onInputChange)
-              onInputChange(selected.label)
-          }
-        }
-        else {
-          context.set('inputValue', '')
-          context.set('isDirty', false)
-          if (onInputChange)
-            onInputChange('')
-        }
+      syncInputWithSelection({ context, prop }) {
+        const options = prop('options') || []
+        const value = context.get('value')
+        const selected = value ? findSelectedOption(options, value) : undefined
+
+        context.set('inputValue', selected?.label || '')
+        context.set('isDirty', false)
+        context.set('activeIndex', -1)
       },
+
+      // resetInput({ context, prop }) {
+      //   const options = prop('options') || []
+      //   const value = context.get('value')
+      //   const selected = value ? findSelectedOption(options, value) : undefined
+      //   const newInputValue = selected?.label || ''
+
+      //   context.set('inputValue', newInputValue)
+      //   context.set('isDirty', false)
+      //   prop('onInputChange')?.(newInputValue)
+      // },
       filterOptions({ context, prop }) {
         const inputValue = context.get('inputValue').toLowerCase()
         const options = prop('options') || []
@@ -162,47 +157,50 @@ export const machine = createMachine<ComboboxSchema>({
         const isDirty = context.get('isDirty')
         const value = context.get('value')
 
+        // Helper to find best matching index
+        const findMatchingIndex = (): number => {
+          if (!inputValue)
+            return options.length > 0 ? 0 : -1
+          const idx = options.findIndex(o =>
+            o.label.toLowerCase().includes(inputValue) || o.value.toLowerCase().includes(inputValue),
+          )
+          return idx >= 0 ? idx : -1
+        }
+
+        // When filtering is disabled, show all options
         if (disableFiltering) {
           context.set('filteredOptions', options)
-          if (!inputValue) {
-            context.set('activeIndex', options.length > 0 ? 0 : -1)
-          }
-          else {
-            const idx = options.findIndex(o =>
-              o.label.toLowerCase().includes(inputValue) || o.value.toLowerCase().includes(inputValue),
-            )
-            context.set('activeIndex', idx >= 0 ? idx : -1)
-          }
+          context.set('activeIndex', findMatchingIndex())
           return
         }
 
+        // When input is empty or unchanged, maintain selection context
         if (!inputValue || !isDirty) {
+          const activeIndex = (!isDirty && value)
+            ? findSelectedIndex(options, value)
+            : (options.length > 0 ? 0 : -1)
           context.set('filteredOptions', options)
-          if (!isDirty && value !== '') {
-            const selectedIndex = options.findIndex(o => o.value === value)
-            context.set('activeIndex', selectedIndex >= 0 ? selectedIndex : 0)
-          }
-          else {
-            context.set('activeIndex', options.length > 0 ? 0 : -1)
-          }
+          context.set('activeIndex', activeIndex)
           return
         }
 
+        // Filter options: prioritize "starts with" over "contains"
         const startsWith: ComboboxOption[] = []
         const contains: ComboboxOption[] = []
-        for (const option of options as ComboboxOption[]) {
-          const label = option.label.toLowerCase()
-          const value = option.value.toLowerCase()
-          if (label.startsWith(inputValue) || value.startsWith(inputValue)) {
+
+        for (const option of options) {
+          const labelLower = option.label.toLowerCase()
+          const valueLower = option.value.toLowerCase()
+
+          if (labelLower.startsWith(inputValue) || valueLower.startsWith(inputValue)) {
             startsWith.push(option)
           }
-          else if (label.includes(inputValue) || value.includes(inputValue)) {
+          else if (labelLower.includes(inputValue) || valueLower.includes(inputValue)) {
             contains.push(option)
           }
         }
-        const filtered = [...startsWith, ...contains]
 
-        context.set('filteredOptions', filtered)
+        context.set('filteredOptions', [...startsWith, ...contains])
         context.set('activeIndex', -1)
       },
       selectOption({ context, event, prop, send, scope }) {
@@ -210,15 +208,13 @@ export const machine = createMachine<ComboboxSchema>({
           return
 
         const { option } = event
-        const onInputChange = prop('onInputChange')
 
         context.set('value', option.value)
         context.set('inputValue', option.label)
         context.set('isDirty', false)
+        prop('onInputChange')?.(option.label)
 
-        if (onInputChange)
-          onInputChange(option.label)
-
+        // Sync hidden select element for form submission
         const selectEl = dom.getSelectEl(scope)
         if (selectEl) {
           selectEl.value = option.value
@@ -227,39 +223,30 @@ export const machine = createMachine<ComboboxSchema>({
 
         send({ type: 'CLOSE' })
       },
+
       clearSelection({ context, prop }) {
         context.set('value', '')
         context.set('inputValue', '')
         context.set('isDirty', false)
-        const onInputChange = prop('onInputChange')
-        if (onInputChange)
-          onInputChange('')
+        prop('onInputChange')?.('')
       },
       handleKeyDown({ event, send }) {
         if (!('key' in event))
           return
 
-        switch (event.key) {
-          case 'ArrowDown':
-            send({ type: 'ARROW_DOWN' })
-            break
-          case 'ArrowUp':
-            send({ type: 'ARROW_UP' })
-            break
-          case 'Enter':
-            send({ type: 'ENTER' })
-            break
-          case 'Escape':
-            send({ type: 'ESCAPE' })
-            break
-          case 'Tab':
-            send({ type: 'TAB' })
-            break
-          case ' ':
-          case 'Space':
-            send({ type: 'SPACE' })
-            break
+        type KeyboardEventType = 'ARROW_DOWN' | 'ARROW_UP' | 'ENTER' | 'ESCAPE' | 'SPACE'
+        const keyMap: Record<string, KeyboardEventType> = {
+          'ArrowDown': 'ARROW_DOWN',
+          'ArrowUp': 'ARROW_UP',
+          'Enter': 'ENTER',
+          'Escape': 'ESCAPE',
+          ' ': 'SPACE',
+          'Space': 'SPACE',
         }
+
+        const eventType = keyMap[event.key]
+        if (eventType)
+          send({ type: eventType })
       },
 
       navigateNext({ context, send, scope }) {
@@ -268,67 +255,78 @@ export const machine = createMachine<ComboboxSchema>({
         const isOpen = context.get('isOpen')
         const inputEl = dom.getInputEl(scope)
         const isInputFocused = document.activeElement === inputEl
+        const hasOptions = filteredOptions.length > 0
 
+        // Open the list if closed
         if (!isOpen) {
           send({ type: 'OPEN' })
-          if (filteredOptions.length > 0) {
+          if (hasOptions)
             send({ type: 'FOCUS_ITEM', index: 0 })
-          }
+          return
         }
-        else if (isInputFocused && filteredOptions.length > 0) {
+
+        // Move focus from input to first/active item
+        if (isInputFocused && hasOptions) {
           const targetIndex = activeIndex >= 0 ? activeIndex : 0
           send({ type: 'FOCUS_ITEM', index: targetIndex })
+          return
         }
-        else if (activeIndex >= 0 && activeIndex < filteredOptions.length - 1) {
-          const nextIndex = activeIndex + 1
+
+        // Navigate to next item (or stay at end)
+        if (activeIndex >= 0 && hasOptions) {
+          const nextIndex = Math.min(activeIndex + 1, filteredOptions.length - 1)
           send({ type: 'FOCUS_ITEM', index: nextIndex })
-        }
-        else if (activeIndex >= 0 && filteredOptions.length > 0) {
-          send({ type: 'FOCUS_ITEM', index: activeIndex })
         }
       },
 
       navigatePrev({ context, send, scope }) {
         const activeIndex = context.get('activeIndex')
+        const inputEl = dom.getInputEl(scope)
+        const isInputFocused = document.activeElement === inputEl
 
+        // Do nothing if input has focus
+        if (isInputFocused)
+          return
+
+        // At first item: return focus to input and close
         if (activeIndex === 0) {
-          const inputEl = dom.getInputEl(scope)
-          if (inputEl) {
-            inputEl.focus()
-            context.set('activeIndex', -1)
-          }
+          inputEl?.focus()
+          context.set('activeIndex', -1)
           send({ type: 'CLOSE' })
+          return
         }
-        else if (activeIndex > 0) {
+
+        // Navigate to previous item
+        if (activeIndex > 0) {
           send({ type: 'FOCUS_ITEM', index: activeIndex - 1 })
         }
       },
 
       selectActiveOrMatch({ context, send }) {
-        const isOpen = context.get('isOpen')
-        if (!isOpen)
+        if (!context.get('isOpen'))
           return
 
         const activeIndex = context.get('activeIndex')
         const filteredOptions = context.get('filteredOptions')
-        const inputValue = context.get('inputValue')
+        const inputValue = context.get('inputValue').toLowerCase()
 
+        // Select the active item if one is focused
         if (activeIndex >= 0 && filteredOptions[activeIndex]) {
           send({ type: 'SELECT_OPTION', option: filteredOptions[activeIndex] })
+          return
+        }
+
+        // Try to find an exact match by label or value
+        const exactMatch = filteredOptions.find(option =>
+          option.label.toLowerCase() === inputValue || option.value.toLowerCase() === inputValue,
+        )
+
+        if (exactMatch) {
+          send({ type: 'SELECT_OPTION', option: exactMatch })
         }
         else {
-          const exactMatch = filteredOptions.find(option =>
-            option.label.toLowerCase() === inputValue.toLowerCase()
-            || option.value.toLowerCase() === inputValue.toLowerCase(),
-          )
-
-          if (exactMatch) {
-            send({ type: 'SELECT_OPTION', option: exactMatch })
-          }
-          else {
-            send({ type: 'RESET_INPUT' })
-            send({ type: 'CLOSE' })
-          }
+          send({ type: 'RESET_INPUT' })
+          send({ type: 'CLOSE' })
         }
       },
 
@@ -349,28 +347,30 @@ export const machine = createMachine<ComboboxSchema>({
 
           raf(() => {
             const option = filteredOptions[index]
-            const itemEl = dom.getItemEl(scope, option?.value || '')
-            if (itemEl) {
-              itemEl.focus()
+            if (option) {
+              dom.getItemEl(scope, option.value)?.focus()
             }
           })
         }
       },
+
       setValue({ context, event, flush, prop, scope }) {
         flush(() => {
-          const options = prop('options')
+          const options = prop('options') || []
+          const selected = findSelectedOption(options, event.value)
 
-          const selected = options?.find(o => o.value === event.value)
-          if (selected) {
-            context.set('value', selected.value)
-            context.set('inputValue', selected.label)
-            context.set('isDirty', false)
+          if (!selected)
+            return
 
-            const selectEl = dom.getSelectEl(scope)
-            if (selectEl && selectEl.value !== selected.value) {
-              selectEl.value = selected.value
-              selectEl.dispatchEvent(new Event('change', { bubbles: true }))
-            }
+          context.set('value', selected.value)
+          context.set('inputValue', selected.label)
+          context.set('isDirty', false)
+
+          // Sync hidden select element for form submission
+          const selectEl = dom.getSelectEl(scope)
+          if (selectEl && selectEl.value !== selected.value) {
+            selectEl.value = selected.value
+            selectEl.dispatchEvent(new Event('change', { bubbles: true }))
           }
         })
       },

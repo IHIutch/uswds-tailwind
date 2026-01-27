@@ -6,6 +6,7 @@ export const anatomy = createAnatomy('combobox').parts(
   'input',
   'list',
   'item',
+  'emptyItem',
   'select',
   'clearButton',
   'toggleButton',

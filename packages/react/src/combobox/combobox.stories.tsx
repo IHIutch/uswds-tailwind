@@ -1,10 +1,10 @@
 import preview from '../../.storybook/preview'
 import { Combobox } from './combobox'
 
-const items = [
-  { title: 'Watercraft', content: 'Sample accordion content' },
-  { title: 'Automobiles', content: 'Sample accordion content' },
-  { title: 'Aircraft', content: 'Sample accordion content' },
+const options = [
+  { value: 'watercraft', label: 'Watercraft' },
+  { value: 'automobiles', label: 'Automobiles' },
+  { value: 'aircraft', label: 'Aircraft' },
 ]
 
 const meta = preview.meta({
@@ -17,7 +17,7 @@ export const Basic = meta.story({
   args: {
   },
   render: () => (
-    <Combobox.Root options={items.map(i => ({ value: i.title, label: i.title }))}>
+    <Combobox.Root options={options}>
       <Combobox.Label>Choose an option</Combobox.Label>
       <Combobox.Control>
         <Combobox.Input />
@@ -27,16 +27,20 @@ export const Basic = meta.story({
         </Combobox.IndicatorGroup>
       </Combobox.Control>
       <Combobox.List>
-        {items.map((item, index) => (
-          <Combobox.Item
-            key={item.title}
-            index={index}
-            value={item.title}
-            label={item.title}
-          >
-            {item.title}
-          </Combobox.Item>
-        ))}
+        {({ options }) => (
+          <>
+            {options.map((option, index) => (
+              <Combobox.Item
+                key={option.value}
+                index={index}
+                {...option}
+              >
+                {option.label}
+              </Combobox.Item>
+            ))}
+            <Combobox.EmptyItem />
+          </>
+        )}
       </Combobox.List>
     </Combobox.Root>
   ),

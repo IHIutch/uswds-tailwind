@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { ComboboxApi, ComboboxOption, ComboboxSchema } from './combobox.types'
-import { visuallyHiddenStyle } from '@zag-js/dom-query'
+import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
 
@@ -41,7 +41,16 @@ export function connect<T extends PropTypes>(
         ...parts.root.attrs,
         'id': dom.getRootId(scope),
         'data-state': isOpen ? 'open' : 'closed',
-        'data-disabled': disabled ? '' : undefined,
+        'data-disabled': dataAttr(disabled),
+        'data-empty': dataAttr(noResults),
+        // USWDS uses onFocusout. However, in React onFocusout is not supported and onBlur === onFocusout
+        onBlur(event) {
+          const related = event.relatedTarget
+          const root = dom.getRootEl(scope)
+          if (root && !root.contains(related)) {
+            send({ type: 'CLOSE' })
+          }
+        },
       })
     },
 
@@ -50,7 +59,7 @@ export function connect<T extends PropTypes>(
         ...parts.label.attrs,
         'id': dom.getLabelId(scope),
         'htmlFor': dom.getInputId(scope),
-        'data-disabled': disabled ? '' : undefined,
+        'data-disabled': dataAttr(disabled),
       })
     },
 
@@ -68,21 +77,21 @@ export function connect<T extends PropTypes>(
           : undefined,
         'placeholder': prop('placeholder'),
         disabled,
-        // 'data-disabled': disabled ? '' : undefined,
+        'data-disabled': dataAttr(disabled),
         'value': inputValue,
         'autoComplete': 'off',
         'autoCapitalize': 'off',
         onFocus() {
           send({ type: 'FOCUS' })
         },
-        onBlur(event) {
-          const relatedTarget = event.relatedTarget
-          const comboboxEl = dom.getRootEl(scope)
+        // onBlur(event) {
+        //   const relatedTarget = event.relatedTarget
+        //   const comboboxEl = dom.getRootEl(scope)
 
-          if (!comboboxEl?.contains(relatedTarget)) {
-            send({ type: 'BLUR' })
-          }
-        },
+        //   if (!comboboxEl?.contains(relatedTarget)) {
+        //     send({ type: 'BLUR' })
+        //   }
+        // },
         onInput(event) {
           send({ type: 'INPUT_CHANGE', value: event.currentTarget.value })
         },
@@ -107,9 +116,10 @@ export function connect<T extends PropTypes>(
         'role': 'listbox',
         'tabIndex': -1,
         'aria-labelledby': dom.getLabelId(scope),
-        'data-disabled': disabled ? '' : undefined,
+        'data-disabled': dataAttr(disabled),
         'hidden': !isOpen,
         'data-state': isOpen ? 'open' : 'closed',
+        'data-empty': dataAttr(noResults),
       })
     },
 
@@ -135,8 +145,8 @@ export function connect<T extends PropTypes>(
         'aria-selected': isSelected ? 'true' : 'false',
         'aria-setsize': filteredOptions.length,
         'aria-posinset': index + 1,
-        'data-active': isActive ? '' : undefined,
-        'data-selected': isSelected ? '' : undefined,
+        'data-active': dataAttr(isActive),
+        'data-selected': dataAttr(isSelected),
         // 'data-disabled': option.disabled ? '' : undefined,
         'data-value': option.value,
         'tabIndex': isActive ? 0 : -1,
@@ -157,13 +167,20 @@ export function connect<T extends PropTypes>(
       })
     },
 
+    getEmptyItemProps() {
+      return normalize.element({
+        ...parts.emptyItem.attrs,
+        'data-empty': dataAttr(noResults),
+      })
+    },
+
     getClearButtonProps() {
       return normalize.button({
         ...parts.clearButton.attrs,
         'id': dom.getClearButtonId(scope),
         'type': 'button',
-        'aria-label': 'Clear selection',
-        // 'data-disabled': disabled ? '' : undefined,
+        'aria-label': 'Clear the select contents',
+        'data-disabled': dataAttr(disabled),
         'disabled': disabled || !hasSelection,
         'hidden': !showClearButton || !hasSelection,
         onClick() {
@@ -183,7 +200,7 @@ export function connect<T extends PropTypes>(
         'type': 'button',
         'tabIndex': -1,
         'aria-label': 'Toggle the dropdown list',
-        // 'data-disabled': disabled ? '' : undefined,
+        'data-disabled': dataAttr(disabled),
         disabled,
         'hidden': !showToggleButton,
         'data-state': isOpen ? 'open' : 'closed',

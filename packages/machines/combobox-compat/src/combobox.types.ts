@@ -11,6 +11,7 @@ export type ElementIds = Partial<{
   input: string
   list: string
   item: string
+  emptyItem: string
   clearButton: string
   toggleButton: string
 }>
@@ -70,6 +71,10 @@ export interface ComboboxSchema {
     disabled: boolean
     inputValue: string
     filteredOptions: ComboboxOption[]
+    /**
+     * Index of the item that has DOM focus (via keyboard navigation).
+     * -1 when input has focus (no item is active).
+     */
     activeIndex: number
     isOpen: boolean
     isDirty: boolean
@@ -88,24 +93,22 @@ export interface ComboboxSchema {
     | 'navigatePrev'
     | 'selectActiveOrMatch'
     | 'closeAndReset'
-    | 'resetInput'
     | 'focusItem'
     | 'setValue'
   event: EventObject & (
     | { type: 'FOCUS' }
-    | { type: 'BLUR' }
     | { type: 'OPEN' }
     | { type: 'CLOSE' }
     | { type: 'INPUT_CHANGE', value: string }
     | { type: 'SELECT_OPTION', option: ComboboxOption }
     | { type: 'CLEAR_SELECTION' }
     | { type: 'KEY_DOWN', key: string }
+    | { type: 'HIGHLIGHT_ITEM', index: number }
     | { type: 'FOCUS_ITEM', index: number }
     | { type: 'ARROW_DOWN' }
     | { type: 'ARROW_UP' }
     | { type: 'ENTER' }
     | { type: 'ESCAPE' }
-    | { type: 'TAB' }
     | { type: 'SPACE' }
     | { type: 'RESET_INPUT' }
     | { type: 'VALUE.SET', value: string }
@@ -141,7 +144,7 @@ export interface ComboboxApi<T extends PropTypes = PropTypes> {
    */
   filteredOptions: ComboboxOption[]
   /**
-   * The currently active option index
+   * The currently active option index (-1 when no item is active)
    */
   activeIndex: number
   /**
@@ -157,6 +160,7 @@ export interface ComboboxApi<T extends PropTypes = PropTypes> {
   getSelectProps: () => T['select']
   getListProps: () => T['element']
   getItemProps: (option: ComboboxOption, index: number) => T['button']
+  getEmptyItemProps: () => T['element']
   getClearButtonProps: () => T['button']
   getToggleButtonProps: () => T['button']
 }
