@@ -79,9 +79,10 @@ export const machine = createMachine<ComboboxSchema>({
         KEY_DOWN: { actions: ['handleKeyDown'] },
         ARROW_DOWN: { actions: ['navigateNext'] },
         ENTER: { actions: ['selectActiveOrMatch'] },
-        ESCAPE: { actions: ['closeAndReset'] },
+        ESCAPE: { actions: ['handleEscape'] },
         SPACE: { actions: ['selectActiveOrMatch'] },
         CLEAR_SELECTION: { actions: ['clearSelection'] },
+        RESET_INPUT: { actions: ['syncInputWithSelection'] },
         FOCUS_ITEM: { actions: ['focusItem'] },
       },
     },
@@ -96,7 +97,7 @@ export const machine = createMachine<ComboboxSchema>({
         ARROW_DOWN: { actions: ['navigateNext'] },
         ARROW_UP: { actions: ['navigatePrev'] },
         ENTER: { actions: ['selectActiveOrMatch'] },
-        ESCAPE: { actions: ['closeAndReset'] },
+        ESCAPE: { target: 'focused', actions: ['handleEscape'] },
         SPACE: { actions: ['selectActiveOrMatch'] },
         RESET_INPUT: { actions: ['syncInputWithSelection'] },
         FOCUS_ITEM: { actions: ['focusItem'] },
@@ -140,16 +141,6 @@ export const machine = createMachine<ComboboxSchema>({
         context.set('activeIndex', -1)
       },
 
-      // resetInput({ context, prop }) {
-      //   const options = prop('options') || []
-      //   const value = context.get('value')
-      //   const selected = value ? findSelectedOption(options, value) : undefined
-      //   const newInputValue = selected?.label || ''
-
-      //   context.set('inputValue', newInputValue)
-      //   context.set('isDirty', false)
-      //   prop('onInputChange')?.(newInputValue)
-      // },
       filterOptions({ context, prop }) {
         const inputValue = context.get('inputValue').toLowerCase()
         const options = prop('options') || []
@@ -330,9 +321,11 @@ export const machine = createMachine<ComboboxSchema>({
         }
       },
 
-      closeAndReset({ send }) {
+      handleEscape({ context, send, scope }) {
         send({ type: 'RESET_INPUT' })
-        send({ type: 'CLOSE' })
+        context.set('isOpen', false)
+
+        dom.getInputEl(scope)?.focus()
       },
 
       focusItem({ context, event, scope }) {

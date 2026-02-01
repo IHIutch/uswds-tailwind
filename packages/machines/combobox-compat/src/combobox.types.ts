@@ -92,7 +92,7 @@ export interface ComboboxSchema {
     | 'navigateNext'
     | 'navigatePrev'
     | 'selectActiveOrMatch'
-    | 'closeAndReset'
+    | 'handleEscape'
     | 'focusItem'
     | 'setValue'
   event: EventObject & (
