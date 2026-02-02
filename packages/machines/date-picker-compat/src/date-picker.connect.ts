@@ -1,6 +1,8 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { DatePickerApi, DatePickerSchema } from './date-picker.types'
+import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
+import { chunk } from '@zag-js/utils'
 import { parts } from './date-picker.anatomy'
 import * as dom from './date-picker.dom'
 import {
@@ -21,9 +23,9 @@ export function connect<T extends PropTypes>(
   const { state, send, scope, context, prop } = service
 
   const open = !state.matches('closed')
-  const view = state.matches('monthSelection') ? 'month' : state.matches('yearSelection') ? 'year' : 'date'
+  const view = state.matches('monthSelection') ? 'month' : state.matches('yearSelection') ? 'year' : 'day'
   const disabled = context.get('disabled')
-  const readonly = !!prop('readonly')
+  const readonly = Boolean(prop('readonly'))
 
   const selectionMode = context.get('selectionMode')
   const startDate = context.get('startDate')
@@ -46,10 +48,10 @@ export function connect<T extends PropTypes>(
   const validationMessage = context.get('validationMessage')
 
   // Cross-input constraints for range mode
-  const startInputMaxDate = context.get('startInputMaxDate')
-  const startInputRangeDate = context.get('startInputRangeDate')
-  const endInputMinDate = context.get('endInputMinDate')
-  const endInputRangeDate = context.get('endInputRangeDate')
+  // const startInputMaxDate = context.get('startInputMaxDate')
+  // const startInputRangeDate = context.get('startInputRangeDate')
+  // const endInputMinDate = context.get('endInputMinDate')
+  // const endInputRangeDate = context.get('endInputRangeDate')
 
   const minDate = context.get('minDate')
   const maxDate = context.get('maxDate')
@@ -113,18 +115,6 @@ export function connect<T extends PropTypes>(
       // Use existing clear range functionality, but only for end
       send({ type: 'CLEAR_RANGE' })
     },
-
-    // focusStartInput() {
-    //   if (disabled || selectionMode !== 'range')
-    //     return
-    //   send({ type: 'START_INPUT_FOCUS' })
-    // },
-
-    // focusEndInput() {
-    //   if (disabled || selectionMode !== 'range')
-    //     return
-    //   send({ type: 'END_INPUT_FOCUS' })
-    // },
 
     getRootProps() {
       return normalize.element({
@@ -191,7 +181,7 @@ export function connect<T extends PropTypes>(
         'type': 'button',
         disabled,
         'aria-haspopup': 'dialog',
-        'aria-expanded': open,
+        'aria-expanded': ariaAttr(open),
         'aria-controls': open ? dom.getCalendarId(scope) : undefined,
         'aria-label': target ? `Open calendar for ${target} date` : 'Toggle calendar',
         'data-state': open ? 'open' : 'closed',
@@ -236,7 +226,7 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getCalendarProps() {
+    getContentProps() {
       return normalize.element({
         ...parts.calendar.attrs,
         'id': dom.getCalendarId(scope),
@@ -267,8 +257,8 @@ export function connect<T extends PropTypes>(
         'id': dom.getStatusId(scope),
         'role': 'status',
         'aria-live': 'polite',
-        'aria-atomic': true,
-        'className': 'sr-only',
+        'aria-atomic': ariaAttr(true),
+        'style': visuallyHiddenStyle,
       })
     },
 
@@ -317,13 +307,13 @@ export function connect<T extends PropTypes>(
       }
       // Also check min/max date constraints
       if (!isDisabled) {
-        isDisabled = !!(
+        isDisabled = Boolean(
           (direction === 'prev' && unit === 'year' && minDate && calendarDate.getFullYear() <= minDate.getFullYear())
           || (direction === 'next' && unit === 'year' && maxDate && calendarDate.getFullYear() >= maxDate.getFullYear())
           || (direction === 'prev' && unit === 'month' && minDate
             && calendarDate.getFullYear() === minDate.getFullYear() && calendarDate.getMonth() <= minDate.getMonth())
           || (direction === 'next' && unit === 'month' && maxDate
-            && calendarDate.getFullYear() === maxDate.getFullYear() && calendarDate.getMonth() >= maxDate.getMonth())
+            && calendarDate.getFullYear() === maxDate.getFullYear() && calendarDate.getMonth() >= maxDate.getMonth()),
         )
       }
 
@@ -373,16 +363,15 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getDateGridProps() {
+    getTableProps() {
       return normalize.element({
-        ...parts.dateGrid.attrs,
-        'role': 'grid',
-        'aria-label': `${monthLabels[calendarDate.getMonth()]} ${calendarDate.getFullYear()}`,
-        'hidden': view !== 'date',
+        // ...parts..attrs,
+        role: 'grid',
+        // 'aria-label': `${monthLabels[calendarDate.getMonth()]} ${calendarDate.getFullYear()}`,
       })
     },
 
-    getDayOfWeekHeaderProps(dayIndex) {
+    getTableHeaderProps(dayIndex) {
       return normalize.element({
         ...parts.dayOfWeekHeader.attrs,
         'role': 'columnheader',
@@ -391,14 +380,14 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getDateButtonProps(date) {
+    getDayButtonProps(date) {
       const isRangeMode = selectionMode === 'range'
-      const isSelected = isRangeMode
-        ? (startDate && isSameDay(date, startDate)) || (endDate && isSameDay(date, endDate))
-        : (startDate && isSameDay(date, startDate))
+      const isSelected = Boolean(isRangeMode
+        ? ((startDate && isSameDay(date, startDate)) || (endDate && isSameDay(date, endDate)))
+        : (startDate && isSameDay(date, startDate)))
       const isToday = isSameDay(date, today())
       // Base disabled state (outside min/max range or component disabled)
-      let isDisabled = disabled || (minDate && maxDate && !isWithinInterval(date, { start: minDate, end: maxDate })) || (minDate && !maxDate && isBefore(date, minDate)) || (!minDate && maxDate && isAfter(date, maxDate))
+      let isDisabled = Boolean(disabled || (minDate && maxDate && !isWithinInterval(date, { start: minDate, end: maxDate })) || (minDate && !maxDate && isBefore(date, minDate)) || (!minDate && maxDate && isAfter(date, maxDate)))
 
       // Range mode additional constraints
       if (isRangeMode && !isDisabled) {
@@ -438,26 +427,26 @@ export function connect<T extends PropTypes>(
       }
 
       // Range-specific states
-      const isRangeStart = isRangeMode && startDate && isSameDay(date, startDate)
-      const isRangeEnd = isRangeMode && endDate && isSameDay(date, endDate)
-      const isInRange = isRangeMode && startDate && endDate && isDateInRange(date, startDate, endDate)
+      const isRangeStart = Boolean(isRangeMode && startDate && isSameDay(date, startDate))
+      const isRangeEnd = Boolean(isRangeMode && endDate && isSameDay(date, endDate))
+      const isInRange = Boolean(isRangeMode && startDate && endDate && isDateInRange(date, startDate, endDate))
 
       // Show hover range when selecting complementary date (not reselecting same type)
-      const isInHoverRange = isRangeMode && hoverDate && (
+      const isInHoverRange = Boolean(isRangeMode && hoverDate && (
         (startDate && activeInput === 'end' && isDateInRange(date, startDate, null, hoverDate) && !isSameDay(date, startDate)) // Has start, selecting end (exclude start date)
         || (endDate && activeInput === 'start' && isDateInRange(date, hoverDate, endDate, null) && !isSameDay(date, endDate)) // Has end, selecting start (exclude end date)
-      )
+      ))
 
       // Active input highlighting
-      const isActiveInputDate = isRangeMode && (
+      const isActiveInputDate = Boolean(isRangeMode && (
         (activeInput === 'start' && startDate && isSameDay(date, startDate))
         || (activeInput === 'end' && endDate && isSameDay(date, endDate))
-      )
+      ))
 
       // Range date functionality (legacy behavior: rangeDate is start, user selects end)
-      const isRangeDateStart = rangeDate && isSameDay(date, rangeDate)
-      const isRangeDateEnd = rangeDate && startDate && isSameDay(date, startDate)
-      const isInRangeDate = rangeDate && (
+      const isRangeDateStart = Boolean(rangeDate && isSameDay(date, rangeDate))
+      const isRangeDateEnd = Boolean(rangeDate && startDate && isSameDay(date, startDate))
+      const isInRangeDate = Boolean(rangeDate && (
         // Show in-range during hover (between rangeDate and hovered date)
         (hoverDate && !startDate && (
           (date > rangeDate && date < hoverDate) || (date > hoverDate && date < rangeDate)
@@ -466,11 +455,13 @@ export function connect<T extends PropTypes>(
         || (startDate && !isSameDay(date, rangeDate) && !isSameDay(date, startDate) && (
           (date > rangeDate && date < startDate) || (date > startDate && date < rangeDate)
         ))
-      )
+      ))
 
       const monthContext = month < currentMonth
         ? 'prev'
-        : month > currentMonth ? 'next' : 'current'
+        : month > currentMonth
+          ? 'next'
+          : 'current'
 
       return normalize.button({
         ...parts.dateButton.attrs,
@@ -478,24 +469,24 @@ export function connect<T extends PropTypes>(
         'disabled': isDisabled ? true : undefined,
         'tabIndex': isSelected ? 0 : -1,
         'aria-label': `${date.getDate()} ${monthLabels[month]} ${date.getFullYear()} ${dayOfWeekLabels[date.getDay()]}`,
-        'aria-selected': isSelected || undefined,
+        'aria-selected': ariaAttr(isSelected),
         'data-value': formatDate(date, 'yyyy-MM-dd'),
         'data-day': date.getDate(),
         'data-month': month,
         'data-year': date.getFullYear(),
-        'data-selected': isSelected,
-        'data-today': isToday,
-        'data-disabled': isDisabled || isRangeMode,
-        'data-focus': isFocused,
+        'data-selected': dataAttr(isSelected),
+        'data-today': dataAttr(isToday),
+        'data-disabled': dataAttr(isDisabled || isRangeMode),
+        'data-focus': dataAttr(isFocused),
         'data-month-context': monthContext,
         'data-range-start': (isRangeStart && startDate) || (isRangeEnd && endDate) || undefined,
         'data-range-end': (isRangeEnd && endDate) || (isRangeDateEnd && rangeDate) || undefined,
-        'data-in-range': isInRange || undefined,
-        'data-range-hover': isInHoverRange || undefined,
+        'data-in-range': dataAttr(isInRange),
+        'data-range-hover': dataAttr(isInHoverRange),
         'data-active-input': isActiveInputDate ? activeInput : undefined,
         // Legacy rangeDate attributes (for backward compatibility with existing tests)
-        'data-range-date': isRangeDateStart || undefined,
-        'data-within-range': isInRangeDate || undefined,
+        'data-range-date': dataAttr(isRangeDateStart),
+        'data-within-range': dataAttr(isInRangeDate),
         onClick() {
           if (isDisabled)
             return
@@ -625,11 +616,11 @@ export function connect<T extends PropTypes>(
         'type': 'button',
         'disabled': isDisabled,
         'tabIndex': isFocused ? 0 : -1,
-        'aria-selected': isSelected,
+        'aria-selected': ariaAttr(isSelected),
         'data-value': month,
         'data-label': monthLabels[month],
-        'data-selected': isSelected,
-        'data-focus': isFocused,
+        'data-selected': dataAttr(isSelected),
+        'data-focus': dataAttr(isFocused),
         onClick() {
           if (isDisabled)
             return
@@ -723,15 +714,15 @@ export function connect<T extends PropTypes>(
       }
       // Also check min/max date constraints
       else if (!isDisabled) {
-        isDisabled = !!(
+        isDisabled = Boolean(
           (direction === 'prev' && minDate && focusedYear - yearChunk < minDate.getFullYear())
-          || (direction === 'next' && maxDate && focusedYear + yearChunk > maxDate.getFullYear())
+          || (direction === 'next' && maxDate && focusedYear + yearChunk > maxDate.getFullYear()),
         )
       }
 
       return normalize.button({
         'type': 'button',
-        'disabled': isDisabled || undefined,
+        'disabled': isDisabled,
         'aria-label': `Navigate ${direction} ${yearChunk} years`,
         'data-direction': direction,
         onClick() {
@@ -770,7 +761,7 @@ export function connect<T extends PropTypes>(
       else if (!isDisabled && (minDate || maxDate)) {
         const yearStart = new Date(year, 0, 1)
         const yearEnd = new Date(year, 11, 31)
-        isDisabled = !!(minDate && yearEnd < minDate) || !!(maxDate && yearStart > maxDate)
+        isDisabled = Boolean((minDate && yearEnd < minDate) || (maxDate && yearStart > maxDate))
       }
 
       return normalize.button({
@@ -778,10 +769,10 @@ export function connect<T extends PropTypes>(
         'type': 'button',
         'disabled': isDisabled,
         'tabIndex': isFocused ? 0 : -1,
-        'aria-selected': isSelected,
+        'aria-selected': ariaAttr(isSelected),
         'data-value': year,
-        'data-selected': isSelected,
-        'data-focus': isFocused,
+        'data-selected': dataAttr(isSelected),
+        'data-focus': dataAttr(isFocused),
         onClick() {
           if (isDisabled)
             return
@@ -847,7 +838,6 @@ export function connect<T extends PropTypes>(
       return dayOfWeekAbbreviations.map((label, index) => ({
         label,
         index,
-        props: this.getDayOfWeekHeaderProps(index),
       }))
     },
 
@@ -855,7 +845,7 @@ export function connect<T extends PropTypes>(
       const weeks = this.getWeeksInMonth(calendarDate)
       return weeks.flat().filter(date => date !== null).map(date => ({
         date,
-        props: this.getDateButtonProps(date),
+        props: this.getDayButtonProps(date),
       }))
     },
 
@@ -867,8 +857,8 @@ export function connect<T extends PropTypes>(
       const daysInMonth = lastDayOfMonth.getDate()
       const startingDayOfWeek = firstDayOfMonth.getDay()
 
-      const weeks: (Date | null)[][] = []
-      let currentWeek: (Date | null)[] = []
+      const weeks: (Date)[][] = []
+      let currentWeek: (Date)[] = []
 
       // Fill cells before first day with previous month dates
       const prevMonth = month === 0 ? 11 : month - 1
@@ -904,11 +894,11 @@ export function connect<T extends PropTypes>(
     },
 
     getMonthsGrid() {
-      return monthLabels.map((label, index) => ({
-        month: index,
+      const months = monthLabels.map((label, index) => ({
+        value: index,
         label,
-        props: this.getMonthButtonProps(index),
       }))
+      return chunk(months, 3)
     },
 
     getYearsGrid() {
@@ -920,12 +910,12 @@ export function connect<T extends PropTypes>(
       for (let i = 0; i < yearChunk; i++) {
         const year = startYear + i
         years.push({
-          year,
-          props: this.getYearButtonProps(year),
+          value: year,
+          label: String(year),
         })
       }
 
-      return years
+      return chunk(years, 3)
     },
 
     getYearRange() {
@@ -954,7 +944,7 @@ export function connect<T extends PropTypes>(
         'value': startInputValue,
         disabled,
         'readOnly': readonly,
-        'aria-invalid': !isStartInputValid,
+        'aria-invalid': ariaAttr(!isStartInputValid),
         'aria-describedby': startValidationMessage ? `${dom.getStatusId(scope)}-start` : undefined,
         'placeholder': 'MM/dd/yyyy',
         'aria-label': 'Start date',
@@ -1013,7 +1003,7 @@ export function connect<T extends PropTypes>(
         'value': endInputValue,
         disabled,
         'readOnly': readonly,
-        'aria-invalid': !isEndInputValid,
+        'aria-invalid': ariaAttr(!isEndInputValid),
         'aria-describedby': endValidationMessage ? `${dom.getStatusId(scope)}-end` : undefined,
         'placeholder': 'MM/dd/yyyy',
         'aria-label': 'End date',
@@ -1056,19 +1046,30 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getMonthPickerProps() {
+    getDayViewProps() {
       return normalize.element({
-        ...parts.monthPicker.attrs,
-        id: dom.getMonthPickerId(scope),
-        hidden: view !== 'month',
+        ...parts.dayView.attrs,
+        'id': dom.getDayViewId(scope),
+        'hidden': view !== 'day',
+        'data-state': open ? 'open' : 'closed',
       })
     },
 
-    getYearPickerProps() {
+    getMonthViewProps() {
       return normalize.element({
-        ...parts.yearPicker.attrs,
-        id: dom.getYearPickerId(scope),
-        hidden: view !== 'year',
+        ...parts.monthView.attrs,
+        'id': dom.getMonthViewId(scope),
+        'hidden': view !== 'month',
+        'data-state': open ? 'open' : 'closed',
+      })
+    },
+
+    getYearViewProps() {
+      return normalize.element({
+        ...parts.yearView.attrs,
+        'id': dom.getYearViewId(scope),
+        'hidden': view !== 'year',
+        'data-state': open ? 'open' : 'closed',
       })
     },
   }

@@ -8,8 +8,9 @@ export const getStatusId = (ctx: Scope) => `date-picker:${ctx.id}:status`
 export const getMonthSelectionId = (ctx: Scope) => `date-picker:${ctx.id}:month-selection`
 export const getYearSelectionId = (ctx: Scope) => `date-picker:${ctx.id}:year-selection`
 
-export const getMonthPickerId = (ctx: Scope) => `date-picker:${ctx.id}:month-picker`
-export const getYearPickerId = (ctx: Scope) => `date-picker:${ctx.id}:year-picker`
+export const getDayViewId = (ctx: Scope) => `date-picker:${ctx.id}:day-view`
+export const getMonthViewId = (ctx: Scope) => `date-picker:${ctx.id}:month-view`
+export const getYearViewId = (ctx: Scope) => `date-picker:${ctx.id}:year-view`
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
 export const getInputEl = (ctx: Scope) => ctx.getById(getInputId(ctx))
@@ -19,8 +20,8 @@ export const getStatusEl = (ctx: Scope) => ctx.getById(getStatusId(ctx))
 export const getMonthSelectionEl = (ctx: Scope) => ctx.getById(getMonthSelectionId(ctx))
 export const getYearSelectionEl = (ctx: Scope) => ctx.getById(getYearSelectionId(ctx))
 
-export const getMonthPickerEl = (ctx: Scope) => ctx.getById(getMonthPickerId(ctx))
-export const getYearPickerEl = (ctx: Scope) => ctx.getById(getYearPickerId(ctx))
+export const getMonthViewEl = (ctx: Scope) => ctx.getById(getMonthViewId(ctx))
+export const getYearViewEl = (ctx: Scope) => ctx.getById(getYearViewId(ctx))
 
 export function getDateButtonEls(ctx: Scope) {
   const calendar = getCalendarEl(ctx)
@@ -48,7 +49,7 @@ export function getFocusedDateButtonEl(ctx: Scope, targetDate: Date) {
 }
 
 export function getFocusedMonthButtonEl(ctx: Scope, targetMonth: number) {
-  const monthSelection = getMonthPickerEl(ctx)
+  const monthSelection = getMonthViewEl(ctx)
   if (!monthSelection)
     return null
 
@@ -56,7 +57,7 @@ export function getFocusedMonthButtonEl(ctx: Scope, targetMonth: number) {
 }
 
 export function getFocusedYearButtonEl(ctx: Scope, targetYear: number) {
-  const yearSelection = getYearPickerEl(ctx)
+  const yearSelection = getYearViewEl(ctx)
   if (!yearSelection)
     return null
 

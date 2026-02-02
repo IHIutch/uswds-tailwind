@@ -154,7 +154,7 @@ catalogs:
       specifier: ^1.31.1
       version: 1.31.1
     '@zag-js/utils':
-      specifier: ^1.31.1
+      specifier: 1.31.1
       version: 1.31.1
     astro:
       specifier: 5.14.5
@@ -829,6 +829,9 @@ importers:
       '@uswds-tailwind/combobox-compat':
         specifier: workspace:*
         version: link:../machines/combobox-compat
+      '@uswds-tailwind/date-picker-compat':
+        specifier: workspace:*
+        version: link:../machines/date-picker-compat
       '@uswds-tailwind/dropdown-compat':
         specifier: workspace:*
         version: link:../machines/dropdown-compat

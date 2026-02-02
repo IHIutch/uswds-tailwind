@@ -141,7 +141,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
   }
 
   private renderCalendar(el: HTMLElement) {
-    spreadProps(el, this.api.getCalendarProps())
+    spreadProps(el, this.api.getContentProps())
   }
 
   private renderStartStatus(el: HTMLElement) {
@@ -166,7 +166,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
     if (!this.dateGrid)
       return
 
-    spreadProps(this.dateGrid, this.api.getDateGridProps())
+    spreadProps(this.dateGrid, this.api.getTableProps())
 
     this.cloneDayHeaders()
 
@@ -318,7 +318,7 @@ export class DateRangePicker extends Component<datePicker.Props, datePicker.Api>
           button.textContent = String(date.getDate())
 
           // Apply dynamic props via spreadProps (no stale attributes!)
-          spreadProps(button, this.api.getDateButtonProps(date))
+          spreadProps(button, this.api.getDayButtonProps(date))
 
           td.appendChild(button)
           row.appendChild(td)

@@ -11,7 +11,7 @@ export type CharacterCountStatusProps = React.HTMLAttributes<HTMLElement>
 
 export interface CharacterCountContextProps {
   api: characterCount.Api
-  service: characterCount.Service
+  context: characterCount.Service['context']
 }
 
 const CharacterCountContext = React.createContext<CharacterCountContextProps | null>(null)
@@ -35,7 +35,7 @@ const CharacterCountRoot = React.forwardRef<any, CharacterCountRootProps>(
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (
-      <CharacterCountContext.Provider value={{ api, service }}>
+      <CharacterCountContext.Provider value={{ api, context: service.context }}>
         <div {...mergedProps} className={className} ref={forwardedRef} />
       </CharacterCountContext.Provider>
     )
@@ -59,7 +59,7 @@ const CharacterCountInput = React.forwardRef<any, CharacterCountInputProps>(
 
 const CharacterCountStatus = React.forwardRef<any, CharacterCountStatusProps>(
   ({ className, ...props }, forwardedRef) => {
-    const { api, service } = useCharacterCountContext()
+    const { api, context } = useCharacterCountContext()
 
     const mergedProps = mergeProps(api.getStatusProps(), props)
 
@@ -79,9 +79,9 @@ const CharacterCountStatus = React.forwardRef<any, CharacterCountStatusProps>(
           )}
           ref={forwardedRef}
         >
-          {service.context.get('statusText')}
+          {context.get('statusText')}
         </span>
-        <span {...api.getSrStatusProps()}>{service.context.get('srStatusText')}</span>
+        <span {...api.getSrStatusProps()}>{context.get('srStatusText')}</span>
       </div>
     )
   },

@@ -17,14 +17,6 @@ function useComboboxContext() {
   return context
 }
 
-/**
- * Hook to access the combobox API from within a ComboboxRoot.
- * Useful for rendering filtered options or accessing combobox state.
- */
-export function useCombobox() {
-  return useComboboxContext()
-}
-
 function ComboboxRoot({ className, options, ...props }: React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>) {
   const service = useMachine(combobox.machine, {
     id: React.useId(),
@@ -62,10 +54,10 @@ export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListEl
 }
 
 function ComboboxList({ className, children, ...props }: ComboboxListProps) {
-  const context = useComboboxContext()
-  const mergedProps = mergeProps(context.api.getListProps(), props)
+  const { api } = useComboboxContext()
+  const mergedProps = mergeProps(api.getListProps(), props)
 
-  const content = typeof children === 'function' ? children({ options: context.api.filteredOptions }) : children
+  const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
 
   return (
     <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)}>

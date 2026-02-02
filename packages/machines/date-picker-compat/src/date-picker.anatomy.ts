@@ -8,7 +8,7 @@ export const anatomy = createAnatomy('date-picker').parts(
   'status',
   'monthSelection',
   'yearSelection',
-  'dateGrid',
+  // 'dateGrid',
   'dateButton',
   'monthButton',
   'yearButton',
@@ -16,8 +16,9 @@ export const anatomy = createAnatomy('date-picker').parts(
   'tableHeader',
   'tableBody',
   'dayOfWeekHeader',
-  'monthPicker',
-  'yearPicker',
+  'dayView',
+  'monthView',
+  'yearView',
 )
 
 export const parts = anatomy.build()

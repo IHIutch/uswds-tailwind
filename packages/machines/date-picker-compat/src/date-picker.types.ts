@@ -7,6 +7,7 @@ export type SelectionMode = 'single' | 'range'
 
 export type NavigationDirection = 'next' | 'prev'
 export type NavigationUnit = 'day' | 'week' | 'month' | 'year'
+export type DateView = 'day' | 'month' | 'year'
 
 export type ElementIds = Partial<{
   root: string
@@ -198,7 +199,7 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   /**
    * The current view state
    */
-  view: 'date' | 'month' | 'year'
+  view: DateView
 
   /**
    * Whether the input is focused
@@ -290,7 +291,7 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   /**
    * Props for the calendar container
    */
-  getCalendarProps: () => T['element']
+  getContentProps: () => T['element']
 
   /**
    * Props for the status region
@@ -310,17 +311,17 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   /**
    * Props for the date grid container
    */
-  getDateGridProps: () => T['element']
+  getTableProps: () => T['element']
 
   /**
    * Props for day of week headers
    */
-  getDayOfWeekHeaderProps: (dayIndex: number) => T['element']
+  getTableHeaderProps: (dayIndex: number) => T['element']
 
   /**
    * Props for individual date buttons
    */
-  getDateButtonProps: (date: Date) => T['button']
+  getDayButtonProps: (date: Date) => T['button']
 
   /**
    * Props for month selection container
@@ -350,7 +351,7 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   /**
    * Get array of week days with props for template cloning
    */
-  getWeekDays: () => Array<{ label: string, index: number, props: T['element'] }>
+  getWeekDays: () => Array<{ label: string, index: number }>
 
   /**
    * Get array of calendar dates with props for template cloning
@@ -360,12 +361,12 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   /**
    * Get array of months with props for template cloning
    */
-  getMonthsGrid: () => Array<{ month: number, label: string, props: T['button'] }>
+  getMonthsGrid: () => { value: number, label: string }[][]
 
   /**
    * Get array of years with props for template cloning
    */
-  getYearsGrid: () => Array<{ year: number, props: T['button'] }>
+  getYearsGrid: () => { value: number, label: string }[][]
 
   /**
    * Get current year range information
@@ -373,17 +374,22 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   getYearRange: () => { start: number, end: number, display: string }
 
   /**
-   * Generate calendar weeks (internal method)
+   * The weeks of the month. Represented as an array of arrays of dates.
    */
-  getWeeksInMonth: (date: Date) => (Date | null)[][]
+  getWeeksInMonth: (date: Date) => (Date)[][]
 
   /**
-   * Get props for the month picker container
+   * Get props for the day view container
    */
-  getMonthPickerProps: () => T['element']
+  getDayViewProps: () => T['element']
 
   /**
-   * Get props for the year picker container
+   * Get props for the month view container
    */
-  getYearPickerProps: () => T['element']
+  getMonthViewProps: () => T['element']
+
+  /**
+   * Get props for the year view container
+   */
+  getYearViewProps: () => T['element']
 }

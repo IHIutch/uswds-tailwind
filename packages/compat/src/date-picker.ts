@@ -145,7 +145,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   }
 
   private renderCalendar(el: HTMLElement) {
-    spreadProps(el, this.api.getCalendarProps())
+    spreadProps(el, this.api.getContentProps())
   }
 
   private renderStatus(el: HTMLElement) {
@@ -161,7 +161,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     if (!this.dateGrid)
       return
 
-    spreadProps(this.dateGrid, this.api.getDateGridProps())
+    spreadProps(this.dateGrid, this.api.getTableProps())
 
     this.cloneDayHeaders()
 
@@ -209,7 +209,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     if (!this.monthSelection)
       return
 
-    spreadProps(this.monthSelection, this.api.getMonthPickerProps())
+    spreadProps(this.monthSelection, this.api.getMonthViewProps())
     this.cloneMonthButtons()
   }
 
@@ -217,7 +217,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     if (!this.yearSelection)
       return
 
-    spreadProps(this.yearSelection, this.api.getYearPickerProps())
+    spreadProps(this.yearSelection, this.api.getYearViewProps())
 
     this.cloneYearButtons()
   }
@@ -230,10 +230,11 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     const weekDays = this.api.getWeekDays()
 
     if (templates.length === weekDays.length) {
-      templates.forEach((header, index) => {
-        if (weekDays[index]) {
-          header.textContent = weekDays[index].label.charAt(0)
-          spreadProps(header, weekDays[index].props)
+      templates.forEach((header, idx) => {
+        if (weekDays[idx]) {
+          header.textContent = weekDays[idx].label.charAt(0)
+          const headerProps = this.api.getTableHeaderProps(weekDays[idx].index)
+          spreadProps(header, headerProps)
         }
       })
       return
@@ -249,12 +250,13 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
       template.remove()
 
-      weekDays.forEach(({ label, props }) => {
+      weekDays.forEach(({ label, index }) => {
         const header = document.createElement(template.tagName.toLowerCase())
+        const headerProps = this.api.getTableHeaderProps(index)
         copyAttributes(template, header)
         header.setAttribute('data-part', 'date-picker-day-header')
         header.textContent = label
-        spreadProps(header, props)
+        spreadProps(header, headerProps)
         parent.appendChild(header)
       })
     }
@@ -307,7 +309,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
               copyAttributes(templateButton, button)
               button.setAttribute('data-part', 'date-picker-date-button')
               button.textContent = String(date.getDate())
-              spreadProps(button, this.api.getDateButtonProps(date))
+              spreadProps(button, this.api.getDayButtonProps(date))
               td.appendChild(button)
             }
             row.appendChild(td)
@@ -321,7 +323,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
               copyAttributes(templateButton, button)
               button.setAttribute('data-part', 'date-picker-date-button')
               button.textContent = String(date.getDate())
-              spreadProps(button, this.api.getDateButtonProps(date))
+              spreadProps(button, this.api.getDayButtonProps(date))
               td.appendChild(button)
             }
             row.appendChild(td)

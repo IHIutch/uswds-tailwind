@@ -14,8 +14,9 @@ export function createDisposableDatePicker(id: string, template: string) {
       const getMonthSelectionEl = () => document.getElementById(`date-picker:${id}:month-selection`)
       const getYearSelectionEl = () => document.getElementById(`date-picker:${id}:year-selection`)
 
-      const getMonthPickerEl = () => document.getElementById(`date-picker:${id}:month-picker`)
-      const getYearPickerEl = () => document.getElementById(`date-picker:${id}:year-picker`)
+      // const getDayViewEl = () => document.getElementById(`date-picker:${id}:day-view`)
+      const getMonthViewEl = () => document.getElementById(`date-picker:${id}:month-view`)
+      const getYearViewEl = () => document.getElementById(`date-picker:${id}:year-view`)
 
       const getDateButtonEls = () => {
         const calendar = getCalendarEl()
@@ -40,8 +41,8 @@ export function createDisposableDatePicker(id: string, template: string) {
         getStatusEl,
         getMonthSelectionEl,
         getYearSelectionEl,
-        getMonthPickerEl,
-        getYearPickerEl,
+        getMonthViewEl,
+        getYearViewEl,
         getDateButtonEls,
         getMonthButtonEls,
         getYearButtonEls,
