@@ -48,7 +48,7 @@
     "@uswds-tailwind/combobox-compat": "workspace:*",
     "@uswds-tailwind/date-picker-compat": "workspace:*",
     "@uswds-tailwind/dropdown-compat": "workspace:*",
-    "@uswds-tailwind/theme": "catalog:",
+    "@uswds-tailwind/theme": "workspace:*",
     "@uswds-tailwind/tooltip-compat": "workspace:*",
     "@vitejs/plugin-react": "catalog:",
     "@zag-js/dom-query": "catalog:",
