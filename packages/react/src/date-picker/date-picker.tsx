@@ -207,7 +207,18 @@ const DatePickerView = React.forwardRef<any, Omit<React.HTMLAttributes<HTMLDivEl
 
     return (
       <DatePickerViewContext.Provider value={{ view }}>
-        <div {...mergedProps} className={cx('bg-gray-5 w-mobile absolute top-10 right-0', className)} ref={forwardedRef}>
+        <div
+          {...mergedProps}
+          className={
+            cx([
+              view === 'month' || view === 'year' ? 'py-5 px-2' : '',
+              view === 'year' ? 'flex items-center' : '',
+              'bg-gray-5 w-mobile absolute top-10 right-0',
+              className,
+            ])
+          }
+          ref={forwardedRef}
+        >
           {content}
         </div>
       </DatePickerViewContext.Provider>
@@ -266,21 +277,43 @@ function DatePickerTableCell(props: React.TdHTMLAttributes<HTMLTableCellElement>
 function DatePickerTableCellTrigger({ className, value, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   value: number
 }) {
-  const { api, context } = useDatePickerContext()
+  const { api } = useDatePickerContext()
   const { view } = useDatePickerViewContext()
 
-  const month = context.get('calendarDate').getMonth()
-  const year = context.get('calendarDate').getFullYear()
-  const date = new Date(year, month, value)
-
   const viewTriggerProps = {
-    day: api.getDayButtonProps(date),
+    day: api.getDayButtonProps(new Date(value)),
     month: api.getMonthButtonProps(value),
     year: api.getYearButtonProps(value),
   }[view]
 
   const mergedProps = mergeProps(viewTriggerProps, props)
-  return <button {...mergedProps} className={cx('w-full py-1.5 hover:bg-gray-10 cursor-pointer text-center data-[month-context=prev]:text-gray-warm-60 data-[month-context=next]:text-gray-warm-60 data-focus:outline-2 data-focus:outline-blue-warm-80v data-focus:-outline-offset-2 focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! data-range-start:bg-blue-warm-60v data-range-start:text-white data-range-start:rounded-s-sm data-range-end:bg-blue-warm-60v data-range-end:text-white data-range-end:rounded-e-sm data-in-range:bg-blue-warm-10v data-in-range:text-ink data-range-hover:bg-blue-warm-10v active:bg-gray-30 data-selected:active:bg-blue-warm-70v disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent', className)} />
+  return <button {...mergedProps} className={cx('w-full py-1.5 hover:bg-gray-10 cursor-pointer text-center data-[month-context=prev]:text-gray-warm-60 data-[month-context=next]:text-gray-warm-60 not-focus:data-focus:outline-2 not-focus:data-focus:outline-blue-warm-80v not-focus:data-focus:-outline-offset-2 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 data-range-start:bg-blue-warm-60v data-range-start:text-white data-range-start:rounded-s-sm data-range-end:bg-blue-warm-60v data-range-end:text-white data-range-end:rounded-e-sm data-in-range:bg-blue-warm-10v data-in-range:text-ink data-range-hover:bg-blue-warm-10v active:bg-gray-30 data-selected:bg-blue-warm-60v data-selected:text-white data-selected:active:bg-blue-warm-70v disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent', className)} />
+}
+
+function DatePickerPrevDecadeTrigger({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getDecadeNavigationProps('prev'), props)
+
+  return (
+    <button {...mergedProps} className={cx('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
+      {children || (
+        <div className="icon-[material-symbols--keyboard-arrow-left] size-8"></div>
+      )}
+    </button>
+  )
+}
+
+function DatePickerNextDecadeTrigger({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getDecadeNavigationProps('next'), props)
+
+  return (
+    <button {...mergedProps} className={cx('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
+      {children || (
+        <div className="icon-[material-symbols--keyboard-arrow-right] size-8"></div>
+      )}
+    </button>
+  )
 }
 
 export const DatePicker = {
@@ -304,4 +337,6 @@ export const DatePicker = {
   TableBody: DatePickerTableBody,
   TableCell: DatePickerTableCell,
   TableCellTrigger: DatePickerTableCellTrigger,
+  PrevDecadeTrigger: DatePickerPrevDecadeTrigger,
+  NextDecadeTrigger: DatePickerNextDecadeTrigger,
 }

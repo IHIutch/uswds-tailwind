@@ -1,4 +1,5 @@
 import type { Scope } from '@zag-js/core'
+import { query, queryAll } from '@zag-js/dom-query'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `date-picker:${ctx.id}`
 export const getInputId = (ctx: Scope) => `date-picker:${ctx.id}:input`
@@ -25,17 +26,17 @@ export const getYearViewEl = (ctx: Scope) => ctx.getById(getYearViewId(ctx))
 
 export function getDateButtonEls(ctx: Scope) {
   const calendar = getCalendarEl(ctx)
-  return Array.from(calendar?.querySelectorAll('[data-part="date-button"]') || [])
+  return queryAll<HTMLButtonElement>(calendar, '[data-part="date-button"]')
 }
 
 export function getMonthButtonEls(ctx: Scope) {
   const monthSelection = getMonthSelectionEl(ctx)
-  return Array.from(monthSelection?.querySelectorAll('[data-part="month-button"]') || [])
+  return queryAll<HTMLButtonElement>(monthSelection, '[data-part="month-button"]')
 }
 
 export function getYearButtonEls(ctx: Scope) {
   const yearSelection = getYearSelectionEl(ctx)
-  return Array.from(yearSelection?.querySelectorAll('[data-part="year-button"]') || [])
+  return queryAll<HTMLButtonElement>(yearSelection, '[data-part="year-button"]')
 }
 
 export function getFocusedDateButtonEl(ctx: Scope, targetDate: Date) {
@@ -45,7 +46,7 @@ export function getFocusedDateButtonEl(ctx: Scope, targetDate: Date) {
 
   const dateString = targetDate.getDate()
   const monthString = targetDate.getMonth()
-  return calendar.querySelector(`[data-part="date-picker-date-button"][data-day="${dateString}"][data-month="${monthString}"]`)
+  return query(calendar, `[data-part="date-button"][data-day="${dateString}"][data-month="${monthString}"]`)
 }
 
 export function getFocusedMonthButtonEl(ctx: Scope, targetMonth: number) {
@@ -53,7 +54,7 @@ export function getFocusedMonthButtonEl(ctx: Scope, targetMonth: number) {
   if (!monthSelection)
     return null
 
-  return monthSelection.querySelector(`[data-part="date-picker-month-button"][data-value="${targetMonth}"]`)
+  return query(monthSelection, `[data-part="month-button"][data-value="${targetMonth}"]`)
 }
 
 export function getFocusedYearButtonEl(ctx: Scope, targetYear: number) {
@@ -61,16 +62,16 @@ export function getFocusedYearButtonEl(ctx: Scope, targetYear: number) {
   if (!yearSelection)
     return null
 
-  return yearSelection.querySelector(`[data-part="date-picker-year-button"][data-value="${targetYear}"]`)
+  return query(yearSelection, `[data-part="year-button"][data-value="${targetYear}"]`)
 }
 
 // Range picker specific DOM helpers
 export function getStartInputEl(ctx: Scope) {
   const root = getRootEl(ctx)
-  return root?.querySelector<HTMLInputElement>('[data-part="date-range-picker-start-input"]')
+  return query<HTMLInputElement>(root, '[data-part="date-range-picker-start-input"]')
 }
 
 export function getEndInputEl(ctx: Scope) {
   const root = getRootEl(ctx)
-  return root?.querySelector<HTMLInputElement>('[data-part="date-range-picker-end-input"]')
+  return query<HTMLInputElement>(root, '[data-part="date-range-picker-end-input"]')
 }

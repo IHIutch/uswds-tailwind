@@ -457,11 +457,11 @@ export function connect<T extends PropTypes>(
         ))
       ))
 
-      const monthContext = month < currentMonth
+      const monthContext = (month < currentMonth || (currentMonth === 0 && month === 11))
         ? 'prev'
-        : month > currentMonth
-          ? 'next'
-          : 'current'
+        : (month > currentMonth || (currentMonth === 11 && month === 0))
+            ? 'next'
+            : 'current'
 
       return normalize.button({
         ...parts.dateButton.attrs,

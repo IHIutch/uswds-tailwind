@@ -44,11 +44,11 @@ export const Basic = meta.story({
             <DatePicker.TableBody>
               {({ api, context }) => (
                 <>
-                  {api.getWeeksInMonth(context.get('calendarDate')).map((week, weekIndex) => (
-                    <DatePicker.TableRow key={weekIndex}>
-                      {week.map((day, dayIndex) => (
-                        <DatePicker.TableCell key={dayIndex}>
-                          <DatePicker.TableCellTrigger value={day.getDate()}>
+                  {api.getWeeksInMonth(context.get('calendarDate')).map((week, row) => (
+                    <DatePicker.TableRow key={row}>
+                      {week.map((day, cell) => (
+                        <DatePicker.TableCell key={cell}>
+                          <DatePicker.TableCellTrigger value={day.valueOf()}>
                             {String(day?.getDate())}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
@@ -81,21 +81,25 @@ export const Basic = meta.story({
         </DatePicker.View>
         <DatePicker.View view="year">
           {({ api }) => (
-            <DatePicker.Table>
-              <DatePicker.TableBody>
-                {api.getYearsGrid().map((years, row) => (
-                  <DatePicker.TableRow key={row}>
-                    {years.map((year, cell) => (
-                      <DatePicker.TableCell key={cell}>
-                        <DatePicker.TableCellTrigger value={year.value}>
-                          {year.label}
-                        </DatePicker.TableCellTrigger>
-                      </DatePicker.TableCell>
-                    ))}
-                  </DatePicker.TableRow>
-                ))}
-              </DatePicker.TableBody>
-            </DatePicker.Table>
+            <>
+              <DatePicker.PrevDecadeTrigger />
+              <DatePicker.Table>
+                <DatePicker.TableBody>
+                  {api.getYearsGrid().map((years, row) => (
+                    <DatePicker.TableRow key={row}>
+                      {years.map((year, cell) => (
+                        <DatePicker.TableCell key={cell}>
+                          <DatePicker.TableCellTrigger value={year.value}>
+                            {year.label}
+                          </DatePicker.TableCellTrigger>
+                        </DatePicker.TableCell>
+                      ))}
+                    </DatePicker.TableRow>
+                  ))}
+                </DatePicker.TableBody>
+              </DatePicker.Table>
+              <DatePicker.NextDecadeTrigger />
+            </>
           )}
         </DatePicker.View>
       </DatePicker.Content>
