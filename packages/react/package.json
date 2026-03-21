@@ -51,6 +51,7 @@
     "@uswds-tailwind/theme": "workspace:*",
     "@uswds-tailwind/tooltip-compat": "workspace:*",
     "@vitejs/plugin-react": "catalog:",
+    "@zag-js/anatomy": "catalog:",
     "@zag-js/dom-query": "catalog:",
     "@zag-js/react": "catalog:",
     "@zag-js/types": "catalog:",
