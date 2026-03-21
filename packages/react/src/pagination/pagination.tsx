@@ -2,7 +2,7 @@ import type { PageSlot, UsePaginationProps, UsePaginationReturn } from './use-pa
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
-import { splitItemProps, splitProps } from './pagination.props'
+import { splitProps } from './pagination.props'
 import { usePagination } from './use-pagination'
 
 const PaginationContext = React.createContext<UsePaginationReturn | null>(null)
@@ -17,8 +17,8 @@ function usePaginationContext() {
 
 type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & UsePaginationProps
 
-function PaginationRoot(allProps: PaginationRootProps) {
-  const [rootProps, localProps] = splitProps(allProps)
+function PaginationRoot(props: PaginationRootProps) {
+  const [rootProps, localProps] = splitProps(props)
   const pagination = usePagination(rootProps)
 
   const mergedProps = mergeProps(pagination.getRootProps(), localProps)
@@ -125,23 +125,22 @@ type PaginationItemProps = {
   render?: (props: PaginationItemRenderProps) => React.ReactNode
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
 
-function PaginationItem({ className, ...props }: PaginationItemProps) {
-  const [itemProps, localProps] = splitItemProps(props)
+function PaginationItem({ className, value, render, ...props }: PaginationItemProps) {
   const { isLastPage, isActivePage, getItemProps } = usePaginationContext()
   const mergedClassName = cx(
     'h-10 min-w-10 p-2 cursor-pointer w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white',
     className,
   )
 
-  const mergedProps = mergeProps(getItemProps(itemProps), localProps)
+  const mergedProps = mergeProps(getItemProps({ value }), props)
 
   return (
     <li>
-      {itemProps?.render
-        ? itemProps.render({
-            value: itemProps.value,
-            isActive: isActivePage(itemProps.value),
-            isLast: isLastPage(itemProps.value),
+      {render
+        ? render({
+            value,
+            isActive: isActivePage(value),
+            isLast: isLastPage(value),
             ...mergedProps,
             className: mergedClassName,
           })
@@ -150,7 +149,7 @@ function PaginationItem({ className, ...props }: PaginationItemProps) {
               {...mergedProps}
               className={mergedClassName}
             >
-              {itemProps.value}
+              {value}
             </button>
           )}
     </li>

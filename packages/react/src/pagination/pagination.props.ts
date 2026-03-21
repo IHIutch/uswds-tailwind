@@ -9,21 +9,3 @@ export const props = createProps<UsePaginationProps>()([
 ])
 
 export const splitProps = createSplitProps<Partial<UsePaginationProps>>(props)
-
-export interface PaginationItemRenderProps extends React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
-  value: number
-  isActive: boolean
-  isLast: boolean
-}
-
-interface ItemProps {
-  value: number
-  render?: (props: PaginationItemRenderProps) => React.ReactNode
-}
-
-export const itemProps = createProps<ItemProps>()([
-  'value',
-  'render',
-])
-
-export const splitItemProps = createSplitProps<ItemProps>(itemProps)
