@@ -91,8 +91,8 @@ export function useFieldset(props: UseFieldsetProps = {}) {
   const getDescriptionProps = React.useMemo(
     () => () =>
       ({
-        id: descriptionId,
         ...parts.description.attrs,
+        id: descriptionId,
       }) as React.HTMLAttributes<HTMLSpanElement>,
     [disabled, descriptionId],
   )
