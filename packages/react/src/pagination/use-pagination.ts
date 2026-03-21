@@ -27,8 +27,15 @@ export function usePagination(props: UsePaginationProps = {}) {
 
   const pages = getPages(currentPage, pageCount)
 
-  const isFirstPage = currentPage === 1
-  const isLastPage = pageCount !== undefined && currentPage === pageCount
+  const isFirstPage = (value: number) => {
+    return value === 1
+  }
+  const isLastPage = (value: number) => {
+    return pageCount !== undefined && value === pageCount
+  }
+  const isActivePage = (value: number) => {
+    return value === currentPage
+  }
 
   const getRootProps = React.useMemo(
     () => () => ({
@@ -62,17 +69,13 @@ export function usePagination(props: UsePaginationProps = {}) {
   )
 
   const getItemProps = React.useMemo(
-    () => (value: number) => {
-      const isActive = value === currentPage
-      const isLast = pageCount !== undefined && value === pageCount
-      return {
-        ...parts.item.attrs,
-        'type': 'button' as const,
-        'aria-label': isLast ? `Last page, page ${value}` : `Page ${value}`,
-        'aria-current': isActive ? 'page' as const : undefined,
-        'onClick': () => setPage(value),
-      } as React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement>
-    },
+    () => ({ value }: { value: number }) => ({
+      ...parts.item.attrs,
+      'type': 'button' as const,
+      'aria-label': isLastPage(value) ? `Last page, page ${value}` : `Page ${value}`,
+      'aria-current': isActivePage(value) ? 'page' as const : undefined,
+      'onClick': () => setPage(value),
+    }) as React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement>,
     [currentPage, pageCount, setPage],
   )
 
@@ -90,6 +93,7 @@ export function usePagination(props: UsePaginationProps = {}) {
     pages,
     isFirstPage,
     isLastPage,
+    isActivePage,
     setPage,
     getRootProps,
     getListProps,

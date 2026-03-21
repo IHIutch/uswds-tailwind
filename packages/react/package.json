@@ -55,6 +55,7 @@
     "@zag-js/dom-query": "catalog:",
     "@zag-js/react": "catalog:",
     "@zag-js/types": "catalog:",
+    "@zag-js/utils": "catalog:",
     "cva": "catalog:",
     "storybook": "catalog:",
     "tailwind-merge": "catalog:",

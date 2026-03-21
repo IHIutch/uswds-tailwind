@@ -2,6 +2,7 @@ import type { PageSlot, UsePaginationProps, UsePaginationReturn } from './use-pa
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { splitItemProps, splitProps } from './pagination.props'
 import { usePagination } from './use-pagination'
 
 const PaginationContext = React.createContext<UsePaginationReturn | null>(null)
@@ -16,18 +17,19 @@ function usePaginationContext() {
 
 type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & UsePaginationProps
 
-function PaginationRoot({ currentPage, pageCount, onPageChange, className, children, ...props }: PaginationRootProps) {
-  const pagination = usePagination({ currentPage, pageCount, onPageChange })
+function PaginationRoot(allProps: PaginationRootProps) {
+  const [rootProps, localProps] = splitProps(allProps)
+  const pagination = usePagination(rootProps)
 
-  const mergedProps = mergeProps(pagination.getRootProps(), props)
+  const mergedProps = mergeProps(pagination.getRootProps(), localProps)
 
   return (
     <PaginationContext.Provider value={pagination}>
       <nav
         {...mergedProps}
-        className={cx('@container flex justify-center', className)}
+        className={cx('@container flex justify-center', localProps.className)}
       >
-        {children}
+        {localProps.children}
       </nav>
     </PaginationContext.Provider>
   )
@@ -49,7 +51,7 @@ function PaginationList({
   return (
     <ul
       {...mergedProps}
-      className={cx('flex gap-2 *:inline-flex *:has-[data-prev]:hidden *:has-[data-prev]:@tablet:inline-flex *:has-[data-next]:hidden *:has-[data-next]:@tablet:inline-flex', className)}
+      className={cx('flex gap-2 *:inline-flex *:has-data-[part=prev-trigger]:hidden *:has-data-[part=prev-trigger]:@tablet:inline-flex *:has-data-[part=next-trigger]:hidden *:has-data-[part=next-trigger]:@tablet:inline-flex', className)}
     >
       {typeof children === 'function' ? children({ pages }) : children}
     </ul>
@@ -57,9 +59,9 @@ function PaginationList({
 }
 
 function PaginationPrevTrigger({ className, children, ...props }: React.ComponentPropsWithoutRef<'button'>) {
-  const { isFirstPage, getPrevTriggerProps } = usePaginationContext()
+  const { currentPage, isFirstPage, getPrevTriggerProps } = usePaginationContext()
 
-  if (isFirstPage)
+  if (isFirstPage(currentPage))
     return null
 
   const mergedProps = mergeProps(getPrevTriggerProps(), props)
@@ -85,9 +87,9 @@ function PaginationPrevTrigger({ className, children, ...props }: React.Componen
 }
 
 function PaginationNextTrigger({ className, children, ...props }: React.ComponentPropsWithoutRef<'button'>) {
-  const { isLastPage, getNextTriggerProps } = usePaginationContext()
+  const { currentPage, isLastPage, getNextTriggerProps } = usePaginationContext()
 
-  if (isLastPage)
+  if (isLastPage(currentPage))
     return null
 
   const mergedProps = mergeProps(getNextTriggerProps(), props)
@@ -123,27 +125,32 @@ type PaginationItemProps = {
   render?: (props: PaginationItemRenderProps) => React.ReactNode
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
 
-function PaginationItem({ value, render, className, ...props }: PaginationItemProps) {
-  const { currentPage, pageCount, getItemProps } = usePaginationContext()
-  const isActive = value === currentPage
-  const isLast = pageCount !== undefined && value === pageCount
+function PaginationItem({ className, ...props }: PaginationItemProps) {
+  const [itemProps, localProps] = splitItemProps(props)
+  const { isLastPage, isActivePage, getItemProps } = usePaginationContext()
   const mergedClassName = cx(
     'h-10 min-w-10 p-2 cursor-pointer w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white',
     className,
   )
 
-  const mergedProps = mergeProps(getItemProps(value), props)
+  const mergedProps = mergeProps(getItemProps(itemProps), localProps)
 
   return (
     <li>
-      {render
-        ? render({ value, isActive, isLast, ...mergedProps, className: mergedClassName })
+      {itemProps?.render
+        ? itemProps.render({
+            value: itemProps.value,
+            isActive: isActivePage(itemProps.value),
+            isLast: isLastPage(itemProps.value),
+            ...mergedProps,
+            className: mergedClassName,
+          })
         : (
             <button
               {...mergedProps}
               className={mergedClassName}
             >
-              {value}
+              {itemProps.value}
             </button>
           )}
     </li>
@@ -153,10 +160,11 @@ function PaginationItem({ value, render, className, ...props }: PaginationItemPr
 function PaginationEllipsis({ className, ...props }: React.ComponentPropsWithoutRef<'li'>) {
   const { getEllipsisProps } = usePaginationContext()
 
+  const mergedProps = mergeProps(getEllipsisProps(), props)
+
   return (
     <li
-      {...getEllipsisProps()}
-      {...props}
+      {...mergedProps}
     >
       <div className={cx('h-10 w-10 flex items-center justify-center', className)}>...</div>
     </li>
