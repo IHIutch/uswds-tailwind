@@ -1,16 +1,10 @@
+import type { PageSlot, UsePaginationProps, UsePaginationReturn } from './use-pagination'
+import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { usePagination } from './use-pagination'
 
-type PageSlot = { type: 'page', value: number } | { type: 'ellipsis' }
-
-interface PaginationContextProps {
-  currentPage: number
-  pageCount?: number
-  onPageChange: (page: number) => void
-  pages: PageSlot[]
-}
-
-const PaginationContext = React.createContext<PaginationContextProps | null>(null)
+const PaginationContext = React.createContext<UsePaginationReturn | null>(null)
 
 function usePaginationContext() {
   const context = React.useContext(PaginationContext)
@@ -20,31 +14,17 @@ function usePaginationContext() {
   return context
 }
 
-type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & {
-  currentPage?: number
-  pageCount?: number
-  onPageChange?: (page: number) => void
-}
+type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & UsePaginationProps
 
-function PaginationRoot({ currentPage: currentPageProp = 1, pageCount, onPageChange, className, children, ...props }: PaginationRootProps) {
-  const [uncontrolledPage, setUncontrolledPage] = React.useState(currentPageProp)
-  const isControlled = onPageChange !== undefined
-  const currentPage = isControlled ? currentPageProp : uncontrolledPage
+function PaginationRoot({ currentPage, pageCount, onPageChange, className, children, ...props }: PaginationRootProps) {
+  const pagination = usePagination({ currentPage, pageCount, onPageChange })
 
-  const handlePageChange = React.useCallback((page: number) => {
-    if (!isControlled) {
-      setUncontrolledPage(page)
-    }
-    onPageChange?.(page)
-  }, [isControlled, onPageChange])
-
-  const pages = getPages(currentPage, pageCount)
+  const mergedProps = mergeProps(pagination.getRootProps(), props)
 
   return (
-    <PaginationContext.Provider value={{ currentPage, pageCount, onPageChange: handlePageChange, pages }}>
+    <PaginationContext.Provider value={pagination}>
       <nav
-        aria-label="Pagination"
-        {...props}
+        {...mergedProps}
         className={cx('@container flex justify-center', className)}
       >
         {children}
@@ -62,12 +42,14 @@ function PaginationList({
   children,
   ...props
 }: PaginationListProps) {
-  const { pages } = usePaginationContext()
+  const { pages, getListProps } = usePaginationContext()
+
+  const mergedProps = mergeProps(getListProps(), props)
 
   return (
     <ul
-      {...props}
-      className={cx('flex space-x-2 *:inline-flex *:[data-prev]:hidden *:[data-prev]:@tablet:inline-flex *:[data-next]:hidden *:[data-next]:@tablet:inline-flex', className)}
+      {...mergedProps}
+      className={cx('flex gap-2 *:inline-flex *:has-[data-prev]:hidden *:has-[data-prev]:@tablet:inline-flex *:has-[data-next]:hidden *:has-[data-next]:@tablet:inline-flex', className)}
     >
       {typeof children === 'function' ? children({ pages }) : children}
     </ul>
@@ -75,16 +57,17 @@ function PaginationList({
 }
 
 function PaginationPrevTrigger({ className, children, ...props }: React.ComponentPropsWithoutRef<'button'>) {
-  const { currentPage, onPageChange } = usePaginationContext()
+  const { isFirstPage, getPrevTriggerProps } = usePaginationContext()
 
-  if (currentPage === 1)
+  if (isFirstPage)
     return null
 
+  const mergedProps = mergeProps(getPrevTriggerProps(), props)
+
   return (
-    <li data-prev>
+    <li>
       <button
-        onClick={() => onPageChange(currentPage - 1)}
-        {...props}
+        {...mergedProps}
         className={cx(
           'h-10 pr-2 mr-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
           className,
@@ -102,16 +85,17 @@ function PaginationPrevTrigger({ className, children, ...props }: React.Componen
 }
 
 function PaginationNextTrigger({ className, children, ...props }: React.ComponentPropsWithoutRef<'button'>) {
-  const { currentPage, pageCount, onPageChange } = usePaginationContext()
+  const { isLastPage, getNextTriggerProps } = usePaginationContext()
 
-  if (pageCount !== undefined && currentPage === pageCount)
+  if (isLastPage)
     return null
 
+  const mergedProps = mergeProps(getNextTriggerProps(), props)
+
   return (
-    <li data-next>
+    <li>
       <button
-        onClick={() => onPageChange(currentPage + 1)}
-        {...props}
+        {...mergedProps}
         className={cx(
           'h-10 pl-2 ml-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
           className,
@@ -128,13 +112,10 @@ function PaginationNextTrigger({ className, children, ...props }: React.Componen
   )
 }
 
-export interface PaginationItemRenderProps {
-  'value': number
-  'isActive': boolean
-  'isLast': boolean
-  'className': string
-  'aria-label': string
-  'aria-current': 'page' | undefined
+export interface PaginationItemRenderProps extends React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
+  value: number
+  isActive: boolean
+  isLast: boolean
 }
 
 type PaginationItemProps = {
@@ -143,27 +124,23 @@ type PaginationItemProps = {
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
 
 function PaginationItem({ value, render, className, ...props }: PaginationItemProps) {
-  const { currentPage, pageCount, onPageChange } = usePaginationContext()
+  const { currentPage, pageCount, getItemProps } = usePaginationContext()
   const isActive = value === currentPage
   const isLast = pageCount !== undefined && value === pageCount
-  const ariaLabel = isLast ? `Last page, page ${value}` : `Page ${value}`
-  const ariaCurrent = isActive ? 'page' as const : undefined
   const mergedClassName = cx(
     'h-10 min-w-10 p-2 cursor-pointer w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white',
     className,
   )
 
+  const mergedProps = mergeProps(getItemProps(value), props)
+
   return (
-    <li data-page={value}>
+    <li>
       {render
-        ? render({ value, isActive, isLast, 'className': mergedClassName, 'aria-label': ariaLabel, 'aria-current': ariaCurrent })
+        ? render({ value, isActive, isLast, ...mergedProps, className: mergedClassName })
         : (
             <button
-              type="button"
-              onClick={() => onPageChange(value)}
-              aria-label={ariaLabel}
-              aria-current={ariaCurrent}
-              {...props}
+              {...mergedProps}
               className={mergedClassName}
             >
               {value}
@@ -174,10 +151,11 @@ function PaginationItem({ value, render, className, ...props }: PaginationItemPr
 }
 
 function PaginationEllipsis({ className, ...props }: React.ComponentPropsWithoutRef<'li'>) {
+  const { getEllipsisProps } = usePaginationContext()
+
   return (
     <li
-      data-ellipsis
-      aria-label="ellipsis indicating non-visible pages"
+      {...getEllipsisProps()}
       {...props}
     >
       <div className={cx('h-10 w-10 flex items-center justify-center', className)}>...</div>
@@ -205,58 +183,4 @@ export const Pagination = {
   Item: PaginationItem,
   Ellipsis: PaginationEllipsis,
   Pages: PaginationPages,
-}
-
-function getPages(currentPage: number, pageCount?: number): PageSlot[] {
-  // Unbounded: always overflow in slot 7, slot 4 = current for pages 4+
-  if (pageCount === undefined) {
-    const start = currentPage < 4 ? 1 : currentPage - 3
-    return [
-      ...Array.from({ length: 6 }, (_, i) => ({ type: 'page' as const, value: start + i })),
-      { type: 'ellipsis' as const },
-    ]
-  }
-
-  // Bounded with 7 or fewer pages: show all, no overflow
-  if (pageCount <= 7) {
-    return Array.from({ length: pageCount }, (_, i) => ({ type: 'page' as const, value: i + 1 }))
-  }
-
-  // Bounded with 8+ pages: 7 slots, overflow only in slot 2 and/or slot 6
-  // Near start: show pages 1–5, overflow in slot 6, last page in slot 7
-  if (currentPage <= 4) {
-    return [
-      { type: 'page', value: 1 },
-      { type: 'page', value: 2 },
-      { type: 'page', value: 3 },
-      { type: 'page', value: 4 },
-      { type: 'page', value: 5 },
-      { type: 'ellipsis' },
-      { type: 'page', value: pageCount },
-    ]
-  }
-
-  // Near end: page 1 in slot 1, overflow in slot 2, last 5 pages in slots 3–7
-  if (currentPage >= pageCount - 3) {
-    return [
-      { type: 'page', value: 1 },
-      { type: 'ellipsis' },
-      { type: 'page', value: pageCount - 4 },
-      { type: 'page', value: pageCount - 3 },
-      { type: 'page', value: pageCount - 2 },
-      { type: 'page', value: pageCount - 1 },
-      { type: 'page', value: pageCount },
-    ]
-  }
-
-  // Middle: page 1, overflow, current-1/current/current+1, overflow, last page
-  return [
-    { type: 'page', value: 1 },
-    { type: 'ellipsis' },
-    { type: 'page', value: currentPage - 1 },
-    { type: 'page', value: currentPage },
-    { type: 'page', value: currentPage + 1 },
-    { type: 'ellipsis' },
-    { type: 'page', value: pageCount },
-  ]
 }
