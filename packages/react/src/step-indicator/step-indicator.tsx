@@ -1,16 +1,54 @@
+import type { VariantProps } from 'cva'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
 
+// ============================================================================
+// Types
+// ============================================================================
+
+// export type StepIndicatorStatus = 'complete' | 'current' | 'incomplete'
+// export type StepIndicatorVariant = 'default' | 'centered' | 'noLabels'
+const stepSegmentIndicatorVariants = cva({
+  base: '[counter-increment:usa-step-indicator] border-t-8 pt-2 w-full',
+  variants: {
+    variant: {
+      default: 'pr-8',
+      centered: 'px-2',
+      noLabels: '',
+    },
+    counters: {
+      unset: null,
+      lg: 'relative @tablet:pt-6 @tablet:mt-4 @tablet:last:border-t-transparent',
+      sm: 'relative @tablet:pt-4 @tablet:mt-2 @tablet:last:border-t-transparent',
+    },
+    status: {
+      complete: 'border-t-blue-warm-80v',
+      current: 'border-t-blue-60v',
+      incomplete: 'border-t-gray-40',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    counters: 'unset',
+  },
+})
+
 export interface StepIndicatorStep {
   label: string
-  status: 'complete' | 'current' | 'incomplete'
 }
 
-interface StepIndicatorContextProps {
-  variant?: 'default' | 'centered' | 'counters' | 'countersSmall' | 'noLabels'
-  steps: StepIndicatorStep[]
+interface StepIndicatorComputedStep extends StepIndicatorStep {
+  status: VariantProps<typeof stepSegmentIndicatorVariants>['status']
+}
+
+interface StepIndicatorContextProps extends VariantProps<typeof stepSegmentIndicatorVariants> {
+  steps: StepIndicatorComputedStep[]
   currentStep: number
 }
+
+// ============================================================================
+// Context
+// ============================================================================
 
 const StepIndicatorContext = React.createContext<StepIndicatorContextProps | null>(null)
 
@@ -22,21 +60,26 @@ function useStepIndicatorContext() {
   return context
 }
 
-type StepIndicatorRootProps = React.HTMLAttributes<HTMLDivElement> & {
-  variant?: StepIndicatorContextProps['variant']
-  steps?: Omit<StepIndicatorStep, 'status'>[]
-  currentStep: number
-}
+// ============================================================================
+// Root
+// ============================================================================
 
-function StepIndicatorRoot({ variant, steps = [], currentStep, className, ...props }: StepIndicatorRootProps) {
+type StepIndicatorRootProps = React.HTMLAttributes<HTMLDivElement>
+  & VariantProps<typeof stepSegmentIndicatorVariants>
+  & {
+    steps?: StepIndicatorStep[]
+    currentStep: number
+  }
+
+function StepIndicatorRoot({ variant, counters, steps = [], currentStep, className, ...props }: StepIndicatorRootProps) {
   const activeIdx = currentStep - 1
   const computedSteps = steps.map((step, idx) => ({
-    label: step.label,
+    ...step,
     status: idx < activeIdx ? 'complete' : idx > activeIdx ? 'incomplete' : 'current',
-  })) satisfies StepIndicatorStep[]
+  })) satisfies StepIndicatorComputedStep[]
 
   return (
-    <StepIndicatorContext.Provider value={{ variant, steps: computedSteps, currentStep }}>
+    <StepIndicatorContext.Provider value={{ variant, counters, steps: computedSteps, currentStep }}>
       <div
         aria-label="Progress"
         {...props}
@@ -46,31 +89,60 @@ function StepIndicatorRoot({ variant, steps = [], currentStep, className, ...pro
   )
 }
 
+// ============================================================================
+// List
+// ============================================================================
+
 type StepIndicatorListProps = Omit<React.OlHTMLAttributes<HTMLOListElement>, 'children'> & {
-  children: ((context: StepIndicatorContextProps) => React.ReactNode) | React.ReactNode
+  children: ((context: { steps: StepIndicatorComputedStep[] }) => React.ReactNode) | React.ReactNode
 }
 
 function StepIndicatorList({ className, children, ...props }: StepIndicatorListProps) {
-  const context = useStepIndicatorContext()
+  const { steps } = useStepIndicatorContext()
   return (
     <ol
       {...props}
       className={cx('flex space-x-0.5 [counter-reset:usa-step-indicator]', className)}
     >
-      {typeof children === 'function' ? children(context) : children}
+      {typeof children === 'function' ? children({ steps }) : children}
     </ol>
   )
 }
 
+// ============================================================================
+// ListItem
+// ============================================================================
+
+type StepIndicatorListItemProps = React.HTMLAttributes<HTMLLIElement> & {
+  status?: VariantProps<typeof stepSegmentIndicatorVariants>['status']
+}
+
+function StepIndicatorListItem({ status = 'incomplete', className, ...props }: StepIndicatorListItemProps) {
+  const { variant, counters } = useStepIndicatorContext()
+
+  return (
+    <li
+      aria-current={status === 'current' ? 'step' : undefined}
+      {...props}
+      className={cx(
+        stepSegmentIndicatorVariants({ status, variant, counters }),
+        className,
+      )}
+    />
+  )
+}
+
+// ============================================================================
+// Segment
+// ============================================================================
+
 const stepSegmentLabelVariants = cva({
-  base: 'hidden @tablet:block leading-none',
+  base: 'hidden leading-none',
   variants: {
     variant: {
-      default: '',
-      centered: 'text-center',
-      counters: '',
-      countersSmall: '',
-      noLabels: '',
+      default: '@tablet:block',
+      centered: 'text-center @tablet:block',
+      noLabels: '@tablet:hidden',
     },
     status: {
       complete: 'text-blue-warm-80v',
@@ -78,89 +150,58 @@ const stepSegmentLabelVariants = cva({
       incomplete: 'text-gray-cool-60',
     },
   },
+  defaultVariants: {
+    variant: 'default',
+  },
 })
 
 const stepCounterVariant = cva({
   base: 'hidden @tablet:flex rounded-full items-center justify-center absolute outline-white outline-4 before:[content:counter(usa-step-indicator)] font-bold',
   variants: {
+    counters: {
+      unset: null,
+      lg: 'size-10 -top-6',
+      sm: 'size-6 -top-4',
+    },
     status: {
       complete: 'bg-blue-warm-80v text-white',
       current: 'bg-blue-60v text-white',
       incomplete: 'bg-white border-4 border-gray-40 text-gray-60',
     },
-    size: {
-      md: 'size-10 -top-6',
-      sm: 'size-6 -top-4',
-    },
+  },
+  defaultVariants: {
+    counters: 'unset',
   },
 })
 
-type StepIndicatorSegmentProps = React.LiHTMLAttributes<HTMLLIElement> & {
-  status: StepIndicatorStep['status']
+type StepIndicatorSegmentProps = React.HTMLAttributes<HTMLSpanElement> & {
+  status: VariantProps<typeof stepSegmentIndicatorVariants>['status']
 }
 
-function StepIndicatorSegment({ status, className, ...props }: StepIndicatorSegmentProps) {
-  const { variant } = useStepIndicatorContext()
+function StepIndicatorSegment({ status, className, children, ...props }: StepIndicatorSegmentProps) {
+  const { variant, counters } = useStepIndicatorContext()
   return (
     <>
-      {variant === 'counters' || variant === 'countersSmall'
-        ? (
-            <div className={stepCounterVariant({
-              size: variant === 'counters' ? 'md' : 'sm',
-              status,
-            })}
-            />
-          )
+      {counters
+        ? <div className={stepCounterVariant({ counters, status })} />
         : null}
-      <span className={cx(
-        stepSegmentLabelVariants({ status, variant }),
-        className,
-      )}
+      <span
+        {...props}
+        className={cx(
+          stepSegmentLabelVariants({ status, variant }),
+          className,
+        )}
       >
-        {props.children}
+        {children}
       </span>
       <span className="sr-only">{status}</span>
     </>
-
   )
 }
 
-const stepSegmentIndicatorVariants = cva({
-  base: '[counter-increment:usa-step-indicator] border-t-8 pr-8 pt-2 w-full',
-  variants: {
-    variant: {
-      default: '',
-      centered: '',
-      counters: 'relative @tablet:pt-6 @tablet:mt-4 @tablet:last:border-t-transparent',
-      countersSmall: 'relative',
-      noLabels: '',
-    },
-    status: {
-      complete: 'border-t-blue-warm-80v',
-      current: 'border-t-blue-60v',
-      incomplete: 'border-t-gray-40',
-    },
-  },
-})
-
-type StepIndicatorListItemProps = React.HTMLAttributes<HTMLLIElement> & {
-  status?: StepIndicatorStep['status']
-}
-
-function StepIndicatorListItem({ status = 'incomplete', className, ...props }: StepIndicatorListItemProps) {
-  const { variant } = useStepIndicatorContext()
-
-  return (
-    <li
-      aria-current={status === 'current' ? 'step' : undefined}
-      {...props}
-      className={cx(
-        stepSegmentIndicatorVariants({ status, variant }),
-        className,
-      )}
-    />
-  )
-}
+// ============================================================================
+// Label
+// ============================================================================
 
 type StepIndicatorLabelProps = React.HTMLAttributes<HTMLSpanElement>
 
@@ -176,6 +217,10 @@ function StepIndicatorLabel({ className, ...props }: StepIndicatorLabelProps) {
   )
 }
 
+// ============================================================================
+// Summary
+// ============================================================================
+
 type StepIndicatorSummaryProps = React.HTMLAttributes<HTMLDivElement>
 
 function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps) {
@@ -186,6 +231,10 @@ function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps
     />
   )
 }
+
+// ============================================================================
+// Counter
+// ============================================================================
 
 type StepIndicatorCounterProps = Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> & {
   children?: ((context: StepIndicatorContextProps) => React.ReactNode) | React.ReactNode
@@ -215,19 +264,26 @@ function StepIndicatorCounter({ className, children, ...props }: StepIndicatorCo
   )
 }
 
+// ============================================================================
+// Heading
+// ============================================================================
+
 type StepIndicatorHeadingProps = React.HTMLAttributes<HTMLSpanElement> & {
   label?: string
 }
 
 function StepIndicatorHeading({ label, className, ...props }: StepIndicatorHeadingProps) {
   const { steps, currentStep } = useStepIndicatorContext()
-
   const headingLabel = label || steps[currentStep - 1]?.label
 
   return (
     <span {...props} className={cx('font-bold pl-2 text-2xl', className)}>{headingLabel}</span>
   )
 }
+
+// ============================================================================
+// Segments (convenience)
+// ============================================================================
 
 function StepIndicatorSegments() {
   const { steps } = useStepIndicatorContext()
@@ -239,6 +295,10 @@ function StepIndicatorSegments() {
     </StepIndicatorListItem>
   ))
 }
+
+// ============================================================================
+// Export
+// ============================================================================
 
 export const StepIndicator = {
   Root: StepIndicatorRoot,

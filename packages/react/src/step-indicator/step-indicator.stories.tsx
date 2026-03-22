@@ -2,15 +2,21 @@ import preview from '../../.storybook/preview'
 import { StepIndicator } from './step-indicator'
 
 const meta = preview.meta({
-  tags: ['new'],
   title: 'Components/StepIndicator',
   component: StepIndicator.Root,
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'centered', 'counters', 'countersSmall', 'noLabels'],
+      options: ['centered', 'counters', 'countersSmall', 'noLabels'],
       table: {
-        defaultValue: { summary: 'default' },
+        defaultValue: undefined,
+      },
+    },
+    counters: {
+      control: 'select',
+      options: ['sm', 'lg'],
+      table: {
+        defaultValue: undefined,
       },
     },
   },
@@ -25,9 +31,9 @@ const steps = [
 ]
 
 export const Default = meta.story({
-  args: { variant: 'default', currentStep: 3 },
-  render: ({ variant, currentStep }) => (
-    <StepIndicator.Root variant={variant} steps={steps} currentStep={currentStep}>
+  args: { variant: undefined, counters: undefined, currentStep: 3 },
+  render: ({ variant, counters, currentStep }) => (
+    <StepIndicator.Root variant={variant} counters={counters} steps={steps} currentStep={currentStep}>
       <StepIndicator.List>
         {({ steps }) => steps.map(step => (
           <StepIndicator.ListItem key={step.label} status={step.status}>
@@ -61,7 +67,7 @@ export const Centered = meta.story({
 
 export const Counters = meta.story({
   render: () => (
-    <StepIndicator.Root variant="counters" steps={steps} currentStep={3}>
+    <StepIndicator.Root counters="lg" steps={steps} currentStep={3}>
       <StepIndicator.List>
         <StepIndicator.Segments />
       </StepIndicator.List>
@@ -75,7 +81,7 @@ export const Counters = meta.story({
 
 export const CountersSmall = meta.story({
   render: () => (
-    <StepIndicator.Root variant="countersSmall" steps={steps} currentStep={3}>
+    <StepIndicator.Root counters="sm" steps={steps} currentStep={3}>
       <StepIndicator.List>
         <StepIndicator.Segments />
       </StepIndicator.List>
