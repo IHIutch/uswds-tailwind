@@ -17,28 +17,32 @@ function useComboboxContext() {
   return context
 }
 
-function ComboboxRoot({ className, options, ...props }: React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>) {
-  const service = useMachine(combobox.machine, {
-    id: React.useId(),
-    options,
-  })
+const ComboboxRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>>(
+  ({ className, options, ...props }, forwardedRef) => {
+    const service = useMachine(combobox.machine, {
+      id: React.useId(),
+      options,
+    })
 
-  const api = combobox.connect(service, normalizeProps)
-  const mergedProps = mergeProps(api.getRootProps(), props)
+    const api = combobox.connect(service, normalizeProps)
+    const mergedProps = mergeProps(api.getRootProps(), props)
 
-  return (
-    <ComboboxContext.Provider value={{ api }}>
-      <div {...mergedProps} className={cx('relative mt-2', className)} />
-    </ComboboxContext.Provider>
-  )
-}
+    return (
+      <ComboboxContext.Provider value={{ api }}>
+        <div {...mergedProps} className={cx('relative mt-2', className)} ref={forwardedRef} />
+      </ComboboxContext.Provider>
+    )
+  },
+)
 
-function ComboboxLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getLabelProps(), props)
+const ComboboxLabel = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getLabelProps(), props)
 
-  return <label {...mergedProps} className={cx('block', className)} />
-}
+    return <label {...mergedProps} className={cx('block', className)} ref={forwardedRef} />
+  },
+)
 
 const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, forwardedRef) => {
@@ -53,82 +57,96 @@ export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListEl
   children?: React.ReactNode | (({ options }: { options: ComboboxContextProps['api']['filteredOptions'] }) => React.ReactNode)
 }
 
-function ComboboxList({ className, children, ...props }: ComboboxListProps) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getListProps(), props)
+const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getListProps(), props)
 
-  const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
+    const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
 
-  return (
-    <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)}>
-      {content}
-    </ul>
-  )
-}
+    return (
+      <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)} ref={forwardedRef}>
+        {content}
+      </ul>
+    )
+  },
+)
 
 export type ComboboxItemProps = React.LiHTMLAttributes<HTMLLIElement>
   & combobox.ComboboxOption
   & { index: number }
 
-function ComboboxItem({ value, label, index, children, ...props }: ComboboxItemProps) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getItemProps({ value, label }, index), props)
+const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
+  ({ value, label, index, children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getItemProps({ value, label }, index), props)
 
-  return (
-    <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)}>
-      {children}
-    </li>
-  )
-}
+    return (
+      <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)} ref={forwardedRef}>
+        {children}
+      </li>
+    )
+  },
+)
 
-function ComboboxEmptyItem({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getEmptyItemProps(), props)
+const ComboboxEmptyItem = React.forwardRef<HTMLLIElement, React.HTMLAttributes<HTMLLIElement>>(
+  ({ children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getEmptyItemProps(), props)
 
-  return (
-    <li {...mergedProps} className={cx('p-2 cursor-not-allowed hidden data-empty:block', mergedProps.className)}>
-      {children || 'No results found'}
-    </li>
-  )
-}
+    return (
+      <li {...mergedProps} className={cx('p-2 cursor-not-allowed hidden data-empty:block', mergedProps.className)} ref={forwardedRef}>
+        {children || 'No results found'}
+      </li>
+    )
+  },
+)
 
-function ComboboxIndicatorGroup({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div {...props} className={cx('absolute z-10 inset-y-0 right-0 flex', className)} />
-  )
-}
+const ComboboxIndicatorGroup = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <div {...props} className={cx('absolute z-10 inset-y-0 right-0 flex', className)} ref={forwardedRef} />
+    )
+  },
+)
 
-function ComboboxControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div {...props} className={cx('relative', className)} />
-  )
-}
+const ComboboxControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <div {...props} className={cx('relative', className)} ref={forwardedRef} />
+    )
+  },
+)
 
-function ComboboxClearButton({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getClearButtonProps(), props)
+const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getClearButtonProps(), props)
 
-  return (
-    <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)}>
-      {children || (
-        <div className="icon-[material-symbols--close] size-6"></div>
-      )}
-    </button>
-  )
-}
+    return (
+      <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
+        {children || (
+          <div className="icon-[material-symbols--close] size-6"></div>
+        )}
+      </button>
+    )
+  },
+)
 
-function ComboboxToggleButton({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getToggleButtonProps(), props)
+const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getToggleButtonProps(), props)
 
-  return (
-    <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)}>
-      {children || (
-        <div className="icon-[material-symbols--expand-more] size-8"></div>
-      )}
-    </button>
-  )
-}
+    return (
+      <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
+        {children || (
+          <div className="icon-[material-symbols--expand-more] size-8"></div>
+        )}
+      </button>
+    )
+  },
+)
 
 export const Combobox = {
   Root: ComboboxRoot,

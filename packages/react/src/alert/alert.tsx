@@ -96,53 +96,61 @@ function useAlertContext() {
   return context
 }
 
-function AlertRoot({ variant, slim, noIcon, className, ...props }: AlertRootProps) {
-  return (
-    <AlertContext.Provider value={{ variant, slim, noIcon }}>
-      <div {...props} className={alertVariants({ variant, slim, noIcon, className })} />
-    </AlertContext.Provider>
-  )
-}
+const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
+  ({ variant, slim, noIcon, className, ...props }, forwardedRef) => {
+    return (
+      <AlertContext.Provider value={{ variant, slim, noIcon }}>
+        <div {...props} className={alertVariants({ variant, slim, noIcon, className })} ref={forwardedRef} />
+      </AlertContext.Provider>
+    )
+  },
+)
 
-function AlertContent({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  const { slim, noIcon } = useAlertContext()
+const AlertContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    const { slim, noIcon } = useAlertContext()
+    return (
+      <div
+        {...props}
+        className={alertContentVariants({ slim, noIcon, className })}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
-  return (
-    <div
-      {...props}
-      className={alertContentVariants({ slim, noIcon, className })}
-    />
-  )
-}
+const AlertTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <div
+        {...props}
+        className={cx('text-2xl font-bold mb-2 leading-none', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
-function AlertTitle({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return (
-    <div
-      {...props}
-      className={cx(
-        'text-2xl font-bold mb-2 leading-none',
-        className,
-      )}
-    />
-  )
-}
+const AlertDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    return <div {...props} className={className} ref={forwardedRef} />
+  },
+)
 
-function AlertDescription({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return <div {...props} className={className} />
-}
-
-function AlertIndicator({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) {
-  const { variant, slim, noIcon } = useAlertContext()
-
-  return (
-    <div
-      {...props}
-      className={alertIndicatorVariants({ slim, className, noIcon })}
-    >
-      {children || <div className={alertIconVariants({ variant, slim })} />}
-    </div>
-  )
-}
+const AlertIndicator = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { variant, slim, noIcon } = useAlertContext()
+    return (
+      <div
+        {...props}
+        className={alertIndicatorVariants({ slim, className, noIcon })}
+        ref={forwardedRef}
+      >
+        {children || <div className={alertIconVariants({ variant, slim })} />}
+      </div>
+    )
+  },
+)
 
 export const Alert = {
   Root: AlertRoot,

@@ -71,5 +71,3 @@ export const Button = React.forwardRef<any, ButtonProps>(
     )
   },
 )
-
-Button.displayName = 'Button'

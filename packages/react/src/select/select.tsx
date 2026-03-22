@@ -28,23 +28,25 @@ export type SelectIconProps = React.HTMLAttributes<HTMLDivElement>
 // Components
 // ============================================================================
 
-function SelectRoot({ children, className, ...props }: SelectRootProps) {
-  const select = useSelect(props)
-
-  return (
-    <SelectContext.Provider value={select}>
-      <div
-        {...select.getRootProps()}
-        className={cx(
-          'relative flex items-center mt-2',
-          className,
-        )}
-      >
-        {children}
-      </div>
-    </SelectContext.Provider>
-  )
-}
+const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
+  ({ children, className, ...props }, forwardedRef) => {
+    const select = useSelect(props)
+    return (
+      <SelectContext.Provider value={select}>
+        <div
+          {...select.getRootProps()}
+          className={cx(
+            'relative flex items-center mt-2',
+            className,
+          )}
+          ref={forwardedRef}
+        >
+          {children}
+        </div>
+      </SelectContext.Provider>
+    )
+  },
+)
 
 const SelectField = React.forwardRef<any, SelectProps>(
   ({ className, ...props }, forwardedRef) => {

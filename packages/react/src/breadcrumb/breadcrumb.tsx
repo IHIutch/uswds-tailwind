@@ -39,100 +39,102 @@ function useBreadcrumbItemContext() {
   return context
 }
 
-function BreadcrumbRoot({ wrap = false, className, separator, previous, ...props }: BreadcrumbRootProps) {
-  return (
-    <BreadcrumbContext.Provider value={{
-      wrap,
-      separator,
-      previous,
-    }}
-    >
-      <nav {...props} className={cx('@container flex p-1 -mx-1', className)} />
-    </BreadcrumbContext.Provider>
-  )
-}
+const BreadcrumbRoot = React.forwardRef<HTMLElement, BreadcrumbRootProps>(
+  ({ wrap = false, className, separator, previous, ...props }, forwardedRef) => {
+    return (
+      <BreadcrumbContext.Provider value={{ wrap, separator, previous }}>
+        <nav {...props} className={cx('@container flex p-1 -mx-1', className)} ref={forwardedRef} />
+      </BreadcrumbContext.Provider>
+    )
+  },
+)
 
-function BreadcrumbList({ className, ...props }: BreadcrumbListProps) {
-  const { wrap } = useBreadcrumbContext()
-  return (
-    <ol
-      {...props}
-      className={
-        cx(
-          'list-none block',
-          wrap ? '' : '@mobile-lg:truncate',
-          className,
-        )
-      }
-      aria-label="Breadcrumb"
-    />
-  )
-}
-
-function BreadcrumbItem({ className, children, isCurrent, ...props }: BreadcrumbItemProps) {
-  const { wrap } = useBreadcrumbContext()
-
-  return (
-    <BreadcrumbItemContext.Provider value={{ isCurrent }}>
-      <li
+const BreadcrumbList = React.forwardRef<HTMLOListElement, BreadcrumbListProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { wrap } = useBreadcrumbContext()
+    return (
+      <ol
         {...props}
+        className={cx('list-none block', wrap ? '' : '@mobile-lg:truncate', className)}
+        aria-label="Breadcrumb"
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
+  ({ className, children, isCurrent, ...props }, forwardedRef) => {
+    const { wrap } = useBreadcrumbContext()
+    return (
+      <BreadcrumbItemContext.Provider value={{ isCurrent }}>
+        <li
+          {...props}
+          className={cx(
+            wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
+            '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
+            className,
+          )}
+          ref={forwardedRef}
+        >
+          {children}
+        </li>
+      </BreadcrumbItemContext.Provider>
+    )
+  },
+)
+
+const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { isCurrent } = useBreadcrumbItemContext()
+    const Component = isCurrent ? 'span' : 'a'
+    return (
+      <Component
+        {...props}
+        aria-current={isCurrent ? 'page' : undefined} // In USWDS, they place aria-current on the <li>, but per MDN and w3, it is shown on the link
         className={cx(
-          wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
-          '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
+          isCurrent ? '' : 'text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline',
           className,
         )}
+        ref={forwardedRef}
       >
         {children}
-      </li>
-    </BreadcrumbItemContext.Provider>
-  )
-}
+      </Component>
+    )
+  },
+)
 
-function BreadcrumbLink({ className, children, ...props }: BreadcrumbLinkProps) {
-  const { isCurrent } = useBreadcrumbItemContext()
-  const Component = isCurrent ? 'span' : 'a'
+const BreadcrumbSeparator = React.forwardRef<HTMLSpanElement, BreadcrumbSeparatorProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    return (
+      <span
+        aria-hidden="true"
+        className="hidden @mobile-lg:inline"
+        {...props}
+        ref={forwardedRef}
+      >
+        {children || (
+          <span className="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        )}
+      </span>
+    )
+  },
+)
 
-  return (
-    <Component
-      {...props}
-      aria-current={isCurrent ? 'page' : undefined} // In USWDS, they place aria-current on the <li>, but per MDN and w3, it is shown on the link
-      // aria-disabled={isCurrent ? 'true' : undefined} // This is suggested by React Aria, but not in the USWDS spec
-      // role={isCurrent ? 'link' : undefined}
-      className={cx(
-        isCurrent ? '' : 'text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline',
-        className,
-      )}
-    >
-      {children}
-    </Component>
-  )
-}
-
-function BreadcrumbSeparator({ className, children, ...props }: BreadcrumbSeparatorProps) {
-  return (
-    <span
-      aria-hidden="true"
-      className="hidden @mobile-lg:inline"
-      {...props}
-    >
-      {children || (
-        <span className="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
-      )}
-    </span>
-  )
-}
-
-function BreadcrumbPrevious({ className, children, ...props }: BreadcrumbPreviousProps) {
-  return (
-    <span
-      aria-hidden="true"
-      className="@mobile-lg:hidden"
-      {...props}
-    >
-      {children || <span className="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>}
-    </span>
-  )
-}
+const BreadcrumbPrevious = React.forwardRef<HTMLSpanElement, BreadcrumbPreviousProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    return (
+      <span
+        aria-hidden="true"
+        className="@mobile-lg:hidden"
+        {...props}
+        ref={forwardedRef}
+      >
+        {children || <span className="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>}
+      </span>
+    )
+  },
+)
 
 export const Breadcrumb = {
   Root: BreadcrumbRoot,
