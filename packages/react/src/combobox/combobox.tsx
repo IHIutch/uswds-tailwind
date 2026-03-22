@@ -12,7 +12,7 @@ const ComboboxContext = React.createContext<ComboboxContextProps | null>(null)
 function useComboboxContext() {
   const context = React.useContext(ComboboxContext)
   if (!context) {
-    throw new Error('Combobox components must be used within a ComboboxRoot')
+    throw new Error('Combobox components must be used within a Combobox.Root')
   }
   return context
 }
@@ -50,7 +50,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttribut
 )
 
 export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'children'> {
-  children?: React.ReactNode | (({ options}: { options: ComboboxContextProps['api']['filteredOptions'] }) => React.ReactNode)
+  children?: React.ReactNode | (({ options }: { options: ComboboxContextProps['api']['filteredOptions'] }) => React.ReactNode)
 }
 
 function ComboboxList({ className, children, ...props }: ComboboxListProps) {

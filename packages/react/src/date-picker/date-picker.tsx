@@ -14,7 +14,7 @@ const DatePickerContext = React.createContext<DatePickerContextProps | null>(nul
 function useDatePickerContext(): DatePickerContextProps {
   const context = React.useContext(DatePickerContext)
   if (!context) {
-    throw new Error('useDatePicker must be used within a DatePickerProvider')
+    throw new Error('DatePicker components must be used within a DatePicker.Root')
   }
   return context
 }
@@ -181,7 +181,7 @@ const DatePickerViewContext = React.createContext<{
 function useDatePickerViewContext() {
   const context = React.useContext(DatePickerViewContext)
   if (!context) {
-    throw new Error('useDatePickerViewContext must be used within a DatePickerViewProvider')
+    throw new Error('DatePickerView components must be used within a DatePicker.View')
   }
   return context
 }

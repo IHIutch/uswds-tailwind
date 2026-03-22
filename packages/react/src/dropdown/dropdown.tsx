@@ -20,7 +20,7 @@ const DropdownContext = React.createContext<DropdownContextProps | null>(null)
 function useDropdownContext() {
   const context = React.useContext(DropdownContext)
   if (!context) {
-    throw new Error('Dropdown components must be used within a DropdownRoot')
+    throw new Error('Dropdown components must be used within a Dropdown.Root')
   }
   return context
 }

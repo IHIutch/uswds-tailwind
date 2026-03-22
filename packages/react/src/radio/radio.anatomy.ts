@@ -1,9 +1,9 @@
 import { createAnatomy } from '@zag-js/anatomy'
 
-export const fieldAnatomy = createAnatomy('field').parts(
+export const radioAnatomy = createAnatomy('radio').parts(
   'root',
   'input',
   'label',
   'control',
 )
-export const parts = fieldAnatomy.build()
+export const parts = radioAnatomy.build()

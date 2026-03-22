@@ -31,7 +31,7 @@ const AccordionItemContext = React.createContext<AccordionItemContextProps | nul
 function useAccordionContext() {
   const context = React.useContext(AccordionContext)
   if (!context) {
-    throw new Error('Accordion components must be used within an AccordionRoot')
+    throw new Error('Accordion components must be used within an Accordion.Root')
   }
   return context
 }
@@ -41,7 +41,7 @@ function useAccordionItemContext() {
   const context = React.useContext(AccordionItemContext)
 
   if (!context) {
-    throw new Error('AccordionItem components must be used within an AccordionItem')
+    throw new Error('AccordionItem components must be used within an Accordion.Item')
   }
   return {
     value: context.value,

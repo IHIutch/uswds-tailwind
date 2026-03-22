@@ -98,5 +98,3 @@ export const ButtonGroup = {
   Root: ButtonGroupRoot,
   Button: ButtonGroupButton,
 }
-
-export default ButtonGroup

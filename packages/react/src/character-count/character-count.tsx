@@ -19,7 +19,7 @@ const CharacterCountContext = React.createContext<CharacterCountContextProps | n
 function useCharacterCountContext() {
   const context = React.useContext(CharacterCountContext)
   if (!context) {
-    throw new Error('CharacterCount components must be used within a CharacterCountRoot')
+    throw new Error('CharacterCount components must be used within a CharacterCount.Root')
   }
   return context
 }

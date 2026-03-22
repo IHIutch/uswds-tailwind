@@ -1,9 +1,9 @@
 import { createAnatomy } from '@zag-js/anatomy'
 
-export const fieldAnatomy = createAnatomy('field').parts(
+export const fieldsetAnatomy = createAnatomy('fieldset').parts(
   'root',
   'errorText',
   'description',
   'legend',
 )
-export const parts = fieldAnatomy.build()
+export const parts = fieldsetAnatomy.build()

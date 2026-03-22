@@ -91,7 +91,7 @@ const AlertContext = React.createContext<AlertContextProps | null>(null)
 function useAlertContext() {
   const context = React.useContext(AlertContext)
   if (!context) {
-    throw new Error('Alert components must be used within a Alert.Root')
+    throw new Error('Alert components must be used within an Alert.Root')
   }
   return context
 }

@@ -26,7 +26,7 @@ const BreadcrumbItemContext = React.createContext<BreadcrumbItemContextProps | n
 function useBreadcrumbContext() {
   const context = React.useContext(BreadcrumbContext)
   if (!context) {
-    throw new Error('Breadcrumb components must be used within a BreadcrumbRoot')
+    throw new Error('Breadcrumb components must be used within a Breadcrumb.Root')
   }
   return context
 }
@@ -34,7 +34,7 @@ function useBreadcrumbContext() {
 function useBreadcrumbItemContext() {
   const context = React.useContext(BreadcrumbItemContext)
   if (!context) {
-    throw new Error('Breadcrumb components must be used within a BreadcrumbRoot')
+    throw new Error('Breadcrumb components must be used within a Breadcrumb.Root')
   }
   return context
 }
