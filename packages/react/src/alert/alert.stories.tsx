@@ -1,4 +1,5 @@
 import preview from '../../.storybook/preview'
+import { cx } from '../cva.config'
 import { Alert } from './alert'
 
 const meta = preview.meta({
@@ -7,7 +8,7 @@ const meta = preview.meta({
   argTypes: {
     variant: {
       control: 'select',
-      options: ['info', 'warning', 'success', 'error'],
+      options: ['info', 'warning', 'success', 'error', 'emergency'],
       table: {
         defaultValue: {
           summary: 'info',
@@ -110,7 +111,24 @@ export const Error = meta.story({
   ),
 })
 
-const variants = ['info', 'warning', 'success', 'error'] as const
+export const Emergency = meta.story({
+  render: () => (
+    <Alert.Root variant="emergency">
+      <Alert.Content>
+        <Alert.Indicator />
+        <Alert.Title>Emergency alert message</Alert.Title>
+        <Alert.Description>
+          Additional context and followup information including
+          {' '}
+          <a href="#" className="text-gray-10 underline">a link</a>
+          .
+        </Alert.Description>
+      </Alert.Content>
+    </Alert.Root>
+  ),
+})
+
+const variants = ['info', 'warning', 'success', 'error', 'emergency'] as const
 
 export const Slim = meta.story({
   render: () => (
@@ -122,7 +140,14 @@ export const Slim = meta.story({
             <Alert.Description>
               Lorem ipsum dolor sit amet,
               {' '}
-              <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+              <a
+                href="#"
+                className={cx('underline', variant === 'emergency'
+                  ? 'text-gray-10'
+                  : 'text-blue-60v')}
+              >
+                consectetur adipiscing
+              </a>
               {' '}
               elit, sed do eiusmod.
             </Alert.Description>
@@ -142,7 +167,14 @@ export const NoIcon = meta.story({
             <Alert.Description>
               Lorem ipsum dolor sit amet,
               {' '}
-              <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+              <a
+                href="#"
+                className={cx('underline', variant === 'emergency'
+                  ? 'text-gray-10'
+                  : 'text-blue-60v')}
+              >
+                consectetur adipiscing
+              </a>
               {' '}
               elit, sed do eiusmod.
             </Alert.Description>
@@ -162,7 +194,14 @@ export const SlimNoIcon = meta.story({
             <Alert.Description>
               Lorem ipsum dolor sit amet,
               {' '}
-              <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+              <a
+                href="#"
+                className={cx('underline', variant === 'emergency'
+                  ? 'text-gray-10'
+                  : 'text-blue-60v')}
+              >
+                consectetur adipiscing
+              </a>
               {' '}
               elit, sed do eiusmod.
             </Alert.Description>

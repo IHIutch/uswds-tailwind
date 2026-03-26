@@ -9,6 +9,7 @@ export const alertVariants = cva({
       warning: 'bg-yellow-5 border-l-8 border-l-gold-20v',
       success: 'bg-green-cool-5 border-l-8 border-l-green-cool-40v',
       error: 'bg-red-warm-10 border-l-8 border-l-red-warm-50v',
+      emergency: 'bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white',
     },
     slim: {
       true: null,
@@ -71,6 +72,7 @@ const alertIconVariants = cva({
       warning: 'icon-[material-symbols--warning]',
       success: 'icon-[material-symbols--check-circle]',
       error: 'icon-[material-symbols--error]',
+      emergency: 'icon-[material-symbols--info]',
     },
     slim: {
       true: 'size-6',
