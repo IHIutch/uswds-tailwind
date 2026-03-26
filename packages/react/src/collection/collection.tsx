@@ -1,0 +1,133 @@
+import * as React from 'react'
+import { cx } from '../cva.config'
+
+type CollectionRootProps = React.HTMLAttributes<HTMLDivElement>
+
+function CollectionRoot({ className, ...props }: CollectionRootProps) {
+  return <div {...props} className={cx('', className)} />
+}
+
+type CollectionListProps = React.HTMLAttributes<HTMLUListElement>
+
+function CollectionList({ className, ...props }: CollectionListProps) {
+  return <ul {...props} className={cx('divide-y *:py-4 *:first:pt-0 *:last:pb-0', className)} />
+}
+
+type CollectionItemProps = React.HTMLAttributes<HTMLLIElement> & {
+  startElement?: React.ReactNode
+}
+
+function CollectionItem({ className, children, startElement, ...props }: CollectionItemProps) {
+  return (
+    <li
+      {...props}
+      className={cx('flex gap-4', className)}
+    >
+      {startElement ?? null}
+      <div>{children}</div>
+    </li>
+  )
+}
+
+type CollectionHeadingProps = React.HTMLAttributes<HTMLDivElement>
+
+function CollectionHeading({ className, ...props }: CollectionHeadingProps) {
+  return <div {...props} className={cx('text-lg font-bold', className)} />
+}
+
+type CollectionDescriptionProps = React.HTMLAttributes<HTMLDivElement>
+
+function CollectionDescription({ className, ...props }: CollectionDescriptionProps) {
+  return <div {...props} className={cx('mt-1', className)} />
+}
+
+type CollectionMetaListProps = React.HTMLAttributes<HTMLUListElement>
+
+function CollectionMetaList({ className, ...props }: CollectionMetaListProps) {
+  return <ul {...props} className={cx('mt-2 flex flex-col gap-1', className)} />
+}
+
+type CollectionMetadataProps = React.HTMLAttributes<HTMLLIElement>
+
+function CollectionMetaListItem({ className, ...props }: CollectionMetadataProps) {
+  return <li {...props} className={cx('text-sm leading-tight', className)} />
+}
+
+export interface CollectionCalendarContextProps {
+  dateTime: Date
+}
+
+const CollectionCalendarContext = React.createContext<CollectionCalendarContextProps | null>(null)
+
+export function useCollectionCalendarContext() {
+  const context = React.useContext(CollectionCalendarContext)
+  if (!context) {
+    throw new Error('CollectionCalendar components must be used within a CollectionCalendar')
+  }
+  return context
+}
+
+type CollectionCalendarProps = Omit<React.TimeHTMLAttributes<HTMLTimeElement>, 'dateTime'>
+  & CollectionCalendarContextProps
+
+function CollectionCalendar({ className, dateTime, ...props }: CollectionCalendarProps) {
+  return (
+    <CollectionCalendarContext.Provider
+      value={{
+        dateTime,
+      }}
+    >
+      {/* Since this component only displays month/date, choose to format dateTime without time */}
+      <time {...props} dateTime={dateTime.toISOString().split('T')[0]} className={cx('text-lg w-20 shrink-0', className)} />
+    </CollectionCalendarContext.Provider>
+  )
+}
+
+type CollectionCalendarDateProps = React.HTMLAttributes<HTMLSpanElement>
+
+function CollectionCalendarDate({ className, children, ...props }: CollectionCalendarDateProps) {
+  const { dateTime } = useCollectionCalendarContext()
+  return (
+    <div {...props} className={cx('font-bold border text-blue-60v border-blue-60v flex items-center justify-center p-2 rounded-b-xs', className)}>
+      {children || dateTime.toLocaleString(undefined, { day: 'numeric' })}
+    </div>
+  )
+}
+
+type CollectionCalendarMonthProps = React.HTMLAttributes<HTMLSpanElement>
+
+function CollectionCalendarMonth({ className, children, ...props }: CollectionCalendarMonthProps) {
+  const { dateTime } = useCollectionCalendarContext()
+  return (
+    <div {...props} className={cx('text-white font-bold bg-blue-60v flex items-center justify-center p-2 rounded-t-xs', className)}>
+      {children || dateTime.toLocaleString(undefined, { month: 'short' })}
+    </div>
+  )
+}
+
+type CollectionThumbnailProps = React.HTMLAttributes<HTMLDivElement>
+
+function CollectionThumbnail({ className, ...props }: CollectionThumbnailProps) {
+  return <div {...props} className={cx('w-20 shrink-0', className)} />
+}
+
+// type CollectionThumbnailImageProps = React.ImgHTMLAttributes<HTMLImageElement>
+
+// function CollectionThumbnailImage({ className, ...props }: CollectionThumbnailImageProps) {
+//   return <img {...props} className={cx('w-full h-auto object-cover', className)} />
+// }
+
+export const Collection = {
+  Root: CollectionRoot,
+  List: CollectionList,
+  Item: CollectionItem,
+  Heading: CollectionHeading,
+  Description: CollectionDescription,
+  MetaList: CollectionMetaList,
+  MetaListItem: CollectionMetaListItem,
+  Calendar: CollectionCalendar,
+  CalendarDate: CollectionCalendarDate,
+  CalendarMonth: CollectionCalendarMonth,
+  Thumbnail: CollectionThumbnail,
+  // ThumbnailImage: CollectionThumbnailImage,
+}
