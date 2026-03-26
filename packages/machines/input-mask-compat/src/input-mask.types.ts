@@ -29,10 +29,9 @@ export interface InputMaskSchema {
   props: Partial<InputMaskProps>
   context: {
     value: string
-    dynamicPlaceholder: string
   }
   state: 'idle'
-  action: 'setValue' | 'updatePlaceholder'
+  action: 'setValue'
   event: EventObject & {
     type: 'INPUT'
     value: string
@@ -44,8 +43,8 @@ export type InputMaskMachine = Machine<InputMaskSchema>
 
 export interface InputMaskApi<T extends PropTypes = PropTypes> {
   getRootProps: () => T['element']
+  getLabelProps: () => T['label']
+  getDescriptionProps: () => T['element']
   getInputProps: () => T['input']
-  getPlaceholderProps: () => T['element']
   getValue: () => string
-  getDynamicPlaceholder: () => string
 }

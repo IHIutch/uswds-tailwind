@@ -12,18 +12,16 @@ export const machine = createMachine<InputMaskSchema>({
     return 'idle'
   },
 
-  context({ bindable, prop }) {
-    const placeholder = prop('placeholder') || ''
+  context({ bindable }) {
     return {
       value: bindable(() => ({ defaultValue: '' })),
-      dynamicPlaceholder: bindable(() => ({ defaultValue: placeholder })),
     }
   },
 
   states: {
     idle: {
       on: {
-        INPUT: { actions: ['setValue', 'updatePlaceholder'] },
+        INPUT: { actions: ['setValue'] },
       },
     },
   },
@@ -32,11 +30,6 @@ export const machine = createMachine<InputMaskSchema>({
     actions: {
       setValue({ context, event }) {
         context.set('value', event.value)
-      },
-      updatePlaceholder({ context, prop }) {
-        const placeholder = prop('placeholder') || ''
-        const value = context.get('value')
-        context.set('dynamicPlaceholder', placeholder.slice(value.length))
       },
     },
   },

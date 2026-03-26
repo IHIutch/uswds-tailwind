@@ -19,6 +19,21 @@ export function connect<T extends PropTypes>(
       })
     },
 
+    getLabelProps() {
+      return normalize.label({
+        ...parts.label.attrs,
+        id: dom.getLabelId(scope),
+        htmlFor: dom.getInputId(scope),
+      })
+    },
+
+    getDescriptionProps() {
+      return normalize.element({
+        ...parts.description.attrs,
+        id: dom.getDescriptionId(scope),
+      })
+    },
+
     getInputProps() {
       const placeholder = prop('placeholder')
       const charset = prop('charset')
@@ -26,10 +41,11 @@ export function connect<T extends PropTypes>(
 
       return normalize.input({
         ...parts.input.attrs,
-        id: dom.getInputId(scope),
-        value: context.get('value'),
+        'id': dom.getInputId(scope),
+        'value': context.get('value'),
         maxLength,
-        placeholder: '',
+        'placeholder': '',
+        'aria-describedby': dom.getDescriptionId(scope),
         onKeyUp(event) {
           const inputElement = event.currentTarget as HTMLInputElement
           const currentValue = inputElement.value
@@ -52,18 +68,6 @@ export function connect<T extends PropTypes>(
 
     getValue() {
       return context.get('value')
-    },
-
-    getDynamicPlaceholder() {
-      return context.get('dynamicPlaceholder')
-    },
-
-    getPlaceholderProps() {
-      return normalize.element({
-        ...parts.placeholder.attrs,
-        id: `${dom.getRootId(scope)}-placeholder`,
-        children: context.get('dynamicPlaceholder'),
-      })
     },
   }
 }
