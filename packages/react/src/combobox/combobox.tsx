@@ -18,10 +18,10 @@ function useComboboxContext() {
 }
 
 const ComboboxRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>>(
-  ({ className, options, ...props }, forwardedRef) => {
+  ({ className, ...props }, forwardedRef) => {
     const service = useMachine(combobox.machine, {
       id: React.useId(),
-      options,
+      ...props,
     })
 
     const api = combobox.connect(service, normalizeProps)

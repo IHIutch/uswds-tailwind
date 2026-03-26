@@ -62,6 +62,11 @@ export interface ComboboxProps extends CommonProperties {
    * @default false
    */
   disableFiltering?: boolean
+  /**
+   * Custom function to find the best matching option index when filtering is disabled.
+   * Receives the input value and options array, returns the index of the best match (-1 if none).
+   */
+  customFilter?: (inputValue: string, options: ComboboxOption[]) => number
 }
 
 export interface ComboboxSchema {

@@ -141,27 +141,40 @@ export const machine = createMachine<ComboboxSchema>({
         context.set('activeIndex', -1)
       },
 
-      filterOptions({ context, prop }) {
+      filterOptions({ context, prop, scope }) {
         const inputValue = context.get('inputValue').toLowerCase()
         const options = prop('options') || []
         const disableFiltering = prop('disableFiltering')
+        const customFilter = prop('customFilter')
         const isDirty = context.get('isDirty')
         const value = context.get('value')
 
-        // Helper to find best matching index
-        const findMatchingIndex = (): number => {
-          if (!inputValue)
-            return options.length > 0 ? 0 : -1
-          const idx = options.findIndex(o =>
-            o.label.toLowerCase().includes(inputValue) || o.value.toLowerCase().includes(inputValue),
+        // Normalize filter: customFilter or default startsWith/contains
+        const defaultFilter = (query: string, opts: ComboboxOption[]): number => {
+          if (!query)
+            return opts.length > 0 ? 0 : -1
+          const idx = opts.findIndex(o =>
+            o.label.toLowerCase().includes(query) || o.value.toLowerCase().includes(query),
           )
           return idx >= 0 ? idx : -1
         }
 
-        // When filtering is disabled, show all options
+        const handleFilter = customFilter ?? defaultFilter
+
+        // When filtering is disabled, show all options and scroll to match
         if (disableFiltering) {
+          const matchIndex = handleFilter(inputValue, options)
           context.set('filteredOptions', options)
-          context.set('activeIndex', findMatchingIndex())
+          context.set('activeIndex', matchIndex)
+
+          if (matchIndex >= 0) {
+            raf(() => {
+              const option = options[matchIndex]
+              if (option) {
+                dom.getItemEl(scope, option.value)?.scrollIntoView({ block: 'nearest' })
+              }
+            })
+          }
           return
         }
 
@@ -175,24 +188,10 @@ export const machine = createMachine<ComboboxSchema>({
           return
         }
 
-        // Filter options: prioritize "starts with" over "contains"
-        const startsWith: ComboboxOption[] = []
-        const contains: ComboboxOption[] = []
-
-        for (const option of options) {
-          const labelLower = option.label.toLowerCase()
-          const valueLower = option.value.toLowerCase()
-
-          if (labelLower.startsWith(inputValue) || valueLower.startsWith(inputValue)) {
-            startsWith.push(option)
-          }
-          else if (labelLower.includes(inputValue) || valueLower.includes(inputValue)) {
-            contains.push(option)
-          }
-        }
-
-        context.set('filteredOptions', [...startsWith, ...contains])
-        context.set('activeIndex', -1)
+        // Filter options: keep those that match, set first as active
+        const filtered = options.filter(o => handleFilter(inputValue, [o]) >= 0)
+        context.set('filteredOptions', filtered)
+        context.set('activeIndex', filtered.length > 0 ? 0 : -1)
       },
       selectOption({ context, event, prop, send, scope }) {
         if (!('option' in event))
