@@ -34,6 +34,8 @@ export function connect<T extends PropTypes>(
         'hidden': !open,
         'tabIndex': -1,
         'aria-modal': true,
+        'aria-labelledby': dom.getTitleId(scope),
+        'aria-describedby': dom.getDescriptionId(scope),
         'data-state': open ? 'open' : 'closed',
       })
     },
@@ -52,6 +54,18 @@ export function connect<T extends PropTypes>(
         'id': dom.getBackdropId(scope),
         'hidden': !open,
         'data-state': open ? 'open' : 'closed',
+      })
+    },
+    getTitleProps() {
+      return normalize.element({
+        ...parts.title.attrs,
+        id: dom.getTitleId(scope),
+      })
+    },
+    getDescriptionProps() {
+      return normalize.element({
+        ...parts.description.attrs,
+        id: dom.getDescriptionId(scope),
       })
     },
     getCloseTriggerProps() {

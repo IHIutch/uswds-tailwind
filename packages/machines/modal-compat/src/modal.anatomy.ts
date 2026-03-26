@@ -5,6 +5,8 @@ export const anatomy = createAnatomy('dialog').parts(
   'backdrop',
   'positioner',
   'content',
+  'title',
+  'description',
   'closeTrigger',
 )
 

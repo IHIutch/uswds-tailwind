@@ -832,6 +832,12 @@ importers:
       '@uswds-tailwind/dropdown-compat':
         specifier: workspace:*
         version: link:../machines/dropdown-compat
+      '@uswds-tailwind/input-mask-compat':
+        specifier: workspace:*
+        version: link:../machines/input-mask-compat
+      '@uswds-tailwind/modal-compat':
+        specifier: workspace:*
+        version: link:../machines/modal-compat
       '@uswds-tailwind/theme':
         specifier: workspace:*
         version: link:../theme

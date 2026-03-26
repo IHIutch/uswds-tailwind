@@ -4,6 +4,8 @@ export const getPositionerId = (ctx: Scope) => `modal:${ctx.id}:positioner`
 export const getBackdropId = (ctx: Scope) => `modal:${ctx.id}:backdrop`
 export const getContentId = (ctx: Scope) => `modal:${ctx.id}:content`
 export const getTriggerId = (ctx: Scope) => `modal:${ctx.id}:trigger`
+export const getTitleId = (ctx: Scope) => `modal:${ctx.id}:title`
+export const getDescriptionId = (ctx: Scope) => `modal:${ctx.id}:description`
 export const getCloseTriggerId = (ctx: Scope) => `modal:${ctx.id}:close`
 
 export const getContentEl = (ctx: Scope) => ctx.getById(getContentId(ctx))

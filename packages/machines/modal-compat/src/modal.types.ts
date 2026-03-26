@@ -56,9 +56,11 @@ export interface ModalApi<T extends PropTypes = PropTypes> {
    */
   open: boolean
 
-  getTriggerProps: (element: HTMLButtonElement | HTMLAnchorElement) => T['button']
+  getTriggerProps: (element?: HTMLButtonElement | HTMLAnchorElement) => T['button']
   getBackdropProps: () => T['element']
   getPositionerProps: () => T['element']
   getContentProps: () => T['element']
-  getCloseTriggerProps: (element: HTMLButtonElement | HTMLAnchorElement) => T['button']
+  getTitleProps: () => T['element']
+  getDescriptionProps: () => T['element']
+  getCloseTriggerProps: (element?: HTMLButtonElement | HTMLAnchorElement) => T['button']
 }
