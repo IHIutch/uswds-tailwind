@@ -9,15 +9,23 @@
 }
 
 @custom-variant thumb {
-  &::-webkit-slider-runnable-track,
-  &::-moz-range-track,
-  &::-ms-track {
+  &::-webkit-slider-thumb {
+    @slot;
+  }
+  &::-moz-range-thumb {
+    @slot;
+  }
+  &::-ms-thumb {
     @slot;
   }
 }
 @custom-variant track {
-  &::-webkit-slider-runnable-track
-  &::-moz-range-track,
+  &::-webkit-slider-runnable-track {
+    @slot;
+  }
+  &::-moz-range-track {
+    @slot;
+  }
   &::-ms-track {
     @slot;
   }
