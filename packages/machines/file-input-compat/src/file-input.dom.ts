@@ -1,4 +1,5 @@
 import type { Scope } from '@zag-js/core'
+// import { hash } from '@zag-js/utils'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `fileInput:${ctx.id}`
 export const getDropzoneId = (ctx: Scope) => ctx.ids?.dropzone ?? `fileInput:${ctx.id}:dropzone`
@@ -7,10 +8,11 @@ export const getLabelId = (ctx: Scope) => ctx.ids?.label ?? `fileInput:${ctx.id}
 export const getErrorMessageId = (ctx: Scope) => ctx.ids?.errorMessage ?? `fileInput:${ctx.id}:error-message`
 export const getInstructionsId = (ctx: Scope) => ctx.ids?.instructions ?? `fileInput:${ctx.id}:instructions`
 export const getSrStatusId = (ctx: Scope) => ctx.ids?.srStatus ?? `fileInput:${ctx.id}:sr-status`
-export const getPreviewHeaderId = (ctx: Scope) => ctx.ids?.previewHeader ?? `fileInput:${ctx.id}:preview-header`
+export const getPreviewTitleId = (ctx: Scope) => ctx.ids?.previewTitle ?? `fileInput:${ctx.id}:preview-header`
 export const getPreviewListId = (ctx: Scope) => ctx.ids?.previewList ?? `fileInput:${ctx.id}:preview-list`
 export const getPreviewItemId = (ctx: Scope, value: string) => `fileInput:${ctx.id}:preview-item:${value}`
 export const getPreviewItemIconId = (ctx: Scope, value: string) => `fileInput:${ctx.id}:preview-item-icon:${value}`
+export const getPreviewItemThumbId = (ctx: Scope, value: string) => `fileInput:${ctx.id}:preview-item-thumb:${value}`
 export const getPreviewItemContentId = (ctx: Scope, value: string) => `fileInput:${ctx.id}:preview-item-content:${value}`
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
@@ -20,8 +22,11 @@ export const getInputEl = (ctx: Scope) => ctx.getById<HTMLInputElement>(getInput
 export const getErrorMessageEl = (ctx: Scope) => ctx.getById(getErrorMessageId(ctx))
 export const getInstructionsEl = (ctx: Scope) => ctx.getById(getInstructionsId(ctx))
 export const getSrStatusEl = (ctx: Scope) => ctx.getById(getSrStatusId(ctx))
-export const getPreviewHeaderEl = (ctx: Scope) => ctx.getById(getPreviewHeaderId(ctx))
+export const getPreviewTitleEl = (ctx: Scope) => ctx.getById(getPreviewTitleId(ctx))
 export const getPreviewListEl = (ctx: Scope) => ctx.getById(getPreviewListId(ctx))
 export const getPreviewItemEl = (ctx: Scope, value: string) => ctx.getById(getPreviewItemId(ctx, value))
 export const getPreviewItemIconEl = (ctx: Scope, value: string) => ctx.getById(getPreviewItemIconId(ctx, value))
 export const getPreviewItemContentEl = (ctx: Scope, value: string) => ctx.getById(getPreviewItemContentId(ctx, value))
+
+// export const getFileId = (file: File) => hash(`${file.name}-${file.size}`)
+export const getFileId = (file: File) => `${file.name}-${file.size}`

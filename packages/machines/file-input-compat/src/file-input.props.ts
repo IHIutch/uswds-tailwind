@@ -4,8 +4,10 @@ import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<FileInputProps>()([
   'id',
+  'ids',
   'getRootNode',
   'accept',
+  'multiple',
   'disabled',
   'srStatusText',
   'errorMessage',

@@ -8,10 +8,11 @@ export const anatomy = createAnatomy('file-input').parts(
   'errorMessage',
   'instructions',
   'srStatus',
-  'previewHeader',
+  'previewTitle',
   'previewList',
   'previewItem',
   'previewItemIcon',
+  'previewItemThumb',
   'previewItemContent',
 )
 

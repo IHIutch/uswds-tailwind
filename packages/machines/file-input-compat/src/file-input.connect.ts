@@ -4,6 +4,7 @@ import type { FileInputApi, FileInputSchema } from './file-input.types'
 import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
+import { getFileType } from './file-input.utils'
 
 export function connect<T extends PropTypes>(
   service: Service<FileInputSchema>,
@@ -47,12 +48,12 @@ export function connect<T extends PropTypes>(
         'data-invalid': dataAttr(isInvalid),
         'data-valid': dataAttr(isValid),
         'data-dragging': dataAttr(isDragging),
-        onDragover() {
+        onDragOver() {
           if (!isDisabled) {
             context.set('isDragging', true)
           }
         },
-        onDragleave() {
+        onDragLeave() {
           if (!isDisabled) {
             context.set('isDragging', false)
           }
@@ -71,7 +72,9 @@ export function connect<T extends PropTypes>(
       return normalize.input({
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
+        'multiple': prop('multiple'),
         'aria-invalid': ariaAttr(isInvalid),
+        'aria-label': 'Drag files here or choose from folder',
         'data-invalid': dataAttr(isInvalid),
         'data-valid': dataAttr(isValid),
         'data-dragging': dataAttr(isDragging),
@@ -119,47 +122,42 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getPreviewHeaderProps() {
+    getPreviewTitleProps() {
       return normalize.element({
-        ...parts.previewHeader.attrs,
-        id: dom.getPreviewHeaderId(scope),
+        ...parts.previewTitle.attrs,
+        id: dom.getPreviewTitleId(scope),
       })
     },
 
-    getPreviewItemProps(index) {
+    getPreviewItemProps({ file }) {
       return normalize.element({
         ...parts.previewItem.attrs,
-        id: dom.getPreviewItemId(scope, index.toString()),
+        id: dom.getPreviewItemId(scope, dom.getFileId(file)),
       })
     },
 
-    getPreviewItemIconProps(index) {
-      const files = context.get('files')
-      const file = files[index]
-      let dataType = 'generic'
-
-      if (file?.type) {
-        if (file.type.includes('pdf'))
-          dataType = 'pdf'
-        else if (file.type.includes('word') || file.type.includes('document'))
-          dataType = 'doc'
-        else if (file.type.includes('sheet') || file.type.includes('excel'))
-          dataType = 'sheet'
-        else if (file.type.includes('video'))
-          dataType = 'vid'
-      }
+    getPreviewItemIconProps({ file }) {
+      const fileExt = file.name.split('.').pop()
 
       return normalize.element({
         ...parts.previewItemIcon.attrs,
-        'id': dom.getPreviewItemIconId(scope, index.toString()),
-        'data-type': dataType,
+        'id': dom.getPreviewItemIconId(scope, dom.getFileId(file)),
+        'data-type': getFileType(fileExt),
       })
     },
 
-    getPreviewItemContentProps(index) {
+    getPreviewItemThumbProps({ file }) {
+      return normalize.element({
+        ...parts.previewItemThumb.attrs,
+        id: dom.getPreviewItemThumbId(scope, dom.getFileId(file)),
+        alt: file.name,
+      })
+    },
+
+    getPreviewItemContentProps({ file }) {
       return normalize.element({
         ...parts.previewItemContent.attrs,
-        id: dom.getPreviewItemContentId(scope, index.toString()),
+        id: dom.getPreviewItemContentId(scope, dom.getFileId(file)),
       })
     },
 

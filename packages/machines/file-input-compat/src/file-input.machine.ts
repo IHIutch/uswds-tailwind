@@ -1,6 +1,6 @@
-import type { FileData, FileInputSchema } from './file-input.types'
+import type { FileInputSchema } from './file-input.types'
 import { createMachine } from '@zag-js/core'
-import { getFileType, validate } from './file-input.utils'
+import { validate } from './file-input.utils'
 
 function debounce<T extends (...args: any[]) => void>(callback: T, wait: number) {
   let timeoutId: number | null = null
@@ -38,7 +38,7 @@ export const machine = createMachine<FileInputSchema>({
       isInvalid: bindable(() => ({ defaultValue: false })),
       isDisabled: bindable(() => ({ defaultValue: prop('disabled') })),
       srStatusText: bindable(() => ({ defaultValue: prop('srStatusText') })),
-      files: bindable<FileData[]>(() => ({ defaultValue: [] })),
+      files: bindable<File[]>(() => ({ defaultValue: [] })),
     }
   },
 
@@ -84,11 +84,7 @@ export const machine = createMachine<FileInputSchema>({
         const files = (event.files || []) as File[]
         const isValid = validate(files, prop('accept'))
         if (isValid) {
-          const fileData = files.map(file => ({
-            name: file.name,
-            type: getFileType(file.name.split('.').pop()),
-          }))
-          context.set('files', fileData)
+          context.set('files', files)
           send({ type: 'VALID' })
         }
         else {

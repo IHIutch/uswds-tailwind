@@ -1,6 +1,6 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
-import type { getFileType } from './file-input.utils'
+// import type { getFileType } from './file-input.utils'
 
 /* -----------------------------------------------------------------------------
  * Machine context
@@ -10,11 +10,16 @@ export type ElementIds = Partial<{
   root: string
   dropzone: string
   input: string
+  label: string
   errorMessage: string
   instructions: string
 }>
 
 export interface FileInputProps extends CommonProperties {
+  /**
+   * The ids of the elements in the file input. Useful for composition.
+   */
+  ids?: ElementIds | undefined
   /**
    * Comma separated list of accepted file types
    */
@@ -31,13 +36,17 @@ export interface FileInputProps extends CommonProperties {
    * Custom error message for invalid file types
    */
   errorMessage?: string
+  /**
+   * Whether to allow multiple file selection
+   */
+  multiple?: boolean
 }
 
 type PropsWithDefault = 'disabled' | 'srStatusText' | 'errorMessage'
 
-export interface FileData {
-  name: string
-  type: ReturnType<typeof getFileType>
+export interface ItemProps {
+  file: File
+  // type: ReturnType<typeof getFileType>
 }
 
 export interface FileInputSchema {
@@ -46,7 +55,7 @@ export interface FileInputSchema {
     isDragging: boolean
     isDisabled: boolean
     srStatusText: string
-    files: FileData[]
+    files: File[]
   }
   state: 'idle' | 'valid' | 'invalid'
   action: 'validateFiles' | 'updateSrStatus' | 'checkEmptyFiles'
@@ -78,8 +87,9 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   getInstructionProps: () => T['element']
   getSrStatusProps: () => T['element']
   getPreviewListProps: () => T['element']
-  getPreviewHeaderProps: () => T['element']
-  getPreviewItemProps: (index: number) => T['element']
-  getPreviewItemIconProps: (index: number) => T['element']
-  getPreviewItemContentProps: (index: number) => T['element']
+  getPreviewTitleProps: () => T['element']
+  getPreviewItemProps: (props: ItemProps) => T['element']
+  getPreviewItemIconProps: (props: ItemProps) => T['element']
+  getPreviewItemThumbProps: (props: ItemProps) => T['element']
+  getPreviewItemContentProps: (props: ItemProps) => T['element']
 }
