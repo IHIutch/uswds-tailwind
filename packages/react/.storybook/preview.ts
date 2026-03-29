@@ -1,7 +1,7 @@
 import addonDocs from '@storybook/addon-docs'
 import { definePreview } from '@storybook/react-vite'
 
-import './styles.css'
+import '../styles.css'
 
 export default definePreview({
   tags: ['autodocs'],

@@ -8,8 +8,30 @@ const meta = preview.meta({
 })
 
 export const Default = meta.story({
-  render: () => (
-    <Field.Root>
+  argTypes: {
+    invalid: {
+      control: 'boolean',
+      table: {
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      table: {
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
+  },
+  args: {
+    invalid: false,
+    disabled: false,
+  },
+  render: ({ invalid, disabled }) => (
+    <Field.Root invalid={invalid} disabled={disabled}>
       <Field.Label>Input label</Field.Label>
       <Input type="text" />
     </Field.Root>
