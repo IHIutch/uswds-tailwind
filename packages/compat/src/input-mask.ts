@@ -49,7 +49,7 @@ export class InputMask extends Component<inputMask.Props, inputMask.Api> {
   private renderPlaceholder() {
     const placeholderEl = this.placeholder
     if (placeholderEl) {
-      placeholderEl.textContent = this.input.placeholder.slice(this.api.getValue().length)
+      placeholderEl.textContent = this.machine.prop('placeholder').slice(this.api.getValue().length)
       const spaceSaver = placeholderEl.querySelector('[data-part="input-mask"]')
 
       if (spaceSaver) {
