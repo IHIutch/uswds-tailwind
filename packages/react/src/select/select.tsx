@@ -21,9 +21,9 @@ export function useSelectContext() {
 // Types
 // ============================================================================
 
-export type SelectRootProps = React.HTMLAttributes<HTMLDivElement> & UseSelectProps
-export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement>
-export type SelectIconProps = React.HTMLAttributes<HTMLDivElement>
+export type SelectRootProps = React.ComponentPropsWithoutRef<'div'> & UseSelectProps
+export type SelectProps = React.ComponentPropsWithoutRef<'select'>
+export type SelectIconProps = React.ComponentPropsWithoutRef<'div'>
 
 // ============================================================================
 // Components

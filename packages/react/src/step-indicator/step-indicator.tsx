@@ -64,7 +64,7 @@ function useStepIndicatorContext() {
 // Root
 // ============================================================================
 
-export type StepIndicatorRootProps = React.HTMLAttributes<HTMLDivElement>
+export type StepIndicatorRootProps = React.ComponentPropsWithoutRef<'div'>
   & VariantProps<typeof stepSegmentIndicatorVariants>
   & {
     steps?: StepIndicatorStep[]
@@ -93,7 +93,7 @@ function StepIndicatorRoot({ variant, counters, steps = [], currentStep, classNa
 // List
 // ============================================================================
 
-export type StepIndicatorListProps = Omit<React.OlHTMLAttributes<HTMLOListElement>, 'children'> & {
+export type StepIndicatorListProps = Omit<React.ComponentPropsWithoutRef<'ol'>, 'children'> & {
   children: ((context: { steps: StepIndicatorComputedStep[] }) => React.ReactNode) | React.ReactNode
 }
 
@@ -113,7 +113,7 @@ function StepIndicatorList({ className, children, ...props }: StepIndicatorListP
 // ListItem
 // ============================================================================
 
-export type StepIndicatorListItemProps = React.HTMLAttributes<HTMLLIElement> & {
+export type StepIndicatorListItemProps = React.ComponentPropsWithoutRef<'li'> & {
   status?: VariantProps<typeof stepSegmentIndicatorVariants>['status']
 }
 
@@ -174,7 +174,7 @@ const stepCounterVariant = cva({
   },
 })
 
-export type StepIndicatorSegmentProps = React.HTMLAttributes<HTMLSpanElement> & {
+export type StepIndicatorSegmentProps = React.ComponentPropsWithoutRef<'span'> & {
   status: VariantProps<typeof stepSegmentIndicatorVariants>['status']
 }
 
@@ -203,7 +203,7 @@ function StepIndicatorSegment({ status, className, children, ...props }: StepInd
 // Label
 // ============================================================================
 
-export type StepIndicatorLabelProps = React.HTMLAttributes<HTMLSpanElement>
+export type StepIndicatorLabelProps = React.ComponentPropsWithoutRef<'span'>
 
 function StepIndicatorLabel({ className, ...props }: StepIndicatorLabelProps) {
   const { variant } = useStepIndicatorContext()
@@ -221,7 +221,7 @@ function StepIndicatorLabel({ className, ...props }: StepIndicatorLabelProps) {
 // Summary
 // ============================================================================
 
-export type StepIndicatorSummaryProps = React.HTMLAttributes<HTMLDivElement>
+export type StepIndicatorSummaryProps = React.ComponentPropsWithoutRef<'div'>
 
 function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps) {
   return (
@@ -236,7 +236,7 @@ function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps
 // Counter
 // ============================================================================
 
-export type StepIndicatorCounterProps = Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> & {
+export type StepIndicatorCounterProps = Omit<React.ComponentPropsWithoutRef<'span'>, 'children'> & {
   children?: ((context: StepIndicatorContextProps) => React.ReactNode) | React.ReactNode
 }
 
@@ -268,7 +268,7 @@ function StepIndicatorCounter({ className, children, ...props }: StepIndicatorCo
 // Heading
 // ============================================================================
 
-export type StepIndicatorHeadingProps = React.HTMLAttributes<HTMLSpanElement> & {
+export type StepIndicatorHeadingProps = React.ComponentPropsWithoutRef<'span'> & {
   label?: string
 }
 

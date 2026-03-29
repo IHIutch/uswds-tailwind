@@ -1,19 +1,19 @@
 import * as React from 'react'
 import { cx } from '../cva.config'
 
-export type CollectionRootProps = React.HTMLAttributes<HTMLDivElement>
+export type CollectionRootProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionRoot({ className, ...props }: CollectionRootProps) {
   return <div {...props} className={cx('', className)} />
 }
 
-export type CollectionListProps = React.HTMLAttributes<HTMLUListElement>
+export type CollectionListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function CollectionList({ className, ...props }: CollectionListProps) {
   return <ul {...props} className={cx('divide-y *:py-4 *:first:pt-0 *:last:pb-0', className)} />
 }
 
-export type CollectionItemProps = React.HTMLAttributes<HTMLLIElement> & {
+export type CollectionItemProps = React.ComponentPropsWithoutRef<'li'> & {
   startElement?: React.ReactNode
 }
 
@@ -29,25 +29,25 @@ function CollectionItem({ className, children, startElement, ...props }: Collect
   )
 }
 
-export type CollectionHeadingProps = React.HTMLAttributes<HTMLDivElement>
+export type CollectionHeadingProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionHeading({ className, ...props }: CollectionHeadingProps) {
   return <div {...props} className={cx('text-lg font-bold', className)} />
 }
 
-export type CollectionDescriptionProps = React.HTMLAttributes<HTMLDivElement>
+export type CollectionDescriptionProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionDescription({ className, ...props }: CollectionDescriptionProps) {
   return <div {...props} className={cx('mt-1', className)} />
 }
 
-export type CollectionMetaListProps = React.HTMLAttributes<HTMLUListElement>
+export type CollectionMetaListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function CollectionMetaList({ className, ...props }: CollectionMetaListProps) {
   return <ul {...props} className={cx('mt-2 flex flex-col gap-1', className)} />
 }
 
-export type CollectionMetadataProps = React.HTMLAttributes<HTMLLIElement>
+export type CollectionMetadataProps = React.ComponentPropsWithoutRef<'li'>
 
 function CollectionMetaListItem({ className, ...props }: CollectionMetadataProps) {
   return <li {...props} className={cx('text-sm leading-tight', className)} />
@@ -67,7 +67,7 @@ export function useCollectionCalendarContext() {
   return context
 }
 
-export type CollectionCalendarProps = Omit<React.TimeHTMLAttributes<HTMLTimeElement>, 'dateTime'>
+export type CollectionCalendarProps = Omit<React.ComponentPropsWithoutRef<'time'>, 'dateTime'>
   & CollectionCalendarContextProps
 
 function CollectionCalendar({ className, dateTime, ...props }: CollectionCalendarProps) {
@@ -83,7 +83,7 @@ function CollectionCalendar({ className, dateTime, ...props }: CollectionCalenda
   )
 }
 
-export type CollectionCalendarDateProps = React.HTMLAttributes<HTMLSpanElement>
+export type CollectionCalendarDateProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionCalendarDate({ className, children, ...props }: CollectionCalendarDateProps) {
   const { dateTime } = useCollectionCalendarContext()
@@ -94,7 +94,7 @@ function CollectionCalendarDate({ className, children, ...props }: CollectionCal
   )
 }
 
-export type CollectionCalendarMonthProps = React.HTMLAttributes<HTMLSpanElement>
+export type CollectionCalendarMonthProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionCalendarMonth({ className, children, ...props }: CollectionCalendarMonthProps) {
   const { dateTime } = useCollectionCalendarContext()
@@ -105,7 +105,7 @@ function CollectionCalendarMonth({ className, children, ...props }: CollectionCa
   )
 }
 
-export type CollectionThumbnailProps = React.HTMLAttributes<HTMLDivElement>
+export type CollectionThumbnailProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionThumbnail({ className, ...props }: CollectionThumbnailProps) {
   return <div {...props} className={cx('w-20 shrink-0', className)} />

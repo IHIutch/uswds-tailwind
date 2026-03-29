@@ -15,7 +15,7 @@ export const tagVariants = cva({
   },
 })
 
-export type TagProps = React.HTMLAttributes<HTMLSpanElement> & VariantProps<typeof tagVariants>
+export type TagProps = React.ComponentPropsWithoutRef<'span'> & VariantProps<typeof tagVariants>
 
 export function Tag({ className, size, ...props }: TagProps) {
   return (

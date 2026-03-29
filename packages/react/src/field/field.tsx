@@ -5,7 +5,7 @@ import { cx } from '../cva.config'
 import { composeRefs } from '../utils/compose-refs'
 import { useField } from './use-field'
 
-export type FieldRootProps = React.HTMLProps<HTMLDivElement> & UseFieldProps
+export type FieldRootProps = React.ComponentPropsWithoutRef<'div'> & UseFieldProps
 
 const FieldContext = React.createContext<ReturnType<typeof useField> | null>(null)
 

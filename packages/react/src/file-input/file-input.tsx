@@ -19,7 +19,7 @@ function useFileInputContext() {
   return context
 }
 
-export type FileInputRootProps = React.HTMLAttributes<HTMLDivElement> & Omit<fileInput.Props, 'id'>
+export type FileInputRootProps = React.ComponentPropsWithoutRef<'div'> & Omit<fileInput.Props, 'id'>
 
 function FileInputRoot({ className, children, ...props }: FileInputRootProps) {
   const field = useFieldContext()
@@ -49,7 +49,7 @@ function FileInputRoot({ className, children, ...props }: FileInputRootProps) {
   )
 }
 
-export type FileInputLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
+export type FileInputLabelProps = React.ComponentPropsWithoutRef<'label'>
 
 function FileInputLabel({ className, ...props }: FileInputLabelProps) {
   const { api } = useFileInputContext()
@@ -58,7 +58,7 @@ function FileInputLabel({ className, ...props }: FileInputLabelProps) {
   return <label {...mergedProps} className={cx('block', className)} />
 }
 
-export type FileInputSrStatusProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputSrStatusProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputSrStatus(props: FileInputSrStatusProps) {
   const { api } = useFileInputContext()
@@ -67,7 +67,7 @@ function FileInputSrStatus(props: FileInputSrStatusProps) {
   return <div {...mergedProps} />
 }
 
-export type FileInputDropzoneProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputDropzoneProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputDropzone({ className, ...props }: FileInputDropzoneProps) {
   const { api } = useFileInputContext()
@@ -81,7 +81,7 @@ function FileInputDropzone({ className, ...props }: FileInputDropzoneProps) {
   )
 }
 
-export type FileInputInputProps = React.InputHTMLAttributes<HTMLInputElement>
+export type FileInputInputProps = React.ComponentPropsWithoutRef<'input'>
 
 const FileInputInput = React.forwardRef<HTMLInputElement, FileInputInputProps>(
   ({ className, ...props }, forwardedRef) => {
@@ -100,7 +100,7 @@ const FileInputInput = React.forwardRef<HTMLInputElement, FileInputInputProps>(
   },
 )
 
-export type FileInputInstructionsProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputInstructionsProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputInstructions({ className, children, ...props }: FileInputInstructionsProps) {
   const { api } = useFileInputContext()
@@ -121,7 +121,7 @@ function FileInputInstructions({ className, children, ...props }: FileInputInstr
   )
 }
 
-export type FileInputErrorMessageProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputErrorMessageProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputErrorMessage({ className, ...props }: FileInputErrorMessageProps) {
   const { api } = useFileInputContext()
@@ -135,7 +135,7 @@ function FileInputErrorMessage({ className, ...props }: FileInputErrorMessagePro
   )
 }
 
-export type FileInputPreviewListProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & {
+export type FileInputPreviewListProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'> & {
   children: ((context: { files: FileInputContextProps['files'] }) => React.ReactNode) | React.ReactNode
 }
 
@@ -153,7 +153,7 @@ function FileInputPreviewList({ className, children, ...props }: FileInputPrevie
   )
 }
 
-export type FileInputPreviewTitleProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputPreviewTitleProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewTitle({ className, children, ...props }: FileInputPreviewTitleProps) {
   const { api, files } = useFileInputContext()
@@ -179,7 +179,7 @@ function usePreviewItemPropsContext() {
   return index
 }
 
-export type FileInputItemProps = React.HTMLAttributes<HTMLDivElement> & {
+export type FileInputItemProps = React.ComponentPropsWithoutRef<'div'> & {
   file: FileInputContextProps['files'][number]
 }
 
@@ -197,7 +197,7 @@ function FileInputItem({ file, className, ...props }: FileInputItemProps) {
   )
 }
 
-export type FileInputPreviewItemProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputPreviewItemProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewItem({ className, ...props }: FileInputPreviewItemProps) {
   return (
@@ -205,7 +205,7 @@ function FileInputPreviewItem({ className, ...props }: FileInputPreviewItemProps
   )
 }
 
-export type FileInputPreviewItemIconProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputPreviewItemIconProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewItemIcon({ className, children, ...props }: FileInputPreviewItemIconProps) {
   const { api } = useFileInputContext()
@@ -219,7 +219,7 @@ function FileInputPreviewItemIcon({ className, children, ...props }: FileInputPr
   )
 }
 
-export type FileInputPreviewItemThumbProps = React.ImgHTMLAttributes<HTMLImageElement>
+export type FileInputPreviewItemThumbProps = React.ComponentPropsWithoutRef<'img'>
 
 function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItemThumbProps) {
   const { api } = useFileInputContext()
@@ -245,7 +245,7 @@ function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItem
   )
 }
 
-export type FileInputPreviewItemContentProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputPreviewItemContentProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewItemContent({ className, children, ...props }: FileInputPreviewItemContentProps) {
   const { api } = useFileInputContext()
@@ -259,13 +259,13 @@ function FileInputPreviewItemContent({ className, children, ...props }: FileInpu
   )
 }
 
-export type FileInputPreviewHeaderProps = React.HTMLAttributes<HTMLDivElement>
+export type FileInputPreviewHeaderProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewHeader({ className, ...props }: FileInputPreviewHeaderProps) {
   return <div {...props} className={cx('flex justify-between items-center p-2', className)} />
 }
 
-export type FileInputChangeTriggerProps = React.HTMLAttributes<HTMLSpanElement>
+export type FileInputChangeTriggerProps = React.ComponentPropsWithoutRef<'span'>
 
 function FileInputChangeTrigger({ className, children, ...props }: FileInputChangeTriggerProps) {
   const { files } = useFileInputContext()

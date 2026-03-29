@@ -5,11 +5,11 @@ import { cva, cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
 import { useCheckbox } from './use-checkbox'
 
-export type CheckboxRootProps = React.LabelHTMLAttributes<HTMLLabelElement>
-export type CheckboxGroupProps = React.HTMLAttributes<HTMLDivElement>
-export type CheckboxLabelProps = React.HTMLAttributes<HTMLDivElement>
-export type CheckboxInputProps = React.InputHTMLAttributes<HTMLInputElement>
-export type CheckboxControlProps = React.InputHTMLAttributes<HTMLInputElement>
+export type CheckboxRootProps = React.ComponentPropsWithoutRef<'label'>
+export type CheckboxGroupProps = React.ComponentPropsWithoutRef<'div'>
+export type CheckboxLabelProps = React.ComponentPropsWithoutRef<'div'>
+export type CheckboxInputProps = React.ComponentPropsWithoutRef<'input'>
+export type CheckboxControlProps = React.ComponentPropsWithoutRef<'input'>
 
 export type CheckboxContextProps = ReturnType<typeof useCheckbox> & {
   tile?: boolean

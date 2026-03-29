@@ -25,7 +25,7 @@ export interface InPageNavContextProps extends Pick<InPageNavRootProps, 'heading
   leastHeadingDepth: number
 }
 
-export type InPageNavHeadingProps = React.HTMLAttributes<HTMLDivElement>
+export type InPageNavHeadingProps = React.ComponentPropsWithoutRef<'div'>
 
 export type InPageNavListContext = Pick<InPageNavContextProps, 'headings' | 'activeHref'>
 

@@ -5,10 +5,10 @@ import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
 
-export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.HTMLAttributes<HTMLElement>
-export type CharacterCountLabelProps = React.HTMLAttributes<HTMLLabelElement>
-export type CharacterCountInputProps = React.InputHTMLAttributes<HTMLInputElement>
-export type CharacterCountStatusProps = React.HTMLAttributes<HTMLElement>
+export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
+export type CharacterCountLabelProps = React.ComponentPropsWithoutRef<'label'>
+export type CharacterCountInputProps = React.ComponentPropsWithoutRef<'input'>
+export type CharacterCountStatusProps = React.ComponentPropsWithoutRef<'span'>
 
 export interface CharacterCountContextProps {
   api: characterCount.Api

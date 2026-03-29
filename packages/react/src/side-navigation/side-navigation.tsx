@@ -20,7 +20,7 @@ function SideNavigationRoot({ className, children, ...props }: SideNavigationRoo
   )
 }
 
-export type SideNavigationListProps = React.HTMLAttributes<HTMLUListElement>
+export type SideNavigationListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function SideNavigationList({ className, ...props }: SideNavigationListProps) {
   return (
@@ -31,7 +31,7 @@ function SideNavigationList({ className, ...props }: SideNavigationListProps) {
   )
 }
 
-export type SideNavigationListItemProps = React.HTMLAttributes<HTMLLIElement>
+export type SideNavigationListItemProps = React.ComponentPropsWithoutRef<'li'>
 
 function SideNavigationListItem({ className, ...props }: SideNavigationListItemProps) {
   return (
@@ -42,7 +42,7 @@ function SideNavigationListItem({ className, ...props }: SideNavigationListItemP
   )
 }
 
-export type SideNavigationLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+export type SideNavigationLinkProps = React.ComponentPropsWithoutRef<'a'> & {
   isCurrent?: boolean
 }
 

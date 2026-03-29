@@ -4,16 +4,16 @@ import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
 
-export type AccordionRootProps = Omit<accordion.Props, 'id'> & React.HTMLAttributes<HTMLElement>
+export type AccordionRootProps = Omit<accordion.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
-export type AccordionItemProps = React.HTMLAttributes<HTMLElement> & {
+export type AccordionItemProps = React.ComponentPropsWithoutRef<'div'> & {
   value: string
 }
 
-export type AccordionTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
-export type AccordionContentProps = React.HTMLAttributes<HTMLElement>
+export type AccordionTriggerProps = React.ComponentPropsWithoutRef<'button'>
+export type AccordionContentProps = React.ComponentPropsWithoutRef<'div'>
 
-export type AccordionItemIndicatorProps = Omit<React.HTMLAttributes<HTMLElement>, 'children'> & {
+export type AccordionItemIndicatorProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'> & {
   children?: React.ReactNode | ((context: ReturnType<typeof useAccordionItemContext>) => React.ReactNode)
 }
 

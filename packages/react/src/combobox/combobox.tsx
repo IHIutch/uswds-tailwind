@@ -81,7 +81,7 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
   },
 )
 
-export type ComboboxItemProps = React.LiHTMLAttributes<HTMLLIElement>
+export type ComboboxItemProps = React.ComponentPropsWithoutRef<'li'>
   & combobox.ComboboxOption
   & { index: number }
 

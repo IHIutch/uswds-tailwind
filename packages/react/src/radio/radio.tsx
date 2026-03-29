@@ -10,12 +10,12 @@ import { useRadioGroup } from './use-radio-group'
 // Types
 // ============================================================================
 
-export type RadioRootProps = React.HTMLAttributes<HTMLDivElement> & UseRadioGroupProps & VariantProps<typeof radioItemVariant>
-export type RadioItemProps = React.LabelHTMLAttributes<HTMLLabelElement> & GroupItemProps
-export type RadioLabelProps = React.HTMLAttributes<HTMLDivElement>
-export type RadioInputProps = React.InputHTMLAttributes<HTMLInputElement>
-export type RadioControlProps = React.InputHTMLAttributes<HTMLInputElement>
-export type RadioDescriptionProps = React.HTMLAttributes<HTMLDivElement>
+export type RadioRootProps = React.ComponentPropsWithoutRef<'div'> & UseRadioGroupProps & VariantProps<typeof radioItemVariant>
+export type RadioItemProps = React.ComponentPropsWithoutRef<'label'> & GroupItemProps
+export type RadioLabelProps = React.ComponentPropsWithoutRef<'div'>
+export type RadioInputProps = React.ComponentPropsWithoutRef<'input'>
+export type RadioControlProps = React.ComponentPropsWithoutRef<'input'>
+export type RadioDescriptionProps = React.ComponentPropsWithoutRef<'div'>
 
 export type RadioContextProps = ReturnType<typeof useRadioGroup> & VariantProps<typeof radioItemVariant>
 

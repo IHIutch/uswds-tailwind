@@ -7,9 +7,9 @@ import { cx } from '../cva.config'
 // Types
 // ============================================================================
 
-export type TooltipRootProps = Omit<tooltip.Props, 'id'> & React.HTMLAttributes<HTMLElement>
-export type TooltipTriggerProps = React.HTMLAttributes<HTMLElement>
-export type TooltipContentProps = React.HTMLAttributes<HTMLDivElement>
+export type TooltipRootProps = Omit<tooltip.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
+export type TooltipTriggerProps = React.ComponentPropsWithoutRef<'div'>
+export type TooltipContentProps = React.ComponentPropsWithoutRef<'div'>
 
 export interface TooltipContextProps {
   api: tooltip.Api

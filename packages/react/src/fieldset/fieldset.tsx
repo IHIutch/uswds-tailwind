@@ -4,7 +4,7 @@ import * as React from 'react'
 import { cx } from '../cva.config'
 import { useFieldset } from './use-fieldset'
 
-export type FieldsetRootProps = React.HTMLProps<HTMLFieldSetElement> & UseFieldsetProps
+export type FieldsetRootProps = React.ComponentPropsWithoutRef<'fieldset'> & UseFieldsetProps
 
 const FieldsetContext = React.createContext<ReturnType<typeof useFieldset> | null>(null)
 

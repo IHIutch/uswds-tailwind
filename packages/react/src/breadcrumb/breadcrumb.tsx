@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { cx } from '../cva.config'
 
-export type BreadcrumbRootProps = React.HTMLAttributes<HTMLDivElement> & BreadcrumbContextProps & {
+export type BreadcrumbRootProps = React.ComponentPropsWithoutRef<'div'> & BreadcrumbContextProps & {
   'aria-label': string
 }
-export type BreadcrumbListProps = React.HTMLAttributes<HTMLOListElement>
-export type BreadcrumbItemProps = React.HTMLAttributes<HTMLElement> & BreadcrumbItemContextProps
+export type BreadcrumbListProps = React.ComponentPropsWithoutRef<'ol'>
+export type BreadcrumbItemProps = React.ComponentPropsWithoutRef<'li'> & BreadcrumbItemContextProps
 export type BreadcrumbLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement>
-export type BreadcrumbSeparatorProps = React.HTMLAttributes<HTMLSpanElement>
-export type BreadcrumbPreviousProps = React.HTMLAttributes<HTMLSpanElement>
+export type BreadcrumbSeparatorProps = React.ComponentPropsWithoutRef<'span'>
+export type BreadcrumbPreviousProps = React.ComponentPropsWithoutRef<'span'>
 
 interface BreadcrumbContextProps {
   wrap: boolean

@@ -85,7 +85,7 @@ const alertIconVariants = cva({
   },
 })
 
-export type AlertRootProps = React.HTMLAttributes<HTMLElement> & VariantProps<typeof alertVariants>
+export type AlertRootProps = React.ComponentPropsWithoutRef<'div'> & VariantProps<typeof alertVariants>
 export type AlertContextProps = VariantProps<typeof alertVariants>
 
 const AlertContext = React.createContext<AlertContextProps | null>(null)

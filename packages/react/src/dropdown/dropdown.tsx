@@ -5,11 +5,11 @@ import * as React from 'react'
 import { Button } from '../button'
 import { cx } from '../cva.config'
 
-export type DropdownRootProps = Omit<dropdown.Props, 'id'> & React.HTMLAttributes<HTMLElement>
+export type DropdownRootProps = Omit<dropdown.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
 export type DropdownTriggerProps = ButtonProps
-export type DropdownContentProps = React.HTMLAttributes<HTMLUListElement>
-export type DropdownItemProps = React.HTMLAttributes<HTMLLIElement>
+export type DropdownContentProps = React.ComponentPropsWithoutRef<'ul'>
+export type DropdownItemProps = React.ComponentPropsWithoutRef<'li'>
 
 export interface DropdownContextProps {
   api: dropdown.Api

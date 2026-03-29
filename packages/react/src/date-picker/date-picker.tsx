@@ -21,7 +21,7 @@ function useDatePickerContext(): DatePickerContextProps {
 }
 
 // export default DatePickerContext;
-export type DatePickerRootProps = Omit<datepicker.Props, 'id'> & React.HTMLAttributes<HTMLElement>
+export type DatePickerRootProps = Omit<datepicker.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
 const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
   ({ className, ...props }, forwardedRef) => {

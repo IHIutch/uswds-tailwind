@@ -44,6 +44,7 @@ export const Basic = meta.story({
   render: ({ disabled, invalid }) => (
     <Field.Root disabled={disabled} invalid={invalid}>
       <Field.Label>Dropdown label</Field.Label>
+      <Field.ErrorMessage>This field is required</Field.ErrorMessage>
       <Select.Root>
         <Select.Field>
           {options.map(option => (
