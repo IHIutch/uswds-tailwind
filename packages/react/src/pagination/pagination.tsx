@@ -15,7 +15,7 @@ function usePaginationContext() {
   return context
 }
 
-type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & UsePaginationProps
+export type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & UsePaginationProps
 
 function PaginationRoot(props: PaginationRootProps) {
   const [rootProps, localProps] = splitProps(props)
@@ -35,7 +35,7 @@ function PaginationRoot(props: PaginationRootProps) {
   )
 }
 
-type PaginationListProps = Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> & {
+export type PaginationListProps = Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> & {
   children?: ((context: { pages: PageSlot[] }) => React.ReactNode) | React.ReactNode
 }
 
@@ -120,7 +120,7 @@ export interface PaginationItemRenderProps extends React.HTMLAttributes<HTMLButt
   isLast: boolean
 }
 
-type PaginationItemProps = {
+export type PaginationItemProps = {
   value: number
   render?: (props: PaginationItemRenderProps) => React.ReactNode
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>

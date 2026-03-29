@@ -4,8 +4,8 @@ import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
 import { useInputGroupContext } from '../input-group/input-group'
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>
-type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
+export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {

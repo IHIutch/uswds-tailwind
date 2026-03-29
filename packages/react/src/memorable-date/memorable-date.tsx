@@ -17,7 +17,7 @@ export function useMemorableDateContext() {
   return context
 }
 
-type MemorableDateRootProps = React.HTMLAttributes<HTMLFieldSetElement> & UseMemorableDateProps
+export type MemorableDateRootProps = React.HTMLAttributes<HTMLFieldSetElement> & UseMemorableDateProps
 
 function MemorableDateRoot({ className, children, id, disabled, invalid, ...props }: MemorableDateRootProps) {
   const memorableDate = useMemorableDate({ id, disabled, invalid })
@@ -35,7 +35,7 @@ function MemorableDateRoot({ className, children, id, disabled, invalid, ...prop
   )
 }
 
-type MemorableDateLegendProps = React.HTMLAttributes<HTMLLegendElement>
+export type MemorableDateLegendProps = React.HTMLAttributes<HTMLLegendElement>
 
 function MemorableDateLegend({ className, ...props }: MemorableDateLegendProps) {
   const { getLegendProps } = useMemorableDateContext()
@@ -44,7 +44,7 @@ function MemorableDateLegend({ className, ...props }: MemorableDateLegendProps) 
   return <legend {...mergedProps} className={className} />
 }
 
-type MemorableDateDescriptionProps = React.HTMLAttributes<HTMLDivElement>
+export type MemorableDateDescriptionProps = React.HTMLAttributes<HTMLDivElement>
 
 function MemorableDateDescription({ className, ...props }: MemorableDateDescriptionProps) {
   const { getDescriptionProps } = useMemorableDateContext()
@@ -53,7 +53,7 @@ function MemorableDateDescription({ className, ...props }: MemorableDateDescript
   return <div {...mergedProps} className={cx('text-gray-50', className)} />
 }
 
-type MemorableDateControlProps = React.HTMLAttributes<HTMLDivElement>
+export type MemorableDateControlProps = React.HTMLAttributes<HTMLDivElement>
 
 function MemorableDateControl({ className, ...props }: MemorableDateControlProps) {
   return <div {...props} className={cx('flex flex-wrap gap-4 mt-4', className)} />

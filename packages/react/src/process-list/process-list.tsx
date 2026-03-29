@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { cx } from '../cva.config'
 
-type ProcessListRootProps = React.OlHTMLAttributes<HTMLOListElement>
+export type ProcessListRootProps = React.OlHTMLAttributes<HTMLOListElement>
 
 function ProcessListRoot({ className, ...props }: ProcessListRootProps) {
   return (
@@ -12,7 +12,7 @@ function ProcessListRoot({ className, ...props }: ProcessListRootProps) {
   )
 }
 
-type ProcessListItemProps = React.LiHTMLAttributes<HTMLLIElement>
+export type ProcessListItemProps = React.LiHTMLAttributes<HTMLLIElement>
 
 function ProcessListItem({ className, ...props }: ProcessListItemProps) {
   return (
@@ -28,7 +28,7 @@ function ProcessListItem({ className, ...props }: ProcessListItemProps) {
   )
 }
 
-type ProcessListContentProps = React.HTMLAttributes<HTMLHeadingElement>
+export type ProcessListContentProps = React.HTMLAttributes<HTMLHeadingElement>
 
 function ProcessListContent({ className, ...props }: ProcessListContentProps) {
   return (
@@ -39,7 +39,7 @@ function ProcessListContent({ className, ...props }: ProcessListContentProps) {
   )
 }
 
-type ProcessListTitleProps = React.HTMLAttributes<HTMLHeadingElement>
+export type ProcessListTitleProps = React.HTMLAttributes<HTMLHeadingElement>
 
 function ProcessListTitle({ className, ...props }: ProcessListTitleProps) {
   return (
@@ -50,7 +50,7 @@ function ProcessListTitle({ className, ...props }: ProcessListTitleProps) {
   )
 }
 
-type ProcessListDescriptionProps = React.HTMLAttributes<HTMLDivElement>
+export type ProcessListDescriptionProps = React.HTMLAttributes<HTMLDivElement>
 
 function ProcessListDescription({ className, ...props }: ProcessListDescriptionProps) {
   return (

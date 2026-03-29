@@ -13,7 +13,7 @@ export const linkVariants = cva({
   },
 })
 
-type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   isExternal?: boolean
 }
 

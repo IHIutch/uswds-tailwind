@@ -35,7 +35,7 @@ function useSearchContext() {
   return context
 }
 
-type SearchRootProps = React.HTMLAttributes<HTMLDivElement> & {
+export type SearchRootProps = React.HTMLAttributes<HTMLDivElement> & {
   size?: SearchContextProps['size']
   id?: string
   disabled?: boolean
@@ -57,7 +57,7 @@ function SearchRoot({ size, className, id, disabled, required, name, ...props }:
   )
 }
 
-type SearchLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
+export type SearchLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
 
 function SearchLabel({ className, children, ...props }: SearchLabelProps) {
   const { getLabelProps } = useSearchContext()
@@ -73,7 +73,7 @@ function SearchLabel({ className, children, ...props }: SearchLabelProps) {
   )
 }
 
-type SearchInputProps = React.InputHTMLAttributes<HTMLInputElement>
+export type SearchInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
   ({ className, ...props }, forwardedRef) => {
@@ -107,7 +107,7 @@ const searchButtonVariants = cva({
   },
 })
 
-type SearchButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
+export type SearchButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const SearchButton = React.forwardRef<HTMLButtonElement, SearchButtonProps>(
   ({ className, children, ...props }, forwardedRef) => {

@@ -15,7 +15,7 @@ function useRangeSliderContext() {
   return context
 }
 
-type RangeSliderRootProps = React.HTMLAttributes<HTMLDivElement> & UseRangeSliderProps
+export type RangeSliderRootProps = React.HTMLAttributes<HTMLDivElement> & UseRangeSliderProps
 
 function RangeSliderRoot({ className, children, id, disabled, name, ...props }: RangeSliderRootProps) {
   const rangeSlider = useRangeSlider({ id, disabled, name })
@@ -33,7 +33,7 @@ function RangeSliderRoot({ className, children, id, disabled, name, ...props }: 
   )
 }
 
-type RangeSliderInputProps = React.InputHTMLAttributes<HTMLInputElement>
+export type RangeSliderInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const RangeSliderInput = React.forwardRef<HTMLInputElement, RangeSliderInputProps>(
   ({ className, ...props }, forwardedRef) => {

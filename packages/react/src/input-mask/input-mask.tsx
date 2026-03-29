@@ -20,7 +20,7 @@ function useInputMaskContext() {
   return context
 }
 
-type InputMaskRootProps = Omit<inputMask.Props, 'id'> & React.HTMLAttributes<HTMLDivElement>
+export type InputMaskRootProps = Omit<inputMask.Props, 'id'> & React.HTMLAttributes<HTMLDivElement>
 
 function InputMaskRoot({ className, children, ...props }: InputMaskRootProps) {
   const field = useFieldContext()
@@ -48,7 +48,7 @@ function InputMaskRoot({ className, children, ...props }: InputMaskRootProps) {
   )
 }
 
-type InputMaskLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
+export type InputMaskLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
 
 function InputMaskLabel({ className, ...props }: InputMaskLabelProps) {
   const { api } = useInputMaskContext()
@@ -62,7 +62,7 @@ function InputMaskLabel({ className, ...props }: InputMaskLabelProps) {
   )
 }
 
-type InputMaskDescriptionProps = React.HTMLAttributes<HTMLDivElement>
+export type InputMaskDescriptionProps = React.HTMLAttributes<HTMLDivElement>
 
 function InputMaskDescription({ className, ...props }: InputMaskDescriptionProps) {
   const { api } = useInputMaskContext()
@@ -76,7 +76,7 @@ function InputMaskDescription({ className, ...props }: InputMaskDescriptionProps
   )
 }
 
-type InputMaskControlProps = React.HTMLAttributes<HTMLDivElement>
+export type InputMaskControlProps = React.HTMLAttributes<HTMLDivElement>
 
 function InputMaskControl({ className, ...props }: InputMaskControlProps) {
   return (
@@ -87,7 +87,7 @@ function InputMaskControl({ className, ...props }: InputMaskControlProps) {
   )
 }
 
-type InputMaskPlaceholderProps = React.HTMLAttributes<HTMLSpanElement>
+export type InputMaskPlaceholderProps = React.HTMLAttributes<HTMLSpanElement>
 
 function InputMaskPlaceholder({ className, ...props }: InputMaskPlaceholderProps) {
   const { api, placeholder } = useInputMaskContext()
@@ -107,7 +107,7 @@ function InputMaskPlaceholder({ className, ...props }: InputMaskPlaceholderProps
     : null
 }
 
-type InputMaskInputProps = React.InputHTMLAttributes<HTMLInputElement>
+export type InputMaskInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
   ({ className, ...props }, forwardedRef) => {

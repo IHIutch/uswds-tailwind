@@ -6,7 +6,7 @@ import { cx } from '../cva.config'
 // Pre-generated to avoid creating a new array on every render
 const DEFAULT_TIME_OPTIONS = generateTimeOptions()
 
-type TimePickerRootProps = React.ComponentProps<typeof Combobox.Root> & {
+export type TimePickerRootProps = React.ComponentProps<typeof Combobox.Root> & {
   options?: combobox.ComboboxOption[]
 }
 

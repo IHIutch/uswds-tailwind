@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { cx } from '../cva.config'
 
-type InputGroupProps = React.HTMLAttributes<HTMLDivElement> & {
+export type InputGroupProps = React.HTMLAttributes<HTMLDivElement> & {
   startElement?: React.ReactNode
   endElement?: React.ReactNode
 }

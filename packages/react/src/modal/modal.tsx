@@ -17,7 +17,7 @@ function useModalContext() {
   return context
 }
 
-type ModalRootProps = Omit<modal.Props, 'id'> & {
+export type ModalRootProps = Omit<modal.Props, 'id'> & {
   children: React.ReactNode
 }
 
@@ -35,7 +35,7 @@ function ModalRoot({ children, ...props }: ModalRootProps) {
   )
 }
 
-type ModalTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
+export type ModalTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 
 function ModalTrigger({ className, ...props }: ModalTriggerProps) {
   const { api } = useModalContext()
@@ -49,7 +49,7 @@ function ModalTrigger({ className, ...props }: ModalTriggerProps) {
   )
 }
 
-type ModalBackdropProps = React.HTMLAttributes<HTMLDivElement>
+export type ModalBackdropProps = React.HTMLAttributes<HTMLDivElement>
 
 function ModalBackdrop({ className, ...props }: ModalBackdropProps) {
   const { api } = useModalContext()
@@ -63,7 +63,7 @@ function ModalBackdrop({ className, ...props }: ModalBackdropProps) {
   )
 }
 
-type ModalPositionerProps = React.HTMLAttributes<HTMLDivElement>
+export type ModalPositionerProps = React.HTMLAttributes<HTMLDivElement>
 
 function ModalPositioner({ className, ...props }: ModalPositionerProps) {
   const { api } = useModalContext()
@@ -77,7 +77,7 @@ function ModalPositioner({ className, ...props }: ModalPositionerProps) {
   )
 }
 
-type ModalContentProps = React.HTMLAttributes<HTMLDivElement>
+export type ModalContentProps = React.HTMLAttributes<HTMLDivElement>
 
 function ModalContent({ className, ...props }: ModalContentProps) {
   const { api } = useModalContext()
@@ -91,7 +91,7 @@ function ModalContent({ className, ...props }: ModalContentProps) {
   )
 }
 
-type ModalTitleProps = React.HTMLAttributes<HTMLHeadingElement>
+export type ModalTitleProps = React.HTMLAttributes<HTMLHeadingElement>
 
 function ModalTitle({ className, ...props }: ModalTitleProps) {
   const { api } = useModalContext()
@@ -105,7 +105,7 @@ function ModalTitle({ className, ...props }: ModalTitleProps) {
   )
 }
 
-type ModalDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>
+export type ModalDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>
 
 function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   const { api } = useModalContext()
@@ -119,7 +119,7 @@ function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   )
 }
 
-type ModalCloseTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
+export type ModalCloseTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 
 function ModalCloseTrigger({ className, ...props }: ModalCloseTriggerProps) {
   const { api } = useModalContext()

@@ -25,7 +25,7 @@ export function useButtonGroupContext() {
   return React.useContext(ButtonGroupContext)
 }
 
-type ButtonGroupRootProps = React.HTMLAttributes<HTMLDivElement> & ButtonGroupContextProps
+export type ButtonGroupRootProps = React.HTMLAttributes<HTMLDivElement> & ButtonGroupContextProps
 
 export const ButtonGroupRoot = React.forwardRef<HTMLDivElement, ButtonGroupRootProps>(
   ({ className, children, ...props }, forwardedRef) => {

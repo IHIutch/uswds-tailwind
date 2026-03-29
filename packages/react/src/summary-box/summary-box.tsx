@@ -15,7 +15,7 @@ function useSummaryBoxContext() {
   return context
 }
 
-type SummaryBoxRootProps = React.HTMLAttributes<HTMLDivElement>
+export type SummaryBoxRootProps = React.HTMLAttributes<HTMLDivElement>
 
 function SummaryBoxRoot({ className, ...props }: SummaryBoxRootProps) {
   const headingId = React.useId()
@@ -31,7 +31,7 @@ function SummaryBoxRoot({ className, ...props }: SummaryBoxRootProps) {
   )
 }
 
-type SummaryBoxHeadingProps = React.HTMLAttributes<HTMLHeadingElement>
+export type SummaryBoxHeadingProps = React.HTMLAttributes<HTMLHeadingElement>
 
 function SummaryBoxHeading({ className, ...props }: SummaryBoxHeadingProps) {
   const { headingId } = useSummaryBoxContext()
@@ -44,7 +44,7 @@ function SummaryBoxHeading({ className, ...props }: SummaryBoxHeadingProps) {
   )
 }
 
-type SummaryBoxContentProps = React.HTMLAttributes<HTMLDivElement>
+export type SummaryBoxContentProps = React.HTMLAttributes<HTMLDivElement>
 
 function SummaryBoxContent({ className, ...props }: SummaryBoxContentProps) {
   return (
