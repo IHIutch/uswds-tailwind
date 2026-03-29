@@ -109,6 +109,14 @@ function MemorableDateYear({ className, ...props }: React.InputHTMLAttributes<HT
   )
 }
 
+MemorableDateRoot.displayName = 'MemorableDate.Root'
+MemorableDateLegend.displayName = 'MemorableDate.Legend'
+MemorableDateDescription.displayName = 'MemorableDate.Description'
+MemorableDateControl.displayName = 'MemorableDate.Control'
+MemorableDateMonth.displayName = 'MemorableDate.Month'
+MemorableDateDay.displayName = 'MemorableDate.Day'
+MemorableDateYear.displayName = 'MemorableDate.Year'
+
 export const MemorableDate = {
   Root: MemorableDateRoot,
   Legend: MemorableDateLegend,

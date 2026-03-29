@@ -3,10 +3,15 @@ import type { CommonProperties, PropTypes } from '@zag-js/types'
 
 export type ElementIds = Partial<{
   root: string
+  label: string
   input: string
 }>
 
 export interface InputMaskProps extends CommonProperties {
+  /**
+   * The ids of the elements in the input mask. Useful for composition.
+   */
+  ids?: ElementIds | undefined
   /**
    * The pattern to validate input against
    */

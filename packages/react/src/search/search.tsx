@@ -129,6 +129,11 @@ const SearchButton = React.forwardRef<HTMLButtonElement, SearchButtonProps>(
   },
 )
 
+SearchRoot.displayName = 'Search.Root'
+SearchLabel.displayName = 'Search.Label'
+SearchInput.displayName = 'Search.Input'
+SearchButton.displayName = 'Search.Button'
+
 export const Search = {
   Root: SearchRoot,
   Label: SearchLabel,

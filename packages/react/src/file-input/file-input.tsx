@@ -276,6 +276,23 @@ function FileInputChangeTrigger({ className, children, ...props }: FileInputChan
   )
 }
 
+FileInputRoot.displayName = 'FileInput.Root'
+FileInputLabel.displayName = 'FileInput.Label'
+FileInputSrStatus.displayName = 'FileInput.SrStatus'
+FileInputDropzone.displayName = 'FileInput.Dropzone'
+FileInputInput.displayName = 'FileInput.Input'
+FileInputInstructions.displayName = 'FileInput.Instructions'
+FileInputErrorMessage.displayName = 'FileInput.ErrorMessage'
+FileInputPreviewList.displayName = 'FileInput.PreviewList'
+FileInputPreviewHeader.displayName = 'FileInput.PreviewHeader'
+FileInputPreviewTitle.displayName = 'FileInput.PreviewTitle'
+FileInputItem.displayName = 'FileInput.Item'
+FileInputPreviewItem.displayName = 'FileInput.PreviewItem'
+FileInputPreviewItemIcon.displayName = 'FileInput.PreviewItemIcon'
+FileInputPreviewItemThumb.displayName = 'FileInput.PreviewItemThumb'
+FileInputPreviewItemContent.displayName = 'FileInput.PreviewItemContent'
+FileInputChangeTrigger.displayName = 'FileInput.ChangeTrigger'
+
 export const FileInput = {
   Root: FileInputRoot,
   Label: FileInputLabel,

@@ -23,6 +23,10 @@ export interface ComboboxOption {
 
 export interface ComboboxProps extends CommonProperties {
   /**
+   * The ids of the elements in the combobox. Useful for composition.
+   */
+  ids?: ElementIds | undefined
+  /**
    * The options to display in the combobox
    */
   options?: ComboboxOption[]

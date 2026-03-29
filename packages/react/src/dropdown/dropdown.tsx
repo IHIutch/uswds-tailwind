@@ -25,7 +25,7 @@ function useDropdownContext() {
   return context
 }
 
-const DropdownRoot = React.forwardRef<any, DropdownRootProps>(
+const DropdownRoot = React.forwardRef<HTMLDivElement, DropdownRootProps>(
   ({ className, ...props }, forwardedRef) => {
     const service = useMachine(dropdown.machine, {
       id: React.useId(),
@@ -43,7 +43,7 @@ const DropdownRoot = React.forwardRef<any, DropdownRootProps>(
   },
 )
 
-const DropdownTrigger = React.forwardRef<any, DropdownTriggerProps>(
+const DropdownTrigger = React.forwardRef<HTMLButtonElement, DropdownTriggerProps>(
   (props, forwardedRef) => {
     const { api } = useDropdownContext()
 
@@ -58,7 +58,7 @@ const DropdownTrigger = React.forwardRef<any, DropdownTriggerProps>(
   },
 )
 
-const DropdownContent = React.forwardRef<any, DropdownContentProps>(
+const DropdownContent = React.forwardRef<HTMLUListElement, DropdownContentProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useDropdownContext()
 
@@ -77,7 +77,7 @@ const DropdownContent = React.forwardRef<any, DropdownContentProps>(
   },
 )
 
-const DropdownItem = React.forwardRef<any, DropdownItemProps>(
+const DropdownItem = React.forwardRef<HTMLLIElement, DropdownItemProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useDropdownContext()
 
@@ -96,7 +96,7 @@ const DropdownItem = React.forwardRef<any, DropdownItemProps>(
   },
 )
 
-const DropdownLink = React.forwardRef<any, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
+const DropdownLink = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
   ({ className, ...props }, forwardedRef) => {
     return (
       <a
@@ -110,6 +110,12 @@ const DropdownLink = React.forwardRef<any, React.AnchorHTMLAttributes<HTMLAnchor
     )
   },
 )
+
+DropdownRoot.displayName = 'Dropdown.Root'
+DropdownTrigger.displayName = 'Dropdown.Trigger'
+DropdownContent.displayName = 'Dropdown.Content'
+DropdownItem.displayName = 'Dropdown.Item'
+DropdownLink.displayName = 'Dropdown.Link'
 
 export const Dropdown = {
   Root: DropdownRoot,

@@ -12,7 +12,7 @@ export function useFieldsetContext() {
   return React.useContext(FieldsetContext)
 }
 
-const FieldsetRoot = React.forwardRef<any, FieldsetRootProps>(
+const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootProps>(
   (props, forwardedRef) => {
     const fieldset = useFieldset(props)
 
@@ -27,7 +27,7 @@ const FieldsetRoot = React.forwardRef<any, FieldsetRootProps>(
   },
 )
 
-const FieldsetLegend = React.forwardRef<any, React.HTMLAttributes<HTMLLegendElement>>(
+const FieldsetLegend = React.forwardRef<HTMLLegendElement, React.HTMLAttributes<HTMLLegendElement>>(
   ({ className, ...props }, forwardedRef) => {
     const fieldset = useFieldsetContext()
     const mergedProps = mergeProps(fieldset?.getLegendProps(), props)
@@ -42,7 +42,7 @@ const FieldsetLegend = React.forwardRef<any, React.HTMLAttributes<HTMLLegendElem
   },
 )
 
-const FieldsetDescription = React.forwardRef<any, React.HTMLAttributes<HTMLDivElement>>(
+const FieldsetDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
     const fieldset = useFieldsetContext()
     const mergedProps = mergeProps(fieldset?.getDescriptionProps(), props)
@@ -57,7 +57,7 @@ const FieldsetDescription = React.forwardRef<any, React.HTMLAttributes<HTMLDivEl
   },
 )
 
-const FieldsetErrorMessage = React.forwardRef<any, React.HTMLAttributes<HTMLDivElement>>(
+const FieldsetErrorMessage = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
     const fieldset = useFieldsetContext()
     const mergedProps = mergeProps(fieldset?.getErrorTextProps(), props)
@@ -71,6 +71,11 @@ const FieldsetErrorMessage = React.forwardRef<any, React.HTMLAttributes<HTMLDivE
     )
   },
 )
+
+FieldsetRoot.displayName = 'Fieldset.Root'
+FieldsetLegend.displayName = 'Fieldset.Legend'
+FieldsetDescription.displayName = 'Fieldset.Description'
+FieldsetErrorMessage.displayName = 'Fieldset.ErrorMessage'
 
 export const Fieldset = {
   Root: FieldsetRoot,

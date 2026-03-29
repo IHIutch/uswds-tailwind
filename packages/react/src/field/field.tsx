@@ -13,7 +13,7 @@ export function useFieldContext() {
   return React.useContext(FieldContext)
 }
 
-const FieldRoot = React.forwardRef<any, FieldRootProps>(
+const FieldRoot = React.forwardRef<HTMLDivElement, FieldRootProps>(
   ({ className, ...props }, forwardedRef) => {
     const field = useField(props)
     const mergedProps = mergeProps(field.getRootProps(), props)
@@ -33,7 +33,7 @@ const FieldRoot = React.forwardRef<any, FieldRootProps>(
   },
 )
 
-const FieldLabel = React.forwardRef<any, React.LabelHTMLAttributes<HTMLLabelElement>>(
+const FieldLabel = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
   ({ className, ...props }, forwardedRef) => {
     const field = useFieldContext()
     const mergedProps = mergeProps(field?.getLabelProps(), props)
@@ -48,7 +48,7 @@ const FieldLabel = React.forwardRef<any, React.LabelHTMLAttributes<HTMLLabelElem
   },
 )
 
-const FieldDescription = React.forwardRef<any, React.HTMLAttributes<HTMLDivElement>>(
+const FieldDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
     const field = useFieldContext()
     const mergedProps = mergeProps(field?.getDescriptionProps(), props)
@@ -63,7 +63,7 @@ const FieldDescription = React.forwardRef<any, React.HTMLAttributes<HTMLDivEleme
   },
 )
 
-const FieldErrorMessage = React.forwardRef<any, React.HTMLAttributes<HTMLDivElement>>(
+const FieldErrorMessage = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
     const field = useFieldContext()
     const mergedProps = mergeProps(field?.getErrorTextProps(), props)
@@ -79,6 +79,11 @@ const FieldErrorMessage = React.forwardRef<any, React.HTMLAttributes<HTMLDivElem
       : null
   },
 )
+
+FieldRoot.displayName = 'Field.Root'
+FieldLabel.displayName = 'Field.Label'
+FieldDescription.displayName = 'Field.Description'
+FieldErrorMessage.displayName = 'Field.ErrorMessage'
 
 export const Field = {
   Root: FieldRoot,

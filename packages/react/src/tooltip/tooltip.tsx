@@ -90,6 +90,10 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
   },
 )
 
+TooltipRoot.displayName = 'Tooltip.Root'
+TooltipTrigger.displayName = 'Tooltip.Trigger'
+TooltipContent.displayName = 'Tooltip.Content'
+
 export type TooltipProps = React.PropsWithChildren & Pick<tooltip.Props, 'content' | 'placement'>
 
 export function Tooltip({ content, placement, children, ...props }: TooltipProps) {

@@ -300,6 +300,16 @@ function StepIndicatorSegments() {
 // Export
 // ============================================================================
 
+StepIndicatorRoot.displayName = 'StepIndicator.Root'
+StepIndicatorList.displayName = 'StepIndicator.List'
+StepIndicatorListItem.displayName = 'StepIndicator.ListItem'
+StepIndicatorSegment.displayName = 'StepIndicator.Segment'
+StepIndicatorLabel.displayName = 'StepIndicator.Label'
+StepIndicatorSummary.displayName = 'StepIndicator.Summary'
+StepIndicatorCounter.displayName = 'StepIndicator.Counter'
+StepIndicatorHeading.displayName = 'StepIndicator.Heading'
+StepIndicatorSegments.displayName = 'StepIndicator.Segments'
+
 export const StepIndicator = {
   Root: StepIndicatorRoot,
   List: StepIndicatorList,

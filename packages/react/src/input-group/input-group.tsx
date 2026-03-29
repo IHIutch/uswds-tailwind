@@ -19,7 +19,7 @@ export function useInputGroupContext() {
   return React.useContext(InputGroupContext)
 }
 
-export const InputGroup = React.forwardRef<any, InputGroupProps>(
+export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
   ({ className, children, startElement, endElement, ...props }, forwardedRef) => {
     return (
       <InputGroupContext.Provider

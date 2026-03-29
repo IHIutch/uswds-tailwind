@@ -7,7 +7,7 @@ import { useInputGroupContext } from '../input-group/input-group'
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
-export const Input = React.forwardRef<any, InputProps>(
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
     const inputGroup = useInputGroupContext()
     const field = useFieldContext()
@@ -18,7 +18,7 @@ export const Input = React.forwardRef<any, InputProps>(
       <input
         {...mergedProps}
         className={cx(
-          'p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:border-red-60v invalid:border-4 invalid:py-1 valid:border-green-cool-40v valid:border-4 valid:py-1',
+          'mt-2 p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:border-red-60v invalid:border-4 invalid:py-1 valid:border-green-cool-40v valid:border-4 valid:py-1',
           inputGroup?.hasStartElement ? 'pl-10' : '',
           inputGroup?.hasEndElement ? 'pr-10' : '',
           className,
@@ -29,7 +29,7 @@ export const Input = React.forwardRef<any, InputProps>(
   },
 )
 
-export const Textarea = React.forwardRef<any, TextareaProps>(
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
     const field = useFieldContext()
     const mergedProps = mergeProps(field?.getTextareaProps(), props)

@@ -14,6 +14,8 @@ function TimePickerRoot({ options = DEFAULT_TIME_OPTIONS, className, ...props }:
   return <Combobox.Root options={options} disableFiltering customFilter={findTimeMatch} {...props} className={cx('max-w-40', className)} />
 }
 
+TimePickerRoot.displayName = 'TimePicker.Root'
+
 export const TimePicker = {
   Root: TimePickerRoot,
   Label: Combobox.Label,

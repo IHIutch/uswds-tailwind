@@ -125,6 +125,13 @@ const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
   },
 )
 
+InputMaskRoot.displayName = 'InputMask.Root'
+InputMaskLabel.displayName = 'InputMask.Label'
+InputMaskDescription.displayName = 'InputMask.Description'
+InputMaskControl.displayName = 'InputMask.Control'
+InputMaskPlaceholder.displayName = 'InputMask.Placeholder'
+InputMaskInput.displayName = 'InputMask.Input'
+
 export const InputMask = {
   Root: InputMaskRoot,
   Label: InputMaskLabel,

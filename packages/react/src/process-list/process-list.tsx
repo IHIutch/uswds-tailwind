@@ -61,6 +61,12 @@ function ProcessListDescription({ className, ...props }: ProcessListDescriptionP
   )
 }
 
+ProcessListRoot.displayName = 'ProcessList.Root'
+ProcessListItem.displayName = 'ProcessList.Item'
+ProcessListContent.displayName = 'ProcessList.Content'
+ProcessListTitle.displayName = 'ProcessList.Title'
+ProcessListDescription.displayName = 'ProcessList.Description'
+
 export const ProcessList = {
   Root: ProcessListRoot,
   Item: ProcessListItem,

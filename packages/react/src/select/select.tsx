@@ -49,11 +49,11 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
   },
 )
 
-const SelectField = React.forwardRef<any, SelectProps>(
+const SelectField = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, ...props }, forwardedRef) => {
     const select = useSelectContext()
     const field = useFieldContext()
-    const mergedProps = mergeProps(select.getFieldProps(), field?.getInputProps(), props)
+    const mergedProps = mergeProps(select.getFieldProps(), field?.getSelectProps(), props)
 
     return (
       <select
@@ -87,6 +87,10 @@ const SelectIcon = React.forwardRef<HTMLDivElement, SelectIconProps>(
 // ============================================================================
 // Compound Component Export
 // ============================================================================
+
+SelectRoot.displayName = 'Select.Root'
+SelectField.displayName = 'Select.Field'
+SelectIcon.displayName = 'Select.Icon'
 
 export const Select = {
   Root: SelectRoot,

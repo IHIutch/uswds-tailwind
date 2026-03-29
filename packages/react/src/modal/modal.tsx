@@ -133,6 +133,15 @@ function ModalCloseTrigger({ className, ...props }: ModalCloseTriggerProps) {
   )
 }
 
+ModalRoot.displayName = 'Modal.Root'
+ModalTrigger.displayName = 'Modal.Trigger'
+ModalBackdrop.displayName = 'Modal.Backdrop'
+ModalPositioner.displayName = 'Modal.Positioner'
+ModalContent.displayName = 'Modal.Content'
+ModalTitle.displayName = 'Modal.Title'
+ModalDescription.displayName = 'Modal.Description'
+ModalCloseTrigger.displayName = 'Modal.CloseTrigger'
+
 export const Modal = {
   Root: ModalRoot,
   Trigger: ModalTrigger,

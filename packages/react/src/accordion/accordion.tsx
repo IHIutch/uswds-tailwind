@@ -49,7 +49,7 @@ function useAccordionItemContext() {
   }
 }
 
-const AccordionRoot = React.forwardRef<any, AccordionRootProps>(
+const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
   ({ className, ...props }, forwardedRef) => {
     const service = useMachine(accordion.machine, {
       id: React.useId(),
@@ -67,7 +67,7 @@ const AccordionRoot = React.forwardRef<any, AccordionRootProps>(
   },
 )
 
-const AccordionItem = React.forwardRef<any, AccordionItemProps>(
+const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
   ({ className, value, ...props }, forwardedRef) => {
     const { api } = useAccordionContext()
     const mergedProps = mergeProps(api.getItemProps({ value }), props)
@@ -80,7 +80,7 @@ const AccordionItem = React.forwardRef<any, AccordionItemProps>(
   },
 )
 
-const AccordionTrigger = React.forwardRef<any, AccordionTriggerProps>(
+const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useAccordionContext()
     const { value } = useAccordionItemContext()
@@ -100,7 +100,7 @@ const AccordionTrigger = React.forwardRef<any, AccordionTriggerProps>(
   },
 )
 
-const AccordionContent = React.forwardRef<any, AccordionContentProps>(
+const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useAccordionContext()
     const { value } = useAccordionItemContext()
@@ -120,7 +120,7 @@ const AccordionContent = React.forwardRef<any, AccordionContentProps>(
   },
 )
 
-const AccordionItemIndicator = React.forwardRef<any, AccordionItemIndicatorProps>(
+const AccordionItemIndicator = React.forwardRef<HTMLDivElement, AccordionItemIndicatorProps>(
   ({ className, children, ...props }, forwardedRef) => {
     const content = typeof children === 'function'
       ? children(useAccordionItemContext())
@@ -139,6 +139,12 @@ const AccordionItemIndicator = React.forwardRef<any, AccordionItemIndicatorProps
     )
   },
 )
+
+AccordionRoot.displayName = 'Accordion.Root'
+AccordionItem.displayName = 'Accordion.Item'
+AccordionItemIndicator.displayName = 'Accordion.ItemIndicator'
+AccordionTrigger.displayName = 'Accordion.ItemTrigger'
+AccordionContent.displayName = 'Accordion.ItemContent'
 
 export const Accordion = {
   Root: AccordionRoot,

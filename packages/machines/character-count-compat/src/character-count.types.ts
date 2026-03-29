@@ -15,6 +15,10 @@ export type ElementIds = Partial<{
 
 export interface CharacterCountProps extends CommonProperties {
   /**
+   * The ids of the elements in the character count. Useful for composition.
+   */
+  ids?: ElementIds | undefined
+  /**
    * The maximum number of characters allowed.
    *  @default undefined
    */

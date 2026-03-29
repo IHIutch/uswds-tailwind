@@ -78,6 +78,12 @@ function SideNavigationItems({ items }: SideNavigationItemsProps) {
   )
 }
 
+SideNavigationRoot.displayName = 'SideNavigation.Root'
+SideNavigationList.displayName = 'SideNavigation.List'
+SideNavigationListItem.displayName = 'SideNavigation.ListItem'
+SideNavigationLink.displayName = 'SideNavigation.Link'
+SideNavigationItems.displayName = 'SideNavigation.Items'
+
 export const SideNavigation = {
   Root: SideNavigationRoot,
   List: SideNavigationList,

@@ -136,6 +136,13 @@ const BreadcrumbPrevious = React.forwardRef<HTMLSpanElement, BreadcrumbPreviousP
   },
 )
 
+BreadcrumbRoot.displayName = 'Breadcrumb.Root'
+BreadcrumbList.displayName = 'Breadcrumb.List'
+BreadcrumbItem.displayName = 'Breadcrumb.Item'
+BreadcrumbLink.displayName = 'Breadcrumb.Link'
+BreadcrumbSeparator.displayName = 'Breadcrumb.Separator'
+BreadcrumbPrevious.displayName = 'Breadcrumb.Previous'
+
 export const Breadcrumb = {
   Root: BreadcrumbRoot,
   List: BreadcrumbList,

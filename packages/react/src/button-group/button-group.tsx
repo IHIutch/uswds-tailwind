@@ -94,6 +94,9 @@ export const ButtonGroupButton = React.forwardRef<HTMLButtonElement, ButtonProps
   },
 )
 
+ButtonGroupRoot.displayName = 'ButtonGroup.Root'
+ButtonGroupButton.displayName = 'ButtonGroup.Button'
+
 export const ButtonGroup = {
   Root: ButtonGroupRoot,
   Button: ButtonGroupButton,

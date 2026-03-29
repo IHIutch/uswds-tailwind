@@ -153,6 +153,13 @@ const CheckboxDescription = React.forwardRef<HTMLDivElement, React.HTMLAttribute
   },
 )
 
+CheckboxRoot.displayName = 'Checkbox.Root'
+CheckboxGroup.displayName = 'Checkbox.Group'
+CheckboxLabel.displayName = 'Checkbox.Label'
+CheckboxInput.displayName = 'Checkbox.Input'
+CheckboxControl.displayName = 'Checkbox.Control'
+CheckboxDescription.displayName = 'Checkbox.Description'
+
 export const Checkbox = {
   Root: CheckboxRoot,
   Group: CheckboxGroup,

@@ -55,6 +55,10 @@ function SummaryBoxContent({ className, ...props }: SummaryBoxContentProps) {
   )
 }
 
+SummaryBoxRoot.displayName = 'SummaryBox.Root'
+SummaryBoxHeading.displayName = 'SummaryBox.Heading'
+SummaryBoxContent.displayName = 'SummaryBox.Content'
+
 export const SummaryBox = {
   Root: SummaryBoxRoot,
   Heading: SummaryBoxHeading,

@@ -157,6 +157,17 @@ const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTM
   },
 )
 
+ComboboxRoot.displayName = 'Combobox.Root'
+ComboboxLabel.displayName = 'Combobox.Label'
+ComboboxControl.displayName = 'Combobox.Control'
+ComboboxInput.displayName = 'Combobox.Input'
+ComboboxList.displayName = 'Combobox.List'
+ComboboxItem.displayName = 'Combobox.Item'
+ComboboxEmptyItem.displayName = 'Combobox.EmptyItem'
+ComboboxIndicatorGroup.displayName = 'Combobox.IndicatorGroup'
+ComboboxClearButton.displayName = 'Combobox.ClearButton'
+ComboboxToggleButton.displayName = 'Combobox.ToggleButton'
+
 export const Combobox = {
   Root: ComboboxRoot,
   Label: ComboboxLabel,

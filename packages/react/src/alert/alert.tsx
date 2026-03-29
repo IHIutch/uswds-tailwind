@@ -154,6 +154,12 @@ const AlertIndicator = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
   },
 )
 
+AlertRoot.displayName = 'Alert.Root'
+AlertContent.displayName = 'Alert.Content'
+AlertTitle.displayName = 'Alert.Title'
+AlertDescription.displayName = 'Alert.Description'
+AlertIndicator.displayName = 'Alert.Indicator'
+
 export const Alert = {
   Root: AlertRoot,
   Content: AlertContent,

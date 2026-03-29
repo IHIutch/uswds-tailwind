@@ -205,6 +205,14 @@ function InPageNavItems() {
 // Export
 // ============================================================================
 
+InPageNavRoot.displayName = 'InPageNav.Root'
+InPageNavHeadingElement.displayName = 'InPageNav.Heading'
+InPageNavList.displayName = 'InPageNav.List'
+InPageNavItem.displayName = 'InPageNav.Item'
+InPageNavLink.displayName = 'InPageNav.Link'
+InPageNavScrollspy.displayName = 'InPageNav.Scrollspy'
+InPageNavItems.displayName = 'InPageNav.Items'
+
 export const InPageNav = {
   Root: InPageNavRoot,
   Heading: InPageNavHeadingElement,

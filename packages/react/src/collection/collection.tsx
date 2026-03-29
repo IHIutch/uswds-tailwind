@@ -117,6 +117,18 @@ function CollectionThumbnail({ className, ...props }: CollectionThumbnailProps) 
 //   return <img {...props} className={cx('w-full h-auto object-cover', className)} />
 // }
 
+CollectionRoot.displayName = 'Collection.Root'
+CollectionList.displayName = 'Collection.List'
+CollectionItem.displayName = 'Collection.Item'
+CollectionHeading.displayName = 'Collection.Heading'
+CollectionDescription.displayName = 'Collection.Description'
+CollectionMetaList.displayName = 'Collection.MetaList'
+CollectionMetaListItem.displayName = 'Collection.MetaListItem'
+CollectionCalendar.displayName = 'Collection.Calendar'
+CollectionCalendarDate.displayName = 'Collection.CalendarDate'
+CollectionCalendarMonth.displayName = 'Collection.CalendarMonth'
+CollectionThumbnail.displayName = 'Collection.Thumbnail'
+
 export const Collection = {
   Root: CollectionRoot,
   List: CollectionList,

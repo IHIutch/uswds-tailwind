@@ -182,6 +182,14 @@ function PaginationPages({ render }: { render?: PaginationItemProps['render'] })
 
 export type { PageSlot }
 
+PaginationRoot.displayName = 'Pagination.Root'
+PaginationList.displayName = 'Pagination.List'
+PaginationPrevTrigger.displayName = 'Pagination.PrevTrigger'
+PaginationNextTrigger.displayName = 'Pagination.NextTrigger'
+PaginationItem.displayName = 'Pagination.Item'
+PaginationEllipsis.displayName = 'Pagination.Ellipsis'
+PaginationPages.displayName = 'Pagination.Pages'
+
 export const Pagination = {
   Root: PaginationRoot,
   List: PaginationList,

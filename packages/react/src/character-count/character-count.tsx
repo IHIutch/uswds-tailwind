@@ -25,7 +25,7 @@ function useCharacterCountContext() {
   return context
 }
 
-const CharacterCountRoot = React.forwardRef<any, CharacterCountRootProps>(
+const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootProps>(
   ({ className, ...props }, forwardedRef) => {
     const field = useFieldContext()
 
@@ -49,7 +49,7 @@ const CharacterCountRoot = React.forwardRef<any, CharacterCountRootProps>(
   },
 )
 
-const CharacterCountInput = React.forwardRef<any, CharacterCountInputProps>(
+const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInputProps>(
   (props, forwardedRef) => {
     const { api } = useCharacterCountContext()
 
@@ -64,7 +64,7 @@ const CharacterCountInput = React.forwardRef<any, CharacterCountInputProps>(
   },
 )
 
-const CharacterCountStatus = React.forwardRef<any, CharacterCountStatusProps>(
+const CharacterCountStatus = React.forwardRef<HTMLSpanElement, CharacterCountStatusProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api, context } = useCharacterCountContext()
 
@@ -94,7 +94,7 @@ const CharacterCountStatus = React.forwardRef<any, CharacterCountStatusProps>(
   },
 )
 
-const CharacterCountLabel = React.forwardRef<any, CharacterCountLabelProps>(
+const CharacterCountLabel = React.forwardRef<HTMLLabelElement, CharacterCountLabelProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useCharacterCountContext()
 
@@ -109,6 +109,11 @@ const CharacterCountLabel = React.forwardRef<any, CharacterCountLabelProps>(
     )
   },
 )
+
+CharacterCountRoot.displayName = 'CharacterCount.Root'
+CharacterCountInput.displayName = 'CharacterCount.Input'
+CharacterCountStatus.displayName = 'CharacterCount.Status'
+CharacterCountLabel.displayName = 'CharacterCount.Label'
 
 export const CharacterCount = {
   Root: CharacterCountRoot,

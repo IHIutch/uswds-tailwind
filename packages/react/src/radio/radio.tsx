@@ -171,6 +171,13 @@ const RadioGroupItemDescription = React.forwardRef<HTMLDivElement, RadioDescript
 // Exports
 // ============================================================================
 
+RadioGroupRoot.displayName = 'RadioGroup.Root'
+RadioGroupItem.displayName = 'RadioGroup.Item'
+RadioGroupItemInput.displayName = 'RadioGroup.ItemInput'
+RadioGroupItemControl.displayName = 'RadioGroup.ItemControl'
+RadioGroupItemLabel.displayName = 'RadioGroup.ItemLabel'
+RadioGroupItemDescription.displayName = 'RadioGroup.ItemDescription'
+
 export const RadioGroup = {
   Root: RadioGroupRoot,
   Item: RadioGroupItem,
