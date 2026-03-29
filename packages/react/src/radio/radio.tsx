@@ -3,6 +3,7 @@ import type { GroupItemProps, UseRadioGroupProps } from './use-radio-group'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 import { useRadioGroup } from './use-radio-group'
 
 // ============================================================================
@@ -106,7 +107,8 @@ const RadioGroupItemInput = React.forwardRef<HTMLInputElement, RadioInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const radio = useRadioGroupContext()
     const radioItem = useRadioGroupItemContext()
-    const mergedProps = mergeProps(radio?.getInputProps(radioItem), props)
+    const field = useFieldContext()
+    const mergedProps = mergeProps(radio?.getInputProps(radioItem), field?.getInputProps(), props)
 
     return (
       <input

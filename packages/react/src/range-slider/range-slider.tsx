@@ -2,6 +2,7 @@ import type { UseRangeSliderProps, UseRangeSliderReturn } from './use-range-slid
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 import { useRangeSlider } from './use-range-slider'
 
 const RangeSliderContext = React.createContext<UseRangeSliderReturn | null>(null)
@@ -37,7 +38,8 @@ type RangeSliderInputProps = React.InputHTMLAttributes<HTMLInputElement>
 const RangeSliderInput = React.forwardRef<HTMLInputElement, RangeSliderInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const { getInputProps } = useRangeSliderContext()
-    const mergedProps = mergeProps(getInputProps(), props)
+    const field = useFieldContext()
+    const mergedProps = mergeProps(getInputProps(), field?.getInputProps(), props)
 
     return (
       <input

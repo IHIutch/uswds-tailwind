@@ -1,4 +1,6 @@
+import { dataAttr } from '@zag-js/dom-query'
 import * as React from 'react'
+import { useFieldContext } from '../field/field'
 import { parts } from './checkbox.anatomy'
 
 export interface ElementIds {
@@ -9,24 +11,18 @@ export interface ElementIds {
 }
 
 export interface UseCheckboxProps {
-  /**
-   * The id of the field.
-   */
   id?: string | undefined
-  /**
-   * The ids of the field parts.
-   */
   ids?: ElementIds | undefined
-  /**
-   * Indicates whether the field is disabled.
-   */
   disabled?: boolean | undefined
+  invalid?: boolean | undefined
 }
 
 export type UseCheckboxReturn = ReturnType<typeof useCheckbox>
 
 export function useCheckbox(props: UseCheckboxProps = {}) {
-  const { ids, disabled = false } = props
+  const field = useFieldContext()
+
+  const { ids, disabled = field?.disabled ?? false, invalid = field?.invalid ?? false } = props
 
   const uid = React.useId()
   const id = props.id ?? uid
@@ -34,7 +30,7 @@ export function useCheckbox(props: UseCheckboxProps = {}) {
 
   const rootId = ids?.root ?? `checkbox::${id}`
   const labelId = ids?.label ?? `checkbox::${id}::label`
-  const inputId = ids?.input ?? `checkbox::${id}::input`
+  const inputId = field?.ids.control ?? ids?.input ?? `checkbox::${id}::input`
   const controlId = ids?.control ?? `checkbox::${id}::control`
 
   const getRootProps = React.useMemo(
@@ -65,8 +61,10 @@ export function useCheckbox(props: UseCheckboxProps = {}) {
         'type': 'checkbox',
         disabled,
         'aria-labelledby': labelId,
+        'data-invalid': dataAttr(invalid),
+        'data-disabled': dataAttr(disabled),
       }) as React.InputHTMLAttributes<HTMLInputElement>,
-    [disabled, inputId, labelId],
+    [disabled, invalid, inputId, labelId],
   )
 
   const getControlProps = React.useMemo(
@@ -93,5 +91,6 @@ export function useCheckbox(props: UseCheckboxProps = {}) {
     getInputProps,
     getControlProps,
     disabled,
+    invalid,
   }
 }

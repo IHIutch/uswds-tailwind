@@ -1,4 +1,6 @@
+import { dataAttr } from '@zag-js/dom-query'
 import * as React from 'react'
+import { useFieldContext } from '../field/field'
 import { useFieldsetContext } from '../fieldset/fieldset'
 import { parts } from './radio.anatomy'
 
@@ -11,42 +13,14 @@ export interface ElementIds {
 }
 
 export interface UseRadioGroupProps {
-  /**
-   * The id of the field.
-   */
   id?: string | undefined
-  /**
-   * The ids of the field parts.
-   */
   ids?: ElementIds | undefined
-  /**
-   * The initial value of `value` when uncontrolled
-   */
   defaultValue?: string | undefined
-  /**
-   * The controlled value of the checkbox group
-   */
   value?: string | undefined
-  /**
-   * The callback to call when the value changes
-   */
   onValueChange?: ((value: string) => void) | undefined
-  /**
-   * If `true`, the checkbox group is disabled
-   */
   disabled?: boolean | undefined
-  /**
-   * If `true`, the checkbox group is read-only
-   */
   readOnly?: boolean | undefined
-  /**
-   * If `true`, the checkbox group is invalid
-   */
   invalid?: boolean | undefined
-  /**
-   * The name of the input fields in the radio
-   * (Useful for form submission).
-   */
   name?: string | undefined
 }
 
@@ -59,8 +33,9 @@ export interface GroupItemProps {
 export type UseRadioGroupReturn = ReturnType<typeof useRadioGroup>
 
 export function useRadioGroup(props: UseRadioGroupProps = {}) {
+  const field = useFieldContext()
   const fieldset = useFieldsetContext()
-  const { ids, disabled = false, readOnly = false, invalid = false, name } = props
+  const { ids, disabled = field?.disabled ?? false, readOnly = false, invalid = field?.invalid ?? false, name } = props
 
   const uid = React.useId()
   const id = props.id ?? uid
@@ -69,7 +44,7 @@ export function useRadioGroup(props: UseRadioGroupProps = {}) {
   const rootId = ids?.root ?? `radio::${id}`
   const labelId = ids?.label ?? `radio::${id}::label`
   const legendId = fieldset?.ids.legend ?? `radio::${id}::legend`
-  const inputId = ids?.input ?? `radio::${id}::input`
+  const inputId = field?.ids.control ?? ids?.input ?? `radio::${id}::input`
   const controlId = ids?.control ?? `radio::${id}::control`
 
   const getRootProps = React.useMemo(
@@ -115,8 +90,10 @@ export function useRadioGroup(props: UseRadioGroupProps = {}) {
         'name': name || id,
         'disabled': disabled || itemProps.disabled,
         'aria-labelledby': labelId,
+        'data-invalid': dataAttr(invalid),
+        'data-disabled': dataAttr(disabled),
       }) as React.InputHTMLAttributes<HTMLInputElement>,
-    [disabled, inputId, labelId],
+    [disabled, invalid, inputId, labelId],
   )
 
   const getControlProps = React.useMemo(
@@ -124,7 +101,6 @@ export function useRadioGroup(props: UseRadioGroupProps = {}) {
       ({
         ...parts.control.attrs,
         id: `${controlId}::${itemProps.value}`,
-        // disabled: disabled || props.disabled,
       }) as React.HTMLAttributes<HTMLDivElement>,
     [disabled, controlId],
   )

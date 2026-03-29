@@ -86,7 +86,8 @@ type FileInputInputProps = React.InputHTMLAttributes<HTMLInputElement>
 const FileInputInput = React.forwardRef<HTMLInputElement, FileInputInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useFileInputContext()
-    const mergedProps = mergeProps(api.getInputProps(), props)
+    const field = useFieldContext()
+    const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
 
     return (
       <input

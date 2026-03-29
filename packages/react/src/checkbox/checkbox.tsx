@@ -2,6 +2,7 @@ import type { VariantProps } from 'cva'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 import { useCheckbox } from './use-checkbox'
 
 export type CheckboxRootProps = React.LabelHTMLAttributes<HTMLLabelElement>
@@ -103,7 +104,8 @@ const CheckboxLabel = React.forwardRef<HTMLDivElement, CheckboxLabelProps>(
 const CheckboxInput = React.forwardRef<HTMLInputElement, CheckboxInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const checkbox = useCheckboxContext()
-    const mergedProps = mergeProps(checkbox?.getInputProps(), props)
+    const field = useFieldContext()
+    const mergedProps = mergeProps(checkbox?.getInputProps(), field?.getInputProps(), props)
 
     return (
       <input

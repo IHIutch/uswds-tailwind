@@ -2,6 +2,7 @@ import * as combobox from '@uswds-tailwind/combobox-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 
 export interface ComboboxContextProps {
   api: combobox.Api
@@ -19,8 +20,15 @@ function useComboboxContext() {
 
 const ComboboxRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>>(
   ({ className, ...props }, forwardedRef) => {
+    const field = useFieldContext()
+
     const service = useMachine(combobox.machine, {
       id: React.useId(),
+      ids: {
+        label: field?.ids.label,
+        input: field?.ids.control,
+      },
+      disabled: props.disabled ?? field?.disabled,
       ...props,
     })
 
@@ -47,7 +55,8 @@ const ComboboxLabel = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttribut
 const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getInputProps(), props)
+    const field = useFieldContext()
+    const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
 
     return <input {...mergedProps} className={cx('pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4', className)} ref={forwardedRef} />
   },

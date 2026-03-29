@@ -2,6 +2,7 @@ import type { UseSelectProps } from './use-select'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 import { useSelect } from './use-select'
 
 export type SelectContextProps = ReturnType<typeof useSelect>
@@ -51,7 +52,8 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
 const SelectField = React.forwardRef<any, SelectProps>(
   ({ className, ...props }, forwardedRef) => {
     const select = useSelectContext()
-    const mergedProps = mergeProps(select.getFieldProps(), props)
+    const field = useFieldContext()
+    const mergedProps = mergeProps(select.getFieldProps(), field?.getInputProps(), props)
 
     return (
       <select

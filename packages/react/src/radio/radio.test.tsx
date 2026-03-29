@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
+import { Fieldset } from '../fieldset/fieldset'
 import { RadioGroup } from './radio'
 
 it('radioGroup works standalone', async () => {
@@ -17,10 +18,10 @@ it('radioGroup works standalone', async () => {
   await expect.element(screen.getByRole('radio')).toBeVisible()
 })
 
-it('field.Label htmlFor matches RadioGroup.ItemInput id', async () => {
+it('fieldset.Legend is referenced by RadioGroup aria-labelledby', async () => {
   const screen = await render(
-    <Field.Root>
-      <Field.Label>Choice</Field.Label>
+    <Fieldset.Root>
+      <Fieldset.Legend>Choice</Fieldset.Legend>
       <RadioGroup.Root>
         <RadioGroup.Item value="a">
           <RadioGroup.ItemInput />
@@ -28,12 +29,11 @@ it('field.Label htmlFor matches RadioGroup.ItemInput id', async () => {
           <RadioGroup.ItemLabel>Option A</RadioGroup.ItemLabel>
         </RadioGroup.Item>
       </RadioGroup.Root>
-    </Field.Root>,
+    </Fieldset.Root>,
   )
 
-  const label = screen.getByText('Choice')
-  const input = screen.getByRole('radio')
-  expect(label.element().getAttribute('for')).toBe(input.element().id)
+  const radiogroup = screen.getByRole('radiogroup')
+  await expect.element(radiogroup).toHaveAccessibleName('Choice')
 })
 
 it('radioGroup inherits disabled from Field.Root', async () => {

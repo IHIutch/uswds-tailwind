@@ -2,6 +2,7 @@ import * as characterCount from '@uswds-tailwind/character-count-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
 
 export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.HTMLAttributes<HTMLElement>
@@ -26,8 +27,14 @@ function useCharacterCountContext() {
 
 const CharacterCountRoot = React.forwardRef<any, CharacterCountRootProps>(
   ({ className, ...props }, forwardedRef) => {
+    const field = useFieldContext()
+
     const service = useMachine(characterCount.machine, {
       id: React.useId(),
+      ids: {
+        label: field?.ids.label,
+        input: field?.ids.control,
+      },
       maxLength: props.maxLength,
     })
 

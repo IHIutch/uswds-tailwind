@@ -6,6 +6,7 @@ import { parts } from './range-slider.anatomy'
 export interface UseRangeSliderProps {
   id?: string
   disabled?: boolean
+  invalid?: boolean
   name?: string
 }
 
@@ -14,7 +15,7 @@ export type UseRangeSliderReturn = ReturnType<typeof useRangeSlider>
 export function useRangeSlider(props: UseRangeSliderProps = {}) {
   const field = useFieldContext()
 
-  const { disabled = field?.disabled, name } = props
+  const { disabled = field?.disabled, invalid = field?.invalid ?? false, name } = props
   const uid = React.useId()
   const id = props.id ?? uid
 
@@ -37,13 +38,15 @@ export function useRangeSlider(props: UseRangeSliderProps = {}) {
         disabled,
         'name': name || id,
         'data-disabled': dataAttr(disabled),
+        'data-invalid': dataAttr(invalid),
       }) as React.InputHTMLAttributes<HTMLInputElement>,
-    [disabled, inputId, name, id],
+    [disabled, invalid, inputId, name, id],
   )
 
   return {
     id,
     disabled,
+    invalid,
     getRootProps,
     getInputProps,
   }

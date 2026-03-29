@@ -1,4 +1,4 @@
-import { ariaAttr, dataAttr } from '@zag-js/dom-query'
+import { dataAttr } from '@zag-js/dom-query'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
 import { parts } from '../select/select.anatomy'
@@ -78,7 +78,6 @@ export function useSelect(props: UseSelectProps = {}) {
         readOnly,
         required,
         'name': name || id,
-        'aria-invalid': ariaAttr(invalid),
         'data-invalid': dataAttr(invalid),
         'data-disabled': dataAttr(disabled),
       } as React.SelectHTMLAttributes<HTMLSelectElement>),

@@ -2,6 +2,7 @@ import * as inputMask from '@uswds-tailwind/input-mask-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
 import { Input } from '../input'
 
 export interface InputMaskContextProps {
@@ -22,8 +23,14 @@ function useInputMaskContext() {
 type InputMaskRootProps = Omit<inputMask.Props, 'id'> & React.HTMLAttributes<HTMLDivElement>
 
 function InputMaskRoot({ className, children, ...props }: InputMaskRootProps) {
+  const field = useFieldContext()
+
   const service = useMachine(inputMask.machine, {
     id: React.useId(),
+    ids: {
+      label: field?.ids.label,
+      input: field?.ids.control,
+    },
     ...props,
   })
   const api = inputMask.connect(service, normalizeProps)
@@ -105,7 +112,8 @@ type InputMaskInputProps = React.InputHTMLAttributes<HTMLInputElement>
 const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useInputMaskContext()
-    const mergedProps = mergeProps(api.getInputProps(), props)
+    const { 'aria-describedby': _, ...inputProps } = api.getInputProps()
+    const mergedProps = mergeProps(inputProps, props)
 
     return (
       <Input

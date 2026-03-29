@@ -2,7 +2,7 @@ import type { Scope } from '@zag-js/core'
 import { query, queryAll } from '@zag-js/dom-query'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `date-picker:${ctx.id}`
-export const getInputId = (ctx: Scope) => `date-picker:${ctx.id}:input`
+export const getInputId = (ctx: Scope) => ctx.ids?.input ?? `date-picker:${ctx.id}:input`
 export const getTriggerId = (ctx: Scope) => `date-picker:${ctx.id}:trigger`
 export const getCalendarId = (ctx: Scope) => `date-picker:${ctx.id}:calendar`
 export const getStatusId = (ctx: Scope) => `date-picker:${ctx.id}:status`
