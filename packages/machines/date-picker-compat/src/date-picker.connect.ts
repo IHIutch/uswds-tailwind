@@ -134,8 +134,6 @@ export function connect<T extends PropTypes>(
         'value': startInputValue,
         disabled,
         'readOnly': readonly,
-        'aria-invalid': !isInputValid,
-        'aria-describedby': validationMessage ? dom.getStatusId(scope) : undefined,
         onChange(event) {
           const target = event.target as HTMLInputElement
           send({ type: 'START_INPUT_CHANGE', value: target.value })
@@ -944,8 +942,6 @@ export function connect<T extends PropTypes>(
         'value': startInputValue,
         disabled,
         'readOnly': readonly,
-        'aria-invalid': ariaAttr(!isStartInputValid),
-        'aria-describedby': startValidationMessage ? `${dom.getStatusId(scope)}-start` : undefined,
         'placeholder': 'MM/dd/yyyy',
         'aria-label': 'Start date',
         'max': startInputMax ? formatDate(startInputMax, 'yyyy-MM-dd') : undefined,
@@ -1003,8 +999,6 @@ export function connect<T extends PropTypes>(
         'value': endInputValue,
         disabled,
         'readOnly': readonly,
-        'aria-invalid': ariaAttr(!isEndInputValid),
-        'aria-describedby': endValidationMessage ? `${dom.getStatusId(scope)}-end` : undefined,
         'placeholder': 'MM/dd/yyyy',
         'aria-label': 'End date',
         'max': maxDate ? formatDate(maxDate, 'yyyy-MM-dd') : undefined,

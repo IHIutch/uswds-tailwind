@@ -49,7 +49,6 @@ export type InputMaskMachine = Machine<InputMaskSchema>
 export interface InputMaskApi<T extends PropTypes = PropTypes> {
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
-  getDescriptionProps: () => T['element']
   getInputProps: () => T['input']
   getValue: () => string
 }

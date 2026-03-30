@@ -8,7 +8,8 @@ import { Input } from '../input/input'
 export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 export type CharacterCountLabelProps = React.ComponentPropsWithoutRef<'label'>
 export type CharacterCountInputProps = React.ComponentPropsWithoutRef<'input'>
-export type CharacterCountStatusProps = React.ComponentPropsWithoutRef<'span'>
+export type CharacterCountStatusProps = React.ComponentPropsWithoutRef<'div'>
+export type CharacterCountSrStatusProps = React.ComponentPropsWithoutRef<'div'>
 
 export interface CharacterCountContextProps {
   api: characterCount.Api
@@ -34,6 +35,7 @@ const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootPr
       ids: {
         label: field?.ids.label,
         input: field?.ids.control,
+        status: field?.ids.description,
       },
       maxLength: props.maxLength,
     })
@@ -64,11 +66,33 @@ const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInp
   },
 )
 
-const CharacterCountStatus = React.forwardRef<HTMLSpanElement, CharacterCountStatusProps>(
+const CharacterCountStatus = React.forwardRef<HTMLDivElement, CharacterCountStatusProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api, context } = useCharacterCountContext()
+    const field = useFieldContext()
 
-    const mergedProps = mergeProps(api.getStatusProps(), props)
+    const mergedProps = mergeProps(api.getStatusProps(), field?.getDescriptionProps(), props)
+
+    return (
+      <div
+        {...mergedProps}
+        className={cx(
+          'mt-1 text-gray-50 invalid:text-red-60v invalid:font-bold',
+          className,
+        )}
+        ref={forwardedRef}
+      >
+        {context.get('statusText')}
+      </div>
+    )
+  },
+)
+
+const CharacterCountSrStatus = React.forwardRef<HTMLDivElement, CharacterCountSrStatusProps>(
+  (props, forwardedRef) => {
+    const { api, context } = useCharacterCountContext()
+
+    const mergedProps = mergeProps(api.getSrStatusProps(), props)
 
     return (
       <div>
@@ -78,17 +102,7 @@ const CharacterCountStatus = React.forwardRef<HTMLSpanElement, CharacterCountSta
           {' '}
           characters
         </span>
-        <span
-          {...mergedProps}
-          className={cx(
-            'text-gray-50 invalid:text-red-60v invalid:font-bold',
-            className,
-          )}
-          ref={forwardedRef}
-        >
-          {context.get('statusText')}
-        </span>
-        <span {...api.getSrStatusProps()}>{context.get('srStatusText')}</span>
+        <span {...mergedProps} ref={forwardedRef}>{context.get('srStatusText')}</span>
       </div>
     )
   },
@@ -113,11 +127,13 @@ const CharacterCountLabel = React.forwardRef<HTMLLabelElement, CharacterCountLab
 CharacterCountRoot.displayName = 'CharacterCount.Root'
 CharacterCountInput.displayName = 'CharacterCount.Input'
 CharacterCountStatus.displayName = 'CharacterCount.Status'
+CharacterCountSrStatus.displayName = 'CharacterCount.SrStatus'
 CharacterCountLabel.displayName = 'CharacterCount.Label'
 
 export const CharacterCount = {
   Root: CharacterCountRoot,
   Input: CharacterCountInput,
   Status: CharacterCountStatus,
+  SrStatus: CharacterCountSrStatus,
   Label: CharacterCountLabel,
 }

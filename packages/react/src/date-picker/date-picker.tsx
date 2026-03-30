@@ -50,8 +50,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
 const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
-    const { 'aria-describedby': _, 'aria-invalid': __, ...inputProps } = api.getInputProps()
-    const mergedProps = mergeProps(inputProps, props)
+    const mergedProps = mergeProps(api.getInputProps(), props)
 
     return <Input {...mergedProps} className={cx('', className)} ref={forwardedRef} />
   },

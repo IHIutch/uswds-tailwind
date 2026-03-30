@@ -27,13 +27,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getDescriptionProps() {
-      return normalize.element({
-        ...parts.description.attrs,
-        id: dom.getDescriptionId(scope),
-      })
-    },
-
     getInputProps() {
       const placeholder = prop('placeholder')
       const charset = prop('charset')
@@ -45,7 +38,6 @@ export function connect<T extends PropTypes>(
         'value': context.get('value'),
         maxLength,
         'placeholder': '',
-        'aria-describedby': dom.getDescriptionId(scope),
         onKeyUp(event) {
           const inputElement = event.currentTarget as HTMLInputElement
           const currentValue = inputElement.value

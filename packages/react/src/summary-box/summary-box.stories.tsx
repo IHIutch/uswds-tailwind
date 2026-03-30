@@ -2,7 +2,6 @@ import preview from '../../.storybook/preview'
 import { SummaryBox } from './summary-box'
 
 const meta = preview.meta({
-  tags: ['new'],
   title: 'Components/Summary Box',
   component: SummaryBox.Root,
 })

@@ -62,20 +62,6 @@ function InputMaskLabel({ className, ...props }: InputMaskLabelProps) {
   )
 }
 
-export type InputMaskDescriptionProps = React.ComponentPropsWithoutRef<'div'>
-
-function InputMaskDescription({ className, ...props }: InputMaskDescriptionProps) {
-  const { api } = useInputMaskContext()
-  const mergedProps = mergeProps(api.getDescriptionProps(), props)
-
-  return (
-    <div
-      {...mergedProps}
-      className={cx('text-gray-50', className)}
-    />
-  )
-}
-
 export type InputMaskControlProps = React.ComponentPropsWithoutRef<'div'>
 
 function InputMaskControl({ className, ...props }: InputMaskControlProps) {
@@ -112,8 +98,7 @@ export type InputMaskInputProps = React.ComponentPropsWithoutRef<'input'>
 const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useInputMaskContext()
-    const { 'aria-describedby': _, ...inputProps } = api.getInputProps()
-    const mergedProps = mergeProps(inputProps, props)
+    const mergedProps = mergeProps(api.getInputProps(), props)
 
     return (
       <Input
@@ -127,7 +112,6 @@ const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
 
 InputMaskRoot.displayName = 'InputMask.Root'
 InputMaskLabel.displayName = 'InputMask.Label'
-InputMaskDescription.displayName = 'InputMask.Description'
 InputMaskControl.displayName = 'InputMask.Control'
 InputMaskPlaceholder.displayName = 'InputMask.Placeholder'
 InputMaskInput.displayName = 'InputMask.Input'
@@ -135,7 +119,6 @@ InputMaskInput.displayName = 'InputMask.Input'
 export const InputMask = {
   Root: InputMaskRoot,
   Label: InputMaskLabel,
-  Description: InputMaskDescription,
   Control: InputMaskControl,
   Placeholder: InputMaskPlaceholder,
   Input: InputMaskInput,

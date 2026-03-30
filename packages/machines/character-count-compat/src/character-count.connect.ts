@@ -47,6 +47,7 @@ export function connect<T extends PropTypes>(
         'id': dom.getInputId(scope),
         'data-invalid': isInvalid ? 'true' : undefined,
         'aria-invalid': isInvalid ? 'true' : undefined,
+        'aria-describedby': dom.getStatusId(scope),
         'data-maxlength': context.get('maxLength'),
         'maxLength': Infinity,
         onInput(event) {

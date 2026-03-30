@@ -1,11 +1,11 @@
 import preview from '../../.storybook/preview'
 import { Field } from '../field/field'
+import { Fieldset } from '../fieldset/fieldset'
 import { Input } from '../input/input'
 import { Select } from '../select/select'
 import { MemorableDate } from './memorable-date'
 
 const meta = preview.meta({
-  tags: ['new'],
   title: 'Components/Memorable Date',
   component: MemorableDate.Root,
 })
@@ -59,11 +59,11 @@ export const Composed = meta.story({
         </Field.Root>
         <Field.Root className="w-12">
           <Field.Label>Day</Field.Label>
-          <Input maxLength={2} inputMode="numeric" pattern="[0-9]*" className="mt-2" />
+          <Input maxLength={2} inputMode="numeric" pattern="[0-9]*" />
         </Field.Root>
         <Field.Root className="w-20">
           <Field.Label>Year</Field.Label>
-          <Input minLength={4} maxLength={4} inputMode="numeric" pattern="[0-9]*" className="mt-2" />
+          <Input minLength={4} maxLength={4} inputMode="numeric" pattern="[0-9]*" />
         </Field.Root>
       </MemorableDate.Control>
     </MemorableDate.Root>

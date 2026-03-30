@@ -3,7 +3,6 @@ import { Field } from '../field/field'
 import { FileInput } from './file-input'
 
 const meta = preview.meta({
-  tags: ['new'],
   title: 'Components/File Input',
   component: FileInput.Root,
 })

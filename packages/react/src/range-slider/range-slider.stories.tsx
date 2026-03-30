@@ -3,7 +3,6 @@ import { Field } from '../field/field'
 import { RangeSlider } from './range-slider'
 
 const meta = preview.meta({
-  tags: ['new'],
   title: 'Components/Range Slider',
   component: RangeSlider.Root,
 })

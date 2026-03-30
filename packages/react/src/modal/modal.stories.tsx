@@ -4,7 +4,6 @@ import { ButtonGroup } from '../button-group'
 import { Modal } from './modal'
 
 const meta = preview.meta({
-  tags: ['new'],
   title: 'Components/Modal',
   component: Modal.Root,
 })
