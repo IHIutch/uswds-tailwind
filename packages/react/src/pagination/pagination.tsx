@@ -17,23 +17,26 @@ function usePaginationContext() {
 
 export type PaginationRootProps = React.ComponentPropsWithoutRef<'nav'> & UsePaginationProps
 
-function PaginationRoot(props: PaginationRootProps) {
-  const [rootProps, localProps] = splitProps(props)
-  const pagination = usePagination(rootProps)
+const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
+  (props, forwardedRef) => {
+    const [rootProps, localProps] = splitProps(props)
+    const pagination = usePagination(rootProps)
 
-  const mergedProps = mergeProps(pagination.getRootProps(), localProps)
+    const mergedProps = mergeProps(pagination.getRootProps(), localProps)
 
-  return (
-    <PaginationContext.Provider value={pagination}>
-      <nav
-        {...mergedProps}
-        className={cx('@container flex justify-center', localProps.className)}
-      >
-        {localProps.children}
-      </nav>
-    </PaginationContext.Provider>
-  )
-}
+    return (
+      <PaginationContext.Provider value={pagination}>
+        <nav
+          {...mergedProps}
+          className={cx('@container flex justify-center', localProps.className)}
+          ref={forwardedRef}
+        >
+          {localProps.children}
+        </nav>
+      </PaginationContext.Provider>
+    )
+  },
+)
 
 export type PaginationListProps = Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> & {
   children?: ((context: { pages: PageSlot[] }) => React.ReactNode) | React.ReactNode
@@ -58,61 +61,67 @@ function PaginationList({
   )
 }
 
-function PaginationPrevTrigger({ className, children, ...props }: React.ComponentPropsWithoutRef<'button'>) {
-  const { currentPage, isFirstPage, getPrevTriggerProps } = usePaginationContext()
+const PaginationPrevTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<'button'>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { currentPage, isFirstPage, getPrevTriggerProps } = usePaginationContext()
 
-  if (isFirstPage(currentPage))
-    return null
+    if (isFirstPage(currentPage))
+      return null
 
-  const mergedProps = mergeProps(getPrevTriggerProps(), props)
+    const mergedProps = mergeProps(getPrevTriggerProps(), props)
 
-  return (
-    <li>
-      <button
-        {...mergedProps}
-        className={cx(
-          'h-10 pr-2 mr-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
-          className,
-        )}
-      >
-        {children ?? (
-          <>
-            <span aria-hidden="true" className="icon-[material-symbols--chevron-left] align-middle size-4" />
-            Previous
-          </>
-        )}
-      </button>
-    </li>
-  )
-}
+    return (
+      <li>
+        <button
+          {...mergedProps}
+          className={cx(
+            'h-10 pr-2 mr-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
+            className,
+          )}
+          ref={forwardedRef}
+        >
+          {children ?? (
+            <>
+              <span aria-hidden="true" className="icon-[material-symbols--chevron-left] align-middle size-4" />
+              Previous
+            </>
+          )}
+        </button>
+      </li>
+    )
+  },
+)
 
-function PaginationNextTrigger({ className, children, ...props }: React.ComponentPropsWithoutRef<'button'>) {
-  const { currentPage, isLastPage, getNextTriggerProps } = usePaginationContext()
+const PaginationNextTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<'button'>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { currentPage, isLastPage, getNextTriggerProps } = usePaginationContext()
 
-  if (isLastPage(currentPage))
-    return null
+    if (isLastPage(currentPage))
+      return null
 
-  const mergedProps = mergeProps(getNextTriggerProps(), props)
+    const mergedProps = mergeProps(getNextTriggerProps(), props)
 
-  return (
-    <li>
-      <button
-        {...mergedProps}
-        className={cx(
-          'h-10 pl-2 ml-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
-          className,
-        )}
-      >
-        {children ?? (
-          <>
-            Next
-            <span aria-hidden="true" className="icon-[material-symbols--chevron-right] align-middle size-4" />
-          </>
-        )}
-      </button>
-    </li>
-  )
-}
+    return (
+      <li>
+        <button
+          {...mergedProps}
+          className={cx(
+            'h-10 pl-2 ml-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
+            className,
+          )}
+          ref={forwardedRef}
+        >
+          {children ?? (
+            <>
+              Next
+              <span aria-hidden="true" className="icon-[material-symbols--chevron-right] align-middle size-4" />
+            </>
+          )}
+        </button>
+      </li>
+    )
+  },
+)
 
 export interface PaginationItemRenderProps extends React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement> {
   value: number
@@ -125,36 +134,38 @@ export type PaginationItemProps = {
   render?: (props: PaginationItemRenderProps) => React.ReactNode
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
 
-function PaginationItem({ className, value, render, ...props }: PaginationItemProps) {
-  const { isLastPage, isActivePage, getItemProps } = usePaginationContext()
-  const mergedClassName = cx(
-    'h-10 min-w-10 p-2 cursor-pointer w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white',
-    className,
-  )
+const PaginationItem = React.forwardRef<HTMLLIElement, PaginationItemProps>(
+  ({ className, value, render, ...props }, forwardedRef) => {
+    const { isLastPage, isActivePage, getItemProps } = usePaginationContext()
+    const mergedClassName = cx(
+      'h-10 min-w-10 p-2 cursor-pointer w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white',
+      className,
+    )
 
-  const mergedProps = mergeProps(getItemProps({ value }), props)
+    const mergedProps = mergeProps(getItemProps({ value }), props)
 
-  return (
-    <li>
-      {render
-        ? render({
-            value,
-            isActive: isActivePage(value),
-            isLast: isLastPage(value),
-            ...mergedProps,
-            className: mergedClassName,
-          })
-        : (
-            <button
-              {...mergedProps}
-              className={mergedClassName}
-            >
-              {value}
-            </button>
-          )}
-    </li>
-  )
-}
+    return (
+      <li ref={forwardedRef}>
+        {render
+          ? render({
+              value,
+              isActive: isActivePage(value),
+              isLast: isLastPage(value),
+              ...mergedProps,
+              className: mergedClassName,
+            })
+          : (
+              <button
+                {...mergedProps}
+                className={mergedClassName}
+              >
+                {value}
+              </button>
+            )}
+      </li>
+    )
+  },
+)
 
 function PaginationEllipsis({ className, ...props }: React.ComponentPropsWithoutRef<'li'>) {
   const { getEllipsisProps } = usePaginationContext()

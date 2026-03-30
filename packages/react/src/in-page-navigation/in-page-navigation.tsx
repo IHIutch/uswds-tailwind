@@ -63,41 +63,44 @@ function useInPageNavContext() {
 // Root
 // ============================================================================
 
-function InPageNavRoot({
-  headings,
-  children,
-  activeHref,
-  onActiveChange,
-  className,
-  ...props
-}: InPageNavRootProps) {
-  const [internalActiveHref, setInternalActiveHref] = React.useState(activeHref || null)
+const InPageNavRoot = React.forwardRef<HTMLElement, InPageNavRootProps>(
+  ({
+    headings,
+    children,
+    activeHref,
+    onActiveChange,
+    className,
+    ...props
+  }, forwardedRef) => {
+    const [internalActiveHref, setInternalActiveHref] = React.useState(activeHref || null)
 
-  const setActiveHref = React.useCallback((href: string) => {
-    setInternalActiveHref(href)
-    onActiveChange?.(href)
-  }, [onActiveChange])
+    const setActiveHref = React.useCallback((href: string) => {
+      setInternalActiveHref(href)
+      onActiveChange?.(href)
+    }, [onActiveChange])
 
-  const leastHeadingDepth = Math.min(...headings.map(h => h.depth || Infinity))
+    const leastHeadingDepth = Math.min(...headings.map(h => h.depth || Infinity))
 
-  return (
-    <InPageNavContext.Provider value={{
-      headings,
-      activeHref: internalActiveHref,
-      setActiveHref,
-      leastHeadingDepth,
-    }}
-    >
-      <nav
-        aria-label="On this page"
-        {...props}
-        className={cx('', className)}
+    return (
+      <InPageNavContext.Provider value={{
+        headings,
+        activeHref: internalActiveHref,
+        setActiveHref,
+        leastHeadingDepth,
+      }}
       >
-        {children}
-      </nav>
-    </InPageNavContext.Provider>
-  )
-}
+        <nav
+          aria-label="On this page"
+          {...props}
+          className={cx('', className)}
+          ref={forwardedRef}
+        >
+          {children}
+        </nav>
+      </InPageNavContext.Provider>
+    )
+  },
+)
 
 // ============================================================================
 // Heading
@@ -143,28 +146,31 @@ function InPageNavItem({ className, ...props }: InPageNavItemProps) {
 // Link
 // ============================================================================
 
-function InPageNavLink({ href, depth = Infinity, className, children, ...props }: InPageNavLinkProps) {
-  const { activeHref, leastHeadingDepth } = useInPageNavContext()
+const InPageNavLink = React.forwardRef<HTMLAnchorElement, InPageNavLinkProps>(
+  ({ href, depth = Infinity, className, children, ...props }, forwardedRef) => {
+    const { activeHref, leastHeadingDepth } = useInPageNavContext()
 
-  const isActive = activeHref === href
-  const isPrimary = leastHeadingDepth < Infinity && depth === leastHeadingDepth
+    const isActive = activeHref === href
+    const isPrimary = leastHeadingDepth < Infinity && depth === leastHeadingDepth
 
-  return (
-    <a
-      {...props}
-      href={href}
-      data-active={dataAttr(isActive)}
-      data-depth={depth}
-      data-primary={dataAttr(isPrimary)}
-      className={cx(
-        'relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold',
-        className,
-      )}
-    >
-      {children}
-    </a>
-  )
-}
+    return (
+      <a
+        {...props}
+        href={href}
+        data-active={dataAttr(isActive)}
+        data-depth={depth}
+        data-primary={dataAttr(isPrimary)}
+        className={cx(
+          'relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold',
+          className,
+        )}
+        ref={forwardedRef}
+      >
+        {children}
+      </a>
+    )
+  },
+)
 
 // ============================================================================
 // Scrollspy

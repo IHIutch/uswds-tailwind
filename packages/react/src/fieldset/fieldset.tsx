@@ -27,50 +27,41 @@ const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootProps>(
   },
 )
 
-const FieldsetLegend = React.forwardRef<HTMLLegendElement, React.HTMLAttributes<HTMLLegendElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const fieldset = useFieldsetContext()
-    const mergedProps = mergeProps(fieldset?.getLegendProps(), props)
+function FieldsetLegend({ className, ...props }: React.HTMLAttributes<HTMLLegendElement>) {
+  const fieldset = useFieldsetContext()
+  const mergedProps = mergeProps(fieldset?.getLegendProps(), props)
 
-    return (
-      <legend
-        {...mergedProps}
-        className={cx('leading-snug max-w-mobile-lg mb-3', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <legend
+      {...mergedProps}
+      className={cx('leading-snug max-w-mobile-lg mb-3', className)}
+    />
+  )
+}
 
-const FieldsetDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const fieldset = useFieldsetContext()
-    const mergedProps = mergeProps(fieldset?.getDescriptionProps(), props)
+function FieldsetDescription({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const fieldset = useFieldsetContext()
+  const mergedProps = mergeProps(fieldset?.getDescriptionProps(), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx('text-gray-500', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx('text-gray-500', className)}
+    />
+  )
+}
 
-const FieldsetErrorMessage = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const fieldset = useFieldsetContext()
-    const mergedProps = mergeProps(fieldset?.getErrorTextProps(), props)
+function FieldsetErrorMessage({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const fieldset = useFieldsetContext()
+  const mergedProps = mergeProps(fieldset?.getErrorTextProps(), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx('invalid:text-red-60v invalid:font-bold', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx('invalid:text-red-60v invalid:font-bold', className)}
+    />
+  )
+}
 
 FieldsetRoot.displayName = 'Fieldset.Root'
 FieldsetLegend.displayName = 'Fieldset.Legend'

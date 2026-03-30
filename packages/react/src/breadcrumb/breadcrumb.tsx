@@ -49,40 +49,34 @@ const BreadcrumbRoot = React.forwardRef<HTMLElement, BreadcrumbRootProps>(
   },
 )
 
-const BreadcrumbList = React.forwardRef<HTMLOListElement, BreadcrumbListProps>(
-  ({ className, ...props }, forwardedRef) => {
-    const { wrap } = useBreadcrumbContext()
-    return (
-      <ol
-        {...props}
-        className={cx('list-none block', wrap ? '' : '@mobile-lg:truncate', className)}
-        aria-label="Breadcrumb"
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+function BreadcrumbList({ className, ...props }: BreadcrumbListProps) {
+  const { wrap } = useBreadcrumbContext()
+  return (
+    <ol
+      {...props}
+      className={cx('list-none block', wrap ? '' : '@mobile-lg:truncate', className)}
+      aria-label="Breadcrumb"
+    />
+  )
+}
 
-const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
-  ({ className, children, isCurrent, ...props }, forwardedRef) => {
-    const { wrap } = useBreadcrumbContext()
-    return (
-      <BreadcrumbItemContext.Provider value={{ isCurrent }}>
-        <li
-          {...props}
-          className={cx(
-            wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
-            '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
-            className,
-          )}
-          ref={forwardedRef}
-        >
-          {children}
-        </li>
-      </BreadcrumbItemContext.Provider>
-    )
-  },
-)
+function BreadcrumbItem({ className, children, isCurrent, ...props }: BreadcrumbItemProps) {
+  const { wrap } = useBreadcrumbContext()
+  return (
+    <BreadcrumbItemContext.Provider value={{ isCurrent }}>
+      <li
+        {...props}
+        className={cx(
+          wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
+          '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
+          className,
+        )}
+      >
+        {children}
+      </li>
+    </BreadcrumbItemContext.Provider>
+  )
+}
 
 const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
   ({ className, children, ...props }, forwardedRef) => {
@@ -104,37 +98,31 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
   },
 )
 
-const BreadcrumbSeparator = React.forwardRef<HTMLSpanElement, BreadcrumbSeparatorProps>(
-  ({ className, children, ...props }, forwardedRef) => {
-    return (
-      <span
-        aria-hidden="true"
-        className="hidden @mobile-lg:inline"
-        {...props}
-        ref={forwardedRef}
-      >
-        {children || (
-          <span className="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
-        )}
-      </span>
-    )
-  },
-)
+function BreadcrumbSeparator({ className, children, ...props }: BreadcrumbSeparatorProps) {
+  return (
+    <span
+      aria-hidden="true"
+      className="hidden @mobile-lg:inline"
+      {...props}
+    >
+      {children || (
+        <span className="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+      )}
+    </span>
+  )
+}
 
-const BreadcrumbPrevious = React.forwardRef<HTMLSpanElement, BreadcrumbPreviousProps>(
-  ({ className, children, ...props }, forwardedRef) => {
-    return (
-      <span
-        aria-hidden="true"
-        className="@mobile-lg:hidden"
-        {...props}
-        ref={forwardedRef}
-      >
-        {children || <span className="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>}
-      </span>
-    )
-  },
-)
+function BreadcrumbPrevious({ className, children, ...props }: BreadcrumbPreviousProps) {
+  return (
+    <span
+      aria-hidden="true"
+      className="@mobile-lg:hidden"
+      {...props}
+    >
+      {children || <span className="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>}
+    </span>
+  )
+}
 
 BreadcrumbRoot.displayName = 'Breadcrumb.Root'
 BreadcrumbList.displayName = 'Breadcrumb.List'

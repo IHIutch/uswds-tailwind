@@ -37,17 +37,20 @@ function ModalRoot({ children, ...props }: ModalRootProps) {
 
 export type ModalTriggerProps = React.ComponentPropsWithoutRef<'button'>
 
-function ModalTrigger({ className, ...props }: ModalTriggerProps) {
-  const { api } = useModalContext()
-  const mergedProps = mergeProps(api.getTriggerProps(), props)
+const ModalTrigger = React.forwardRef<HTMLButtonElement, ModalTriggerProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useModalContext()
+    const mergedProps = mergeProps(api.getTriggerProps(), props)
 
-  return (
-    <button
-      {...mergedProps}
-      className={className}
-    />
-  )
-}
+    return (
+      <button
+        {...mergedProps}
+        className={className}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 export type ModalBackdropProps = React.ComponentPropsWithoutRef<'div'>
 
@@ -65,31 +68,37 @@ function ModalBackdrop({ className, ...props }: ModalBackdropProps) {
 
 export type ModalPositionerProps = React.ComponentPropsWithoutRef<'div'>
 
-function ModalPositioner({ className, ...props }: ModalPositionerProps) {
-  const { api } = useModalContext()
-  const mergedProps = mergeProps(api.getPositionerProps(), props)
+const ModalPositioner = React.forwardRef<HTMLDivElement, ModalPositionerProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useModalContext()
+    const mergedProps = mergeProps(api.getPositionerProps(), props)
 
-  return (
-    <div
-      {...mergedProps}
-      className={cx('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in', className)}
-    />
-  )
-}
+    return (
+      <div
+        {...mergedProps}
+        className={cx('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 export type ModalContentProps = React.ComponentPropsWithoutRef<'div'>
 
-function ModalContent({ className, ...props }: ModalContentProps) {
-  const { api } = useModalContext()
-  const mergedProps = mergeProps(api.getContentProps(), props)
+const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useModalContext()
+    const mergedProps = mergeProps(api.getContentProps(), props)
 
-  return (
-    <div
-      {...mergedProps}
-      className={cx('@container relative w-full max-w-lg rounded-lg bg-white shadow-lg', className)}
-    />
-  )
-}
+    return (
+      <div
+        {...mergedProps}
+        className={cx('@container relative w-full max-w-lg rounded-lg bg-white shadow-lg', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 export type ModalTitleProps = React.ComponentPropsWithoutRef<'h2'>
 
@@ -121,17 +130,20 @@ function ModalDescription({ className, ...props }: ModalDescriptionProps) {
 
 export type ModalCloseTriggerProps = React.ComponentPropsWithoutRef<'button'>
 
-function ModalCloseTrigger({ className, ...props }: ModalCloseTriggerProps) {
-  const { api } = useModalContext()
-  const mergedProps = mergeProps(api.getCloseTriggerProps(), props)
+const ModalCloseTrigger = React.forwardRef<HTMLButtonElement, ModalCloseTriggerProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useModalContext()
+    const mergedProps = mergeProps(api.getCloseTriggerProps(), props)
 
-  return (
-    <button
-      {...mergedProps}
-      className={className}
-    />
-  )
-}
+    return (
+      <button
+        {...mergedProps}
+        className={className}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 ModalRoot.displayName = 'Modal.Root'
 ModalTrigger.displayName = 'Modal.Trigger'

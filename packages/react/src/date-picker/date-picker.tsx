@@ -60,11 +60,9 @@ const DatePickerTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAt
   },
 )
 
-const DatePickerControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    return <div {...props} className={cx('w-full flex', className)} ref={forwardedRef} />
-  },
-)
+function DatePickerControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div {...props} className={cx('w-full flex', className)} />
+}
 
 const DatePickerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
@@ -75,11 +73,9 @@ const DatePickerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
   },
 )
 
-const DatePickerViewControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    return <div {...props} className={cx('flex w-full justify-between', className)} ref={forwardedRef} />
-  },
-)
+function DatePickerViewControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div {...props} className={cx('flex w-full justify-between', className)} />
+}
 
 const DatePickerNextMonthTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, children, ...props }, forwardedRef) => {
@@ -222,14 +218,12 @@ const DatePickerView = React.forwardRef<HTMLDivElement, Omit<React.HTMLAttribute
   },
 )
 
-const DatePickerTable = React.forwardRef<HTMLTableElement, React.TableHTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getTableProps(), props)
+function DatePickerTable({ className, ...props }: React.TableHTMLAttributes<HTMLTableElement>) {
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getTableProps(), props)
 
-    return <table {...mergedProps} className={cx('w-full', className)} ref={forwardedRef} />
-  },
-)
+  return <table {...mergedProps} className={cx('w-full', className)} />
+}
 
 function DatePickerTableHead({ children, ...props }: Omit<React.HTMLAttributes<HTMLTableSectionElement>, 'children'> & {
   children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode
@@ -246,15 +240,13 @@ function DatePickerTableRow(props: React.HTMLAttributes<HTMLTableRowElement>) {
   return <tr {...props} />
 }
 
-const DatePickerTableHeader = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<HTMLTableCellElement> & {
+function DatePickerTableHeader({ className, dayIndex, ...props }: React.ThHTMLAttributes<HTMLTableCellElement> & {
   dayIndex: number
-}>(
-  ({ className, dayIndex, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getTableHeaderProps(dayIndex), props)
-    return <th {...mergedProps} className={cx('text-center py-1.5 font-normal', className)} ref={forwardedRef} />
-  },
-)
+}) {
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getTableHeaderProps(dayIndex), props)
+  return <th {...mergedProps} className={cx('text-center py-1.5 font-normal', className)} />
+}
 
 function DatePickerTableBody({ children, ...props }: Omit<React.HTMLAttributes<HTMLTableSectionElement>, 'children'> & {
   children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode

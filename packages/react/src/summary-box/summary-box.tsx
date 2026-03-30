@@ -17,19 +17,22 @@ function useSummaryBoxContext() {
 
 export type SummaryBoxRootProps = React.ComponentPropsWithoutRef<'div'>
 
-function SummaryBoxRoot({ className, ...props }: SummaryBoxRootProps) {
-  const headingId = React.useId()
-  return (
-    <SummaryBoxContext.Provider value={{ headingId }}>
-      <div
-        role="complementary"
-        aria-labelledby={headingId}
-        {...props}
-        className={cx('border border-cyan-20 bg-cyan-5 rounded-sm p-6', className)}
-      />
-    </SummaryBoxContext.Provider>
-  )
-}
+const SummaryBoxRoot = React.forwardRef<HTMLDivElement, SummaryBoxRootProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const headingId = React.useId()
+    return (
+      <SummaryBoxContext.Provider value={{ headingId }}>
+        <div
+          role="complementary"
+          aria-labelledby={headingId}
+          {...props}
+          className={cx('border border-cyan-20 bg-cyan-5 rounded-sm p-6', className)}
+          ref={forwardedRef}
+        />
+      </SummaryBoxContext.Provider>
+    )
+  },
+)
 
 export type SummaryBoxHeadingProps = React.ComponentPropsWithoutRef<'h3'>
 

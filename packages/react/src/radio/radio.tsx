@@ -139,33 +139,27 @@ const RadioGroupItemControl = React.forwardRef<HTMLInputElement, RadioControlPro
   },
 )
 
-const RadioGroupItemLabel = React.forwardRef<HTMLDivElement, RadioLabelProps>(
-  ({ className, ...props }, forwardedRef) => {
-    const radio = useRadioGroupContext()
-    const radioItem = useRadioGroupItemContext()
-    const mergedProps = mergeProps(radio?.getLabelProps(radioItem), props)
+function RadioGroupItemLabel({ className, ...props }: RadioLabelProps) {
+  const radio = useRadioGroupContext()
+  const radioItem = useRadioGroupItemContext()
+  const mergedProps = mergeProps(radio?.getLabelProps(radioItem), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx(radioLabelVariant({ tile: radio?.tile }), className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx(radioLabelVariant({ tile: radio?.tile }), className)}
+    />
+  )
+}
 
-const RadioGroupItemDescription = React.forwardRef<HTMLDivElement, RadioDescriptionProps>(
-  ({ className, ...props }, forwardedRef) => {
-    return (
-      <div
-        {...props}
-        className={cx('block mt-1 text-sm', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+function RadioGroupItemDescription({ className, ...props }: RadioDescriptionProps) {
+  return (
+    <div
+      {...props}
+      className={cx('block mt-1 text-sm', className)}
+    />
+  )
+}
 
 // ============================================================================
 // Exports

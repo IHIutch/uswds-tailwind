@@ -65,24 +65,21 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectProps>(
   },
 )
 
-const SelectIcon = React.forwardRef<HTMLDivElement, SelectIconProps>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const select = useSelectContext()
-    const mergedProps = mergeProps(select.getIconProps(), props)
+function SelectIcon({ className, children, ...props }: SelectIconProps) {
+  const select = useSelectContext()
+  const mergedProps = mergeProps(select.getIconProps(), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx('select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70', className)}
-        ref={forwardedRef}
-      >
-        {children || (
-          <div className="icon-[material-symbols--unfold-more] size-5" />
-        )}
-      </div>
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx('select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70', className)}
+    >
+      {children || (
+        <div className="icon-[material-symbols--unfold-more] size-5" />
+      )}
+    </div>
+  )
+}
 
 // ============================================================================
 // Compound Component Export

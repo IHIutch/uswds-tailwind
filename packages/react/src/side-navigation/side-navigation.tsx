@@ -12,13 +12,15 @@ export type SideNavigationItem
 
 export type SideNavigationRootProps = React.ComponentPropsWithoutRef<'nav'>
 
-function SideNavigationRoot({ className, children, ...props }: SideNavigationRootProps) {
-  return (
-    <nav {...props} className={cx('border-b border-b-gray-10 [&_ul_ul_a]:pl-8 [&_ul_ul_ul_a]:pl-12 [&>ul>li:has([aria-current=page])>a]:after:block [&>ul>li:has([aria-current=page])>a]:after:absolute [&>ul>li:has([aria-current=page])>a]:after:bg-blue-60v [&>ul>li:has([aria-current=page])>a]:after:inset-y-1 [&>ul>li:has([aria-current=page])>a]:after:left-0 [&>ul>li:has([aria-current=page])>a]:after:w-1 [&>ul>li:has([aria-current=page])>a]:after:rounded-full [&>ul>li:has([aria-current=page])>a]:text-blue-60v [&>ul>li:has([aria-current=page])>a]:font-bold', className)}>
-      {children}
-    </nav>
-  )
-}
+const SideNavigationRoot = React.forwardRef<HTMLElement, SideNavigationRootProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    return (
+      <nav {...props} className={cx('border-b border-b-gray-10 [&_ul_ul_a]:pl-8 [&_ul_ul_ul_a]:pl-12 [&>ul>li:has([aria-current=page])>a]:after:block [&>ul>li:has([aria-current=page])>a]:after:absolute [&>ul>li:has([aria-current=page])>a]:after:bg-blue-60v [&>ul>li:has([aria-current=page])>a]:after:inset-y-1 [&>ul>li:has([aria-current=page])>a]:after:left-0 [&>ul>li:has([aria-current=page])>a]:after:w-1 [&>ul>li:has([aria-current=page])>a]:after:rounded-full [&>ul>li:has([aria-current=page])>a]:text-blue-60v [&>ul>li:has([aria-current=page])>a]:font-bold', className)} ref={forwardedRef}>
+        {children}
+      </nav>
+    )
+  },
+)
 
 export type SideNavigationListProps = React.ComponentPropsWithoutRef<'ul'>
 
@@ -46,18 +48,21 @@ export type SideNavigationLinkProps = React.ComponentPropsWithoutRef<'a'> & {
   isCurrent?: boolean
 }
 
-function SideNavigationLink({ className, isCurrent, ...props }: SideNavigationLinkProps) {
-  return (
-    <a
-      {...props}
-      aria-current={isCurrent ? 'page' : undefined}
-      className={cx(
-        'block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold',
-        className,
-      )}
-    />
-  )
-}
+const SideNavigationLink = React.forwardRef<HTMLAnchorElement, SideNavigationLinkProps>(
+  ({ className, isCurrent, ...props }, forwardedRef) => {
+    return (
+      <a
+        {...props}
+        aria-current={isCurrent ? 'page' : undefined}
+        className={cx(
+          'block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold',
+          className,
+        )}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 interface SideNavigationItemsProps {
   items: SideNavigationItem[]

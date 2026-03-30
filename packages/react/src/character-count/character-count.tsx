@@ -56,63 +56,55 @@ const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInp
   },
 )
 
-const CharacterCountStatus = React.forwardRef<HTMLDivElement, CharacterCountStatusProps>(
-  ({ className, ...props }, forwardedRef) => {
-    const { api, context } = useCharacterCountContext()
-    const field = useFieldContext()
+function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps) {
+  const { api, context } = useCharacterCountContext()
+  const field = useFieldContext()
 
-    const mergedProps = mergeProps(api.getStatusProps(), field?.getDescriptionProps(), props)
+  const mergedProps = mergeProps(api.getStatusProps(), field?.getDescriptionProps(), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx(
-          'mt-1 text-gray-50 invalid:text-red-60v invalid:font-bold',
-          className,
-        )}
-        ref={forwardedRef}
-      >
-        {context.get('statusText')}
-      </div>
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx(
+        'mt-1 text-gray-50 invalid:text-red-60v invalid:font-bold',
+        className,
+      )}
+    >
+      {context.get('statusText')}
+    </div>
+  )
+}
 
-const CharacterCountSrStatus = React.forwardRef<HTMLDivElement, CharacterCountSrStatusProps>(
-  (props, forwardedRef) => {
-    const { api, context } = useCharacterCountContext()
+function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
+  const { api, context } = useCharacterCountContext()
 
-    const mergedProps = mergeProps(api.getSrStatusProps(), props)
+  const mergedProps = mergeProps(api.getSrStatusProps(), props)
 
-    return (
-      <div>
-        <span className="sr-only">
-          You can enter up to
-          {api.maxLength}
-          {' '}
-          characters
-        </span>
-        <span {...mergedProps} ref={forwardedRef}>{context.get('srStatusText')}</span>
-      </div>
-    )
-  },
-)
+  return (
+    <div>
+      <span className="sr-only">
+        You can enter up to
+        {api.maxLength}
+        {' '}
+        characters
+      </span>
+      <span {...mergedProps}>{context.get('srStatusText')}</span>
+    </div>
+  )
+}
 
-const CharacterCountLabel = React.forwardRef<HTMLLabelElement, CharacterCountLabelProps>(
-  ({ className, ...props }, forwardedRef) => {
-    const { api } = useCharacterCountContext()
+function CharacterCountLabel({ className, ...props }: CharacterCountLabelProps) {
+  const { api } = useCharacterCountContext()
 
-    const mergedProps = mergeProps(api.getLabelProps(), props)
+  const mergedProps = mergeProps(api.getLabelProps(), props)
 
-    return (
-      <label
-        {...mergedProps}
-        className={cx('block', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <label
+      {...mergedProps}
+      className={cx('block', className)}
+    />
+  )
+}
 
 CharacterCountRoot.displayName = 'CharacterCount.Root'
 CharacterCountInput.displayName = 'CharacterCount.Input'

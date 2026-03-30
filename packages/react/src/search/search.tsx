@@ -43,19 +43,22 @@ export type SearchRootProps = React.ComponentPropsWithoutRef<'div'> & {
   name?: string
 }
 
-function SearchRoot({ size, className, id, disabled, required, name, ...props }: SearchRootProps) {
-  const search = useSearch({ id, disabled, required, name })
-  const mergedProps = mergeProps(search.getRootProps(), props)
+const SearchRoot = React.forwardRef<HTMLDivElement, SearchRootProps>(
+  ({ size, className, id, disabled, required, name, ...props }, forwardedRef) => {
+    const search = useSearch({ id, disabled, required, name })
+    const mergedProps = mergeProps(search.getRootProps(), props)
 
-  return (
-    <SearchContext.Provider value={{ ...search, size }}>
-      <div
-        {...mergedProps}
-        className={cx('flex', className)}
-      />
-    </SearchContext.Provider>
-  )
-}
+    return (
+      <SearchContext.Provider value={{ ...search, size }}>
+        <div
+          {...mergedProps}
+          className={cx('flex', className)}
+          ref={forwardedRef}
+        />
+      </SearchContext.Provider>
+    )
+  },
+)
 
 export type SearchLabelProps = React.ComponentPropsWithoutRef<'label'>
 

@@ -17,21 +17,24 @@ function useRangeSliderContext() {
 
 export type RangeSliderRootProps = React.ComponentPropsWithoutRef<'div'> & UseRangeSliderProps
 
-function RangeSliderRoot({ className, children, id, disabled, name, ...props }: RangeSliderRootProps) {
-  const rangeSlider = useRangeSlider({ id, disabled, name })
-  const mergedProps = mergeProps(rangeSlider.getRootProps(), props)
+const RangeSliderRoot = React.forwardRef<HTMLDivElement, RangeSliderRootProps>(
+  ({ className, children, id, disabled, name, ...props }, forwardedRef) => {
+    const rangeSlider = useRangeSlider({ id, disabled, name })
+    const mergedProps = mergeProps(rangeSlider.getRootProps(), props)
 
-  return (
-    <RangeSliderContext.Provider value={rangeSlider}>
-      <div
-        {...mergedProps}
-        className={className}
-      >
-        {children}
-      </div>
-    </RangeSliderContext.Provider>
-  )
-}
+    return (
+      <RangeSliderContext.Provider value={rangeSlider}>
+        <div
+          {...mergedProps}
+          className={className}
+          ref={forwardedRef}
+        >
+          {children}
+        </div>
+      </RangeSliderContext.Provider>
+    )
+  },
+)
 
 export type RangeSliderInputProps = React.ComponentPropsWithoutRef<'input'>
 

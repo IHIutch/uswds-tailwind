@@ -33,52 +33,43 @@ const FieldRoot = React.forwardRef<HTMLDivElement, FieldRootProps>(
   },
 )
 
-const FieldLabel = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const field = useFieldContext()
-    const mergedProps = mergeProps(field?.getLabelProps(), props)
+function FieldLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
+  const field = useFieldContext()
+  const mergedProps = mergeProps(field?.getLabelProps(), props)
 
-    return (
-      <label
-        {...mergedProps}
-        className={cx('block invalid:font-bold', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <label
+      {...mergedProps}
+      className={cx('block invalid:font-bold', className)}
+    />
+  )
+}
 
-const FieldDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const field = useFieldContext()
-    const mergedProps = mergeProps(field?.getDescriptionProps(), props)
+function FieldDescription({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const field = useFieldContext()
+  const mergedProps = mergeProps(field?.getDescriptionProps(), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx('text-gray-500', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx('text-gray-500', className)}
+    />
+  )
+}
 
-const FieldErrorMessage = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const field = useFieldContext()
-    const mergedProps = mergeProps(field?.getErrorTextProps(), props)
+function FieldErrorMessage({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const field = useFieldContext()
+  const mergedProps = mergeProps(field?.getErrorTextProps(), props)
 
-    return field?.invalid
-      ? (
-          <div
-            {...mergedProps}
-            className={cx('mt-0.5 invalid:text-red-60v invalid:font-bold', className)}
-            ref={forwardedRef}
-          />
-        )
-      : null
-  },
-)
+  return field?.invalid
+    ? (
+        <div
+          {...mergedProps}
+          className={cx('mt-0.5 invalid:text-red-60v invalid:font-bold', className)}
+        />
+      )
+    : null
+}
 
 FieldRoot.displayName = 'Field.Root'
 FieldLabel.displayName = 'Field.Label'

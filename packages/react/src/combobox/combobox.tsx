@@ -33,14 +33,12 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, React.ComponentPropsWithou
   },
 )
 
-const ComboboxLabel = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getLabelProps(), props)
+function ComboboxLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
+  const { api } = useComboboxContext()
+  const mergedProps = mergeProps(api.getLabelProps(), props)
 
-    return <label {...mergedProps} className={cx('block', className)} ref={forwardedRef} />
-  },
-)
+  return <label {...mergedProps} className={cx('block', className)} />
+}
 
 const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, forwardedRef) => {
@@ -88,26 +86,22 @@ const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
   },
 )
 
-const ComboboxEmptyItem = React.forwardRef<HTMLLIElement, React.HTMLAttributes<HTMLLIElement>>(
-  ({ children, ...props }, forwardedRef) => {
-    const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getEmptyItemProps(), props)
+function ComboboxEmptyItem({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
+  const { api } = useComboboxContext()
+  const mergedProps = mergeProps(api.getEmptyItemProps(), props)
 
-    return (
-      <li {...mergedProps} className={cx('p-2 cursor-not-allowed hidden data-empty:block', mergedProps.className)} ref={forwardedRef}>
-        {children || 'No results found'}
-      </li>
-    )
-  },
-)
+  return (
+    <li {...mergedProps} className={cx('p-2 cursor-not-allowed hidden data-empty:block', mergedProps.className)}>
+      {children || 'No results found'}
+    </li>
+  )
+}
 
-const ComboboxIndicatorGroup = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    return (
-      <div {...props} className={cx('absolute z-10 inset-y-0 right-0 flex', className)} ref={forwardedRef} />
-    )
-  },
-)
+function ComboboxIndicatorGroup({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div {...props} className={cx('absolute z-10 inset-y-0 right-0 flex', className)} />
+  )
+}
 
 const ComboboxControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {

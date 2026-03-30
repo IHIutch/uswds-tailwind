@@ -17,16 +17,21 @@ export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   isExternal?: boolean
 }
 
-export function Link({ className, isExternal, ...props }: LinkProps) {
-  return (
-    <a
-      {...props}
-      className={cx(
-        linkVariants({
-          external: isExternal,
-        }),
-        className,
-      )}
-    />
-  )
-}
+export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+  ({ className, isExternal, ...props }, forwardedRef) => {
+    return (
+      <a
+        {...props}
+        className={cx(
+          linkVariants({
+            external: isExternal,
+          }),
+          className,
+        )}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+Link.displayName = 'Link'

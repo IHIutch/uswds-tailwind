@@ -19,21 +19,24 @@ export function useMemorableDateContext() {
 
 export type MemorableDateRootProps = React.ComponentPropsWithoutRef<'fieldset'> & UseMemorableDateProps
 
-function MemorableDateRoot({ className, children, id, disabled, invalid, ...props }: MemorableDateRootProps) {
-  const memorableDate = useMemorableDate({ id, disabled, invalid })
-  const mergedProps = mergeProps(memorableDate.getRootProps(), props)
+const MemorableDateRoot = React.forwardRef<HTMLFieldSetElement, MemorableDateRootProps>(
+  ({ className, children, id, disabled, invalid, ...props }, forwardedRef) => {
+    const memorableDate = useMemorableDate({ id, disabled, invalid })
+    const mergedProps = mergeProps(memorableDate.getRootProps(), props)
 
-  return (
-    <MemorableDateContext.Provider value={memorableDate}>
-      <fieldset
-        {...mergedProps}
-        className={className}
-      >
-        {children}
-      </fieldset>
-    </MemorableDateContext.Provider>
-  )
-}
+    return (
+      <MemorableDateContext.Provider value={memorableDate}>
+        <fieldset
+          {...mergedProps}
+          className={className}
+          ref={forwardedRef}
+        >
+          {children}
+        </fieldset>
+      </MemorableDateContext.Provider>
+    )
+  },
+)
 
 export type MemorableDateLegendProps = React.ComponentPropsWithoutRef<'legend'>
 

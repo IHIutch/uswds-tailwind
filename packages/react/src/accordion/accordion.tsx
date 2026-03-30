@@ -120,25 +120,22 @@ const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>
   },
 )
 
-const AccordionItemIndicator = React.forwardRef<HTMLDivElement, AccordionItemIndicatorProps>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const content = typeof children === 'function'
-      ? children(useAccordionItemContext())
-      : children
+function AccordionItemIndicator({ className, children, ...props }: AccordionItemIndicatorProps) {
+  const content = typeof children === 'function'
+    ? children(useAccordionItemContext())
+    : children
 
-    return (
-      <div
-        className={
-          cx('h-full flex items-center ml-auto shrink-0', className)
-        }
-        {...props}
-        ref={forwardedRef}
-      >
-        {content || <div className="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]" />}
-      </div>
-    )
-  },
-)
+  return (
+    <div
+      className={
+        cx('h-full flex items-center ml-auto shrink-0', className)
+      }
+      {...props}
+    >
+      {content || <div className="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]" />}
+    </div>
+  )
+}
 
 AccordionRoot.displayName = 'Accordion.Root'
 AccordionItem.displayName = 'Accordion.Item'

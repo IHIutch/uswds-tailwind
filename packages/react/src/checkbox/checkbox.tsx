@@ -56,20 +56,17 @@ const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & Vari
   },
 )
 
-const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
-  ({ className, ...props }, forwardedRef) => {
-    return (
-      <div
-        {...props}
-        className={cx(
-          'space-y-2',
-          className,
-        )}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+function CheckboxGroup({ className, ...props }: CheckboxGroupProps) {
+  return (
+    <div
+      {...props}
+      className={cx(
+        'space-y-2',
+        className,
+      )}
+    />
+  )
+}
 
 const checkboxLabelVariant = cva({
   base: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed ',
@@ -81,25 +78,22 @@ const checkboxLabelVariant = cva({
   },
 })
 
-const CheckboxLabel = React.forwardRef<HTMLDivElement, CheckboxLabelProps>(
-  ({ className, ...props }, forwardedRef) => {
-    const checkbox = useCheckboxContext()
-    const mergedProps = mergeProps(checkbox?.getLabelProps(), props)
+function CheckboxLabel({ className, ...props }: CheckboxLabelProps) {
+  const checkbox = useCheckboxContext()
+  const mergedProps = mergeProps(checkbox?.getLabelProps(), props)
 
-    return (
-      <div
-        {...mergedProps}
-        className={cx(
-          checkboxLabelVariant({
-            tile: checkbox?.tile,
-          }),
-          className,
-        )}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+  return (
+    <div
+      {...mergedProps}
+      className={cx(
+        checkboxLabelVariant({
+          tile: checkbox?.tile,
+        }),
+        className,
+      )}
+    />
+  )
+}
 
 const CheckboxInput = React.forwardRef<HTMLInputElement, CheckboxInputProps>(
   ({ className, ...props }, forwardedRef) => {
@@ -141,17 +135,14 @@ const CheckboxControl = React.forwardRef<HTMLInputElement, CheckboxControlProps>
   },
 )
 
-const CheckboxDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, forwardedRef) => {
-    return (
-      <div
-        {...props}
-        className={cx('block mt-1 text-sm', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
+function CheckboxDescription({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      {...props}
+      className={cx('block mt-1 text-sm', className)}
+    />
+  )
+}
 
 CheckboxRoot.displayName = 'Checkbox.Root'
 CheckboxGroup.displayName = 'Checkbox.Group'
