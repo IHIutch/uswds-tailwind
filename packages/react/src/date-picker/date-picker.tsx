@@ -1,9 +1,9 @@
 import * as datepicker from '@uswds-tailwind/date-picker-compat'
-import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
-import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
+import { useDatePicker, type UseDatePickerProps } from './use-date-picker'
 
 export interface DatePickerContextProps {
   api: datepicker.Api
@@ -21,22 +21,11 @@ function useDatePickerContext(): DatePickerContextProps {
 }
 
 // export default DatePickerContext;
-export type DatePickerRootProps = Omit<datepicker.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
+export type DatePickerRootProps = UseDatePickerProps & React.ComponentPropsWithoutRef<'div'>
 
 const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
   ({ className, ...props }, forwardedRef) => {
-    const field = useFieldContext()
-
-    const service = useMachine(datepicker.machine, {
-      id: React.useId(),
-      ids: {
-        input: field?.ids.control,
-      },
-      disabled: props.disabled ?? field?.disabled,
-      ...props,
-    })
-
-    const api = datepicker.connect(service, normalizeProps)
+    const { api, service } = useDatePicker(props)
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (

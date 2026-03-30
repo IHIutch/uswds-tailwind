@@ -1,11 +1,13 @@
-import * as characterCount from '@uswds-tailwind/character-count-compat'
-import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import type * as characterCount from '@uswds-tailwind/character-count-compat'
+import type { UseCharacterCountProps } from './use-character-count'
+import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
+import { useCharacterCount } from './use-character-count'
 
-export type CharacterCountRootProps = Omit<characterCount.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
+export type CharacterCountRootProps = UseCharacterCountProps & React.ComponentPropsWithoutRef<'div'>
 export type CharacterCountLabelProps = React.ComponentPropsWithoutRef<'label'>
 export type CharacterCountInputProps = React.ComponentPropsWithoutRef<'input'>
 export type CharacterCountStatusProps = React.ComponentPropsWithoutRef<'div'>
@@ -28,19 +30,7 @@ function useCharacterCountContext() {
 
 const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootProps>(
   ({ className, ...props }, forwardedRef) => {
-    const field = useFieldContext()
-
-    const service = useMachine(characterCount.machine, {
-      id: React.useId(),
-      ids: {
-        label: field?.ids.label,
-        input: field?.ids.control,
-        status: field?.ids.description,
-      },
-      maxLength: props.maxLength,
-    })
-
-    const api = characterCount.connect(service, normalizeProps)
+    const { api, service } = useCharacterCount(props)
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (

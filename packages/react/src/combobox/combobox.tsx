@@ -1,8 +1,10 @@
-import * as combobox from '@uswds-tailwind/combobox-compat'
-import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import type * as combobox from '@uswds-tailwind/combobox-compat'
+import type { UseComboboxProps } from './use-combobox'
+import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { useCombobox } from './use-combobox'
 
 export interface ComboboxContextProps {
   api: combobox.Api
@@ -18,21 +20,9 @@ function useComboboxContext() {
   return context
 }
 
-const ComboboxRoot = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & Omit<combobox.Props, 'id'>>(
+const ComboboxRoot = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'> & UseComboboxProps>(
   ({ className, ...props }, forwardedRef) => {
-    const field = useFieldContext()
-
-    const service = useMachine(combobox.machine, {
-      id: React.useId(),
-      ids: {
-        label: field?.ids.label,
-        input: field?.ids.control,
-      },
-      disabled: props.disabled ?? field?.disabled,
-      ...props,
-    })
-
-    const api = combobox.connect(service, normalizeProps)
+    const { api } = useCombobox(props)
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (

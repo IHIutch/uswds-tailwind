@@ -1,9 +1,9 @@
 import * as inputMask from '@uswds-tailwind/input-mask-compat'
-import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
-import { useFieldContext } from '../field/field'
 import { Input } from '../input'
+import { type UseInputMaskProps, useInputMask } from './use-input-mask'
 
 export interface InputMaskContextProps {
   api: inputMask.Api
@@ -20,24 +20,14 @@ function useInputMaskContext() {
   return context
 }
 
-export type InputMaskRootProps = Omit<inputMask.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
+export type InputMaskRootProps = UseInputMaskProps & React.ComponentPropsWithoutRef<'div'>
 
-function InputMaskRoot({ className, children, ...props }: InputMaskRootProps) {
-  const field = useFieldContext()
-
-  const service = useMachine(inputMask.machine, {
-    id: React.useId(),
-    ids: {
-      label: field?.ids.label,
-      input: field?.ids.control,
-    },
-    ...props,
-  })
-  const api = inputMask.connect(service, normalizeProps)
+function InputMaskRoot({ className, children, charset, pattern, placeholder, maxlength, id, ...props }: InputMaskRootProps) {
+  const { api } = useInputMask({ charset, pattern, placeholder, maxlength, id })
   const mergedProps = mergeProps(api.getRootProps(), props)
 
   return (
-    <InputMaskContext.Provider value={{ api, placeholder: props.placeholder }}>
+    <InputMaskContext.Provider value={{ api, placeholder }}>
       <div
         {...mergedProps}
         className={className}
@@ -51,12 +41,9 @@ function InputMaskRoot({ className, children, ...props }: InputMaskRootProps) {
 export type InputMaskLabelProps = React.ComponentPropsWithoutRef<'label'>
 
 function InputMaskLabel({ className, ...props }: InputMaskLabelProps) {
-  const { api } = useInputMaskContext()
-  const mergedProps = mergeProps(api.getLabelProps(), props)
-
   return (
     <label
-      {...mergedProps}
+      {...props}
       className={cx('block', className)}
     />
   )

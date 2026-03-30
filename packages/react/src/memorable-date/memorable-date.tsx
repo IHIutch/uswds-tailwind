@@ -44,15 +44,6 @@ function MemorableDateLegend({ className, ...props }: MemorableDateLegendProps) 
   return <legend {...mergedProps} className={className} />
 }
 
-export type MemorableDateDescriptionProps = React.ComponentPropsWithoutRef<'div'>
-
-function MemorableDateDescription({ className, ...props }: MemorableDateDescriptionProps) {
-  const { getDescriptionProps } = useMemorableDateContext()
-  const mergedProps = mergeProps(getDescriptionProps(), props)
-
-  return <div {...mergedProps} className={cx('text-gray-50', className)} />
-}
-
 export type MemorableDateControlProps = React.ComponentPropsWithoutRef<'div'>
 
 function MemorableDateControl({ className, ...props }: MemorableDateControlProps) {
@@ -111,7 +102,6 @@ function MemorableDateYear({ className, ...props }: React.InputHTMLAttributes<HT
 
 MemorableDateRoot.displayName = 'MemorableDate.Root'
 MemorableDateLegend.displayName = 'MemorableDate.Legend'
-MemorableDateDescription.displayName = 'MemorableDate.Description'
 MemorableDateControl.displayName = 'MemorableDate.Control'
 MemorableDateMonth.displayName = 'MemorableDate.Month'
 MemorableDateDay.displayName = 'MemorableDate.Day'
@@ -120,7 +110,6 @@ MemorableDateYear.displayName = 'MemorableDate.Year'
 export const MemorableDate = {
   Root: MemorableDateRoot,
   Legend: MemorableDateLegend,
-  Description: MemorableDateDescription,
   Control: MemorableDateControl,
   Month: MemorableDateMonth,
   Day: MemorableDateDay,

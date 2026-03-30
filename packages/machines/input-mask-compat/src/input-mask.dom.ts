@@ -1,7 +1,7 @@
 import type { Scope } from '@zag-js/core'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `inputMask:${ctx.id}`
-export const getLabelId = (ctx: Scope) => `inputMask:${ctx.id}:label`
+export const getLabelId = (ctx: Scope) => ctx.ids?.label ?? `inputMask:${ctx.id}:label`
 export const getInputId = (ctx: Scope) => ctx.ids?.input ?? `inputMask:${ctx.id}:input`
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))

@@ -30,7 +30,7 @@ export const Default = meta.story({
   render: () => (
     <MemorableDate.Root>
       <MemorableDate.Legend>Date of birth</MemorableDate.Legend>
-      <MemorableDate.Description>For example: January 19 2000</MemorableDate.Description>
+      <Fieldset.Description>For example: January 19 2000</Fieldset.Description>
       <MemorableDate.Control>
         <MemorableDate.Month />
         <MemorableDate.Day />
@@ -44,7 +44,7 @@ export const Composed = meta.story({
   render: () => (
     <MemorableDate.Root>
       <MemorableDate.Legend>Date of birth</MemorableDate.Legend>
-      <MemorableDate.Description>For example: January 19 2000</MemorableDate.Description>
+      <Fieldset.Description>For example: January 19 2000</Fieldset.Description>
       <MemorableDate.Control>
         <Field.Root className="w-60">
           <Field.Label>Month</Field.Label>

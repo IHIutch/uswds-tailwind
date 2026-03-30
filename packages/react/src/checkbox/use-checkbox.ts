@@ -22,14 +22,17 @@ export type UseCheckboxReturn = ReturnType<typeof useCheckbox>
 export function useCheckbox(props: UseCheckboxProps = {}) {
   const field = useFieldContext()
 
-  const { ids, disabled = field?.disabled ?? false, invalid = field?.invalid ?? false } = props
+  const {
+    id = React.useId(),
+    ids,
+    disabled = field?.disabled ?? false,
+    invalid = field?.invalid ?? false,
+  } = props
 
-  const uid = React.useId()
-  const id = props.id ?? uid
   const rootRef = React.useRef<HTMLDivElement>(null)
 
   const rootId = ids?.root ?? `checkbox::${id}`
-  const labelId = ids?.label ?? `checkbox::${id}::label`
+  const labelId = field?.ids.label ?? ids?.label ?? `checkbox::${id}::label`
   const inputId = field?.ids.control ?? ids?.input ?? `checkbox::${id}::input`
   const controlId = ids?.control ?? `checkbox::${id}::control`
 

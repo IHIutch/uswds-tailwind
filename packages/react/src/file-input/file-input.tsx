@@ -1,8 +1,9 @@
 import * as fileInput from '@uswds-tailwind/file-input-compat'
-import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
+import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { useFileInput, type UseFileInputProps } from './use-file-input'
 
 export interface FileInputContextProps {
   api: fileInput.Api
@@ -19,21 +20,10 @@ function useFileInputContext() {
   return context
 }
 
-export type FileInputRootProps = React.ComponentPropsWithoutRef<'div'> & Omit<fileInput.Props, 'id'>
+export type FileInputRootProps = React.ComponentPropsWithoutRef<'div'> & UseFileInputProps
 
 function FileInputRoot({ className, children, ...props }: FileInputRootProps) {
-  const field = useFieldContext()
-
-  const service = useMachine(fileInput.machine, {
-    id: React.useId(),
-    ids: {
-      input: field?.ids.control,
-      label: field?.ids.label,
-    },
-    disabled: props.disabled ?? field?.disabled,
-    ...props,
-  })
-  const api = fileInput.connect(service, normalizeProps)
+  const { api, service } = useFileInput(props)
   const files = service.context.get('files')
   const mergedProps = mergeProps(api.getRootProps(), props)
 

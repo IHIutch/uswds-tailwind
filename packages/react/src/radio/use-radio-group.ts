@@ -42,7 +42,7 @@ export function useRadioGroup(props: UseRadioGroupProps = {}) {
   const rootRef = React.useRef<HTMLDivElement>(null)
 
   const rootId = ids?.root ?? `radio::${id}`
-  const labelId = ids?.label ?? `radio::${id}::label`
+  const labelId = field?.ids.label ?? ids?.label ?? `radio::${id}::label`
   const legendId = fieldset?.ids.legend ?? `radio::${id}::legend`
   const inputId = field?.ids.control ?? ids?.input ?? `radio::${id}::input`
   const controlId = ids?.control ?? `radio::${id}::control`

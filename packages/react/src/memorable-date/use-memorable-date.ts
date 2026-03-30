@@ -15,8 +15,6 @@ export function useMemorableDate(props: UseMemorableDateProps = {}) {
   const uid = React.useId()
   const id = props.id ?? uid
 
-  const descriptionId = `memorable-date::${id}::description`
-
   const getRootProps = React.useMemo(
     () => () =>
       ({
@@ -35,15 +33,6 @@ export function useMemorableDate(props: UseMemorableDateProps = {}) {
     [],
   )
 
-  const getDescriptionProps = React.useMemo(
-    () => () =>
-      ({
-        ...parts.description.attrs,
-        id: descriptionId,
-      }) as React.HTMLAttributes<HTMLDivElement>,
-    [descriptionId],
-  )
-
   const getControlProps = React.useMemo(
     () => () =>
       ({
@@ -56,10 +45,8 @@ export function useMemorableDate(props: UseMemorableDateProps = {}) {
     id,
     disabled,
     invalid,
-    descriptionId,
     getRootProps,
     getLegendProps,
-    getDescriptionProps,
     getControlProps,
   }
 }
