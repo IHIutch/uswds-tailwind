@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
@@ -199,4 +200,18 @@ it.skip('selecting one radio deselects the previous one', async () => {
   await screen.getByText('Option B').click()
   await expect.element(radioA).not.toBeChecked()
   await expect.element(radioB).toBeChecked()
+})
+
+it('forwarded ref is set on root element', async () => {
+  const ref = React.createRef<HTMLDivElement>()
+  await render(
+    <RadioGroup.Root ref={ref}>
+      <RadioGroup.Item value="a">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option A</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+    </RadioGroup.Root>,
+  )
+  expect(ref.current).toBeInstanceOf(HTMLDivElement)
 })

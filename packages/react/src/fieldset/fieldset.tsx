@@ -2,6 +2,7 @@ import type { UseFieldsetProps } from './use-fieldset'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
+import { composeRefs } from '../utils/compose-refs'
 import { useFieldset } from './use-fieldset'
 
 export type FieldsetRootProps = React.ComponentPropsWithoutRef<'fieldset'> & UseFieldsetProps
@@ -20,7 +21,7 @@ const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootProps>(
       <FieldsetContext.Provider value={fieldset}>
         <fieldset
           {...props}
-          ref={forwardedRef}
+          ref={composeRefs(fieldset.refs.rootRef, forwardedRef)}
         />
       </FieldsetContext.Provider>
     )

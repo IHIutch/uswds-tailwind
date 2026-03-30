@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Fieldset } from './fieldset'
@@ -20,4 +21,14 @@ it('fieldset renders as role="group"', async () => {
   )
 
   await expect.element(screen.getByRole('group')).toBeVisible()
+})
+
+it('forwarded ref is set on root element', async () => {
+  const ref = React.createRef<HTMLFieldSetElement>()
+  await render(
+    <Fieldset.Root ref={ref}>
+      <Fieldset.Legend>Info</Fieldset.Legend>
+    </Fieldset.Root>,
+  )
+  expect(ref.current).toBeInstanceOf(HTMLFieldSetElement)
 })

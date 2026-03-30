@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
@@ -155,4 +156,15 @@ it('disabled checkbox cannot be toggled', async () => {
   const checkbox = screen.getByRole('checkbox')
   await expect.element(checkbox).toBeDisabled()
   await expect.element(checkbox).not.toBeChecked()
+})
+
+it('forwarded ref is set on root element', async () => {
+  const ref = React.createRef<HTMLLabelElement>()
+  await render(
+    <Checkbox.Root ref={ref}>
+      <Checkbox.Input />
+      <Checkbox.Control />
+    </Checkbox.Root>,
+  )
+  expect(ref.current).toBeInstanceOf(HTMLLabelElement)
 })

@@ -4,6 +4,7 @@ import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { composeRefs } from '../utils/compose-refs'
 import { useRadioGroup } from './use-radio-group'
 
 // ============================================================================
@@ -79,7 +80,7 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioRootProps>(
         <div
           {...mergedProps}
           className={cx('space-y-2', className)}
-          ref={forwardedRef}
+          ref={composeRefs(radioGroup.refs.rootRef, forwardedRef)}
         />
       </RadioGroupContext.Provider>
     )

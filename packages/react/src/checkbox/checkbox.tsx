@@ -3,6 +3,7 @@ import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { composeRefs } from '../utils/compose-refs'
 import { useCheckbox } from './use-checkbox'
 
 export type CheckboxRootProps = React.ComponentPropsWithoutRef<'label'>
@@ -49,7 +50,7 @@ const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & Vari
               className,
             }),
           )}
-          ref={forwardedRef}
+          ref={composeRefs(checkbox.refs.rootRef, forwardedRef)}
         />
       </CheckboxContext.Provider>
     )
