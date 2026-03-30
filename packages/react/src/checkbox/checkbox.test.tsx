@@ -125,3 +125,34 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+it('clicking checkbox toggles checked state', async () => {
+  const screen = await render(
+    <Checkbox.Root>
+      <Checkbox.Input />
+      <Checkbox.Control />
+      <Checkbox.Label>Option</Checkbox.Label>
+    </Checkbox.Root>,
+  )
+
+  const checkbox = screen.getByRole('checkbox')
+  await expect.element(checkbox).not.toBeChecked()
+
+  await screen.getByText('Option').click()
+
+  await expect.element(checkbox).toBeChecked()
+})
+
+it('disabled checkbox cannot be toggled', async () => {
+  const screen = await render(
+    <Checkbox.Root>
+      <Checkbox.Input disabled />
+      <Checkbox.Control />
+      <Checkbox.Label>Option</Checkbox.Label>
+    </Checkbox.Root>,
+  )
+
+  const checkbox = screen.getByRole('checkbox')
+  await expect.element(checkbox).toBeDisabled()
+  await expect.element(checkbox).not.toBeChecked()
+})

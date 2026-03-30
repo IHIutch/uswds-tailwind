@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Search } from './search'
@@ -124,4 +124,30 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
 
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
+})
+
+it('search input accepts user text input', async () => {
+  const screen = await render(
+    <Search.Root>
+      <Search.Label>Search</Search.Label>
+      <Search.Input />
+      <Search.Button>Go</Search.Button>
+    </Search.Root>,
+  )
+  const input = screen.getByRole('searchbox')
+  await input.fill('hello world')
+  await expect.element(input).toHaveValue('hello world')
+})
+
+it('clicking search button fires handler', async () => {
+  const handleClick = vi.fn()
+  const screen = await render(
+    <Search.Root>
+      <Search.Label>Search</Search.Label>
+      <Search.Input />
+      <Search.Button onClick={handleClick}>Go</Search.Button>
+    </Search.Root>,
+  )
+  await screen.getByRole('button', { name: 'Go' }).click()
+  expect(handleClick).toHaveBeenCalled()
 })

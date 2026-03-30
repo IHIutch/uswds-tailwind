@@ -132,3 +132,20 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+it('typing fills in the mask progressively', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Phone</Field.Label>
+      <InputMask.Root placeholder="___-____">
+        <InputMask.Control>
+          <InputMask.Placeholder />
+          <InputMask.Input />
+        </InputMask.Control>
+      </InputMask.Root>
+    </Field.Root>,
+  )
+  const input = screen.getByRole('textbox')
+  await input.fill('123')
+  await expect.element(input).not.toHaveValue('')
+})

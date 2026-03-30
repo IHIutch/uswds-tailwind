@@ -116,3 +116,13 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+it('slider renders with default value', async () => {
+  const screen = await render(
+    <RangeSlider.Root>
+      <RangeSlider.Input />
+    </RangeSlider.Root>,
+  )
+  const slider = screen.getByRole('slider')
+  await expect.element(slider).toHaveValue('50')
+})

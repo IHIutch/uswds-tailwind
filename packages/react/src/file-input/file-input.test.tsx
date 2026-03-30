@@ -129,3 +129,16 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   expect(errorMessage.id).toBeTruthy()
   expect(input.getAttribute('aria-describedby')).toContain(errorMessage.id)
 })
+
+it('renders dropzone instruction text', async () => {
+  const screen = await render(
+    <FileInput.Root>
+      <FileInput.Label>Upload</FileInput.Label>
+      <FileInput.Dropzone>
+        <FileInput.Instructions />
+        <FileInput.Input />
+      </FileInput.Dropzone>
+    </FileInput.Root>,
+  )
+  await expect.element(screen.getByText(/Drag file here or/)).toBeVisible()
+})

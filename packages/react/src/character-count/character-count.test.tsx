@@ -119,3 +119,25 @@ it.skip('aria-describedby updates when invalid is set dynamically', async () => 
 
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+it('status text shows character count', async () => {
+  const screen = await render(
+    <CharacterCount.Root maxLength={20}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
+  )
+  await expect.element(screen.getByText(/20 characters allowed/)).toBeVisible()
+})
+
+it('character count updates as user types', async () => {
+  const screen = await render(
+    <CharacterCount.Root maxLength={20}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
+  )
+  const input = screen.getByRole('textbox')
+  await input.fill('hello')
+  await expect.element(screen.getByText(/15 characters left/)).toBeVisible()
+})

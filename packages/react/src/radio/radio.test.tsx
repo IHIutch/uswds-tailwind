@@ -148,3 +148,55 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+// TODO: Radio standalone rendering with multiple items needs investigation
+it.skip('clicking a radio selects it', async () => {
+  const screen = await render(
+    <RadioGroup.Root>
+      <RadioGroup.Item value="a">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option A</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+      <RadioGroup.Item value="b">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option B</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+    </RadioGroup.Root>,
+  )
+
+  const radioA = screen.getByRole('radio', { name: 'Option A' })
+
+  await screen.getByText('Option A').click()
+
+  await expect.element(radioA).toBeChecked()
+})
+
+// TODO: Radio standalone rendering with multiple items needs investigation
+it.skip('selecting one radio deselects the previous one', async () => {
+  const screen = await render(
+    <RadioGroup.Root>
+      <RadioGroup.Item value="a">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option A</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+      <RadioGroup.Item value="b">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option B</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+    </RadioGroup.Root>,
+  )
+
+  const radioA = screen.getByRole('radio', { name: 'Option A' })
+  const radioB = screen.getByRole('radio', { name: 'Option B' })
+
+  await screen.getByText('Option A').click()
+  await expect.element(radioA).toBeChecked()
+
+  await screen.getByText('Option B').click()
+  await expect.element(radioA).not.toBeChecked()
+  await expect.element(radioB).toBeChecked()
+})

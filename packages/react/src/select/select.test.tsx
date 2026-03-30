@@ -83,3 +83,18 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(select).toHaveAccessibleDescription(/Help text/)
   await expect.element(select).toHaveAccessibleDescription(/Required/)
 })
+
+it('changing option updates select value', async () => {
+  const screen = await render(
+    <Select.Root>
+      <Select.Field>
+        <option value="">- Select -</option>
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+      </Select.Field>
+    </Select.Root>,
+  )
+  const select = screen.getByRole('combobox')
+  await select.selectOptions(['banana'])
+  await expect.element(select).toHaveValue('banana')
+})
