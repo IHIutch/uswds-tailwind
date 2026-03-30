@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Checkbox } from './checkbox'
@@ -167,4 +167,64 @@ it('forwarded ref is set on root element', async () => {
     </Checkbox.Root>,
   )
   expect(ref.current).toBeInstanceOf(HTMLLabelElement)
+})
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <Checkbox.Root>
+        <Checkbox.Input name="agree" value="yes" />
+        <Checkbox.Control />
+        <Checkbox.Label>Agree</Checkbox.Label>
+      </Checkbox.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+
+  await screen.getByText('Agree').click()
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('agree')).toBe('yes')
+})
+
+it('onCheckedChange fires when checkbox is toggled', async () => {
+  const handleChange = vi.fn()
+  const screen = await render(
+    <Checkbox.Root onCheckedChange={handleChange}>
+      <Checkbox.Input />
+      <Checkbox.Control />
+      <Checkbox.Label>Option</Checkbox.Label>
+    </Checkbox.Root>,
+  )
+
+  await screen.getByText('Option').click()
+  expect(handleChange).toHaveBeenCalledWith({ checked: true })
+})
+
+it('checkboxGroup onValueChange fires with all checked values', async () => {
+  const handleChange = vi.fn()
+  const screen = await render(
+    <Checkbox.Group onValueChange={handleChange}>
+      <Checkbox.Root value="a">
+        <Checkbox.Input />
+        <Checkbox.Control />
+        <Checkbox.Label>Option A</Checkbox.Label>
+      </Checkbox.Root>
+      <Checkbox.Root value="b">
+        <Checkbox.Input />
+        <Checkbox.Control />
+        <Checkbox.Label>Option B</Checkbox.Label>
+      </Checkbox.Root>
+    </Checkbox.Group>,
+  )
+
+  await screen.getByText('Option A').click()
+  expect(handleChange).toHaveBeenLastCalledWith(['a'])
+
+  await screen.getByText('Option B').click()
+  expect(handleChange).toHaveBeenLastCalledWith(['a', 'b'])
 })

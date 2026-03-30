@@ -149,3 +149,24 @@ it('typing fills in the mask progressively', async () => {
   await input.fill('123')
   await expect.element(input).not.toHaveValue('')
 })
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <InputMask.Root placeholder="___-____">
+        <InputMask.Control>
+          <InputMask.Input name="phone" />
+        </InputMask.Control>
+      </InputMask.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('textbox').fill('1234567')
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('phone')).toBeTruthy()
+})

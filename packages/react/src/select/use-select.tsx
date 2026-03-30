@@ -10,35 +10,16 @@ export interface ElementIds {
 }
 
 export interface UseSelectProps {
-  /**
-   * The id of the field.
-   */
   id?: string | undefined
-  /**
-   * The ids of the field parts.
-   */
   ids?: ElementIds | undefined
-  /**
-   * Indicates whether the field is disabled.
-   */
   disabled?: boolean | undefined
-  /**
-   * Indicates whether the field is invalid.
-   */
   invalid?: boolean | undefined
-  /**
-   * Indicates whether the field is read-only.
-   */
   readOnly?: boolean | undefined
-  /**
-   * Indicates whether the field is required.
-   */
   required?: boolean | undefined
-  /**
-   * The name of the input fields in the radio
-   * (Useful for form submission).
-   */
   name?: string | undefined
+  value?: string | undefined
+  defaultValue?: string | undefined
+  onValueChange?: (value: string) => void
 }
 
 export type UseSelectReturn = ReturnType<typeof useSelect>
@@ -46,7 +27,18 @@ export type UseSelectReturn = ReturnType<typeof useSelect>
 export function useSelect(props: UseSelectProps = {}) {
   const field = useFieldContext()
 
-  const { ids, disabled = field?.disabled, invalid = field?.invalid, readOnly = field?.readOnly, required = field?.required, name } = props
+  const { ids, disabled = field?.disabled, invalid = field?.invalid, readOnly = field?.readOnly, required = field?.required, name, onValueChange } = props
+
+  const [uncontrolledValue, setUncontrolledValue] = React.useState(props.defaultValue ?? '')
+  const isControlled = props.value !== undefined
+  const value = isControlled ? props.value! : uncontrolledValue
+
+  const setValue = React.useCallback((newValue: string) => {
+    if (!isControlled) {
+      setUncontrolledValue(newValue)
+    }
+    onValueChange?.(newValue)
+  }, [isControlled, onValueChange])
   const uid = React.useId()
   const id = props.id ?? uid
 
@@ -74,14 +66,19 @@ export function useSelect(props: UseSelectProps = {}) {
     () => () =>
       ({
         'id': fieldId,
+        'value': isControlled ? value : undefined,
+        'defaultValue': !isControlled ? props.defaultValue : undefined,
         disabled,
         readOnly,
         required,
         'name': name || id,
         'data-invalid': dataAttr(invalid),
         'data-disabled': dataAttr(disabled),
+        onChange(e: React.ChangeEvent<HTMLSelectElement>) {
+          setValue(e.target.value)
+        },
       } as React.SelectHTMLAttributes<HTMLSelectElement>),
-    [required, readOnly, id, disabled, invalid],
+    [required, readOnly, id, disabled, invalid, value, isControlled, setValue, props.defaultValue],
   )
 
   const getIconProps = React.useMemo(

@@ -1,6 +1,6 @@
+import { userEvent } from '@vitest/browser/context'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
-import { userEvent } from '@vitest/browser/context'
 import { Button } from '../button'
 import { Tooltip } from './tooltip'
 

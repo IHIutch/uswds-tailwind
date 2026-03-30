@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Select } from './select'
@@ -97,4 +97,44 @@ it('changing option updates select value', async () => {
   const select = screen.getByRole('combobox')
   await select.selectOptions(['banana'])
   await expect.element(select).toHaveValue('banana')
+})
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <Select.Root>
+        <Select.Field name="color">
+          <option value="">-</option>
+          <option value="banana">Banana</option>
+        </Select.Field>
+        <Select.Icon />
+      </Select.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('combobox').selectOptions(['banana'])
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('color')).toBe('banana')
+})
+
+it('onValueChange fires when option is selected', async () => {
+  const handleChange = vi.fn()
+  const screen = await render(
+    <Select.Root onValueChange={handleChange}>
+      <Select.Field>
+        <option value="">-</option>
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+      </Select.Field>
+      <Select.Icon />
+    </Select.Root>,
+  )
+
+  await screen.getByRole('combobox').selectOptions(['banana'])
+  expect(handleChange).toHaveBeenCalledWith('banana')
 })

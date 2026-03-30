@@ -1,9 +1,10 @@
-import * as fileInput from '@uswds-tailwind/file-input-compat'
+import type * as fileInput from '@uswds-tailwind/file-input-compat'
+import type { UseFileInputProps } from './use-file-input'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
-import { useFileInput, type UseFileInputProps } from './use-file-input'
+import { useFileInput } from './use-file-input'
 
 export interface FileInputContextProps {
   api: fileInput.Api

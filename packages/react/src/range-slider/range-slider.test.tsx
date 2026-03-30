@@ -126,3 +126,21 @@ it('slider renders with default value', async () => {
   const slider = screen.getByRole('slider')
   await expect.element(slider).toHaveValue('50')
 })
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <RangeSlider.Root name="volume">
+        <RangeSlider.Input defaultValue={75} />
+      </RangeSlider.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('volume')).toBe('75')
+})

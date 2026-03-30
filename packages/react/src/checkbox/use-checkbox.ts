@@ -15,6 +15,7 @@ export interface UseCheckboxProps {
   ids?: ElementIds | undefined
   disabled?: boolean | undefined
   invalid?: boolean | undefined
+  onCheckedChange?: ({ checked}: { checked: boolean }) => void
 }
 
 export type UseCheckboxReturn = ReturnType<typeof useCheckbox>
@@ -27,9 +28,10 @@ export function useCheckbox(props: UseCheckboxProps = {}) {
     ids,
     disabled = field?.disabled ?? false,
     invalid = field?.invalid ?? false,
+    onCheckedChange,
   } = props
 
-  const rootRef = React.useRef<HTMLDivElement>(null)
+  const rootRef = React.useRef<HTMLLabelElement>(null)
 
   const rootId = ids?.root ?? `checkbox::${id}`
   const labelId = field?.ids.label ?? ids?.label ?? `checkbox::${id}::label`
@@ -66,8 +68,11 @@ export function useCheckbox(props: UseCheckboxProps = {}) {
         'aria-labelledby': labelId,
         'data-invalid': dataAttr(invalid),
         'data-disabled': dataAttr(disabled),
+        onChange(e: React.ChangeEvent<HTMLInputElement>) {
+          onCheckedChange?.({ checked: e.target.checked })
+        },
       }) as React.InputHTMLAttributes<HTMLInputElement>,
-    [disabled, invalid, inputId, labelId],
+    [disabled, invalid, inputId, labelId, onCheckedChange],
   )
 
   const getControlProps = React.useMemo(

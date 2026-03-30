@@ -142,3 +142,13 @@ it('renders dropzone instruction text', async () => {
   )
   await expect.element(screen.getByText(/Drag file here or/)).toBeVisible()
 })
+
+it('file input has name attribute for form submission', async () => {
+  await render(
+    <FileInput.Root>
+      <FileInput.Input name="upload" />
+    </FileInput.Root>,
+  )
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement
+  expect(input.name).toBe('upload')
+})

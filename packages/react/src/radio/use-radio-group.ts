@@ -15,13 +15,11 @@ export interface ElementIds {
 export interface UseRadioGroupProps {
   id?: string | undefined
   ids?: ElementIds | undefined
-  defaultValue?: string | undefined
-  value?: string | undefined
-  onValueChange?: ((value: string) => void) | undefined
   disabled?: boolean | undefined
   readOnly?: boolean | undefined
   invalid?: boolean | undefined
   name?: string | undefined
+  onValueChange?: (value: string) => void
 }
 
 export interface GroupItemProps {
@@ -35,7 +33,7 @@ export type UseRadioGroupReturn = ReturnType<typeof useRadioGroup>
 export function useRadioGroup(props: UseRadioGroupProps = {}) {
   const field = useFieldContext()
   const fieldset = useFieldsetContext()
-  const { ids, disabled = field?.disabled ?? false, readOnly = false, invalid = field?.invalid ?? false, name } = props
+  const { ids, disabled = field?.disabled ?? false, readOnly = false, invalid = field?.invalid ?? false, name, onValueChange } = props
 
   const uid = React.useId()
   const id = props.id ?? uid
@@ -88,12 +86,16 @@ export function useRadioGroup(props: UseRadioGroupProps = {}) {
         'id': `${inputId}::${itemProps.value}`,
         'type': 'radio',
         'name': name || id,
+        'value': itemProps.value,
         'disabled': disabled || itemProps.disabled,
         'aria-labelledby': labelId,
         'data-invalid': dataAttr(invalid),
         'data-disabled': dataAttr(disabled),
+        onChange() {
+          onValueChange?.(itemProps.value)
+        },
       }) as React.InputHTMLAttributes<HTMLInputElement>,
-    [disabled, invalid, inputId, labelId],
+    [disabled, invalid, inputId, labelId, name, id, onValueChange],
   )
 
   const getControlProps = React.useMemo(

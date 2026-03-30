@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Fieldset } from '../fieldset/fieldset'
@@ -150,7 +150,7 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
 
-// TODO: Radio standalone rendering with multiple items needs investigation
+// TODO: Radio label click interaction needs investigation (sr-only input)
 it.skip('clicking a radio selects it', async () => {
   const screen = await render(
     <RadioGroup.Root>
@@ -174,7 +174,7 @@ it.skip('clicking a radio selects it', async () => {
   await expect.element(radioA).toBeChecked()
 })
 
-// TODO: Radio standalone rendering with multiple items needs investigation
+// TODO: Radio label click interaction needs investigation (sr-only input)
 it.skip('selecting one radio deselects the previous one', async () => {
   const screen = await render(
     <RadioGroup.Root>
@@ -214,4 +214,54 @@ it('forwarded ref is set on root element', async () => {
     </RadioGroup.Root>,
   )
   expect(ref.current).toBeInstanceOf(HTMLDivElement)
+})
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <RadioGroup.Root name="choice">
+        <RadioGroup.Item value="a">
+          <RadioGroup.ItemInput />
+          <RadioGroup.ItemControl />
+          <RadioGroup.ItemLabel>Option A</RadioGroup.ItemLabel>
+        </RadioGroup.Item>
+        <RadioGroup.Item value="b">
+          <RadioGroup.ItemInput />
+          <RadioGroup.ItemControl />
+          <RadioGroup.ItemLabel>Option B</RadioGroup.ItemLabel>
+        </RadioGroup.Item>
+      </RadioGroup.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+
+  await screen.getByText('Option A').click()
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('choice')).toBe('a')
+})
+
+it('onValueChange fires when a radio is selected', async () => {
+  const handleChange = vi.fn()
+  const screen = await render(
+    <RadioGroup.Root onValueChange={handleChange}>
+      <RadioGroup.Item value="a">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option A</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+      <RadioGroup.Item value="b">
+        <RadioGroup.ItemInput />
+        <RadioGroup.ItemControl />
+        <RadioGroup.ItemLabel>Option B</RadioGroup.ItemLabel>
+      </RadioGroup.Item>
+    </RadioGroup.Root>,
+  )
+
+  await screen.getByText('Option A').click()
+  expect(handleChange).toHaveBeenCalledWith('a')
 })

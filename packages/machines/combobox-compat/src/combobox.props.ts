@@ -12,6 +12,6 @@ export const props = createProps<ComboboxProps>()([
   'showClearButton',
   'showToggleButton',
   'disableFiltering',
-  'onSelectionChange',
+  'onValueChange',
   'onInputChange',
 ])

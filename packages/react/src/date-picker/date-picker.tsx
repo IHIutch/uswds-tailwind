@@ -1,9 +1,10 @@
-import * as datepicker from '@uswds-tailwind/date-picker-compat'
+import type * as datepicker from '@uswds-tailwind/date-picker-compat'
+import type { UseDatePickerProps } from './use-date-picker'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
 import { Input } from '../input/input'
-import { useDatePicker, type UseDatePickerProps } from './use-date-picker'
+import { useDatePicker } from './use-date-picker'
 
 export interface DatePickerContextProps {
   api: datepicker.Api

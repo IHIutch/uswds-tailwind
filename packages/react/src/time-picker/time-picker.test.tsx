@@ -121,3 +121,32 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <TimePicker.Root>
+        <TimePicker.Control>
+          <TimePicker.Input name="time" />
+        </TimePicker.Control>
+        <TimePicker.List>
+          {({ options }) => options.map((option, index) => (
+            <TimePicker.Item key={option.value} index={index} {...option}>
+              {option.label}
+            </TimePicker.Item>
+          ))}
+        </TimePicker.List>
+      </TimePicker.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('combobox').fill('12:00')
+  await screen.getByText('12:00pm').click()
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('time')).toBe('12:00pm')
+})

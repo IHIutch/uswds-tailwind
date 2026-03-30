@@ -98,3 +98,19 @@ it('aria-describedby updates when invalid is set dynamically', async () => {
   await expect.element(input).toHaveAccessibleDescription(/Help text/)
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <Input name="email" defaultValue="test@example.com" />
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('email')).toBe('test@example.com')
+})

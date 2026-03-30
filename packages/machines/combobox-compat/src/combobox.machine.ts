@@ -202,6 +202,7 @@ export const machine = createMachine<ComboboxSchema>({
         context.set('value', option.value)
         context.set('inputValue', option.label)
         context.set('isDirty', false)
+        prop('onValueChange')?.(option.value)
         prop('onInputChange')?.(option.label)
 
         // Sync hidden select element for form submission
@@ -218,6 +219,7 @@ export const machine = createMachine<ComboboxSchema>({
         context.set('value', '')
         context.set('inputValue', '')
         context.set('isDirty', false)
+        prop('onValueChange')?.('')
         prop('onInputChange')?.('')
       },
       handleKeyDown({ event, send }) {

@@ -1,4 +1,5 @@
 import type { VariantProps } from 'cva'
+import type { UseCheckboxProps } from './use-checkbox'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
@@ -6,8 +7,13 @@ import { useFieldContext } from '../field/field'
 import { composeRefs } from '../utils/compose-refs'
 import { useCheckbox } from './use-checkbox'
 
-export type CheckboxRootProps = React.ComponentPropsWithoutRef<'label'>
-export type CheckboxGroupProps = React.ComponentPropsWithoutRef<'div'>
+export type CheckboxRootProps = React.ComponentPropsWithoutRef<'label'> & UseCheckboxProps & {
+  value?: string
+}
+export type CheckboxGroupProps = React.ComponentPropsWithoutRef<'div'> & {
+  defaultValue?: string[]
+  onValueChange?: (values: string[]) => void
+}
 export type CheckboxLabelProps = React.ComponentPropsWithoutRef<'div'>
 export type CheckboxInputProps = React.ComponentPropsWithoutRef<'input'>
 export type CheckboxControlProps = React.ComponentPropsWithoutRef<'input'>
@@ -16,10 +22,19 @@ export type CheckboxContextProps = ReturnType<typeof useCheckbox> & {
   tile?: boolean
 }
 
+export interface CheckboxGroupContextProps {
+  onCheckedChange?: ({ value, checked}: { value: string, checked: boolean }) => void
+}
+
 const CheckboxContext = React.createContext<CheckboxContextProps | null>(null)
+const CheckboxGroupContext = React.createContext<CheckboxGroupContextProps | null>(null)
 
 export function useCheckboxContext() {
   return React.useContext(CheckboxContext)
+}
+
+function useCheckboxGroupContext() {
+  return React.useContext(CheckboxGroupContext)
 }
 
 const checkboxRootVariant = cva({
@@ -32,8 +47,17 @@ const checkboxRootVariant = cva({
 })
 
 const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & VariantProps<typeof checkboxRootVariant>>(
-  ({ className, id, tile, ...props }, forwardedRef) => {
-    const checkbox = useCheckbox()
+  ({ className, id, tile, onCheckedChange, value, ...props }, forwardedRef) => {
+    const group = useCheckboxGroupContext()
+
+    const handleCheckedChange = React.useCallback((details: { checked: boolean }) => {
+      onCheckedChange?.(details)
+      if (value !== undefined) {
+        group?.onCheckedChange?.({ value, checked: details.checked })
+      }
+    }, [onCheckedChange, group, value])
+
+    const checkbox = useCheckbox({ id, onCheckedChange: handleCheckedChange })
     const mergedProps = mergeProps(checkbox.getRootProps(), props)
 
     return (
@@ -57,15 +81,27 @@ const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & Vari
   },
 )
 
-function CheckboxGroup({ className, ...props }: CheckboxGroupProps) {
+function CheckboxGroup({ className, onValueChange, defaultValue = [], ...props }: CheckboxGroupProps) {
+  const [_, setValues] = React.useState<string[]>(defaultValue)
+
+  const handleCheckedChange = React.useCallback(({ value, checked }: { value: string, checked: boolean }) => {
+    setValues((prev) => {
+      const next = checked ? [...prev, value] : prev.filter(v => v !== value)
+      onValueChange?.(next)
+      return next
+    })
+  }, [onValueChange])
+
   return (
-    <div
-      {...props}
-      className={cx(
-        'space-y-2',
-        className,
-      )}
-    />
+    <CheckboxGroupContext.Provider value={{ onCheckedChange: handleCheckedChange }}>
+      <div
+        {...props}
+        className={cx(
+          'space-y-2',
+          className,
+        )}
+      />
+    </CheckboxGroupContext.Provider>
   )
 }
 

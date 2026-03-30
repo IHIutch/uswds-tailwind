@@ -35,7 +35,7 @@ export function useFieldset(props: UseFieldsetProps = {}) {
 
   const uid = React.useId()
   const id = props.id ?? uid
-  const rootRef = React.useRef<HTMLDivElement>(null)
+  const rootRef = React.useRef<HTMLFieldSetElement>(null)
 
   const legendId = `fieldset::${id}::legend`
   const errorTextId = `fieldset::${id}::error-text`

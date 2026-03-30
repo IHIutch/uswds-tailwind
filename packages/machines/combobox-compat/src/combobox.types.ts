@@ -56,7 +56,7 @@ export interface ComboboxProps extends CommonProperties {
   /**
    * Function called when selection changes
    */
-  onSelectionChange?: (value: string) => void
+  onValueChange?: (value: string) => void
   /**
    * Function called when input value changes
    */

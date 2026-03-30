@@ -141,3 +141,23 @@ it('character count updates as user types', async () => {
   await input.fill('hello')
   await expect.element(screen.getByText(/15 characters left/)).toBeVisible()
 })
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <CharacterCount.Root maxLength={100}>
+        <CharacterCount.Input name="message" />
+        <CharacterCount.Status />
+      </CharacterCount.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('textbox').fill('hello')
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('message')).toBe('hello')
+})

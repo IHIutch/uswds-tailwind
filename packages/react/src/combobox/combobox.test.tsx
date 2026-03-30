@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Combobox } from './combobox'
@@ -201,4 +201,42 @@ it('toggle button opens the dropdown list', async () => {
   await screen.getByRole('button', { name: /toggle the dropdown list/i }).click()
 
   await expect.element(screen.getByRole('listbox')).toBeVisible()
+})
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <Combobox.Root options={multipleOptions}>
+        <Combobox.Control>
+          <Combobox.Input name="vehicle" />
+        </Combobox.Control>
+        <Combobox.List>
+          {({ options }) => options.map((o, i) => (
+            <Combobox.Item key={o.value} index={i} {...o}>{o.label}</Combobox.Item>
+          ))}
+        </Combobox.List>
+      </Combobox.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('combobox').fill('Air')
+  await screen.getByText('Aircraft').click()
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('vehicle')).toBe('Aircraft')
+})
+
+it('onValueChange fires when option is selected', async () => {
+  const handleChange = vi.fn()
+  const screen = await render(
+    <FullComboboxComponent options={multipleOptions} onValueChange={handleChange} />,
+  )
+
+  await screen.getByRole('combobox').fill('Air')
+  await screen.getByText('Aircraft').click()
+  expect(handleChange).toHaveBeenCalledWith('aircraft')
 })

@@ -151,3 +151,24 @@ it('clicking search button fires handler', async () => {
   await screen.getByRole('button', { name: 'Go' }).click()
   expect(handleClick).toHaveBeenCalled()
 })
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <Search.Root name="q">
+        <Search.Label>Search</Search.Label>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('searchbox').fill('test query')
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('q')).toBe('test query')
+})
