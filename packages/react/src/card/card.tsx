@@ -16,11 +16,6 @@ function CardGroup({ className, ...props }: CardGroupProps) {
 const cardRootVariants = cva({
   base: 'bg-white border-2 border-gray-10 rounded grid',
   variants: {
-    variant: {
-      indent: '',
-      flush: '',
-      exdent: '',
-    },
     layout: {
       vertical: '',
       ltr: 'md:grid-cols-[auto_1fr]',
@@ -75,51 +70,18 @@ const cardMediaVariants = cva({
     },
   },
   compoundVariants: [
-    {
-      layout: ['ltr'],
-      variant: 'exdent',
-      className: '-my-0.5 -ml-0.5 rounded-l',
-    },
-    {
-      layout: ['rtl'],
-      variant: 'exdent',
-      className: '-my-0.5 -mr-0.5 rounded-r',
-    },
-    {
-      layout: 'vertical',
-      variant: 'exdent',
-      className: '-mx-0.5 -mt-0.5 rounded-t',
-    },
-    {
-      layout: ['rtl'],
-      variant: 'flush',
-      className: 'rounded-r-xs',
-    },
-    {
-      layout: ['ltr'],
-      variant: 'flush',
-      className: 'rounded-l-xs',
-    },
-    {
-      layout: ['vertical'],
-      variant: 'flush',
-      className: 'rounded-t-xs',
-    },
-    {
-      layout: ['ltr'],
-      variant: 'indent',
-      className: 'p-6 md:pr-0',
-    },
-    {
-      layout: ['rtl'],
-      variant: 'indent',
-      className: 'p-6 md:pl-0',
-    },
-    {
-      layout: 'vertical',
-      variant: 'indent',
-      className: 'px-6 pt-6',
-    },
+    // exdent
+    { layout: 'ltr', variant: 'exdent', className: '-my-0.5 -ml-0.5 rounded-l' },
+    { layout: 'rtl', variant: 'exdent', className: '-my-0.5 -mr-0.5 rounded-r' },
+    { layout: 'vertical', variant: 'exdent', className: '-mx-0.5 -mt-0.5 rounded-t' },
+    // flush
+    { layout: 'ltr', variant: 'flush', className: 'rounded-l-xs' },
+    { layout: 'rtl', variant: 'flush', className: 'rounded-r-xs' },
+    { layout: 'vertical', variant: 'flush', className: 'rounded-t-xs' },
+    // indent
+    { layout: 'ltr', variant: 'indent', className: 'p-6 md:pr-0' },
+    { layout: 'rtl', variant: 'indent', className: 'p-6 md:pl-0' },
+    { layout: 'vertical', variant: 'indent', className: 'px-6 pt-6' },
   ],
   defaultVariants: {
     variant: 'indent',
@@ -139,57 +101,24 @@ function CardMedia({ className, variant, ...props }: CardMediaProps) {
   )
 }
 
-const cardHeaderVariants = cva({
-  base: 'pb-2',
-  variants: {
-    variant: {
-      indent: 'px-6 pt-6',
-      flush: 'rounded-t-xs  overflow-hidden',
-      exdent: '-mx-0.5 -mt-0.5 rounded-t overflow-hidden',
-    },
-  },
-  defaultVariants: {
-    variant: 'indent',
-  },
-})
+export type CardHeaderProps = React.ComponentPropsWithoutRef<'div'>
 
-export type CardHeaderProps = React.ComponentPropsWithoutRef<'div'> & VariantProps<typeof cardHeaderVariants>
-
-function CardHeader({ className, variant, ...props }: CardHeaderProps) {
+function CardHeader({ className, ...props }: CardHeaderProps) {
   return (
     <div
       {...props}
-      className={cx(
-        cardHeaderVariants({ variant }),
-        className,
-      )}
+      className={cx('pb-2 px-6 pt-6', className)}
     />
   )
 }
 
-const cardBodyVariants = cva({
-  base: 'grow py-2',
-  variants: {
-    variant: {
-      indent: 'px-6',
-      flush: 'overflow-hidden',
-      exdent: '-mx-0.5 overflow-hidden',
-    },
-  },
-  defaultVariants: {
-    variant: 'indent',
-  },
-})
+export type CardBodyProps = React.ComponentPropsWithoutRef<'div'>
 
-export type CardBodyProps = React.ComponentPropsWithoutRef<'div'> & VariantProps<typeof cardBodyVariants>
-
-function CardBody({ className, variant, ...props }: CardBodyProps) {
+function CardBody({ className, ...props }: CardBodyProps) {
   return (
     <div
       {...props}
-      className={cx(cardBodyVariants({
-        variant,
-      }), className)}
+      className={cx('grow py-2 px-6', className)}
     />
   )
 }

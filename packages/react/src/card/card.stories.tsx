@@ -4,7 +4,8 @@ import { Card } from './card'
 
 const meta = preview.meta({
   title: 'Components/Card',
-  component: Card.Root,
+  // Using Card.Media as component to expose both layout and variant controls
+  component: Card.Media,
   argTypes: {
     layout: {
       control: 'select',
@@ -17,7 +18,7 @@ const meta = preview.meta({
       control: 'select',
       options: ['indent', 'exdent', 'flush'],
       table: {
-        defaultValue: { summary: 'default' },
+        defaultValue: { summary: 'indent' },
       },
     },
   },
