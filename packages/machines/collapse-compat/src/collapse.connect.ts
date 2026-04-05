@@ -32,6 +32,7 @@ export function connect<T extends PropTypes>(
       return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope),
+        'data-state': isOpen ? 'open' : 'closed',
         'aria-controls': dom.getContentId(scope),
         'aria-expanded': isOpen ? 'true' : 'false',
         'type': 'button',

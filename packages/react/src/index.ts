@@ -1,5 +1,6 @@
 export * from './accordion'
 export * from './alert'
+export * from './banner'
 export * from './breadcrumb'
 export * from './button'
 export * from './button-group'
