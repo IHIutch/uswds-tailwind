@@ -152,6 +152,19 @@ ComboboxIndicatorGroup.displayName = 'Combobox.IndicatorGroup'
 ComboboxClearButton.displayName = 'Combobox.ClearButton'
 ComboboxToggleButton.displayName = 'Combobox.ToggleButton'
 
+export {
+  ComboboxRoot,
+  ComboboxLabel,
+  ComboboxControl,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxEmptyItem,
+  ComboboxIndicatorGroup,
+  ComboboxClearButton,
+  ComboboxToggleButton,
+}
+
 export const Combobox = {
   Root: ComboboxRoot,
   Label: ComboboxLabel,
