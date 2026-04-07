@@ -125,7 +125,7 @@ const NavContent = React.forwardRef<HTMLElement, NavContentProps>(
           // Mobile: hide when closed via data-state
           '@max-desktop:not-data-[state=open]:hidden',
           // Desktop: inline nav (always visible)
-          '@desktop:flex @desktop:justify-end @desktop:items-center @desktop:pl-2 @desktop:pb-1',
+          '@desktop:flex @desktop:items-center',
           className,
         )}
         ref={forwardedRef}
@@ -281,7 +281,7 @@ const NavDropdownTrigger = React.forwardRef<HTMLButtonElement, NavDropdownTrigge
           // Desktop
           '@desktop:font-bold @desktop:gap-1 @desktop:p-4 @desktop:data-[state=open]:bg-blue-warm-80v @desktop:data-[state=open]:text-white @desktop:hover:text-blue-60v @desktop:hover:after:bg-blue-60v',
           // desktop:after
-          '@desktop:data-current:after:-bottom-1 @desktop:data-current:after:inset-x-4 @desktop:data-current:after:h-1 @desktop:hover:after:absolute @desktop:hover:after:-bottom-1 @desktop:hover:after:inset-x-4 @desktop:hover:after:h-1 @desktop:data-[state=open]:after:hidden',
+          '@desktop:data-current:after:bottom-0 @desktop:data-current:after:inset-x-4 @desktop:data-current:after:h-1 @desktop:hover:after:absolute @desktop:hover:after:bottom-0 @desktop:hover:after:inset-x-4 @desktop:hover:after:h-1 @desktop:data-[state=open]:after:hidden',
           className,
         )}
         ref={forwardedRef}

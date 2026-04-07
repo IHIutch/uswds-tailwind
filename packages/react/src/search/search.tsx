@@ -126,7 +126,7 @@ const SearchButton = React.forwardRef<HTMLButtonElement, SearchButtonProps>(
         )}
         ref={forwardedRef}
       >
-        {children ?? <span className="icon-[material-symbols--search] size-5 align-middle" aria-hidden="true" />}
+        {children ?? <span className="icon-[material-symbols--search] size-6" aria-hidden="true" />}
       </Button>
     )
   },
