@@ -1,11 +1,10 @@
-import * as collapse from '@uswds-tailwind/collapse-compat'
 import * as modal from '@uswds-tailwind/modal-compat'
 import { normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 
-export interface UseHeaderProps extends Omit<modal.Props, 'id' | 'getRootNode'> {}
+export interface UseNavProps extends Omit<modal.Props, 'id' | 'getRootNode'> {}
 
-export function useHeader(props?: UseHeaderProps) {
+export function useNav(props?: UseNavProps) {
   const service = useMachine(modal.machine, {
     id: React.useId(),
     ...props,
@@ -25,14 +24,4 @@ export function useHeader(props?: UseHeaderProps) {
   }, [api, service])
 
   return api
-}
-
-export interface UseHeaderNavDropdownProps extends Omit<collapse.Props, 'id' | 'getRootNode'> {}
-
-export function useHeaderNavMenu(props?: UseHeaderNavDropdownProps) {
-  const service = useMachine(collapse.machine, {
-    id: React.useId(),
-    ...props,
-  })
-  return collapse.connect(service, normalizeProps)
 }

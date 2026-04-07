@@ -35,4 +35,5 @@ export interface DropdownApi<T extends PropTypes = PropTypes> {
   getTriggerProps: () => T['element']
   getContentProps: () => T['element']
   getItemProps: () => T['element']
+  getIndicatorProps: () => T['element']
 }

@@ -1,4 +1,5 @@
 import preview from '../../.storybook/preview'
+import { Nav } from '../nav'
 import { Header } from './header'
 
 const meta = preview.meta({
@@ -10,58 +11,58 @@ export const Default = meta.story({
   render: () => (
     <Header.Root>
       <Header.Container>
-        <div className="max-w-5xl mx-auto flex justify-between items-end pb-1">
-          <Header.Branding>
-            <em className="font-bold not-italic">
-              <a className="text-gray-90 focus:outline-4 focus:outline-blue-40v" href="/">Project Title</a>
-            </em>
-          </Header.Branding>
-          <Header.MenuTrigger />
+        <Header.Branding>
+          <em className="font-bold not-italic">
+            <a className="text-gray-90 focus:outline-4 focus:outline-blue-40v" href="/">Project Title</a>
+          </em>
+        </Header.Branding>
 
-          <Header.Backdrop />
-          <Header.NavPositioner>
-            <Header.NavContent>
-              <Header.NavClose />
-              <Header.NavList>
-                <Header.NavListItem>
-                  <Header.NavMenu>
-                    <Header.NavMenuTrigger isCurrent>
+        <Nav.Root>
+          <Nav.Trigger>Menu</Nav.Trigger>
+          <Nav.Backdrop />
+          <Nav.Positioner>
+            <Nav.Content>
+              <Nav.CloseTrigger />
+              <Nav.List>
+                <Nav.ListItem>
+                  <Nav.Dropdown>
+                    <Nav.DropdownTrigger isCurrent>
                       Dropdown
-                      <Header.NavMenuIndicator />
-                    </Header.NavMenuTrigger>
-                    <Header.NavMenuContent>
-                      <Header.NavMenuItem>
-                        <Header.NavMenuLink href="#">Sub-link one</Header.NavMenuLink>
-                      </Header.NavMenuItem>
-                      <Header.NavMenuItem>
-                        <Header.NavMenuLink href="#">Sub-link two</Header.NavMenuLink>
-                      </Header.NavMenuItem>
-                    </Header.NavMenuContent>
-                  </Header.NavMenu>
-                </Header.NavListItem>
-                <Header.NavListItem>
-                  <Header.NavMenu>
-                    <Header.NavMenuTrigger>
+                      <Nav.DropdownIndicator />
+                    </Nav.DropdownTrigger>
+                    <Nav.DropdownContent>
+                      <Nav.DropdownItem>
+                        <Nav.DropdownLink href="#">Sub-link one</Nav.DropdownLink>
+                      </Nav.DropdownItem>
+                      <Nav.DropdownItem>
+                        <Nav.DropdownLink href="#">Sub-link two</Nav.DropdownLink>
+                      </Nav.DropdownItem>
+                    </Nav.DropdownContent>
+                  </Nav.Dropdown>
+                </Nav.ListItem>
+                <Nav.ListItem>
+                  <Nav.Dropdown>
+                    <Nav.DropdownTrigger>
                       Dropdown
-                      <Header.NavMenuIndicator />
-                    </Header.NavMenuTrigger>
-                    <Header.NavMenuContent>
-                      <Header.NavMenuItem>
-                        <Header.NavMenuLink href="#">Sub-link one</Header.NavMenuLink>
-                      </Header.NavMenuItem>
-                      <Header.NavMenuItem>
-                        <Header.NavMenuLink href="#">Sub-link two</Header.NavMenuLink>
-                      </Header.NavMenuItem>
-                    </Header.NavMenuContent>
-                  </Header.NavMenu>
-                </Header.NavListItem>
-                <Header.NavListItem>
-                  <Header.NavLink href="#">Link</Header.NavLink>
-                </Header.NavListItem>
-              </Header.NavList>
-            </Header.NavContent>
-          </Header.NavPositioner>
-        </div>
+                      <Nav.DropdownIndicator />
+                    </Nav.DropdownTrigger>
+                    <Nav.DropdownContent>
+                      <Nav.DropdownItem>
+                        <Nav.DropdownLink href="#">Sub-link one</Nav.DropdownLink>
+                      </Nav.DropdownItem>
+                      <Nav.DropdownItem>
+                        <Nav.DropdownLink href="#">Sub-link two</Nav.DropdownLink>
+                      </Nav.DropdownItem>
+                    </Nav.DropdownContent>
+                  </Nav.Dropdown>
+                </Nav.ListItem>
+                <Nav.ListItem>
+                  <Nav.Link href="#">Link</Nav.Link>
+                </Nav.ListItem>
+              </Nav.List>
+            </Nav.Content>
+          </Nav.Positioner>
+        </Nav.Root>
       </Header.Container>
     </Header.Root>
   ),

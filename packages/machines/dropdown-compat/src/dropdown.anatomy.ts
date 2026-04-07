@@ -5,6 +5,7 @@ export const anatomy = createAnatomy('dropdown').parts(
   'trigger',
   'content',
   'item',
+  'indicator',
 )
 
 export const parts = anatomy.build()
