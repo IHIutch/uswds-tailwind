@@ -2,7 +2,8 @@ import type { VariantProps } from 'cva'
 import * as React from 'react'
 import { cva, cx } from '../cva.config'
 
-// Root
+// Variants
+
 const headerContainerVariants = cva({
   base: 'max-w-5xl flex justify-between items-center @desktop:items-end @desktop:px-8 mx-auto',
   variants: {
@@ -16,7 +17,35 @@ const headerContainerVariants = cva({
   },
 })
 
-export type HeaderContextProps = & VariantProps<typeof headerContainerVariants>
+const headerBrandingVariants = cva({
+  base: '@desktop:mt-8 ml-4 @desktop:ml-0 @desktop:w-1/3 w-full',
+  variants: {
+    size: {
+      md: '@desktop:text-2xl @desktop:mb-4',
+      lg: '@desktop:text-3xl @desktop:mb-6',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+})
+
+const headerPrimaryVariants = cva({
+  base: 'border-b border-b-gray-cool-10',
+  variants: {
+    variant: {
+      default: '@desktop:border-b-0',
+      extended: '',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+})
+
+// Context
+
+export type HeaderContextProps = VariantProps<typeof headerContainerVariants>
 
 const HeaderContext = React.createContext<HeaderContextProps | null>(null)
 
@@ -27,6 +56,8 @@ function useHeaderContext() {
   }
   return context
 }
+
+// Root
 
 export type HeaderRootProps = React.ComponentPropsWithoutRef<'header'> & HeaderContextProps
 
@@ -61,24 +92,18 @@ function HeaderContainer({ className, ...props }: HeaderContainerProps) {
 
 // Branding
 
-export type HeaderBrandingProps = React.ComponentPropsWithoutRef<'div'> & {
-  size?: 'md' | 'lg'
-}
+export type HeaderBrandingProps = React.ComponentPropsWithoutRef<'div'> & VariantProps<typeof headerBrandingVariants>
 
 function HeaderBranding({ className, size, ...props }: HeaderBrandingProps) {
   return (
     <div
       {...props}
-      className={cx(
-        size === 'lg' ? '@desktop:text-3xl @desktop:mb-6' : '@desktop:text-2xl @desktop:mb-4',
-        '@desktop:mt-8 ml-4 @desktop:ml-0 @desktop:w-1/3 w-full',
-        className,
-      )}
+      className={cx(headerBrandingVariants({ size }), className)}
     />
   )
 }
 
-// Primary (slot)
+// Primary
 
 export type HeaderPrimaryProps = React.ComponentPropsWithoutRef<'div'>
 
@@ -88,16 +113,12 @@ function HeaderPrimary({ className, ...props }: HeaderPrimaryProps) {
   return (
     <div
       {...props}
-      className={cx(
-        variant !== 'extended' ? '@desktop:border-b-0' : '',
-        'border-b border-b-gray-cool-10',
-        className,
-      )}
+      className={cx(headerPrimaryVariants({ variant }), className)}
     />
   )
 }
 
-// Extended (slot)
+// Extended
 
 export type HeaderExtendedProps = React.ComponentPropsWithoutRef<'div'>
 
@@ -110,7 +131,6 @@ function HeaderExtended({ className, ...props }: HeaderExtendedProps) {
       className={cx(
         headerContainerVariants({ variant }),
         '@desktop:px-4 relative',
-        // 'desktop:border-t border-t-gray-cool-10 @desktop:px-4 relative',
         className,
       )}
     />
@@ -146,6 +166,7 @@ function HeaderSecondaryList({ className, ...props }: HeaderSecondaryListProps) 
 // SecondaryItem
 
 export type HeaderSecondaryItemProps = React.ComponentPropsWithoutRef<'li'>
+
 function HeaderSecondaryItem({ className, ...props }: HeaderSecondaryItemProps) {
   return (
     <li
@@ -157,7 +178,7 @@ function HeaderSecondaryItem({ className, ...props }: HeaderSecondaryItemProps) 
 
 // SecondaryLink
 
-export type HeaderSecondaryLinkProps = React.ComponentPropsWithoutRef<'a'>
+export type HeaderSecondaryLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement>
 
 function HeaderSecondaryLink({ className, ...props }: HeaderSecondaryLinkProps) {
   return (
@@ -178,6 +199,7 @@ HeaderExtended.displayName = 'Header.Extended'
 HeaderSecondaryNav.displayName = 'Header.SecondaryNav'
 HeaderSecondaryList.displayName = 'Header.SecondaryList'
 HeaderSecondaryItem.displayName = 'Header.SecondaryItem'
+HeaderSecondaryLink.displayName = 'Header.SecondaryLink'
 
 export const Header = {
   Root: HeaderRoot,
