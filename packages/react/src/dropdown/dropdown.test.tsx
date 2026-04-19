@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Dropdown } from './dropdown'
 
 function renderDropdown() {
@@ -39,10 +40,10 @@ it('clicking trigger again closes menu', async () => {
 
   const trigger = screen.getByRole('button', { name: 'Menu' })
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(screen.getByText('One')).toBeVisible()
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(screen.getByText('One')).not.toBeVisible()
 })
 
@@ -52,9 +53,9 @@ it.skip('pressing Escape closes menu', async () => {
 
   const trigger = screen.getByRole('button', { name: 'Menu' })
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(screen.getByText('One')).toBeVisible()
 
-  await trigger.keyboard('{Escape}')
+  await userEvent.keyboard('{Escape}')
   await expect.element(screen.getByText('One')).not.toBeVisible()
 })

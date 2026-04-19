@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Accordion } from './accordion'
 
 const items = [
@@ -42,10 +43,10 @@ it('clicking expanded trigger collapses it', async () => {
   const trigger = screen.getByRole('button', { name: 'First' })
   const content = screen.getByText('First content')
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(content).toBeVisible()
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(content).not.toBeVisible()
 })
 
@@ -84,13 +85,13 @@ it.skip('keyboard: Enter toggles panel', async () => {
   const trigger = screen.getByRole('button', { name: 'First' })
   const content = screen.getByText('First content')
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(content).toBeVisible()
 
-  await trigger.keyboard('{Enter}')
+  await userEvent.keyboard('{Enter}')
   await expect.element(content).not.toBeVisible()
 
-  await trigger.keyboard('{Enter}')
+  await userEvent.keyboard('{Enter}')
   await expect.element(content).toBeVisible()
 })
 
@@ -101,12 +102,12 @@ it.skip('keyboard: Space toggles panel', async () => {
   const trigger = screen.getByRole('button', { name: 'First' })
   const content = screen.getByText('First content')
 
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(content).toBeVisible()
 
-  await trigger.keyboard(' ')
+  await userEvent.keyboard(' ')
   await expect.element(content).not.toBeVisible()
 
-  await trigger.keyboard(' ')
+  await userEvent.keyboard(' ')
   await expect.element(content).toBeVisible()
 })

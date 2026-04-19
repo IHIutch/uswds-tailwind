@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Modal } from './modal'
 
 function renderModal() {
@@ -55,9 +56,9 @@ it.skip('pressing Escape closes modal', async () => {
   const screen = await renderModal()
 
   const trigger = screen.getByRole('button', { name: 'Open modal' })
-  await trigger.click()
+  await userEvent.click(trigger)
   await expect.element(screen.getByText('Test Modal Title')).toBeVisible()
 
-  await screen.getByRole('dialog').keyboard('{Escape}')
+  await userEvent.keyboard('{Escape}')
   await expect.element(screen.getByText('Test Modal Title')).not.toBeVisible()
 })

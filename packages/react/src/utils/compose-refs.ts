@@ -2,7 +2,7 @@ import type { Ref } from 'react'
 
 type PossibleRef<T> = Ref<T | null> | undefined
 
-export function composeRefs<T>(...refs: PossibleRef<T>[]): (node: T | null) => void {
+export function composeRefs<T>(...refs: PossibleRef<T>[]): (node: T | null) => VoidFunction | void {
   return (node) => {
     const cleanUps: VoidFunction[] = []
 

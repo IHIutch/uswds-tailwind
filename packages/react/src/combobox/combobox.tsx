@@ -153,15 +153,15 @@ ComboboxClearButton.displayName = 'Combobox.ClearButton'
 ComboboxToggleButton.displayName = 'Combobox.ToggleButton'
 
 export {
-  ComboboxRoot,
-  ComboboxLabel,
+  ComboboxClearButton,
   ComboboxControl,
-  ComboboxInput,
-  ComboboxList,
-  ComboboxItem,
   ComboboxEmptyItem,
   ComboboxIndicatorGroup,
-  ComboboxClearButton,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxRoot,
   ComboboxToggleButton,
 }
 
