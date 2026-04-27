@@ -6,8 +6,9 @@ export type {
   TooltipApi as Api,
   ElementIds,
   TooltipMachine as Machine,
+  OpenChangeDetails,
+  Position,
   TooltipProps as Props,
   TooltipService as Service,
-  TooltipPlacement,
   TooltipSchema,
 } from './tooltip.types'

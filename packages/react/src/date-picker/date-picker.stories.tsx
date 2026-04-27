@@ -1,3 +1,4 @@
+import { chunk } from '@zag-js/utils'
 import preview from '../../.storybook/preview'
 import { DatePicker } from './date-picker'
 
@@ -19,56 +20,52 @@ export const Basic = meta.story({
       </DatePicker.Control>
       <DatePicker.Content>
         <DatePicker.View view="day">
-          <DatePicker.ViewControl>
-            <DatePicker.PrevYearTrigger />
-            <DatePicker.PrevMonthTrigger />
-            <div className="flex grow justify-center">
-              <DatePicker.MonthTrigger />
-              <DatePicker.YearTrigger />
-            </div>
-            <DatePicker.NextMonthTrigger />
-            <DatePicker.NextYearTrigger />
-          </DatePicker.ViewControl>
-          <DatePicker.Table>
-            <DatePicker.TableHead>
-              {({ api }) => (
-                <DatePicker.TableRow>
-                  {api.getWeekDays().map(day => (
-                    <DatePicker.TableHeader key={day.index} dayIndex={day.index}>
-                      {day.label}
-                    </DatePicker.TableHeader>
-                  ))}
-                </DatePicker.TableRow>
-              )}
-            </DatePicker.TableHead>
-            <DatePicker.TableBody>
-              {({ api, context }) => (
-                <>
-                  {api.getWeeksInMonth(context.get('calendarDate')).map((week, row) => (
+          {({ api }) => (
+            <>
+              <DatePicker.ViewControl>
+                <DatePicker.PrevYearTrigger />
+                <DatePicker.PrevMonthTrigger />
+                <div className="flex grow justify-center">
+                  <DatePicker.MonthTrigger />
+                  <DatePicker.YearTrigger />
+                </div>
+                <DatePicker.NextMonthTrigger />
+                <DatePicker.NextYearTrigger />
+              </DatePicker.ViewControl>
+              <DatePicker.Table>
+                <DatePicker.TableHead>
+                  <DatePicker.TableRow>
+                    {api.weekDays.map(day => (
+                      <DatePicker.TableHeader key={day.long} day={day} />
+                    ))}
+                  </DatePicker.TableRow>
+                </DatePicker.TableHead>
+                <DatePicker.TableBody>
+                  {api.weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
-                      {week.map((day, cell) => (
-                        <DatePicker.TableCell key={cell}>
-                          <DatePicker.TableCellTrigger value={day.valueOf()}>
-                            {String(day?.getDate())}
+                      {week.map(cell => (
+                        <DatePicker.TableCell key={cell.dateString} cell={cell}>
+                          <DatePicker.TableCellTrigger cell={cell}>
+                            {cell.day}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
                     </DatePicker.TableRow>
                   ))}
-                </>
-              )}
-            </DatePicker.TableBody>
-          </DatePicker.Table>
+                </DatePicker.TableBody>
+              </DatePicker.Table>
+            </>
+          )}
         </DatePicker.View>
         <DatePicker.View view="month">
           {({ api }) => (
             <DatePicker.Table>
               <DatePicker.TableBody>
-                {api.getMonthsGrid().map((months, row) => (
-                  <DatePicker.TableRow key={row}>
-                    {months.map((month, cell) => (
-                      <DatePicker.TableCell key={cell}>
-                        <DatePicker.TableCellTrigger value={month.value}>
+                {chunk(api.months, 3).map((row, rowIdx) => (
+                  <DatePicker.TableRow key={rowIdx}>
+                    {row.map(month => (
+                      <DatePicker.TableCell key={month.month}>
+                        <DatePicker.TableCellTrigger cell={month}>
                           {month.label}
                         </DatePicker.TableCellTrigger>
                       </DatePicker.TableCell>
@@ -85,12 +82,12 @@ export const Basic = meta.story({
               <DatePicker.PrevDecadeTrigger />
               <DatePicker.Table>
                 <DatePicker.TableBody>
-                  {api.getYearsGrid().map((years, row) => (
-                    <DatePicker.TableRow key={row}>
-                      {years.map((year, cell) => (
-                        <DatePicker.TableCell key={cell}>
-                          <DatePicker.TableCellTrigger value={year.value}>
-                            {year.label}
+                  {chunk(api.years, 3).map((row, rowIdx) => (
+                    <DatePicker.TableRow key={rowIdx}>
+                      {row.map(year => (
+                        <DatePicker.TableCell key={year.year}>
+                          <DatePicker.TableCellTrigger cell={year}>
+                            {year.year}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -103,6 +100,7 @@ export const Basic = meta.story({
           )}
         </DatePicker.View>
       </DatePicker.Content>
+      <DatePicker.Status />
     </DatePicker.Root>
   ),
 })

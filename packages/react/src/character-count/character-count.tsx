@@ -15,7 +15,7 @@ export type CharacterCountSrStatusProps = React.ComponentPropsWithoutRef<'div'>
 
 export interface CharacterCountContextProps {
   api: characterCount.Api
-  context: characterCount.Service['context']
+  maxLength: number | undefined
 }
 
 const CharacterCountContext = React.createContext<CharacterCountContextProps | null>(null)
@@ -30,11 +30,11 @@ function useCharacterCountContext() {
 
 const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootProps>(
   ({ className, ...props }, forwardedRef) => {
-    const { api, service } = useCharacterCount(props)
+    const { api, maxLength } = useCharacterCount(props)
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (
-      <CharacterCountContext.Provider value={{ api, context: service.context }}>
+      <CharacterCountContext.Provider value={{ api, maxLength }}>
         <div {...mergedProps} className={className} ref={forwardedRef} />
       </CharacterCountContext.Provider>
     )
@@ -57,7 +57,7 @@ const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInp
 )
 
 function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps) {
-  const { api, context } = useCharacterCountContext()
+  const { api } = useCharacterCountContext()
   const field = useFieldContext()
 
   const mergedProps = mergeProps(api.getStatusProps(), field?.getDescriptionProps(), props)
@@ -70,13 +70,13 @@ function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps
         className,
       )}
     >
-      {context.get('statusText')}
+      {api.countMessage}
     </div>
   )
 }
 
 function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
-  const { api, context } = useCharacterCountContext()
+  const { api, maxLength } = useCharacterCountContext()
 
   const mergedProps = mergeProps(api.getSrStatusProps(), props)
 
@@ -84,11 +84,12 @@ function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
     <div>
       <span className="sr-only">
         You can enter up to
-        {api.maxLength}
+        {' '}
+        {maxLength}
         {' '}
         characters
       </span>
-      <span {...mergedProps}>{context.get('srStatusText')}</span>
+      <span {...mergedProps}>{api.srCountMessage}</span>
     </div>
   )
 }

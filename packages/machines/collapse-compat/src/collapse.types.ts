@@ -1,44 +1,56 @@
-import type { EventObject, Machine, Service } from '@zag-js/core'
-import type { CommonProperties, PropTypes } from '@zag-js/types'
+import type { Machine, Service } from '@zag-js/core'
+import type { CommonProperties, DirectionProperty, PropTypes } from '@zag-js/types'
+
+/* -----------------------------------------------------------------------------
+ * Callback details
+ * ----------------------------------------------------------------------------- */
+
+export interface OpenChangeDetails {
+  open: boolean
+}
 
 export type ElementIds = Partial<{
   root: string
-  trigger: string
   content: string
+  trigger: string
 }>
 
-export interface CollapseProps extends CommonProperties {
-  /**
-   * The controlled open state of the collapse
-   */
-  open?: boolean
-  /**
-   * The initial open state when uncontrolled
-   */
-  defaultOpen?: boolean
-  /**
-   * Callback when the open state changes
-   */
-  onOpenChange?: (details: { open: boolean }) => void
+/* -----------------------------------------------------------------------------
+ * Machine context
+ * ----------------------------------------------------------------------------- */
+
+export interface CollapseProps extends CommonProperties, DirectionProperty {
+  ids?: ElementIds | undefined
+  open?: boolean | undefined
+  defaultOpen?: boolean | undefined
+  onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
 }
 
 export interface CollapseSchema {
-  props: Partial<CollapseProps>
   state: 'open' | 'closed'
-  action: 'invokeOnOpen' | 'invokeOnClose' | 'toggleVisibility'
-  event: EventObject & { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
+  props: CollapseProps
+  context: Record<string, never>
+  event:
+    | { type: 'TOGGLE' }
+    | { type: 'controlled.open' }
+    | { type: 'controlled.close' }
+  action: 'invokeOnOpenChange' | 'toggleVisibility'
+  guard: 'isOpenControlled'
 }
 
 export type CollapseService = Service<CollapseSchema>
+
 export type CollapseMachine = Machine<CollapseSchema>
 
+/* -----------------------------------------------------------------------------
+ * Component API
+ * ----------------------------------------------------------------------------- */
+
 export interface CollapseApi<T extends PropTypes = PropTypes> {
-  /** Whether the content is open */
-  isOpen: boolean
-  /** Set the open state */
+  open: boolean
   setOpen: (open: boolean) => void
 
   getRootProps: () => T['element']
-  getTriggerProps: () => T['button']
+  getTriggerProps: () => T['element']
   getContentProps: () => T['element']
 }

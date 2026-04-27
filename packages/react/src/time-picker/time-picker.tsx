@@ -11,7 +11,23 @@ export type TimePickerRootProps = React.ComponentProps<typeof Combobox.Root> & {
 }
 
 function TimePickerRoot({ options = DEFAULT_TIME_OPTIONS, className, ...props }: TimePickerRootProps) {
-  return <Combobox.Root options={options} disableFiltering customFilter={findTimeMatch} {...props} className={cx('max-w-40', className)} />
+  const [inputValue, setInputValue] = React.useState<string>(props.defaultInputValue ?? '')
+
+  const filteredOptions = React.useMemo(() => filterTimeOptions(inputValue, options), [inputValue, options])
+
+  return (
+    <Combobox.Root
+      options={filteredOptions}
+      disableFiltering
+      inputValue={inputValue}
+      onInputValueChange={(details) => {
+        setInputValue(details.inputValue)
+        props.onInputValueChange?.(details)
+      }}
+      {...props}
+      className={cx('max-w-40', className)}
+    />
+  )
 }
 
 TimePickerRoot.displayName = 'TimePicker.Root'
@@ -38,7 +54,7 @@ export function generateTimeOptions(interval = 30): combobox.ComboboxOption[] {
       const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h
       const period = h < 12 ? 'am' : 'pm'
       options.push({
-        label: `${hour12}:${min}${period}`,
+        text: `${hour12}:${min}${period}`,
         value: `${hour24}:${min}`,
       })
     }
@@ -46,30 +62,22 @@ export function generateTimeOptions(interval = 30): combobox.ComboboxOption[] {
   return options
 }
 
-/**
- * Time filter matches input like "5", "5:30", "5p", "530p", "12:30a"
- * Builds a regex from the input to find the best matching time option.
- */
-function findTimeMatch(inputValue: string, options: combobox.ComboboxOption[]): number {
+function filterTimeOptions(inputValue: string, options: combobox.ComboboxOption[]): combobox.ComboboxOption[] {
   if (!inputValue)
-    return options.length > 0 ? 0 : -1
+    return options
 
   const query = inputValue.replace(/\s/g, '').toLowerCase()
-
-  // Extract parts: optional hour, optional :minutes, optional a/p
   const match = query.match(/^(\d{0,2}):?(\d{0,2})([ap])?/)
   if (!match)
-    return -1
+    return options
 
   const [, hourStr, minStr, period] = match
-
-  // Build a regex pattern for matching time labels
   const hourPattern = hourStr || '\\d+'
   const minPattern = minStr ? minStr.padEnd(2, '\\d') : '\\d{2}'
   const periodPattern = period ? `${period}m` : '[ap]m'
 
   const regex = new RegExp(`^${hourPattern}:${minPattern}${periodPattern}$`, 'i')
 
-  const idx = options.findIndex(o => regex.test(o.label))
-  return idx >= 0 ? idx : -1
+  const matches = options.filter(o => regex.test(o.text))
+  return matches.length > 0 ? matches : options
 }

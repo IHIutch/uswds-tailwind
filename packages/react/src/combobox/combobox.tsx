@@ -1,5 +1,5 @@
-import type * as combobox from '@uswds-tailwind/combobox-compat'
 import type { UseComboboxProps } from './use-combobox'
+import * as combobox from '@uswds-tailwind/combobox-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cx } from '../cva.config'
@@ -22,8 +22,9 @@ function useComboboxContext() {
 
 const ComboboxRoot = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'> & UseComboboxProps>(
   ({ className, ...props }, forwardedRef) => {
-    const { api } = useCombobox(props)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const [machineProps, rest] = combobox.splitProps(props)
+    const { api } = useCombobox(machineProps as UseComboboxProps)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <ComboboxContext.Provider value={{ api }}>
@@ -57,7 +58,7 @@ export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListEl
 const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
   ({ className, children, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getListProps(), props)
+    const mergedProps = mergeProps(api.getListboxProps(), props)
 
     const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
 
@@ -74,9 +75,9 @@ export type ComboboxItemProps = React.ComponentPropsWithoutRef<'li'>
   & { index: number }
 
 const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
-  ({ value, label, index, children, ...props }, forwardedRef) => {
+  ({ value, text, disabled, index, children, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getItemProps({ value, label }, index), props)
+    const mergedProps = mergeProps(api.getOptionProps({ option: { value, text, disabled }, index }), props)
 
     return (
       <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)} ref={forwardedRef}>
@@ -86,12 +87,14 @@ const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
   },
 )
 
-function ComboboxEmptyItem({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) {
+function ComboboxEmptyItem({ children, className, ...props }: React.HTMLAttributes<HTMLLIElement>) {
   const { api } = useComboboxContext()
-  const mergedProps = mergeProps(api.getEmptyItemProps(), props)
+
+  if (api.filteredOptions.length > 0)
+    return null
 
   return (
-    <li {...mergedProps} className={cx('p-2 cursor-not-allowed hidden data-empty:block', mergedProps.className)}>
+    <li {...props} className={cx('p-2 cursor-not-allowed', className)}>
       {children || 'No results found'}
     </li>
   )
@@ -114,7 +117,7 @@ const ComboboxControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, children, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getClearButtonProps(), props)
+    const mergedProps = mergeProps(api.getClearTriggerProps(), props)
 
     return (
       <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
@@ -129,7 +132,7 @@ const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTML
 const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, children, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getToggleButtonProps(), props)
+    const mergedProps = mergeProps(api.getTriggerProps(), props)
 
     return (
       <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>

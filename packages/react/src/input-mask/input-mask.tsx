@@ -24,8 +24,8 @@ function useInputMaskContext() {
 export type InputMaskRootProps = UseInputMaskProps & React.ComponentPropsWithoutRef<'div'>
 
 const InputMaskRoot = React.forwardRef<HTMLDivElement, InputMaskRootProps>(
-  ({ className, children, charset, pattern, placeholder, maxlength, ...props }, forwardedRef) => {
-    const { api } = useInputMask({ charset, pattern, placeholder, maxlength })
+  ({ className, children, charset, placeholder, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
+    const { api } = useInputMask({ charset, placeholder, value, defaultValue, onValueChange })
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (
@@ -68,16 +68,17 @@ export type InputMaskPlaceholderProps = React.ComponentPropsWithoutRef<'span'>
 
 function InputMaskPlaceholder({ className, ...props }: InputMaskPlaceholderProps) {
   const { api, placeholder } = useInputMaskContext()
+  const maskProps = api.getMaskProps()
 
   return placeholder
     ? (
         <div
-          aria-hidden="true"
+          {...maskProps}
           className="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
         >
-          <span className="invisible">{api.getValue()}</span>
+          <span className="invisible">{api.enteredText}</span>
           <span {...props} className={cx('text-gray-50', className)}>
-            {placeholder.slice(api.getValue().length)}
+            {api.remainingPlaceholder}
           </span>
         </div>
       )

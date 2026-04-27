@@ -9,7 +9,9 @@ export type DropdownRootProps = Omit<dropdown.Props, 'id'> & React.ComponentProp
 
 export type DropdownTriggerProps = ButtonProps
 export type DropdownContentProps = React.ComponentPropsWithoutRef<'ul'>
-export type DropdownItemProps = React.ComponentPropsWithoutRef<'li'>
+export type DropdownItemProps = React.ComponentPropsWithoutRef<'li'> & {
+  value: string
+}
 
 export interface DropdownContextProps {
   api: dropdown.Api
@@ -78,10 +80,10 @@ const DropdownContent = React.forwardRef<HTMLUListElement, DropdownContentProps>
 )
 
 const DropdownItem = React.forwardRef<HTMLLIElement, DropdownItemProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, value, ...props }, forwardedRef) => {
     const { api } = useDropdownContext()
 
-    const mergedProps = mergeProps(api.getItemProps(), props)
+    const mergedProps = mergeProps(api.getItemProps({ value }), props)
 
     return (
       <li

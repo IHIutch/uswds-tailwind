@@ -8,81 +8,86 @@ export function connect<T extends PropTypes>(
   service: Service<TooltipSchema>,
   normalize: NormalizeProps<T>,
 ): TooltipApi<T> {
-  const { context, send, state, scope } = service
+  const { state, context, send, scope } = service
 
-  const isOpen = state.matches('open')
+  const open = state.matches('open')
+  const isVisible = context.get('isVisible')
+  const currentPosition = context.get('currentPosition')
+  const isWrapped = context.get('isWrapped')
+  const contentStyle = context.get('contentStyle')
+
+  const rootId = dom.getRootId(scope)
+  const triggerId = dom.getTriggerId(scope)
+  const contentId = dom.getContentId(scope)
 
   return {
-    isOpen,
-    placement: context.get('placement'),
+    open,
 
-    setPlacement(placement) {
-      send({ type: 'SET_PLACEMENT', placement })
+    setOpen(nextOpen) {
+      if (open === nextOpen)
+        return
+      send({ type: nextOpen ? 'POINTER_ENTER' : 'CLOSE' })
     },
 
-    getContent() {
-      return context.get('content')
-    },
-
+    // Created by setUpAttributes (lines 317, 336-341)
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
-        id: dom.getRootId(scope),
+        id: rootId,
+        // is added to the wrapper. When the mouse leaves the entire wrapper area
+        // (which contains both trigger and content), the tooltip hides.
+        onPointerLeave() {
+          send({ type: 'POINTER_LEAVE' })
+        },
       })
     },
 
+    // Attributes set by setUpAttributes (lines 328-333)
     getTriggerProps() {
-      return normalize.button({
+      return normalize.element({
         ...parts.trigger.attrs,
-        'id': dom.getTriggerId(scope),
-        'aria-describedby': dom.getContentId(scope),
+        'id': triggerId,
         'tabIndex': 0,
-        onMouseEnter() {
-          send({ type: 'OPEN' })
-        },
-        onMouseLeave() {
-          send({ type: 'CLOSE' })
+        // Only link to content when tooltip is open (accessible pattern)
+        'aria-describedby': open ? contentId : undefined,
+        'data-state': open ? 'open' : 'closed',
+        // Both events call showToolTip, which transitions the machine to open.
+        onPointerEnter() {
+          send({ type: 'POINTER_ENTER' })
         },
         onFocus() {
-          send({ type: 'OPEN' })
+          send({ type: 'FOCUS' })
         },
+        // Calls hideToolTip, which transitions the machine to closed.
         onBlur() {
-          send({ type: 'CLOSE' })
-        },
-        onKeyDown(event) {
-          if (event.key === 'Escape') {
-            send({ type: 'CLOSE' })
-          }
+          send({ type: 'BLUR' })
         },
       })
     },
 
+    // Attributes set by setUpAttributes (lines 349-356) and showToolTip/hideToolTip
     getContentProps() {
-      const { x, y } = context.get('position')
-      const placement = context.get('placement')
-
       return normalize.element({
         ...parts.content.attrs,
-        'id': dom.getContentId(scope),
+        'id': contentId,
         'role': 'tooltip',
-        'aria-hidden': !isOpen,
-        'data-state': isOpen ? 'open' : 'closed',
-        'data-placement': context.get('placement'),
-        'hidden': !isOpen,
+        // showToolTip sets aria-hidden="false", hideToolTip sets aria-hidden="true"
+        'hidden': !open,
+        'data-state': open ? 'open' : 'closed',
+        // Maps to position classes: usa-tooltip__body--top/bottom/right/left
+        'data-placement': currentPosition,
+        // Applied when no position fits and width compression is needed
+        'data-wrapped': isWrapped ? '' : undefined,
+        // Added after 20ms delay to trigger opacity transition
+        'data-visible': isVisible ? '' : undefined,
+        // Positioning styles from context, applied as CSS custom properties.
+        // The CSS should use these to position the content element:
+        //   top: var(--tooltip-top);
+        //   left: var(--tooltip-left);
+        //   margin: var(--tooltip-margin);
+        // These replace the inline styles set by positionTop/Bottom/Right/Left
         'style': {
-          'position': 'absolute',
-          'left': 0,
-          'top': 0,
-          'transform': `translate(${x}px, ${y}px)`,
-          '--caret-top': placement === 'left' || placement === 'right' ? '50%' : placement === 'top' ? '100%' : '0',
-          '--caret-left': placement === 'top' || placement === 'bottom' ? '50%' : placement === 'left' ? '100%' : '0',
-          '--caret-translate': '-50%',
-        },
-        onMouseEnter() {
-          send({ type: 'OPEN' })
-        },
-        onMouseLeave() {
-          send({ type: 'CLOSE' })
+          ...contentStyle,
         },
       })
     },

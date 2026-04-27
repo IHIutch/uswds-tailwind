@@ -4,12 +4,12 @@ import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Combobox } from './combobox'
 
-const options = [{ value: 'a', label: 'A' }]
+const options = [{ value: 'a', text: 'A' }]
 
 const multipleOptions = [
-  { value: 'watercraft', label: 'Watercraft' },
-  { value: 'automobiles', label: 'Automobiles' },
-  { value: 'aircraft', label: 'Aircraft' },
+  { value: 'watercraft', text: 'Watercraft' },
+  { value: 'automobiles', text: 'Automobiles' },
+  { value: 'aircraft', text: 'Aircraft' },
 ]
 
 function ComboboxComponent(props: React.ComponentProps<typeof Combobox.Root>) {
@@ -43,7 +43,7 @@ function FullComboboxComponent(props: React.ComponentProps<typeof Combobox.Root>
                 index={index}
                 {...option}
               >
-                {option.label}
+                {option.text}
               </Combobox.Item>
             ))}
             <Combobox.EmptyItem />
@@ -217,7 +217,7 @@ it('submits value in form data', async () => {
         </Combobox.Control>
         <Combobox.List>
           {({ options }) => options.map((o, i) => (
-            <Combobox.Item key={o.value} index={i} {...o}>{o.label}</Combobox.Item>
+            <Combobox.Item key={o.value} index={i} {...o}>{o.text}</Combobox.Item>
           ))}
         </Combobox.List>
       </Combobox.Root>

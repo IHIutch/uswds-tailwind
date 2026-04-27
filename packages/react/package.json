@@ -53,6 +53,7 @@
     "@uswds-tailwind/file-input-compat": "workspace:*",
     "@uswds-tailwind/input-mask-compat": "workspace:*",
     "@uswds-tailwind/modal-compat": "workspace:*",
+    "@uswds-tailwind/table-compat": "workspace:*",
     "@uswds-tailwind/theme": "workspace:*",
     "@uswds-tailwind/tooltip-compat": "workspace:*",
     "@vitejs/plugin-react": "catalog:",

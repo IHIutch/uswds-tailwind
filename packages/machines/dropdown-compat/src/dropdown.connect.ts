@@ -1,6 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
-import type { DropdownApi, DropdownSchema } from './dropdown.types'
+import type { DropdownApi, DropdownSchema, ItemProps } from './dropdown.types'
+import { getEventKey } from '@zag-js/dom-query'
 import { parts } from './dropdown.anatomy'
 import * as dom from './dropdown.dom'
 
@@ -9,53 +10,53 @@ export function connect<T extends PropTypes>(
   normalize: NormalizeProps<T>,
 ): DropdownApi<T> {
   const { state, send, scope } = service
-
   const open = state.matches('open')
 
   return {
     open,
-    setOpen(next) {
-      if (open === next)
-        return
-      send({ type: next ? 'OPEN' : 'CLOSE' })
+
+    setOpen(nextOpen) {
+      send({ type: nextOpen ? 'OPEN' : 'CLOSE' })
     },
 
     getRootProps() {
-      // USWDS adds an onClick event to the <body>. That seems redundant to the onBlur event, so its been omitted (https://github.com/uswds/uswds/blob/develop/packages/usa-language-selector/src/index.js#L64)
       return normalize.element({
         ...parts.root.attrs,
-        id: dom.getRootId(scope),
-        // USWDS uses onFocusout. However, in React onFocusout is not supported and onBlur === onFocusout
-        onBlur(event) {
-          const related = event.relatedTarget
-          const root = dom.getRootEl(scope)
-          if (root && !root.contains(related)) {
-            send({ type: 'CLOSE' })
+        'id': dom.getRootId(scope),
+        'data-state': open ? 'open' : 'closed',
+
+        onFocusOut(event: any) {
+          const rootEl = dom.getRootEl(scope)
+          if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
+            send({ type: 'FOCUS_OUTSIDE' })
           }
         },
+
         onKeyDown(event) {
-          switch (event.key) {
-            case 'Escape': {
-              event.preventDefault()
-              send({ type: 'CLOSE' })
-              dom.getTriggerEl(scope)?.focus()
-              break
-            }
+          if (event.defaultPrevented)
+            return
+          const key = getEventKey(event)
+          if (key === 'Escape') {
+            send({ type: 'ESCAPE' })
+            event.preventDefault()
           }
         },
       })
     },
 
     getTriggerProps() {
-      return normalize.element({
+      return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope),
-        'role': 'button',
+        'type': 'button',
+        'aria-expanded': open,
         'aria-controls': dom.getContentId(scope),
-        'aria-expanded': open ? 'true' : 'false',
         'data-state': open ? 'open' : 'closed',
-        onClick() {
-          send({ type: 'TOGGLE' })
+
+        onClick(event) {
+          if (event.defaultPrevented)
+            return
+          send({ type: 'TRIGGER_CLICK' })
         },
       })
     },
@@ -69,20 +70,15 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getItemProps() {
+    getItemProps(itemProps: ItemProps) {
       return normalize.element({
         ...parts.item.attrs,
-        onClick() {
-          send({ type: 'CLOSE' })
-          dom.getTriggerEl(scope)?.focus()
+        'data-value': itemProps.value,
+        onClick(event) {
+          if (event.defaultPrevented)
+            return
+          send({ type: 'ITEM_CLICK', value: itemProps.value })
         },
-      })
-    },
-
-    getIndicatorProps() {
-      return normalize.element({
-        ...parts.indicator.attrs,
-        'data-state': open ? 'open' : 'closed',
       })
     },
   }

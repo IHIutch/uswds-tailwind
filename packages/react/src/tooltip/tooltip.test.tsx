@@ -6,7 +6,7 @@ import { Tooltip } from './tooltip'
 
 function renderTooltip() {
   return render(
-    <Tooltip content="This is a tooltip" placement="top">
+    <Tooltip content="This is a tooltip" position="top">
       <Button>Hover me</Button>
     </Tooltip>,
   )

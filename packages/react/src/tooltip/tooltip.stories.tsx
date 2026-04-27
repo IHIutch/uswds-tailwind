@@ -6,7 +6,7 @@ const meta = preview.meta({
   title: 'Components/Tooltip',
   component: Tooltip,
   argTypes: {
-    placement: {
+    position: {
       control: 'select',
       options: ['top', 'bottom', 'left', 'right'],
       table: {
@@ -24,11 +24,11 @@ const meta = preview.meta({
 
 export const Basic = meta.story({
   args: {
-    placement: 'top',
+    position: 'top',
     content: 'This is a tooltip',
   },
-  render: ({ content, placement }) => (
-    <Tooltip content={content} placement={placement}>
+  render: ({ content, position }) => (
+    <Tooltip content={content} position={position}>
       <Button>Hover me</Button>
     </Tooltip>
   ),
@@ -37,16 +37,16 @@ export const Basic = meta.story({
 export const Placements = meta.story({
   render: () => (
     <div className="flex gap-4 flex-wrap">
-      <Tooltip content="Top tooltip" placement="top">
+      <Tooltip content="Top tooltip" position="top">
         <Button>Top</Button>
       </Tooltip>
-      <Tooltip content="Bottom tooltip" placement="bottom">
+      <Tooltip content="Bottom tooltip" position="bottom">
         <Button>Bottom</Button>
       </Tooltip>
-      <Tooltip content="Left tooltip" placement="left">
+      <Tooltip content="Left tooltip" position="left">
         <Button>Left</Button>
       </Tooltip>
-      <Tooltip content="Right tooltip" placement="right">
+      <Tooltip content="Right tooltip" position="right">
         <Button>Right</Button>
       </Tooltip>
     </div>

@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -3,29 +3,75 @@ import { createMachine } from '@zag-js/core'
 import { raf } from '@zag-js/dom-query'
 import * as dom from './combobox.dom'
 
-/* -----------------------------------------------------------------------------
- * Helper functions
- * ----------------------------------------------------------------------------- */
-
-function findSelectedOption(options: ComboboxOption[], value: string): ComboboxOption | undefined {
-  return options.find(o => o.value === value)
+function escapeRegExp(text: string) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
-function findSelectedIndex(options: ComboboxOption[], value: string): number {
-  const index = options.findIndex(o => o.value === value)
-  return index >= 0 ? index : 0
+function generateDynamicRegExp(filter: string, query: string = '', extras: Record<string, string> = {}) {
+  let find = filter.replace(/\{\{(.*?)\}\}/g, (_m: string, $1: string) => {
+    const key = $1.trim()
+    const queryFilter = extras[key]
+    if (key !== 'query' && queryFilter) {
+      const matcher = new RegExp(queryFilter, 'i')
+      const matches = query.match(matcher)
+      if (matches) {
+        return escapeRegExp(matches[1] ?? '')
+      }
+      return ''
+    }
+    return escapeRegExp(query)
+  })
+
+  find = `^(?:${find})$`
+  return new RegExp(find, 'i')
+}
+
+function filterAndSortOptions(options: ComboboxOption[], inputValue: string, isPristine: boolean, disableFiltering: boolean, filter: string, filterExtras: Record<string, string>) {
+  const query = inputValue.toLowerCase()
+  const regex = generateDynamicRegExp(filter, query, filterExtras)
+
+  // option must have value AND (disableFiltering OR isPristine OR empty query OR matches regex)
+  const shouldInclude = (option: ComboboxOption) =>
+    !!option.value
+    && (disableFiltering || isPristine || !query || regex.test(option.text))
+
+  // When filtering is disabled or pristine, preserve original order (no sorting)
+  //   if (disableFiltering || isPristine) { options.push(option); return; }
+  if (disableFiltering || isPristine) {
+    return options.filter(shouldInclude)
+  }
+
+  // Two-tier sort: startsWith first, then contains
+  const startsWithOptions: ComboboxOption[] = []
+  const containsOptions: ComboboxOption[] = []
+
+  for (const option of options) {
+    if (shouldInclude(option)) {
+      if (option.text.toLowerCase().startsWith(query)) {
+        startsWithOptions.push(option)
+      }
+      else {
+        containsOptions.push(option)
+      }
+    }
+  }
+
+  return [...startsWithOptions, ...containsOptions]
 }
 
 /* -----------------------------------------------------------------------------
- * Machine definition
+ * Machine
  * ----------------------------------------------------------------------------- */
 
 export const machine = createMachine<ComboboxSchema>({
   props({ props }) {
     return {
+      options: [],
+      filter: '.*{{query}}.*',
+      disableFiltering: false,
+      defaultValue: '',
+      defaultInputValue: '',
       ...props,
-      showToggleButton: props.showToggleButton ?? true,
-      showClearButton: props.showClearButton ?? true,
     }
   },
 
@@ -33,340 +79,561 @@ export const machine = createMachine<ComboboxSchema>({
     return 'idle'
   },
 
-  context({ bindable, prop }) {
-    const options = prop('options') || []
-    const initialValue = prop('value') || ''
-    const initialLabel = findSelectedOption(options, initialValue)?.label || ''
+  context({ prop, bindable }) {
+    // is set and matches an option, populate input with that option's text and
+    // mark as pristine.
+    const defaultValue = prop('defaultValue')
+    const defaultInputValue = prop('defaultInputValue')
+    let initialInputValue = defaultInputValue
+    let initialPristine = false
+
+    if (defaultValue) {
+      const matchingOption = prop('options').find(o => o.value === defaultValue)
+      if (matchingOption) {
+        initialInputValue = initialInputValue || matchingOption.text
+        initialPristine = true
+      }
+    }
 
     return {
-      value: bindable(() => ({ defaultValue: initialValue })),
-      disabled: bindable(() => ({ defaultValue: prop('disabled') || false })),
-      inputValue: bindable(() => ({ defaultValue: initialLabel })),
-      filteredOptions: bindable(() => ({ defaultValue: options })),
-      activeIndex: bindable(() => ({ defaultValue: -1 })),
-      isOpen: bindable(() => ({ defaultValue: false })),
-      isDirty: bindable(() => ({ defaultValue: false })),
+      value: bindable<string>(() => ({
+        defaultValue,
+        value: prop('value'),
+        onChange(value) {
+          const option = prop('options').find(o => o.value === value) ?? null
+          prop('onValueChange')?.({ value, option })
+        },
+      })),
+      inputValue: bindable<string>(() => ({
+        defaultValue: initialInputValue,
+        value: prop('inputValue'),
+        onChange(value) {
+          prop('onInputValueChange')?.({ inputValue: value })
+        },
+      })),
+      highlightedValue: bindable<string | null>(() => ({
+        defaultValue: null,
+      })),
+      isPristine: bindable<boolean>(() => ({
+        defaultValue: initialPristine,
+      })),
     }
   },
 
-  watch({ track, action, context }) {
-    track([() => context.get('inputValue')], () => {
-      action(['filterOptions'])
-    })
+  computed: {
+    isInteractive: ({ prop }) => !prop('disabled'),
+    hasValue: ({ context }) => context.get('value') !== '',
+    filteredOptions: ({ prop, context }) =>
+      filterAndSortOptions(
+        prop('options'),
+        context.get('inputValue'),
+        context.get('isPristine'),
+        prop('disableFiltering'),
+        prop('filter'),
+        prop('filterExtras') ?? {},
+      ),
   },
 
+  // Global events (handled in any state)
   on: {
     'VALUE.SET': {
       actions: ['setValue'],
     },
+    'INPUT_VALUE.SET': {
+      actions: ['setInputValue'],
+    },
   },
 
   states: {
+    /* -----------------------------------------------------------------------
+     * idle: No focus, list hidden
+     * ----------------------------------------------------------------------- */
     idle: {
-      entry: ['setClosed', 'syncInputWithSelection'],
       on: {
-        FOCUS: { target: 'focused' },
-        OPEN: { target: 'open' },
-        INPUT_CHANGE: { target: 'open', actions: ['updateInputValue'] },
-        CLEAR_SELECTION: { actions: ['clearSelection'] },
+        'INPUT.FOCUS': {
+          target: 'focused',
+        },
+        // Click on input from idle: focus fires first (idle → focused),
+        // then click fires (focused → open). But handle here too for safety.
+        // handleClickFromInput (lines 819-825)
+        'INPUT.CLICK': {
+          target: 'open',
+          actions: ['invokeOnOpen'],
+        },
+        // toggleList (lines 802-812)
+        'TRIGGER.CLICK': {
+          target: 'open',
+          actions: ['focusInput', 'invokeOnOpen'],
+        },
+        'OPEN': {
+          target: 'open',
+          actions: ['invokeOnOpen'],
+        },
+        'VALUE.CLEAR': {
+          actions: ['clearValue', 'clearInputValue', 'clearPristine'],
+        },
       },
     },
+
+    /* -----------------------------------------------------------------------
+     * focused: Input has focus, list hidden
+     * ----------------------------------------------------------------------- */
     focused: {
+      entry: ['clearHighlightedValue'],
       on: {
-        CLOSE: { target: 'idle' },
-        OPEN: { target: 'open' },
-        INPUT_CHANGE: { target: 'open', actions: ['updateInputValue'] },
-        KEY_DOWN: { actions: ['handleKeyDown'] },
-        ARROW_DOWN: { actions: ['navigateNext'] },
-        ENTER: { actions: ['selectActiveOrMatch'] },
-        ESCAPE: { actions: ['handleEscape'] },
-        SPACE: { actions: ['selectActiveOrMatch'] },
-        CLEAR_SELECTION: { actions: ['clearSelection'] },
-        RESET_INPUT: { actions: ['syncInputWithSelection'] },
-        FOCUS_ITEM: { actions: ['focusItem'] },
+        // Click on input when focused: open list
+        //   if (listEl.hidden) displayList()
+        'INPUT.CLICK': {
+          target: 'open',
+          actions: ['invokeOnOpen'],
+        },
+        // User typed in input: clear pristine, open list with filtered results
+        //   comboBoxEl.classList.remove(COMBO_BOX_PRISTINE_CLASS); displayList(this);
+        'INPUT.CHANGE': {
+          target: 'open',
+          actions: ['setInputValue', 'clearPristine', 'invokeOnOpen'],
+        },
+        // ArrowDown from focused input: open list and highlight first/selected
+        //   if (listEl.hidden) displayList(); highlightOption(nextOptionEl);
+        // This is the ONLY open trigger that sets highlightedValue AND
+        // distinction between "list open with focus on input" (typing/click)
+        // vs "list open with focus on option" (ArrowDown).
+        'INPUT.ARROW_DOWN': {
+          target: 'open',
+          actions: ['highlightFirstOrSelected', 'focusOption', 'invokeOnOpen'],
+        },
+        // Enter from focused input (list hidden): complete selection
+        'INPUT.ENTER': {
+          actions: ['completeSelection'],
+        },
+        // Escape from focused input: reset to last valid selection
+        // hideList is no-op when already hidden
+        'ESCAPE': {
+          actions: ['resetSelection'],
+        },
+        // Focus left the input
+        'INPUT.BLUR': {
+          target: 'idle',
+        },
+        // Focus left the combobox entirely
+        //   if (!this.contains(event.relatedTarget)) { resetSelection; hideList; }
+        'FOCUS_OUTSIDE': {
+          target: 'idle',
+          actions: ['resetSelection'],
+        },
+        // Toggle button clicked while list is closed: open list
+        //   if (listEl.hidden) displayList()
+        'TRIGGER.CLICK': {
+          target: 'open',
+          actions: ['invokeOnOpen'],
+        },
+        // Clear button clicked: clear value + input, remove pristine
+        // When list is hidden: no re-display
+        'CLEAR.CLICK': {
+          actions: ['clearValue', 'clearInputValue', 'clearPristine', 'focusInput'],
+        },
+        'OPEN': {
+          target: 'open',
+          actions: ['invokeOnOpen'],
+        },
+        'VALUE.CLEAR': {
+          actions: ['clearValue', 'clearInputValue', 'clearPristine'],
+        },
       },
     },
+
     open: {
-      entry: ['setOpen', 'filterOptions'],
       on: {
-        CLOSE: { target: 'idle' },
-        INPUT_CHANGE: { actions: ['updateInputValue'] },
-        SELECT_OPTION: { actions: ['selectOption'] },
-        CLEAR_SELECTION: { actions: ['clearSelection'] },
-        KEY_DOWN: { actions: ['handleKeyDown'] },
-        ARROW_DOWN: { actions: ['navigateNext'] },
-        ARROW_UP: { actions: ['navigatePrev'] },
-        ENTER: { actions: ['selectActiveOrMatch'] },
-        ESCAPE: { target: 'focused', actions: ['handleEscape'] },
-        SPACE: { actions: ['selectActiveOrMatch'] },
-        RESET_INPUT: { actions: ['syncInputWithSelection'] },
-        FOCUS_ITEM: { actions: ['focusItem'] },
+        // User typed while list is open: update input, clear pristine
+        //   comboBoxEl.classList.remove(COMBO_BOX_PRISTINE_CLASS); displayList(this);
+        // filteredOptions recomputes automatically from new inputValue.
+        // doesn't move focus to an option.
+        'INPUT.CHANGE': {
+          actions: ['setInputValue', 'clearPristine', 'clearHighlightedValue'],
+        },
+        // ArrowDown from input while list is open
+        //   const nextOptionEl = listEl.querySelector(LIST_OPTION_FOCUSED) ||
+        //                        listEl.querySelector(LIST_OPTION);
+        //   highlightOption(comboBoxEl, nextOptionEl);
+        // Highlights first/selected option and physically focuses it.
+        'INPUT.ARROW_DOWN': {
+          actions: ['highlightNextItem', 'focusOption'],
+        },
+        // Enter from input while list is open
+        //   completeSelection(comboBoxEl); if (listShown) hideList(comboBoxEl);
+        // selectItem only happens from Enter on a LIST_OPTION (physical focus).
+        'INPUT.ENTER': {
+          target: 'focused',
+          actions: ['completeSelection', 'invokeOnClose'],
+        },
+
+        // --- Option keyboard events (physical focus on list option, lines 864-872) ---
+
+        // ArrowDown from a focused option
+        //   const nextOptionEl = focusedOptionEl.nextSibling;
+        //   if (nextOptionEl) highlightOption(focusedOptionEl, nextOptionEl);
+        // Moves to next option. Does nothing if at last option (no wrap).
+        'OPTION.ARROW_DOWN': {
+          actions: ['highlightNextItem', 'focusOption'],
+        },
+        // ArrowUp from a focused option
+        //   const nextOptionEl = focusedOptionEl.previousSibling;
+        //   highlightOption(comboBoxEl, nextOptionEl);
+        //   if (!nextOptionEl) hideList(comboBoxEl);
+        // Moves to previous option, or closes list if at first option.
+        'OPTION.ARROW_UP': [
+          {
+            guard: 'isFirstItemHighlighted',
+            target: 'focused',
+            actions: ['clearHighlightedValue', 'focusInput', 'invokeOnClose'],
+          },
+          {
+            actions: ['highlightPrevItem', 'focusOption'],
+          },
+        ],
+        // Enter from a focused option
+        //   selectItem(event.target)
+        // selectItem (lines 579-587) updates value, input text, sets pristine,
+        // hides list, and focuses input.
+        'OPTION.ENTER': {
+          target: 'focused',
+          actions: ['selectHighlightedItem', 'focusInput', 'invokeOnClose'],
+        },
+        // Space from a focused option
+        //   selectItem(event.target)
+        // Identical behavior to Enter on a list option.
+        'OPTION.SPACE': {
+          target: 'focused',
+          actions: ['selectHighlightedItem', 'focusInput', 'invokeOnClose'],
+        },
+
+        //   hideList(comboBoxEl); resetSelection(comboBoxEl); inputEl.focus();
+        'ESCAPE': {
+          target: 'focused',
+          actions: ['resetSelection', 'clearHighlightedValue', 'focusInput', 'invokeOnClose'],
+        },
+
+        // --- Mouse/pointer events ---
+
+        // Click on a list option: select it and close
+        // selectItem calls inputEl.focus() at the end (line 586).
+        'ITEM.CLICK': {
+          target: 'focused',
+          actions: ['selectItem', 'focusInput', 'invokeOnClose'],
+        },
+        // Mouseover on a list option: highlight and physically focus it
+        //   highlightOption(listOptionEl, listOptionEl, { preventScroll: true })
+        // Physical focus moves to the hovered option with preventScroll.
+        'ITEM.POINTER_MOVE': {
+          actions: ['setHighlightedValue', 'focusOptionPreventScroll'],
+        },
+
+        // --- Button events ---
+
+        // Toggle button clicked while list is open: close list
+        //   else { hideList(comboBoxEl); } inputEl.focus();
+        'TRIGGER.CLICK': {
+          target: 'focused',
+          actions: ['focusInput', 'invokeOnClose'],
+        },
+        // Clear button clicked while list is open: clear and re-filter
+        //   clear values + remove pristine + if (listShown) displayList
+        // List stays open with full options.
+        'CLEAR.CLICK': {
+          actions: ['clearValue', 'clearInputValue', 'clearPristine', 'clearHighlightedValue', 'focusInput'],
+        },
+
+        // --- Focus/programmatic events ---
+
+        // Focus left the combobox entirely
+        //   if (!this.contains(event.relatedTarget)) { resetSelection; hideList; }
+        'FOCUS_OUTSIDE': {
+          target: 'idle',
+          actions: ['resetSelection', 'clearHighlightedValue', 'invokeOnClose'],
+        },
+        // Programmatic close
+        'CLOSE': {
+          target: 'focused',
+          actions: ['invokeOnClose'],
+        },
+        // Programmatic clear
+        'VALUE.CLEAR': {
+          target: 'focused',
+          actions: ['clearValue', 'clearInputValue', 'clearPristine', 'invokeOnClose'],
+        },
       },
     },
   },
 
   implementations: {
-    actions: {
-      setOpen({ context, prop }) {
-        context.set('isOpen', true)
-
-        const value = context.get('value')
-        const options = prop('options') || []
-        const targetIndex = value ? findSelectedIndex(options, value) : 0
-
-        context.set('activeIndex', targetIndex)
-      },
-
-      setClosed({ context, prop }) {
-        const options = prop('options') || []
-
-        context.set('isOpen', false)
-        context.set('activeIndex', -1)
-        context.set('filteredOptions', options)
-      },
-
-      updateInputValue({ context, event, prop }) {
-        context.set('inputValue', event.value)
-        context.set('isDirty', true)
-        prop('onInputChange')?.(event.value)
-      },
-
-      syncInputWithSelection({ context, prop }) {
-        const options = prop('options') || []
-        const value = context.get('value')
-        const selected = value ? findSelectedOption(options, value) : undefined
-
-        context.set('inputValue', selected?.label || '')
-        context.set('isDirty', false)
-        context.set('activeIndex', -1)
-      },
-
-      filterOptions({ context, prop, scope }) {
-        const inputValue = context.get('inputValue').toLowerCase()
-        const options = prop('options') || []
-        const disableFiltering = prop('disableFiltering')
-        const customFilter = prop('customFilter')
-        const isDirty = context.get('isDirty')
-        const value = context.get('value')
-
-        // Normalize filter: customFilter or default startsWith/contains
-        const defaultFilter = (query: string, opts: ComboboxOption[]): number => {
-          if (!query)
-            return opts.length > 0 ? 0 : -1
-          const idx = opts.findIndex(o =>
-            o.label.toLowerCase().includes(query) || o.value.toLowerCase().includes(query),
-          )
-          return idx >= 0 ? idx : -1
-        }
-
-        const handleFilter = customFilter ?? defaultFilter
-
-        // When filtering is disabled, show all options and scroll to match
-        if (disableFiltering) {
-          const matchIndex = handleFilter(inputValue, options)
-          context.set('filteredOptions', options)
-          context.set('activeIndex', matchIndex)
-
-          if (matchIndex >= 0) {
-            raf(() => {
-              const option = options[matchIndex]
-              if (option) {
-                dom.getItemEl(scope, option.value)?.scrollIntoView({ block: 'nearest' })
-              }
-            })
-          }
-          return
-        }
-
-        // When input is empty or unchanged, maintain selection context
-        if (!inputValue || !isDirty) {
-          const activeIndex = (!isDirty && value)
-            ? findSelectedIndex(options, value)
-            : (options.length > 0 ? 0 : -1)
-          context.set('filteredOptions', options)
-          context.set('activeIndex', activeIndex)
-          return
-        }
-
-        // Filter options: keep those that match, set first as active
-        const filtered = options.filter(o => handleFilter(inputValue, [o]) >= 0)
-        context.set('filteredOptions', filtered)
-        context.set('activeIndex', filtered.length > 0 ? 0 : -1)
-      },
-      selectOption({ context, event, prop, send, scope }) {
-        if (!('option' in event))
-          return
-
-        const { option } = event
-
-        context.set('value', option.value)
-        context.set('inputValue', option.label)
-        context.set('isDirty', false)
-        prop('onValueChange')?.(option.value)
-        prop('onInputChange')?.(option.label)
-
-        // Sync hidden select element for form submission
-        const selectEl = dom.getSelectEl(scope)
-        if (selectEl) {
-          selectEl.value = option.value
-          selectEl.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-
-        send({ type: 'CLOSE' })
-      },
-
-      clearSelection({ context, prop }) {
-        context.set('value', '')
-        context.set('inputValue', '')
-        context.set('isDirty', false)
-        prop('onValueChange')?.('')
-        prop('onInputChange')?.('')
-      },
-      handleKeyDown({ event, send }) {
-        if (!('key' in event))
-          return
-
-        type KeyboardEventType = 'ARROW_DOWN' | 'ARROW_UP' | 'ENTER' | 'ESCAPE' | 'SPACE'
-        const keyMap: Record<string, KeyboardEventType> = {
-          'ArrowDown': 'ARROW_DOWN',
-          'ArrowUp': 'ARROW_UP',
-          'Enter': 'ENTER',
-          'Escape': 'ESCAPE',
-          ' ': 'SPACE',
-          'Space': 'SPACE',
-        }
-
-        const eventType = keyMap[event.key]
-        if (eventType)
-          send({ type: eventType })
-      },
-
-      navigateNext({ context, send, scope }) {
-        const filteredOptions = context.get('filteredOptions')
-        const activeIndex = context.get('activeIndex')
-        const isOpen = context.get('isOpen')
-        const inputEl = dom.getInputEl(scope)
-        const isInputFocused = document.activeElement === inputEl
-        const hasOptions = filteredOptions.length > 0
-
-        // Open the list if closed
-        if (!isOpen) {
-          send({ type: 'OPEN' })
-          if (hasOptions)
-            send({ type: 'FOCUS_ITEM', index: 0 })
-          return
-        }
-
-        // Move focus from input to first/active item
-        if (isInputFocused && hasOptions) {
-          const targetIndex = activeIndex >= 0 ? activeIndex : 0
-          send({ type: 'FOCUS_ITEM', index: targetIndex })
-          return
-        }
-
-        // Navigate to next item (or stay at end)
-        if (activeIndex >= 0 && hasOptions) {
-          const nextIndex = Math.min(activeIndex + 1, filteredOptions.length - 1)
-          send({ type: 'FOCUS_ITEM', index: nextIndex })
-        }
-      },
-
-      navigatePrev({ context, send, scope }) {
-        const activeIndex = context.get('activeIndex')
-        const inputEl = dom.getInputEl(scope)
-        const isInputFocused = document.activeElement === inputEl
-
-        // Do nothing if input has focus
-        if (isInputFocused)
-          return
-
-        // At first item: return focus to input and close
-        if (activeIndex === 0) {
-          inputEl?.focus()
-          context.set('activeIndex', -1)
-          send({ type: 'CLOSE' })
-          return
-        }
-
-        // Navigate to previous item
-        if (activeIndex > 0) {
-          send({ type: 'FOCUS_ITEM', index: activeIndex - 1 })
-        }
-      },
-
-      selectActiveOrMatch({ context, send }) {
-        if (!context.get('isOpen'))
-          return
-
-        const activeIndex = context.get('activeIndex')
-        const filteredOptions = context.get('filteredOptions')
-        const inputValue = context.get('inputValue').toLowerCase()
-
-        // Select the active item if one is focused
-        if (activeIndex >= 0 && filteredOptions[activeIndex]) {
-          send({ type: 'SELECT_OPTION', option: filteredOptions[activeIndex] })
-          return
-        }
-
-        // Try to find an exact match by label or value
-        const exactMatch = filteredOptions.find(option =>
-          option.label.toLowerCase() === inputValue || option.value.toLowerCase() === inputValue,
+    guards: {
+      //   if (!nextOptionEl) { hideList(comboBoxEl); }
+      isFirstItemHighlighted: ({ context, computed }) => {
+        const highlighted = context.get('highlightedValue')
+        const filtered = computed('filteredOptions')
+        return (
+          highlighted != null
+          && filtered.length > 0
+          && filtered[0]!.value === highlighted
         )
-
-        if (exactMatch) {
-          send({ type: 'SELECT_OPTION', option: exactMatch })
-        }
-        else {
-          send({ type: 'RESET_INPUT' })
-          send({ type: 'CLOSE' })
-        }
       },
+      noHighlightedItem: ({ context }) => context.get('highlightedValue') == null,
+      hasHighlightedItem: ({ context }) => context.get('highlightedValue') != null,
+    },
 
-      handleEscape({ context, send, scope }) {
-        send({ type: 'RESET_INPUT' })
-        context.set('isOpen', false)
-
-        dom.getInputEl(scope)?.focus()
-      },
-
-      focusItem({ context, event, scope }) {
-        if (!('index' in event))
+    effects: {
+      // Scroll the listbox to keep the highlighted option visible.
+      //   if (optionBottom > currentBottom) scrollTop = optionBottom - listHeight
+      //   if (nextEl.offsetTop < scrollTop) scrollTop = nextEl.offsetTop
+      scrollToHighlightedItem({ context, scope }) {
+        const inputEl = dom.getInputEl(scope)
+        if (!inputEl)
           return
 
-        const { index } = event
-        const filteredOptions = context.get('filteredOptions')
-
-        if (index >= 0 && index < filteredOptions.length) {
-          context.set('activeIndex', index)
-
-          raf(() => {
-            const option = filteredOptions[index]
-            if (option) {
-              dom.getItemEl(scope, option.value)?.focus()
-            }
-          })
-        }
-      },
-
-      setValue({ context, event, flush, prop, scope }) {
-        flush(() => {
-          const options = prop('options') || []
-          const selected = findSelectedOption(options, event.value)
-
-          if (!selected)
+        // Why MutationObserver instead of inline scroll in actions:
+        // on the input (line 305) and then immediately scrolls (lines 309-319)
+        // in the same synchronous call. In the machine model, actions update
+        // context (highlightedValue) but the DOM isn't updated until connect
+        // runs. A MutationObserver on aria-activedescendant reacts to the same
+        // between "the highlight moved" and "scroll to it" — just async instead
+        // of synchronous. The alternative (scrolling in raf() from actions)
+        // would decouple scroll from the actual DOM change entirely.
+        const observer = new MutationObserver(() => {
+          const highlightedValue = context.get('highlightedValue')
+          if (!highlightedValue)
             return
 
-          context.set('value', selected.value)
-          context.set('inputValue', selected.label)
-          context.set('isDirty', false)
+          const listboxEl = dom.getListboxEl(scope)
+          if (!listboxEl)
+            return
 
-          // Sync hidden select element for form submission
-          const selectEl = dom.getSelectEl(scope)
-          if (selectEl && selectEl.value !== selected.value) {
-            selectEl.value = selected.value
-            selectEl.dispatchEvent(new Event('change', { bubbles: true }))
+          // Find the highlighted option element by its data-value attribute
+          const optionEl = listboxEl.querySelector(
+            `[role=option][data-value="${CSS.escape(highlightedValue)}"]`,
+          ) as HTMLElement | null
+          if (!optionEl)
+            return
+
+          const optionBottom = optionEl.offsetTop + optionEl.offsetHeight
+          const currentBottom = listboxEl.scrollTop + listboxEl.offsetHeight
+
+          if (optionBottom > currentBottom) {
+            listboxEl.scrollTop = optionBottom - listboxEl.offsetHeight
+          }
+
+          if (optionEl.offsetTop < listboxEl.scrollTop) {
+            listboxEl.scrollTop = optionEl.offsetTop
           }
         })
+
+        // Watch for aria-activedescendant changes on the input
+        // (which is set by connect based on highlightedValue)
+        observer.observe(inputEl, {
+          attributes: true,
+          attributeFilter: ['aria-activedescendant'],
+        })
+
+        return () => {
+          observer.disconnect()
+        }
+      },
+    },
+
+    actions: {
+      /* ----- Input value management ----- */
+
+      setInputValue({ context, event }) {
+        context.set('inputValue', event.value)
+      },
+      clearInputValue({ context }) {
+        context.set('inputValue', '')
+      },
+
+      /* ----- Pristine flag management ----- */
+
+      clearPristine({ context }) {
+        context.set('isPristine', false)
+      },
+
+      /* ----- Highlighted value management ----- */
+
+      clearHighlightedValue({ context }) {
+        context.set('highlightedValue', null)
+      },
+      setHighlightedValue({ context, event }) {
+        if (event.value == null)
+          return
+        context.set('highlightedValue', event.value)
+      },
+      highlightFirstOrSelected({ context, computed }) {
+        const value = context.get('value')
+        const filtered = computed('filteredOptions')
+
+        if (value) {
+          const hasSelected = filtered.some(o => o.value === value)
+          if (hasSelected) {
+            context.set('highlightedValue', value)
+            return
+          }
+        }
+
+        if (filtered.length > 0) {
+          context.set('highlightedValue', filtered[0]!.value)
+        }
+        else {
+          context.set('highlightedValue', null)
+        }
+      },
+      highlightNextItem({ context, computed }) {
+        const highlighted = context.get('highlightedValue')
+        const filtered = computed('filteredOptions')
+        if (filtered.length === 0)
+          return
+
+        if (highlighted == null) {
+          context.set('highlightedValue', filtered[0]!.value)
+          return
+        }
+
+        const currentIndex = filtered.findIndex(o => o.value === highlighted)
+        if (currentIndex < 0 || currentIndex >= filtered.length - 1) {
+          // Not found or at last item: do nothing (no wrap)
+          return
+        }
+
+        context.set('highlightedValue', filtered[currentIndex + 1]!.value)
+      },
+      highlightPrevItem({ context, computed }) {
+        const highlighted = context.get('highlightedValue')
+        const filtered = computed('filteredOptions')
+        if (filtered.length === 0 || highlighted == null)
+          return
+
+        const currentIndex = filtered.findIndex(o => o.value === highlighted)
+        if (currentIndex <= 0)
+          return
+
+        context.set('highlightedValue', filtered[currentIndex - 1]!.value)
+      },
+
+      /* ----- Selection ----- */
+
+      selectItem({ context, prop, event }) {
+        const value = event.value as string
+        const option = prop('options').find(o => o.value === value)
+        if (!option)
+          return
+
+        context.set('value', value)
+        context.set('inputValue', option.text)
+        context.set('isPristine', true)
+      },
+      selectHighlightedItem({ context, prop }) {
+        const highlighted = context.get('highlightedValue')
+        if (!highlighted)
+          return
+
+        const option = prop('options').find(o => o.value === highlighted)
+        if (!option)
+          return
+
+        context.set('value', highlighted)
+        context.set('inputValue', option.text)
+        context.set('isPristine', true)
+      },
+      completeSelection({ context, prop }) {
+        const inputValue = context.get('inputValue').toLowerCase()
+        const options = prop('options')
+
+        if (inputValue) {
+          for (const option of options) {
+            if (option.text.toLowerCase() === inputValue) {
+              context.set('value', option.value)
+              context.set('inputValue', option.text)
+              context.set('isPristine', true)
+              return
+            }
+          }
+        }
+
+        // No exact match found — fall through to resetSelection logic
+        const currentValue = context.get('value')
+        if (currentValue) {
+          const currentOption = options.find(o => o.value === currentValue)
+          if (currentOption) {
+            context.set('inputValue', currentOption.text)
+            context.set('isPristine', true)
+            return
+          }
+        }
+
+        // No current selection: clear input
+        if (context.get('inputValue')) {
+          context.set('inputValue', '')
+        }
+      },
+      resetSelection({ context, prop }) {
+        const currentValue = context.get('value')
+        const options = prop('options')
+
+        if (currentValue) {
+          const currentOption = options.find(o => o.value === currentValue)
+          if (currentOption) {
+            const currentInput = context.get('inputValue').toLowerCase()
+            if (currentInput !== currentOption.text.toLowerCase()) {
+              context.set('inputValue', currentOption.text)
+            }
+            context.set('isPristine', true)
+            return
+          }
+        }
+
+        // No value or option not found: clear input
+        if (context.get('inputValue')) {
+          context.set('inputValue', '')
+        }
+      },
+
+      /* ----- Value management (programmatic) ----- */
+
+      clearValue({ context }) {
+        context.set('value', '')
+      },
+      setValue({ context, event }) {
+        context.set('value', event.value)
+      },
+
+      /* ----- Focus management ----- */
+
+      focusInput({ scope }) {
+        raf(() => {
+          dom.focusInputEl(scope)
+        })
+      },
+      focusOption({ context, scope }) {
+        const value = context.get('highlightedValue')
+        if (!value)
+          return
+        raf(() => {
+          dom.focusOptionEl(scope, value)
+        })
+      },
+      focusOptionPreventScroll({ context, scope }) {
+        const value = context.get('highlightedValue')
+        if (!value)
+          return
+        raf(() => {
+          dom.focusOptionEl(scope, value, true)
+        })
+      },
+
+      /* ----- Callbacks ----- */
+
+      invokeOnOpen({ prop }) {
+        prop('onOpenChange')?.({ open: true })
+      },
+      invokeOnClose({ prop }) {
+        prop('onOpenChange')?.({ open: false })
       },
     },
   },

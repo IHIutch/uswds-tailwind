@@ -33,10 +33,10 @@ export const Default = meta.story({
                         <Nav.DropdownIndicator />
                       </Nav.DropdownTrigger>
                       <Nav.DropdownContent>
-                        <Nav.DropdownItem>
+                        <Nav.DropdownItem value="sub-one-a">
                           <Nav.DropdownLink href="#">Sub-link one</Nav.DropdownLink>
                         </Nav.DropdownItem>
-                        <Nav.DropdownItem>
+                        <Nav.DropdownItem value="sub-two-a">
                           <Nav.DropdownLink href="#">Sub-link two</Nav.DropdownLink>
                         </Nav.DropdownItem>
                       </Nav.DropdownContent>
@@ -49,10 +49,10 @@ export const Default = meta.story({
                         <Nav.DropdownIndicator />
                       </Nav.DropdownTrigger>
                       <Nav.DropdownContent>
-                        <Nav.DropdownItem>
+                        <Nav.DropdownItem value="sub-one-b">
                           <Nav.DropdownLink href="#">Sub-link one</Nav.DropdownLink>
                         </Nav.DropdownItem>
-                        <Nav.DropdownItem>
+                        <Nav.DropdownItem value="sub-two-b">
                           <Nav.DropdownLink href="#">Sub-link two</Nav.DropdownLink>
                         </Nav.DropdownItem>
                       </Nav.DropdownContent>
@@ -99,10 +99,10 @@ export const Extended = meta.story({
                       <Nav.DropdownIndicator />
                     </Nav.DropdownTrigger>
                     <Nav.DropdownContent>
-                      <Nav.DropdownItem>
+                      <Nav.DropdownItem value="ext-one-a">
                         <Nav.DropdownLink href="#">Navigation link</Nav.DropdownLink>
                       </Nav.DropdownItem>
-                      <Nav.DropdownItem>
+                      <Nav.DropdownItem value="ext-two-a">
                         <Nav.DropdownLink href="#">Navigation link</Nav.DropdownLink>
                       </Nav.DropdownItem>
                     </Nav.DropdownContent>
@@ -115,10 +115,10 @@ export const Extended = meta.story({
                       <Nav.DropdownIndicator />
                     </Nav.DropdownTrigger>
                     <Nav.DropdownContent>
-                      <Nav.DropdownItem>
+                      <Nav.DropdownItem value="ext-one-b">
                         <Nav.DropdownLink href="#">Navigation link</Nav.DropdownLink>
                       </Nav.DropdownItem>
-                      <Nav.DropdownItem>
+                      <Nav.DropdownItem value="ext-two-b">
                         <Nav.DropdownLink href="#">Navigation link</Nav.DropdownLink>
                       </Nav.DropdownItem>
                     </Nav.DropdownContent>

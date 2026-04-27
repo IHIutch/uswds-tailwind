@@ -15,7 +15,6 @@ export function useInputMask(props: UseInputMaskProps) {
   const service = useMachine(inputMask.machine, {
     id: React.useId(),
     ids: {
-      label: field?.ids.label,
       input: field?.ids.control,
     },
     ...restProps,

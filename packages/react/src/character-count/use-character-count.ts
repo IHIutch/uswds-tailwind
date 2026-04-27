@@ -34,5 +34,6 @@ export function useCharacterCount(props: UseCharacterCountProps) {
     api,
     service,
     field,
+    maxLength: props.maxLength,
   }
 }

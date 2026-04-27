@@ -45,15 +45,18 @@ function useAccordionItemContext() {
   }
   return {
     value: context.value,
-    isOpen: api.isItemOpen(context.value),
+    isOpen: api.getItemState({ value: context.value }).expanded,
   }
 }
 
 const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, multiple, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
     const service = useMachine(accordion.machine, {
       id: React.useId(),
-      multiple: props.multiple,
+      multiple,
+      value,
+      defaultValue,
+      onValueChange,
     })
 
     const api = accordion.connect(service, normalizeProps)
@@ -85,7 +88,7 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerPro
     const { api } = useAccordionContext()
     const { value } = useAccordionItemContext()
 
-    const mergedProps = mergeProps(api.getTriggerProps({ value }), props)
+    const mergedProps = mergeProps(api.getItemTriggerProps({ value }), props)
 
     return (
       <button
@@ -105,7 +108,7 @@ const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>
     const { api } = useAccordionContext()
     const { value } = useAccordionItemContext()
 
-    const mergedProps = mergeProps(api.getContentProps({ value }), props)
+    const mergedProps = mergeProps(api.getItemContentProps({ value }), props)
 
     return (
       <div

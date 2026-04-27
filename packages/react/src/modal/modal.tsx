@@ -71,11 +71,11 @@ export type ModalPositionerProps = React.ComponentPropsWithoutRef<'div'>
 const ModalPositioner = React.forwardRef<HTMLDivElement, ModalPositionerProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useModalContext()
-    const mergedProps = mergeProps(api.getPositionerProps(), props)
-
     return (
       <div
-        {...mergedProps}
+        hidden={!api.open}
+        data-state={api.open ? 'open' : 'closed'}
+        {...props}
         className={cx('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in', className)}
         ref={forwardedRef}
       />

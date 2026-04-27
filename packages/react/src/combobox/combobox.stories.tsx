@@ -3,9 +3,9 @@ import { Field } from '../field'
 import { Combobox } from './combobox'
 
 const options = [
-  { value: 'watercraft', label: 'Watercraft' },
-  { value: 'automobiles', label: 'Automobiles' },
-  { value: 'aircraft', label: 'Aircraft' },
+  { value: 'watercraft', text: 'Watercraft' },
+  { value: 'automobiles', text: 'Automobiles' },
+  { value: 'aircraft', text: 'Aircraft' },
 ]
 
 const meta = preview.meta({
@@ -36,7 +36,7 @@ export const Basic = meta.story({
                 index={index}
                 {...option}
               >
-                {option.label}
+                {option.text}
               </Combobox.Item>
             ))}
             <Combobox.EmptyItem />
@@ -73,7 +73,7 @@ export const WithField = meta.story({
                   index={index}
                   {...option}
                 >
-                  {option.label}
+                  {option.text}
                 </Combobox.Item>
               ))}
               <Combobox.EmptyItem />

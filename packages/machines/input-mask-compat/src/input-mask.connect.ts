@@ -3,15 +3,25 @@ import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { InputMaskApi, InputMaskSchema } from './input-mask.types'
 import { parts } from './input-mask.anatomy'
 import * as dom from './input-mask.dom'
-import { stripInvalidChars } from './input-mask.utils'
 
 export function connect<T extends PropTypes>(
   service: Service<InputMaskSchema>,
   normalize: NormalizeProps<T>,
 ): InputMaskApi<T> {
-  const { send, scope, context, prop } = service
+  const { state, context, send, scope, computed } = service
+
+  const focused = state.matches("focused")
+  const enteredText = computed("enteredText")
+  const remainingPlaceholder = computed("remainingPlaceholder")
 
   return {
+    /* ----- State properties ----- */
+    focused,
+    value: context.get("value"),
+    enteredText,
+    remainingPlaceholder,
+
+    /* ----- Root props ----- */
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
@@ -19,47 +29,34 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getLabelProps() {
-      return normalize.label({
-        ...parts.label.attrs,
-        id: dom.getLabelId(scope),
-        htmlFor: dom.getInputId(scope),
-      })
-    },
-
+    /* ----- Input props ----- */
     getInputProps() {
-      const placeholder = prop('placeholder')
-      const charset = prop('charset')
-      const maxLength = prop('maxlength') ?? (placeholder ? placeholder.length : undefined)
-
       return normalize.input({
         ...parts.input.attrs,
-        'id': dom.getInputId(scope),
-        'value': context.get('value'),
-        maxLength,
-        'placeholder': '',
-        onKeyUp(event) {
-          const inputElement = event.currentTarget as HTMLInputElement
-          const currentValue = inputElement.value
-
-          const strippedValue = stripInvalidChars(currentValue, placeholder || '', charset)
-
-          if (strippedValue !== currentValue) {
-            inputElement.value = strippedValue
-          }
-
-          send({ type: 'INPUT', value: strippedValue })
-        },
+        id: dom.getInputId(scope),
+        maxLength: computed("maxLength"),
+        defaultValue: context.get("value"),
+        // Uses onInput (not keyup) per Zag convention — fires on paste/cut too.
         onInput(event) {
-          const inputElement = event.currentTarget as HTMLInputElement
-          const currentValue = inputElement.value
-          send({ type: 'INPUT', value: currentValue })
+          const target = event.currentTarget as HTMLInputElement
+          send({ type: "VALUE_CHANGE", value: target.value })
+        },
+        onFocus() {
+          send({ type: "INPUT.FOCUS" })
+        },
+        onBlur() {
+          send({ type: "INPUT.BLUR" })
         },
       })
     },
 
-    getValue() {
-      return context.get('value')
+    /* ----- Mask display props ----- */
+    getMaskProps() {
+      return normalize.element({
+        ...parts.mask.attrs,
+        id: dom.getMaskId(scope),
+        "aria-hidden": true,
+      })
     },
   }
 }

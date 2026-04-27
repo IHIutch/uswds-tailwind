@@ -1,128 +1,163 @@
 import type { CharacterCountSchema } from './character-count.types'
 import { createMachine } from '@zag-js/core'
-import { getInputEl } from './character-count.dom'
+import { addDomEvent } from '@zag-js/dom-query'
+import * as dom from './character-count.dom'
 
-function debounce<T extends (...args: any[]) => void>(callback: T, wait: number) {
-  let timeoutId: number | null = null
-  return (...args: Parameters<T>) => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId)
-    }
-    timeoutId = window.setTimeout(() => {
-      callback(...args)
-    }, wait)
+const DEFAULT_STATUS_LABEL = "characters allowed"
+
+const getCountMessage = (currentLength: number, maxLength: number) => {
+  if (currentLength === 0) {
+    return `${maxLength} ${DEFAULT_STATUS_LABEL}`
   }
+
+  const difference = Math.abs(maxLength - currentLength)
+  const characters = `character${difference === 1 ? "" : "s"}`
+  const guidance = currentLength > maxLength ? "over limit" : "left"
+
+  return `${difference} ${characters} ${guidance}`
 }
 
-const debounced = debounce((fn) => {
-  fn()
-}, 1000)
+/* -----------------------------------------------------------------------------
+ * Machine
+ * -----------------------------------------------------------------------------*/
 
 export const machine = createMachine<CharacterCountSchema>({
   props({ props }) {
     return {
-      getStatusText: (count, max) => {
-        const diff = Math.abs(max - count)
-        const characters = diff === 1 ? 'character' : 'characters'
-        const guidance
-          = count === 0 ? 'allowed' : count > max ? 'over limit' : 'left'
-        return `${diff} ${characters} ${guidance}`
-      },
-      customValidation: 'The content is too long.',
+      defaultValue: "",
+      validationMessage: "The content is too long.",
       ...props,
     }
   },
 
   initialState() {
-    return 'valid'
+    return "idle"
   },
 
-  context({ bindable, prop }) {
-    const maxLength = prop('maxLength')
+  context({ prop, bindable }) {
+    const maxLength = prop("maxLength")
+    const defaultMessage = maxLength
+      ? `${maxLength} ${DEFAULT_STATUS_LABEL}`
+      : ""
+
     return {
-      charCount: bindable(() => ({ defaultValue: 0 })),
-      maxLength: bindable(() => ({ defaultValue: maxLength })),
-      statusText: bindable(() => ({ defaultValue: maxLength ? prop('getStatusText')(0, maxLength) : '' })),
-      srStatusText: bindable(() => ({ defaultValue: maxLength ? prop('getStatusText')(0, maxLength) : '' })),
-      customValidation: bindable(() => ({ defaultValue: prop('customValidation') })),
+      value: bindable<string>(() => ({
+        defaultValue: prop("defaultValue"),
+        value: prop("value"),
+      })),
+      // "${maxLength} characters allowed". SR message is debounced (L125-128).
+      srCountMessage: bindable<string>(() => ({
+        defaultValue: defaultMessage,
+      })),
     }
   },
 
-  watch({ track, action, context }) {
-    track([() => context.get('charCount')], () => {
-      action(['toggleState', 'updateStatus', 'updateSrStatus'])
-    })
+  computed: {
+    currentLength: ({ context }) => context.get("value").length,
+    // Preserves the truthiness check on currentLength (0 is not over limit)
+    isOverLimit: ({ context, prop }) => {
+      const currentLength = context.get("value").length
+      const maxLength = prop("maxLength")
+      return !!currentLength && !!maxLength && currentLength > maxLength
+    },
+    countMessage: ({ context, prop }) => {
+      const maxLength = prop("maxLength")
+      if (!maxLength) return ""
+      return getCountMessage(context.get("value").length, maxLength)
+    },
   },
 
   states: {
-    valid: {
+    idle: {
+      // Effect runs while in idle and focused.
+      // on the input element handles setCustomValidity + SR debounce.
+      effects: ["trackInputSideEffects"],
       on: {
-        INVALID: { target: 'invalid' },
+        VALUE_CHANGE: {
+          guard: "hasMaxLength",
+          actions: ["setValue"],
+        },
+        "INPUT.FOCUS": {
+          target: "focused",
+        },
       },
     },
-    invalid: {
+    focused: {
+      effects: ["trackInputSideEffects"],
       on: {
-        VALID: { target: 'valid' },
+        VALUE_CHANGE: {
+          guard: "hasMaxLength",
+          actions: ["setValue"],
+        },
+        "INPUT.BLUR": {
+          target: "idle",
+        },
       },
     },
-  },
-
-  on: {
-    INPUT: { actions: ['updateCharCount', 'updateStatus'] },
-    SET_CUSTOM_VALIDITY: { actions: ['setCustomValidity'] },
   },
 
   implementations: {
-    actions: {
-      updateCharCount({ context, event }) {
-        context.set('charCount', event.value)
+    guards: {
+      // Blocks VALUE_CHANGE if maxLength is not set or is 0.
+      hasMaxLength: ({ prop }) => {
+        const maxLength = prop("maxLength")
+        return maxLength != null && maxLength > 0
       },
-      updateStatus({ context, prop }) {
-        let text = ''
-        if (prop('maxLength')) {
-          text = prop('getStatusText')(
-            context.get('charCount'),
-            context.get('maxLength'),
-          )
-        }
-        context.set('statusText', text)
-      },
-      updateSrStatus({ context, prop }) {
-        debounced(() => {
-          let text = ''
-          if (prop('maxLength')) {
-            text = prop('getStatusText')(
-              context.get('charCount'),
-              context.get('maxLength'),
-            )
+    },
+
+    effects: {
+      trackInputSideEffects({ context, prop, scope, computed }) {
+        const inputEl = dom.getInputEl(scope)
+        if (!inputEl) return
+
+        let srTimer: ReturnType<typeof setTimeout> | undefined
+
+        const cleanup = addDomEvent(inputEl, "input", () => {
+          const maxLength = prop("maxLength")
+          if (!maxLength) return
+
+          const currentLength = inputEl.value.length
+          const isOverLimit = !!currentLength && currentLength > maxLength
+          const validationMessage = prop("validationMessage")
+          const currentStatusMessage = computed("countMessage")
+
+          if (isOverLimit && !inputEl.validationMessage) {
+            inputEl.setCustomValidity(validationMessage)
           }
-          context.set('srStatusText', text)
+
+          if (!isOverLimit && inputEl.validationMessage === validationMessage) {
+            inputEl.setCustomValidity("")
+          }
+
+          if (srTimer !== undefined) {
+            clearTimeout(srTimer)
+          }
+          srTimer = setTimeout(() => {
+            context.set("srCountMessage", currentStatusMessage)
+            srTimer = undefined
+          }, 1000)
         })
-      },
-      toggleState({ context, send, prop, scope }) {
-        const charCount = context.get('charCount')
-        const maxLength = prop('maxLength')
-        const inputEl = getInputEl(scope)
-        const customValidation = context.get('customValidation')
 
-        if (maxLength && charCount > maxLength) {
-          send({ type: 'INVALID' })
-          if (inputEl && !inputEl.validationMessage) {
-            inputEl.setCustomValidity(customValidation)
-          }
-        }
-        else {
-          send({ type: 'VALID' })
-          if (inputEl && inputEl.validationMessage === customValidation) {
-            inputEl.setCustomValidity('')
+        return () => {
+          cleanup()
+          if (srTimer !== undefined) {
+            clearTimeout(srTimer)
           }
         }
       },
-      setCustomValidity({ context, event, scope }) {
-        context.set('customValidation', event.value)
+    },
 
-        const inputEl = getInputEl(scope)
-        inputEl?.setCustomValidity(event.value)
+    actions: {
+      setValue({ context, prop, event }) {
+        const value = event.value as string
+        context.set("value", value)
+
+        // Fire callback manually after set (per gotcha: multiple context.set calls
+        // + bindable onChange fires per-set, giving inconsistent snapshots)
+        const maxLength = prop("maxLength")
+        const length = value.length
+        const isOverLimit = !!length && !!maxLength && length > maxLength
+        prop("onValueChange")?.({ value, length, isOverLimit })
       },
     },
   },

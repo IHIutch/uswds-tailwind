@@ -2,60 +2,73 @@ import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
+ * Callback details
+ * ----------------------------------------------------------------------------- */
+
+export interface ValueChangeDetails {
+  value: string[]
+}
+
+/* -----------------------------------------------------------------------------
  * Machine context
- * -----------------------------------------------------------------------------
- */
+ * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   root: string
+  item: (value: string) => string
+  itemContent: (value: string) => string
+  itemTrigger: (value: string) => string
 }>
 
 export interface AccordionProps extends CommonProperties {
-  /**
-   * Allow multiple accordion items to stay open at the same time.
-   * @default false
-   */
-  multiple?: boolean
+  ids?: ElementIds | undefined
+  multiple?: boolean | undefined
+  value?: string[] | undefined
+  defaultValue?: string[] | undefined
+  onValueChange?: ((details: ValueChangeDetails) => void) | undefined
 }
 
+type PropsWithDefault = 'multiple'
+
 export interface AccordionSchema {
-  props: RequiredBy<AccordionProps, 'multiple'>
+  state: 'idle' | 'focused'
+  props: RequiredBy<AccordionProps, PropsWithDefault>
   context: {
     value: string[]
   }
-  state: 'idle'
-  action: 'openItem' | 'closeItem' | 'toggleItem'
-  event: EventObject & (
-    | { type: 'OPEN', id: string }
-    | { type: 'CLOSE', id: string }
-    | { type: 'TOGGLE', id: string }
-  )
+  action: string
+  guard: string
+  effect: string
+  event: EventObject
 }
 
 export type AccordionService = Service<AccordionSchema>
+
 export type AccordionMachine = Machine<AccordionSchema>
 
 /* -----------------------------------------------------------------------------
- * Component props
- * -----------------------------------------------------------------------------
- */
+ * Component API
+ * ----------------------------------------------------------------------------- */
+
+export interface ItemProps {
+  value: string
+}
+
+export interface ItemState {
+  expanded: boolean
+}
 
 export interface AccordionApi<T extends PropTypes = PropTypes> {
-  /**
-   * Currently opened item ids.
-   */
+  focused: boolean
   value: string[]
-  /** Open an item by id */
-  open: (id: string) => void
-  /** Close an item by id */
-  close: (id: string) => void
-  /** Toggle an item by id */
-  toggle: (id: string) => void
-  /** Check if an item is open */
-  isItemOpen: (id: string) => boolean
+  setValue: (value: string[]) => void
+  getItemState: (props: ItemProps) => ItemState
+  show: (value: string) => void
+  hide: (value: string) => void
+  toggle: (value: string) => void
 
   getRootProps: () => T['element']
-  getItemProps: (args: { value: string }) => T['element']
-  getTriggerProps: (args: { value: string }) => T['button']
-  getContentProps: (args: { value: string }) => T['element']
+  getItemProps: (props: ItemProps) => T['element']
+  getItemTriggerProps: (props: ItemProps) => T['button']
+  getItemContentProps: (props: ItemProps) => T['element']
 }

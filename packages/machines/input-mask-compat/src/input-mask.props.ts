@@ -6,10 +6,11 @@ export const props = createProps<InputMaskProps>()([
   'id',
   'ids',
   'getRootNode',
-  'pattern',
   'placeholder',
   'charset',
-  'maxlength',
+  'value',
+  'defaultValue',
+  'onValueChange',
 ])
 
 export const splitProps = createSplitProps<Partial<InputMaskProps>>(props)

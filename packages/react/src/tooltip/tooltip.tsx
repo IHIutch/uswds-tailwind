@@ -7,12 +7,15 @@ import { cx } from '../cva.config'
 // Types
 // ============================================================================
 
-export type TooltipRootProps = Omit<tooltip.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
+export type TooltipRootProps = Omit<tooltip.Props, 'id'> & React.ComponentPropsWithoutRef<'div'> & {
+  content: string
+}
 export type TooltipTriggerProps = React.ComponentPropsWithoutRef<'div'>
-export type TooltipContentProps = React.ComponentPropsWithoutRef<'div'>
+export type TooltipContentProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'>
 
 export interface TooltipContextProps {
   api: tooltip.Api
+  content: string
 }
 
 // ============================================================================
@@ -34,18 +37,22 @@ function useTooltipContext() {
 // ============================================================================
 
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, content, position, closeOnEscape, disabled, open, defaultOpen, onOpenChange, ...props }, forwardedRef) => {
     const service = useMachine(tooltip.machine, {
       id: React.useId(),
-      content: props.content,
-      placement: props.placement,
+      position,
+      closeOnEscape,
+      disabled,
+      open,
+      defaultOpen,
+      onOpenChange,
     })
 
     const api = tooltip.connect(service, normalizeProps)
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (
-      <TooltipContext.Provider value={{ api }}>
+      <TooltipContext.Provider value={{ api, content }}>
         <div
           {...mergedProps}
           className={cx('relative isolate', className)}
@@ -71,8 +78,8 @@ function TooltipTrigger({ children, ...props }: TooltipTriggerProps) {
 }
 
 const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useTooltipContext()
+  ({ className, ...props }, forwardedRef) => {
+    const { api, content } = useTooltipContext()
     const mergedProps = mergeProps(api.getContentProps(), props)
 
     return (
@@ -84,7 +91,7 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
         )}
         ref={forwardedRef}
       >
-        {api.getContent()}
+        {content}
       </div>
     )
   },
@@ -94,11 +101,14 @@ TooltipRoot.displayName = 'Tooltip.Root'
 TooltipTrigger.displayName = 'Tooltip.Trigger'
 TooltipContent.displayName = 'Tooltip.Content'
 
-export type TooltipProps = React.PropsWithChildren & Pick<tooltip.Props, 'content' | 'placement'>
+export interface TooltipProps extends Pick<tooltip.Props, 'position'> {
+  content: string
+  children?: React.ReactNode
+}
 
-export function Tooltip({ content, placement, children, ...props }: TooltipProps) {
+export function Tooltip({ content, position, children, ...props }: TooltipProps) {
   return (
-    <TooltipRoot content={content} placement={placement} {...props}>
+    <TooltipRoot content={content} position={position} {...props}>
       <TooltipTrigger>
         {children}
       </TooltipTrigger>

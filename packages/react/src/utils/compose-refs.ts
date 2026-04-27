@@ -25,5 +25,6 @@ export function composeRefs<T>(...refs: PossibleRef<T>[]): (node: T | null) => V
         }
       }
     }
+    return
   }
 }

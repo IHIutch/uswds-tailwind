@@ -1,10 +1,6 @@
 import { createAnatomy } from '@zag-js/anatomy'
 
-export const anatomy = createAnatomy('accordion').parts(
-  'root',
-  'item',
-  'trigger',
-  'content',
-)
-
+// .usa-accordion (root) > .usa-accordion__heading > .usa-accordion__button (trigger)
+// .usa-accordion (root) > .usa-accordion__content (content)
+export const anatomy = createAnatomy('accordion').parts('root', 'item', 'itemTrigger', 'itemContent')
 export const parts = anatomy.build()

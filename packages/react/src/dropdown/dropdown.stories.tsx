@@ -7,9 +7,9 @@ const meta = preview.meta({
 })
 
 const items = [
-  { href: '#', label: 'One' },
-  { href: '#', label: 'Two' },
-  { href: '#', label: 'Three' },
+  { value: 'one', href: '#', label: 'One' },
+  { value: 'two', href: '#', label: 'Two' },
+  { value: 'three', href: '#', label: 'Three' },
 ]
 
 export const Basic = meta.story({
@@ -18,7 +18,7 @@ export const Basic = meta.story({
       <Dropdown.Trigger>Dropdown</Dropdown.Trigger>
       <Dropdown.Content>
         {items.map(item => (
-          <Dropdown.Item>
+          <Dropdown.Item key={item.value} value={item.value}>
             <Dropdown.Link href={item.href}>
               {item.label}
             </Dropdown.Link>
@@ -46,7 +46,7 @@ export const LanguageSelector = meta.story({
         <Dropdown.Trigger>Languages</Dropdown.Trigger>
         <Dropdown.Content className="right-0">
           {languages.map(lang => (
-            <Dropdown.Item key={lang.code}>
+            <Dropdown.Item key={lang.code} value={lang.code}>
               <Dropdown.Link href="#">
                 <span lang={lang.code}>
                   <strong>{lang.name}</strong>

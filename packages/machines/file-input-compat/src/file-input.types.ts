@@ -1,6 +1,19 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
-// import type { getFileType } from './file-input.utils'
+
+/* -----------------------------------------------------------------------------
+ * Callback details
+ * ----------------------------------------------------------------------------- */
+
+export interface FileRejection {
+  file: File
+  errors: string[]
+}
+
+export interface FileChangeDetails {
+  acceptedFiles: File[]
+  rejectedFiles: FileRejection[]
+}
 
 /* -----------------------------------------------------------------------------
  * Machine context
@@ -11,85 +24,85 @@ export type ElementIds = Partial<{
   dropzone: string
   input: string
   label: string
-  errorMessage: string
-  instructions: string
+  item: (id: string) => string
 }>
 
 export interface FileInputProps extends CommonProperties {
-  /**
-   * The ids of the elements in the file input. Useful for composition.
-   */
   ids?: ElementIds | undefined
-  /**
-   * Comma separated list of accepted file types
-   */
-  accept?: string
-  /**
-   * Whether the file input is disabled
-   */
-  disabled?: boolean
-  /**
-   * Screen reader status text
-   */
-  srStatusText?: string
-  /**
-   * Custom error message for invalid file types
-   */
-  errorMessage?: string
-  /**
-   * Whether to allow multiple file selection
-   */
-  multiple?: boolean
+  name?: string | undefined
+  accept?: string | undefined
+  disabled?: boolean | undefined
+  multiple?: boolean | undefined
+  required?: boolean | undefined
+  errorMessage?: string | undefined
+  onFileChange?: ((details: FileChangeDetails) => void) | undefined
 }
 
-type PropsWithDefault = 'disabled' | 'srStatusText' | 'errorMessage'
+type PropsWithDefault = 'errorMessage'
 
-export interface ItemProps {
-  file: File
-  // type: ReturnType<typeof getFileType>
+interface Context {
+  acceptedFiles: File[]
+  rejectedFiles: FileRejection[]
+}
+
+interface Computed {
+  itemsLabel: string
 }
 
 export interface FileInputSchema {
+  state: 'idle' | 'focused' | 'dragging'
   props: RequiredBy<FileInputProps, PropsWithDefault>
-  context: {
-    isDragging: boolean
-    isDisabled: boolean
-    srStatusText: string
-    files: File[]
-  }
-  state: 'idle' | 'valid' | 'invalid'
-  action: 'validateFiles' | 'updateSrStatus' | 'checkEmptyFiles'
-  event: EventObject & (
-    | { type: 'VALID' }
-    | { type: 'INVALID' }
-    | { type: 'CHANGE', files: File[] }
-    | { type: 'RESET' }
-  )
+  context: Context
+  computed: Computed
+  event: EventObject
+  action: string
+  effect: string
+  guard: string
 }
 
 export type FileInputService = Service<FileInputSchema>
+
 export type FileInputMachine = Machine<FileInputSchema>
 
 /* -----------------------------------------------------------------------------
- * Component props
+ * Component API
  * ----------------------------------------------------------------------------- */
 
+export interface ItemProps {
+  file: File
+}
+
 export interface FileInputApi<T extends PropTypes = PropTypes> {
-  isInvalid: boolean
-  isDragging: boolean
-  isDisabled: boolean
+  focused: boolean
+  dragging: boolean
+  disabled: boolean
+  hasFiles: boolean
+  hasInvalidFiles: boolean
+  acceptedFiles: File[]
+  rejectedFiles: FileRejection[]
+  errorMessageText: string
+  statusMessage: string
+  previewHeadingText: string
+  changeItemText: string
+  dragText: string
+  chooseText: string
+  openFilePicker: VoidFunction
+  clearFiles: VoidFunction
+  deleteFile: (file: File) => void
+  createFileUrl: (file: File, cb: (url: string) => void) => VoidFunction
+  getFilePreviewType: (file: File) => 'pdf' | 'word' | 'excel' | 'video' | 'generic' | 'image'
 
   getRootProps: () => T['element']
-  getDropzoneProps: () => T['element']
   getLabelProps: () => T['label']
+  getDropzoneProps: () => T['element']
   getInputProps: () => T['input']
+  getInstructionsProps: () => T['element']
+  getStatusProps: () => T['element']
   getErrorMessageProps: () => T['element']
-  getInstructionProps: () => T['element']
-  getSrStatusProps: () => T['element']
-  getPreviewListProps: () => T['element']
-  getPreviewTitleProps: () => T['element']
-  getPreviewItemProps: (props: ItemProps) => T['element']
-  getPreviewItemIconProps: (props: ItemProps) => T['element']
-  getPreviewItemThumbProps: (props: ItemProps) => T['element']
-  getPreviewItemContentProps: (props: ItemProps) => T['element']
+  getPreviewHeadingProps: () => T['element']
+  getItemGroupProps: () => T['element']
+  getItemProps: (props: ItemProps) => T['element']
+  getItemPreviewProps: (props: ItemProps) => T['img']
+  getItemNameProps: (props: ItemProps) => T['element']
+  getItemDeleteTriggerProps: (props: ItemProps) => T['button']
 }

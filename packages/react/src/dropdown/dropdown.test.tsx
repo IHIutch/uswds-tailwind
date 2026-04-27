@@ -8,13 +8,13 @@ function renderDropdown() {
     <Dropdown.Root>
       <Dropdown.Trigger>Menu</Dropdown.Trigger>
       <Dropdown.Content>
-        <Dropdown.Item>
+        <Dropdown.Item value="one">
           <Dropdown.Link href="#">One</Dropdown.Link>
         </Dropdown.Item>
-        <Dropdown.Item>
+        <Dropdown.Item value="two">
           <Dropdown.Link href="#">Two</Dropdown.Link>
         </Dropdown.Item>
-        <Dropdown.Item>
+        <Dropdown.Item value="three">
           <Dropdown.Link href="#">Three</Dropdown.Link>
         </Dropdown.Item>
       </Dropdown.Content>

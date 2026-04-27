@@ -89,12 +89,9 @@ export type NavPositionerProps = React.ComponentPropsWithoutRef<'div'>
 
 const NavPositioner = React.forwardRef<HTMLDivElement, NavPositionerProps>(
   ({ className, ...props }, forwardedRef) => {
-    const { api } = useNavContext()
-    const { style: _style, ...positionerProps } = mergeProps(api.getPositionerProps(), props)
-
     return (
       <div
-        {...positionerProps}
+        {...props}
         className={cx(
           '@max-desktop:fixed @max-desktop:inset-0 @max-desktop:z-50',
           '@max-desktop:not-data-[state=open]:pointer-events-none',
@@ -315,12 +312,14 @@ const NavDropdownContent = React.forwardRef<HTMLUListElement, NavDropdownContent
 
 // DropdownItem
 
-export type NavDropdownItemProps = React.ComponentPropsWithoutRef<'li'>
+export type NavDropdownItemProps = React.ComponentPropsWithoutRef<'li'> & {
+  value: string
+}
 
 const NavDropdownItem = React.forwardRef<HTMLLIElement, NavDropdownItemProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, value, ...props }, forwardedRef) => {
     const { api } = useNavDropdownContext()
-    const mergedProps = mergeProps(api.getItemProps(), props)
+    const mergedProps = mergeProps(api.getItemProps({ value }), props)
 
     return (
       <li
@@ -357,12 +356,9 @@ const NavDropdownLink = React.forwardRef<HTMLAnchorElement, NavDropdownLinkProps
 export type NavDropdownIndicatorProps = React.ComponentPropsWithoutRef<'div'>
 
 function NavDropdownIndicator({ className, children, ...props }: NavDropdownIndicatorProps) {
-  const { api } = useNavDropdownContext()
-  const mergedProps = mergeProps(api.getIndicatorProps(), props)
-
   return (
     <div
-      {...mergedProps}
+      {...props}
       aria-hidden="true"
       className={cx('group h-full flex items-center ml-auto shrink-0', className)}
     >
