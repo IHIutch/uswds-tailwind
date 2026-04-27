@@ -49,6 +49,18 @@ it('clicking a trigger toggles aria-expanded and the content hidden attribute', 
   await expect.element(content).not.toHaveAttribute('hidden')
 })
 
+it('clicking an expanded trigger collapses it again', async () => {
+  const screen = await renderAccordion()
+  const trigger = screen.getByRole('button', { name: 'Section one' })
+  const content = screen.getByText('Content one')
+
+  await userEvent.click(trigger)
+  await userEvent.click(trigger)
+
+  await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
+  await expect.element(content).toHaveAttribute('hidden')
+})
+
 it('single mode: opening one item collapses the other', async () => {
   const screen = await renderAccordion()
   const firstTrigger = screen.getByRole('button', { name: 'Section one' })
@@ -76,4 +88,22 @@ it('multiple mode: both items can stay expanded', async () => {
 
   await expect.element(screen.getByText('Content one')).not.toHaveAttribute('hidden')
   await expect.element(screen.getByText('Content two')).not.toHaveAttribute('hidden')
+})
+
+it('defaultValue pre-expands the matching item', async () => {
+  const screen = await render(
+    <Accordion.Root defaultValue={['item-1']}>
+      <Accordion.Item value="item-1">
+        <Accordion.ItemTrigger>Section one</Accordion.ItemTrigger>
+        <Accordion.ItemContent>Content one</Accordion.ItemContent>
+      </Accordion.Item>
+      <Accordion.Item value="item-2">
+        <Accordion.ItemTrigger>Section two</Accordion.ItemTrigger>
+        <Accordion.ItemContent>Content two</Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>,
+  )
+  await expect.element(screen.getByRole('button', { name: 'Section one' }))
+    .toHaveAttribute('aria-expanded', 'true')
+  await expect.element(screen.getByText('Content one')).not.toHaveAttribute('hidden')
 })

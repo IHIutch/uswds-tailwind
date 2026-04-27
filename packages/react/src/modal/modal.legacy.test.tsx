@@ -92,3 +92,13 @@ it('pressing Escape closes modal', async () => {
   await userEvent.keyboard('{Escape}')
   await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
 })
+
+it('closing the modal returns focus to the opening trigger', async () => {
+  const screen = await renderModal()
+  const trigger = screen.getByRole('button', { name: 'Open modal' })
+
+  await userEvent.click(trigger)
+  await userEvent.click(screen.getByRole('button', { name: 'Close this window' }))
+
+  expect(document.activeElement).toBe(trigger.element())
+})

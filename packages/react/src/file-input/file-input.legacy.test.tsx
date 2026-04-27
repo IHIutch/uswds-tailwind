@@ -64,6 +64,11 @@ it('multiple prop is forwarded to the underlying input', async () => {
   expect(input.multiple).toBe(true)
 })
 
+// SUGGESTION (review): the `data-invalid` + anatomy-query pair below pins
+// to our Zag anatomy and data-attr convention. The error-message text check
+// on the line after is already a full behavioral signal (error visible to
+// user) — the `data-invalid` assertion duplicates that signal with a more
+// brittle anchor. Could drop lines 75-76.
 it('uploading an invalid file type sets data-invalid on root and shows error message', async () => {
   const screen = await renderFileInput({ accept: '.pdf,.txt' })
   const input = document.querySelector('input[type="file"]') as HTMLInputElement

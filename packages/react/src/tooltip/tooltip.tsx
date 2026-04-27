@@ -87,7 +87,9 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
         {...mergedProps}
         className={cx(
           'invisible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out left-(--tooltip-left) top-(--tooltip-top) m-(--tooltip-margin)',
-          // 'after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)',
+          // Caret pseudo-element: positioned by --caret-top/--caret-left from
+          // the machine's contentStyle, rotated 45° to form a triangle.
+          'after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:left-(--caret-left) after:top-(--caret-top)',
           'data-visible:visible',
           className,
         )}

@@ -121,9 +121,6 @@ it('pressing ArrowDown from empty input opens the list', async () => {
   await expect.element(input).toHaveAttribute('aria-expanded', 'true')
 })
 
-// KNOWN MACHINE ISSUE: the combobox input uses `defaultValue` rather than
-// `value`, so clicking an option doesn't sync the DOM input's value. Fails
-// until the machine switches to a controlled input pattern.
 it('clicking an option updates the input value to the option text', async () => {
   const screen = await renderCombobox()
   const input = screen.getByRole('combobox')
@@ -134,7 +131,6 @@ it('clicking an option updates the input value to the option text', async () => 
   await expect.element(input).toHaveValue('Apple')
 })
 
-// KNOWN MACHINE ISSUE: same uncontrolled input root cause.
 it('clicking an option closes the list', async () => {
   const screen = await renderCombobox()
   const input = screen.getByRole('combobox')
@@ -153,4 +149,79 @@ it('options have role="option"', async () => {
 
   const firstOption = screen.getByRole('option', { name: 'Apple' })
   await expect.element(firstOption).toHaveAttribute('role', 'option')
+})
+
+it('blurring the input (focus moves elsewhere) closes the list', async () => {
+  const screen = render(
+    <>
+      <Combobox.Root options={options}>
+        <Combobox.Label>Fruit</Combobox.Label>
+        <Combobox.Control>
+          <Combobox.Input />
+          <Combobox.IndicatorGroup>
+            <Combobox.ToggleButton />
+          </Combobox.IndicatorGroup>
+        </Combobox.Control>
+        <Combobox.List>
+          {({ options: items }) => items.map((opt, index) => (
+            <Combobox.Item key={opt.value} index={index} value={opt.value} text={opt.text}>
+              {opt.text}
+            </Combobox.Item>
+          ))}
+        </Combobox.List>
+      </Combobox.Root>
+      <button type="button">elsewhere</button>
+    </>,
+  )
+  const resolved = await screen
+  const input = resolved.getByRole('combobox')
+  const sink = resolved.getByRole('button', { name: 'elsewhere' })
+
+  await userEvent.click(input)
+  await expect.element(input).toHaveAttribute('aria-expanded', 'true')
+
+  ;(sink.element() as HTMLButtonElement).focus()
+  await expect.element(input).toHaveAttribute('aria-expanded', 'false')
+})
+
+it('ArrowDown on an open list moves the highlighted option down', async () => {
+  const screen = await renderCombobox()
+  const input = screen.getByRole('combobox')
+
+  input.element().focus()
+  await userEvent.keyboard('{ArrowDown}') // open, first option highlighted
+  await userEvent.keyboard('{ArrowDown}') // move to second
+  // aria-activedescendant points at the currently highlighted option's id.
+  const activeId = input.element().getAttribute('aria-activedescendant')
+  expect(activeId).toBeTruthy()
+  const highlighted = document.getElementById(activeId!)
+  expect(highlighted?.textContent?.trim()).toBe('Apricot')
+})
+
+it('ArrowUp on an open list moves the highlighted option up', async () => {
+  const screen = await renderCombobox()
+  const input = screen.getByRole('combobox')
+
+  input.element().focus()
+  await userEvent.keyboard('{ArrowDown}') // Apple
+  await userEvent.keyboard('{ArrowDown}') // Apricot
+  await userEvent.keyboard('{ArrowDown}') // Avocado
+  await userEvent.keyboard('{ArrowUp}') // back to Apricot
+
+  const activeId = input.element().getAttribute('aria-activedescendant')
+  const highlighted = document.getElementById(activeId!)
+  expect(highlighted?.textContent?.trim()).toBe('Apricot')
+})
+
+it('the clear button empties the input after a selection', async () => {
+  const screen = await renderCombobox()
+  const input = screen.getByRole('combobox')
+
+  await userEvent.click(input)
+  await userEvent.click(screen.getByRole('option', { name: 'Cherry' }))
+  await expect.element(input).toHaveValue('Cherry')
+
+  const clearBtn = screen.getByRole('button', { name: /clear the select/i })
+  await userEvent.click(clearBtn)
+  await expect.element(input).toHaveValue('')
 })

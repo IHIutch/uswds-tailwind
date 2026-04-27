@@ -74,6 +74,11 @@ it('shows "N characters over limit" when multiple over', async () => {
   expect(srStatus).toHaveStyle(visuallyHiddenStyle)
 }, 2000)
 
+// SUGGESTION (review): `data-invalid` on the next three tests is our Zag
+// convention (via `dataAttr()`); `validationMessage` is the native HTML
+// constraint-validation API and would survive an attribute rename. Could
+// drop the `data-invalid` assertions and keep only `validationMessage`
+// checks — same behavioral signal, less coupling to our anatomy.
 it('input is valid under the limit (no data-invalid, no validationMessage)', async () => {
   const screen = await renderCharacterCount({ maxLength: 20 })
   const input = screen.getByRole('textbox')
@@ -92,6 +97,17 @@ it('input becomes invalid over the limit (data-invalid set, validationMessage po
   const inputEl = input.element() as HTMLInputElement
   expect(inputEl.validationMessage).toBe('The content is too long.')
   expect(inputEl.hasAttribute('data-invalid')).toBe(true)
+})
+
+it('clears validity when the user dips back under the limit', async () => {
+  const screen = await renderCharacterCount({ maxLength: 20 })
+  const input = screen.getByRole('textbox')
+  await input.fill('123456789012345678901')
+  await input.fill('12345')
+
+  const inputEl = input.element() as HTMLInputElement
+  expect(inputEl.validationMessage).toBe('')
+  expect(inputEl.hasAttribute('data-invalid')).toBe(false)
 })
 
 it('status renders only text content (no HTML injection)', async () => {

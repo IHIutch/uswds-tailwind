@@ -5,6 +5,19 @@ import { Button } from '../button'
 import { Tooltip } from './tooltip'
 
 // Behavioral parity tests mirroring e2e/tooltip/tooltips.test.ts.
+//
+// SUGGESTION (review): every assertion below pins to our Zag convention
+// `data-state="open|closed"`. That's our internal contract, not user
+// behavior — if the attribute name ever changes (e.g. Radix-style
+// `data-open` / `data-state` -> something else) these tests all fail without
+// the user-visible behavior having changed. Safer rewrite: use
+// `.toBeVisible()` / `.not.toBeVisible()` since the tooltip uses opacity
+// transitions (`data-[state=open]:opacity-100 opacity-0`), so visibility
+// tracks state exactly. Example replacement:
+//   await expect.element(content).toHaveAttribute('data-state', 'open')
+//   →  await expect.element(content).toBeVisible()
+//   await expect.element(content).toHaveAttribute('data-state', 'closed')
+//   →  await expect.element(content).not.toBeVisible()
 
 function renderTooltip() {
   return render(

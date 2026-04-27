@@ -97,6 +97,14 @@ function renderDatePicker() {
   )
 }
 
+// SUGGESTION (review): every test in this file reaches into the DOM with
+// `[data-scope="datepicker"][data-part="..."]` selectors. Those are our Zag
+// anatomy — they'd break on any rename even when the calendar behavior is
+// unchanged. Most of these could be replaced with `getByRole('button',
+// { name: /January/i })` (month-selection), `getByRole('grid')` (table),
+// `getByRole('dialog')` (calendar content) — at the cost of a bit more
+// verbosity, but much more robust. Leaving the pattern here as-is; worth
+// revisiting as a batch.
 function getContent() {
   return document.querySelector('[data-scope="datepicker"][data-part="calendar"]') as HTMLElement | null
 }
@@ -198,6 +206,64 @@ it('clicking the next year trigger advances to the next year', async () => {
   expect(yearTrigger?.textContent).toBe('2021')
 })
 
+it('clicking the previous year trigger retreats to the previous year', async () => {
+  const screen = await renderDatePicker()
+  const input = screen.getByRole('textbox')
+  const trigger = screen.getByRole('button', { name: 'Open calendar' })
+
+  await userEvent.fill(input, '01/15/2020')
+  await userEvent.click(trigger)
+
+  await userEvent.click(screen.getByRole('button', { name: 'Previous year' }))
+
+  const yearTrigger = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]')
+  expect(yearTrigger?.textContent).toBe('2019')
+})
+
+it('`min` prop disables earlier dates in the calendar', async () => {
+  const screen = await render(
+    <DatePicker.Root min="2020-01-10" defaultValue={['2020-01-15']}>
+      <DatePicker.Control>
+        <DatePicker.Input />
+        <DatePicker.Trigger aria-label="Open calendar" />
+      </DatePicker.Control>
+      <DatePicker.Content>
+        <DatePicker.View view="day">
+          {({ api }) => (
+            <DatePicker.Table>
+              <DatePicker.TableBody>
+                {api.weeks.map((week, row) => (
+                  <DatePicker.TableRow key={row}>
+                    {week.map(cell => (
+                      <DatePicker.TableCell key={cell.dateString} cell={cell}>
+                        <DatePicker.TableCellTrigger cell={cell}>
+                          {cell.day}
+                        </DatePicker.TableCellTrigger>
+                      </DatePicker.TableCell>
+                    ))}
+                  </DatePicker.TableRow>
+                ))}
+              </DatePicker.TableBody>
+            </DatePicker.Table>
+          )}
+        </DatePicker.View>
+      </DatePicker.Content>
+    </DatePicker.Root>,
+  )
+  await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
+
+  const cells = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(
+      '[data-scope="datepicker"][data-part="cell-trigger"]',
+    ),
+  )
+  const jan5 = cells.find(c => /^5 January 2020/.test(c.getAttribute('aria-label') || ''))
+  const jan15 = cells.find(c => /^15 January 2020/.test(c.getAttribute('aria-label') || ''))
+
+  expect(jan5?.disabled).toBe(true)
+  expect(jan15?.disabled).toBe(false)
+})
+
 it('clicking the month selection opens the month picker view', async () => {
   const screen = await renderDatePicker()
   const trigger = screen.getByRole('button', { name: 'Open calendar' })
@@ -226,10 +292,60 @@ it('clicking the year selection opens the year picker view', async () => {
   expect(yearPicker?.hasAttribute('hidden')).toBe(false)
 })
 
-// Day-cell click isn't writing the selected value back into the input.
-// The machine's click handler fires but either the `inputValue` context
-// update isn't propagating to the controlled input, or the selected
-// Date is missing from `value`. Needs investigation on the machine side.
+it('selecting a month from the month picker returns to day view on that month', async () => {
+  const screen = await renderDatePicker()
+  const input = screen.getByRole('textbox')
+  await userEvent.fill(input, '01/15/2020') // January
+  await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
+
+  const monthSelection = document.querySelector<HTMLButtonElement>(
+    '[data-scope="datepicker"][data-part="month-selection"]',
+  )!
+  await userEvent.click(monthSelection)
+
+  // Click "June" in the month grid — find by visible text.
+  const monthCells = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(
+      '[data-scope="datepicker"][data-part="month-picker"] [data-part="cell-trigger"]',
+    ),
+  )
+  const june = monthCells.find(b => /^Jun/i.test(b.textContent || ''))!
+  await userEvent.click(june)
+
+  // Back in day view: month header now reads "June".
+  const monthAfter = document.querySelector(
+    '[data-scope="datepicker"][data-part="month-selection"]',
+  )
+  expect(monthAfter?.textContent).toBe('June')
+})
+
+it('selecting a year from the year picker returns to day view with that year', async () => {
+  const screen = await renderDatePicker()
+  const input = screen.getByRole('textbox')
+  await userEvent.fill(input, '06/15/2020')
+  await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
+
+  const yearSelection = document.querySelector<HTMLButtonElement>(
+    '[data-scope="datepicker"][data-part="year-selection"]',
+  )!
+  await userEvent.click(yearSelection)
+
+  // Grab the first rendered year cell, click it, then confirm header reflects it.
+  const yearCells = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(
+      '[data-scope="datepicker"][data-part="year-picker"] [data-part="cell-trigger"]',
+    ),
+  )
+  const firstYear = yearCells[0]!
+  const targetYear = firstYear.textContent?.trim()
+  await userEvent.click(firstYear)
+
+  const yearAfter = document.querySelector(
+    '[data-scope="datepicker"][data-part="year-selection"]',
+  )
+  expect(yearAfter?.textContent?.trim()).toBe(targetYear)
+})
+
 it('clicking a day cell selects that date and closes the calendar', async () => {
   const screen = await renderDatePicker()
   const input = screen.getByRole('textbox')

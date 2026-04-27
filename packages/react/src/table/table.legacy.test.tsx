@@ -87,6 +87,9 @@ it('cells in the sorted column get data-sort-active', async () => {
 
   await userEvent.click(sortButton)
 
+  // SUGGESTION (review): `[data-scope="table"][data-part="cell"]` pins to
+  // our Zag anatomy; a native `screen.getByRole('cell')` (or a `tbody td`
+  // DOM query) would survive an anatomy rename with the same signal.
   // Find cells in column 0 (Alphabetical)
   const cells = document.querySelectorAll('[data-scope="table"][data-part="cell"]')
   const column0Cells = Array.from(cells).filter(

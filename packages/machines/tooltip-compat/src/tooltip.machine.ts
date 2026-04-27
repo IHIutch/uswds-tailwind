@@ -172,6 +172,9 @@ export const machine = createMachine<TooltipSchema>({
               '--tooltip-top': `-${TRIANGLE_SIZE}px`,
               '--tooltip-left': `50%`,
               '--tooltip-margin': `-${topMargin}px 0 0 -${leftMargin / 2}px`,
+              // Caret at bottom-center of tooltip body, pointing down at trigger.
+              '--caret-top': `100%`,
+              '--caret-left': `50%`,
             }
             const viewportRect = {
               top: wrapperRect.top + (-TRIANGLE_SIZE) + (-topMargin),
@@ -189,6 +192,9 @@ export const machine = createMachine<TooltipSchema>({
             const styles: Record<string, string> = {
               '--tooltip-left': `50%`,
               '--tooltip-margin': `${TRIANGLE_SIZE}px 0 0 -${leftMargin / 2}px`,
+              // Caret at top-center of tooltip body, pointing up at trigger.
+              '--caret-top': `0`,
+              '--caret-left': `50%`,
             }
             // Static position: content appears after trigger, so top = wrapperHeight
             const staticTop = wrapperHeight
@@ -208,6 +214,9 @@ export const machine = createMachine<TooltipSchema>({
               '--tooltip-top': `50%`,
               '--tooltip-left': `${leftPx}px`,
               '--tooltip-margin': `-${topMargin / 2}px 0 0 0`,
+              // Caret at left-center of tooltip body, pointing left at trigger.
+              '--caret-top': `50%`,
+              '--caret-left': `0`,
             }
             const viewportRect = {
               top: wrapperRect.top + (wrapperHeight * 0.5) + (-topMargin / 2),
@@ -235,6 +244,9 @@ export const machine = createMachine<TooltipSchema>({
               '--tooltip-top': `50%`,
               '--tooltip-left': `-${TRIANGLE_SIZE}px`,
               '--tooltip-margin': `-${topMargin / 2}px 0 0 ${marginLeftValue}px`,
+              // Caret at right-center of tooltip body, pointing right at trigger.
+              '--caret-top': `50%`,
+              '--caret-left': `100%`,
             }
             const viewportRect = {
               top: wrapperRect.top + (wrapperHeight * 0.5) + (-topMargin / 2),
