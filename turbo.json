@@ -15,10 +15,6 @@
         "dist/**"
       ]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
     "lint": {
       "dependsOn": [
         "^lint"
@@ -42,9 +38,6 @@
         "build"
       ],
       "outputs": []
-    },
-    "migrate": {
-      "cache": false
     },
     "deploy": {
       "dependsOn": [

@@ -31,7 +31,7 @@ jobs:
         uses: ./.github/actions/setup-pnpm
 
       - name: Build packages
-        run: pnpm build-packages
+        run: pnpm build:packages
 
       - run: pnpm dlx pkg-pr-new publish ./packages/**/*
 

@@ -93,6 +93,7 @@
     "@zag-js/core": "catalog:",
     "@zag-js/store": "catalog:",
     "@zag-js/types": "catalog:",
-    "@zag-js/utils": "catalog:"
+    "@zag-js/utils": "catalog:",
+    "@zag-js/vanilla": "catalog:"
   }
 }

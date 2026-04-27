@@ -1,4 +1,4 @@
-import type { VanillaMachine } from './machine'
+import type { VanillaMachine } from '@zag-js/vanilla'
 
 interface ComponentInterface<Api> {
   rootEl: HTMLElement
@@ -14,6 +14,10 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   rootEl: HTMLElement
   machine: VanillaMachine<any>
   api: Api
+
+  get doc(): Document {
+    return this.rootEl.ownerDocument
+  }
 
   constructor(rootEl: HTMLElement | null, props: Props) {
     if (!rootEl)

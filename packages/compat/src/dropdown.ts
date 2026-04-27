@@ -1,9 +1,7 @@
 import * as dropdown from '@uswds-tailwind/dropdown-compat'
-import { normalizeProps } from './lib//normalize-props'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { spreadProps } from './lib/spread-props'
 
 export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
   static instances = new Map<string, Dropdown>()

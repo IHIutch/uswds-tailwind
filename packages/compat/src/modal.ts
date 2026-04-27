@@ -1,9 +1,7 @@
 import * as modal from '@uswds-tailwind/modal-compat'
-import { normalizeProps } from './lib//normalize-props'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { VanillaMachine } from './lib/machine'
-import { spreadProps } from './lib/spread-props'
 
 export class Modal extends Component<modal.Props, modal.Api> {
   static instances = new Map<string, Modal>()
