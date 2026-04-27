@@ -1,33 +1,34 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
-import type { SortableTableSchema, SortDirection } from './table.types'
+import type { CellProps, HeaderProps, SortDirection, TableApi, TableSchema } from './table.types'
 import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './table.anatomy'
 import * as dom from './table.dom'
 
 export function connect<T extends PropTypes>(
-  service: Service<SortableTableSchema>,
+  service: Service<TableSchema>,
   normalize: NormalizeProps<T>,
-) {
-  const { send, context, scope } = service
-  const sortedColumn = context.get('sortedColumn')
+): TableApi<T> {
+  const { state, context, send, prop, scope, computed } = service
+
+  const sortedColumnIndex = context.get('sortedColumnIndex')
   const sortDirection = context.get('sortDirection')
+  const isSorted = computed('isSorted')
+  const announcement = computed('announcement')
+  const columnNames = prop('columnNames') ?? {}
+
+  const focused = state.matches('focused')
 
   return {
-    sortedColumn,
+    focused,
+    isSorted,
+    sortedColumnIndex,
     sortDirection,
-    srStatus: context.get('srStatus'),
+    announcement,
 
-    sortByColumn(columnIndex: number) {
-      send({ type: 'SORT', columnIndex })
-    },
-
-    getColumnSortDirection(columnIndex: number): SortDirection {
-      return sortedColumn === columnIndex ? sortDirection : undefined
-    },
-
-    isColumnSorted(columnIndex: number): boolean {
-      return sortedColumn === columnIndex && sortDirection !== undefined
+    // If direction is omitted, the machine action toggles.
+    sort(columnIndex: number, direction?: SortDirection) {
+      send({ type: 'SORT', columnIndex, direction })
     },
 
     getRootProps() {
@@ -37,50 +38,74 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getSrStatusProps() {
+    getHeaderProps(props: HeaderProps) {
+      const { index } = props
+      const isThisSorted = sortedColumnIndex === index
+      const name = columnNames[index] ?? ''
+
+      const isSortedAscending = isThisSorted && sortDirection === 'ascending'
+
+      const ariaLabel = `${name}, sortable column, currently ${
+        isThisSorted
+          ? `${isSortedAscending ? 'sorted ascending' : 'sorted descending'}`
+          : 'unsorted'
+      }`
+
       return normalize.element({
-        ...parts.srStatus.attrs,
-        'id': dom.getSrStatusId(scope),
-        'aria-live': 'polite',
-        'style': visuallyHiddenStyle,
+        ...parts.header.attrs,
+        'id': dom.getHeaderId(scope, index),
+        'data-sortable': true,
+        'aria-sort': isThisSorted ? sortDirection ?? undefined : undefined,
+        'aria-label': ariaLabel,
       })
     },
 
-    getHeaderCellProps(columnIndex: number) {
-      const isCurrentlySorted = sortedColumn === columnIndex
-      const currentDirection = isCurrentlySorted ? sortDirection : 'none'
-      const ariaSortValue = currentDirection === 'none' ? undefined : currentDirection === 'asc' ? 'ascending' : 'descending'
+    getSortButtonProps(props: HeaderProps) {
+      const { index } = props
+      const isThisSorted = sortedColumnIndex === index
+      const name = columnNames[index] ?? ''
 
-      return normalize.element({
-        ...parts.headerCell.attrs,
-        'data-sort': currentDirection === 'none' ? undefined : currentDirection,
-        'aria-sort': ariaSortValue || undefined,
-        'aria-label': ariaSortValue ? `Sort by this column in ${ariaSortValue} order` : 'Sort by this column',
-      })
-    },
-
-    getSortButtonProps(columnIndex: number) {
-      const isCurrentlySorted = sortedColumn === columnIndex
-      const currentDirection = isCurrentlySorted ? sortDirection : undefined
-      const nextDirection = currentDirection === 'desc' ? 'ascending' : 'descending'
-      const titleText = `Click to sort by this column in ${nextDirection} order`
+      // If currently ascending → next is descending; otherwise → ascending
+      const nextDirection: SortDirection
+        = isThisSorted && sortDirection === 'ascending' ? 'descending' : 'ascending'
+      const title = `Click to sort by ${name} in ${nextDirection} order.`
 
       return normalize.button({
         ...parts.sortButton.attrs,
-        'type': 'button',
-        'data-sort': currentDirection,
-        'title': titleText,
+        id: dom.getSortButtonId(scope, index),
+        type: 'button',
+        tabIndex: 0,
+        title,
         onClick() {
-          send({ type: 'SORT', columnIndex })
+          send({ type: 'SORT', columnIndex: index })
+        },
+        onFocus() {
+          send({ type: 'SORT_BUTTON.FOCUS', columnIndex: index })
+        },
+        onBlur() {
+          send({ type: 'SORT_BUTTON.BLUR', columnIndex: index })
         },
       })
     },
 
-    getBodyCellProps(columnIndex: number) {
-      const isCurrentlySorted = sortedColumn === columnIndex
+    getCellProps(props: CellProps) {
       return normalize.element({
-        ...parts.bodyCell.attrs,
-        'data-sort-active': isCurrentlySorted,
+        ...parts.cell.attrs,
+        'data-sort-active':
+          sortedColumnIndex === props.columnIndex ? true : undefined,
+      })
+    },
+
+    // SR sort-announcement region: visually hidden, aria-live="polite",
+    // role="status". Inline style keeps it SR-only regardless of consumer
+    // styling.
+    getSrStatusProps() {
+      return normalize.element({
+        ...parts.srStatus.attrs,
+        'id': dom.getSrStatusId(scope),
+        'aria-live': 'polite' as const,
+        'role': 'status',
+        'style': visuallyHiddenStyle,
       })
     },
   }

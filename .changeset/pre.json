@@ -1,0 +1,28 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "website": "0.0.0",
+    "@uswds-tailwind/compat": "0.2.0",
+    "@uswds-tailwind/accordion-compat": "0.2.0",
+    "@uswds-tailwind/character-count-compat": "0.2.0",
+    "@uswds-tailwind/collapse-compat": "0.2.0",
+    "@uswds-tailwind/combobox-compat": "0.2.0",
+    "@uswds-tailwind/date-picker-compat": "0.2.0",
+    "@uswds-tailwind/dropdown-compat": "0.2.0",
+    "@uswds-tailwind/file-input-compat": "0.2.0",
+    "@uswds-tailwind/input-mask-compat": "0.2.0",
+    "@uswds-tailwind/modal": "0.2.0",
+    "@uswds-tailwind/modal-compat": "0.2.0",
+    "@uswds-tailwind/table-compat": "0.2.0",
+    "@uswds-tailwind/tooltip-compat": "0.2.0",
+    "@uswds-tailwind/react": "0.1.0",
+    "@uswds-tailwind/theme": "0.2.0"
+  },
+  "changesets": [
+    "alpha-1",
+    "alpha-2",
+    "alpha-3",
+    "first-alpha"
+  ]
+}

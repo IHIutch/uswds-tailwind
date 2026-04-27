@@ -1,0 +1,201 @@
+import type { UseComboboxProps } from './use-combobox'
+import * as combobox from '@uswds-tailwind/combobox-compat'
+import { mergeProps } from '@zag-js/react'
+import * as React from 'react'
+import { cx } from '../cva.config'
+import { useFieldContext } from '../field/field'
+import { useCombobox } from './use-combobox'
+
+export interface ComboboxContextProps {
+  api: combobox.Api
+  showClearButton: boolean
+  showToggleButton: boolean
+}
+
+const ComboboxContext = React.createContext<ComboboxContextProps | null>(null)
+
+function useComboboxContext() {
+  const context = React.useContext(ComboboxContext)
+  if (!context) {
+    throw new Error('Combobox components must be used within a Combobox.Root')
+  }
+  return context
+}
+
+export type ComboboxRootProps = React.ComponentPropsWithoutRef<'div'> & UseComboboxProps & {
+  /**
+   * Whether to render the clear button. Default true.
+   * Restored from the react branch — opt-out shortcut for consumers that
+   * keep the standard compound tree but don't want the × button.
+   */
+  showClearButton?: boolean
+  /**
+   * Whether to render the toggle (▼) button. Default true.
+   */
+  showToggleButton?: boolean
+}
+
+const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxRootProps>(
+  ({ className, showClearButton = true, showToggleButton = true, ...props }, forwardedRef) => {
+    const [machineProps, rest] = combobox.splitProps(props)
+    const { api } = useCombobox(machineProps as UseComboboxProps)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
+
+    return (
+      <ComboboxContext.Provider value={{ api, showClearButton, showToggleButton }}>
+        <div {...mergedProps} className={cx('relative mt-2', className)} ref={forwardedRef} />
+      </ComboboxContext.Provider>
+    )
+  },
+)
+
+function ComboboxLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
+  const { api } = useComboboxContext()
+  const mergedProps = mergeProps(api.getLabelProps(), props)
+
+  return <label {...mergedProps} className={cx('block', className)} />
+}
+
+const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const field = useFieldContext()
+    const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
+
+    return <input {...mergedProps} className={cx('pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4', className)} ref={forwardedRef} />
+  },
+)
+
+export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'children'> {
+  children?: React.ReactNode | (({ options }: { options: ComboboxContextProps['api']['filteredOptions'] }) => React.ReactNode)
+}
+
+const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getListboxProps(), props)
+
+    const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
+
+    return (
+      <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)} ref={forwardedRef}>
+        {content}
+      </ul>
+    )
+  },
+)
+
+export type ComboboxItemProps = React.ComponentPropsWithoutRef<'li'>
+  & combobox.ComboboxOption
+  & { index: number }
+
+const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
+  ({ value, text, disabled, index, children, ...props }, forwardedRef) => {
+    const { api } = useComboboxContext()
+    const mergedProps = mergeProps(api.getOptionProps({ option: { value, text, disabled }, index }), props)
+
+    return (
+      <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)} ref={forwardedRef}>
+        {children}
+      </li>
+    )
+  },
+)
+
+function ComboboxEmptyItem({ children, className, ...props }: React.HTMLAttributes<HTMLLIElement>) {
+  const { api } = useComboboxContext()
+
+  if (api.filteredOptions.length > 0)
+    return null
+
+  return (
+    <li {...props} className={cx('p-2 cursor-not-allowed', className)}>
+      {children || 'No results found'}
+    </li>
+  )
+}
+
+function ComboboxIndicatorGroup({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div {...props} className={cx('absolute z-10 inset-y-0 right-0 flex', className)} />
+  )
+}
+
+const ComboboxControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <div {...props} className={cx('relative', className)} ref={forwardedRef} />
+    )
+  },
+)
+
+const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { api, showClearButton } = useComboboxContext()
+    const mergedProps = mergeProps(api.getClearTriggerProps(), props)
+
+    if (!showClearButton) return null
+
+    return (
+      <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
+        {children || (
+          <div className="icon-[material-symbols--close] size-6"></div>
+        )}
+      </button>
+    )
+  },
+)
+
+const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { api, showToggleButton } = useComboboxContext()
+    const mergedProps = mergeProps(api.getTriggerProps(), props)
+
+    if (!showToggleButton) return null
+
+    return (
+      <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
+        {children || (
+          <div className="icon-[material-symbols--expand-more] size-8"></div>
+        )}
+      </button>
+    )
+  },
+)
+
+ComboboxRoot.displayName = 'Combobox.Root'
+ComboboxLabel.displayName = 'Combobox.Label'
+ComboboxControl.displayName = 'Combobox.Control'
+ComboboxInput.displayName = 'Combobox.Input'
+ComboboxList.displayName = 'Combobox.List'
+ComboboxItem.displayName = 'Combobox.Item'
+ComboboxEmptyItem.displayName = 'Combobox.EmptyItem'
+ComboboxIndicatorGroup.displayName = 'Combobox.IndicatorGroup'
+ComboboxClearButton.displayName = 'Combobox.ClearButton'
+ComboboxToggleButton.displayName = 'Combobox.ToggleButton'
+
+export {
+  ComboboxClearButton,
+  ComboboxControl,
+  ComboboxEmptyItem,
+  ComboboxIndicatorGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxRoot,
+  ComboboxToggleButton,
+}
+
+export const Combobox = {
+  Root: ComboboxRoot,
+  Label: ComboboxLabel,
+  Control: ComboboxControl,
+  Input: ComboboxInput,
+  List: ComboboxList,
+  Item: ComboboxItem,
+  EmptyItem: ComboboxEmptyItem,
+  IndicatorGroup: ComboboxIndicatorGroup,
+  ClearButton: ComboboxClearButton,
+  ToggleButton: ComboboxToggleButton,
+}

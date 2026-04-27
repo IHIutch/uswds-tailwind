@@ -2,50 +2,71 @@ import type { CollapseSchema } from './collapse.types'
 import { createMachine } from '@zag-js/core'
 
 export const machine = createMachine<CollapseSchema>({
-  props({ props }) {
-    return {
-      ...props,
-    }
-  },
-
   initialState({ prop }) {
-    const open = prop('open') ?? prop('defaultOpen')
+    const open = prop('open') || prop('defaultOpen')
     return open ? 'open' : 'closed'
   },
 
-  watch({ track, action, prop }) {
+  context() {
+    return {}
+  },
+
+  watch({ track, prop, action }) {
     track([() => prop('open')], () => {
       action(['toggleVisibility'])
     })
   },
 
   states: {
-    open: {
-      on: {
-        CLOSE: { target: 'closed', actions: ['invokeOnClose'] },
-        TOGGLE: { target: 'closed', actions: ['invokeOnClose'] },
-      },
-    },
     closed: {
       on: {
-        OPEN: { target: 'open', actions: ['invokeOnOpen'] },
-        TOGGLE: { target: 'open', actions: ['invokeOnOpen'] },
+        'TOGGLE': [
+          {
+            guard: 'isOpenControlled',
+            actions: ['invokeOnOpenChange'],
+          },
+          {
+            target: 'open',
+            actions: ['invokeOnOpenChange'],
+          },
+        ],
+        'controlled.open': {
+          target: 'open',
+        },
+      },
+    },
+    open: {
+      on: {
+        'TOGGLE': [
+          {
+            guard: 'isOpenControlled',
+            actions: ['invokeOnOpenChange'],
+          },
+          {
+            target: 'closed',
+            actions: ['invokeOnOpenChange'],
+          },
+        ],
+        'controlled.close': {
+          target: 'closed',
+        },
       },
     },
   },
 
   implementations: {
+    guards: {
+      isOpenControlled: ({ prop }) => prop('open') !== undefined,
+    },
+
     actions: {
-      invokeOnOpen({ prop }) {
-        prop('onOpenChange')?.({ open: true })
+      invokeOnOpenChange: ({ prop, state }) => {
+        const nextOpen = !state.matches('open')
+        prop('onOpenChange')?.({ open: nextOpen })
       },
-      invokeOnClose({ prop }) {
-        prop('onOpenChange')?.({ open: false })
-      },
-      toggleVisibility({ prop, send }) {
-        if (prop('open') === undefined)
-          return
-        send({ type: prop('open') ? 'OPEN' : 'CLOSE' })
+      // Controlled mode: sync machine state to match open prop
+      toggleVisibility: ({ prop, send }) => {
+        send({ type: prop('open') ? 'controlled.open' : 'controlled.close' })
       },
     },
   },

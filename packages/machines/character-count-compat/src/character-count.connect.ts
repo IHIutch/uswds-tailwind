@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { CharacterCountApi, CharacterCountSchema } from './character-count.types'
-import { visuallyHiddenStyle } from '@zag-js/dom-query'
+import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './character-count.anatomy'
 import * as dom from './character-count.dom'
 
@@ -9,70 +9,88 @@ export function connect<T extends PropTypes>(
   service: Service<CharacterCountSchema>,
   normalize: NormalizeProps<T>,
 ): CharacterCountApi<T> {
-  const { state, send, scope, context } = service
+  const { state, context, send, scope, computed } = service
 
-  const isInvalid = state.matches('invalid')
+  const focused = state.matches("focused")
+  const isOverLimit = computed("isOverLimit")
+  const statusText = computed("statusText")
 
   return {
-    maxLength: context.get('maxLength') || Infinity,
-    isInvalid,
+    /* ----- State properties ----- */
+    focused,
+    isOverLimit,
+    statusText,
+    srStatusText: context.get("srStatusText"),
+    currentLength: computed("currentLength"),
+    value: context.get("value"),
 
-    setCustomValidity(message: string) {
-      send({
-        type: 'SET_CUSTOM_VALIDITY',
-        value: message,
-      })
-    },
-
+    /* ----- Root props ----- */
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
-        'id': dom.getRootId(scope),
-        'data-invalid': isInvalid ? 'true' : undefined,
+        id: dom.getRootId(scope),
       })
     },
 
+    /* ----- Form group props ----- */
+    //   formGroupEl.classList.toggle(FORM_GROUP_ERROR_CLASS, isOverLimit)
+    getFormGroupProps() {
+      return normalize.element({
+        ...parts.formGroup.attrs,
+        id: dom.getFormGroupId(scope),
+        "data-invalid": dataAttr(isOverLimit),
+      })
+    },
+
+    /* ----- Label props ----- */
+    //   labelEl.classList.toggle(LABEL_ERROR_CLASS, isOverLimit)
     getLabelProps() {
       return normalize.label({
         ...parts.label.attrs,
-        'id': dom.getLabelId(scope),
-        'htmlFor': dom.getInputId(scope),
-        'data-invalid': isInvalid ? 'true' : undefined,
+        id: dom.getLabelId(scope),
+        htmlFor: dom.getInputId(scope),
+        "data-invalid": dataAttr(isOverLimit),
       })
     },
 
+    /* ----- Input props ----- */
     getInputProps() {
       return normalize.input({
         ...parts.input.attrs,
-        'id': dom.getInputId(scope),
-        'data-invalid': isInvalid ? 'true' : undefined,
-        'aria-invalid': isInvalid ? 'true' : undefined,
-        'data-maxlength': context.get('maxLength'),
-        'maxLength': Infinity,
+        id: dom.getInputId(scope),
+        defaultValue: context.get("value"),
+        "data-invalid": dataAttr(isOverLimit),
+        //   [INPUT]() { updateCountMessage(this); }
+        // Uses onInput (not onChange) per Zag convention for <input> elements.
         onInput(event) {
-          send({
-            type: 'INPUT',
-            value: event.currentTarget.value.length,
-          })
+          const target = event.currentTarget as HTMLInputElement | HTMLTextAreaElement
+          send({ type: "VALUE_CHANGE", value: target.value })
+        },
+        onFocus() {
+          send({ type: "INPUT.FOCUS" })
+        },
+        onBlur() {
+          send({ type: "INPUT.BLUR" })
         },
       })
     },
 
+    /* ----- Visual status props ----- */
     getStatusProps() {
       return normalize.element({
         ...parts.status.attrs,
-        'id': dom.getStatusId(scope),
-        'aria-live': 'polite',
-        'data-invalid': isInvalid ? 'true' : undefined,
+        id: dom.getStatusId(scope),
+        "aria-hidden": true,
+        "data-invalid": dataAttr(isOverLimit),
       })
     },
 
+    /* ----- Screen reader status props ----- */
     getSrStatusProps() {
       return normalize.element({
         ...parts.srStatus.attrs,
         'id': dom.getSrStatusId(scope),
         'aria-live': 'polite',
-        'data-invalid': isInvalid ? 'true' : undefined,
         'style': visuallyHiddenStyle,
       })
     },

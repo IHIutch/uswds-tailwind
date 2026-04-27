@@ -1,0 +1,122 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Introduction" />
+
+
+# USWDS + Tailwind React
+
+<img src="meta.jpg" />
+
+Welcome to the **USWDS + Tailwind React** component library - a modern implementation of the [U.S. Web Design System](https://designsystem.digital.gov/) built with React, Tailwind CSS, and Zag.js state machines.
+
+
+## Overview
+
+This library provides accessible, production-ready React components that follow USWDS design patterns while leveraging modern web technologies:
+
+- **🎨 Tailwind CSS** - Utility-first styling with USWDS design tokens
+- **⚛️ React** - Modern React patterns with hooks, context, and TypeScript
+- **🤖 Zag.js** - Robust state machines for complex interactions
+- **♿️ Accessible** - WCAG 2.1 compliant with ARIA best practices
+- **🎯 Typesafe** - Full TypeScript support with comprehensive types
+- **🧩 Composable** - Compound component pattern for maximum flexibility
+
+{/* ## Getting Started
+
+Install the package and its peer dependencies:
+
+```bash
+npm install @uswds-tailwind/react @uswds-tailwind/theme tailwindcss react react-dom
+``` */}
+
+## Usage
+
+```tsx
+import { Accordion } from '@uswds-tailwind/react'
+
+function Example() {
+  return (
+    <Accordion.Root>
+      <Accordion.Item>
+        <Accordion.ItemTrigger>
+          Section Title
+          <Accordion.ItemIndicator />
+        </Accordion.ItemTrigger>
+        <Accordion.ItemContent>
+          Section content goes here
+        </Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>
+  )
+}
+```
+
+## Key Features
+
+### Compound Components
+
+Each component is built using a compound component pattern, giving you full control over rendering and composition:
+
+```tsx
+<Button variant="blue" size="lg">Click me</Button>
+
+<Alert.Root variant="info">
+  <Alert.Indicator />
+  <Alert.Content>
+    <Alert.Title>Information</Alert.Title>
+    <Alert.Description>This is an informational alert</Alert.Description>
+  </Alert.Content>
+</Alert.Root>
+```
+
+### Customizable Styling
+
+All components accept `className` props and use [CVA](https://beta.cva.style/) (Class Variance Authority) for variant management:
+
+```tsx
+<Button className="custom-class" variant="red">
+  Custom Styled Button
+</Button>
+```
+
+### State Machines
+
+Complex interactive components use Zag.js state machines for reliable, predictable behavior:
+
+- Accordion - Expand/collapse panels
+- Dropdown - Menu interactions
+- Character Count - Input validation
+- And more...
+
+## Design Tokens
+
+This library uses USWDS design tokens through `@uswds-tailwind/theme`:
+
+- **Colors** - Complete USWDS color palette
+- **Typography** - USWDS type scale and fonts
+- **Spacing** - Consistent spacing system
+- **Breakpoints** - Responsive design utilities
+
+## Accessibility
+
+All components are built with accessibility as a core requirement:
+
+- ✅ Keyboard navigation
+- ✅ Screen reader support
+- ✅ Focus management
+- ✅ ARIA attributes
+- ✅ WCAG 2.1 Level AA compliance
+
+{/* ## Resources
+
+- [GitHub Repository](https://github.com/IHIutch/uswds-tailwind)
+- [USWDS Documentation](https://designsystem.digital.gov/)
+- [Component Examples](https://uswds-tailwind.com) */}
+
+## Contributing
+
+Contributions are welcome! Please see our contributing guidelines for more information.
+
+## License
+
+[MIT License](https://github.com/IHIutch/uswds-tailwind?tab=MIT-1-ov-file#readme)

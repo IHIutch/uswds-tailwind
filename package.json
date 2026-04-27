@@ -4,7 +4,8 @@
     "apps/*",
     "packages/machines/*",
     "packages/theme",
-    "packages/compat"
+    "packages/compat",
+    "packages/react"
   ],
   "packageManager": "pnpm@10.25.0",
   "scripts": {
@@ -17,7 +18,10 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
-    "changeset:release": "changeset tag && changeset publish"
+    "changeset:release": "changeset tag && changeset publish",
+    "test:browser": "vitest",
+    "release:beta": "pnpm build-packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit",
+    "release:alpha": "pnpm build-packages && changeset version && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

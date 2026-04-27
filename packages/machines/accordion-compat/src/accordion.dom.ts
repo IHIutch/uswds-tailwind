@@ -1,10 +1,23 @@
 import type { Scope } from '@zag-js/core'
+import { queryAll } from '@zag-js/dom-query'
+
+// ACCORDION = `.usa-accordion, .usa-accordion--bordered`
+// BUTTON = `.usa-accordion__button[aria-controls]:not(.usa-banner__button)`
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `accordion:${ctx.id}`
-export const getTriggerId = (ctx: Scope, value: string) => `accordion:${ctx.id}:trigger:${value}`
-export const getContentId = (ctx: Scope, value: string) => `accordion:${ctx.id}:content:${value}`
+export const getItemId = (ctx: Scope, value: string) => ctx.ids?.item?.(value) ?? `accordion:${ctx.id}:item:${value}`
+export function getItemContentId(ctx: Scope, value: string) {
+  return ctx.ids?.itemContent?.(value) ?? `accordion:${ctx.id}:content:${value}`
+}
+export function getItemTriggerId(ctx: Scope, value: string) {
+  return ctx.ids?.itemTrigger?.(value) ?? `accordion:${ctx.id}:trigger:${value}`
+}
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
-export const getTriggerEl = (ctx: Scope, value: string) => ctx.getById(getTriggerId(ctx, value))
-export const getContentEl = (ctx: Scope, value: string) => ctx.getById(getContentId(ctx, value))
-export const getAllTriggerEls = (ctx: Scope) => Array.from(getRootEl(ctx)?.querySelectorAll<HTMLElement>('[data-part="accordion-trigger"]') ?? [])
+
+// Uses data-ownedby to filter to direct children, mirroring the
+export function getTriggerEls(ctx: Scope) {
+  const ownerId = CSS.escape(getRootId(ctx))
+  const selector = `[data-controls][data-ownedby='${ownerId}']`
+  return queryAll(getRootEl(ctx), selector)
+}

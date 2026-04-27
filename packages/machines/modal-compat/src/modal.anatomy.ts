@@ -1,10 +1,11 @@
 import { createAnatomy } from '@zag-js/anatomy'
 
-export const anatomy = createAnatomy('dialog').parts(
+export const anatomy = createAnatomy('modal').parts(
   'trigger',
   'backdrop',
-  'positioner',
   'content',
+  'title',
+  'description',
   'closeTrigger',
 )
 

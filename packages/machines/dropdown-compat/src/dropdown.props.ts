@@ -5,16 +5,10 @@ import { createSplitProps } from '@zag-js/utils'
 export const props = createProps<DropdownProps>()([
   'id',
   'ids',
-  'dir',
   'getRootNode',
-  'open',
-  'defaultOpen',
+  'closeOnSelect',
   'onOpenChange',
-  'onInteractOutside',
-  'onFocusOutside',
-  'positioning',
-  'onEscapeKeyDown',
-  'onPointerDownOutside',
+  'onSelect',
 ])
 
 export const splitProps = createSplitProps<Partial<DropdownProps>>(props)

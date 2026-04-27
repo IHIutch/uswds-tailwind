@@ -1,93 +1,91 @@
-import type { EventObject, Machine, Service } from '@zag-js/core'
+import type { Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
- * Machine context
- * ----------------------------------------------------------------------------- */
+ * Callback details
+ * -----------------------------------------------------------------------------*/
+
+export interface ValueChangeDetails {
+  value: string
+  length: number
+  isOverLimit: boolean
+}
+
+/* -----------------------------------------------------------------------------
+ * Element IDs
+ * -----------------------------------------------------------------------------*/
 
 export type ElementIds = Partial<{
   root: string
+  formGroup: string
   label: string
   input: string
   status: string
   srStatus: string
 }>
 
+/* -----------------------------------------------------------------------------
+ * Machine props
+ * -----------------------------------------------------------------------------*/
+
 export interface CharacterCountProps extends CommonProperties {
-  /**
-   * The maximum number of characters allowed.
-   *  @default undefined
-   */
-  maxLength?: number
-  /**
-   * The debounce duration (in milliseconds) for updating the screen-reader status text.
-   * @default 1000 (1 second)
-   */
-  statusSrDebounce?: number
-  /**
-   * Function to generate the status text based on the character count and maximum length.
-   * @param count - The current character count.
-   * @param max - The maximum allowed characters.
-   * @returns The status text to be displayed.
-   */
-  getStatusText?: (count: number, max: number) => string
-  /**
-   * Custom validation message to display when the input is invalid.
-   */
-  customValidation?: string
+  ids?: ElementIds | undefined
+  maxLength?: number | undefined
+  value?: string | undefined
+  defaultValue?: string | undefined
+  validationMessage?: string | undefined
+  onValueChange?: ((details: ValueChangeDetails) => void) | undefined
+  // Customize the status message for both the visible and SR text. Useful
+  // for i18n or alternative formats ("N of M", "N words remaining").
+  getStatusText?: ((details: { count: number, max: number, isOverLimit: boolean }) => string) | undefined
 }
 
+type PropsWithDefault = "defaultValue" | "validationMessage"
+
+/* -----------------------------------------------------------------------------
+ * Machine schema
+ * -----------------------------------------------------------------------------*/
+
 export interface CharacterCountSchema {
-  props: RequiredBy<CharacterCountProps, 'getStatusText'>
+  props: RequiredBy<CharacterCountProps, PropsWithDefault>
+  state: "idle" | "focused"
   context: {
-    charCount: number
-    maxLength: number
-    statusText: string
+    value: string
     srStatusText: string
-    customValidation: string
   }
-  state: 'valid' | 'invalid'
-  action: 'updateCharCount' | 'updateStatus' | 'updateSrStatus' | 'toggleState' | 'setCustomValidity'
-  event: EventObject
+  computed: {
+    currentLength: number
+    isOverLimit: boolean
+    statusText: string
+  }
+  event:
+    | { type: "VALUE_CHANGE"; value: string }
+    | { type: "INPUT.FOCUS" }
+    | { type: "INPUT.BLUR" }
+  action: string
+  effect: string
+  guard: string
 }
 
 export type CharacterCountService = Service<CharacterCountSchema>
 export type CharacterCountMachine = Machine<CharacterCountSchema>
 
 /* -----------------------------------------------------------------------------
- * Component props
- * ----------------------------------------------------------------------------- */
+ * Component API
+ * -----------------------------------------------------------------------------*/
 
 export interface CharacterCountApi<T extends PropTypes = PropTypes> {
-  /**
-   * The maximum number of characters allowed.
-   */
-  maxLength: number
-  /**
-   * The current state of the input
-   */
-  isInvalid: boolean
-  /**
-   * Set a custom validation message for the input
-   * @param message - The custom validation message to set
-   */
-  setCustomValidity: (message: string) => void
-  // /**
-  //  * The debounce duration (in milliseconds) for updating the screen-reader status text.
-  //  * @default 1000 (1 second)
-  //  */
-  // statusSrDebounce?: number
-  // /**
-  //  * Function to generate the status text based on the character count and maximum length.
-  //  * @param count - The current character count.
-  //  * @param max - The maximum allowed characters.
-  //  * @returns The status text to be displayed.
-  //  */
-  // getStatusText: (count: number, max: number) => string
+  focused: boolean
+  isOverLimit: boolean
+  statusText: string
+  srStatusText: string
+  currentLength: number
+  value: string
 
-  getRootProps: () => T['element']
-  getLabelProps: () => T['label']
-  getInputProps: () => T['input']
-  getStatusProps: () => T['element']
-  getSrStatusProps: () => T['element']
+  getRootProps: () => T["element"]
+  getFormGroupProps: () => T["element"]
+  getLabelProps: () => T["label"]
+  getInputProps: () => T["input"]
+  getStatusProps: () => T["element"]
+  getSrStatusProps: () => T["element"]
 }

@@ -18,13 +18,6 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
     return new VanillaMachine(characterCount.machine, {
       ...props,
       maxLength: maxLength ? Number(maxLength) : undefined,
-      getStatusText: (count, max) => {
-        const diff = Math.abs(max - count)
-        const characters = diff === 1 ? 'character' : 'characters'
-        const guidance
-          = count === 0 ? 'allowed' : count > max ? 'over limit' : 'left'
-        return `${diff} ${characters} ${guidance}`
-      },
     })
   }
 

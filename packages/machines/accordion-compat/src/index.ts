@@ -1,12 +1,14 @@
-export { anatomy } from './accordion.anatomy'
+export { anatomy, parts } from './accordion.anatomy'
 export { connect } from './accordion.connect'
 export { machine } from './accordion.machine'
-export * from './accordion.props'
+export { itemProps, props, splitItemProps, splitProps } from './accordion.props'
 export type {
-  AccordionSchema,
   AccordionApi as Api,
   ElementIds,
+  ItemProps,
+  ItemState,
   AccordionMachine as Machine,
   AccordionProps as Props,
   AccordionService as Service,
+  ValueChangeDetails,
 } from './accordion.types'

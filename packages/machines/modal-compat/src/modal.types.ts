@@ -2,63 +2,82 @@ import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
- * Machine context
+ * Callback details
+ * ----------------------------------------------------------------------------- */
+
+export interface OpenChangeDetails {
+  open: boolean
+}
+
+/* -----------------------------------------------------------------------------
+ * Element IDs
  * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   trigger: string
-  positioner: string
   backdrop: string
   content: string
+  title: string
+  description: string
   closeTrigger: string
 }>
 
+/* -----------------------------------------------------------------------------
+ * Machine props
+ * ----------------------------------------------------------------------------- */
+
 export interface ModalProps extends CommonProperties {
-  /**
-   * The ids of the elements in the modal. Useful for composition.
-   */
   ids?: ElementIds | undefined
-  /**
-   * The controlled open state of the modal
-   */
-  open?: boolean | undefined
-  /**
-   * Whether the modal should close when the `Escape` key is pressed or the backdrop is clicked
-   * @default false
-   */
   forceAction?: boolean | undefined
+  preventScroll?: boolean | undefined
+  trapFocus?: boolean | undefined
+  modal?: boolean | undefined
+  role?: 'dialog' | 'alertdialog' | undefined
+  initialFocusEl?: (() => HTMLElement | null) | undefined
+  restoreFocus?: boolean | undefined
+  defaultOpen?: boolean | undefined
+  open?: boolean | undefined
+  onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
 }
 
-type PropsWithDefault = 'forceAction'
+type PropsWithDefault
+  = | 'forceAction'
+    | 'preventScroll'
+    | 'trapFocus'
+    | 'modal'
+    | 'role'
+    | 'restoreFocus'
+    | 'defaultOpen'
+
+/* -----------------------------------------------------------------------------
+ * Machine schema
+ * ----------------------------------------------------------------------------- */
 
 export interface ModalSchema {
   props: RequiredBy<ModalProps, PropsWithDefault>
-  context: {
-    isOpen: boolean
-  }
-  effect: 'trackDismissableElement' | 'preventScroll' | 'trapFocus' | 'hideContentBelow'
   state: 'open' | 'closed'
-  action: 'focusContent'
-  event: EventObject & { type: 'OPEN' | 'CLOSE' | 'TOGGLE' }
+  context: Record<string, never>
+  event: EventObject
+  action: string
+  effect: string
+  guard: string
 }
 
 export type ModalService = Service<ModalSchema>
-
 export type ModalMachine = Machine<ModalSchema>
 
 /* -----------------------------------------------------------------------------
- * Component props
+ * Component API
  * ----------------------------------------------------------------------------- */
 
 export interface ModalApi<T extends PropTypes = PropTypes> {
-  /**
-   * Whether the modal is open
-   */
   open: boolean
+  setOpen: (open: boolean) => void
 
-  getTriggerProps: (element: HTMLButtonElement | HTMLAnchorElement) => T['button']
+  getTriggerProps: () => T['button']
   getBackdropProps: () => T['element']
-  getPositionerProps: () => T['element']
   getContentProps: () => T['element']
-  getCloseTriggerProps: (element: HTMLButtonElement | HTMLAnchorElement) => T['button']
+  getTitleProps: () => T['element']
+  getDescriptionProps: () => T['element']
+  getCloseTriggerProps: () => T['button']
 }

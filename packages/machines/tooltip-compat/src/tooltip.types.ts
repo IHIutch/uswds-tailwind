@@ -2,6 +2,20 @@ import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
+ * Position type
+ * ----------------------------------------------------------------------------- */
+
+export type Position = 'top' | 'bottom' | 'right' | 'left'
+
+/* -----------------------------------------------------------------------------
+ * Callback details
+ * ----------------------------------------------------------------------------- */
+
+export interface OpenChangeDetails {
+  open: boolean
+}
+
+/* -----------------------------------------------------------------------------
  * Machine context
  * ----------------------------------------------------------------------------- */
 
@@ -11,78 +25,49 @@ export type ElementIds = Partial<{
   content: string
 }>
 
-export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right'
-
-export interface TooltipPosition {
-  x: number
-  y: number
-}
-
 export interface TooltipProps extends CommonProperties {
-  /**
-   * The positioning strategy for the tooltip
-   * @default "top"
-   */
-  placement?: TooltipPlacement
-  /**
-   * The content to display in the tooltip
-   */
-  content?: string
+  ids?: ElementIds | undefined
+  position?: Position | undefined
+  closeOnEscape?: boolean | undefined
+  disabled?: boolean | undefined
+  open?: boolean | undefined
+  defaultOpen?: boolean | undefined
+  onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
 }
+
+type PropsWithDefault
+  = | 'id'
+    | 'position'
+    | 'closeOnEscape'
 
 export interface TooltipSchema {
-  props: RequiredBy<TooltipProps, 'placement'>
-  context: {
-    placement: TooltipPlacement
-    initialPlacement: TooltipPlacement
-    content: string
-    position: TooltipPosition
-  }
   state: 'closed' | 'open'
-  action: 'getPosition' | 'initialize'
-  event:
-    | { type: 'OPEN' }
-    | { type: 'CLOSE' }
-    | { type: 'SET_PLACEMENT', placement: TooltipPlacement }
-    | EventObject
+  props: RequiredBy<TooltipProps, PropsWithDefault>
+  context: {
+    currentPosition: Position
+    isVisible: boolean
+    isWrapped: boolean
+    contentStyle: Record<string, string>
+  }
+  event: EventObject
+  action: string
+  effect: string
+  guard: string
 }
 
 export type TooltipService = Service<TooltipSchema>
+
 export type TooltipMachine = Machine<TooltipSchema>
 
 /* -----------------------------------------------------------------------------
- * Component props
+ * Component API
  * ----------------------------------------------------------------------------- */
 
 export interface TooltipApi<T extends PropTypes = PropTypes> {
-  /**
-   * Whether the tooltip is currently open
-   */
-  isOpen: boolean
-  /**
-   * The current placement of the tooltip
-   */
-  placement: TooltipPlacement
-  /**
-   * Show the tooltip
-   */
-  // show: () => void
-  /**
-   * Hide the tooltip
-   */
-  // hide: () => void
-  /**
-   * Set the tooltip placement
-   * @param placement - The new placement for the tooltip
-   */
-  setPlacement: (placement: TooltipPlacement) => void
-
-  /**
-   * Get the content of the tooltip
-   */
-  getContent: () => string
+  open: boolean
+  setOpen: (open: boolean) => void
 
   getRootProps: () => T['element']
-  getTriggerProps: () => T['button']
+  getTriggerProps: () => T['element']
   getContentProps: () => T['element']
 }

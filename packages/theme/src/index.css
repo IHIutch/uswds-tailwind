@@ -1,3 +1,9 @@
+@import "@fontsource-variable/public-sans";
+@import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/merriweather";
+@import "@fontsource-variable/roboto-mono";
+@import "@fontsource-variable/open-sans";
+
 @utility text-* {
   font-size: calc(--value(--text-*) * var(--font-normalization));
   line-height: calc(--value(--text-*--line-height) * var(--font-normalization));
@@ -9,15 +15,23 @@
 }
 
 @custom-variant thumb {
-  &::-webkit-slider-runnable-track,
-  &::-moz-range-track,
-  &::-ms-track {
+  &::-webkit-slider-thumb {
+    @slot;
+  }
+  &::-moz-range-thumb {
+    @slot;
+  }
+  &::-ms-thumb {
     @slot;
   }
 }
 @custom-variant track {
-  &::-webkit-slider-runnable-track
-  &::-moz-range-track,
+  &::-webkit-slider-runnable-track {
+    @slot;
+  }
+  &::-moz-range-track {
+    @slot;
+  }
   &::-ms-track {
     @slot;
   }

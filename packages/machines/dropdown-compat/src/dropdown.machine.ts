@@ -1,117 +1,76 @@
 import type { DropdownSchema } from './dropdown.types'
 import { createMachine } from '@zag-js/core'
-import { trackDismissableElement } from '@zag-js/dismissable'
-import { getPlacement } from '@zag-js/popper'
+import { addDomEvent, raf } from '@zag-js/dom-query'
 import * as dom from './dropdown.dom'
 
 export const machine = createMachine<DropdownSchema>({
   props({ props }) {
     return {
-      dir: 'ltr',
+      closeOnSelect: true,
       ...props,
     }
   },
 
-  initialState({ prop }) {
-    const open = prop('open') ?? prop('defaultOpen')
-    return open ? 'open' : 'closed'
+  initialState() {
+    return 'closed'
   },
 
-  watch({ track, send, prop }) {
-    track([() => prop('open')], () => {
-      const controlled = prop('open')
-      if (controlled === undefined)
-        return
-      send({ type: controlled ? 'CONTROLLED.OPEN' : 'CONTROLLED.CLOSE' })
-    })
+  context() {
+    return {}
   },
 
   states: {
-    open: {
-      effects: ['trackInteractOutside', 'trackPositioning'],
-      entry: ['invokeOnOpen'],
+    closed: {
       on: {
-        'CLOSE': { target: 'closed', actions: ['invokeOnClose'] },
-        'TOGGLE': { target: 'closed', actions: ['invokeOnClose'] },
-        'CONTROLLED.CLOSE': { target: 'closed' },
+        TRIGGER_CLICK: { target: 'open', actions: ['invokeOnOpen'] },
+        OPEN: { target: 'open', actions: ['invokeOnOpen'] },
       },
     },
-    closed: {
-      entry: [],
+    open: {
+      effects: ['trackInteractOutside'],
       on: {
-        'OPEN': { target: 'open', actions: ['invokeOnOpen'] },
-        'TOGGLE': { target: 'open', actions: ['invokeOnOpen'] },
-        'CONTROLLED.OPEN': { target: 'open' },
+        TRIGGER_CLICK: { target: 'closed', actions: ['invokeOnClose'] },
+        ESCAPE: { target: 'closed', actions: ['focusTrigger', 'invokeOnClose'] },
+        FOCUS_OUTSIDE: { target: 'closed', actions: ['invokeOnClose'] },
+        CLOSE: { target: 'closed', actions: ['invokeOnClose'] },
+        // Item click — close if closeOnSelect is true, otherwise stay open
+        ITEM_CLICK: [
+          { guard: 'closeOnSelect', target: 'closed', actions: ['invokeOnSelect', 'invokeOnClose'] },
+          { actions: ['invokeOnSelect'] },
+        ],
       },
     },
   },
 
   implementations: {
+    guards: {
+      closeOnSelect({ prop }) {
+        return !!prop('closeOnSelect')
+      },
+    },
+    effects: {
+      trackInteractOutside({ scope, send }) {
+        const doc = scope.getDoc()
+        return addDomEvent(doc, 'click', (event) => {
+          const rootEl = dom.getRootEl(scope)
+          if (rootEl && !rootEl.contains(event.target as Node)) {
+            send({ type: 'CLOSE' })
+          }
+        })
+      },
+    },
     actions: {
+      focusTrigger({ scope }) {
+        raf(() => dom.focusTriggerEl(scope))
+      },
       invokeOnOpen({ prop }) {
         prop('onOpenChange')?.({ open: true })
       },
       invokeOnClose({ prop }) {
         prop('onOpenChange')?.({ open: false })
       },
-      // closeRootMenu({ refs }) {
-      //   closeRootMenu({ parent: refs.get('parent') })
-      // },
-    },
-    effects: {
-      trackPositioning({ context, prop, scope }) {
-        const positioning = {
-          ...prop('positioning'),
-        }
-        context.set('currentPlacement', positioning.placement!)
-        const getContentEl = () => dom.getContentEl(scope)
-        const getTriggerEl = () => dom.getTriggerEl(scope)
-
-        return getPlacement(getTriggerEl, getContentEl, {
-          ...positioning,
-          gutter: 0,
-          defer: true,
-          onComplete(data) {
-            context.set('currentPlacement', data.placement)
-          },
-        })
-      },
-      trackInteractOutside({ scope, prop, send }) {
-        const getContentEl = () => dom.getContentEl(scope)
-        const restoreFocus = true
-        return trackDismissableElement(getContentEl, {
-          defer: true,
-          exclude: [dom.getTriggerEl(scope)],
-          onInteractOutside: prop('onInteractOutside'),
-          onFocusOutside(event) {
-            prop('onFocusOutside')?.(event)
-
-            // const target = getEventTarget(event.detail.originalEvent)
-            // const isWithinContextTrigger = contains(dom.getContextTriggerEl(scope), target)
-            // if (isWithinContextTrigger) {
-            //   event.preventDefault()
-            //   return
-            // }
-          },
-          onEscapeKeyDown(event) {
-            prop('onEscapeKeyDown')?.(event)
-            // closeRootMenu({ parent: refs.get('parent') })
-          },
-          onPointerDownOutside(event) {
-            prop('onPointerDownOutside')?.(event)
-
-            // const target = getEventTarget(event.detail.originalEvent)
-            // const isWithinContextTrigger = contains(dom.getContextTriggerEl(scope), target)
-            // if (isWithinContextTrigger && event.detail.contextmenu) {
-            //   event.preventDefault()
-            //   return
-            // }
-            // restoreFocus = !event.detail.focusable
-          },
-          onDismiss() {
-            send({ type: 'CLOSE', src: 'interact-outside', restoreFocus })
-          },
-        })
+      invokeOnSelect({ prop, event }) {
+        prop('onSelect')?.({ value: (event as any).value })
       },
     },
   },

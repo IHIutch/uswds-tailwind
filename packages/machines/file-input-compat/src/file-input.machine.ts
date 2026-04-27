@@ -1,29 +1,19 @@
-import type { FileData, FileInputSchema } from './file-input.types'
+import type { FileInputSchema, FileRejection } from './file-input.types'
 import { createMachine } from '@zag-js/core'
-import { getFileType, validate } from './file-input.utils'
+import { raf } from '@zag-js/dom-query'
+import * as dom from './file-input.dom'
+import { validateFiles } from './file-input.utils'
 
-function debounce<T extends (...args: any[]) => void>(callback: T, wait: number) {
-  let timeoutId: number | null = null
-  return (...args: Parameters<T>) => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId)
-    }
-    timeoutId = window.setTimeout(() => {
-      callback(...args)
-    }, wait)
-  }
+const DEFAULT_ERROR_MESSAGE = 'Error: This is not a valid file type.'
+
+function isFileEqual(a: File, b: File) {
+  return a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
 }
-
-const debounced = debounce((fn) => {
-  fn()
-}, 1000)
 
 export const machine = createMachine<FileInputSchema>({
   props({ props }) {
     return {
-      srStatusText: 'No file selected.',
-      disabled: false,
-      errorMessage: 'Error: This is not a valid file type.',
+      errorMessage: DEFAULT_ERROR_MESSAGE,
       ...props,
     }
   },
@@ -32,91 +22,123 @@ export const machine = createMachine<FileInputSchema>({
     return 'idle'
   },
 
-  context({ bindable, prop }) {
+  context({ bindable }) {
     return {
-      isDragging: bindable(() => ({ defaultValue: false })),
-      isInvalid: bindable(() => ({ defaultValue: false })),
-      isDisabled: bindable(() => ({ defaultValue: prop('disabled') })),
-      srStatusText: bindable(() => ({ defaultValue: prop('srStatusText') })),
-      files: bindable<FileData[]>(() => ({ defaultValue: [] })),
+      acceptedFiles: bindable<File[]>(() => ({
+        defaultValue: [],
+      })),
+      rejectedFiles: bindable<FileRejection[]>(() => ({
+        defaultValue: [],
+      })),
     }
   },
 
-  watch({ track, context, send }) {
-    track([() => context.get('files').length], () => {
-      const files = context.get('files')
-      if (files.length === 0) {
-        send({ type: 'RESET' })
-      }
-    })
+  computed: {
+    itemsLabel: ({ prop }) => (prop('multiple') ? 'files' : 'file'),
+  },
+
+  on: {
+    'INPUT.CHANGE': {
+      actions: ['setFilesFromEvent'],
+    },
+    'FILES.CLEAR': {
+      actions: ['clearFiles'],
+    },
+    'FILE.DELETE': {
+      actions: ['removeFile'],
+    },
+    'OPEN': {
+      actions: ['openFilePicker'],
+    },
   },
 
   states: {
     idle: {
       on: {
-        INVALID: { target: 'invalid' },
-        VALID: { target: 'valid' },
+        'INPUT.FOCUS': {
+          target: 'focused',
+        },
+        'DROPZONE.DRAG_OVER': {
+          target: 'dragging',
+        },
       },
     },
-    valid: {
+    focused: {
       on: {
-        RESET: { target: 'idle' },
-        INVALID: { target: 'invalid' },
+        'INPUT.BLUR': {
+          target: 'idle',
+        },
+        'DROPZONE.DRAG_OVER': {
+          target: 'dragging',
+        },
       },
     },
-    invalid: {
+    dragging: {
       on: {
-        RESET: { target: 'idle' },
-        VALID: { target: 'valid' },
+        'DROPZONE.DRAG_LEAVE': {
+          target: 'idle',
+        },
+        // Also processes files from dataTransfer since framework doesn't overlay
+        'DROPZONE.DROP': {
+          target: 'idle',
+          actions: ['setFilesFromEvent'],
+        },
       },
-    },
-  },
-
-  on: {
-    CHANGE: {
-      actions: ['validateFiles', 'updateSrStatus'],
     },
   },
 
   implementations: {
     actions: {
-      validateFiles({ context, event, prop, send }) {
-        const files = (event.files || []) as File[]
-        const isValid = validate(files, prop('accept'))
-        if (isValid) {
-          const fileData = files.map(file => ({
-            name: file.name,
-            type: getFileType(file.name.split('.').pop()),
-          }))
-          context.set('files', fileData)
-          send({ type: 'VALID' })
+      setFilesFromEvent({ context, event, prop }) {
+        const files: File[] = event.files ?? []
+        const acceptAttr = prop('accept')
+
+        if (acceptAttr) {
+          const allValid = validateFiles(files, acceptAttr)
+          if (!allValid) {
+            // All-or-nothing: if ANY file is invalid, reject ALL
+            const errorMessage = prop('errorMessage')
+            context.set('acceptedFiles', [])
+            context.set(
+              'rejectedFiles',
+              files.map(file => ({ file, errors: [errorMessage] })),
+            )
+            prop('onFileChange')?.({
+              acceptedFiles: [],
+              rejectedFiles: files.map(file => ({ file, errors: [errorMessage] })),
+            })
+            return
+          }
         }
-        else {
-          context.set('files', [])
-          send({ type: 'INVALID' })
-        }
+
+        context.set('acceptedFiles', files)
+        context.set('rejectedFiles', [])
+        prop('onFileChange')?.({ acceptedFiles: files, rejectedFiles: [] })
       },
-      updateSrStatus({ context, prop }) {
-        const files = context.get('files')
-        let text = prop('srStatusText')
 
-        if (files && files.length === 1 && files[0]) {
-          text = `You have selected the file: ${files[0].name}`
-        }
-        else if (files && files.length > 1) {
-          const fileNames = files.map(file => file.name).filter(Boolean)
-          text = `You have selected ${files.length} files: ${fileNames.join(', ')}`
-        }
+      // Clear all files and reset to initial state
+      clearFiles({ context, prop }) {
+        context.set('acceptedFiles', [])
+        context.set('rejectedFiles', [])
+        prop('onFileChange')?.({ acceptedFiles: [], rejectedFiles: [] })
+      },
 
-        debounced(() => {
-          context.set('srStatusText', text)
+      // Remove a specific file from the accepted list
+      removeFile({ context, event, prop }) {
+        const fileToRemove: File = event.file
+        const updatedFiles = context.get('acceptedFiles').filter(file => !isFileEqual(file, fileToRemove))
+        context.set('acceptedFiles', updatedFiles)
+        prop('onFileChange')?.({
+          acceptedFiles: updatedFiles,
+          rejectedFiles: context.get('rejectedFiles'),
         })
       },
-      checkEmptyFiles({ context, send }) {
-        const files = context.get('files')
-        if (!files || files.length === 0) {
-          send({ type: 'RESET' })
-        }
+
+      // Programmatically open the file dialog
+      openFilePicker({ scope }) {
+        raf(() => {
+          dom.getInputEl(scope)?.click()
+        })
       },
     },
   },

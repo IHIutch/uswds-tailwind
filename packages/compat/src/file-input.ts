@@ -79,7 +79,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     this.renderSrStatus(this.srStatus)
     this.renderErrorMessage(this.errorMessage)
     this.renderPreviewList(this.previewList)
-    this.renderPreviewHeader(this.previewHeader)
+    this.renderPreviewTitle(this.previewTitle)
   }
 
   // Helper to get required elements
@@ -115,7 +115,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     return this.getElement('file-input-preview-list')
   }
 
-  private get previewHeader() {
+  private get previewTitle() {
     return this.getElement('file-input-preview-header')
   }
 
@@ -161,8 +161,8 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     })
   }
 
-  private renderPreviewHeader(el: HTMLElement) {
-    spreadProps(el, this.api.getPreviewHeaderProps())
+  private renderPreviewTitle(el: HTMLElement) {
+    spreadProps(el, this.api.getPreviewTitleProps())
     const fileCount = this.machine.context.get('files')?.length || 0
     el.textContent = fileCount === 1 ? 'Selected file' : `${fileCount} files selected`
   }

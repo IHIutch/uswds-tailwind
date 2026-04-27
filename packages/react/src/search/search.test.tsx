@@ -1,0 +1,174 @@
+import { expect, it, vi } from 'vitest'
+import { render } from 'vitest-browser-react'
+import { Field } from '../field/field'
+import { Search } from './search'
+
+it('search works standalone', async () => {
+  const screen = await render(
+    <Search.Root>
+      <Search.Label>Search</Search.Label>
+      <Search.Input />
+      <Search.Button>Go</Search.Button>
+    </Search.Root>,
+  )
+
+  await expect.element(screen.getByRole('searchbox')).toBeVisible()
+})
+
+it('field.Label htmlFor matches Search.Input id', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Search</Field.Label>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  const label = screen.getByText('Search')
+  const input = screen.getByRole('searchbox')
+  expect(label.element().getAttribute('for')).toBe(input.element().id)
+})
+
+it('search inherits disabled from Field.Root', async () => {
+  const screen = await render(
+    <Field.Root disabled>
+      <Field.Label>Search</Field.Label>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  await expect.element(screen.getByRole('searchbox')).toBeDisabled()
+})
+
+it('search inherits invalid from Field.Root', async () => {
+  const screen = await render(
+    <Field.Root invalid>
+      <Field.Label>Search</Field.Label>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  await expect.element(screen.getByRole('searchbox')).toHaveAttribute('aria-invalid', 'true')
+})
+
+it('field.Description id is referenced by Search.Input aria-describedby', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Search</Field.Label>
+      <Field.Description>Help text</Field.Description>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  const input = screen.getByRole('searchbox')
+  await expect.element(input).toHaveAccessibleDescription(/Help text/)
+})
+
+it('field.ErrorMessage id is referenced by Search.Input aria-describedby when invalid', async () => {
+  const screen = await render(
+    <Field.Root invalid>
+      <Field.Label>Search</Field.Label>
+      <Field.Description>Help text</Field.Description>
+      <Field.ErrorMessage>Required</Field.ErrorMessage>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  const input = screen.getByRole('searchbox')
+  await expect.element(input).toHaveAccessibleDescription(/Help text/)
+  await expect.element(input).toHaveAccessibleDescription(/Required/)
+})
+
+it('aria-describedby updates when invalid is set dynamically', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Search</Field.Label>
+      <Field.Description>Help text</Field.Description>
+      <Field.ErrorMessage>Required</Field.ErrorMessage>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  const input = screen.getByRole('searchbox')
+  await expect.element(input).toHaveAccessibleDescription(/Help text/)
+  await expect.element(input).not.toHaveAccessibleDescription(/Required/)
+
+  await screen.rerender(
+    <Field.Root invalid>
+      <Field.Label>Search</Field.Label>
+      <Field.Description>Help text</Field.Description>
+      <Field.ErrorMessage>Required</Field.ErrorMessage>
+      <Search.Root>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+    </Field.Root>,
+  )
+
+  await expect.element(input).toHaveAccessibleDescription(/Help text/)
+  await expect.element(input).toHaveAccessibleDescription(/Required/)
+})
+
+it('search input accepts user text input', async () => {
+  const screen = await render(
+    <Search.Root>
+      <Search.Label>Search</Search.Label>
+      <Search.Input />
+      <Search.Button>Go</Search.Button>
+    </Search.Root>,
+  )
+  const input = screen.getByRole('searchbox')
+  await input.fill('hello world')
+  await expect.element(input).toHaveValue('hello world')
+})
+
+it('clicking search button fires handler', async () => {
+  const handleClick = vi.fn()
+  const screen = await render(
+    <Search.Root>
+      <Search.Label>Search</Search.Label>
+      <Search.Input />
+      <Search.Button onClick={handleClick}>Go</Search.Button>
+    </Search.Root>,
+  )
+  await screen.getByRole('button', { name: 'Go' }).click()
+  expect(handleClick).toHaveBeenCalled()
+})
+
+it('submits value in form data', async () => {
+  let formData = new FormData()
+  const screen = await render(
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formData = new FormData(e.currentTarget)
+    }}
+    >
+      <Search.Root name="q">
+        <Search.Label>Search</Search.Label>
+        <Search.Input />
+        <Search.Button>Go</Search.Button>
+      </Search.Root>
+      <button type="submit">Submit</button>
+    </form>,
+  )
+  await screen.getByRole('searchbox').fill('test query')
+  await screen.getByRole('button', { name: 'Submit' }).click()
+  expect(formData.get('q')).toBe('test query')
+})

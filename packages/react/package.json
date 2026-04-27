@@ -1,0 +1,237 @@
+{
+  "name": "@uswds-tailwind/react",
+  "type": "module",
+  "version": "0.3.0-alpha.3",
+  "publishConfig": {
+    "tag": "alpha"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "style": "./styles.css",
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./accordion": {
+      "types": "./dist/accordion/index.d.mts",
+      "import": "./dist/accordion/index.mjs"
+    },
+    "./alert": {
+      "types": "./dist/alert/index.d.mts",
+      "import": "./dist/alert/index.mjs"
+    },
+    "./banner": {
+      "types": "./dist/banner/index.d.mts",
+      "import": "./dist/banner/index.mjs"
+    },
+    "./breadcrumb": {
+      "types": "./dist/breadcrumb/index.d.mts",
+      "import": "./dist/breadcrumb/index.mjs"
+    },
+    "./button": {
+      "types": "./dist/button/index.d.mts",
+      "import": "./dist/button/index.mjs"
+    },
+    "./button-group": {
+      "types": "./dist/button-group/index.d.mts",
+      "import": "./dist/button-group/index.mjs"
+    },
+    "./card": {
+      "types": "./dist/card/index.d.mts",
+      "import": "./dist/card/index.mjs"
+    },
+    "./character-count": {
+      "types": "./dist/character-count/index.d.mts",
+      "import": "./dist/character-count/index.mjs"
+    },
+    "./checkbox": {
+      "types": "./dist/checkbox/index.d.mts",
+      "import": "./dist/checkbox/index.mjs"
+    },
+    "./collection": {
+      "types": "./dist/collection/index.d.mts",
+      "import": "./dist/collection/index.mjs"
+    },
+    "./combobox": {
+      "types": "./dist/combobox/index.d.mts",
+      "import": "./dist/combobox/index.mjs"
+    },
+    "./date-picker": {
+      "types": "./dist/date-picker/index.d.mts",
+      "import": "./dist/date-picker/index.mjs"
+    },
+    "./dropdown": {
+      "types": "./dist/dropdown/index.d.mts",
+      "import": "./dist/dropdown/index.mjs"
+    },
+    "./field": {
+      "types": "./dist/field/index.d.mts",
+      "import": "./dist/field/index.mjs"
+    },
+    "./fieldset": {
+      "types": "./dist/fieldset/index.d.mts",
+      "import": "./dist/fieldset/index.mjs"
+    },
+    "./file-input": {
+      "types": "./dist/file-input/index.d.mts",
+      "import": "./dist/file-input/index.mjs"
+    },
+    "./footer": {
+      "types": "./dist/footer/index.d.mts",
+      "import": "./dist/footer/index.mjs"
+    },
+    "./header": {
+      "types": "./dist/header/index.d.mts",
+      "import": "./dist/header/index.mjs"
+    },
+    "./identifier": {
+      "types": "./dist/identifier/index.d.mts",
+      "import": "./dist/identifier/index.mjs"
+    },
+    "./in-page-navigation": {
+      "types": "./dist/in-page-navigation/index.d.mts",
+      "import": "./dist/in-page-navigation/index.mjs"
+    },
+    "./input": {
+      "types": "./dist/input/index.d.mts",
+      "import": "./dist/input/index.mjs"
+    },
+    "./input-group": {
+      "types": "./dist/input-group/index.d.mts",
+      "import": "./dist/input-group/index.mjs"
+    },
+    "./input-mask": {
+      "types": "./dist/input-mask/index.d.mts",
+      "import": "./dist/input-mask/index.mjs"
+    },
+    "./link": {
+      "types": "./dist/link/index.d.mts",
+      "import": "./dist/link/index.mjs"
+    },
+    "./memorable-date": {
+      "types": "./dist/memorable-date/index.d.mts",
+      "import": "./dist/memorable-date/index.mjs"
+    },
+    "./modal": {
+      "types": "./dist/modal/index.d.mts",
+      "import": "./dist/modal/index.mjs"
+    },
+    "./nav": {
+      "types": "./dist/nav/index.d.mts",
+      "import": "./dist/nav/index.mjs"
+    },
+    "./pagination": {
+      "types": "./dist/pagination/index.d.mts",
+      "import": "./dist/pagination/index.mjs"
+    },
+    "./process-list": {
+      "types": "./dist/process-list/index.d.mts",
+      "import": "./dist/process-list/index.mjs"
+    },
+    "./radio": {
+      "types": "./dist/radio/index.d.mts",
+      "import": "./dist/radio/index.mjs"
+    },
+    "./range-slider": {
+      "types": "./dist/range-slider/index.d.mts",
+      "import": "./dist/range-slider/index.mjs"
+    },
+    "./search": {
+      "types": "./dist/search/index.d.mts",
+      "import": "./dist/search/index.mjs"
+    },
+    "./select": {
+      "types": "./dist/select/index.d.mts",
+      "import": "./dist/select/index.mjs"
+    },
+    "./side-navigation": {
+      "types": "./dist/side-navigation/index.d.mts",
+      "import": "./dist/side-navigation/index.mjs"
+    },
+    "./step-indicator": {
+      "types": "./dist/step-indicator/index.d.mts",
+      "import": "./dist/step-indicator/index.mjs"
+    },
+    "./summary-box": {
+      "types": "./dist/summary-box/index.d.mts",
+      "import": "./dist/summary-box/index.mjs"
+    },
+    "./table": {
+      "types": "./dist/table/index.d.mts",
+      "import": "./dist/table/index.mjs"
+    },
+    "./tag": {
+      "types": "./dist/tag/index.d.mts",
+      "import": "./dist/tag/index.mjs"
+    },
+    "./time-picker": {
+      "types": "./dist/time-picker/index.d.mts",
+      "import": "./dist/time-picker/index.mjs"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip/index.d.mts",
+      "import": "./dist/tooltip/index.mjs"
+    },
+    "./styles.css": "./styles.css"
+  },
+  "files": [
+    "dist",
+    "styles.css"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "deploy-storybook": "pnpm build-storybook && pnpx wrangler deploy --assets=./storybook-static"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "dependencies": {
+    "@uswds-tailwind/accordion-compat": "workspace:*",
+    "@uswds-tailwind/character-count-compat": "workspace:*",
+    "@uswds-tailwind/collapse-compat": "workspace:*",
+    "@uswds-tailwind/combobox-compat": "workspace:*",
+    "@uswds-tailwind/date-picker-compat": "workspace:*",
+    "@uswds-tailwind/dropdown-compat": "workspace:*",
+    "@uswds-tailwind/file-input-compat": "workspace:*",
+    "@uswds-tailwind/input-mask-compat": "workspace:*",
+    "@uswds-tailwind/modal-compat": "workspace:*",
+    "@uswds-tailwind/table-compat": "workspace:*",
+    "@uswds-tailwind/theme": "workspace:*",
+    "@uswds-tailwind/tooltip-compat": "workspace:*",
+    "@zag-js/anatomy": "catalog:",
+    "@zag-js/dom-query": "catalog:",
+    "@zag-js/react": "catalog:",
+    "@zag-js/types": "catalog:",
+    "@zag-js/utils": "catalog:",
+    "cva": "catalog:",
+    "tailwind-merge": "catalog:"
+  },
+  "devDependencies": {
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@types/react": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "@vitest/browser": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "fathom-client": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vitest-browser-react": "catalog:"
+  }
+}

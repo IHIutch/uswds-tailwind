@@ -18,6 +18,7 @@ export const props = createProps<ModalProps>()([
   'onInteractOutside',
   'onOpenChange',
   'onPointerDownOutside',
+  'onRequestDismiss',
   'defaultOpen',
   'open',
   'persistentElements',

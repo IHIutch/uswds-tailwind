@@ -1,0 +1,14 @@
+{
+  "name": "uswds-tailwind-react-storybook",
+  "compatibility_date": "2025-08-18",
+  "assets": {
+    "directory": "./storybook-static", // default build output directory
+    "binding": "ASSETS"
+  },
+  "main": "./.storybook/worker.js", // worker entry point
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  }
+}

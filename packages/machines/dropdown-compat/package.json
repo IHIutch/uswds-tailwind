@@ -1,7 +1,10 @@
 {
   "name": "@uswds-tailwind/dropdown-compat",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0-alpha.3",
+  "publishConfig": {
+    "tag": "alpha"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
@@ -22,7 +25,6 @@
     "@zag-js/core": "catalog:",
     "@zag-js/dismissable": "catalog:",
     "@zag-js/dom-query": "catalog:",
-    "@zag-js/popper": "catalog:",
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:"
   }

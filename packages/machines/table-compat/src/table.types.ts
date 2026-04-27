@@ -1,91 +1,103 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
-import type { CommonProperties, PropTypes } from '@zag-js/types'
+import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
- * Machine context
+ * Sort direction
+ * ----------------------------------------------------------------------------- */
+
+export type SortDirection = 'ascending' | 'descending'
+
+/* -----------------------------------------------------------------------------
+ * Callback details
+ * ----------------------------------------------------------------------------- */
+
+export interface SortChangeDetails {
+  columnIndex: number
+  direction: SortDirection
+}
+
+/* -----------------------------------------------------------------------------
+ * Element IDs
  * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   root: string
-  table: string
-  caption: string
-  thead: string
-  tbody: string
-  tfoot: string
+  header: (index: number) => string
+  sortButton: (index: number) => string
+  srStatus: string
 }>
 
-export type SortDirection = 'asc' | 'desc' | undefined
-
-export type SortType = 'text' | 'number' | 'date'
-
-export interface ColumnConfig {
-  /** The index of the column (0-based) */
-  index: number
-  /** The type of data in the column for sorting */
-  type?: SortType
-  /** Whether this column is sortable */
-  sortable?: boolean
-  /** Custom sort function for this column */
-  sortFn?: (a: string, b: string) => number
-  /** Attribute name to read sort values from (defaults to text content) */
-  sortAttribute?: string
-}
-
-export interface SortableTableProps extends CommonProperties { }
-
-// type PropsWithDefault = ''
-
-export interface SortableTableSchema {
-  props: SortableTableProps
-  context: {
-    sortedColumn: number
-    sortDirection: SortDirection
-    srStatus: string
-  }
-  state: 'idle'
-  action: 'sort' | 'updateSrStatus'
-  event: EventObject & {
-    type: 'SORT'
-    columnIndex: number
-  }
-}
-
-export type SortableTableService = Service<SortableTableSchema>
-export type SortableTableMachine = Machine<SortableTableSchema>
-
 /* -----------------------------------------------------------------------------
- * Component props
+ * Machine props
  * ----------------------------------------------------------------------------- */
 
-export interface SortableTableApi<T extends PropTypes = PropTypes> {
-  /**
-   * The currently sorted column index (-1 if none)
-   */
-  sortedColumn: number
+export interface TableProps extends CommonProperties {
+  ids?: ElementIds | undefined
+  captionText?: string | undefined
+  columnNames?: Record<number, string> | undefined
+  defaultSortedColumnIndex?: number | undefined
+  defaultSortDirection?: SortDirection | undefined
+  onSortChange?: ((details: SortChangeDetails) => void) | undefined
+}
 
-  /**
-   * The current sort direction
-   */
-  sortDirection: SortDirection
+type PropsWithDefault = 'defaultSortDirection'
 
-  /**
-   * Sort the table by a specific column
-   */
-  sortByColumn: (columnIndex: number) => void
+/* -----------------------------------------------------------------------------
+ * Machine schema
+ * ----------------------------------------------------------------------------- */
 
-  /**
-   * Get the sort direction for a specific column
-   */
-  getColumnSortDirection: (columnIndex: number) => SortDirection
+export interface TableSchema {
+  props: RequiredBy<TableProps, PropsWithDefault>
+  state: 'idle' | 'focused'
+  context: {
+    sortedColumnIndex: number | null
+    sortDirection: SortDirection | null
+  }
+  computed: {
+    isSorted: boolean
+    announcement: string
+  }
+  event: EventObject
+  action: string
+  effect: string
+  guard: string
+}
 
-  /**
-   * Check if a column is currently sorted
-   */
-  isColumnSorted: (columnIndex: number) => boolean
+export type TableService = Service<TableSchema>
+export type TableMachine = Machine<TableSchema>
+
+/* -----------------------------------------------------------------------------
+ * Header props for connect
+ * ----------------------------------------------------------------------------- */
+
+export interface HeaderProps {
+  index: number
+}
+
+/* -----------------------------------------------------------------------------
+ * Cell props for connect
+ * ----------------------------------------------------------------------------- */
+
+export interface CellProps {
+  columnIndex: number
+}
+
+/* -----------------------------------------------------------------------------
+ * Component API
+ * ----------------------------------------------------------------------------- */
+
+export interface TableApi<T extends PropTypes = PropTypes> {
+  focused: boolean
+  isSorted: boolean
+  sortedColumnIndex: number | null
+  sortDirection: SortDirection | null
+  announcement: string
+
+  sort: (columnIndex: number, direction?: SortDirection) => void
 
   getRootProps: () => T['element']
-  getHeaderCellProps: (columnIndex: number) => T['element']
-  getSortButtonProps: (columnIndex: number) => T['button']
-  getBodyCellProps: (columnIndex: number) => T['element']
+  getHeaderProps: (props: HeaderProps) => T['element']
+  getSortButtonProps: (props: HeaderProps) => T['button']
+  getCellProps: (props: CellProps) => T['element']
   getSrStatusProps: () => T['element']
 }

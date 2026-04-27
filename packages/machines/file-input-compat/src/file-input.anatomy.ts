@@ -2,17 +2,18 @@ import { createAnatomy } from '@zag-js/anatomy'
 
 export const anatomy = createAnatomy('file-input').parts(
   'root',
-  'dropzone',
   'label',
+  'dropzone',
   'input',
-  'errorMessage',
   'instructions',
   'srStatus',
-  'previewHeader',
-  'previewList',
-  'previewItem',
-  'previewItemIcon',
-  'previewItemContent',
+  'errorMessage',
+  'previewHeading',
+  'itemGroup',
+  'item',
+  'itemPreview',
+  'itemName',
+  'itemDeleteTrigger',
 )
 
 export const parts = anatomy.build()

@@ -1,6 +1,9 @@
 {
   "name": "@uswds-tailwind/theme",
-  "version": "0.2.0",
+  "version": "0.3.0-alpha.3",
+  "publishConfig": {
+    "tag": "alpha"
+  },
   "style": "src/index.css",
   "exports": {
     ".": {
@@ -16,11 +19,26 @@
     "src/index.css",
     "src/tailwind.config.ts"
   ],
+  "peerDependencies": {
+    "tailwindcss": "^4.0.0"
+  },
   "dependencies": {
-    "@iconify/tailwind4": "catalog:",
     "@tailwindcss/forms": "catalog:",
     "@tailwindcss/typography": "catalog:",
-    "tailwindcss": "catalog:",
     "tailwindcss-animate": "catalog:"
+  },
+  "devDependencies": {
+    "tailwindcss": "catalog:"
+  },
+  "optionalDependencies": {
+    "@fontsource-variable/merriweather": "catalog:",
+    "@fontsource-variable/open-sans": "catalog:",
+    "@fontsource-variable/public-sans": "catalog:",
+    "@fontsource-variable/roboto-mono": "catalog:",
+    "@fontsource-variable/source-sans-3": "catalog:",
+    "@iconify-json/fa-solid": "catalog:",
+    "@iconify-json/fa6-brands": "catalog:",
+    "@iconify-json/material-symbols": "catalog:",
+    "@iconify/tailwind4": "catalog:"
   }
 }
