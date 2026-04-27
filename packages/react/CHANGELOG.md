@@ -1,4 +1,4 @@
-# @uswds-tailwind/theme
+# @uswds-tailwind/react
 
 ## 0.3.0-alpha.0
 
@@ -15,22 +15,18 @@
   per-prop renames, compound-part ergonomics polish, and small fixes
   between `-alpha.N` releases.
 
-## 0.2.0
-
-## 0.1.0
-
-### Minor Changes
-
-- f1236e1: Basic working components with all USWDS tests passing
-
-## 0.0.3
-
 ### Patch Changes
 
-- 67ca090: Test
-
-## 0.0.2
-
-### Patch Changes
-
-- Test
+- Updated dependencies [31de347]
+  - @uswds-tailwind/theme@0.3.0-alpha.0
+  - @uswds-tailwind/accordion-compat@0.3.0-alpha.0
+  - @uswds-tailwind/character-count-compat@0.3.0-alpha.0
+  - @uswds-tailwind/collapse-compat@0.3.0-alpha.0
+  - @uswds-tailwind/combobox-compat@0.3.0-alpha.0
+  - @uswds-tailwind/date-picker-compat@0.3.0-alpha.0
+  - @uswds-tailwind/dropdown-compat@0.3.0-alpha.0
+  - @uswds-tailwind/file-input-compat@0.3.0-alpha.0
+  - @uswds-tailwind/input-mask-compat@0.3.0-alpha.0
+  - @uswds-tailwind/modal-compat@0.3.0-alpha.0
+  - @uswds-tailwind/table-compat@0.3.0-alpha.0
+  - @uswds-tailwind/tooltip-compat@0.3.0-alpha.0

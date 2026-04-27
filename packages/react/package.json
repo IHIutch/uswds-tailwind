@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/react",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.3.0-alpha.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
@@ -30,20 +30,11 @@
     "deploy-storybook": "pnpm build-storybook && pnpx wrangler deploy --assets=./storybook-static"
   },
   "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "tailwindcss": "^4.0.0"
   },
   "dependencies": {
-    "@fontsource-variable/merriweather": "catalog:",
-    "@fontsource-variable/open-sans": "catalog:",
-    "@fontsource-variable/public-sans": "catalog:",
-    "@fontsource-variable/roboto-mono": "catalog:",
-    "@fontsource-variable/source-sans-3": "catalog:",
-    "@iconify-json/fa-solid": "catalog:",
-    "@iconify-json/fa6-brands": "catalog:",
-    "@iconify-json/material-symbols": "catalog:",
-    "@storybook/addon-docs": "catalog:",
-    "@storybook/react-vite": "catalog:",
-    "@tailwindcss/vite": "catalog:",
     "@uswds-tailwind/accordion-compat": "workspace:*",
     "@uswds-tailwind/character-count-compat": "workspace:*",
     "@uswds-tailwind/collapse-compat": "workspace:*",
@@ -56,25 +47,36 @@
     "@uswds-tailwind/table-compat": "workspace:*",
     "@uswds-tailwind/theme": "workspace:*",
     "@uswds-tailwind/tooltip-compat": "workspace:*",
-    "@vitejs/plugin-react": "catalog:",
     "@zag-js/anatomy": "catalog:",
     "@zag-js/dom-query": "catalog:",
     "@zag-js/react": "catalog:",
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:",
     "cva": "catalog:",
-    "storybook": "catalog:",
-    "tailwind-merge": "catalog:",
-    "tailwindcss": "catalog:",
-    "vite": "catalog:"
+    "tailwind-merge": "catalog:"
   },
   "devDependencies": {
+    "@fontsource-variable/merriweather": "catalog:",
+    "@fontsource-variable/open-sans": "catalog:",
+    "@fontsource-variable/public-sans": "catalog:",
+    "@fontsource-variable/roboto-mono": "catalog:",
+    "@fontsource-variable/source-sans-3": "catalog:",
+    "@iconify-json/fa-solid": "catalog:",
+    "@iconify-json/fa6-brands": "catalog:",
+    "@iconify-json/material-symbols": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@tailwindcss/vite": "catalog:",
     "@types/react": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
     "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
+    "vite": "catalog:",
     "vitest": "catalog:",
     "vitest-browser-react": "catalog:"
   }
