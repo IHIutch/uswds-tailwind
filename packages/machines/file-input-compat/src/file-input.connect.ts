@@ -1,6 +1,6 @@
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { FileInputApi, FileInputService, ItemProps } from './file-input.types'
-import { dataAttr } from '@zag-js/dom-query'
+import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
 import { getFilePreviewType } from './file-input.utils'
@@ -33,14 +33,17 @@ export function connect<T extends PropTypes>(
     previewHeadingText = `${acceptedFiles.length} files selected`
   }
 
+  // Consumer can override with the `srStatusText` prop (i18n hook).
   const defaultStatusText = `No ${itemsLabel} selected.`
-  let statusMessage = defaultStatusText
-  if (acceptedFiles.length === 1) {
-    statusMessage = `You have selected the file: ${acceptedFiles[0]!.name}`
-  }
-  else if (acceptedFiles.length > 1) {
-    const fileNames = acceptedFiles.map(f => f.name).join(', ')
-    statusMessage = `You have selected ${acceptedFiles.length} files: ${fileNames}`
+  let srStatusText = prop('srStatusText') ?? defaultStatusText
+  if (prop('srStatusText') == null) {
+    if (acceptedFiles.length === 1) {
+      srStatusText = `You have selected the file: ${acceptedFiles[0]!.name}`
+    }
+    else if (acceptedFiles.length > 1) {
+      const fileNames = acceptedFiles.map(f => f.name).join(', ')
+      srStatusText = `You have selected ${acceptedFiles.length} files: ${fileNames}`
+    }
   }
 
   const errorMessageText = prop('errorMessage')
@@ -66,7 +69,7 @@ export function connect<T extends PropTypes>(
     acceptedFiles,
     rejectedFiles,
     errorMessageText,
-    statusMessage,
+    srStatusText,
     previewHeadingText,
     changeItemText,
     dragText,
@@ -198,21 +201,11 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getStatusProps() {
+    getSrStatusProps() {
       return normalize.element({
-        ...parts.status.attrs,
+        ...parts.srStatus.attrs,
         'aria-live': 'polite' as const,
-        'style': {
-          position: 'absolute' as const,
-          width: '1px',
-          height: '1px',
-          padding: '0',
-          margin: '-1px',
-          overflow: 'hidden',
-          clip: 'rect(0, 0, 0, 0)',
-          whiteSpace: 'nowrap' as const,
-          borderWidth: '0',
-        },
+        'style': visuallyHiddenStyle,
       })
     },
 
@@ -235,6 +228,8 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.itemGroup.attrs,
         'data-disabled': dataAttr(disabled),
+        'data-valid': dataAttr(hasFiles),
+        'data-invalid': dataAttr(hasInvalidFiles),
       })
     },
 

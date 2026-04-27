@@ -107,7 +107,7 @@ function TableRoot({
           {...rootProps}
           className={cx('border-spacing-0 border-t border-l', className)}
         />
-        <TableAnnouncementRegion />
+        <TableSrStatus />
       </div>
     </TableContext.Provider>
   )
@@ -262,17 +262,17 @@ function TableScrollArea({ className, ...props }: TableScrollAreaProps) {
   )
 }
 
-// AnnouncementRegion (SR-only live region for sort announcements)
+// SrStatus (SR-only live region for sort announcements)
 
-type TableAnnouncementRegionProps = React.ComponentPropsWithoutRef<'div'>
+type TableSrStatusProps = React.ComponentPropsWithoutRef<'div'>
 
-function TableAnnouncementRegion({ className, ...props }: TableAnnouncementRegionProps) {
+function TableSrStatus({ className, ...props }: TableSrStatusProps) {
   const { api } = useTableContext()
-  const mergedProps = mergeProps(api.getAnnouncementRegionProps(), props)
+  const mergedProps = mergeProps(api.getSrStatusProps(), props)
   return (
     <div
       {...mergedProps}
-      className={cx('sr-only', className)}
+      className={cx(className)}
     >
       {api.announcement}
     </div>
@@ -290,7 +290,7 @@ TableRow.displayName = 'Table.Row'
 TableColumnHeader.displayName = 'Table.ColumnHeader'
 TableCell.displayName = 'Table.Cell'
 TableScrollArea.displayName = 'Table.ScrollArea'
-TableAnnouncementRegion.displayName = 'Table.AnnouncementRegion'
+TableSrStatus.displayName = 'Table.SrStatus'
 
 export const Table = {
   Root: TableRoot,
@@ -302,5 +302,5 @@ export const Table = {
   ColumnHeader: TableColumnHeader,
   Cell: TableCell,
   ScrollArea: TableScrollArea,
-  AnnouncementRegion: TableAnnouncementRegion,
+  SrStatus: TableSrStatus,
 }

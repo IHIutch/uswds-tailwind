@@ -55,7 +55,7 @@ const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
       <TooltipContext.Provider value={{ api, content }}>
         <div
           {...mergedProps}
-          className={cx('relative isolate', className)}
+          className={cx('relative isolate inline-block', className)}
           ref={forwardedRef}
         />
       </TooltipContext.Provider>
@@ -86,7 +86,9 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
       <div
         {...mergedProps}
         className={cx(
-          'bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)',
+          'invisible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out left-(--tooltip-left) top-(--tooltip-top) m-(--tooltip-margin)',
+          // 'after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)',
+          'data-visible:visible',
           className,
         )}
         ref={forwardedRef}

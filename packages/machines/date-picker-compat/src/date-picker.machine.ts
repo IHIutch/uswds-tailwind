@@ -722,7 +722,7 @@ export const machine = createMachine<DatepickerSchema>({
         // Select a date — close calendar and focus input
         'CELL.CLICK': {
           target: 'focused',
-          actions: ['selectDate', 'setInputFromSelection', 'clearStatusMessage', 'invokeOnClose', 'focusInput'],
+          actions: ['selectDate', 'clearStatusMessage', 'invokeOnClose', 'focusInput'],
         },
         // Select month from month picker → return to day view
         'MONTH.SELECT': {
@@ -884,20 +884,12 @@ export const machine = createMachine<DatepickerSchema>({
     actions: {
       // --- Value management ---
 
-      // Set value from CELL.CLICK
       selectDate({ context, event }) {
         const dateString = event.value as string
         const parsed = parseDateString(dateString)
         if (parsed) {
           context.set('value', [parsed])
-        }
-      },
-
-      // Set input value from selection
-      setInputFromSelection({ context }) {
-        const value = context.get('value')
-        if (value.length > 0) {
-          context.set('inputValue', formatDate(value[0]!, DEFAULT_EXTERNAL_DATE_FORMAT))
+          context.set('inputValue', formatDate(parsed, DEFAULT_EXTERNAL_DATE_FORMAT))
         }
       },
 

@@ -29,14 +29,11 @@ export function connect<T extends PropTypes>(
       send({ type: nextOpen ? 'POINTER_ENTER' : 'CLOSE' })
     },
 
-    // Created by setUpAttributes (lines 317, 336-341)
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
         id: rootId,
-        // is added to the wrapper. When the mouse leaves the entire wrapper area
-        // (which contains both trigger and content), the tooltip hides.
-        onPointerLeave() {
+        onMouseLeave() {
           send({ type: 'POINTER_LEAVE' })
         },
       })
@@ -52,7 +49,7 @@ export function connect<T extends PropTypes>(
         'aria-describedby': open ? contentId : undefined,
         'data-state': open ? 'open' : 'closed',
         // Both events call showToolTip, which transitions the machine to open.
-        onPointerEnter() {
+        onMouseEnter() {
           send({ type: 'POINTER_ENTER' })
         },
         onFocus() {

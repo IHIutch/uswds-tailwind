@@ -35,6 +35,8 @@ export interface FileInputProps extends CommonProperties {
   multiple?: boolean | undefined
   required?: boolean | undefined
   errorMessage?: string | undefined
+  // Override the screen-reader-only status message (i18n hook).
+  srStatusText?: string | undefined
   onFileChange?: ((details: FileChangeDetails) => void) | undefined
 }
 
@@ -81,7 +83,7 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   acceptedFiles: File[]
   rejectedFiles: FileRejection[]
   errorMessageText: string
-  statusMessage: string
+  srStatusText: string
   previewHeadingText: string
   changeItemText: string
   dragText: string
@@ -97,7 +99,7 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   getDropzoneProps: () => T['element']
   getInputProps: () => T['input']
   getInstructionsProps: () => T['element']
-  getStatusProps: () => T['element']
+  getSrStatusProps: () => T['element']
   getErrorMessageProps: () => T['element']
   getPreviewHeadingProps: () => T['element']
   getItemGroupProps: () => T['element']

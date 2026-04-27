@@ -51,9 +51,9 @@ export type FileInputSrStatusProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputSrStatus(props: FileInputSrStatusProps) {
   const { api } = useFileInputContext()
-  const mergedProps = mergeProps(api.getStatusProps(), props)
+  const mergedProps = mergeProps(api.getSrStatusProps(), props)
 
-  return <div {...mergedProps}>{api.statusMessage}</div>
+  return <div {...mergedProps}>{api.srStatusText}</div>
 }
 
 export type FileInputDropzoneProps = React.ComponentPropsWithoutRef<'div'>
@@ -102,8 +102,16 @@ function FileInputInstructions({ className, children, ...props }: FileInputInstr
     >
       {children ?? (
         <>
-          <span>Drag file here or </span>
-          <span className="text-blue-60v underline">choose from folder</span>
+          {/*
+            Mirrors USWDS createVisibleInstructions (composed from getItemsLabel):
+            "Drag file here or" / "Drag files here or" + "choose from folder".
+            The machine pre-computes these strings based on `multiple`.
+          */}
+          <span>
+            {api.dragText}
+            {' '}
+          </span>
+          <span className="text-blue-60v underline">{api.chooseText}</span>
         </>
       )}
     </div>

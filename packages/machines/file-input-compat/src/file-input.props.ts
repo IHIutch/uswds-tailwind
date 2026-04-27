@@ -13,6 +13,7 @@ export const props = createProps<FileInputProps>()([
   'name',
   'onFileChange',
   'required',
+  'srStatusText',
 ])
 
 export const splitProps = createSplitProps<Partial<FileInputProps>>(props)

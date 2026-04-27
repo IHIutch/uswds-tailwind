@@ -5,7 +5,7 @@ export const anatomy = createAnatomy('table').parts(
   'header',
   'sortButton',
   'cell',
-  'announcementRegion',
+  'srStatus',
 )
 
 export const parts = anatomy.build()

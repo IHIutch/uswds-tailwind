@@ -100,8 +100,7 @@ export const machine = createMachine<ComboboxSchema>({
         defaultValue,
         value: prop('value'),
         onChange(value) {
-          const option = prop('options').find(o => o.value === value) ?? null
-          prop('onValueChange')?.({ value, option })
+          prop('onValueChange')?.(value)
         },
       })),
       inputValue: bindable<string>(() => ({
@@ -123,15 +122,31 @@ export const machine = createMachine<ComboboxSchema>({
   computed: {
     isInteractive: ({ prop }) => !prop('disabled'),
     hasValue: ({ context }) => context.get('value') !== '',
-    filteredOptions: ({ prop, context }) =>
-      filterAndSortOptions(
-        prop('options'),
-        context.get('inputValue'),
-        context.get('isPristine'),
-        prop('disableFiltering'),
+    // When `customFilter` is provided, it replaces the default regex-based
+    // filter/sort entirely (useful for flexible parsing like time strings
+    // where the regex template falls short).
+    filteredOptions: ({ prop, context }) => {
+      const options = prop('options')
+      const inputValue = context.get('inputValue')
+      const isPristine = context.get('isPristine')
+      const disableFiltering = prop('disableFiltering')
+      const customFilter = prop('customFilter')
+
+      if (disableFiltering || isPristine || !inputValue)
+        return options
+
+      if (customFilter)
+        return customFilter(inputValue, options)
+
+      return filterAndSortOptions(
+        options,
+        inputValue,
+        isPristine,
+        disableFiltering,
         prop('filter'),
         prop('filterExtras') ?? {},
-      ),
+      )
+    },
   },
 
   // Global events (handled in any state)

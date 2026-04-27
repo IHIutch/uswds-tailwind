@@ -7,8 +7,8 @@ export function getHeaderId(ctx: Scope, index: number) {
 export function getSortButtonId(ctx: Scope, index: number) {
   return ctx.ids?.sortButton?.(index) ?? `table:${ctx.id}:sort-button:${index}`
 }
-export function getAnnouncementRegionId(ctx: Scope) {
-  return `table:${ctx.id}:announcement-region`
+export function getSrStatusId(ctx: Scope) {
+  return ctx.ids?.srStatus ?? `table:${ctx.id}:sr-status`
 }
 
 export const getRootEl = (ctx: Scope) => ctx.getById<HTMLTableElement>(getRootId(ctx))
@@ -18,6 +18,6 @@ export function getHeaderEl(ctx: Scope, index: number) {
 export function getSortButtonEl(ctx: Scope, index: number) {
   return ctx.getById<HTMLButtonElement>(getSortButtonId(ctx, index))
 }
-export function getAnnouncementRegionEl(ctx: Scope) {
-  return ctx.getById(getAnnouncementRegionId(ctx))
+export function getSrStatusEl(ctx: Scope) {
+  return ctx.getById(getSrStatusId(ctx))
 }

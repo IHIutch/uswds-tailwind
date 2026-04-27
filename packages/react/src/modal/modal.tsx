@@ -76,7 +76,7 @@ const ModalPositioner = React.forwardRef<HTMLDivElement, ModalPositionerProps>(
         hidden={!api.open}
         data-state={api.open ? 'open' : 'closed'}
         {...props}
-        className={cx('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in', className)}
+        className={cx('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in pointer-events-none', className)}
         ref={forwardedRef}
       />
     )
@@ -93,7 +93,7 @@ const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
     return (
       <div
         {...mergedProps}
-        className={cx('@container relative w-full max-w-lg rounded-lg bg-white shadow-lg', className)}
+        className={cx('@container relative w-full max-w-lg rounded-lg bg-white shadow-lg pointer-events-auto', className)}
         ref={forwardedRef}
       />
     )

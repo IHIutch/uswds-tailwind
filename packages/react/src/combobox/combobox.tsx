@@ -8,6 +8,8 @@ import { useCombobox } from './use-combobox'
 
 export interface ComboboxContextProps {
   api: combobox.Api
+  showClearButton: boolean
+  showToggleButton: boolean
 }
 
 const ComboboxContext = React.createContext<ComboboxContextProps | null>(null)
@@ -20,14 +22,27 @@ function useComboboxContext() {
   return context
 }
 
-const ComboboxRoot = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'> & UseComboboxProps>(
-  ({ className, ...props }, forwardedRef) => {
+export type ComboboxRootProps = React.ComponentPropsWithoutRef<'div'> & UseComboboxProps & {
+  /**
+   * Whether to render the clear button. Default true.
+   * Restored from the react branch — opt-out shortcut for consumers that
+   * keep the standard compound tree but don't want the × button.
+   */
+  showClearButton?: boolean
+  /**
+   * Whether to render the toggle (▼) button. Default true.
+   */
+  showToggleButton?: boolean
+}
+
+const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxRootProps>(
+  ({ className, showClearButton = true, showToggleButton = true, ...props }, forwardedRef) => {
     const [machineProps, rest] = combobox.splitProps(props)
     const { api } = useCombobox(machineProps as UseComboboxProps)
     const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
-      <ComboboxContext.Provider value={{ api }}>
+      <ComboboxContext.Provider value={{ api, showClearButton, showToggleButton }}>
         <div {...mergedProps} className={cx('relative mt-2', className)} ref={forwardedRef} />
       </ComboboxContext.Provider>
     )
@@ -116,8 +131,10 @@ const ComboboxControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 
 const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useComboboxContext()
+    const { api, showClearButton } = useComboboxContext()
     const mergedProps = mergeProps(api.getClearTriggerProps(), props)
+
+    if (!showClearButton) return null
 
     return (
       <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
@@ -131,8 +148,10 @@ const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTML
 
 const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
   ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useComboboxContext()
+    const { api, showToggleButton } = useComboboxContext()
     const mergedProps = mergeProps(api.getTriggerProps(), props)
+
+    if (!showToggleButton) return null
 
     return (
       <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>

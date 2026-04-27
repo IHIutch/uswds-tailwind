@@ -19,6 +19,7 @@ export const props = createProps<ComboboxProps>()([
   'filter',
   'filterExtras',
   'disableFiltering',
+  'customFilter',
   'onValueChange',
   'onInputValueChange',
   'onOpenChange',

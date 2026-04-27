@@ -46,7 +46,7 @@ export const machine = createMachine<CharacterCountSchema>({
         value: prop("value"),
       })),
       // "${maxLength} characters allowed". SR message is debounced (L125-128).
-      srCountMessage: bindable<string>(() => ({
+      srStatusText: bindable<string>(() => ({
         defaultValue: defaultMessage,
       })),
     }
@@ -60,10 +60,15 @@ export const machine = createMachine<CharacterCountSchema>({
       const maxLength = prop("maxLength")
       return !!currentLength && !!maxLength && currentLength > maxLength
     },
-    countMessage: ({ context, prop }) => {
+    // Consumer can override with `getStatusText` prop for i18n or alternate formats.
+    statusText: ({ context, prop }) => {
       const maxLength = prop("maxLength")
       if (!maxLength) return ""
-      return getCountMessage(context.get("value").length, maxLength)
+      const count = context.get("value").length
+      const isOverLimit = !!count && count > maxLength
+      const custom = prop("getStatusText")
+      if (custom) return custom({ count, max: maxLength, isOverLimit })
+      return getCountMessage(count, maxLength)
     },
   },
 
@@ -119,7 +124,6 @@ export const machine = createMachine<CharacterCountSchema>({
           const currentLength = inputEl.value.length
           const isOverLimit = !!currentLength && currentLength > maxLength
           const validationMessage = prop("validationMessage")
-          const currentStatusMessage = computed("countMessage")
 
           if (isOverLimit && !inputEl.validationMessage) {
             inputEl.setCustomValidity(validationMessage)
@@ -129,11 +133,15 @@ export const machine = createMachine<CharacterCountSchema>({
             inputEl.setCustomValidity("")
           }
 
+          // Debounced SR status update (1000ms). Read `statusText` at
+          // timer-firing time, not event time — the VALUE_CHANGE action runs
+          // on a microtask, so the computed is still stale when this listener
+          // fires.
           if (srTimer !== undefined) {
             clearTimeout(srTimer)
           }
           srTimer = setTimeout(() => {
-            context.set("srCountMessage", currentStatusMessage)
+            context.set("srStatusText", computed("statusText"))
             srTimer = undefined
           }, 1000)
         })

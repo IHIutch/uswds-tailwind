@@ -35,6 +35,9 @@ export interface CharacterCountProps extends CommonProperties {
   defaultValue?: string | undefined
   validationMessage?: string | undefined
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
+  // Customize the status message for both the visible and SR text. Useful
+  // for i18n or alternative formats ("N of M", "N words remaining").
+  getStatusText?: ((details: { count: number, max: number, isOverLimit: boolean }) => string) | undefined
 }
 
 type PropsWithDefault = "defaultValue" | "validationMessage"
@@ -48,12 +51,12 @@ export interface CharacterCountSchema {
   state: "idle" | "focused"
   context: {
     value: string
-    srCountMessage: string
+    srStatusText: string
   }
   computed: {
     currentLength: number
     isOverLimit: boolean
-    countMessage: string
+    statusText: string
   }
   event:
     | { type: "VALUE_CHANGE"; value: string }
@@ -74,8 +77,8 @@ export type CharacterCountMachine = Machine<CharacterCountSchema>
 export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   focused: boolean
   isOverLimit: boolean
-  countMessage: string
-  srCountMessage: string
+  statusText: string
+  srStatusText: string
   currentLength: number
   value: string
 

@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { CharacterCountApi, CharacterCountSchema } from './character-count.types'
-import { dataAttr } from '@zag-js/dom-query'
+import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './character-count.anatomy'
 import * as dom from './character-count.dom'
 
@@ -13,14 +13,14 @@ export function connect<T extends PropTypes>(
 
   const focused = state.matches("focused")
   const isOverLimit = computed("isOverLimit")
-  const countMessage = computed("countMessage")
+  const statusText = computed("statusText")
 
   return {
     /* ----- State properties ----- */
     focused,
     isOverLimit,
-    countMessage,
-    srCountMessage: context.get("srCountMessage"),
+    statusText,
+    srStatusText: context.get("srStatusText"),
     currentLength: computed("currentLength"),
     value: context.get("value"),
 
@@ -89,8 +89,9 @@ export function connect<T extends PropTypes>(
     getSrStatusProps() {
       return normalize.element({
         ...parts.srStatus.attrs,
-        id: dom.getSrStatusId(scope),
-        "aria-live": "polite",
+        'id': dom.getSrStatusId(scope),
+        'aria-live': 'polite',
+        'style': visuallyHiddenStyle,
       })
     },
   }

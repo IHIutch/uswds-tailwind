@@ -11,11 +11,6 @@ export interface ComboboxOption {
  * Callback details
  * ----------------------------------------------------------------------------- */
 
-export interface ValueChangeDetails {
-  value: string
-  option: ComboboxOption | null
-}
-
 export interface InputValueChangeDetails {
   inputValue: string
 }
@@ -59,7 +54,8 @@ export interface ComboboxProps extends CommonProperties {
   filter?: string | undefined
   filterExtras?: Record<string, string> | undefined
   disableFiltering?: boolean | undefined
-  onValueChange?: ((details: ValueChangeDetails) => void) | undefined
+  customFilter?: ((inputValue: string, options: ComboboxOption[]) => ComboboxOption[]) | undefined
+  onValueChange?: ((value: string) => void) | undefined
   onInputValueChange?: ((details: InputValueChangeDetails) => void) | undefined
   onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
 }

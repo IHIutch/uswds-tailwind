@@ -50,9 +50,11 @@ function useAccordionItemContext() {
 }
 
 const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
-  ({ className, multiple, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
+  ({ className, id, ids, multiple, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
+    const generatedId = React.useId()
     const service = useMachine(accordion.machine, {
-      id: React.useId(),
+      id: id ?? generatedId,
+      ids,
       multiple,
       value,
       defaultValue,

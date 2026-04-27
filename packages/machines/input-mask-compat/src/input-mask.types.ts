@@ -27,6 +27,9 @@ export interface InputMaskProps extends CommonProperties {
   ids?: ElementIds | undefined
   placeholder: string
   charset?: string | undefined
+  // Additive validation regex applied to the fully-entered value. Mismatch
+  // sets aria-invalid + data-invalid on the input.
+  pattern?: string | undefined
   value?: string | undefined
   defaultValue?: string | undefined
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
@@ -70,6 +73,9 @@ export interface InputMaskApi<T extends PropTypes = PropTypes> {
   value: string
   enteredText: string
   remainingPlaceholder: string
+  // Whether the entered value fails the optional `pattern` regex. Always
+  // false when `pattern` is not set or while the input isn't fully filled.
+  isInvalid: boolean
 
   getRootProps: () => T["element"]
   getInputProps: () => T["input"]

@@ -85,12 +85,10 @@ export function connect<T extends PropTypes>(
         'data-state': open ? 'open' : 'closed',
         'data-disabled': dataAttr(disabled),
         'data-pristine': dataAttr(context.get('isPristine')),
-        onFocusOut(event: any) {
-          //   [COMBO_BOX](event) {
-          //     if (!this.contains(event.relatedTarget)) {
-          //       resetSelection(this); hideList(this);
-          //     }
-          //   }
+        // USWDS uses onFocusout. However, in React onFocusout is not
+        // supported, and onBlur does not bubble. onBlur with relatedTarget
+        // is the closest equivalent.
+        onBlur(event) {
           const rootEl = dom.getRootEl(scope)
           if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
             send({ type: 'FOCUS_OUTSIDE' })
@@ -159,7 +157,13 @@ export function connect<T extends PropTypes>(
         'aria-label': prop('ariaLabel'),
         'aria-labelledby': prop('ariaLabelledby'),
         'data-state': open ? 'open' : 'closed',
-        'defaultValue': context.get('inputValue'),
+        // USWDS enhanceComboBox keeps the input as a real form element with
+        // its value driven by JS (selectItem writes `inputEl.value = textContent`).
+        // In React we need this to be a controlled input so that machine-driven
+        // updates to `inputValue` (option click, clear, etc.) propagate to the
+        // DOM. `defaultValue` makes it uncontrolled, and machine changes never
+        // reach the DOM after the initial render.
+        'value': context.get('inputValue'),
 
         onClick(event) {
           if (event.defaultPrevented)

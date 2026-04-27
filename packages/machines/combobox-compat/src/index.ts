@@ -14,5 +14,4 @@ export type {
   OptionState,
   ComboboxProps as Props,
   ComboboxService as Service,
-  ValueChangeDetails,
 } from './combobox.types'

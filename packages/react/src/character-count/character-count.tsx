@@ -70,7 +70,7 @@ function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps
         className,
       )}
     >
-      {api.countMessage}
+      {api.statusText}
     </div>
   )
 }
@@ -89,7 +89,7 @@ function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
         {' '}
         characters
       </span>
-      <span {...mergedProps}>{api.srCountMessage}</span>
+      <span {...mergedProps}>{api.srStatusText}</span>
     </div>
   )
 }

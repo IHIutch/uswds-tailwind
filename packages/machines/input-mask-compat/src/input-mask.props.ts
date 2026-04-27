@@ -8,6 +8,7 @@ export const props = createProps<InputMaskProps>()([
   'getRootNode',
   'placeholder',
   'charset',
+  'pattern',
   'value',
   'defaultValue',
   'onValueChange',

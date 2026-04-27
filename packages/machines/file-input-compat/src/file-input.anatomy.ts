@@ -6,7 +6,7 @@ export const anatomy = createAnatomy('file-input').parts(
   'dropzone',
   'input',
   'instructions',
-  'status',
+  'srStatus',
   'errorMessage',
   'previewHeading',
   'itemGroup',

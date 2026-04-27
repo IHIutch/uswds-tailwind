@@ -11,19 +11,10 @@ export type TimePickerRootProps = React.ComponentProps<typeof Combobox.Root> & {
 }
 
 function TimePickerRoot({ options = DEFAULT_TIME_OPTIONS, className, ...props }: TimePickerRootProps) {
-  const [inputValue, setInputValue] = React.useState<string>(props.defaultInputValue ?? '')
-
-  const filteredOptions = React.useMemo(() => filterTimeOptions(inputValue, options), [inputValue, options])
-
   return (
     <Combobox.Root
-      options={filteredOptions}
-      disableFiltering
-      inputValue={inputValue}
-      onInputValueChange={(details) => {
-        setInputValue(details.inputValue)
-        props.onInputValueChange?.(details)
-      }}
+      options={options}
+      customFilter={filterTimeOptions}
       {...props}
       className={cx('max-w-40', className)}
     />

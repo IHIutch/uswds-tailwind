@@ -200,8 +200,10 @@ export function connect<T extends PropTypes>(
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
         'data-disabled': dataAttr(disabled),
-        //   if (!this.contains(event.relatedTarget)) { hideCalendar(this) }
-        onFocusOut(event: any) {
+        // USWDS uses onFocusout. However, in React onFocusout is not
+        // supported, and onBlur does not bubble. onBlur with relatedTarget
+        // is the closest equivalent.
+        onBlur(event: any) {
           const rootEl = dom.getRootEl(scope)
           if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
             send({ type: 'FOCUS_OUTSIDE' })
@@ -366,7 +368,7 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getCellProps({ cell }) {
+    getCellProps() {
       return normalize.element({
         ...parts.cell.attrs,
         role: 'gridcell',

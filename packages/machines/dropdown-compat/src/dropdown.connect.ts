@@ -25,7 +25,10 @@ export function connect<T extends PropTypes>(
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
 
-        onFocusOut(event: any) {
+        // USWDS uses onFocusout. However, in React onFocusout is not
+        // supported, and onBlur does not bubble. onBlur with relatedTarget
+        // is the closest equivalent.
+        onBlur(event) {
           const rootEl = dom.getRootEl(scope)
           if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
             send({ type: 'FOCUS_OUTSIDE' })

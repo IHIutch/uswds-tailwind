@@ -21,6 +21,7 @@
     "@zag-js/anatomy": "catalog:",
     "@zag-js/core": "catalog:",
     "@zag-js/dom-query": "catalog:",
-    "@zag-js/types": "catalog:"
+    "@zag-js/types": "catalog:",
+    "@zag-js/utils": "catalog:"
   }
 }

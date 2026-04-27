@@ -24,7 +24,7 @@ export type ElementIds = Partial<{
   root: string
   header: (index: number) => string
   sortButton: (index: number) => string
-  announcementRegion: string
+  srStatus: string
 }>
 
 /* -----------------------------------------------------------------------------
@@ -99,5 +99,5 @@ export interface TableApi<T extends PropTypes = PropTypes> {
   getHeaderProps: (props: HeaderProps) => T['element']
   getSortButtonProps: (props: HeaderProps) => T['button']
   getCellProps: (props: CellProps) => T['element']
-  getAnnouncementRegionProps: () => T['element']
+  getSrStatusProps: () => T['element']
 }

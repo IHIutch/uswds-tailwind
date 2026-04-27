@@ -11,6 +11,7 @@ export const props = createProps<CharacterCountProps>()([
   'defaultValue',
   'validationMessage',
   'onValueChange',
+  'getStatusText',
 ])
 
 export const splitProps = createSplitProps<Partial<CharacterCountProps>>(props)

@@ -36,7 +36,7 @@ export const Basic = meta.story({
 
 export const Placements = meta.story({
   render: () => (
-    <div className="flex gap-4 flex-wrap">
+    <div className="flex gap-4 flex-wrap justify-center py-12">
       <Tooltip content="Top tooltip" position="top">
         <Button>Top</Button>
       </Tooltip>

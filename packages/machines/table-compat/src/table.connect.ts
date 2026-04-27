@@ -1,6 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { CellProps, HeaderProps, SortDirection, TableApi, TableSchema } from './table.types'
+import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './table.anatomy'
 import * as dom from './table.dom'
 
@@ -95,12 +96,16 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getAnnouncementRegionProps() {
+    // SR sort-announcement region: visually hidden, aria-live="polite",
+    // role="status". Inline style keeps it SR-only regardless of consumer
+    // styling.
+    getSrStatusProps() {
       return normalize.element({
-        ...parts.announcementRegion.attrs,
-        'id': dom.getAnnouncementRegionId(scope),
+        ...parts.srStatus.attrs,
+        'id': dom.getSrStatusId(scope),
         'aria-live': 'polite' as const,
         'role': 'status',
+        'style': visuallyHiddenStyle,
       })
     },
   }
