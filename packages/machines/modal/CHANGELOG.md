@@ -1,5 +1,7 @@
 # @uswds-tailwind/modal
 
+## 0.3.0-alpha.2
+
 ## 0.3.0-alpha.1
 
 ## 0.3.0-alpha.0
