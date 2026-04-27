@@ -5,11 +5,10 @@ import { Button } from '../button/button'
 import { cva, cx } from '../cva.config'
 
 const buttonGroupRootVariant = cva({
-  base: 'flex @container',
+  base: 'flex',
   variants: {
     segmented: {
-      // We use a container query and a media query, in case the parent doesn't set a container, but it would be nice to not need both
-      false: '@max-mobile-lg:flex-col max-mobile-lg:flex-col flex-row gap-2',
+      false: 'mobile-lg:flex-row flex-col gap-2',
     },
   },
   defaultVariants: {
@@ -50,7 +49,7 @@ export const ButtonGroupRoot = React.forwardRef<HTMLDivElement, ButtonGroupRootP
 )
 
 const buttonGroupButtonVariant = cva({
-  base: 'grow @tablet:grow-0',
+  base: 'grow mobile-lg:grow-0',
   variants: {
     segmented: {
       true: 'first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10',

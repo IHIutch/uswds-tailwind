@@ -4,7 +4,7 @@ import { cva, cx } from '../cva.config'
 
 export const buttonVariants = cva({
   base: [
-    'leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer flex items-center',
+    'cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v',
     // Disabled
     'disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed',
   ],
