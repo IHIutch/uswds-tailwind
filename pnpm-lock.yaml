@@ -821,7 +821,7 @@ importers:
         specifier: workspace:*
         version: link:../machines/table-compat
       '@uswds-tailwind/theme':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../theme
       '@uswds-tailwind/tooltip-compat':
         specifier: workspace:*

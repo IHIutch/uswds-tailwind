@@ -10,6 +10,7 @@
   ],
   "exports": {
     ".": {
+      "style": "./styles.css",
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
@@ -190,7 +191,6 @@
     "deploy-storybook": "pnpm build-storybook && pnpx wrangler deploy --assets=./storybook-static"
   },
   "peerDependencies": {
-    "@uswds-tailwind/theme": "workspace:^",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
     "tailwindcss": "^4.0.0"
@@ -206,6 +206,7 @@
     "@uswds-tailwind/input-mask-compat": "workspace:*",
     "@uswds-tailwind/modal-compat": "workspace:*",
     "@uswds-tailwind/table-compat": "workspace:*",
+    "@uswds-tailwind/theme": "workspace:*",
     "@uswds-tailwind/tooltip-compat": "workspace:*",
     "@zag-js/anatomy": "catalog:",
     "@zag-js/dom-query": "catalog:",
