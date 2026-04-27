@@ -1,6 +1,7 @@
 import * as modal from '@uswds-tailwind/modal-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
+import { Button } from '../button'
 import { cx } from '../cva.config'
 
 export interface ModalContextProps {
@@ -43,7 +44,7 @@ const ModalTrigger = React.forwardRef<HTMLButtonElement, ModalTriggerProps>(
     const mergedProps = mergeProps(api.getTriggerProps(), props)
 
     return (
-      <button
+      <Button
         {...mergedProps}
         className={className}
         ref={forwardedRef}
@@ -93,7 +94,7 @@ const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
     return (
       <div
         {...mergedProps}
-        className={cx('@container relative w-full max-w-lg rounded-lg bg-white shadow-lg pointer-events-auto', className)}
+        className={cx('relative w-full max-w-lg rounded-lg bg-white shadow-lg pointer-events-auto', className)}
         ref={forwardedRef}
       />
     )
@@ -107,7 +108,7 @@ function ModalTitle({ className, ...props }: ModalTitleProps) {
   const mergedProps = mergeProps(api.getTitleProps(), props)
 
   return (
-    <h2
+    <div
       {...mergedProps}
       className={cx('text-xl font-bold font-merriweather', className)}
     />
@@ -121,7 +122,7 @@ function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   const mergedProps = mergeProps(api.getDescriptionProps(), props)
 
   return (
-    <p
+    <div
       {...mergedProps}
       className={cx('mt-2', className)}
     />

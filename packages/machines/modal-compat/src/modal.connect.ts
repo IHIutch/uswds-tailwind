@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { EventKeyMap, NormalizeProps, PropTypes } from '@zag-js/types'
 import type { ModalApi, ModalSchema } from './modal.types'
-import { getEventKey } from '@zag-js/dom-query'
+import { ariaAttr, getEventKey } from '@zag-js/dom-query'
 import { parts } from './modal.anatomy'
 import * as dom from './modal.dom'
 
@@ -86,6 +86,11 @@ export function connect<T extends PropTypes>(
         ...parts.content.attrs,
         'id': dom.getContentId(scope),
         'role': prop('role'),
+        // aria-modal="true" when the dialog is modal — scopes SR focus to
+        // this dialog. WAI-ARIA 1.2 equivalent of the sibling-aria-hidden
+        // strategy; since we render in-tree (no body-level portal),
+        // aria-modal is the correct signal.
+        'aria-modal': ariaAttr(prop('modal')),
         'aria-labelledby': dom.getTitleId(scope),
         'aria-describedby': dom.getDescriptionId(scope),
         'tabIndex': -1,

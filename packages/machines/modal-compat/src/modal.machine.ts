@@ -41,7 +41,12 @@ export const machine = createMachine<ModalSchema>({
     }
   },
 
+  // Modals start hidden by default. Honor controlled `open` at mount,
+  // otherwise <Modal open={true}> renders closed on first paint.
   initialState({ prop }) {
+    if (prop('open') !== undefined) {
+      return prop('open') ? 'open' : 'closed'
+    }
     return prop('defaultOpen') ? 'open' : 'closed'
   },
 

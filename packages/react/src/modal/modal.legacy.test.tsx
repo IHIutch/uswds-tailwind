@@ -102,3 +102,17 @@ it('closing the modal returns focus to the opening trigger', async () => {
 
   expect(document.activeElement).toBe(trigger.element())
 })
+
+// USWDS's legacy approach hides sibling body content via `aria-hidden="true"`
+// while the modal is open. Our migrated modal renders in-tree (no body-level
+// portal) so the machine's sibling-walk can't find non-modal peers; instead
+// we signal the SR boundary with `aria-modal="true"` on the dialog — the
+// WAI-ARIA 1.2 equivalent. Either strategy alone satisfies the a11y goal.
+it('dialog has aria-modal="true" when open so SR users are scoped to the dialog', async () => {
+  const screen = await renderModal()
+  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  await userEvent.click(trigger)
+
+  const dialog = screen.getByRole('dialog')
+  await expect.element(dialog).toHaveAttribute('aria-modal', 'true')
+})
