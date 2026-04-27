@@ -1,1 +1,2 @@
-import '../styles.css'
+/// <reference types="vite/client" />
+import '../dev-styles.css'

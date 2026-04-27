@@ -38,6 +38,7 @@ catalog:
   '@types/react': ^19.2.7
   '@types/react-dom': ^19.2.3
   '@types/twig': ^1.12.17
+  '@uswds/uswds': ^3.13.0
   '@vitejs/plugin-react': 4.7.0
   '@vitest/browser': ^4.0.16
   '@vitest/browser-playwright': ^4.0.16
@@ -60,12 +61,14 @@ catalog:
   cva: ^1.0.0-beta.4
   dedent: ^1.7.0
   eslint: ^9.39.1
+  fathom-client: ^3.7.2
   find-up: 6.3.0
   fs-extra: 11.1.1
   fuse.js: ^7.1.0
   github-slugger: ^2.0.0
   react: ^19.2.3
   react-dom: ^19.2.3
+  receptor: ^1.0.0
   sharp: ^0.34.5
   storybook: 10.1.11
   tailwind-merge: ^3.4.0

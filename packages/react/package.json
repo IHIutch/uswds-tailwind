@@ -223,6 +223,7 @@
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
+    "fathom-client": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "storybook": "catalog:",

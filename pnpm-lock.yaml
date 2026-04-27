@@ -171,6 +171,9 @@ catalogs:
     eslint:
       specifier: ^9.39.1
       version: 9.39.1
+    fathom-client:
+      specifier: ^3.7.2
+      version: 3.7.2
     find-up:
       specifier: 6.3.0
       version: 6.3.0
@@ -866,6 +869,9 @@ importers:
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 4.0.16(playwright@1.57.0)(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.0.16)
+      fathom-client:
+        specifier: 'catalog:'
+        version: 3.7.2
       react:
         specifier: 'catalog:'
         version: 19.2.3
@@ -4400,6 +4406,9 @@ packages:
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
+
+  fathom-client@3.7.2:
+    resolution: {integrity: sha512-sWtaNivhg7uwp/q1bUuIiNj4LeQZMEZ5NXXFFpZ8le4uDedAfQG84gPOdYehtVXbl+1yX2s8lmXZ2+IQ9a/xxA==}
 
   fault@2.0.1:
     resolution: {integrity: sha512-WtySTkS4OKev5JtpHXnib4Gxiurzh5NCGvWrFaZ34m6JehfTUhKZvn9njTfw48t6JumVQOmrKqpmGcdwxnhqBQ==}
@@ -10454,6 +10463,8 @@ snapshots:
   fastq@1.19.1:
     dependencies:
       reusify: 1.1.0
+
+  fathom-client@3.7.2: {}
 
   fault@2.0.1:
     dependencies:
