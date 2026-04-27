@@ -19,7 +19,18 @@
     "src/index.css",
     "src/tailwind.config.ts"
   ],
+  "peerDependencies": {
+    "tailwindcss": "^4.0.0"
+  },
   "dependencies": {
+    "@tailwindcss/forms": "catalog:",
+    "@tailwindcss/typography": "catalog:",
+    "tailwindcss-animate": "catalog:"
+  },
+  "devDependencies": {
+    "tailwindcss": "catalog:"
+  },
+  "optionalDependencies": {
     "@fontsource-variable/merriweather": "catalog:",
     "@fontsource-variable/open-sans": "catalog:",
     "@fontsource-variable/public-sans": "catalog:",
@@ -28,10 +39,6 @@
     "@iconify-json/fa-solid": "catalog:",
     "@iconify-json/fa6-brands": "catalog:",
     "@iconify-json/material-symbols": "catalog:",
-    "@iconify/tailwind4": "catalog:",
-    "@tailwindcss/forms": "catalog:",
-    "@tailwindcss/typography": "catalog:",
-    "tailwindcss": "catalog:",
-    "tailwindcss-animate": "catalog:"
+    "@iconify/tailwind4": "catalog:"
   }
 }

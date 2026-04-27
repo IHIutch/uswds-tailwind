@@ -899,6 +899,20 @@ importers:
 
   packages/theme:
     dependencies:
+      '@tailwindcss/forms':
+        specifier: 'catalog:'
+        version: 0.5.10(tailwindcss@4.1.18)
+      '@tailwindcss/typography':
+        specifier: 'catalog:'
+        version: 0.5.16(tailwindcss@4.1.18)
+      tailwindcss-animate:
+        specifier: 'catalog:'
+        version: 1.0.7(tailwindcss@4.1.18)
+    devDependencies:
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.1.18
+    optionalDependencies:
       '@fontsource-variable/merriweather':
         specifier: 'catalog:'
         version: 5.2.6
@@ -926,18 +940,6 @@ importers:
       '@iconify/tailwind4':
         specifier: 'catalog:'
         version: 1.2.0(tailwindcss@4.1.18)
-      '@tailwindcss/forms':
-        specifier: 'catalog:'
-        version: 0.5.10(tailwindcss@4.1.18)
-      '@tailwindcss/typography':
-        specifier: 'catalog:'
-        version: 0.5.16(tailwindcss@4.1.18)
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.18
-      tailwindcss-animate:
-        specifier: 'catalog:'
-        version: 1.0.7(tailwindcss@4.1.18)
 
   scripts:
     dependencies:
