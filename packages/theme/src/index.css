@@ -1,3 +1,9 @@
+@import "@fontsource-variable/public-sans";
+@import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/merriweather";
+@import "@fontsource-variable/roboto-mono";
+@import "@fontsource-variable/open-sans";
+
 @utility text-* {
   font-size: calc(--value(--text-*) * var(--font-normalization));
   line-height: calc(--value(--text-*--line-height) * var(--font-normalization));

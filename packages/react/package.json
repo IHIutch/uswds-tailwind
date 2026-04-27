@@ -1,23 +1,180 @@
 {
   "name": "@uswds-tailwind/react",
   "type": "module",
-  "version": "0.3.0-alpha.0",
+  "version": "0.3.0-alpha.1",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
     "./accordion": {
-      "types": "./dist/accordion.d.mts",
-      "import": "./dist/accordion.mjs"
+      "types": "./dist/accordion/index.d.mts",
+      "import": "./dist/accordion/index.mjs"
     },
-    "./simple-accordion": {
-      "types": "./dist/simple-accordion.d.mts",
-      "import": "./dist/simple-accordion.mjs"
-    }
+    "./alert": {
+      "types": "./dist/alert/index.d.mts",
+      "import": "./dist/alert/index.mjs"
+    },
+    "./banner": {
+      "types": "./dist/banner/index.d.mts",
+      "import": "./dist/banner/index.mjs"
+    },
+    "./breadcrumb": {
+      "types": "./dist/breadcrumb/index.d.mts",
+      "import": "./dist/breadcrumb/index.mjs"
+    },
+    "./button": {
+      "types": "./dist/button/index.d.mts",
+      "import": "./dist/button/index.mjs"
+    },
+    "./button-group": {
+      "types": "./dist/button-group/index.d.mts",
+      "import": "./dist/button-group/index.mjs"
+    },
+    "./card": {
+      "types": "./dist/card/index.d.mts",
+      "import": "./dist/card/index.mjs"
+    },
+    "./character-count": {
+      "types": "./dist/character-count/index.d.mts",
+      "import": "./dist/character-count/index.mjs"
+    },
+    "./checkbox": {
+      "types": "./dist/checkbox/index.d.mts",
+      "import": "./dist/checkbox/index.mjs"
+    },
+    "./collection": {
+      "types": "./dist/collection/index.d.mts",
+      "import": "./dist/collection/index.mjs"
+    },
+    "./combobox": {
+      "types": "./dist/combobox/index.d.mts",
+      "import": "./dist/combobox/index.mjs"
+    },
+    "./date-picker": {
+      "types": "./dist/date-picker/index.d.mts",
+      "import": "./dist/date-picker/index.mjs"
+    },
+    "./dropdown": {
+      "types": "./dist/dropdown/index.d.mts",
+      "import": "./dist/dropdown/index.mjs"
+    },
+    "./field": {
+      "types": "./dist/field/index.d.mts",
+      "import": "./dist/field/index.mjs"
+    },
+    "./fieldset": {
+      "types": "./dist/fieldset/index.d.mts",
+      "import": "./dist/fieldset/index.mjs"
+    },
+    "./file-input": {
+      "types": "./dist/file-input/index.d.mts",
+      "import": "./dist/file-input/index.mjs"
+    },
+    "./footer": {
+      "types": "./dist/footer/index.d.mts",
+      "import": "./dist/footer/index.mjs"
+    },
+    "./header": {
+      "types": "./dist/header/index.d.mts",
+      "import": "./dist/header/index.mjs"
+    },
+    "./identifier": {
+      "types": "./dist/identifier/index.d.mts",
+      "import": "./dist/identifier/index.mjs"
+    },
+    "./in-page-navigation": {
+      "types": "./dist/in-page-navigation/index.d.mts",
+      "import": "./dist/in-page-navigation/index.mjs"
+    },
+    "./input": {
+      "types": "./dist/input/index.d.mts",
+      "import": "./dist/input/index.mjs"
+    },
+    "./input-group": {
+      "types": "./dist/input-group/index.d.mts",
+      "import": "./dist/input-group/index.mjs"
+    },
+    "./input-mask": {
+      "types": "./dist/input-mask/index.d.mts",
+      "import": "./dist/input-mask/index.mjs"
+    },
+    "./link": {
+      "types": "./dist/link/index.d.mts",
+      "import": "./dist/link/index.mjs"
+    },
+    "./memorable-date": {
+      "types": "./dist/memorable-date/index.d.mts",
+      "import": "./dist/memorable-date/index.mjs"
+    },
+    "./modal": {
+      "types": "./dist/modal/index.d.mts",
+      "import": "./dist/modal/index.mjs"
+    },
+    "./nav": {
+      "types": "./dist/nav/index.d.mts",
+      "import": "./dist/nav/index.mjs"
+    },
+    "./pagination": {
+      "types": "./dist/pagination/index.d.mts",
+      "import": "./dist/pagination/index.mjs"
+    },
+    "./process-list": {
+      "types": "./dist/process-list/index.d.mts",
+      "import": "./dist/process-list/index.mjs"
+    },
+    "./radio": {
+      "types": "./dist/radio/index.d.mts",
+      "import": "./dist/radio/index.mjs"
+    },
+    "./range-slider": {
+      "types": "./dist/range-slider/index.d.mts",
+      "import": "./dist/range-slider/index.mjs"
+    },
+    "./search": {
+      "types": "./dist/search/index.d.mts",
+      "import": "./dist/search/index.mjs"
+    },
+    "./select": {
+      "types": "./dist/select/index.d.mts",
+      "import": "./dist/select/index.mjs"
+    },
+    "./side-navigation": {
+      "types": "./dist/side-navigation/index.d.mts",
+      "import": "./dist/side-navigation/index.mjs"
+    },
+    "./step-indicator": {
+      "types": "./dist/step-indicator/index.d.mts",
+      "import": "./dist/step-indicator/index.mjs"
+    },
+    "./summary-box": {
+      "types": "./dist/summary-box/index.d.mts",
+      "import": "./dist/summary-box/index.mjs"
+    },
+    "./table": {
+      "types": "./dist/table/index.d.mts",
+      "import": "./dist/table/index.mjs"
+    },
+    "./tag": {
+      "types": "./dist/tag/index.d.mts",
+      "import": "./dist/tag/index.mjs"
+    },
+    "./time-picker": {
+      "types": "./dist/time-picker/index.d.mts",
+      "import": "./dist/time-picker/index.mjs"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip/index.d.mts",
+      "import": "./dist/tooltip/index.mjs"
+    },
+    "./styles.css": "./styles.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "styles.css"
   ],
   "scripts": {
     "build": "tsdown",
@@ -56,14 +213,6 @@
     "tailwind-merge": "catalog:"
   },
   "devDependencies": {
-    "@fontsource-variable/merriweather": "catalog:",
-    "@fontsource-variable/open-sans": "catalog:",
-    "@fontsource-variable/public-sans": "catalog:",
-    "@fontsource-variable/roboto-mono": "catalog:",
-    "@fontsource-variable/source-sans-3": "catalog:",
-    "@iconify-json/fa-solid": "catalog:",
-    "@iconify-json/fa6-brands": "catalog:",
-    "@iconify-json/material-symbols": "catalog:",
     "@storybook/addon-docs": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/vite": "catalog:",

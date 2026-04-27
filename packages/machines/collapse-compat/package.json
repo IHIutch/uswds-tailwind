@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/collapse-compat",
   "type": "module",
-  "version": "0.3.0-alpha.0",
+  "version": "0.3.0-alpha.1",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",

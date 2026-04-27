@@ -1,5 +1,7 @@
 # @uswds-tailwind/date-picker-compat
 
+## 0.3.0-alpha.1
+
 ## 0.3.0-alpha.0
 
 ## 0.2.0

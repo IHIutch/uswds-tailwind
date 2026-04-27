@@ -20,6 +20,7 @@
     "@uswds-tailwind/theme": "0.2.0"
   },
   "changesets": [
+    "alpha-1",
     "first-alpha"
   ]
 }
