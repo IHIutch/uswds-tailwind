@@ -31,6 +31,7 @@
     "@vitest/browser-playwright": "catalog:",
     "@zag-js/dom-query": "catalog:",
     "eslint": "catalog:",
+    "playwright": "catalog:",
     "tsdown": "catalog:",
     "turbo": "catalog:",
     "vitest": "catalog:"
