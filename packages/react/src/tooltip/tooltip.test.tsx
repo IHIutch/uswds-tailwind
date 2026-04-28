@@ -12,13 +12,6 @@ function renderTooltip() {
   )
 }
 
-// Match the wrapping content element by anatomy (data-scope/data-part) rather
-// than getByText, which can resolve to a text node or different ancestor in
-// some browsers — the assertion target is the div that owns `data-state`.
-function getContent() {
-  return document.querySelector<HTMLElement>('[data-scope="tooltip"][data-part="content"]')
-}
-
 it('tooltip content is not visible by default', async () => {
   const screen = await renderTooltip()
 
@@ -28,7 +21,8 @@ it('tooltip content is not visible by default', async () => {
   const trigger = screen.getByRole('button', { name: 'Hover me' })
   await userEvent.unhover(trigger.element())
 
-  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('closed')
+  const content = screen.getByText('This is a tooltip')
+  await expect.element(content).toHaveAttribute('data-state', 'closed')
 })
 
 it('hovering trigger shows tooltip content', async () => {
@@ -36,10 +30,12 @@ it('hovering trigger shows tooltip content', async () => {
 
   const trigger = screen.getByRole('button', { name: 'Hover me' })
   await userEvent.hover(trigger.element())
-  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('open')
+
+  const content = screen.getByText('This is a tooltip')
+  await expect.element(content).toHaveAttribute('data-state', 'open')
 
   await userEvent.unhover(trigger.element())
-  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('closed')
+  await expect.element(content).toHaveAttribute('data-state', 'closed')
 })
 
 it('focusing trigger via keyboard shows tooltip', async () => {
@@ -47,5 +43,7 @@ it('focusing trigger via keyboard shows tooltip', async () => {
 
   const trigger = screen.getByRole('button', { name: 'Hover me' })
   await trigger.element().focus()
-  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('open')
+
+  const content = screen.getByText('This is a tooltip')
+  await expect.element(content).toHaveAttribute('data-state', 'open')
 })
