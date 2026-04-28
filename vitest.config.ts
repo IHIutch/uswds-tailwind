@@ -6,8 +6,6 @@ export default defineConfig({
 
   test: {
     reporters: process.env.GITHUB_ACTIONS ? ['github-actions'] : ['dot'],
-
-    testTimeout: 5000,
     globals: true,
     include: ['e2e/**/*.{test,spec}.ts'],
     exclude: [

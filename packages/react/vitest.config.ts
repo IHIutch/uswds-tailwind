@@ -8,7 +8,6 @@ export default defineConfig({
   plugins: [tailwindcss(), react()],
   test: {
     globals: true,
-    testTimeout: 5000,
     setupFiles: ['./test/test-setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     css: true,
