@@ -1,0 +1,38 @@
+name: 🐞 Bug report
+description: Create a report to help us improve uswds-tailwind
+type: bug
+labels: [needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please carefully read the contribution docs before creating a bug report
+        👉 https://github.com/IHIutch/uswds-tailwind/blob/next/CONTRIBUTING.md
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is. If you intend to submit a PR for this issue, tell us in the description. Thanks!
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: A minimal reproduction is the most useful thing you can provide. Link a StackBlitz, CodeSandbox, or GitHub repo if possible.
+      placeholder: https://stackblitz.com/edit/...
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Optional if you have reproduction steps. Please avoid adding screenshots of logs, copy and paste the text instead.
+      render: shell-script
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: If applicable, add any other context about the problem here
