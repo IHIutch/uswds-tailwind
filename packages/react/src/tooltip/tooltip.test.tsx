@@ -12,11 +12,17 @@ function renderTooltip() {
   )
 }
 
-it('tooltip content is not visible by default', async () => {
-  const screen = await renderTooltip()
+// Match the wrapping content element by anatomy (data-scope/data-part) rather
+// than getByText, which can resolve to a text node or different ancestor in
+// some browsers — the assertion target is the div that owns `data-state`.
+function getContent() {
+  return document.querySelector<HTMLElement>('[data-scope="tooltip"][data-part="content"]')
+}
 
-  const content = screen.getByText('This is a tooltip')
-  await expect.element(content).toHaveAttribute('data-state', 'closed')
+it('tooltip content is not visible by default', async () => {
+  await renderTooltip()
+
+  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('closed')
 })
 
 it('hovering trigger shows tooltip content', async () => {
@@ -24,12 +30,10 @@ it('hovering trigger shows tooltip content', async () => {
 
   const trigger = screen.getByRole('button', { name: 'Hover me' })
   await userEvent.hover(trigger.element())
-
-  const content = screen.getByText('This is a tooltip')
-  await expect.element(content).toHaveAttribute('data-state', 'open')
+  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('open')
 
   await userEvent.unhover(trigger.element())
-  await expect.element(content).toHaveAttribute('data-state', 'closed')
+  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('closed')
 })
 
 it('focusing trigger via keyboard shows tooltip', async () => {
@@ -37,7 +41,5 @@ it('focusing trigger via keyboard shows tooltip', async () => {
 
   const trigger = screen.getByRole('button', { name: 'Hover me' })
   await trigger.element().focus()
-
-  const content = screen.getByText('This is a tooltip')
-  await expect.element(content).toHaveAttribute('data-state', 'open')
+  await expect.poll(() => getContent()?.getAttribute('data-state')).toBe('open')
 })
