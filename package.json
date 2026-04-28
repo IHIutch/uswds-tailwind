@@ -14,12 +14,11 @@
     "deploy:website": "turbo run deploy",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck --filter='./packages/**' --filter='!./packages/compat'",
-    "test": "vitest",
+    "test": "turbo run test",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
     "changeset:release": "changeset tag && changeset publish",
-    "test:browser": "vitest",
     "release:beta": "pnpm build:packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit",
     "release:alpha": "pnpm build:packages && changeset version && changeset publish"
   },
