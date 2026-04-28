@@ -16,7 +16,12 @@ export default defineConfig({
       '.storybook/**',
     ],
     browser: {
-      provider: playwright(),
+      provider: playwright({
+        // https://vitest.dev/guide/browser/playwright
+        launchOptions: {
+          channel: 'chromium',
+        },
+      }),
       headless: !!process.env.GITHUB_ACTIONS,
       enabled: true,
       // at least one instance is required
