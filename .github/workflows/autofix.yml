@@ -1,0 +1,30 @@
+name: autofix.ci
+
+# Runs eslint --fix on PRs and commits the fixes back to the branch via the
+# autofix.ci app. Reduces lint-fix back-and-forth on contributor PRs.
+# Requires the autofix.ci GitHub App to be installed: https://autofix.ci/
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  autofix:
+    name: Autofix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup-pnpm
+
+      - name: Run ESLint --fix
+        run: pnpm exec turbo run lint -- --fix
+
+      - name: Apply autofix
+        uses: autofix-ci/action@c5b2d67aa2274e7b5a18224e8171550871fc7e4a # v1.3.4
