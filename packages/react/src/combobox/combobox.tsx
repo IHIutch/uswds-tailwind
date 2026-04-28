@@ -134,7 +134,8 @@ const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTML
     const { api, showClearButton } = useComboboxContext()
     const mergedProps = mergeProps(api.getClearTriggerProps(), props)
 
-    if (!showClearButton) return null
+    if (!showClearButton)
+      return null
 
     return (
       <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
@@ -151,7 +152,8 @@ const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTM
     const { api, showToggleButton } = useComboboxContext()
     const mergedProps = mergeProps(api.getTriggerProps(), props)
 
-    if (!showToggleButton) return null
+    if (!showToggleButton)
+      return null
 
     return (
       <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>

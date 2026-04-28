@@ -46,20 +46,20 @@ it('sr-status has default "No file selected" message on init', async () => {
 })
 
 it('disabled prop disables the underlying input', async () => {
-  const screen = await renderFileInput({ disabled: true })
+  await renderFileInput({ disabled: true })
   // The input is visually hidden; locate by type=file via the DOM directly.
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
   expect(input.disabled).toBe(true)
 })
 
 it('accept prop is forwarded to the underlying input', async () => {
-  const screen = await renderFileInput({ accept: '.pdf,.txt' })
+  await renderFileInput({ accept: '.pdf,.txt' })
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
   expect(input.accept).toBe('.pdf,.txt')
 })
 
 it('multiple prop is forwarded to the underlying input', async () => {
-  const screen = await renderFileInput({ multiple: true })
+  await renderFileInput({ multiple: true })
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
   expect(input.multiple).toBe(true)
 })

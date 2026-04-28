@@ -3,7 +3,7 @@ import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
  * Callback details
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface ValueChangeDetails {
   value: string
@@ -13,7 +13,7 @@ export interface ValueChangeDetails {
 
 /* -----------------------------------------------------------------------------
  * Element IDs
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   root: string
@@ -26,7 +26,7 @@ export type ElementIds = Partial<{
 
 /* -----------------------------------------------------------------------------
  * Machine props
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface CharacterCountProps extends CommonProperties {
   ids?: ElementIds | undefined
@@ -40,15 +40,15 @@ export interface CharacterCountProps extends CommonProperties {
   getStatusText?: ((details: { count: number, max: number, isOverLimit: boolean }) => string) | undefined
 }
 
-type PropsWithDefault = "defaultValue" | "validationMessage"
+type PropsWithDefault = 'defaultValue' | 'validationMessage'
 
 /* -----------------------------------------------------------------------------
  * Machine schema
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface CharacterCountSchema {
   props: RequiredBy<CharacterCountProps, PropsWithDefault>
-  state: "idle" | "focused"
+  state: 'idle' | 'focused'
   context: {
     value: string
     srStatusText: string
@@ -59,9 +59,9 @@ export interface CharacterCountSchema {
     statusText: string
   }
   event:
-    | { type: "VALUE_CHANGE"; value: string }
-    | { type: "INPUT.FOCUS" }
-    | { type: "INPUT.BLUR" }
+    | { type: 'VALUE_CHANGE', value: string }
+    | { type: 'INPUT.FOCUS' }
+    | { type: 'INPUT.BLUR' }
   action: string
   effect: string
   guard: string
@@ -72,7 +72,7 @@ export type CharacterCountMachine = Machine<CharacterCountSchema>
 
 /* -----------------------------------------------------------------------------
  * Component API
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   focused: boolean
@@ -82,10 +82,10 @@ export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   currentLength: number
   value: string
 
-  getRootProps: () => T["element"]
-  getFormGroupProps: () => T["element"]
-  getLabelProps: () => T["label"]
-  getInputProps: () => T["input"]
-  getStatusProps: () => T["element"]
-  getSrStatusProps: () => T["element"]
+  getRootProps: () => T['element']
+  getFormGroupProps: () => T['element']
+  getLabelProps: () => T['label']
+  getInputProps: () => T['input']
+  getStatusProps: () => T['element']
+  getSrStatusProps: () => T['element']
 }

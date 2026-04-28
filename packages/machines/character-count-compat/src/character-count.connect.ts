@@ -11,18 +11,18 @@ export function connect<T extends PropTypes>(
 ): CharacterCountApi<T> {
   const { state, context, send, scope, computed } = service
 
-  const focused = state.matches("focused")
-  const isOverLimit = computed("isOverLimit")
-  const statusText = computed("statusText")
+  const focused = state.matches('focused')
+  const isOverLimit = computed('isOverLimit')
+  const statusText = computed('statusText')
 
   return {
     /* ----- State properties ----- */
     focused,
     isOverLimit,
     statusText,
-    srStatusText: context.get("srStatusText"),
-    currentLength: computed("currentLength"),
-    value: context.get("value"),
+    srStatusText: context.get('srStatusText'),
+    currentLength: computed('currentLength'),
+    value: context.get('value'),
 
     /* ----- Root props ----- */
     getRootProps() {
@@ -37,8 +37,8 @@ export function connect<T extends PropTypes>(
     getFormGroupProps() {
       return normalize.element({
         ...parts.formGroup.attrs,
-        id: dom.getFormGroupId(scope),
-        "data-invalid": dataAttr(isOverLimit),
+        'id': dom.getFormGroupId(scope),
+        'data-invalid': dataAttr(isOverLimit),
       })
     },
 
@@ -47,9 +47,9 @@ export function connect<T extends PropTypes>(
     getLabelProps() {
       return normalize.label({
         ...parts.label.attrs,
-        id: dom.getLabelId(scope),
-        htmlFor: dom.getInputId(scope),
-        "data-invalid": dataAttr(isOverLimit),
+        'id': dom.getLabelId(scope),
+        'htmlFor': dom.getInputId(scope),
+        'data-invalid': dataAttr(isOverLimit),
       })
     },
 
@@ -57,20 +57,20 @@ export function connect<T extends PropTypes>(
     getInputProps() {
       return normalize.input({
         ...parts.input.attrs,
-        id: dom.getInputId(scope),
-        defaultValue: context.get("value"),
-        "data-invalid": dataAttr(isOverLimit),
+        'id': dom.getInputId(scope),
+        'defaultValue': context.get('value'),
+        'data-invalid': dataAttr(isOverLimit),
         //   [INPUT]() { updateCountMessage(this); }
         // Uses onInput (not onChange) per Zag convention for <input> elements.
         onInput(event) {
           const target = event.currentTarget as HTMLInputElement | HTMLTextAreaElement
-          send({ type: "VALUE_CHANGE", value: target.value })
+          send({ type: 'VALUE_CHANGE', value: target.value })
         },
         onFocus() {
-          send({ type: "INPUT.FOCUS" })
+          send({ type: 'INPUT.FOCUS' })
         },
         onBlur() {
-          send({ type: "INPUT.BLUR" })
+          send({ type: 'INPUT.BLUR' })
         },
       })
     },
@@ -79,9 +79,9 @@ export function connect<T extends PropTypes>(
     getStatusProps() {
       return normalize.element({
         ...parts.status.attrs,
-        id: dom.getStatusId(scope),
-        "aria-hidden": true,
-        "data-invalid": dataAttr(isOverLimit),
+        'id': dom.getStatusId(scope),
+        'aria-hidden': true,
+        'data-invalid': dataAttr(isOverLimit),
       })
     },
 

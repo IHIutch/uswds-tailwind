@@ -1,4 +1,4 @@
-import type { DatepickerSchema, DateView, DayCell, MonthCell, WeekDay, YearCell } from './date-picker.types'
+import type { DatepickerSchema, DateView, DayCell, YearCell } from './date-picker.types'
 import { createMachine } from '@zag-js/core'
 import { raf } from '@zag-js/dom-query'
 import * as dom from './date-picker.dom'

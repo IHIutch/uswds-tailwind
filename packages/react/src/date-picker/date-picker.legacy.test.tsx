@@ -257,8 +257,8 @@ it('`min` prop disables earlier dates in the calendar', async () => {
       '[data-scope="datepicker"][data-part="cell-trigger"]',
     ),
   )
-  const jan5 = cells.find(c => /^5 January 2020/.test(c.getAttribute('aria-label') || ''))
-  const jan15 = cells.find(c => /^15 January 2020/.test(c.getAttribute('aria-label') || ''))
+  const jan5 = cells.find(c => (c.getAttribute('aria-label') || '').startsWith('5 January 2020'))
+  const jan15 = cells.find(c => (c.getAttribute('aria-label') || '').startsWith('15 January 2020'))
 
   expect(jan5?.disabled).toBe(true)
   expect(jan15?.disabled).toBe(false)
