@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussions
+    url: https://github.com/IHIutch/uswds-tailwind/discussions
+    about: Use Discussions for general questions, design ideas, "is this a bug?" triage, and roadmap feedback.
+
+  - name: Security vulnerabilities
+    url: https://github.com/IHIutch/uswds-tailwind/security/policy
+    about: Report security issues privately, not through public issues.
