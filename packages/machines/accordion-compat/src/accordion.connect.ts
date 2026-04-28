@@ -1,6 +1,6 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
-import type { AccordionApi, AccordionSchema, ItemProps, ItemState } from './accordion.types'
+import type { AccordionApi, AccordionSchema, ItemProps } from './accordion.types'
 import { isSafari } from '@zag-js/dom-query'
 import { parts } from './accordion.anatomy'
 import * as dom from './accordion.dom'

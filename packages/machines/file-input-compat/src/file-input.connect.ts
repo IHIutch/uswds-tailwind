@@ -140,7 +140,7 @@ export function connect<T extends PropTypes>(
           send({ type: 'DROPZONE.DRAG_OVER' })
         },
 
-        onDragLeave(event) {
+        onDragLeave() {
           if (disabled)
             return
           send({ type: 'DROPZONE.DRAG_LEAVE' })
@@ -253,7 +253,7 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getItemNameProps(props: ItemProps) {
+    getItemNameProps(_props: ItemProps) {
       return normalize.element({
         ...parts.itemName.attrs,
         'data-disabled': dataAttr(disabled),

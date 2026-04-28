@@ -184,7 +184,7 @@ it('blurring the input (focus moves elsewhere) closes the list', async () => {
   await expect.element(input).toHaveAttribute('aria-expanded', 'false')
 })
 
-it('ArrowDown on an open list moves the highlighted option down', async () => {
+it('arrowDown on an open list moves the highlighted option down', async () => {
   const screen = await renderCombobox()
   const input = screen.getByRole('combobox')
 
@@ -198,7 +198,7 @@ it('ArrowDown on an open list moves the highlighted option down', async () => {
   expect(highlighted?.textContent?.trim()).toBe('Apricot')
 })
 
-it('ArrowUp on an open list moves the highlighted option up', async () => {
+it('arrowUp on an open list moves the highlighted option up', async () => {
   const screen = await renderCombobox()
   const input = screen.getByRole('combobox')
 

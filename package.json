@@ -13,15 +13,14 @@
     "build:website": "turbo run build --filter='./apps/docs'",
     "deploy:website": "turbo run deploy",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "test": "vitest",
+    "typecheck": "turbo run typecheck --filter='./packages/**' --filter='!./packages/compat'",
+    "test": "turbo run test",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
     "changeset:release": "changeset tag && changeset publish",
-    "test:browser": "vitest",
-    "release:beta": "pnpm build-packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit",
-    "release:alpha": "pnpm build-packages && changeset version && changeset publish"
+    "release:beta": "pnpm build:packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit",
+    "release:alpha": "pnpm build:packages && changeset version && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
@@ -31,6 +30,7 @@
     "@vitest/browser-playwright": "catalog:",
     "@zag-js/dom-query": "catalog:",
     "eslint": "catalog:",
+    "playwright": "catalog:",
     "tsdown": "catalog:",
     "turbo": "catalog:",
     "vitest": "catalog:"

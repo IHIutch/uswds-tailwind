@@ -7,7 +7,7 @@ function getCellValue(tr: HTMLTableRowElement, index: number) {
   const cell = tr.children[index] as HTMLElement | undefined
   if (!cell)
     return ''
-  return cell.getAttribute('data-sort-value') || cell.innerText || cell.textContent || ''
+  return cell.getAttribute('data-sort-value') || cell.textContent || ''
 }
 
 function compareFunction(index: number, isAscending: boolean, locale: string) {

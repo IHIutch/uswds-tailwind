@@ -3,7 +3,7 @@ import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
  * Callback details
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface ValueChangeDetails {
   value: string
@@ -11,7 +11,7 @@ export interface ValueChangeDetails {
 
 /* -----------------------------------------------------------------------------
  * Element IDs
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   root: string
@@ -21,7 +21,7 @@ export type ElementIds = Partial<{
 
 /* -----------------------------------------------------------------------------
  * Machine props
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface InputMaskProps extends CommonProperties {
   ids?: ElementIds | undefined
@@ -35,15 +35,15 @@ export interface InputMaskProps extends CommonProperties {
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
 }
 
-type PropsWithDefault = "defaultValue"
+type PropsWithDefault = 'defaultValue'
 
 /* -----------------------------------------------------------------------------
  * Machine schema
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface InputMaskSchema {
   props: RequiredBy<InputMaskProps, PropsWithDefault>
-  state: "idle" | "focused"
+  state: 'idle' | 'focused'
   context: {
     value: string
   }
@@ -53,9 +53,9 @@ export interface InputMaskSchema {
     maxLength: number
   }
   event:
-    | { type: "VALUE_CHANGE"; value: string }
-    | { type: "INPUT.FOCUS" }
-    | { type: "INPUT.BLUR" }
+    | { type: 'VALUE_CHANGE', value: string }
+    | { type: 'INPUT.FOCUS' }
+    | { type: 'INPUT.BLUR' }
   action: string
   effect: string
   guard: string
@@ -66,7 +66,7 @@ export type InputMaskMachine = Machine<InputMaskSchema>
 
 /* -----------------------------------------------------------------------------
  * Component API
- * -----------------------------------------------------------------------------*/
+ * ----------------------------------------------------------------------------- */
 
 export interface InputMaskApi<T extends PropTypes = PropTypes> {
   focused: boolean
@@ -77,7 +77,7 @@ export interface InputMaskApi<T extends PropTypes = PropTypes> {
   // false when `pattern` is not set or while the input isn't fully filled.
   isInvalid: boolean
 
-  getRootProps: () => T["element"]
-  getInputProps: () => T["input"]
-  getMaskProps: () => T["element"]
+  getRootProps: () => T['element']
+  getInputProps: () => T['input']
+  getMaskProps: () => T['element']
 }

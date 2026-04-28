@@ -51,7 +51,7 @@ type PropsWithDefault = 'closeOnSelect'
 export interface DropdownSchema {
   props: RequiredBy<DropdownProps, PropsWithDefault>
   state: 'closed' | 'open'
-  context: {}
+  context: Record<string, never>
   event: EventObject
   action: string
   effect: string

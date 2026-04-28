@@ -58,6 +58,9 @@ jobs:
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup-pnpm
 
+      - name: Build packages
+        run: pnpm build:packages
+
       - name: Run TypeScript check
         run: pnpm typecheck
 
@@ -75,7 +78,7 @@ jobs:
         run: pnpm build:packages
 
       - name: Setup Playwright
-        run: pnpm dlx playwright install
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run tests
-        run: pnpm test:browser
+        run: pnpm test

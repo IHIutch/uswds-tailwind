@@ -8,12 +8,16 @@ export default defineConfig({
   plugins: [tailwindcss(), react()],
   test: {
     globals: true,
-    testTimeout: 1000,
     setupFiles: ['./test/test-setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     css: true,
     browser: {
-      provider: playwright(),
+      provider: playwright({
+        // https://vitest.dev/guide/browser/playwright
+        launchOptions: {
+          channel: 'chromium',
+        },
+      }),
       enabled: true,
       headless: !!process.env.CI,
       instances: [{

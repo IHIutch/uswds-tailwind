@@ -1,8 +1,8 @@
 import type { ComboboxOption, ComboboxSchema } from '@uswds-tailwind/combobox-compat'
 import * as combobox from '@uswds-tailwind/combobox-compat'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 
 function copyAttributes(from: HTMLElement, to: HTMLElement) {
   const className = from.getAttribute('class')

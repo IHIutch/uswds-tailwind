@@ -1,4 +1,3 @@
-
 function isIncluded(file: string, value: string) {
   const pos = file.indexOf(value)
   return pos >= 0

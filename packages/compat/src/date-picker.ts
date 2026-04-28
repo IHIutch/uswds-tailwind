@@ -1,7 +1,7 @@
 import * as datePicker from '@uswds-tailwind/date-picker-compat'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 
 function copyAttributes(from: HTMLElement, to: HTMLElement) {
   // Only copy class and style attributes

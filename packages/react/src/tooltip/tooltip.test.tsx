@@ -15,6 +15,12 @@ function renderTooltip() {
 it('tooltip content is not visible by default', async () => {
   const screen = await renderTooltip()
 
+  // Playwright's headless mouse starts at (0,0); if the trigger renders near
+  // there, it counts as hovered and the tooltip opens immediately. Unhover
+  // explicitly so we're testing the actual closed-by-default state.
+  const trigger = screen.getByRole('button', { name: 'Hover me' })
+  await userEvent.unhover(trigger.element())
+
   const content = screen.getByText('This is a tooltip')
   await expect.element(content).toHaveAttribute('data-state', 'closed')
 })

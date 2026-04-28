@@ -6,8 +6,6 @@ export default defineConfig({
 
   test: {
     reporters: process.env.GITHUB_ACTIONS ? ['github-actions'] : ['dot'],
-
-    testTimeout: 5000,
     globals: true,
     include: ['e2e/**/*.{test,spec}.ts'],
     exclude: [
@@ -16,7 +14,12 @@ export default defineConfig({
       '.storybook/**',
     ],
     browser: {
-      provider: playwright(),
+      provider: playwright({
+        // https://vitest.dev/guide/browser/playwright
+        launchOptions: {
+          channel: 'chromium',
+        },
+      }),
       headless: !!process.env.GITHUB_ACTIONS,
       enabled: true,
       // at least one instance is required

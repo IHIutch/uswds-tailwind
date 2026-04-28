@@ -11,12 +11,12 @@ export function connect<T extends PropTypes>(
 ): InputMaskApi<T> {
   const { state, context, send, prop, scope, computed } = service
 
-  const focused = state.matches("focused")
-  const enteredText = computed("enteredText")
-  const remainingPlaceholder = computed("remainingPlaceholder")
-  const value = context.get("value")
-  const pattern = prop("pattern")
-  const maxLength = computed("maxLength")
+  const focused = state.matches('focused')
+  const enteredText = computed('enteredText')
+  const remainingPlaceholder = computed('remainingPlaceholder')
+  const value = context.get('value')
+  const pattern = prop('pattern')
+  const maxLength = computed('maxLength')
 
   // `pattern` validation only applies once the input is fully filled.
   // Partial entries are "in progress" and shouldn't be flagged invalid.
@@ -55,13 +55,13 @@ export function connect<T extends PropTypes>(
         // Uses onInput (not keyup) per Zag convention — fires on paste/cut too.
         onInput(event) {
           const target = event.currentTarget as HTMLInputElement
-          send({ type: "VALUE_CHANGE", value: target.value })
+          send({ type: 'VALUE_CHANGE', value: target.value })
         },
         onFocus() {
-          send({ type: "INPUT.FOCUS" })
+          send({ type: 'INPUT.FOCUS' })
         },
         onBlur() {
-          send({ type: "INPUT.BLUR" })
+          send({ type: 'INPUT.BLUR' })
         },
       })
     },
@@ -70,8 +70,8 @@ export function connect<T extends PropTypes>(
     getMaskProps() {
       return normalize.element({
         ...parts.mask.attrs,
-        id: dom.getMaskId(scope),
-        "aria-hidden": true,
+        'id': dom.getMaskId(scope),
+        'aria-hidden': true,
       })
     },
   }

@@ -1,7 +1,7 @@
 import * as table from '@uswds-tailwind/table-compat'
+import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getId } from './lib/id-generator'
-import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 
 export class Table extends Component<table.Props, table.Api> {
   static instances = new Map<string, Table>()

@@ -1,6 +1,6 @@
 import type { Service } from '@zag-js/core'
 import type { EventKeyMap, NormalizeProps, PropTypes } from '@zag-js/types'
-import type { ComboboxApi, ComboboxSchema, OptionProps, OptionState } from './combobox.types'
+import type { ComboboxApi, ComboboxSchema, OptionProps } from './combobox.types'
 import { ariaAttr, dataAttr, getEventKey, isComposingEvent, isLeftClick } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
