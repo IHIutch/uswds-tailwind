@@ -78,7 +78,7 @@ jobs:
         run: pnpm build:packages
 
       - name: Setup Playwright
-        run: pnpm dlx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run tests
         run: pnpm test:browser
