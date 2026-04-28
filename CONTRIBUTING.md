@@ -82,7 +82,7 @@ If you hit module resolution errors like `Cannot find module '@uswds-tailwind/..
 | `pnpm build:packages` | Build all packages under `packages/*/*` |
 | `pnpm lint` | Run ESLint across the workspace |
 | `pnpm typecheck` | Run `tsc --noEmit` across all packages |
-| `pnpm test:browser` | Run Vitest in browser mode |
+| `pnpm test` | Run Vitest in browser mode |
 | `pnpm changeset` | Create a changeset for a user-facing change |
 
 Per-package commands run via pnpm filters:
@@ -113,7 +113,7 @@ Stories live alongside their components at `packages/react/src/<name>/<name>.sto
 Tests run in real browsers via Vitest's browser mode (Playwright + Chromium):
 
 ```bash
-pnpm test:browser
+pnpm test
 ```
 
 Per-package:
@@ -151,7 +151,7 @@ TypeScript settings live in each package's `tsconfig.json`, extending shared bas
 1. ensure your code follows the style guidelines
 2. run linting: `pnpm lint`
 3. run type checking: `pnpm typecheck`
-4. run tests: `pnpm test:browser`
+4. run tests: `pnpm test`
 5. write or update tests for your changes
 6. add a [changeset](#changesets) if your change affects a published package
 
