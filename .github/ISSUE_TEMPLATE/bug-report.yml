@@ -29,7 +29,7 @@ body:
     attributes:
       label: Logs
       description: Optional if you have reproduction steps. Please avoid adding screenshots of logs, copy and paste the text instead.
-      render: shell-script
+      render: shell
 
   - type: textarea
     id: additional
