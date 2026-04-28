@@ -1,41 +1,78 @@
 name: Release
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - next
+      - main
 
-permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-  id-token: write
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
-  release:
-    name: Release
+  test:
+    name: Test
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'IHIutch'
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js and pnpm (no postinstall scripts)
+        uses: ./.github/actions/setup-pnpm
+        with:
+          ignore-scripts: 'true'
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build packages
+        run: pnpm build:packages
+
+  release:
+    name: Release
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'IHIutch'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js and pnpm
+      - name: Setup Node.js and pnpm (no postinstall scripts)
         uses: ./.github/actions/setup-pnpm
-
-      # - name: Verify package integrity
-      #   run: pnpm audit --audit-level high
-
-      - name: Create Github Release
-        id: changesets
-        uses: changesets/action@v1
         with:
-          # Note: pnpm install after versioning is necessary to refresh lockfile
-          publish: pnpm changeset tag # https://github.com/changesets/action/issues/422#issuecomment-2742776221
-          # version: pnpm changeset version
-          # commit: "[ci] release"
-          # title: "[ci] release"
+          ignore-scripts: 'true'
+
+      # When changesets are present on the branch, opens/updates a
+      # "chore(release): version packages" PR. When that PR merges (no
+      # remaining changesets), builds and publishes to npm.
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf # v1.7.0
+        with:
+          version: pnpm changeset:version
+          publish: pnpm changeset:publish
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ''
+          NPM_CONFIG_PROVENANCE: 'true'
+          NPM_TOKEN: '' # https://github.com/changesets/changesets/issues/1152#issuecomment-3190884868

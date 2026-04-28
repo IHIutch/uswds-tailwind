@@ -16,11 +16,8 @@
     "typecheck": "turbo run typecheck --filter='./packages/**' --filter='!./packages/compat'",
     "test": "turbo run test",
     "changeset": "changeset",
-    "changeset:version": "changeset version",
-    "changeset:publish": "changeset publish",
-    "changeset:release": "changeset tag && changeset publish",
-    "release:beta": "pnpm build:packages && changeset pre enter beta && changeset version && changeset publish && changeset pre exit",
-    "release:alpha": "pnpm build:packages && changeset version && changeset publish"
+    "changeset:version": "changeset version && pnpm install --no-frozen-lockfile",
+    "changeset:publish": "pnpm build:packages && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
