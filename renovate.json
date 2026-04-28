@@ -1,0 +1,67 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":labels(area:build)",
+    ":maintainLockFilesWeekly",
+    ":widenPeerDependencies",
+    ":pinDevDependencies",
+    ":semanticCommitTypeAll(chore)",
+    "group:allNonMajor"
+  ],
+  "schedule": ["on Monday"],
+  "prConcurrentLimit": 3,
+  "branchConcurrentLimit": 3,
+  "minimumReleaseAge": "3 days",
+  "dependencyDashboardAutoclose": true,
+  "inactiveCloseAutoMerge": true,
+  "npm": {
+    "commitMessageTopic": "{{prettyDepType}} {{depName}}"
+  },
+  "postUpdateOptions": ["pnpmDedupe"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["dependencies"],
+      "rangeStrategy": "update-lockfile"
+    },
+    {
+      "groupName": "vite",
+      "groupSlug": "vite",
+      "matchPackageNames": ["vite", "/^@vitejs//", "/^vite-/"]
+    },
+    {
+      "groupName": "vitest",
+      "extends": ["packages:test"],
+      "matchPackageNames": ["/vitest/", "/^@vitest//"]
+    },
+    {
+      "groupName": "all linters",
+      "extends": ["packages:linters"],
+      "matchPackageNames": ["eslint", "/^@antfu//"]
+    },
+    {
+      "groupName": "@zag-js",
+      "matchPackageNames": ["@zag-js/**"]
+    },
+    {
+      "groupName": "tailwindcss",
+      "matchPackageNames": ["tailwindcss", "@tailwindcss/**", "tailwindcss-**"]
+    },
+    {
+      "groupName": "storybook",
+      "matchPackageNames": ["storybook", "@storybook/**"]
+    },
+    {
+      "groupName": "fontsource",
+      "matchPackageNames": ["@fontsource-variable/**"]
+    },
+    {
+      "groupName": "iconify",
+      "matchPackageNames": ["@iconify/**", "@iconify-json/**"]
+    },
+    {
+      "groupName": "playwright",
+      "matchPackageNames": ["playwright", "@playwright/**"]
+    }
+  ]
+}
