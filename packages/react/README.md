@@ -7,18 +7,12 @@
 USWDS components for React, styled with [Tailwind CSS](https://tailwindcss.com/) and powered by [zag-js](https://zagjs.com/) state machines.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases. Pin exact versions and read the [changelog](https://github.com/IHIutch/uswds-tailwind/releases) before upgrading.
+> This package is in **alpha**. APIs may change between releases.
 
 ## Install
 
 ```bash
-npm install @uswds-tailwind/react@alpha
-```
-
-You'll also need Tailwind CSS v4 and the theme package:
-
-```bash
-npm install -D tailwindcss @uswds-tailwind/theme@alpha
+npm install @uswds-tailwind/react@alpha tailwindcss
 ```
 
 ## Setup
@@ -27,10 +21,8 @@ Add two `@import` lines to your global CSS:
 
 ```css
 @import 'tailwindcss';
-@import '@uswds-tailwind/react/styles.css';
+@import '@uswds-tailwind/react';
 ```
-
-`styles.css` re-exports the theme tokens and registers `@source` globs for the component classes used internally, so consumers don't need to configure anything else.
 
 ## Usage
 

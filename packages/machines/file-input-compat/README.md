@@ -6,7 +6,7 @@
 Headless [zag-js](https://zagjs.com/) state machine for the USWDS file input component. Provides state and accessibility behavior used by `@uswds-tailwind/react` and `@uswds-tailwind/compat`.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases. Pin exact versions and read the [changelog](https://github.com/IHIutch/uswds-tailwind/releases) before upgrading.
+> This package is in **alpha**. APIs may change between releases.
 
 ## Install
 

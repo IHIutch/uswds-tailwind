@@ -7,7 +7,7 @@
 USWDS components as drop-in vanilla JavaScript modules. Auto-initializes elements with USWDS data attributes. No framework required.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases. Pin exact versions and read the [changelog](https://github.com/IHIutch/uswds-tailwind/releases) before upgrading.
+> This package is in **alpha**. APIs may change between releases.
 
 ## Install
 
