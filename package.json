@@ -9,7 +9,7 @@
   ],
   "packageManager": "pnpm@10.25.0",
   "scripts": {
-    "build:packages": "turbo run build --filter='./packages/*/*'",
+    "build:packages": "turbo run build --filter='./packages/**'",
     "build:website": "turbo run build --filter='./apps/docs'",
     "deploy:website": "turbo run deploy",
     "lint": "turbo run lint",
@@ -18,7 +18,7 @@
     "test": "turbo run test",
     "changeset": "changeset",
     "changeset:version": "changeset version && pnpm install --no-frozen-lockfile",
-    "changeset:publish": "pnpm build:packages && changeset publish"
+    "changeset:publish": "pnpm build:packages && changeset publish --tag alpha"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
