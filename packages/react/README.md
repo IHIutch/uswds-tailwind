@@ -9,6 +9,8 @@ USWDS components for React, styled with [Tailwind CSS](https://tailwindcss.com/)
 > [!NOTE]
 > This package is in **alpha**. APIs may change between releases.
 
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-xm6mmahl)
+
 ## Install
 
 ```bash
