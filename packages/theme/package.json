@@ -1,6 +1,24 @@
 {
   "name": "@uswds-tailwind/theme",
+  "type": "module",
   "version": "0.3.0-alpha.3",
+  "description": "Tailwind CSS v4 theme with USWDS design tokens (colors, spacing, typography, breakpoints).",
+  "author": "Jonathan Hutchison",
+  "license": "MIT",
+  "homepage": "https://uswds-tailwind.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IHIutch/uswds-tailwind.git",
+    "directory": "packages/theme"
+  },
+  "bugs": "https://github.com/IHIutch/uswds-tailwind/issues",
+  "keywords": [
+    "uswds",
+    "tailwindcss",
+    "theme",
+    "design-tokens",
+    "design-system"
+  ],
   "publishConfig": {
     "tag": "alpha"
   },
@@ -19,6 +37,9 @@
     "src/index.css",
     "src/tailwind.config.ts"
   ],
+  "scripts": {
+    "publint": "publint"
+  },
   "peerDependencies": {
     "tailwindcss": "^4.0.0"
   },
@@ -26,9 +47,6 @@
     "@tailwindcss/forms": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "tailwindcss-animate": "catalog:"
-  },
-  "devDependencies": {
-    "tailwindcss": "catalog:"
   },
   "optionalDependencies": {
     "@fontsource-variable/merriweather": "catalog:",
@@ -40,5 +58,9 @@
     "@iconify-json/fa6-brands": "catalog:",
     "@iconify-json/material-symbols": "catalog:",
     "@iconify/tailwind4": "catalog:"
+  },
+  "devDependencies": {
+    "publint": "catalog:",
+    "tailwindcss": "catalog:"
   }
 }

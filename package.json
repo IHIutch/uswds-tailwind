@@ -13,6 +13,7 @@
     "build:website": "turbo run build --filter='./apps/docs'",
     "deploy:website": "turbo run deploy",
     "lint": "turbo run lint",
+    "publint": "turbo run publint --filter='./packages/**'",
     "typecheck": "turbo run typecheck --filter='./packages/**' --filter='!./packages/compat'",
     "test": "turbo run test",
     "changeset": "changeset",

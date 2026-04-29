@@ -2,6 +2,22 @@
   "name": "@uswds-tailwind/input-mask-compat",
   "type": "module",
   "version": "0.3.0-alpha.3",
+  "description": "Headless state machine for USWDS masked text inputs (zag-js).",
+  "author": "Jonathan Hutchison",
+  "license": "MIT",
+  "homepage": "https://uswds-tailwind.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IHIutch/uswds-tailwind.git",
+    "directory": "packages/machines/input-mask-compat"
+  },
+  "bugs": "https://github.com/IHIutch/uswds-tailwind/issues",
+  "keywords": [
+    "uswds",
+    "input-mask",
+    "zag-js",
+    "state-machine"
+  ],
   "publishConfig": {
     "tag": "alpha"
   },
@@ -18,6 +34,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
+    "publint": "publint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -25,5 +42,8 @@
     "@zag-js/core": "catalog:",
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:"
+  },
+  "devDependencies": {
+    "publint": "catalog:"
   }
 }

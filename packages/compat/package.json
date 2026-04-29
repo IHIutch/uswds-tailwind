@@ -2,6 +2,24 @@
   "name": "@uswds-tailwind/compat",
   "type": "module",
   "version": "0.3.0-alpha.3",
+  "description": "USWDS components as drop-in vanilla JavaScript modules. Auto-initializes elements with USWDS data attributes — no framework required.",
+  "author": "Jonathan Hutchison",
+  "license": "MIT",
+  "homepage": "https://uswds-tailwind.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IHIutch/uswds-tailwind.git",
+    "directory": "packages/compat"
+  },
+  "bugs": "https://github.com/IHIutch/uswds-tailwind/issues",
+  "keywords": [
+    "uswds",
+    "vanilla-js",
+    "components",
+    "design-system",
+    "accessibility",
+    "zag-js"
+  ],
   "publishConfig": {
     "tag": "alpha"
   },
@@ -76,6 +94,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
+    "publint": "publint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -95,5 +114,8 @@
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:",
     "@zag-js/vanilla": "catalog:"
+  },
+  "devDependencies": {
+    "publint": "catalog:"
   }
 }
