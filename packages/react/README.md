@@ -22,7 +22,7 @@ npm install @uswds-tailwind/react@alpha tailwindcss
 Add two `@import` lines to your global CSS:
 
 ```css
-// styles.css
+/* style.css */
 @import 'tailwindcss';
 @import '@uswds-tailwind/react';
 ```
