@@ -183,6 +183,9 @@ catalogs:
     playwright:
       specifier: ^1.57.0
       version: 1.57.0
+    publint:
+      specifier: ^0.3.18
+      version: 0.3.18
     react:
       specifier: ^19.2.3
       version: 19.2.5
@@ -256,7 +259,7 @@ importers:
         version: 1.57.0
       tsdown:
         specifier: 'catalog:'
-        version: 0.17.3(synckit@0.11.11)(typescript@5.9.3)
+        version: 0.17.3(publint@0.3.18)(synckit@0.11.11)(typescript@5.9.3)
       turbo:
         specifier: 'catalog:'
         version: 2.6.3
@@ -496,6 +499,10 @@ importers:
       '@zag-js/vanilla':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/accordion-compat:
     dependencies:
@@ -523,6 +530,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/character-count-compat:
     dependencies:
@@ -553,6 +564,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/collapse-compat:
     dependencies:
@@ -583,6 +598,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/combobox-compat:
     dependencies:
@@ -601,6 +620,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/date-picker-compat:
     dependencies:
@@ -622,6 +645,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/dropdown-compat:
     dependencies:
@@ -643,6 +670,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/file-input-compat:
     dependencies:
@@ -661,6 +692,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/input-mask-compat:
     dependencies:
@@ -676,6 +711,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/modal:
     dependencies:
@@ -706,6 +745,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/modal-compat:
     dependencies:
@@ -736,6 +779,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/table-compat:
     dependencies:
@@ -766,6 +813,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/machines/tooltip-compat:
     dependencies:
@@ -781,6 +832,10 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
+    devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
 
   packages/react:
     dependencies:
@@ -866,6 +921,9 @@ importers:
       fathom-client:
         specifier: 'catalog:'
         version: 3.7.2
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
       react:
         specifier: 'catalog:'
         version: 19.2.5
@@ -903,6 +961,9 @@ importers:
         specifier: 'catalog:'
         version: 1.0.7(tailwindcss@4.1.18)
     devDependencies:
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.18
       tailwindcss:
         specifier: 'catalog:'
         version: 4.1.18
@@ -2817,6 +2878,10 @@ packages:
 
   '@poppinss/exception@1.2.2':
     resolution: {integrity: sha512-m7bpKCD4QMlFCjA/nKTs23fuvoVFoA83brRKmObCUNmi/9tVu8Ve3w4YQAnJu4q3Tjf5fr685HYIC/IA2zHRSg==}
+
+  '@publint/pack@0.1.4':
+    resolution: {integrity: sha512-HDVTWq3H0uTXiU0eeSQntcVUTPP3GamzeXI41+x7uU9J65JgWQh3qWZHblR1i0npXfFtF+mxBiU2nJH8znxWnQ==}
+    engines: {node: '>=18'}
 
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
@@ -5556,6 +5621,9 @@ packages:
   package-manager-detector@1.3.0:
     resolution: {integrity: sha512-ZsEbbZORsyHuO00lY1kV3/t72yp6Ysay6Pd17ZAlNGuGwmWDLCJxFpRs0IzfXfj1o4icJOkUEioexFHzyPurSQ==}
 
+  package-manager-detector@1.6.0:
+    resolution: {integrity: sha512-61A5ThoTiDG/C8s8UMZwSorAGwMJ0ERVGj2OjoW5pAalsNOg15+iQiPzrLJ4jhZ1HJzmC2PIHT2oEiH3R5fzNA==}
+
   pako@0.2.9:
     resolution: {integrity: sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==}
 
@@ -5734,6 +5802,11 @@ packages:
 
   proxy-compare@3.0.1:
     resolution: {integrity: sha512-V9plBAt3qjMlS1+nC8771KNf6oJ12gExvaxnNzN/9yVRLdTv/lc+oJlnSzrdYDAvBfTStPCoiaCOTmTs0adv7Q==}
+
+  publint@0.3.18:
+    resolution: {integrity: sha512-JRJFeBTrfx4qLwEuGFPk+haJOJN97KnPuK01yj+4k/Wj5BgoOK5uNsivporiqBjk2JDaslg7qJOhGRnpltGeog==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
@@ -5960,6 +6033,10 @@ packages:
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
+
+  sade@1.8.1:
+    resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
+    engines: {node: '>=6'}
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
@@ -8805,6 +8882,8 @@ snapshots:
       supports-color: 10.2.2
 
   '@poppinss/exception@1.2.2': {}
+
+  '@publint/pack@0.1.4': {}
 
   '@quansync/fs@1.0.0':
     dependencies:
@@ -12187,6 +12266,8 @@ snapshots:
 
   package-manager-detector@1.3.0: {}
 
+  package-manager-detector@1.6.0: {}
+
   pako@0.2.9: {}
 
   parent-module@1.0.1:
@@ -12353,6 +12434,13 @@ snapshots:
   property-information@7.1.0: {}
 
   proxy-compare@3.0.1: {}
+
+  publint@0.3.18:
+    dependencies:
+      '@publint/pack': 0.1.4
+      package-manager-detector: 1.6.0
+      picocolors: 1.1.1
+      sade: 1.8.1
 
   punycode@2.3.1: {}
 
@@ -12680,6 +12768,10 @@ snapshots:
   run-parallel@1.2.0:
     dependencies:
       queue-microtask: 1.2.3
+
+  sade@1.8.1:
+    dependencies:
+      mri: 1.2.0
 
   safer-buffer@2.1.2: {}
 
@@ -13044,7 +13136,7 @@ snapshots:
       minimist: 1.2.8
       strip-bom: 3.0.0
 
-  tsdown@0.17.3(synckit@0.11.11)(typescript@5.9.3):
+  tsdown@0.17.3(publint@0.3.18)(synckit@0.11.11)(typescript@5.9.3):
     dependencies:
       ansis: 4.2.0
       cac: 6.7.14
@@ -13062,6 +13154,7 @@ snapshots:
       unconfig-core: 7.4.2
       unrun: 0.2.19(synckit@0.11.11)
     optionalDependencies:
+      publint: 0.3.18
       typescript: 5.9.3
     transitivePeerDependencies:
       - '@ts-macro/tsc'

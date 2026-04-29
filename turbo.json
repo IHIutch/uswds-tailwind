@@ -20,6 +20,17 @@
         "^lint"
       ]
     },
+    "publint": {
+      "dependsOn": [
+        "build"
+      ],
+      "inputs": [
+        "package.json",
+        "README.md",
+        "dist/**"
+      ],
+      "outputs": []
+    },
     "typecheck": {
       "dependsOn": [
         "^typecheck"

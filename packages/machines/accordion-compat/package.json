@@ -2,6 +2,23 @@
   "name": "@uswds-tailwind/accordion-compat",
   "type": "module",
   "version": "0.3.0-alpha.3",
+  "description": "Headless state machine for the USWDS accordion component (zag-js). Powers @uswds-tailwind/react and @uswds-tailwind/compat.",
+  "author": "Jonathan Hutchison",
+  "license": "MIT",
+  "homepage": "https://uswds-tailwind.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IHIutch/uswds-tailwind.git",
+    "directory": "packages/machines/accordion-compat"
+  },
+  "bugs": "https://github.com/IHIutch/uswds-tailwind/issues",
+  "keywords": [
+    "uswds",
+    "accordion",
+    "zag-js",
+    "state-machine",
+    "accessibility"
+  ],
   "publishConfig": {
     "tag": "alpha"
   },
@@ -18,6 +35,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
+    "publint": "publint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -29,5 +47,8 @@
     "@zag-js/remove-scroll": "catalog:",
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:"
+  },
+  "devDependencies": {
+    "publint": "catalog:"
   }
 }

@@ -2,6 +2,24 @@
   "name": "@uswds-tailwind/file-input-compat",
   "type": "module",
   "version": "0.3.0-alpha.3",
+  "description": "Headless state machine for the USWDS file-input component (zag-js).",
+  "author": "Jonathan Hutchison",
+  "license": "MIT",
+  "homepage": "https://uswds-tailwind.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IHIutch/uswds-tailwind.git",
+    "directory": "packages/machines/file-input-compat"
+  },
+  "bugs": "https://github.com/IHIutch/uswds-tailwind/issues",
+  "keywords": [
+    "uswds",
+    "file-input",
+    "file-upload",
+    "zag-js",
+    "state-machine",
+    "accessibility"
+  ],
   "publishConfig": {
     "tag": "alpha"
   },
@@ -18,6 +36,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
+    "publint": "publint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -26,5 +45,8 @@
     "@zag-js/dom-query": "catalog:",
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:"
+  },
+  "devDependencies": {
+    "publint": "catalog:"
   }
 }

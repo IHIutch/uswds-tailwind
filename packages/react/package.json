@@ -2,6 +2,25 @@
   "name": "@uswds-tailwind/react",
   "type": "module",
   "version": "0.3.0-alpha.3",
+  "description": "USWDS components for React, styled with Tailwind CSS and powered by zag-js state machines.",
+  "author": "Jonathan Hutchison",
+  "license": "MIT",
+  "homepage": "https://uswds-tailwind.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IHIutch/uswds-tailwind.git",
+    "directory": "packages/react"
+  },
+  "bugs": "https://github.com/IHIutch/uswds-tailwind/issues",
+  "keywords": [
+    "uswds",
+    "tailwindcss",
+    "react",
+    "components",
+    "design-system",
+    "accessibility",
+    "zag-js"
+  ],
   "publishConfig": {
     "tag": "alpha"
   },
@@ -10,8 +29,8 @@
   ],
   "exports": {
     ".": {
-      "style": "./styles.css",
       "types": "./dist/index.d.mts",
+      "style": "./styles.css",
       "import": "./dist/index.mjs"
     },
     "./accordion": {
@@ -183,6 +202,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint src",
+    "publint": "publint",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
@@ -225,6 +245,7 @@
     "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "fathom-client": "catalog:",
+    "publint": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "storybook": "catalog:",

@@ -1,89 +1,69 @@
 # USWDS Tailwind
 
-USWDS Tailwind is an open-source project designed to provide a modern approach to building application federal websites using Tailwind CSS and USWDS principles. This repository is actively maintained, and contributions from the community are welcome!
+USWDS components for Tailwind CSS, available as React components or vanilla JS modules. Built on top of [zag-js](https://zagjs.com/) state machines for accessible, headless behavior.
 
-![hero](https://repository-images.githubusercontent.com/674037448/e36daf0e-292a-4143-8d9c-e54dd8935fe4)
+![](https://repository-images.githubusercontent.com/674037448/e36daf0e-292a-4143-8d9c-e54dd8935fe4)
+
+> [!NOTE]
+> This project is currently in **alpha**. APIs may change between releases.
 
 ## Documentation
 
-Want to use USWDS + Tailwind on your project? Visit the [documentation site](https://uswds-tailwind.com) for how to get started.
+Full guides, component API, and examples live at [uswds-tailwind.com](https://uswds-tailwind.com).
+
+## Packages
+
+| Package | Description |
+|---|---|
+| [`@uswds-tailwind/react`](./packages/react) | React component library |
+| [`@uswds-tailwind/compat`](./packages/compat) | Drop-in vanilla JS modules |
+| [`@uswds-tailwind/theme`](./packages/theme) | Tailwind v4 theme with USWDS design tokens |
+| [`@uswds-tailwind/<name>-compat`](./packages/machines) | Headless zag-js state machines (one per component) |
+
+## Repository structure
+
+- `apps/docs/`: Astro documentation site at [uswds-tailwind.com](https://uswds-tailwind.com)
+- `packages/react/`: React component library + Storybook
+- `packages/compat/`: vanilla JS bundle
+- `packages/theme/`: Tailwind v4 theme
+- `packages/machines/`: per-component zag-js state machines
+- `examples/`: minimal example projects
+
+## Local development
+
+Requires [Node.js](https://nodejs.org/) (see [`.nvmrc`](./.nvmrc)) and [pnpm](https://pnpm.io/).
+
+```bash
+git clone https://github.com/IHIutch/uswds-tailwind.git
+cd uswds-tailwind
+pnpm install
+pnpm build:packages
+```
+
+Common scripts (run from the repo root):
+
+| Script | What it does |
+|---|---|
+| `pnpm build:packages` | Build all publishable packages |
+| `pnpm build:website` | Build the docs site |
+| `pnpm lint` | Run ESLint across the monorepo |
+| `pnpm lint:publish` | Run [publint](https://publint.dev) on every package |
+| `pnpm typecheck` | Run TypeScript across packages |
+| `pnpm test` | Run package tests |
+| `pnpm --filter website dev` | Start the docs dev server |
+| `pnpm --filter @uswds-tailwind/react storybook` | Start Storybook |
 
 ## Contributing
 
-### Development Setup
+Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for branching, conventional commits, changesets, and PR conventions.
 
-#### Prerequisites
+## Community
 
-Ensure you have the following installed before contributing:
-
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [PNPM](https://pnpm.io/) for package management
-- [TurboRepo](https://turbo.build/) (optional, for monorepo workflows)
-
-#### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/IHIutch/uswds-tailwind.git
-   cd uswds-tailwind
-   ```
-2. Install dependencies and build packages:
-   ```bash
-   pnpm install
-   pnpm build
-   ```
-
-> **Important**: Always run `pnpm build` after installing dependencies to ensure all packages are properly built and TypeScript declarations are generated.
-
-#### Troubleshooting
-
-If you encounter module import errors like `Cannot find module '@uswds-tailwind/character-count-compat'`:
-
-1. **Make sure you're in the workspace root**: `cd /path/to/uswds-tailwind`
-2. **Force rebuild**: Run `pnpm rebuild` to force rebuild all packages
-3. **Check turbo cache**: Turbo may be using cached results - the `rebuild` command bypasses cache
-
-### Astro & Storybook Integration
-
-#### Astro
-
-This project uses [Astro](https://astro.build/) to build the documentation site. If you’re unfamiliar with Astro, check out the [Astro documentation](https://docs.astro.build/) for more information.
-
-To start the Astro development server:
-
-```bash
-pnpm dev
-```
-
-#### Storybook
-
-[Storybook](https://storybook.js.org/) is used for developing and testing UI components in isolation. This helps ensure that components are reusable and function correctly across different use cases. Learn more about Storybook in the [Storybook documentation](https://storybook.js.org/docs).
-
-To run Storybook locally:
-
-```bash
-pnpm storybook
-```
-
-## Repository Structure
-
-- **apps/docs/**: Contains the Astro documentation site
-- **apps/storybook/**: Contains the Storybook environment used to build and test components
-- **packages/tailwind-config**: The main Tailwind configuration used by the docs and end-user installation
-- **examples/basic**: A basic example of using this project
-- **scripts/**: Used to copy the Storybook examples into the documentation site
-
-## How to Contribute
-
-1. **Fork the repository** and create a new branch for your feature or fix.
-2. Follow the **coding standards** and ensure your changes align with project goals.
-3. **Write tests** for any new functionality where applicable.
-4. Submit a **pull request** with a clear explanation of your changes.
-
-## Issues and Discussions
-
-If you encounter bugs, have feature requests, or need help, please open an [issue](https://github.com/IHIutch/uswds-tailwind/issues) or start a discussion.
+- [GitHub Issues](https://github.com/IHIutch/uswds-tailwind/issues) for bug reports and feature requests
+- [GitHub Discussions](https://github.com/IHIutch/uswds-tailwind/discussions) for questions and ideas
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Security policy](./SECURITY.md)
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+[MIT](./LICENSE)

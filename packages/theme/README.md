@@ -1,39 +1,38 @@
-# Theme Package
+# @uswds-tailwind/theme
 
-This package contains a Tailwind CSS theme that can be used across various applications and components within the monorepo.
+[![Open on npmx.dev](https://npmx.dev/api/registry/badge/version/@uswds-tailwind/theme)](https://npmx.dev/package/@uswds-tailwind/theme)
+[![Open on npmx.dev](https://npmx.dev/api/registry/badge/license/@uswds-tailwind/theme)](https://npmx.dev/package/@uswds-tailwind/theme)
 
-## Installation
+A [Tailwind CSS v4](https://tailwindcss.com/) theme that exposes USWDS design tokens (colors, spacing, typography, breakpoints) as `@theme` variables.
 
-To install the theme package, run the following command:
+> [!NOTE]
+> This package is in **alpha**. APIs may change between releases. Pin exact versions and read the [changelog](https://github.com/IHIutch/uswds-tailwind/releases) before upgrading.
 
+## Install
+
+```bash
+npm install -D @uswds-tailwind/theme@alpha tailwindcss
 ```
-npm install @your-org/theme
-```
-
-Replace `@your-org` with your organization's name or the appropriate scope.
 
 ## Usage
 
-To use the Tailwind theme in your project, import the CSS file in your main entry point:
+Import the theme alongside Tailwind in your global CSS:
 
-```javascript
-import '@your-org/theme/src/index.css';
+```css
+@import 'tailwindcss';
+@import '@uswds-tailwind/theme';
 ```
 
-## Configuration
+If you're using `@uswds-tailwind/react`, you don't need to import this package directly. The React stylesheet already pulls it in.
 
-The theme can be customized by modifying the `tailwind.config.js` file. You can add or override theme settings, extend utilities, and configure plugins as needed.
+## What's included
 
-## Development
+- USWDS color, spacing, and typography tokens as Tailwind v4 `@theme` variables
+- [`@tailwindcss/forms`](https://github.com/tailwindlabs/tailwindcss-forms) and [`@tailwindcss/typography`](https://github.com/tailwindlabs/tailwindcss-typography) presets
+- [`tailwindcss-animate`](https://github.com/jamiebuilds/tailwindcss-animate) utilities
 
-To develop the theme package, you can run the following command to start a local development server:
+USWDS-recommended fonts ([Public Sans](https://public-sans.digital.gov/), Source Sans 3, Merriweather, Roboto Mono, Open Sans) and icon sets (`material-symbols`, Font Awesome via `@iconify/tailwind4`) are declared as `optionalDependencies`. Install only what you use.
 
-```
-npm run dev
-```
+## License
 
-Make sure to check the `package.json` for available scripts.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+[MIT](https://github.com/IHIutch/uswds-tailwind/blob/next/LICENSE)

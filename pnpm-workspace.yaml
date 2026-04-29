@@ -68,6 +68,7 @@ catalog:
   fuse.js: ^7.1.0
   github-slugger: ^2.0.0
   playwright: ^1.57.0
+  publint: ^0.3.18
   react: ^19.2.3
   react-dom: ^19.2.3
   receptor: ^1.0.0
