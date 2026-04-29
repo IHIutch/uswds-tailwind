@@ -45,4 +45,4 @@ accordion.on(document.querySelector('.usa-accordion'))
 
 ## License
 
-[MIT](https://github.com/IHIutch/uswds-tailwind/blob/next/LICENSE)
+[MIT](./LICENSE)

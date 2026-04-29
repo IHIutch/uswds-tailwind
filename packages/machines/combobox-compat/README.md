@@ -25,4 +25,4 @@ If you need to wire the machine up to a different framework, see the [zag-js doc
 
 ## License
 
-[MIT](https://github.com/IHIutch/uswds-tailwind/blob/next/LICENSE)
+[MIT](./LICENSE)

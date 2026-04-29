@@ -50,4 +50,4 @@ Component API, props, and Storybook examples: [uswds-tailwind.com](https://uswds
 
 ## License
 
-[MIT](https://github.com/IHIutch/uswds-tailwind/blob/next/LICENSE)
+[MIT](./LICENSE)

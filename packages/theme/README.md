@@ -35,4 +35,4 @@ USWDS-recommended fonts ([Public Sans](https://public-sans.digital.gov/), Source
 
 ## License
 
-[MIT](https://github.com/IHIutch/uswds-tailwind/blob/next/LICENSE)
+[MIT](./LICENSE)
