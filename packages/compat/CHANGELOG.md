@@ -1,5 +1,23 @@
 # @uswds-tailwind/compat
 
+## 0.3.0-alpha.4
+
+### Patch Changes
+
+- dd6574d: Add package readmes
+- Updated dependencies [dd6574d]
+  - @uswds-tailwind/character-count-compat@0.3.0-alpha.4
+  - @uswds-tailwind/date-picker-compat@0.3.0-alpha.4
+  - @uswds-tailwind/file-input-compat@0.3.0-alpha.4
+  - @uswds-tailwind/input-mask-compat@0.3.0-alpha.4
+  - @uswds-tailwind/accordion-compat@0.3.0-alpha.4
+  - @uswds-tailwind/collapse-compat@0.3.0-alpha.4
+  - @uswds-tailwind/combobox-compat@0.3.0-alpha.4
+  - @uswds-tailwind/dropdown-compat@0.3.0-alpha.4
+  - @uswds-tailwind/tooltip-compat@0.3.0-alpha.4
+  - @uswds-tailwind/modal-compat@0.3.0-alpha.4
+  - @uswds-tailwind/table-compat@0.3.0-alpha.4
+
 ## 0.3.0-alpha.3
 
 ### Patch Changes

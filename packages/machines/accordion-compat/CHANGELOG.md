@@ -1,5 +1,11 @@
 # @uswds-tailwind/accordion-compat
 
+## 0.3.0-alpha.4
+
+### Patch Changes
+
+- dd6574d: Add package readmes
+
 ## 0.3.0-alpha.3
 
 ### Patch Changes
