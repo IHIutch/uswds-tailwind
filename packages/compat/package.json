@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/compat",
   "type": "module",
-  "version": "0.3.0-alpha.4",
+  "version": "0.3.0-alpha.5",
   "description": "USWDS components as drop-in vanilla JavaScript modules. Auto-initializes elements with USWDS data attributes — no framework required.",
   "author": "Jonathan Hutchison",
   "license": "MIT",

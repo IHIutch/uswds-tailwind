@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/react",
   "type": "module",
-  "version": "0.3.0-alpha.4",
+  "version": "0.3.0-alpha.5",
   "description": "USWDS components for React, styled with Tailwind CSS and powered by zag-js state machines.",
   "author": "Jonathan Hutchison",
   "license": "MIT",

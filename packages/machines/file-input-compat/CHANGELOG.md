@@ -1,5 +1,11 @@
 # @uswds-tailwind/file-input-compat
 
+## 0.3.0-alpha.5
+
+### Patch Changes
+
+- 65ce7ca: CI tweaks and readme updates
+
 ## 0.3.0-alpha.4
 
 ### Patch Changes

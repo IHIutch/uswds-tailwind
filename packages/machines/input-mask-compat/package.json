@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/input-mask-compat",
   "type": "module",
-  "version": "0.3.0-alpha.4",
+  "version": "0.3.0-alpha.5",
   "description": "Headless state machine for USWDS masked text inputs (zag-js).",
   "author": "Jonathan Hutchison",
   "license": "MIT",

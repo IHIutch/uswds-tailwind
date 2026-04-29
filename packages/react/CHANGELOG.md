@@ -1,5 +1,24 @@
 # @uswds-tailwind/react
 
+## 0.3.0-alpha.5
+
+### Patch Changes
+
+- 65ce7ca: CI tweaks and readme updates
+- Updated dependencies [65ce7ca]
+  - @uswds-tailwind/character-count-compat@0.3.0-alpha.5
+  - @uswds-tailwind/date-picker-compat@0.3.0-alpha.5
+  - @uswds-tailwind/file-input-compat@0.3.0-alpha.5
+  - @uswds-tailwind/input-mask-compat@0.3.0-alpha.5
+  - @uswds-tailwind/accordion-compat@0.3.0-alpha.5
+  - @uswds-tailwind/collapse-compat@0.3.0-alpha.5
+  - @uswds-tailwind/combobox-compat@0.3.0-alpha.5
+  - @uswds-tailwind/dropdown-compat@0.3.0-alpha.5
+  - @uswds-tailwind/tooltip-compat@0.3.0-alpha.5
+  - @uswds-tailwind/modal-compat@0.3.0-alpha.5
+  - @uswds-tailwind/table-compat@0.3.0-alpha.5
+  - @uswds-tailwind/theme@0.3.0-alpha.5
+
 ## 0.3.0-alpha.4
 
 ### Patch Changes
