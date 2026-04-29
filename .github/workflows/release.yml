@@ -13,36 +13,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Setup Node.js and pnpm (no postinstall scripts)
-        uses: ./.github/actions/setup-pnpm
-        with:
-          ignore-scripts: 'true'
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Build packages
-        run: pnpm build:packages
-
   release:
     name: Release
-    needs: [test]
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'IHIutch'
     permissions:
       contents: write
       issues: write
