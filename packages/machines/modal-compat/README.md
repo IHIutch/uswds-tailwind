@@ -3,7 +3,7 @@
 [![Open on npmx.dev](https://npmx.dev/api/registry/badge/version/@uswds-tailwind/modal-compat)](https://npmx.dev/package/@uswds-tailwind/modal-compat)
 [![Open on npmx.dev](https://npmx.dev/api/registry/badge/license/@uswds-tailwind/modal-compat)](https://npmx.dev/package/@uswds-tailwind/modal-compat)
 
-Headless [zag-js](https://zagjs.com/) state machine for the USWDS USWDS modal dialog component. Provides state and accessibility behavior used by `@uswds-tailwind/react` and `@uswds-tailwind/compat`.
+Headless [zag-js](https://zagjs.com/) state machine for the USWDS modal component. Provides state and accessibility behavior used by `@uswds-tailwind/react` and `@uswds-tailwind/compat`.
 
 > [!NOTE]
 > This package is in **alpha**. APIs may change between releases. Pin exact versions and read the [changelog](https://github.com/IHIutch/uswds-tailwind/releases) before upgrading.
