@@ -1,5 +1,11 @@
 # @uswds-tailwind/modal-compat
 
+## 0.3.0-alpha.6
+
+### Patch Changes
+
+- 2a7b7b2: Fix release pipeline: `build:packages` now matches all packages (filter was missing one-segment-deep paths, so `react`, `compat`, `theme` shipped without `dist/`). Publish step now passes `--tag alpha` so prereleases stop hijacking the `latest` dist-tag.
+
 ## 0.3.0-alpha.5
 
 ### Patch Changes

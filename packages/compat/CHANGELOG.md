@@ -1,5 +1,23 @@
 # @uswds-tailwind/compat
 
+## 0.3.0-alpha.6
+
+### Patch Changes
+
+- 2a7b7b2: Fix release pipeline: `build:packages` now matches all packages (filter was missing one-segment-deep paths, so `react`, `compat`, `theme` shipped without `dist/`). Publish step now passes `--tag alpha` so prereleases stop hijacking the `latest` dist-tag.
+- Updated dependencies [2a7b7b2]
+  - @uswds-tailwind/character-count-compat@0.3.0-alpha.6
+  - @uswds-tailwind/date-picker-compat@0.3.0-alpha.6
+  - @uswds-tailwind/file-input-compat@0.3.0-alpha.6
+  - @uswds-tailwind/input-mask-compat@0.3.0-alpha.6
+  - @uswds-tailwind/accordion-compat@0.3.0-alpha.6
+  - @uswds-tailwind/collapse-compat@0.3.0-alpha.6
+  - @uswds-tailwind/combobox-compat@0.3.0-alpha.6
+  - @uswds-tailwind/dropdown-compat@0.3.0-alpha.6
+  - @uswds-tailwind/tooltip-compat@0.3.0-alpha.6
+  - @uswds-tailwind/modal-compat@0.3.0-alpha.6
+  - @uswds-tailwind/table-compat@0.3.0-alpha.6
+
 ## 0.3.0-alpha.5
 
 ### Patch Changes
