@@ -18,7 +18,7 @@
     "test": "turbo run test",
     "changeset": "changeset",
     "changeset:version": "changeset version && pnpm install --no-frozen-lockfile",
-    "changeset:publish": "pnpm build:packages && changeset publish --tag alpha"
+    "changeset:publish": "pnpm build:packages && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
