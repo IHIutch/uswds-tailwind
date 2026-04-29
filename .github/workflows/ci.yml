@@ -1,12 +1,7 @@
 name: CI
 
+# Runs on PRs only. Pushes to next/main go through release.yml or admin-bypass merges (e.g. the changesets version PR)
 on:
-  push:
-    branches:
-      - main
-      - next
-    tags:
-      - "!**"
   pull_request:
     branches:
       - main
