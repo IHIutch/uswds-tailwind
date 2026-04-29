@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/theme",
   "type": "module",
-  "version": "0.3.0-alpha.3",
+  "version": "0.3.0-alpha.4",
   "description": "Tailwind CSS v4 theme with USWDS design tokens (colors, spacing, typography, breakpoints).",
   "author": "Jonathan Hutchison",
   "license": "MIT",
