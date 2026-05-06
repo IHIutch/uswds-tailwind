@@ -5,8 +5,6 @@ import { Meta } from '@storybook/addon-docs/blocks'
 
 # USWDS + Tailwind React
 
-<img src="meta.jpg" />
-
 Welcome to the **USWDS + Tailwind React** component library - a modern implementation of the [U.S. Web Design System](https://designsystem.digital.gov/) built with React, Tailwind CSS, and Zag.js state machines.
 
 
@@ -21,13 +19,23 @@ This library provides accessible, production-ready React components that follow 
 - **🎯 Typesafe** - Full TypeScript support with comprehensive types
 - **🧩 Composable** - Compound component pattern for maximum flexibility
 
-{/* ## Getting Started
-
-Install the package and its peer dependencies:
+## Install
 
 ```bash
-npm install @uswds-tailwind/react @uswds-tailwind/theme tailwindcss react react-dom
-``` */}
+npm install @uswds-tailwind/react@alpha tailwindcss
+```
+
+**Or, if you just want a quick demo:** [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-xm6mmahl)
+
+## Setup
+
+Add two `@import` lines to your global CSS:
+
+```css
+/* style.css */
+@import 'tailwindcss';
+@import '@uswds-tailwind/react';
+```
 
 ## Usage
 
