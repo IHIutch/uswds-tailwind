@@ -1051,6 +1051,7 @@ export const machine = createMachine<DatepickerSchema>({
 
       openCalendar({ context, event, prop }) {
         const index = typeof event.index === 'number' ? event.index : 0
+        const activeIndex = context.get('activeIndex')
         const inputValue = context.get('inputValues')[index] ?? ''
         const inputDate = parseDateString({ dateString: inputValue, dateFormat: DEFAULT_EXTERNAL_DATE_FORMAT, adjustDate: true })
 
@@ -1069,7 +1070,7 @@ export const machine = createMachine<DatepickerSchema>({
           value: context.get('value'),
           baseMin,
           baseMax,
-          index: activeIndex,
+          index,
           isRange,
           activeIndex,
         })
