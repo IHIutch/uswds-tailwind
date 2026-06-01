@@ -8,6 +8,52 @@ const DEFAULT_MIN_DATE = '0000-01-01'
 const DEFAULT_EXTERNAL_DATE_FORMAT = 'MM/DD/YYYY'
 const INTERNAL_DATE_FORMAT = 'YYYY-MM-DD'
 
+function padToTwo(values: Date[]): Date[] {
+  const next = values.slice(0, 2)
+  while (next.length < 2) next.push(undefined as unknown as Date)
+  return next
+}
+
+function boundsForIndex({
+  value,
+  baseMin,
+  baseMax,
+  index,
+  isRange,
+  activeIndex,
+}: {
+  value: Date[]
+  baseMin: Date
+  baseMax: Date | null
+  index: number
+  isRange: boolean
+  activeIndex: number
+}) {
+  if (!isRange)
+    return { min: baseMin, max: baseMax }
+
+  const partner = value[1 - index]
+  if (!partner)
+    return { min: baseMin, max: baseMax }
+
+  const own = value[index]
+
+  const conflict = (index === 0 && own && own > partner) || (index === 1 && own && own < partner)
+
+  if (conflict && activeIndex !== index)
+    return { min: baseMin, max: baseMax }
+
+  if (index === 0) {
+    // Start: cannot exceed the end.
+    const max = baseMax && baseMax < partner ? baseMax : partner
+    return { min: baseMin, max }
+  }
+
+  // End: cannot precede the start.
+  const min = baseMin > partner ? baseMin : partner
+  return { min, max: baseMax }
+}
+
 function keepDateWithinMonth(dateToCheck: Date, month: number) {
   if (month !== dateToCheck.getMonth()) {
     dateToCheck.setDate(0)
@@ -140,8 +186,7 @@ function isDatesMonthOutsideMinOrMax(date: Date, minDate: Date, maxDate: Date | 
 }
 
 function isDatesYearOutsideMinOrMax(date: Date, minDate: Date, maxDate: Date | null) {
-  return lastDayOfMonth(setMonth(date, 11)) < minDate
-    || (!!maxDate && startOfMonth(setMonth(date, 0)) > maxDate)
+  return lastDayOfMonth(setMonth(date, 11)) < minDate || (!!maxDate && startOfMonth(setMonth(date, 0)) > maxDate)
 }
 
 function setRangeDates(date: Date, rangeDate: Date | null) {
@@ -160,7 +205,15 @@ function setRangeDates(date: Date, rangeDate: Date | null) {
   }
 }
 
-function parseDateString(dateString: string | undefined | null, dateFormat: string = INTERNAL_DATE_FORMAT, adjustDate: boolean = false) {
+function parseDateString({
+  dateString,
+  dateFormat = INTERNAL_DATE_FORMAT,
+  adjustDate = false,
+}: {
+  dateString: string | undefined | null
+  dateFormat?: string
+  adjustDate?: boolean
+}) {
   let date: Date | undefined
   let month: number | undefined
   let day: number | undefined
@@ -313,7 +366,7 @@ function computeWeekDays(locale: string) {
   }))
 }
 
-function computeWeeks(focusedValue: Date, selectedDate: Date | null, minDate: Date, maxDate: Date | null, rangeDate: Date | null, locale: string) {
+function computeWeeks(focusedValue: Date, selectedDates: Date[], minDate: Date, maxDate: Date | null, rangeDate: Date | null, locale: string) {
   const todaysDate = today()
   const focusedDate = addDays(focusedValue, 0)
   const focusedMonth = focusedValue.getMonth()
@@ -323,12 +376,14 @@ function computeWeeks(focusedValue: Date, selectedDate: Date | null, minDate: Da
 
   const { monthLabels, dayOfWeekLabels } = getLocaleLabels(locale)
 
+  // Range "anchor" is the first selected date (or focused value if none)
+  const rangeAnchor = selectedDates[0] || focusedValue
   const {
     rangeStartDate,
     rangeEndDate,
     withinRangeStartDate,
     withinRangeEndDate,
-  } = setRangeDates(selectedDate || focusedValue, rangeDate)
+  } = setRangeDates(rangeAnchor, rangeDate)
 
   const firstOfMonth = startOfMonth(focusedValue)
   let dateToDisplay = startOfWeek(firstOfMonth)
@@ -347,7 +402,7 @@ function computeWeeks(focusedValue: Date, selectedDate: Date | null, minDate: Da
     const formattedDate = formatDate(dateToDisplay)
 
     const isDisabled = !isDateWithinMinAndMax(dateToDisplay, minDate, maxDate)
-    const isSelected = isSameDay(dateToDisplay, selectedDate)
+    const isSelected = selectedDates.some(d => isSameDay(dateToDisplay, d))
     const isFocused = isSameDay(dateToDisplay, focusedDate)
 
     const isPreviousMonth = isSameMonth(dateToDisplay, prevMonth)
@@ -386,7 +441,6 @@ function computeWeeks(focusedValue: Date, selectedDate: Date | null, minDate: Da
     dateToDisplay = addDays(dateToDisplay, 1)
   }
 
-  // Convert flat array to grid of weeks (7 days per row)
   const weeks: DayCell[][] = []
   for (let i = 0; i < days.length; i += 7) {
     weeks.push(days.slice(i, i + 7))
@@ -450,10 +504,6 @@ function computeYearChunkStart(focusedValue: Date) {
   return Math.max(0, yearToChunk)
 }
 
-/* =============================================================================
- * Machine
- * ============================================================================= */
-
 export const machine = createMachine<DatepickerSchema>({
   props({ props }) {
     return {
@@ -469,39 +519,41 @@ export const machine = createMachine<DatepickerSchema>({
   },
 
   context({ prop, bindable }) {
-    // Parse defaultValue props to initialize selected dates
     const defaultValueStrings = prop('defaultValue')
     const defaultDates: Date[] = []
     if (defaultValueStrings) {
       for (const str of defaultValueStrings) {
-        const parsed = parseDateString(str)
+        const parsed = parseDateString({ dateString: str })
         if (parsed)
           defaultDates.push(parsed)
       }
     }
 
-    // Initial focused value: first selected date, or today, clamped to min/max
-    const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-    const maxDate = parseDateString(prop('max')) || null
+    const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+    const maxDate = parseDateString({ dateString: prop('max') }) || null
     const initialFocused = keepDateBetweenMinAndMax(
       defaultDates[0] || today(),
       minDate,
       maxDate,
     )
 
-    // Initialize input value from first selected date (MM/DD/YYYY) or empty
-    const initialInputValue = defaultDates[0]
-      ? formatDate(defaultDates[0], DEFAULT_EXTERNAL_DATE_FORMAT)
-      : ''
+    const isRange = prop('selectionMode') === 'range'
+    const inputCount = isRange ? 2 : 1
+    const initialInputValues: string[] = []
+    for (let i = 0; i < inputCount; i++) {
+      const d = defaultDates[i]
+      initialInputValues.push(d ? formatDate(d, DEFAULT_EXTERNAL_DATE_FORMAT) : '')
+    }
 
     return {
       value: bindable<Date[]>(() => ({
-        defaultValue: defaultDates,
+        defaultValue: isRange ? padToTwo(defaultDates) : defaultDates,
         value: prop('value'),
         onChange(value) {
+          const present = value.filter(Boolean) as Date[]
           prop('onValueChange')?.({
-            value,
-            valueAsString: value.map(d => formatDate(d)),
+            value: present,
+            valueAsString: present.map(d => formatDate(d)),
           })
         },
       })),
@@ -510,7 +562,7 @@ export const machine = createMachine<DatepickerSchema>({
         onChange(value) {
           prop('onFocusChange')?.({
             focusedValue: value,
-            view: 'day', // Updated by actions when view changes
+            view: 'day',
           })
         },
       })),
@@ -520,8 +572,8 @@ export const machine = createMachine<DatepickerSchema>({
           prop('onViewChange')?.({ view: value })
         },
       })),
-      inputValue: bindable<string>(() => ({
-        defaultValue: initialInputValue,
+      inputValues: bindable<string[]>(() => ({
+        defaultValue: initialInputValues,
       })),
       hoveredValue: bindable<Date | null>(() => ({
         defaultValue: null,
@@ -539,50 +591,143 @@ export const machine = createMachine<DatepickerSchema>({
   },
 
   computed: {
-    minDate: ({ prop }) =>
-      parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
+    minDate: ({ prop }) => parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!,
 
-    maxDate: ({ prop }) =>
-      parseDateString(prop('max')) || null,
+    maxDate: ({ prop }) => parseDateString({ dateString: prop('max') }) || null,
+
+    effectiveMin: ({ context, prop }) => {
+      const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+      const baseMax = parseDateString({ dateString: prop('max') }) || null
+      const isRange = prop('selectionMode') === 'range'
+      const activeIndex = context.get('activeIndex')
+      return boundsForIndex({
+        value: context.get('value'),
+        baseMin,
+        baseMax,
+        index: activeIndex,
+        isRange,
+        activeIndex,
+      }).min
+    },
+
+    effectiveMax: ({ context, prop }) => {
+      const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+      const baseMax = parseDateString({ dateString: prop('max') }) || null
+      const isRange = prop('selectionMode') === 'range'
+      const activeIndex = context.get('activeIndex')
+      return boundsForIndex({
+        value: context.get('value'),
+        baseMin,
+        baseMax,
+        index: activeIndex,
+        isRange,
+        activeIndex,
+      }).max
+    },
 
     isInteractive: ({ prop }) => !prop('disabled'),
 
-    isInvalid: ({ context, prop }) =>
-      isDateInputInvalid(
-        context.get('inputValue'),
-        parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
-        parseDateString(prop('max')) || null,
-      ),
+    isInvalidByIndex: ({ context, prop }) => {
+      const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+      const baseMax = parseDateString({ dateString: prop('max') }) || null
+      const isRange = prop('selectionMode') === 'range'
+      const activeIndex = context.get('activeIndex')
+      const inputValues = context.get('inputValues')
+      const value = context.get('value')
+      const inputCount = isRange ? 2 : 1
+      const result: boolean[] = []
+      for (let i = 0; i < inputCount; i++) {
+        const bounds = boundsForIndex({
+          value,
+          baseMin,
+          baseMax,
+          index: i,
+          isRange,
+          activeIndex,
+        })
+        result.push(isDateInputInvalid(inputValues[i] ?? '', bounds.min, bounds.max))
+      }
+      return result
+    },
+
+    isInvalid: ({ context, prop }) => {
+      const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+      const baseMax = parseDateString({ dateString: prop('max') }) || null
+      const isRange = prop('selectionMode') === 'range'
+      const activeIndex = context.get('activeIndex')
+      const bounds = boundsForIndex({
+        value: context.get('value'),
+        baseMin,
+        baseMax,
+        index: activeIndex,
+        isRange,
+        activeIndex,
+      })
+      return isDateInputInvalid(
+        context.get('inputValues')[activeIndex] ?? '',
+        bounds.min,
+        bounds.max,
+      )
+    },
 
     valueAsString: ({ context }) =>
-      context.get('value').map(d => formatDate(d)),
+      (context.get('value').filter(Boolean) as Date[]).map(d => formatDate(d)),
 
-    weeks: ({ context, prop }) =>
-      computeWeeks(
+    weeks: ({ context, prop, computed }) => {
+      const isRange = prop('selectionMode') === 'range'
+      const value = context.get('value')
+      const activeIndex = context.get('activeIndex')
+      const hovered = context.get('hoveredValue')
+
+      let selectedDates: Date[] = []
+      let rangeDate: Date | null = null
+
+      if (isRange) {
+        selectedDates = value.filter(Boolean) as Date[]
+
+        const partner = value[1 - activeIndex] || null
+        const own = value[activeIndex] || null
+
+        if (partner && !own && hovered) {
+          rangeDate = hovered
+          selectedDates = [partner]
+        }
+        else if (partner && own) {
+          rangeDate = partner
+          selectedDates = [own, partner]
+        }
+      }
+      else {
+        selectedDates = value[0] ? [value[0]] : []
+        rangeDate = parseDateString({ dateString: prop('rangeDate') }) || null
+      }
+
+      return computeWeeks(
         context.get('focusedValue'),
-        context.get('value')[0] || null,
-        parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
-        parseDateString(prop('max')) || null,
-        parseDateString(prop('rangeDate')) || null,
+        selectedDates,
+        computed('effectiveMin'),
+        computed('effectiveMax'),
+        rangeDate,
         prop('locale'),
-      ),
+      )
+    },
 
     weekDays: ({ prop }) =>
       computeWeekDays(prop('locale')),
 
-    months: ({ context, prop }) =>
+    months: ({ context, prop, computed }) =>
       computeMonths(
         context.get('focusedValue'),
-        parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
-        parseDateString(prop('max')) || null,
+        computed('effectiveMin'),
+        computed('effectiveMax'),
         prop('locale'),
       ),
 
-    years: ({ context, prop }) =>
+    years: ({ context, computed }) =>
       computeYears(
         context.get('focusedValue'),
-        parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
-        parseDateString(prop('max')) || null,
+        computed('effectiveMin'),
+        computed('effectiveMax'),
       ),
 
     monthLabel: ({ context, prop }) => {
@@ -590,72 +735,47 @@ export const machine = createMachine<DatepickerSchema>({
       return monthLabels[context.get('focusedValue').getMonth()]!
     },
 
-    yearLabel: ({ context }) =>
-      String(context.get('focusedValue').getFullYear()),
+    yearLabel: ({ context }) => String(context.get('focusedValue').getFullYear()),
 
-    yearChunkStart: ({ context }) =>
-      computeYearChunkStart(context.get('focusedValue')),
+    yearChunkStart: ({ context }) => computeYearChunkStart(context.get('focusedValue')),
 
-    // Nav button disabled states
-    isPrevMonthDisabled: ({ context, prop }) =>
-      isSameMonth(
-        context.get('focusedValue'),
-        parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
-      ),
+    isPrevMonthDisabled: ({ context, computed }) => isSameMonth(context.get('focusedValue'), computed('effectiveMin')),
 
-    isNextMonthDisabled: ({ context, prop }) =>
-      isSameMonth(
-        context.get('focusedValue'),
-        parseDateString(prop('max')) || null,
-      ),
+    isNextMonthDisabled: ({ context, computed }) => isSameMonth(context.get('focusedValue'), computed('effectiveMax')),
 
-    isPrevYearDisabled: ({ context, prop }) =>
-      isSameMonth(
-        context.get('focusedValue'),
-        parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!,
-      ),
+    isPrevYearDisabled: ({ context, computed }) => isSameMonth(context.get('focusedValue'), computed('effectiveMin')),
 
-    isNextYearDisabled: ({ context, prop }) =>
-      isSameMonth(
-        context.get('focusedValue'),
-        parseDateString(prop('max')) || null,
-      ),
+    isNextYearDisabled: ({ context, computed }) => isSameMonth(context.get('focusedValue'), computed('effectiveMax')),
 
-    isPrevYearChunkDisabled: ({ context, prop }) => {
+    isPrevYearChunkDisabled: ({ context, computed }) => {
       const focusedValue = context.get('focusedValue')
-      const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-      const maxDate = parseDateString(prop('max')) || null
       const yearToChunk = computeYearChunkStart(focusedValue)
       return isDatesYearOutsideMinOrMax(
         setYear(focusedValue, yearToChunk - 1),
-        minDate,
-        maxDate,
+        computed('effectiveMin'),
+        computed('effectiveMax'),
       )
     },
 
-    isNextYearChunkDisabled: ({ context, prop }) => {
+    isNextYearChunkDisabled: ({ context, computed }) => {
       const focusedValue = context.get('focusedValue')
-      const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-      const maxDate = parseDateString(prop('max')) || null
       const yearToChunk = computeYearChunkStart(focusedValue)
       return isDatesYearOutsideMinOrMax(
         setYear(focusedValue, yearToChunk + YEAR_CHUNK),
-        minDate,
-        maxDate,
+        computed('effectiveMin'),
+        computed('effectiveMax'),
       )
     },
 
     rangeDates: ({ context, prop }) => {
       const focusedValue = context.get('focusedValue')
       const selectedDate = context.get('value')[0] || null
-      const rangeDate = parseDateString(prop('rangeDate')) || null
+      const rangeDate = parseDateString({ dateString: prop('rangeDate') }) || null
       return setRangeDates(selectedDate || focusedValue, rangeDate)
     },
   },
 
-  // Global events (handled in any state)
   on: {
-    // Imperative API events
     'VALUE.SET': {
       actions: ['setValue'],
     },
@@ -668,37 +788,32 @@ export const machine = createMachine<DatepickerSchema>({
   },
 
   states: {
-    /* -----------------------------------------------------------------------
-     * idle: No focus, calendar hidden
-     * ----------------------------------------------------------------------- */
     idle: {
       on: {
         'INPUT.FOCUS': {
           target: 'focused',
+          actions: ['setActiveIndex'],
         },
-        // Trigger click from idle — toggle open
         'TRIGGER.CLICK': {
           target: 'open',
-          actions: ['setFocusedValueFromInput', 'setOpenStatusMessage', 'invokeOnOpen'],
+          actions: ['setActiveIndex', 'setFocusedValueFromInput', 'setOpenStatusMessage', 'invokeOnOpen'],
         },
       },
     },
 
-    /* -----------------------------------------------------------------------
-     * focused: Input has focus, calendar hidden
-     * ----------------------------------------------------------------------- */
     focused: {
       on: {
+        'INPUT.FOCUS': {
+          actions: ['setActiveIndex'],
+        },
         'INPUT.BLUR': {
           target: 'idle',
           actions: ['validateInput'],
         },
-        // Trigger click from focused — toggle open
         'TRIGGER.CLICK': {
           target: 'open',
-          actions: ['setFocusedValueFromInput', 'setOpenStatusMessage', 'invokeOnOpen'],
+          actions: ['setActiveIndex', 'setFocusedValueFromInput', 'setOpenStatusMessage', 'invokeOnOpen'],
         },
-        // Input events
         'INPUT.CHANGE': {
           actions: ['setInputValue', 'reconcileInputValues', 'updateCalendarIfVisible'],
         },
@@ -708,31 +823,29 @@ export const machine = createMachine<DatepickerSchema>({
       },
     },
 
-    /* -----------------------------------------------------------------------
-     * open: Calendar visible and interactive
-     * ----------------------------------------------------------------------- */
     open: {
       effects: ['focusCalendarDate'],
       on: {
-        // Trigger click from open — toggle close
-        'TRIGGER.CLICK': {
-          target: 'focused',
-          actions: ['clearStatusMessage', 'invokeOnClose'],
-        },
-        // Select a date — close calendar and focus input
+        'TRIGGER.CLICK': [
+          {
+            guard: 'isSameTrigger',
+            target: 'focused',
+            actions: ['clearStatusMessage', 'invokeOnClose'],
+          },
+          {
+            actions: ['setActiveIndex', 'setFocusedValueFromInput'],
+          },
+        ],
         'CELL.CLICK': {
           target: 'focused',
           actions: ['selectDate', 'clearStatusMessage', 'invokeOnClose', 'focusInput'],
         },
-        // Select month from month picker → return to day view
         'MONTH.SELECT': {
           actions: ['selectMonth', 'setViewToDay'],
         },
-        // Select year from year picker → return to day view
         'YEAR.SELECT': {
           actions: ['selectYear', 'setViewToDay'],
         },
-        // Nav button clicks
         'GOTO.PREV_MONTH': {
           actions: ['focusPrevMonth'],
         },
@@ -751,25 +864,21 @@ export const machine = createMachine<DatepickerSchema>({
         'GOTO.NEXT_YEAR_CHUNK': {
           actions: ['focusNextYearChunk'],
         },
-        // View switching
         'VIEW.SET_MONTH': {
           actions: ['setViewToMonth', 'setMonthStatusMessage'],
         },
         'VIEW.SET_YEAR': {
           actions: ['setViewToYear', 'setYearStatusMessage'],
         },
-        // Generic view set (from API)
         'VIEW.SET': {
           actions: ['setView'],
         },
-        // Generic goto (from API)
         'GOTO.NEXT': {
           actions: ['goToNext'],
         },
         'GOTO.PREV': {
           actions: ['goToPrev'],
         },
-        // Day keyboard navigation
         'TABLE.ARROW_UP': [
           { guard: 'isMonthView', actions: ['focusMonthUp'] },
           { guard: 'isYearView', actions: ['focusYearUp'] },
@@ -816,25 +925,20 @@ export const machine = createMachine<DatepickerSchema>({
         'TABLE.SHIFT_PAGE_UP': {
           actions: ['focusPrevYearDate'],
         },
-        // Escape — close calendar and focus input
         'TABLE.ESCAPE': {
           target: 'focused',
           actions: ['clearStatusMessage', 'invokeOnClose', 'focusInput'],
         },
-        // Focus outside — close calendar
         'FOCUS_OUTSIDE': {
           target: 'idle',
           actions: ['clearStatusMessage', 'invokeOnClose'],
         },
-        // Mouseover on current month dates (range preview)
         'CELL.POINTER_MOVE': {
           actions: ['setHoveredValue'],
         },
-        // Keydown/keyup guard
         'CALENDAR.KEYDOWN': {
           actions: ['setLastKeydownCode'],
         },
-        // Input events while calendar is open
         'INPUT.CHANGE': {
           actions: ['setInputValue', 'reconcileInputValues', 'updateCalendarIfVisible'],
         },
@@ -849,10 +953,13 @@ export const machine = createMachine<DatepickerSchema>({
     guards: {
       isMonthView: ({ context }) => context.get('view') === 'month',
       isYearView: ({ context }) => context.get('view') === 'year',
+      isSameTrigger: ({ context, event }) => {
+        const eventIndex = typeof event.index === 'number' ? event.index : 0
+        return context.get('activeIndex') === eventIndex
+      },
     },
 
     effects: {
-      // Focus the calendar date after opening
       focusCalendarDate({ context, scope }) {
         return raf(() => {
           const view = context.get('view')
@@ -862,7 +969,6 @@ export const machine = createMachine<DatepickerSchema>({
             dom.focusCellTriggerEl(scope, dateString)
           }
           else if (view === 'month') {
-            // Focus the focused month button — find by data-focused attribute
             const monthPickerEl = dom.getMonthPickerEl(scope)
             if (monthPickerEl) {
               const focused = monthPickerEl.querySelector<HTMLElement>('[data-focused]')
@@ -870,7 +976,6 @@ export const machine = createMachine<DatepickerSchema>({
             }
           }
           else if (view === 'year') {
-            // Focus the focused year button
             const yearPickerEl = dom.getYearPickerEl(scope)
             if (yearPickerEl) {
               const focused = yearPickerEl.querySelector<HTMLElement>('[data-focused]')
@@ -882,50 +987,83 @@ export const machine = createMachine<DatepickerSchema>({
     },
 
     actions: {
-      // --- Value management ---
-
-      selectDate({ context, event }) {
+      selectDate({ context, event, prop }) {
         const dateString = event.value as string
-        const parsed = parseDateString(dateString)
-        if (parsed) {
+        const parsed = parseDateString({ dateString })
+        if (!parsed)
+          return
+
+        const isRange = prop('selectionMode') === 'range'
+        const activeIndex = context.get('activeIndex')
+        const formatted = formatDate(parsed, DEFAULT_EXTERNAL_DATE_FORMAT)
+
+        if (isRange) {
+          const currentValue = padToTwo(context.get('value'))
+          currentValue[activeIndex] = parsed
+          context.set('value', currentValue)
+
+          const currentInputs = context.get('inputValues').slice()
+          while (currentInputs.length < 2) currentInputs.push('')
+          currentInputs[activeIndex] = formatted
+          context.set('inputValues', currentInputs)
+        }
+        else {
           context.set('value', [parsed])
-          context.set('inputValue', formatDate(parsed, DEFAULT_EXTERNAL_DATE_FORMAT))
+          context.set('inputValues', [formatted])
         }
       },
 
-      // API setValue
-      setValue({ context, event }) {
+      setValue({ context, event, prop }) {
         const values = event.values as Date[]
-        context.set('value', values)
-        if (values.length > 0) {
-          context.set('inputValue', formatDate(values[0]!, DEFAULT_EXTERNAL_DATE_FORMAT))
+        const isRange = prop('selectionMode') === 'range'
+
+        context.set('value', isRange ? padToTwo(values) : values)
+        const inputCount = isRange ? 2 : 1
+        const next: string[] = []
+        for (let i = 0; i < inputCount; i++) {
+          const d = values[i]
+          next.push(d ? formatDate(d, DEFAULT_EXTERNAL_DATE_FORMAT) : '')
         }
+        context.set('inputValues', next)
       },
 
-      // API clearValue
-      clearValue({ context }) {
-        context.set('value', [])
-        context.set('inputValue', '')
+      clearValue({ context, prop }) {
+        const isRange = prop('selectionMode') === 'range'
+        context.set('value', isRange ? padToTwo([]) : [])
+        context.set('inputValues', isRange ? ['', ''] : [''])
       },
 
-      // API setFocusedValue
       setFocusedValue({ context, event }) {
         context.set('focusedValue', event.value as Date)
       },
 
-      // --- Focused value management ---
-
-      // Set focused value from current input value (when opening calendar)
       setFocusedValueFromInput({ context, prop }) {
-        const inputValue = context.get('inputValue')
-        const inputDate = parseDateString(inputValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
+        const activeIndex = context.get('activeIndex')
+        const inputValue = context.get('inputValues')[activeIndex] ?? ''
+        const inputDate = parseDateString({ dateString: inputValue, dateFormat: DEFAULT_EXTERNAL_DATE_FORMAT, adjustDate: true })
+
+        const isRange = prop('selectionMode') === 'range'
+        const partnerDate = isRange
+          ? context.get('value')[1 - activeIndex] ?? undefined
+          : undefined
+
         const defaultValueStrings = prop('defaultValue')
-        const defaultDate = defaultValueStrings?.[0] ? parseDateString(defaultValueStrings[0]) : undefined
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const defaultDate = defaultValueStrings?.[activeIndex]
+          ? parseDateString({ dateString: defaultValueStrings[activeIndex] })
+          : undefined
+        const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+        const baseMax = parseDateString({ dateString: prop('max') }) || null
+        const { min: minDate, max: maxDate } = boundsForIndex({
+          value: context.get('value'),
+          baseMin,
+          baseMax,
+          index: activeIndex,
+          isRange,
+          activeIndex,
+        })
 
         const dateToDisplay = keepDateBetweenMinAndMax(
-          inputDate || defaultDate || today(),
+          inputDate || partnerDate || defaultDate || today(),
           minDate,
           maxDate,
         )
@@ -933,49 +1071,65 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('view', 'day' as DateView)
       },
 
-      // --- Input management ---
-
-      setInputValue({ context, event }) {
-        context.set('inputValue', event.value as string)
+      setActiveIndex({ context, event }) {
+        const index = typeof event.index === 'number' ? event.index : 0
+        context.set('activeIndex', index)
       },
 
-      reconcileInputValues({ context, prop }) {
-        const inputValue = context.get('inputValue')
-        const inputDate = parseDateString(inputValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+      setInputValue({ context, event }) {
+        const index = typeof event.index === 'number' ? event.index : context.get('activeIndex')
+        const next = context.get('inputValues').slice()
+        while (next.length <= index) next.push('')
+        next[index] = event.value as string
+        context.set('inputValues', next)
+      },
+
+      reconcileInputValues({ context, event, prop }) {
+        const index = typeof event.index === 'number' ? event.index : context.get('activeIndex')
+
+        const inputValue = (typeof event.value === 'string' ? event.value : context.get('inputValues')[index]) ?? ''
+        const inputDate = parseDateString({ dateString: inputValue, dateFormat: DEFAULT_EXTERNAL_DATE_FORMAT, adjustDate: true })
+        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+        const maxDate = parseDateString({ dateString: prop('max') }) || null
 
         if (inputDate && !isDateInputInvalid(inputValue, minDate, maxDate)) {
           const newValue = formatDate(inputDate)
-          const currentValue = context.get('value')
-          const currentInternalStr = currentValue.length > 0 ? formatDate(currentValue[0]!) : ''
-          if (currentInternalStr !== newValue) {
-            context.set('value', [inputDate])
+          const isRange = prop('selectionMode') === 'range'
+          const currentValue = isRange ? padToTwo(context.get('value')) : context.get('value').slice()
+          const existing = currentValue[index]
+          const existingStr = existing ? formatDate(existing) : ''
+          if (existingStr !== newValue) {
+            currentValue[index] = inputDate
+            context.set('value', currentValue)
           }
         }
       },
 
-      updateCalendarIfVisible({ context, prop, state }) {
+      updateCalendarIfVisible({ context, event, prop, state }) {
         if (!state.matches('open'))
           return
-        const inputValue = context.get('inputValue')
-        const inputDate = parseDateString(inputValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const activeIndex = context.get('activeIndex')
+        const eventIndex = typeof event.index === 'number' ? event.index : activeIndex
+
+        const inputValue = (typeof event.value === 'string' ? event.value : context.get('inputValues')[eventIndex]) ?? ''
+        const inputDate = parseDateString({ dateString: inputValue, dateFormat: DEFAULT_EXTERNAL_DATE_FORMAT, adjustDate: true })
+        const isRange = prop('selectionMode') === 'range'
+        const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+        const baseMax = parseDateString({ dateString: prop('max') }) || null
+        const { min: minDate, max: maxDate } = boundsForIndex({
+          value: context.get('value'),
+          baseMin,
+          baseMax,
+          index: eventIndex,
+          isRange,
+          activeIndex,
+        })
 
         if (inputDate) {
           const dateToDisplay = keepDateBetweenMinAndMax(inputDate, minDate, maxDate)
           context.set('focusedValue', dateToDisplay)
         }
       },
-
-      // Validation in machine model stores isInvalid as a computed value.
-      // The connect function reads computed("isInvalid") and applies
-      // validation attributes. No DOM writes needed here.
-      // This action is a no-op placeholder preserved for the event graph.
-      validateInput(_params) {},
-
-      // --- View management ---
 
       setViewToDay({ context, scope }) {
         context.set('view', 'day' as DateView)
@@ -1010,76 +1164,70 @@ export const machine = createMachine<DatepickerSchema>({
         })
       },
 
-      // API setView
       setView({ context, event }) {
         context.set('view', event.view as DateView)
       },
 
-      // --- Month/Year selection ---
-
-      selectMonth({ context, event, prop }) {
+      selectMonth({ context, event, computed }) {
         const selectedMonth = event.value as number
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let date = setMonth(focusedValue, selectedMonth)
         date = keepDateBetweenMinAndMax(date, minDate, maxDate)
         context.set('focusedValue', date)
       },
 
-      selectYear({ context, event, prop }) {
+      selectYear({ context, event, computed }) {
         const selectedYear = event.value as number
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let date = setYear(focusedValue, selectedYear)
         date = keepDateBetweenMinAndMax(date, minDate, maxDate)
         context.set('focusedValue', date)
       },
 
-      // --- Navigation ---
-
-      focusPrevMonth({ context, prop, scope }) {
+      focusPrevMonth({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusPrevMonthTriggerEl(scope))
       },
 
-      focusNextMonth({ context, prop, scope }) {
+      focusNextMonth({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusNextMonthTriggerEl(scope))
       },
 
-      focusPrevYear({ context, prop, scope }) {
+      focusPrevYear({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusPrevYearTriggerEl(scope))
       },
 
-      focusNextYear({ context, prop, scope }) {
+      focusNextYear({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusNextYearTriggerEl(scope))
       },
 
-      // Year chunk navigation
       focusPrevYearChunk({ context, scope }) {
         const focusedValue = context.get('focusedValue')
         const newDate = subYears(focusedValue, YEAR_CHUNK)
@@ -1094,15 +1242,14 @@ export const machine = createMachine<DatepickerSchema>({
         raf(() => dom.focusNextYearChunkTriggerEl(scope))
       },
 
-      // API goToNext/goToPrev
-      goToNext({ context, prop }) {
+      goToNext({ context, computed }) {
         const view = context.get('view')
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate: Date
         if (view === 'month') {
-          // No next in month view — it's a static list
+          // No "next" in month view
           return
         }
         else if (view === 'year') {
@@ -1115,11 +1262,11 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('focusedValue', newDate)
       },
 
-      goToPrev({ context, prop }) {
+      goToPrev({ context, computed }) {
         const view = context.get('view')
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate: Date
         if (view === 'month') {
           return
@@ -1134,109 +1281,105 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('focusedValue', newDate)
       },
 
-      // --- Day keyboard navigation ---
-
-      focusPrevWeek({ context, prop, scope }) {
+      focusPrevWeek({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subWeeks(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextWeek({ context, prop, scope }) {
+      focusNextWeek({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addWeeks(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusPrevDay({ context, prop, scope }) {
+      focusPrevDay({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subDays(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextDay({ context, prop, scope }) {
+      focusNextDay({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addDays(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusWeekStart({ context, prop, scope }) {
+      focusWeekStart({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = startOfWeek(focusedValue)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusWeekEnd({ context, prop, scope }) {
+      focusWeekEnd({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = endOfWeek(focusedValue)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextMonthDate({ context, prop, scope }) {
+      focusNextMonthDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusPrevMonthDate({ context, prop, scope }) {
+      focusPrevMonthDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextYearDate({ context, prop, scope }) {
+      focusNextYearDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusPrevYearDate({ context, prop, scope }) {
+      focusPrevYearDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString(prop('min')) || parseDateString(DEFAULT_MIN_DATE)!
-        const maxDate = parseDateString(prop('max')) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
-
-      // --- Month keyboard navigation ---
 
       focusMonthUp({ context, scope }) {
         const focusedValue = context.get('focusedValue')
@@ -1293,7 +1436,7 @@ export const machine = createMachine<DatepickerSchema>({
       focusMonthHome({ context, scope }) {
         const focusedValue = context.get('focusedValue')
         const currentMonth = focusedValue.getMonth()
-        // Home in month grid: go to start of row (row = 3 months)
+
         const rowStart = currentMonth - (currentMonth % 3)
         const newDate = setMonth(focusedValue, rowStart)
         context.set('focusedValue', newDate)
@@ -1309,7 +1452,7 @@ export const machine = createMachine<DatepickerSchema>({
       focusMonthEnd({ context, scope }) {
         const focusedValue = context.get('focusedValue')
         const currentMonth = focusedValue.getMonth()
-        // End in month grid: go to end of row
+
         const rowEnd = currentMonth - (currentMonth % 3) + 2
         const newDate = setMonth(focusedValue, Math.min(11, rowEnd))
         context.set('focusedValue', newDate)
@@ -1323,7 +1466,6 @@ export const machine = createMachine<DatepickerSchema>({
       },
 
       focusMonthPageDown({ context, scope }) {
-        // PageDown in month view: go to December
         const focusedValue = context.get('focusedValue')
         const newDate = setMonth(focusedValue, 11)
         context.set('focusedValue', newDate)
@@ -1337,7 +1479,6 @@ export const machine = createMachine<DatepickerSchema>({
       },
 
       focusMonthPageUp({ context, scope }) {
-        // PageUp in month view: go to January
         const focusedValue = context.get('focusedValue')
         const newDate = setMonth(focusedValue, 0)
         context.set('focusedValue', newDate)
@@ -1349,8 +1490,6 @@ export const machine = createMachine<DatepickerSchema>({
           }
         })
       },
-
-      // --- Year keyboard navigation ---
 
       focusYearUp({ context, scope }) {
         const focusedValue = context.get('focusedValue')
@@ -1408,7 +1547,7 @@ export const machine = createMachine<DatepickerSchema>({
         const focusedValue = context.get('focusedValue')
         const year = focusedValue.getFullYear()
         const yearChunkStart = computeYearChunkStart(focusedValue)
-        // Home: start of row in year grid (row = 3 years)
+
         const yearInChunk = year - yearChunkStart
         const rowStart = yearChunkStart + (yearInChunk - (yearInChunk % 3))
         const newDate = setYear(focusedValue, rowStart)
@@ -1440,7 +1579,6 @@ export const machine = createMachine<DatepickerSchema>({
       },
 
       focusYearPageDown({ context, scope }) {
-        // PageDown in year view: go to last year in chunk
         const focusedValue = context.get('focusedValue')
         const yearChunkStart = computeYearChunkStart(focusedValue)
         const newDate = setYear(focusedValue, yearChunkStart + YEAR_CHUNK - 1)
@@ -1455,7 +1593,6 @@ export const machine = createMachine<DatepickerSchema>({
       },
 
       focusYearPageUp({ context, scope }) {
-        // PageUp in year view: go to first year in chunk
         const focusedValue = context.get('focusedValue')
         const yearChunkStart = computeYearChunkStart(focusedValue)
         const newDate = setYear(focusedValue, yearChunkStart)
@@ -1468,8 +1605,6 @@ export const machine = createMachine<DatepickerSchema>({
           }
         })
       },
-
-      // --- Status messages ---
 
       setOpenStatusMessage({ context }) {
         const focusedValue = context.get('focusedValue')
@@ -1503,8 +1638,6 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('statusMessage', '')
       },
 
-      // --- Callbacks ---
-
       invokeOnOpen({ prop }) {
         prop('onOpenChange')?.({ open: true })
       },
@@ -1513,19 +1646,13 @@ export const machine = createMachine<DatepickerSchema>({
         prop('onOpenChange')?.({ open: false })
       },
 
-      // --- Focus management ---
-
-      focusInput({ scope }) {
-        dom.focusInputEl(scope)
+      focusInput({ context, scope }) {
+        dom.focusInputEl(scope, context.get('activeIndex'))
       },
-
-      // --- Range/hover ---
 
       setHoveredValue({ context, event }) {
         context.set('hoveredValue', event.value as Date)
       },
-
-      // --- Keyup guard ---
 
       setLastKeydownCode({ context, event }) {
         context.set('lastKeydownCode', event.keyCode as number)
@@ -1533,10 +1660,6 @@ export const machine = createMachine<DatepickerSchema>({
     },
   },
 })
-
-/* =============================================================================
- * Exported utilities (used by connect and potentially by consumers)
- * ============================================================================= */
 
 export {
   addDays,

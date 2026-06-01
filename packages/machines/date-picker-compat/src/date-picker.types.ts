@@ -37,8 +37,8 @@ export interface OpenChangeDetails {
 
 export type ElementIds = Partial<{
   root: string
-  input: string
-  trigger: string
+  input: string | string[]
+  trigger: string | string[]
   calendar: string
   dayPicker: string
   monthPicker: string
@@ -126,7 +126,7 @@ export interface DatepickerSchema {
     value: Date[]
     focusedValue: Date
     view: DateView
-    inputValue: string
+    inputValues: string[]
     hoveredValue: Date | null
     activeIndex: number
     lastKeydownCode: number | null
@@ -135,8 +135,11 @@ export interface DatepickerSchema {
   computed: {
     minDate: Date
     maxDate: Date | null
+    effectiveMin: Date
+    effectiveMax: Date | null
     isInteractive: boolean
     isInvalid: boolean
+    isInvalidByIndex: boolean[]
     valueAsString: string[]
     weeks: DayCell[][]
     weekDays: WeekDay[]
@@ -184,10 +187,14 @@ export interface YearCellProps {
 }
 
 /* -----------------------------------------------------------------------------
- * Input props for connect (range mode has two inputs)
+ * Input/trigger props for connect (range mode has two inputs/triggers)
  * ----------------------------------------------------------------------------- */
 
 export interface InputProps {
+  index?: number | undefined
+}
+
+export interface TriggerProps {
   index?: number | undefined
 }
 
@@ -202,10 +209,11 @@ export interface DatepickerApi<T extends PropTypes = PropTypes> {
   view: DateView
   value: Date[]
   valueAsString: string[]
-  inputValue: string
+  inputValues: string[]
   focusedValue: Date
   hoveredValue: Date | null
   isInvalid: boolean
+  isInvalidByIndex: boolean[]
   selectionMode: SelectionMode
   weeks: DayCell[][]
   weekDays: WeekDay[]
@@ -232,7 +240,7 @@ export interface DatepickerApi<T extends PropTypes = PropTypes> {
 
   getRootProps: () => T['element']
   getInputProps: (props?: InputProps) => T['input']
-  getTriggerProps: () => T['button']
+  getTriggerProps: (props?: TriggerProps) => T['button']
   getCalendarProps: () => T['element']
   getDayPickerProps: () => T['element']
   getMonthPickerProps: () => T['element']

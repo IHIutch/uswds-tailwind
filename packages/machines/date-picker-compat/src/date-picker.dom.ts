@@ -3,8 +3,17 @@ import type { Scope } from '@zag-js/core'
 // --- ID helpers ---
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `datepicker:${ctx.id}`
-export const getInputId = (ctx: Scope) => ctx.ids?.input ?? `datepicker:${ctx.id}:input`
-export const getTriggerId = (ctx: Scope) => ctx.ids?.trigger ?? `datepicker:${ctx.id}:trigger`
+
+function pickIndexedId(provided: string | string[] | undefined, fallback: string, index: number) {
+  if (Array.isArray(provided))
+    return provided[index] ?? `${fallback}:${index}`
+  if (typeof provided === 'string')
+    return index === 0 ? provided : `${provided}:${index}`
+  return index === 0 ? fallback : `${fallback}:${index}`
+}
+
+export const getInputId = (ctx: Scope, index: number = 0) => pickIndexedId(ctx.ids?.input, `datepicker:${ctx.id}:input`, index)
+export const getTriggerId = (ctx: Scope, index: number = 0) => pickIndexedId(ctx.ids?.trigger, `datepicker:${ctx.id}:trigger`, index)
 export const getCalendarId = (ctx: Scope) => ctx.ids?.calendar ?? `datepicker:${ctx.id}:calendar`
 export const getDayPickerId = (ctx: Scope) => ctx.ids?.dayPicker ?? `datepicker:${ctx.id}:day-picker`
 export const getMonthPickerId = (ctx: Scope) => ctx.ids?.monthPicker ?? `datepicker:${ctx.id}:month-picker`
@@ -26,8 +35,8 @@ export const getNextYearChunkTriggerId = (ctx: Scope) => ctx.ids?.nextYearChunkT
 // --- Element getters ---
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
-export const getInputEl = (ctx: Scope) => ctx.getById<HTMLInputElement>(getInputId(ctx))
-export const getTriggerEl = (ctx: Scope) => ctx.getById(getTriggerId(ctx))
+export const getInputEl = (ctx: Scope, index: number = 0) => ctx.getById<HTMLInputElement>(getInputId(ctx, index))
+export const getTriggerEl = (ctx: Scope, index: number = 0) => ctx.getById(getTriggerId(ctx, index))
 export const getCalendarEl = (ctx: Scope) => ctx.getById(getCalendarId(ctx))
 export const getDayPickerEl = (ctx: Scope) => ctx.getById(getDayPickerId(ctx))
 export const getMonthPickerEl = (ctx: Scope) => ctx.getById(getMonthPickerId(ctx))
@@ -42,15 +51,12 @@ export const getNextMonthTriggerEl = (ctx: Scope) => ctx.getById(getNextMonthTri
 export const getNextYearTriggerEl = (ctx: Scope) => ctx.getById(getNextYearTriggerId(ctx))
 export const getPrevYearChunkTriggerEl = (ctx: Scope) => ctx.getById(getPrevYearChunkTriggerId(ctx))
 export const getNextYearChunkTriggerEl = (ctx: Scope) => ctx.getById(getNextYearChunkTriggerId(ctx))
+export const getCellTriggerEl = (ctx: Scope, dateString: string) => ctx.getById(getCellTriggerId(ctx, dateString))
 
-export function getCellTriggerEl(ctx: Scope, dateString: string) {
-  return ctx.getById(getCellTriggerId(ctx, dateString))
-}
+// --- Focus helpers ---
 
-// --- Focus helpers (imperative .focus() — these are side effects, not DOM writes) ---
-
-export function focusInputEl(ctx: Scope) {
-  const inputEl = getInputEl(ctx)
+export function focusInputEl(ctx: Scope, index: number = 0) {
+  const inputEl = getInputEl(ctx, index)
   if (ctx.isActiveElement(inputEl))
     return
   inputEl?.focus({ preventScroll: true })

@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { EventKeyMap, JSX, NormalizeProps, PropTypes } from '@zag-js/types'
 import type { DatepickerApi, DatepickerSchema } from './date-picker.types'
-import { dataAttr, getEventKey } from '@zag-js/dom-query'
+import { ariaAttr, dataAttr, getEventKey } from '@zag-js/dom-query'
 import { parts } from './date-picker.anatomy'
 import * as dom from './date-picker.dom'
 
@@ -17,7 +17,6 @@ export function connect<T extends PropTypes>(
   const isInteractive = computed('isInteractive')
   const view = context.get('view')
 
-  // --- Keyboard event map for day cell triggers ---
   const dayKeyMap: EventKeyMap = {
     ArrowUp(event) {
       event.preventDefault()
@@ -63,7 +62,6 @@ export function connect<T extends PropTypes>(
     },
   }
 
-  // --- Keyboard event map for month cell triggers ---
   const monthKeyMap: EventKeyMap = {
     ArrowUp(event) {
       event.preventDefault()
@@ -99,7 +97,6 @@ export function connect<T extends PropTypes>(
     },
   }
 
-  // --- Keyboard event map for year cell triggers ---
   const yearKeyMap: EventKeyMap = {
     ArrowUp(event) {
       event.preventDefault()
@@ -136,14 +133,14 @@ export function connect<T extends PropTypes>(
   }
 
   return {
-    // --- State properties ---
     open,
     focused,
     disabled,
     view,
-    value: context.get('value'),
+    value: (context.get('value').filter(Boolean) as Date[]),
     valueAsString: computed('valueAsString'),
-    inputValue: context.get('inputValue'),
+    inputValues: context.get('inputValues'),
+    isInvalidByIndex: computed('isInvalidByIndex'),
     focusedValue: context.get('focusedValue'),
     hoveredValue: context.get('hoveredValue'),
     isInvalid: computed('isInvalid'),
@@ -162,8 +159,6 @@ export function connect<T extends PropTypes>(
     isPrevYearChunkDisabled: computed('isPrevYearChunkDisabled'),
     isNextYearChunkDisabled: computed('isNextYearChunkDisabled'),
     statusMessage: context.get('statusMessage'),
-
-    // --- Imperative API methods ---
 
     setValue(values) {
       send({ type: 'VALUE.SET', values })
@@ -192,8 +187,6 @@ export function connect<T extends PropTypes>(
       send({ type: 'GOTO.PREV' })
     },
 
-    // --- Props getters ---
-
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
@@ -203,7 +196,7 @@ export function connect<T extends PropTypes>(
         // USWDS uses onFocusout. However, in React onFocusout is not
         // supported, and onBlur does not bubble. onBlur with relatedTarget
         // is the closest equivalent.
-        onBlur(event: any) {
+        onBlur(event) {
           const rootEl = dom.getRootEl(scope)
           if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
             send({ type: 'FOCUS_OUTSIDE' })
@@ -212,47 +205,52 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   - input [DATE_PICKER_EXTERNAL_INPUT] (L2251-2254) → reconcileInputValues + updateCalendarIfVisible
-    //   - focusout [DATE_PICKER_EXTERNAL_INPUT] (L2241-2242) → validateDateInput
-    //   - keydown [DATE_PICKER_EXTERNAL_INPUT] Enter (L2167-2170) → validateDateInput
-    getInputProps() {
+    getInputProps(props) {
+      const index = props?.index ?? 0
+      const invalid = computed('isInvalidByIndex')[index] === true
       return normalize.input({
         ...parts.input.attrs,
-        'id': dom.getInputId(scope),
+        'id': dom.getInputId(scope, index),
         disabled,
         'data-state': open ? 'open' : 'closed',
+        'data-index': index,
+        'data-invalid': dataAttr(invalid),
+        'aria-invalid': ariaAttr(invalid),
         'aria-describedby': dom.getStatusId(scope),
-        'value': context.get('inputValue'),
+        'value': context.get('inputValues')[index] ?? '',
         onFocus() {
-          send({ type: 'INPUT.FOCUS' })
+          send({ type: 'INPUT.FOCUS', index })
         },
         onBlur() {
-          send({ type: 'INPUT.BLUR' })
+          send({ type: 'INPUT.BLUR', index })
         },
         onInput(event) {
           const target = event.target as HTMLInputElement
-          send({ type: 'INPUT.CHANGE', value: target.value })
+          send({ type: 'INPUT.CHANGE', value: target.value, index })
         },
         onKeyDown(event) {
           if (event.key === 'Enter') {
-            send({ type: 'INPUT.ENTER' })
+            send({ type: 'INPUT.ENTER', index })
           }
         },
       })
     },
 
-    getTriggerProps() {
+    getTriggerProps(props) {
+      const index = props?.index ?? 0
       return normalize.button({
         ...parts.trigger.attrs,
-        'id': dom.getTriggerId(scope),
+        'id': dom.getTriggerId(scope, index),
         'type': 'button',
         disabled,
-        'aria-label': open ? 'Close calendar' : 'Toggle calendar',
+        'aria-haspopup': 'true',
+        'aria-label': 'Toggle calendar',
         'data-state': open ? 'open' : 'closed',
+        'data-index': index,
         onClick() {
           if (!isInteractive)
             return
-          send({ type: 'TRIGGER.CLICK' })
+          send({ type: 'TRIGGER.CLICK', index })
         },
       })
     },
@@ -280,8 +278,6 @@ export function connect<T extends PropTypes>(
         },
       })
     },
-
-    // --- Day picker (contains nav buttons + grid) ---
 
     getDayPickerProps() {
       return normalize.element({
@@ -375,9 +371,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_DATE] → selectDate (L2122-2124) +
-    //   keydown [CALENDAR_DATE] arrow/home/end/page handlers (L2172-2188) +
-    //   mouseover [CALENDAR_DATE_CURRENT_MONTH] → handleMouseoverFromDate (L2258-2264)
     getDayCellTriggerProps({ cell }) {
       return normalize.element({
         ...parts.cellTrigger.attrs,
@@ -417,8 +410,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_MONTH] → selectMonth (L2125-2126) +
-    //   keydown [CALENDAR_MONTH] (L2193-2206)
     getMonthCellTriggerProps({ cell }) {
       return normalize.element({
         ...parts.cellTrigger.attrs,
@@ -443,8 +434,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_YEAR] → selectYear (L2128-2129) +
-    //   keydown [CALENDAR_YEAR] (L2211-2224)
     getYearCellTriggerProps({ cell }) {
       return normalize.element({
         ...parts.cellTrigger.attrs,
@@ -468,7 +457,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_PREVIOUS_YEAR] → displayPreviousYear (L2137-2139)
     getPrevYearTriggerProps() {
       return normalize.button({
         ...parts.prevYearTrigger.attrs,
@@ -482,7 +470,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_PREVIOUS_MONTH] → displayPreviousMonth (L2131-2133)
     getPrevMonthTriggerProps() {
       return normalize.button({
         ...parts.prevMonthTrigger.attrs,
@@ -496,7 +483,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_MONTH_SELECTION] (L2149-2151)
     getMonthSelectionProps() {
       return normalize.button({
         ...parts.monthSelection.attrs,
@@ -509,7 +495,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_YEAR_SELECTION] (L2153-2155)
     getYearSelectionProps() {
       return normalize.button({
         ...parts.yearSelection.attrs,
@@ -522,7 +507,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_NEXT_MONTH] → displayNextMonth (L2134-2136)
     getNextMonthTriggerProps() {
       return normalize.button({
         ...parts.nextMonthTrigger.attrs,
@@ -536,7 +520,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_NEXT_YEAR] → displayNextYear (L2140-2142)
     getNextYearTriggerProps() {
       return normalize.button({
         ...parts.nextYearTrigger.attrs,
@@ -550,7 +533,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_PREVIOUS_YEAR_CHUNK] → displayPreviousYearChunk (L2143-2145)
     getPrevYearChunkTriggerProps() {
       return normalize.button({
         ...parts.prevYearChunkTrigger.attrs,
@@ -564,7 +546,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    //   CLICK [CALENDAR_NEXT_YEAR_CHUNK] → displayNextYearChunk (L2146-2148)
     getNextYearChunkTriggerProps() {
       return normalize.button({
         ...parts.nextYearChunkTrigger.attrs,
