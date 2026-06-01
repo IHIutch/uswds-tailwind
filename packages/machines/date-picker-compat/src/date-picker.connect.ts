@@ -205,8 +205,8 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getInputProps(props = {}) {
-      const index = props.index ?? 0
+    getInputProps(props) {
+      const index = props?.index ?? 0
       const invalid = computed('isInvalidByIndex')[index] === true
       return normalize.input({
         ...parts.input.attrs,
@@ -236,8 +236,8 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getTriggerProps(props = {}) {
-      const index = props.index ?? 0
+    getTriggerProps(props) {
+      const index = props?.index ?? 0
       return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope, index),
