@@ -1,5 +1,7 @@
 # @uswds-tailwind/character-count-compat
 
+## 0.3.0-alpha.7
+
 ## 0.3.0-alpha.6
 
 ### Patch Changes
