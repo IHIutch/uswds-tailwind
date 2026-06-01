@@ -1,5 +1,12 @@
 # @uswds-tailwind/date-picker-compat
 
+## 0.3.0-alpha.7
+
+### Patch Changes
+
+- c22684e: Add date-range-picker
+- 98d3c1d: Handle uncontrolled inputs
+
 ## 0.3.0-alpha.6
 
 ### Patch Changes

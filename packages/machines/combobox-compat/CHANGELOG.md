@@ -1,5 +1,11 @@
 # @uswds-tailwind/combobox-compat
 
+## 0.3.0-alpha.7
+
+### Patch Changes
+
+- 98d3c1d: Handle uncontrolled inputs
+
 ## 0.3.0-alpha.6
 
 ### Patch Changes
