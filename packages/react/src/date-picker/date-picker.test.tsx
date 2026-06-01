@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { DatePicker } from './date-picker'
 
@@ -131,4 +132,21 @@ it('submits value in form data', async () => {
   await screen.getByRole('textbox').fill('01/15/2025')
   await screen.getByRole('button', { name: 'Submit' }).click()
   expect(formData.get('date')).toBe('01/15/2025')
+})
+
+it('input is uncontrolled: typing into the middle of the value inserts at the caret', async () => {
+  const screen = await render(
+    <DatePickerComponent />,
+  )
+  const input = screen.getByRole('textbox')
+  const el = input.element() as HTMLInputElement
+
+  await userEvent.fill(input, '01202020')
+  el.setSelectionRange(2, 2)
+  await userEvent.type(input, '15')
+
+  // A controlled input bound to the async state machine snaps the caret to the
+  // end on each keystroke, so the inserted text lands at the end ('0112020205').
+  // An uncontrolled input leaves the caret where the user placed it.
+  expect(el.value).toBe('0115202020')
 })

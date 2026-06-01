@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { Combobox } from './combobox'
 
@@ -239,4 +240,17 @@ it('onValueChange fires when option is selected', async () => {
   await screen.getByRole('combobox').fill('Air')
   await screen.getByText('Aircraft').click()
   expect(handleChange).toHaveBeenCalledWith('aircraft')
+})
+
+it('arrowDown moves DOM focus to the newly-highlighted option', async () => {
+  const screen = await render(
+    <FullComboboxComponent options={multipleOptions} />,
+  )
+  const input = screen.getByRole('combobox')
+
+  input.element().focus()
+  await userEvent.keyboard('{ArrowDown}') // open, Watercraft highlighted
+  await userEvent.keyboard('{ArrowDown}') // move to Automobiles
+
+  await expect.element(screen.getByRole('option', { name: 'Automobiles' })).toHaveFocus()
 })

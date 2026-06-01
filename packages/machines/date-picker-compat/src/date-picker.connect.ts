@@ -217,12 +217,13 @@ export function connect<T extends PropTypes>(
         'data-invalid': dataAttr(invalid),
         'aria-invalid': ariaAttr(invalid),
         'aria-describedby': dom.getStatusId(scope),
-        'value': context.get('inputValues')[index] ?? '',
+        'defaultValue': context.get('inputValues')[index] ?? '',
         onFocus() {
           send({ type: 'INPUT.FOCUS', index })
         },
-        onBlur() {
-          send({ type: 'INPUT.BLUR', index })
+        onBlur(event) {
+          const target = event.target as HTMLInputElement
+          send({ type: 'INPUT.BLUR', value: target.value, index })
         },
         onInput(event) {
           const target = event.target as HTMLInputElement
@@ -230,7 +231,8 @@ export function connect<T extends PropTypes>(
         },
         onKeyDown(event) {
           if (event.key === 'Enter') {
-            send({ type: 'INPUT.ENTER', index })
+            const target = event.target as HTMLInputElement
+            send({ type: 'INPUT.ENTER', value: target.value, index })
           }
         },
       })
