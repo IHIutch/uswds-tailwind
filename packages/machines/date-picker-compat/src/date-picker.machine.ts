@@ -777,10 +777,10 @@ export const machine = createMachine<DatepickerSchema>({
 
   on: {
     'VALUE.SET': {
-      actions: ['setValue'],
+      actions: ['setValue', 'syncInputValue'],
     },
     'VALUE.CLEAR': {
-      actions: ['clearValue'],
+      actions: ['clearValue', 'syncInputValue'],
     },
     'FOCUSED_VALUE.SET': {
       actions: ['setFocusedValue'],
@@ -796,7 +796,7 @@ export const machine = createMachine<DatepickerSchema>({
         },
         'TRIGGER.CLICK': {
           target: 'open',
-          actions: ['setActiveIndex', 'setFocusedValueFromInput', 'setOpenStatusMessage', 'invokeOnOpen'],
+          actions: ['setActiveIndex', 'openCalendar', 'invokeOnOpen'],
         },
       },
     },
@@ -812,7 +812,7 @@ export const machine = createMachine<DatepickerSchema>({
         },
         'TRIGGER.CLICK': {
           target: 'open',
-          actions: ['setActiveIndex', 'setFocusedValueFromInput', 'setOpenStatusMessage', 'invokeOnOpen'],
+          actions: ['setActiveIndex', 'openCalendar', 'invokeOnOpen'],
         },
         'INPUT.CHANGE': {
           actions: ['setInputValue', 'reconcileInputValues', 'updateCalendarIfVisible'],
@@ -833,12 +833,12 @@ export const machine = createMachine<DatepickerSchema>({
             actions: ['clearStatusMessage', 'invokeOnClose'],
           },
           {
-            actions: ['setActiveIndex', 'setFocusedValueFromInput'],
+            actions: ['setActiveIndex', 'openCalendar'],
           },
         ],
         'CELL.CLICK': {
           target: 'focused',
-          actions: ['selectDate', 'clearStatusMessage', 'invokeOnClose', 'focusInput'],
+          actions: ['selectDate', 'syncInputValue', 'clearStatusMessage', 'invokeOnClose', 'focusInput'],
         },
         'MONTH.SELECT': {
           actions: ['selectMonth', 'setViewToDay'],
@@ -1037,19 +1037,31 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('focusedValue', event.value as Date)
       },
 
-      setFocusedValueFromInput({ context, prop }) {
-        const activeIndex = context.get('activeIndex')
-        const inputValue = context.get('inputValues')[activeIndex] ?? ''
+      syncInputValue({ context, scope }) {
+        queueMicrotask(() => {
+          const values = context.get('inputValues')
+          for (let i = 0; i < values.length; i++) {
+            const inputEl = dom.getInputEl(scope, i)
+            if (inputEl && inputEl.value !== (values[i] ?? '')) {
+              inputEl.value = values[i] ?? ''
+            }
+          }
+        })
+      },
+
+      openCalendar({ context, event, prop }) {
+        const index = typeof event.index === 'number' ? event.index : 0
+        const inputValue = context.get('inputValues')[index] ?? ''
         const inputDate = parseDateString({ dateString: inputValue, dateFormat: DEFAULT_EXTERNAL_DATE_FORMAT, adjustDate: true })
 
         const isRange = prop('selectionMode') === 'range'
         const partnerDate = isRange
-          ? context.get('value')[1 - activeIndex] ?? undefined
+          ? context.get('value')[1 - index] ?? undefined
           : undefined
 
         const defaultValueStrings = prop('defaultValue')
-        const defaultDate = defaultValueStrings?.[activeIndex]
-          ? parseDateString({ dateString: defaultValueStrings[activeIndex] })
+        const defaultDate = defaultValueStrings?.[index]
+          ? parseDateString({ dateString: defaultValueStrings[index] })
           : undefined
         const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
         const baseMax = parseDateString({ dateString: prop('max') }) || null
@@ -1062,13 +1074,27 @@ export const machine = createMachine<DatepickerSchema>({
           activeIndex,
         })
 
-        const dateToDisplay = keepDateBetweenMinAndMax(
+        const focusedValue = keepDateBetweenMinAndMax(
           inputDate || partnerDate || defaultDate || today(),
           minDate,
           maxDate,
         )
-        context.set('focusedValue', dateToDisplay)
+        context.set('focusedValue', focusedValue)
         context.set('view', 'day' as DateView)
+
+        const selectedDate = context.get('value')[index] || null
+        const statuses: string[] = []
+        if (selectedDate && isSameDay(selectedDate, focusedValue)) {
+          statuses.push('Selected date')
+        }
+        statuses.push(
+          'You can navigate by day using left and right arrows',
+          'Weeks by using up and down arrows',
+          'Months by using page up and page down keys',
+          'Years by using shift plus page up and shift plus page down',
+          'Home and end keys navigate to the beginning and end of a week',
+        )
+        context.set('statusMessage', statuses.join('. '))
       },
 
       setActiveIndex({ context, event }) {
@@ -1604,24 +1630,6 @@ export const machine = createMachine<DatepickerSchema>({
             focused?.focus({ preventScroll: true })
           }
         })
-      },
-
-      setOpenStatusMessage({ context }) {
-        const focusedValue = context.get('focusedValue')
-        const selectedDate = context.get('value')[0] || null
-
-        const statuses: string[] = []
-        if (selectedDate && isSameDay(selectedDate, focusedValue)) {
-          statuses.push('Selected date')
-        }
-        statuses.push(
-          'You can navigate by day using left and right arrows',
-          'Weeks by using up and down arrows',
-          'Months by using page up and page down keys',
-          'Years by using shift plus page up and shift plus page down',
-          'Home and end keys navigate to the beginning and end of a week',
-        )
-        context.set('statusMessage', statuses.join('. '))
       },
 
       setMonthStatusMessage({ context }) {

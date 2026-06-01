@@ -215,7 +215,7 @@ export const machine = createMachine<ComboboxSchema>({
         // vs "list open with focus on option" (ArrowDown).
         'INPUT.ARROW_DOWN': {
           target: 'open',
-          actions: ['highlightFirstOrSelected', 'focusOption', 'invokeOnOpen'],
+          actions: ['highlightFirstOrSelected', 'invokeOnOpen'],
         },
         // Enter from focused input (list hidden): complete selection
         'INPUT.ENTER': {
@@ -272,7 +272,7 @@ export const machine = createMachine<ComboboxSchema>({
         //   highlightOption(comboBoxEl, nextOptionEl);
         // Highlights first/selected option and physically focuses it.
         'INPUT.ARROW_DOWN': {
-          actions: ['highlightNextItem', 'focusOption'],
+          actions: ['highlightNextItem'],
         },
         // Enter from input while list is open
         //   completeSelection(comboBoxEl); if (listShown) hideList(comboBoxEl);
@@ -289,7 +289,7 @@ export const machine = createMachine<ComboboxSchema>({
         //   if (nextOptionEl) highlightOption(focusedOptionEl, nextOptionEl);
         // Moves to next option. Does nothing if at last option (no wrap).
         'OPTION.ARROW_DOWN': {
-          actions: ['highlightNextItem', 'focusOption'],
+          actions: ['highlightNextItem'],
         },
         // ArrowUp from a focused option
         //   const nextOptionEl = focusedOptionEl.previousSibling;
@@ -303,7 +303,7 @@ export const machine = createMachine<ComboboxSchema>({
             actions: ['clearHighlightedValue', 'focusInput', 'invokeOnClose'],
           },
           {
-            actions: ['highlightPrevItem', 'focusOption'],
+            actions: ['highlightPrevItem'],
           },
         ],
         // Enter from a focused option
@@ -340,7 +340,7 @@ export const machine = createMachine<ComboboxSchema>({
         //   highlightOption(listOptionEl, listOptionEl, { preventScroll: true })
         // Physical focus moves to the hovered option with preventScroll.
         'ITEM.POINTER_MOVE': {
-          actions: ['setHighlightedValue', 'focusOptionPreventScroll'],
+          actions: ['setHighlightedValue'],
         },
 
         // --- Button events ---
@@ -475,50 +475,49 @@ export const machine = createMachine<ComboboxSchema>({
       clearHighlightedValue({ context }) {
         context.set('highlightedValue', null)
       },
-      setHighlightedValue({ context, event }) {
+      setHighlightedValue({ context, event, scope }) {
         if (event.value == null)
           return
         context.set('highlightedValue', event.value)
+        raf(() => dom.focusOptionEl(scope, event.value as string, true))
       },
-      highlightFirstOrSelected({ context, computed }) {
+      highlightFirstOrSelected({ context, computed, scope }) {
         const value = context.get('value')
         const filtered = computed('filteredOptions')
 
-        if (value) {
-          const hasSelected = filtered.some(o => o.value === value)
-          if (hasSelected) {
-            context.set('highlightedValue', value)
-            return
-          }
+        let next: string | null = null
+        if (value && filtered.some(o => o.value === value)) {
+          next = value
+        }
+        else if (filtered.length > 0) {
+          next = filtered[0]!.value
         }
 
-        if (filtered.length > 0) {
-          context.set('highlightedValue', filtered[0]!.value)
-        }
-        else {
-          context.set('highlightedValue', null)
-        }
+        context.set('highlightedValue', next)
+        if (next)
+          raf(() => dom.focusOptionEl(scope, next))
       },
-      highlightNextItem({ context, computed }) {
+      highlightNextItem({ context, computed, scope }) {
         const highlighted = context.get('highlightedValue')
         const filtered = computed('filteredOptions')
         if (filtered.length === 0)
           return
 
+        let next: string
         if (highlighted == null) {
-          context.set('highlightedValue', filtered[0]!.value)
-          return
+          next = filtered[0]!.value
+        }
+        else {
+          const currentIndex = filtered.findIndex(o => o.value === highlighted)
+          if (currentIndex < 0 || currentIndex >= filtered.length - 1)
+            return
+          next = filtered[currentIndex + 1]!.value
         }
 
-        const currentIndex = filtered.findIndex(o => o.value === highlighted)
-        if (currentIndex < 0 || currentIndex >= filtered.length - 1) {
-          // Not found or at last item: do nothing (no wrap)
-          return
-        }
-
-        context.set('highlightedValue', filtered[currentIndex + 1]!.value)
+        context.set('highlightedValue', next)
+        raf(() => dom.focusOptionEl(scope, next))
       },
-      highlightPrevItem({ context, computed }) {
+      highlightPrevItem({ context, computed, scope }) {
         const highlighted = context.get('highlightedValue')
         const filtered = computed('filteredOptions')
         if (filtered.length === 0 || highlighted == null)
@@ -528,7 +527,9 @@ export const machine = createMachine<ComboboxSchema>({
         if (currentIndex <= 0)
           return
 
-        context.set('highlightedValue', filtered[currentIndex - 1]!.value)
+        const next = filtered[currentIndex - 1]!.value
+        context.set('highlightedValue', next)
+        raf(() => dom.focusOptionEl(scope, next))
       },
 
       /* ----- Selection ----- */
@@ -623,22 +624,6 @@ export const machine = createMachine<ComboboxSchema>({
       focusInput({ scope }) {
         raf(() => {
           dom.focusInputEl(scope)
-        })
-      },
-      focusOption({ context, scope }) {
-        const value = context.get('highlightedValue')
-        if (!value)
-          return
-        raf(() => {
-          dom.focusOptionEl(scope, value)
-        })
-      },
-      focusOptionPreventScroll({ context, scope }) {
-        const value = context.get('highlightedValue')
-        if (!value)
-          return
-        raf(() => {
-          dom.focusOptionEl(scope, value, true)
         })
       },
 
