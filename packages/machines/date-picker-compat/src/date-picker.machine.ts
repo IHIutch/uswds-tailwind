@@ -9,7 +9,7 @@ const DEFAULT_EXTERNAL_DATE_FORMAT = 'MM/DD/YYYY'
 const INTERNAL_DATE_FORMAT = 'YYYY-MM-DD'
 
 function padToTwo(values: Date[]): Date[] {
-  const next = values.slice()
+  const next = values.slice(0, 2)
   while (next.length < 2) next.push(undefined as unknown as Date)
   return next
 }
@@ -1051,8 +1051,16 @@ export const machine = createMachine<DatepickerSchema>({
         const defaultDate = defaultValueStrings?.[activeIndex]
           ? parseDateString({ dateString: defaultValueStrings[activeIndex] })
           : undefined
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+        const baseMax = parseDateString({ dateString: prop('max') }) || null
+        const { min: minDate, max: maxDate } = boundsForIndex({
+          value: context.get('value'),
+          baseMin,
+          baseMax,
+          index: activeIndex,
+          isRange,
+          activeIndex,
+        })
 
         const dateToDisplay = keepDateBetweenMinAndMax(
           inputDate || partnerDate || defaultDate || today(),
@@ -1105,8 +1113,17 @@ export const machine = createMachine<DatepickerSchema>({
 
         const inputValue = (typeof event.value === 'string' ? event.value : context.get('inputValues')[eventIndex]) ?? ''
         const inputDate = parseDateString({ dateString: inputValue, dateFormat: DEFAULT_EXTERNAL_DATE_FORMAT, adjustDate: true })
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const isRange = prop('selectionMode') === 'range'
+        const baseMin = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
+        const baseMax = parseDateString({ dateString: prop('max') }) || null
+        const { min: minDate, max: maxDate } = boundsForIndex({
+          value: context.get('value'),
+          baseMin,
+          baseMax,
+          index: eventIndex,
+          isRange,
+          activeIndex,
+        })
 
         if (inputDate) {
           const dateToDisplay = keepDateBetweenMinAndMax(inputDate, minDate, maxDate)
@@ -1151,60 +1168,60 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('view', event.view as DateView)
       },
 
-      selectMonth({ context, event, prop }) {
+      selectMonth({ context, event, computed }) {
         const selectedMonth = event.value as number
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let date = setMonth(focusedValue, selectedMonth)
         date = keepDateBetweenMinAndMax(date, minDate, maxDate)
         context.set('focusedValue', date)
       },
 
-      selectYear({ context, event, prop }) {
+      selectYear({ context, event, computed }) {
         const selectedYear = event.value as number
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let date = setYear(focusedValue, selectedYear)
         date = keepDateBetweenMinAndMax(date, minDate, maxDate)
         context.set('focusedValue', date)
       },
 
-      focusPrevMonth({ context, prop, scope }) {
+      focusPrevMonth({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusPrevMonthTriggerEl(scope))
       },
 
-      focusNextMonth({ context, prop, scope }) {
+      focusNextMonth({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusNextMonthTriggerEl(scope))
       },
 
-      focusPrevYear({ context, prop, scope }) {
+      focusPrevYear({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusPrevYearTriggerEl(scope))
       },
 
-      focusNextYear({ context, prop, scope }) {
+      focusNextYear({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
@@ -1225,11 +1242,11 @@ export const machine = createMachine<DatepickerSchema>({
         raf(() => dom.focusNextYearChunkTriggerEl(scope))
       },
 
-      goToNext({ context, prop }) {
+      goToNext({ context, computed }) {
         const view = context.get('view')
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate: Date
         if (view === 'month') {
           // No "next" in month view
@@ -1245,11 +1262,11 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('focusedValue', newDate)
       },
 
-      goToPrev({ context, prop }) {
+      goToPrev({ context, computed }) {
         const view = context.get('view')
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate: Date
         if (view === 'month') {
           return
@@ -1264,100 +1281,100 @@ export const machine = createMachine<DatepickerSchema>({
         context.set('focusedValue', newDate)
       },
 
-      focusPrevWeek({ context, prop, scope }) {
+      focusPrevWeek({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subWeeks(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextWeek({ context, prop, scope }) {
+      focusNextWeek({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addWeeks(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusPrevDay({ context, prop, scope }) {
+      focusPrevDay({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subDays(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextDay({ context, prop, scope }) {
+      focusNextDay({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addDays(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusWeekStart({ context, prop, scope }) {
+      focusWeekStart({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = startOfWeek(focusedValue)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusWeekEnd({ context, prop, scope }) {
+      focusWeekEnd({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = endOfWeek(focusedValue)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextMonthDate({ context, prop, scope }) {
+      focusNextMonthDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusPrevMonthDate({ context, prop, scope }) {
+      focusPrevMonthDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subMonths(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusNextYearDate({ context, prop, scope }) {
+      focusNextYearDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = addYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
         raf(() => dom.focusCellTriggerEl(scope, formatDate(newDate)))
       },
 
-      focusPrevYearDate({ context, prop, scope }) {
+      focusPrevYearDate({ context, computed, scope }) {
         const focusedValue = context.get('focusedValue')
-        const minDate = parseDateString({ dateString: prop('min') }) || parseDateString({ dateString: DEFAULT_MIN_DATE })!
-        const maxDate = parseDateString({ dateString: prop('max') }) || null
+        const minDate = computed('effectiveMin')
+        const maxDate = computed('effectiveMax')
         let newDate = subYears(focusedValue, 1)
         newDate = keepDateBetweenMinAndMax(newDate, minDate, maxDate)
         context.set('focusedValue', newDate)
