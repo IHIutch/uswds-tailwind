@@ -158,7 +158,8 @@ export function connect<T extends PropTypes>(
         ...parts.closeTrigger.attrs,
         'id': dom.getCloseTriggerId(scope),
         'type': 'button',
-        'aria-controls': dom.getContentId(scope),
+        // 'aria-controls': dom.getContentId(scope), // Not present on USWDS close button. However, seems like it could/should be added for accessibility.
+        'aria-label': 'Close this window',
         'data-state': open ? 'open' : 'closed',
 
         onClick() {
