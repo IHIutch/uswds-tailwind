@@ -3,7 +3,7 @@ import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { Field } from '../field/field'
 import { Fieldset } from '../fieldset/fieldset'
-import { RadioGroup } from './radio'
+import { RadioGroup } from './radio-group'
 
 it('radioGroup works standalone', async () => {
   const screen = await render(
