@@ -1,5 +1,27 @@
 # @uswds-tailwind/react
 
+## 0.3.0-alpha.8
+
+### Patch Changes
+
+- f2b7180: Replace CVA with tailwind-variants
+- b10075e: Update modal anatomy, trigger aria attributes
+- b3180ad: Rename radio to radio group to match component naming
+- 6834323: Update radio item control type from input to div
+- Updated dependencies [b10075e]
+  - @uswds-tailwind/modal-compat@0.3.0-alpha.8
+  - @uswds-tailwind/accordion-compat@0.3.0-alpha.8
+  - @uswds-tailwind/character-count-compat@0.3.0-alpha.8
+  - @uswds-tailwind/collapse-compat@0.3.0-alpha.8
+  - @uswds-tailwind/combobox-compat@0.3.0-alpha.8
+  - @uswds-tailwind/date-picker-compat@0.3.0-alpha.8
+  - @uswds-tailwind/dropdown-compat@0.3.0-alpha.8
+  - @uswds-tailwind/file-input-compat@0.3.0-alpha.8
+  - @uswds-tailwind/input-mask-compat@0.3.0-alpha.8
+  - @uswds-tailwind/table-compat@0.3.0-alpha.8
+  - @uswds-tailwind/tooltip-compat@0.3.0-alpha.8
+  - @uswds-tailwind/theme@0.3.0-alpha.8
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes

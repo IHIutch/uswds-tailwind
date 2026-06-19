@@ -1,5 +1,7 @@
 # @uswds-tailwind/tooltip-compat
 
+## 0.3.0-alpha.8
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6
