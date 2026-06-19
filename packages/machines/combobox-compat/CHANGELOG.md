@@ -1,5 +1,7 @@
 # @uswds-tailwind/combobox-compat
 
+## 0.3.0-alpha.8
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes
