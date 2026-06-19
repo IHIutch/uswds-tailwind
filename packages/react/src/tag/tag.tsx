@@ -17,11 +17,16 @@ export const tagVariants = tv({
 
 export type TagProps = React.ComponentPropsWithoutRef<'span'> & VariantProps<typeof tagVariants>
 
-export function Tag({ className, size, ...props }: TagProps) {
-  return (
-    <span
-      {...props}
-      className={tagVariants({ size, className })}
-    />
-  )
-}
+export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
+  ({ className, size, ...props }, forwardedRef) => {
+    return (
+      <span
+        {...props}
+        className={tagVariants({ size, className })}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
+
+Tag.displayName = 'Tag'

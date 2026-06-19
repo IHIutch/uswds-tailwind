@@ -101,23 +101,26 @@ export type StepIndicatorRootProps = React.ComponentPropsWithoutRef<'div'>
     currentStep: number
   }
 
-function StepIndicatorRoot({ variant, counters, steps = [], currentStep, className, ...props }: StepIndicatorRootProps) {
-  const activeIdx = currentStep - 1
-  const computedSteps = steps.map((step, idx) => ({
-    ...step,
-    status: idx < activeIdx ? 'complete' : idx > activeIdx ? 'incomplete' : 'current',
-  })) satisfies StepIndicatorComputedStep[]
+const StepIndicatorRoot = React.forwardRef<HTMLDivElement, StepIndicatorRootProps>(
+  ({ variant, counters, steps = [], currentStep, className, ...props }, forwardedRef) => {
+    const activeIdx = currentStep - 1
+    const computedSteps = steps.map((step, idx) => ({
+      ...step,
+      status: idx < activeIdx ? 'complete' : idx > activeIdx ? 'incomplete' : 'current',
+    })) satisfies StepIndicatorComputedStep[]
 
-  return (
-    <StepIndicatorContext.Provider value={{ variant, counters, steps: computedSteps, currentStep }}>
-      <div
-        aria-label="Progress"
-        {...props}
-        className={cn('@container', className)}
-      />
-    </StepIndicatorContext.Provider>
-  )
-}
+    return (
+      <StepIndicatorContext.Provider value={{ variant, counters, steps: computedSteps, currentStep }}>
+        <div
+          aria-label="Progress"
+          {...props}
+          className={cn('@container', className)}
+          ref={forwardedRef}
+        />
+      </StepIndicatorContext.Provider>
+    )
+  },
+)
 
 // ============================================================================
 // List
@@ -127,17 +130,20 @@ export type StepIndicatorListProps = Omit<React.ComponentPropsWithoutRef<'ol'>, 
   children: ((context: { steps: StepIndicatorComputedStep[] }) => React.ReactNode) | React.ReactNode
 }
 
-function StepIndicatorList({ className, children, ...props }: StepIndicatorListProps) {
-  const { steps } = useStepIndicatorContext()
-  return (
-    <ol
-      {...props}
-      className={cn('flex space-x-0.5 [counter-reset:usa-step-indicator]', className)}
-    >
-      {typeof children === 'function' ? children({ steps }) : children}
-    </ol>
-  )
-}
+const StepIndicatorList = React.forwardRef<HTMLOListElement, StepIndicatorListProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const { steps } = useStepIndicatorContext()
+    return (
+      <ol
+        {...props}
+        className={cn('flex space-x-0.5 [counter-reset:usa-step-indicator]', className)}
+        ref={forwardedRef}
+      >
+        {typeof children === 'function' ? children({ steps }) : children}
+      </ol>
+    )
+  },
+)
 
 // ============================================================================
 // ListItem
@@ -147,18 +153,21 @@ export type StepIndicatorListItemProps = React.ComponentPropsWithoutRef<'li'> & 
   status?: VariantProps<typeof stepIndicatorVariants>['status']
 }
 
-function StepIndicatorListItem({ status = 'incomplete', className, ...props }: StepIndicatorListItemProps) {
-  const { variant, counters } = useStepIndicatorContext()
-  const { indicator } = stepIndicatorVariants({ status, variant, counters })
+const StepIndicatorListItem = React.forwardRef<HTMLLIElement, StepIndicatorListItemProps>(
+  ({ status = 'incomplete', className, ...props }, forwardedRef) => {
+    const { variant, counters } = useStepIndicatorContext()
+    const { indicator } = stepIndicatorVariants({ status, variant, counters })
 
-  return (
-    <li
-      aria-current={status === 'current' ? 'step' : undefined}
-      {...props}
-      className={indicator({ className })}
-    />
-  )
-}
+    return (
+      <li
+        aria-current={status === 'current' ? 'step' : undefined}
+        {...props}
+        className={indicator({ className })}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // ============================================================================
 // Segment
@@ -168,24 +177,27 @@ export type StepIndicatorSegmentProps = React.ComponentPropsWithoutRef<'span'> &
   status: VariantProps<typeof stepIndicatorVariants>['status']
 }
 
-function StepIndicatorSegment({ status, className, children, ...props }: StepIndicatorSegmentProps) {
-  const { variant, counters } = useStepIndicatorContext()
-  const { counter, label } = stepIndicatorVariants({ variant, counters, status })
-  return (
-    <>
-      {counters
-        ? <div className={counter()} />
-        : null}
-      <span
-        {...props}
-        className={label({ className })}
-      >
-        {children}
-      </span>
-      <span className="sr-only">{status}</span>
-    </>
-  )
-}
+const StepIndicatorSegment = React.forwardRef<HTMLSpanElement, StepIndicatorSegmentProps>(
+  ({ status, className, children, ...props }, forwardedRef) => {
+    const { variant, counters } = useStepIndicatorContext()
+    const { counter, label } = stepIndicatorVariants({ variant, counters, status })
+    return (
+      <>
+        {counters
+          ? <div className={counter()} />
+          : null}
+        <span
+          {...props}
+          className={label({ className })}
+          ref={forwardedRef}
+        >
+          {children}
+        </span>
+        <span className="sr-only">{status}</span>
+      </>
+    )
+  },
+)
 
 // ============================================================================
 // Label
@@ -193,17 +205,20 @@ function StepIndicatorSegment({ status, className, children, ...props }: StepInd
 
 export type StepIndicatorLabelProps = React.ComponentPropsWithoutRef<'span'>
 
-function StepIndicatorLabel({ className, ...props }: StepIndicatorLabelProps) {
-  const { variant } = useStepIndicatorContext()
-  if (variant === 'noLabels')
-    return null
-  return (
-    <span
-      {...props}
-      className={cn('block text-sm mt-1', className)}
-    />
-  )
-}
+const StepIndicatorLabel = React.forwardRef<HTMLSpanElement, StepIndicatorLabelProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { variant } = useStepIndicatorContext()
+    if (variant === 'noLabels')
+      return null
+    return (
+      <span
+        {...props}
+        className={cn('block text-sm mt-1', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // ============================================================================
 // Summary
@@ -211,14 +226,17 @@ function StepIndicatorLabel({ className, ...props }: StepIndicatorLabelProps) {
 
 export type StepIndicatorSummaryProps = React.ComponentPropsWithoutRef<'div'>
 
-function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps) {
-  return (
-    <div
-      {...props}
-      className={cn('mt-4', className)}
-    />
-  )
-}
+const StepIndicatorSummary = React.forwardRef<HTMLDivElement, StepIndicatorSummaryProps>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <div
+        {...props}
+        className={cn('mt-4', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // ============================================================================
 // Counter
@@ -228,12 +246,13 @@ export type StepIndicatorCounterProps = Omit<React.ComponentPropsWithoutRef<'spa
   children?: ((context: StepIndicatorContextProps) => React.ReactNode) | React.ReactNode
 }
 
-function StepIndicatorCounter({ className, children, ...props }: StepIndicatorCounterProps) {
-  const context = useStepIndicatorContext()
+const StepIndicatorCounter = React.forwardRef<HTMLSpanElement, StepIndicatorCounterProps>(
+  ({ className, children, ...props }, forwardedRef) => {
+    const context = useStepIndicatorContext()
 
-  return (
-    <span {...props} className={cn('text-xl', className)}>
-      {typeof children === 'function'
+    return (
+      <span {...props} className={cn('text-xl', className)} ref={forwardedRef}>
+        {typeof children === 'function'
         ? children(context)
         : (
             <>
@@ -248,9 +267,10 @@ function StepIndicatorCounter({ className, children, ...props }: StepIndicatorCo
               </span>
             </>
           )}
-    </span>
-  )
-}
+      </span>
+    )
+  },
+)
 
 // ============================================================================
 // Heading
@@ -260,14 +280,16 @@ export type StepIndicatorHeadingProps = React.ComponentPropsWithoutRef<'span'> &
   label?: string
 }
 
-function StepIndicatorHeading({ label, className, ...props }: StepIndicatorHeadingProps) {
-  const { steps, currentStep } = useStepIndicatorContext()
-  const headingLabel = label || steps[currentStep - 1]?.label
+const StepIndicatorHeading = React.forwardRef<HTMLSpanElement, StepIndicatorHeadingProps>(
+  ({ label, className, ...props }, forwardedRef) => {
+    const { steps, currentStep } = useStepIndicatorContext()
+    const headingLabel = label || steps[currentStep - 1]?.label
 
-  return (
-    <span {...props} className={cn('font-bold pl-2 text-2xl', className)}>{headingLabel}</span>
-  )
-}
+    return (
+      <span {...props} className={cn('font-bold pl-2 text-2xl', className)} ref={forwardedRef}>{headingLabel}</span>
+    )
+  },
+)
 
 // ============================================================================
 // Segments (convenience)

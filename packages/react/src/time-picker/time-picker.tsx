@@ -10,16 +10,20 @@ export type TimePickerRootProps = React.ComponentProps<typeof Combobox.Root> & {
   options?: combobox.ComboboxOption[]
 }
 
-function TimePickerRoot({ options = DEFAULT_TIME_OPTIONS, className, ...props }: TimePickerRootProps) {
+const TimePickerRoot = React.forwardRef<
+  React.ElementRef<typeof Combobox.Root>,
+  TimePickerRootProps
+>(({ options = DEFAULT_TIME_OPTIONS, className, ...props }, forwardedRef) => {
   return (
     <Combobox.Root
       options={options}
       customFilter={filterTimeOptions}
       {...props}
       className={cn('max-w-40', className)}
+      ref={forwardedRef}
     />
   )
-}
+})
 
 TimePickerRoot.displayName = 'TimePicker.Root'
 

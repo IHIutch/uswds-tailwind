@@ -70,54 +70,60 @@ export type TableRootProps = React.ComponentPropsWithoutRef<'table'> & {
   onSortChange?: table.Props['onSortChange']
 }
 
-function TableRoot({
-  variant = 'bordered',
-  compact = false,
-  stacked = false,
-  captionText,
-  columnNames,
-  defaultSortedColumnIndex,
-  defaultSortDirection,
-  onSortChange,
-  className,
-  ...props
-}: TableRootProps) {
-  const service = useMachine(table.machine, {
-    id: React.useId(),
+const TableRoot = React.forwardRef<HTMLTableElement, TableRootProps>(
+  ({
+    variant = 'bordered',
+    compact = false,
+    stacked = false,
     captionText,
     columnNames,
     defaultSortedColumnIndex,
     defaultSortDirection,
     onSortChange,
-  })
-  const api = table.connect(service, normalizeProps)
-  const rootProps = mergeProps(api.getRootProps(), props)
+    className,
+    ...props
+  }, forwardedRef) => {
+    const service = useMachine(table.machine, {
+      id: React.useId(),
+      captionText,
+      columnNames,
+      defaultSortedColumnIndex,
+      defaultSortDirection,
+      onSortChange,
+    })
+    const api = table.connect(service, normalizeProps)
+    const rootProps = mergeProps(api.getRootProps(), props)
 
-  return (
-    <TableContext.Provider value={{ api, variant, compact, stacked }}>
-      <div className="@container">
-        <table
-          {...rootProps}
-          className={cn('border-spacing-0 border-t border-l', className)}
-        />
-        <TableSrStatus />
-      </div>
-    </TableContext.Provider>
-  )
-}
+    return (
+      <TableContext.Provider value={{ api, variant, compact, stacked }}>
+        <div className="@container">
+          <table
+            {...rootProps}
+            className={cn('border-spacing-0 border-t border-l', className)}
+            ref={forwardedRef}
+          />
+          <TableSrStatus />
+        </div>
+      </TableContext.Provider>
+    )
+  },
+)
 
 // Caption
 
 export type TableCaptionProps = React.ComponentPropsWithoutRef<'caption'>
 
-function TableCaption({ className, ...props }: TableCaptionProps) {
-  return (
-    <caption
-      {...props}
-      className={cn('mb-3 text-left font-bold', className)}
-    />
-  )
-}
+const TableCaption = React.forwardRef<HTMLTableCaptionElement, TableCaptionProps>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <caption
+        {...props}
+        className={cn('mb-3 text-left font-bold', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // Header
 
@@ -125,62 +131,74 @@ export type TableHeaderProps = React.ComponentPropsWithoutRef<'thead'> & {
   sticky?: boolean
 }
 
-function TableHeader({ sticky, className, ...props }: TableHeaderProps) {
-  const { stacked } = useTableContext()
-  return (
-    <thead
-      {...props}
-      className={cn(
-        sticky && 'sticky top-0',
-        stacked && '@max-tablet:hidden',
-        className,
-      )}
-    />
-  )
-}
+const TableHeader = React.forwardRef<HTMLTableSectionElement, TableHeaderProps>(
+  ({ sticky, className, ...props }, forwardedRef) => {
+    const { stacked } = useTableContext()
+    return (
+      <thead
+        {...props}
+        className={cn(
+          sticky && 'sticky top-0',
+          stacked && '@max-tablet:hidden',
+          className,
+        )}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // Body
 
 export type TableBodyProps = React.ComponentPropsWithoutRef<'tbody'>
 
-function TableBody({ className, ...props }: TableBodyProps) {
-  const { stacked } = useTableContext()
-  return (
-    <tbody
-      {...props}
-      className={cn(
-        stacked && '[&>tr]:@max-tablet:block [&>tr]:@max-tablet:border-b [&>tr]:@max-tablet:border-black [&>tr]:@max-tablet:py-2',
-        className,
-      )}
-    />
-  )
-}
+const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
+  ({ className, ...props }, forwardedRef) => {
+    const { stacked } = useTableContext()
+    return (
+      <tbody
+        {...props}
+        className={cn(
+          stacked && '[&>tr]:@max-tablet:block [&>tr]:@max-tablet:border-b [&>tr]:@max-tablet:border-black [&>tr]:@max-tablet:py-2',
+          className,
+        )}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // Footer
 
 export type TableFooterProps = React.ComponentPropsWithoutRef<'tfoot'>
 
-function TableFooter({ className, ...props }: TableFooterProps) {
-  return (
-    <tfoot
-      {...props}
-      className={cn(className)}
-    />
-  )
-}
+const TableFooter = React.forwardRef<HTMLTableSectionElement, TableFooterProps>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <tfoot
+        {...props}
+        className={cn(className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // Row
 
 export type TableRowProps = React.ComponentPropsWithoutRef<'tr'>
 
-function TableRow({ className, ...props }: TableRowProps) {
-  return (
-    <tr
-      {...props}
-      className={cn(className)}
-    />
-  )
-}
+const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <tr
+        {...props}
+        className={cn(className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // ColumnHeader
 
@@ -189,23 +207,26 @@ export type TableColumnHeaderProps = React.ComponentPropsWithoutRef<'th'> & {
   sortable?: boolean
 }
 
-function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, children, ...props }: TableColumnHeaderProps) {
-  const { api, variant, compact } = useTableContext()
-  const { columnHeader } = tableVariants({ variant, compact })
-  const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ index: columnIndex }) : {}
-  return (
-    <th
-      scope={scope}
-      {...headerProps}
-      {...props}
-      className={columnHeader({ className })}
-    >
-      {sortable && columnIndex !== undefined
-        ? <TableSortButton columnIndex={columnIndex}>{children}</TableSortButton>
-        : children}
-    </th>
-  )
-}
+const TableColumnHeader = React.forwardRef<HTMLTableCellElement, TableColumnHeaderProps>(
+  ({ scope = 'col', columnIndex, sortable, className, children, ...props }, forwardedRef) => {
+    const { api, variant, compact } = useTableContext()
+    const { columnHeader } = tableVariants({ variant, compact })
+    const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ index: columnIndex }) : {}
+    return (
+      <th
+        scope={scope}
+        {...headerProps}
+        {...props}
+        className={columnHeader({ className })}
+        ref={forwardedRef}
+      >
+        {sortable && columnIndex !== undefined
+          ? <TableSortButton columnIndex={columnIndex}>{children}</TableSortButton>
+          : children}
+      </th>
+    )
+  },
+)
 
 // SortButton (internal)
 
@@ -230,32 +251,38 @@ export type TableCellProps = React.ComponentPropsWithoutRef<'td'> & {
   columnIndex?: number
 }
 
-function TableCell({ columnIndex, className, ...props }: TableCellProps) {
-  const { api, variant, compact, stacked } = useTableContext()
-  const { bodyCell } = tableVariants({ variant, compact, stacked })
-  const cellProps = columnIndex !== undefined ? api.getCellProps({ columnIndex }) : {}
-  return (
-    <td
-      {...cellProps}
-      {...props}
-      className={bodyCell({ className })}
-    />
-  )
-}
+const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
+  ({ columnIndex, className, ...props }, forwardedRef) => {
+    const { api, variant, compact, stacked } = useTableContext()
+    const { bodyCell } = tableVariants({ variant, compact, stacked })
+    const cellProps = columnIndex !== undefined ? api.getCellProps({ columnIndex }) : {}
+    return (
+      <td
+        {...cellProps}
+        {...props}
+        className={bodyCell({ className })}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // ScrollArea
 
 export type TableScrollAreaProps = React.ComponentPropsWithoutRef<'div'>
 
-function TableScrollArea({ className, ...props }: TableScrollAreaProps) {
-  return (
-    <div
-      tabIndex={0}
-      {...props}
-      className={cn('overflow-y-hidden max-w-full focus:outline-4 focus:outline-blue-40v focus:outline-offset-0', className)}
-    />
-  )
-}
+const TableScrollArea = React.forwardRef<HTMLDivElement, TableScrollAreaProps>(
+  ({ className, ...props }, forwardedRef) => {
+    return (
+      <div
+        tabIndex={0}
+        {...props}
+        className={cn('overflow-y-hidden max-w-full focus:outline-4 focus:outline-blue-40v focus:outline-offset-0', className)}
+        ref={forwardedRef}
+      />
+    )
+  },
+)
 
 // SrStatus (SR-only live region for sort announcements)
 
