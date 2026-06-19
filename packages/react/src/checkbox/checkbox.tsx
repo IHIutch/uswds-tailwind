@@ -30,7 +30,11 @@ const CheckboxContext = React.createContext<CheckboxContextProps | null>(null)
 const CheckboxGroupContext = React.createContext<CheckboxGroupContextProps | null>(null)
 
 export function useCheckboxContext() {
-  return React.useContext(CheckboxContext)
+  const context = React.useContext(CheckboxContext)
+  if (!context) {
+    throw new Error('Checkbox components must be used within a Checkbox.Root')
+  }
+  return context
 }
 
 function useCheckboxGroupContext() {
@@ -110,8 +114,8 @@ function CheckboxGroup({ className, onValueChange, defaultValue = [], ...props }
 
 function CheckboxLabel({ className, ...props }: CheckboxLabelProps) {
   const checkbox = useCheckboxContext()
-  const mergedProps = mergeProps(checkbox?.getLabelProps(), props)
-  const { label } = checkboxVariants({ tile: checkbox?.tile })
+  const mergedProps = mergeProps(checkbox.getLabelProps(), props)
+  const { label } = checkboxVariants({ tile: checkbox.tile })
 
   return (
     <div
@@ -125,7 +129,7 @@ const CheckboxInput = React.forwardRef<HTMLInputElement, CheckboxInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const checkbox = useCheckboxContext()
     const field = useFieldContext()
-    const mergedProps = mergeProps(checkbox?.getInputProps(), field?.getInputProps(), props)
+    const mergedProps = mergeProps(checkbox.getInputProps(), field?.getInputProps(), props)
 
     return (
       <input
@@ -140,7 +144,7 @@ const CheckboxInput = React.forwardRef<HTMLInputElement, CheckboxInputProps>(
 const CheckboxControl = React.forwardRef<HTMLInputElement, CheckboxControlProps>(
   ({ className, children, ...props }, forwardedRef) => {
     const checkbox = useCheckboxContext()
-    const mergedProps = mergeProps(checkbox?.getControlProps(), props)
+    const mergedProps = mergeProps(checkbox.getControlProps(), props)
 
     return (
       <div

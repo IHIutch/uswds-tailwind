@@ -52,7 +52,11 @@ const RadioGroupContext = React.createContext<RadioContextProps | null>(null)
 const RadioGroupItemContext = React.createContext<RadioGroupItemContextProps | null>(null)
 
 export function useRadioGroupContext() {
-  return React.useContext(RadioGroupContext)
+  const context = React.useContext(RadioGroupContext)
+  if (!context) {
+    throw new Error('RadioGroup item components must be used within a RadioGroup.Root')
+  }
+  return context
 }
 
 function useRadioGroupItemContext() {
@@ -87,8 +91,8 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioRootProps>(
 const RadioGroupItem = React.forwardRef<HTMLLabelElement, RadioItemProps & RadioGroupItemContextProps>(
   ({ className, value, ...props }, forwardedRef) => {
     const radio = useRadioGroupContext()
-    const mergedProps = mergeProps(radio?.getItemProps({ value }), props)
-    const { item } = radioVariants({ tile: radio?.tile })
+    const mergedProps = mergeProps(radio.getItemProps({ value }), props)
+    const { item } = radioVariants({ tile: radio.tile })
 
     return (
       <RadioGroupItemContext.Provider value={{ value }}>
@@ -107,7 +111,7 @@ const RadioGroupItemInput = React.forwardRef<HTMLInputElement, RadioInputProps>(
     const radio = useRadioGroupContext()
     const radioItem = useRadioGroupItemContext()
     const field = useFieldContext()
-    const mergedProps = mergeProps(radio?.getInputProps(radioItem), field?.getInputProps(), props)
+    const mergedProps = mergeProps(radio.getInputProps(radioItem), field?.getInputProps(), props)
 
     return (
       <input
@@ -123,7 +127,7 @@ const RadioGroupItemControl = React.forwardRef<HTMLDivElement, RadioControlProps
   ({ className, children, ...props }, forwardedRef) => {
     const radio = useRadioGroupContext()
     const radioItem = useRadioGroupItemContext()
-    const mergedProps = mergeProps(radio?.getControlProps(radioItem), props)
+    const mergedProps = mergeProps(radio.getControlProps(radioItem), props)
 
     return (
       <div
@@ -141,8 +145,8 @@ const RadioGroupItemControl = React.forwardRef<HTMLDivElement, RadioControlProps
 function RadioGroupItemLabel({ className, ...props }: RadioLabelProps) {
   const radio = useRadioGroupContext()
   const radioItem = useRadioGroupItemContext()
-  const mergedProps = mergeProps(radio?.getLabelProps(radioItem), props)
-  const { label } = radioVariants({ tile: radio?.tile })
+  const mergedProps = mergeProps(radio.getLabelProps(radioItem), props)
+  const { label } = radioVariants({ tile: radio.tile })
 
   return (
     <div
