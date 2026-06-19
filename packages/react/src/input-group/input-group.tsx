@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 export type InputGroupProps = React.ComponentPropsWithoutRef<'div'> & {
   startElement?: React.ReactNode
@@ -31,7 +31,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
         <div
           ref={forwardedRef}
           {...props}
-          className={cx('mt-2 max-w-mobile-lg relative flex items-center', className)}
+          className={cn('mt-2 max-w-mobile-lg relative flex items-center', className)}
         >
           {startElement ?? null}
           {children}

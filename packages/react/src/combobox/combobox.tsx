@@ -2,8 +2,8 @@ import type { UseComboboxProps } from './use-combobox'
 import * as combobox from '@uswds-tailwind/combobox-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { cn } from '../tv.config'
 import { useCombobox } from './use-combobox'
 
 export interface ComboboxContextProps {
@@ -43,7 +43,7 @@ const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxRootProps>(
 
     return (
       <ComboboxContext.Provider value={{ api, showClearButton, showToggleButton }}>
-        <div {...mergedProps} className={cx('relative mt-2', className)} ref={forwardedRef} />
+        <div {...mergedProps} className={cn('relative mt-2', className)} ref={forwardedRef} />
       </ComboboxContext.Provider>
     )
   },
@@ -53,7 +53,7 @@ function ComboboxLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLa
   const { api } = useComboboxContext()
   const mergedProps = mergeProps(api.getLabelProps(), props)
 
-  return <label {...mergedProps} className={cx('block', className)} />
+  return <label {...mergedProps} className={cn('block', className)} />
 }
 
 const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
@@ -62,7 +62,7 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttribut
     const field = useFieldContext()
     const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
 
-    return <input {...mergedProps} className={cx('pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4', className)} ref={forwardedRef} />
+    return <input {...mergedProps} className={cn('pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4', className)} ref={forwardedRef} />
   },
 )
 
@@ -78,7 +78,7 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
     const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
 
     return (
-      <ul {...mergedProps} className={cx('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)} ref={forwardedRef}>
+      <ul {...mergedProps} className={cn('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)} ref={forwardedRef}>
         {content}
       </ul>
     )
@@ -95,7 +95,7 @@ const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
     const mergedProps = mergeProps(api.getOptionProps({ option: { value, text, disabled }, index }), props)
 
     return (
-      <li {...mergedProps} className={cx('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)} ref={forwardedRef}>
+      <li {...mergedProps} className={cn('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)} ref={forwardedRef}>
         {children}
       </li>
     )
@@ -109,7 +109,7 @@ function ComboboxEmptyItem({ children, className, ...props }: React.HTMLAttribut
     return null
 
   return (
-    <li {...props} className={cx('p-2 cursor-not-allowed', className)}>
+    <li {...props} className={cn('p-2 cursor-not-allowed', className)}>
       {children || 'No results found'}
     </li>
   )
@@ -117,14 +117,14 @@ function ComboboxEmptyItem({ children, className, ...props }: React.HTMLAttribut
 
 function ComboboxIndicatorGroup({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div {...props} className={cx('absolute z-10 inset-y-0 right-0 flex', className)} />
+    <div {...props} className={cn('absolute z-10 inset-y-0 right-0 flex', className)} />
   )
 }
 
 const ComboboxControl = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
     return (
-      <div {...props} className={cx('relative', className)} ref={forwardedRef} />
+      <div {...props} className={cn('relative', className)} ref={forwardedRef} />
     )
   },
 )
@@ -138,7 +138,7 @@ const ComboboxClearButton = React.forwardRef<HTMLButtonElement, React.ButtonHTML
       return null
 
     return (
-      <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
         {children || (
           <div className="icon-[material-symbols--close] size-6"></div>
         )}
@@ -156,7 +156,7 @@ const ComboboxToggleButton = React.forwardRef<HTMLButtonElement, React.ButtonHTM
       return null
 
     return (
-      <button {...mergedProps} className={cx('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50', className)} ref={forwardedRef}>
         {children || (
           <div className="icon-[material-symbols--expand-more] size-8"></div>
         )}

@@ -1,42 +1,35 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import * as table from '@uswds-tailwind/table-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { cn, tv } from '../tv.config'
 
-const tableColumnHeaderVariants = cva({
-  base: 'text-left border-b',
+const tableVariants = tv({
+  slots: {
+    columnHeader: 'text-left border-b',
+    bodyCell: 'text-left',
+  },
   variants: {
     variant: {
-      bordered: 'bg-gray-10 border-r border-black',
-      striped: 'bg-gray-10 border-r border-black',
-      borderless: 'bg-white border-black',
+      bordered: {
+        columnHeader: 'bg-gray-10 border-r border-black',
+        bodyCell: 'bg-white border not-first:border-l-0 border-black border-t-0',
+      },
+      striped: {
+        columnHeader: 'bg-gray-10 border-r border-black',
+        bodyCell: 'odd:bg-gray-5 even:bg-white border not-first:border-l-0 border-black border-t-0',
+      },
+      borderless: {
+        columnHeader: 'bg-white border-black',
+        bodyCell: 'bg-white border-y border-black border-t-0',
+      },
     },
     compact: {
-      true: 'px-3 py-1',
-      false: 'px-4 py-2',
-    },
-  },
-  defaultVariants: {
-    variant: 'bordered',
-    compact: false,
-  },
-})
-
-const tableBodyCellVariants = cva({
-  base: 'text-left',
-  variants: {
-    variant: {
-      bordered: 'bg-white border not-first:border-l-0 border-black border-t-0',
-      striped: 'odd:bg-gray-5 even:bg-white border not-first:border-l-0 border-black border-t-0',
-      borderless: 'bg-white border-y border-black border-t-0',
-    },
-    compact: {
-      true: 'px-3 py-1',
-      false: 'px-4 py-2',
+      true: { columnHeader: 'px-3 py-1', bodyCell: 'px-3 py-1' },
+      false: { columnHeader: 'px-4 py-2', bodyCell: 'px-4 py-2' },
     },
     stacked: {
-      true: '@max-tablet:block @max-tablet:border-0 @max-tablet:before:content-[attr(data-label)] @max-tablet:before:font-bold @max-tablet:before:block',
+      true: { bodyCell: '@max-tablet:block @max-tablet:border-0 @max-tablet:before:content-[attr(data-label)] @max-tablet:before:font-bold @max-tablet:before:block' },
     },
   },
   defaultVariants: {
@@ -45,7 +38,7 @@ const tableBodyCellVariants = cva({
   },
 })
 
-type TableVariant = NonNullable<VariantProps<typeof tableColumnHeaderVariants>['variant']>
+type TableVariant = NonNullable<VariantProps<typeof tableVariants>['variant']>
 
 interface TableContextProps {
   api: table.Api
@@ -105,7 +98,7 @@ function TableRoot({
       <div className="@container">
         <table
           {...rootProps}
-          className={cx('border-spacing-0 border-t border-l', className)}
+          className={cn('border-spacing-0 border-t border-l', className)}
         />
         <TableSrStatus />
       </div>
@@ -121,7 +114,7 @@ function TableCaption({ className, ...props }: TableCaptionProps) {
   return (
     <caption
       {...props}
-      className={cx('mb-3 text-left font-bold', className)}
+      className={cn('mb-3 text-left font-bold', className)}
     />
   )
 }
@@ -137,7 +130,7 @@ function TableHeader({ sticky, className, ...props }: TableHeaderProps) {
   return (
     <thead
       {...props}
-      className={cx(
+      className={cn(
         sticky && 'sticky top-0',
         stacked && '@max-tablet:hidden',
         className,
@@ -155,7 +148,7 @@ function TableBody({ className, ...props }: TableBodyProps) {
   return (
     <tbody
       {...props}
-      className={cx(
+      className={cn(
         stacked && '[&>tr]:@max-tablet:block [&>tr]:@max-tablet:border-b [&>tr]:@max-tablet:border-black [&>tr]:@max-tablet:py-2',
         className,
       )}
@@ -171,7 +164,7 @@ function TableFooter({ className, ...props }: TableFooterProps) {
   return (
     <tfoot
       {...props}
-      className={cx(className)}
+      className={cn(className)}
     />
   )
 }
@@ -184,7 +177,7 @@ function TableRow({ className, ...props }: TableRowProps) {
   return (
     <tr
       {...props}
-      className={cx(className)}
+      className={cn(className)}
     />
   )
 }
@@ -198,13 +191,14 @@ export type TableColumnHeaderProps = React.ComponentPropsWithoutRef<'th'> & {
 
 function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, children, ...props }: TableColumnHeaderProps) {
   const { api, variant, compact } = useTableContext()
+  const { columnHeader } = tableVariants({ variant, compact })
   const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ index: columnIndex }) : {}
   return (
     <th
       scope={scope}
       {...headerProps}
       {...props}
-      className={cx(tableColumnHeaderVariants({ variant, compact }), className)}
+      className={columnHeader({ className })}
     >
       {sortable && columnIndex !== undefined
         ? <TableSortButton columnIndex={columnIndex}>{children}</TableSortButton>
@@ -225,7 +219,7 @@ function TableSortButton({ columnIndex, className, ...props }: TableSortButtonPr
   return (
     <button
       {...mergedProps}
-      className={cx('inline-flex items-center gap-1 cursor-pointer', className)}
+      className={cn('inline-flex items-center gap-1 cursor-pointer', className)}
     />
   )
 }
@@ -238,12 +232,13 @@ export type TableCellProps = React.ComponentPropsWithoutRef<'td'> & {
 
 function TableCell({ columnIndex, className, ...props }: TableCellProps) {
   const { api, variant, compact, stacked } = useTableContext()
+  const { bodyCell } = tableVariants({ variant, compact, stacked })
   const cellProps = columnIndex !== undefined ? api.getCellProps({ columnIndex }) : {}
   return (
     <td
       {...cellProps}
       {...props}
-      className={cx(tableBodyCellVariants({ variant, compact, stacked }), className)}
+      className={bodyCell({ className })}
     />
   )
 }
@@ -257,7 +252,7 @@ function TableScrollArea({ className, ...props }: TableScrollAreaProps) {
     <div
       tabIndex={0}
       {...props}
-      className={cx('overflow-y-hidden max-w-full focus:outline-4 focus:outline-blue-40v focus:outline-offset-0', className)}
+      className={cn('overflow-y-hidden max-w-full focus:outline-4 focus:outline-blue-40v focus:outline-offset-0', className)}
     />
   )
 }
@@ -272,7 +267,7 @@ function TableSrStatus({ className, ...props }: TableSrStatusProps) {
   return (
     <div
       {...mergedProps}
-      className={cx(className)}
+      className={cn(className)}
     >
       {api.announcement}
     </div>

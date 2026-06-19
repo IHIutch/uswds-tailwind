@@ -1,9 +1,9 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import type { GroupItemProps, UseRadioGroupProps } from './use-radio-group'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { cn, tv } from '../tv.config'
 import { composeRefs } from '../utils/compose-refs'
 import { useRadioGroup } from './use-radio-group'
 
@@ -11,14 +11,14 @@ import { useRadioGroup } from './use-radio-group'
 // Types
 // ============================================================================
 
-export type RadioRootProps = React.ComponentPropsWithoutRef<'div'> & UseRadioGroupProps & VariantProps<typeof radioItemVariant>
+export type RadioRootProps = React.ComponentPropsWithoutRef<'div'> & UseRadioGroupProps & VariantProps<typeof radioVariants>
 export type RadioItemProps = React.ComponentPropsWithoutRef<'label'> & GroupItemProps
 export type RadioLabelProps = React.ComponentPropsWithoutRef<'div'>
 export type RadioInputProps = React.ComponentPropsWithoutRef<'input'>
 export type RadioControlProps = React.ComponentPropsWithoutRef<'input'>
 export type RadioDescriptionProps = React.ComponentPropsWithoutRef<'div'>
 
-export type RadioContextProps = ReturnType<typeof useRadioGroup> & VariantProps<typeof radioItemVariant>
+export type RadioContextProps = ReturnType<typeof useRadioGroup> & VariantProps<typeof radioVariants>
 
 export interface RadioGroupItemContextProps {
   value: string
@@ -28,20 +28,17 @@ export interface RadioGroupItemContextProps {
 // Variants (CVA)
 // ============================================================================
 
-const radioItemVariant = cva({
-  base: 'flex',
-  variants: {
-    tile: {
-      true: 'relative z-0 px-3 py-4',
-    },
+const radioVariants = tv({
+  slots: {
+    item: 'flex',
+    label: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed',
   },
-})
-
-const radioLabelVariant = cva({
-  base: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed',
   variants: {
     tile: {
-      true: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white',
+      true: {
+        item: 'relative z-0 px-3 py-4',
+        label: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white',
+      },
       false: '',
     },
   },
@@ -79,7 +76,7 @@ const RadioGroupRoot = React.forwardRef<HTMLDivElement, RadioRootProps>(
       <RadioGroupContext.Provider value={{ ...radioGroup, tile }}>
         <div
           {...mergedProps}
-          className={cx('space-y-2', className)}
+          className={cn('space-y-2', className)}
           ref={composeRefs(radioGroup.refs.rootRef, forwardedRef)}
         />
       </RadioGroupContext.Provider>
@@ -91,12 +88,13 @@ const RadioGroupItem = React.forwardRef<HTMLLabelElement, RadioItemProps & Radio
   ({ className, value, ...props }, forwardedRef) => {
     const radio = useRadioGroupContext()
     const mergedProps = mergeProps(radio?.getItemProps({ value }), props)
+    const { item } = radioVariants({ tile: radio?.tile })
 
     return (
       <RadioGroupItemContext.Provider value={{ value }}>
         <label
           {...mergedProps}
-          className={cx(radioItemVariant({ tile: radio?.tile, className }))}
+          className={item({ className })}
           ref={forwardedRef}
         />
       </RadioGroupItemContext.Provider>
@@ -114,7 +112,7 @@ const RadioGroupItemInput = React.forwardRef<HTMLInputElement, RadioInputProps>(
     return (
       <input
         {...mergedProps}
-        className={cx('sr-only peer', className)}
+        className={cn('sr-only peer', className)}
         ref={forwardedRef}
       />
     )
@@ -130,7 +128,7 @@ const RadioGroupItemControl = React.forwardRef<HTMLInputElement, RadioControlPro
     return (
       <div
         {...mergedProps}
-        className={cx(
+        className={cn(
           'flex items-center justify-center top-0.5 shrink-0 relative cursor-pointer text-blue-60v border-none size-5 rounded-full ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-disabled:peer-checked:text-gray-50 peer-checked:ring-blue-60v peer-focus:peer-checked:ring-blue-60v before:size-4 before:block before:rounded-full peer-checked:before:bg-blue-60v peer-checked:peer-disabled:before:bg-gray-50',
           className,
         )}
@@ -144,11 +142,12 @@ function RadioGroupItemLabel({ className, ...props }: RadioLabelProps) {
   const radio = useRadioGroupContext()
   const radioItem = useRadioGroupItemContext()
   const mergedProps = mergeProps(radio?.getLabelProps(radioItem), props)
+  const { label } = radioVariants({ tile: radio?.tile })
 
   return (
     <div
       {...mergedProps}
-      className={cx(radioLabelVariant({ tile: radio?.tile }), className)}
+      className={label({ className })}
     />
   )
 }
@@ -157,7 +156,7 @@ function RadioGroupItemDescription({ className, ...props }: RadioDescriptionProp
   return (
     <div
       {...props}
-      className={cx('block mt-1 text-sm', className)}
+      className={cn('block mt-1 text-sm', className)}
     />
   )
 }

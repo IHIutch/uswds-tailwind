@@ -1,6 +1,6 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { cn, tv } from '../tv.config'
 
 // ============================================================================
 // Types
@@ -8,23 +8,53 @@ import { cva, cx } from '../cva.config'
 
 // export type StepIndicatorStatus = 'complete' | 'current' | 'incomplete'
 // export type StepIndicatorVariant = 'default' | 'centered' | 'noLabels'
-const stepSegmentIndicatorVariants = cva({
-  base: '[counter-increment:usa-step-indicator] border-t-8 pt-2 w-full',
+const stepIndicatorVariants = tv({
+  slots: {
+    indicator: '[counter-increment:usa-step-indicator] border-t-8 pt-2 w-full',
+    label: 'hidden leading-none',
+    counter: 'hidden @tablet:flex rounded-full items-center justify-center absolute outline-white outline-4 before:[content:counter(usa-step-indicator)] font-bold',
+  },
   variants: {
     variant: {
-      default: 'pr-8',
-      centered: 'px-2',
-      noLabels: '',
+      default: {
+        indicator: 'pr-8',
+        label: '@tablet:block',
+      },
+      centered: {
+        indicator: 'px-2',
+        label: 'text-center @tablet:block',
+      },
+      noLabels: {
+        label: '@tablet:hidden',
+      },
     },
     counters: {
-      unset: null,
-      lg: 'relative @tablet:pt-6 @tablet:mt-4 @tablet:last:border-t-transparent',
-      sm: 'relative @tablet:pt-4 @tablet:mt-2 @tablet:last:border-t-transparent',
+      unset: '',
+      lg: {
+        indicator: 'relative @tablet:pt-6 @tablet:mt-4 @tablet:last:border-t-transparent',
+        counter: 'size-10 -top-6',
+      },
+      sm: {
+        indicator: 'relative @tablet:pt-4 @tablet:mt-2 @tablet:last:border-t-transparent',
+        counter: 'size-6 -top-4',
+      },
     },
     status: {
-      complete: 'border-t-blue-warm-80v',
-      current: 'border-t-blue-60v',
-      incomplete: 'border-t-gray-40',
+      complete: {
+        indicator: 'border-t-blue-warm-80v',
+        label: 'text-blue-warm-80v',
+        counter: 'bg-blue-warm-80v text-white',
+      },
+      current: {
+        indicator: 'border-t-blue-60v',
+        label: 'text-blue-60v font-bold',
+        counter: 'bg-blue-60v text-white',
+      },
+      incomplete: {
+        indicator: 'border-t-gray-40',
+        label: 'text-gray-cool-60',
+        counter: 'bg-white border-4 border-gray-40 text-gray-60',
+      },
     },
   },
   defaultVariants: {
@@ -38,10 +68,10 @@ export interface StepIndicatorStep {
 }
 
 interface StepIndicatorComputedStep extends StepIndicatorStep {
-  status: VariantProps<typeof stepSegmentIndicatorVariants>['status']
+  status: VariantProps<typeof stepIndicatorVariants>['status']
 }
 
-interface StepIndicatorContextProps extends VariantProps<typeof stepSegmentIndicatorVariants> {
+interface StepIndicatorContextProps extends VariantProps<typeof stepIndicatorVariants> {
   steps: StepIndicatorComputedStep[]
   currentStep: number
 }
@@ -65,7 +95,7 @@ function useStepIndicatorContext() {
 // ============================================================================
 
 export type StepIndicatorRootProps = React.ComponentPropsWithoutRef<'div'>
-  & VariantProps<typeof stepSegmentIndicatorVariants>
+  & VariantProps<typeof stepIndicatorVariants>
   & {
     steps?: StepIndicatorStep[]
     currentStep: number
@@ -83,7 +113,7 @@ function StepIndicatorRoot({ variant, counters, steps = [], currentStep, classNa
       <div
         aria-label="Progress"
         {...props}
-        className={cx('@container')}
+        className={cn('@container')}
       />
     </StepIndicatorContext.Provider>
   )
@@ -102,7 +132,7 @@ function StepIndicatorList({ className, children, ...props }: StepIndicatorListP
   return (
     <ol
       {...props}
-      className={cx('flex space-x-0.5 [counter-reset:usa-step-indicator]', className)}
+      className={cn('flex space-x-0.5 [counter-reset:usa-step-indicator]', className)}
     >
       {typeof children === 'function' ? children({ steps }) : children}
     </ol>
@@ -114,20 +144,18 @@ function StepIndicatorList({ className, children, ...props }: StepIndicatorListP
 // ============================================================================
 
 export type StepIndicatorListItemProps = React.ComponentPropsWithoutRef<'li'> & {
-  status?: VariantProps<typeof stepSegmentIndicatorVariants>['status']
+  status?: VariantProps<typeof stepIndicatorVariants>['status']
 }
 
 function StepIndicatorListItem({ status = 'incomplete', className, ...props }: StepIndicatorListItemProps) {
   const { variant, counters } = useStepIndicatorContext()
+  const { indicator } = stepIndicatorVariants({ status, variant, counters })
 
   return (
     <li
       aria-current={status === 'current' ? 'step' : undefined}
       {...props}
-      className={cx(
-        stepSegmentIndicatorVariants({ status, variant, counters }),
-        className,
-      )}
+      className={indicator({ className })}
     />
   )
 }
@@ -136,61 +164,21 @@ function StepIndicatorListItem({ status = 'incomplete', className, ...props }: S
 // Segment
 // ============================================================================
 
-const stepSegmentLabelVariants = cva({
-  base: 'hidden leading-none',
-  variants: {
-    variant: {
-      default: '@tablet:block',
-      centered: 'text-center @tablet:block',
-      noLabels: '@tablet:hidden',
-    },
-    status: {
-      complete: 'text-blue-warm-80v',
-      current: 'text-blue-60v font-bold',
-      incomplete: 'text-gray-cool-60',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const stepCounterVariant = cva({
-  base: 'hidden @tablet:flex rounded-full items-center justify-center absolute outline-white outline-4 before:[content:counter(usa-step-indicator)] font-bold',
-  variants: {
-    counters: {
-      unset: null,
-      lg: 'size-10 -top-6',
-      sm: 'size-6 -top-4',
-    },
-    status: {
-      complete: 'bg-blue-warm-80v text-white',
-      current: 'bg-blue-60v text-white',
-      incomplete: 'bg-white border-4 border-gray-40 text-gray-60',
-    },
-  },
-  defaultVariants: {
-    counters: 'unset',
-  },
-})
-
 export type StepIndicatorSegmentProps = React.ComponentPropsWithoutRef<'span'> & {
-  status: VariantProps<typeof stepSegmentIndicatorVariants>['status']
+  status: VariantProps<typeof stepIndicatorVariants>['status']
 }
 
 function StepIndicatorSegment({ status, className, children, ...props }: StepIndicatorSegmentProps) {
   const { variant, counters } = useStepIndicatorContext()
+  const { counter, label } = stepIndicatorVariants({ variant, counters, status })
   return (
     <>
       {counters
-        ? <div className={stepCounterVariant({ counters, status })} />
+        ? <div className={counter()} />
         : null}
       <span
         {...props}
-        className={cx(
-          stepSegmentLabelVariants({ status, variant }),
-          className,
-        )}
+        className={label({ className })}
       >
         {children}
       </span>
@@ -212,7 +200,7 @@ function StepIndicatorLabel({ className, ...props }: StepIndicatorLabelProps) {
   return (
     <span
       {...props}
-      className={cx('block text-sm mt-1', className)}
+      className={cn('block text-sm mt-1', className)}
     />
   )
 }
@@ -227,7 +215,7 @@ function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps
   return (
     <div
       {...props}
-      className={cx('mt-4', className)}
+      className={cn('mt-4', className)}
     />
   )
 }
@@ -244,7 +232,7 @@ function StepIndicatorCounter({ className, children, ...props }: StepIndicatorCo
   const context = useStepIndicatorContext()
 
   return (
-    <span {...props} className={cx('text-xl', className)}>
+    <span {...props} className={cn('text-xl', className)}>
       {typeof children === 'function'
         ? children(context)
         : (
@@ -277,7 +265,7 @@ function StepIndicatorHeading({ label, className, ...props }: StepIndicatorHeadi
   const headingLabel = label || steps[currentStep - 1]?.label
 
   return (
-    <span {...props} className={cx('font-bold pl-2 text-2xl', className)}>{headingLabel}</span>
+    <span {...props} className={cn('font-bold pl-2 text-2xl', className)}>{headingLabel}</span>
   )
 }
 

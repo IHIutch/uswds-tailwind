@@ -1,9 +1,9 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import type { UseCheckboxProps } from './use-checkbox'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { cn, tv } from '../tv.config'
 import { composeRefs } from '../utils/compose-refs'
 import { useCheckbox } from './use-checkbox'
 
@@ -37,16 +37,23 @@ function useCheckboxGroupContext() {
   return React.useContext(CheckboxGroupContext)
 }
 
-const checkboxRootVariant = cva({
-  base: 'flex',
+const checkboxVariants = tv({
+  slots: {
+    root: 'flex',
+    label: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed ',
+  },
   variants: {
     tile: {
-      true: 'relative z-0 px-3 py-4',
+      true: {
+        root: 'relative z-0 px-3 py-4',
+        label: 'before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white',
+      },
+      false: '',
     },
   },
 })
 
-const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & VariantProps<typeof checkboxRootVariant>>(
+const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & VariantProps<typeof checkboxVariants>>(
   ({ className, id, tile, onCheckedChange, value, ...props }, forwardedRef) => {
     const group = useCheckboxGroupContext()
 
@@ -59,6 +66,7 @@ const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & Vari
 
     const checkbox = useCheckbox({ id, onCheckedChange: handleCheckedChange })
     const mergedProps = mergeProps(checkbox.getRootProps(), props)
+    const { root } = checkboxVariants({ tile })
 
     return (
       <CheckboxContext.Provider value={{
@@ -68,12 +76,7 @@ const CheckboxRoot = React.forwardRef<HTMLLabelElement, CheckboxRootProps & Vari
       >
         <label
           {...mergedProps}
-          className={cx(
-            checkboxRootVariant({
-              tile,
-              className,
-            }),
-          )}
+          className={root({ className })}
           ref={composeRefs(checkbox.refs.rootRef, forwardedRef)}
         />
       </CheckboxContext.Provider>
@@ -96,7 +99,7 @@ function CheckboxGroup({ className, onValueChange, defaultValue = [], ...props }
     <CheckboxGroupContext.Provider value={{ onCheckedChange: handleCheckedChange }}>
       <div
         {...props}
-        className={cx(
+        className={cn(
           'space-y-2',
           className,
         )}
@@ -105,29 +108,15 @@ function CheckboxGroup({ className, onValueChange, defaultValue = [], ...props }
   )
 }
 
-const checkboxLabelVariant = cva({
-  base: 'pl-3 cursor-pointer block peer-disabled:text-gray-60 peer-disabled:cursor-not-allowed ',
-  variants: {
-    tile: {
-      true: 'before:absolute before:-z-10 before:inset-0 before:bg-white before:border-2 before:border-gray-20 before:rounded peer-checked:before:border-blue-60v peer-checked:before:bg-blue-60v/10 peer-disabled:before:border-gray-10 peer-disabled:before:bg-white',
-      false: '',
-    },
-  },
-})
-
 function CheckboxLabel({ className, ...props }: CheckboxLabelProps) {
   const checkbox = useCheckboxContext()
   const mergedProps = mergeProps(checkbox?.getLabelProps(), props)
+  const { label } = checkboxVariants({ tile: checkbox?.tile })
 
   return (
     <div
       {...mergedProps}
-      className={cx(
-        checkboxLabelVariant({
-          tile: checkbox?.tile,
-        }),
-        className,
-      )}
+      className={label({ className })}
     />
   )
 }
@@ -141,7 +130,7 @@ const CheckboxInput = React.forwardRef<HTMLInputElement, CheckboxInputProps>(
     return (
       <input
         {...mergedProps}
-        className={cx('sr-only peer', className)}
+        className={cn('sr-only peer', className)}
         ref={forwardedRef}
       />
     )
@@ -156,7 +145,7 @@ const CheckboxControl = React.forwardRef<HTMLInputElement, CheckboxControlProps>
     return (
       <div
         {...mergedProps}
-        className={cx(
+        className={cn(
           'flex items-center justify-center top-0.5 relative shrink-0 cursor-pointer text-transparent peer-checked:text-white border-none size-5 rounded-sm ring-2 ring-offset-0 ring-gray-90 peer-focus:ring-2 peer-focus:ring-offset-0 peer-focus:ring-gray-90 peer-focus:outline-4 peer-focus:outline-offset-4 peer-focus:outline-blue-40v peer-disabled:ring-gray-50 peer-disabled:cursor-not-allowed peer-checked:ring-blue-60v peer-checked:bg-blue-60v peer-disabled:peer-checked:bg-gray-50 peer-focus:peer-checked:ring-blue-60v',
           className,
         )}
@@ -176,7 +165,7 @@ function CheckboxDescription({ className, ...props }: React.HTMLAttributes<HTMLD
   return (
     <div
       {...props}
-      className={cx('block mt-1 text-sm', className)}
+      className={cn('block mt-1 text-sm', className)}
     />
   )
 }

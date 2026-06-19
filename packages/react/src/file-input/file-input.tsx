@@ -2,8 +2,8 @@ import type * as fileInput from '@uswds-tailwind/file-input-compat'
 import type { UseFileInputProps } from './use-file-input'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { cn } from '../tv.config'
 import { useFileInput } from './use-file-input'
 
 export interface FileInputContextProps {
@@ -30,7 +30,7 @@ function FileInputRoot({ className, children, ...props }: FileInputRootProps) {
     <FileInputContext.Provider value={{ api }}>
       <div
         {...mergedProps}
-        className={cx('relative z-0 max-w-lg', className)}
+        className={cn('relative z-0 max-w-lg', className)}
       >
         {children}
       </div>
@@ -44,7 +44,7 @@ function FileInputLabel({ className, ...props }: FileInputLabelProps) {
   const { api } = useFileInputContext()
   const mergedProps = mergeProps(api.getLabelProps(), props)
 
-  return <label {...mergedProps} className={cx('block', className)} />
+  return <label {...mergedProps} className={cn('block', className)} />
 }
 
 export type FileInputSrStatusProps = React.ComponentPropsWithoutRef<'div'>
@@ -65,7 +65,7 @@ function FileInputDropzone({ className, ...props }: FileInputDropzoneProps) {
   return (
     <div
       {...mergedProps}
-      className={cx('border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-orange-30v mt-2 relative w-full bg-white data-[dragging]:bg-blue-10', className)}
+      className={cn('border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-orange-30v mt-2 relative w-full bg-white data-[dragging]:bg-blue-10', className)}
     />
   )
 }
@@ -82,7 +82,7 @@ const FileInputInput = React.forwardRef<HTMLInputElement, FileInputInputProps>(
       <input
         type="file"
         {...mergedProps}
-        className={cx('cursor-pointer absolute inset-0 z-10 p-2 focus:outline-4 focus:outline-blue-40v [&::-webkit-file-upload-button]:hidden text-transparent', className)}
+        className={cn('cursor-pointer absolute inset-0 z-10 p-2 focus:outline-4 focus:outline-blue-40v [&::-webkit-file-upload-button]:hidden text-transparent', className)}
         ref={forwardedRef}
       />
     )
@@ -98,7 +98,7 @@ function FileInputInstructions({ className, children, ...props }: FileInputInstr
   return (
     <div
       {...mergedProps}
-      className={cx('py-8 px-4 pointer-events-none z-30 relative text-center data-[valid]:hidden', className)}
+      className={cn('py-8 px-4 pointer-events-none z-30 relative text-center data-[valid]:hidden', className)}
     >
       {children ?? (
         <>
@@ -127,7 +127,7 @@ function FileInputErrorMessage({ className, ...props }: FileInputErrorMessagePro
   return (
     <div
       {...mergedProps}
-      className={cx('hidden text-red-60v font-bold data-[invalid]:block -mt-6 mb-6 text-center', className)}
+      className={cn('hidden text-red-60v font-bold data-[invalid]:block -mt-6 mb-6 text-center', className)}
     />
   )
 }
@@ -143,7 +143,7 @@ function FileInputPreviewList({ className, children, ...props }: FileInputPrevie
   return (
     <div
       {...mergedProps}
-      className={cx('relative z-30 pointer-events-none hidden data-[valid]:block data-[valid]:bg-blue-10 group', className)}
+      className={cn('relative z-30 pointer-events-none hidden data-[valid]:block data-[valid]:bg-blue-10 group', className)}
     >
       {typeof children === 'function' ? children({ files: api.acceptedFiles }) : children}
     </div>
@@ -157,7 +157,7 @@ function FileInputPreviewTitle({ className, children, ...props }: FileInputPrevi
   const mergedProps = mergeProps(api.getPreviewHeadingProps(), props)
 
   return (
-    <div {...mergedProps} className={cx('font-bold', className)}>
+    <div {...mergedProps} className={cn('font-bold', className)}>
       {children ?? api.previewHeadingText}
     </div>
   )
@@ -188,7 +188,7 @@ function FileInputItem({ file, className, ...props }: FileInputItemProps) {
     <PreviewItemContext.Provider value={{ file }}>
       <div
         {...mergedProps}
-        className={cx('border-t border-t-white group-data-dragging:opacity-10', className)}
+        className={cn('border-t border-t-white group-data-dragging:opacity-10', className)}
       />
     </PreviewItemContext.Provider>
   )
@@ -198,7 +198,7 @@ export type FileInputPreviewItemProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewItem({ className, ...props }: FileInputPreviewItemProps) {
   return (
-    <div {...props} className={cx('flex items-center gap-2 p-2', className)} />
+    <div {...props} className={cn('flex items-center gap-2 p-2', className)} />
   )
 }
 
@@ -213,7 +213,7 @@ function FileInputPreviewItemIcon({ className, children, ...props }: FileInputPr
     <div
       {...props}
       data-type={type}
-      className={cx('size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=word]:icon-[fa-solid--file-word] data-[type=excel]:icon-[fa-solid--file-excel] data-[type=video]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]', className)}
+      className={cn('size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=word]:icon-[fa-solid--file-word] data-[type=excel]:icon-[fa-solid--file-excel] data-[type=video]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]', className)}
     >
       {children}
     </div>
@@ -239,7 +239,7 @@ function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItem
     <img
       {...mergedProps}
       src={url}
-      className={cx('size-8 object-contain', className)}
+      className={cn('size-8 object-contain', className)}
     />
   )
 }
@@ -252,7 +252,7 @@ function FileInputPreviewItemContent({ className, children, ...props }: FileInpu
   const mergedProps = mergeProps(api.getItemNameProps(itemProps), props)
 
   return (
-    <div {...mergedProps} className={cx('flex items-center', className)}>
+    <div {...mergedProps} className={cn('flex items-center', className)}>
       {children ?? itemProps.file.name}
     </div>
   )
@@ -269,7 +269,7 @@ const FileInputItemDeleteTrigger = React.forwardRef<HTMLButtonElement, FileInput
     return (
       <button
         {...mergedProps}
-        className={cx('pointer-events-auto text-blue-60v cursor-pointer', className)}
+        className={cn('pointer-events-auto text-blue-60v cursor-pointer', className)}
         ref={forwardedRef}
       />
     )
@@ -279,7 +279,7 @@ const FileInputItemDeleteTrigger = React.forwardRef<HTMLButtonElement, FileInput
 export type FileInputPreviewHeaderProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewHeader({ className, ...props }: FileInputPreviewHeaderProps) {
-  return <div {...props} className={cx('flex justify-between items-center p-2', className)} />
+  return <div {...props} className={cn('flex justify-between items-center p-2', className)} />
 }
 
 export type FileInputChangeTriggerProps = React.ComponentPropsWithoutRef<'span'>
@@ -287,7 +287,7 @@ export type FileInputChangeTriggerProps = React.ComponentPropsWithoutRef<'span'>
 function FileInputChangeTrigger({ className, children, ...props }: FileInputChangeTriggerProps) {
   const { api } = useFileInputContext()
   return (
-    <span {...props} className={cx('text-blue-60v underline', className)}>
+    <span {...props} className={cn('text-blue-60v underline', className)}>
       {children ?? api.changeItemText}
     </span>
   )

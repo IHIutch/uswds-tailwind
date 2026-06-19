@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 interface SummaryBoxContextProps {
   headingId: string
@@ -26,7 +26,7 @@ const SummaryBoxRoot = React.forwardRef<HTMLDivElement, SummaryBoxRootProps>(
           role="complementary"
           aria-labelledby={headingId}
           {...props}
-          className={cx('border border-cyan-20 bg-cyan-5 rounded-sm p-6', className)}
+          className={cn('border border-cyan-20 bg-cyan-5 rounded-sm p-6', className)}
           ref={forwardedRef}
         />
       </SummaryBoxContext.Provider>
@@ -42,7 +42,7 @@ function SummaryBoxHeading({ className, ...props }: SummaryBoxHeadingProps) {
     <div
       id={headingId}
       {...props}
-      className={cx('text-xl font-bold', className)}
+      className={cn('text-xl font-bold', className)}
     />
   )
 }
@@ -53,7 +53,7 @@ function SummaryBoxContent({ className, ...props }: SummaryBoxContentProps) {
   return (
     <div
       {...props}
-      className={cx('mt-4', className)}
+      className={cn('mt-4', className)}
     />
   )
 }

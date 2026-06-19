@@ -1,87 +1,69 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { cn, tv } from '../tv.config'
 
-export const alertVariants = cva({
+export const alertVariants = tv({
+  slots: {
+    root: '',
+    content: 'pr-5 relative',
+    indicator: 'absolute left-4.5',
+    icon: '',
+  },
   variants: {
     variant: {
-      info: 'bg-cyan-5 border-l-8 border-l-cyan-30v',
-      warning: 'bg-yellow-5 border-l-8 border-l-gold-20v',
-      success: 'bg-green-cool-5 border-l-8 border-l-green-cool-40v',
-      error: 'bg-red-warm-10 border-l-8 border-l-red-warm-50v',
-      emergency: 'bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white',
+      info: {
+        root: 'bg-cyan-5 border-l-8 border-l-cyan-30v',
+        icon: 'icon-[material-symbols--info]',
+      },
+      warning: {
+        root: 'bg-yellow-5 border-l-8 border-l-gold-20v',
+        icon: 'icon-[material-symbols--warning]',
+      },
+      success: {
+        root: 'bg-green-cool-5 border-l-8 border-l-green-cool-40v',
+        icon: 'icon-[material-symbols--check-circle]',
+      },
+      error: {
+        root: 'bg-red-warm-10 border-l-8 border-l-red-warm-50v',
+        icon: 'icon-[material-symbols--error]',
+      },
+      emergency: {
+        root: 'bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white',
+        icon: 'icon-[material-symbols--info]',
+      },
     },
     slim: {
-      true: null,
+      true: {
+        content: 'py-2',
+        icon: 'size-6',
+      },
+      false: {
+        content: 'py-4',
+        indicator: 'top-3',
+        icon: 'size-8',
+      },
     },
     noIcon: {
-      true: null,
-    },
-  },
-  defaultVariants: {
-    variant: 'info',
-  },
-})
-
-const alertContentVariants = cva({
-  base: 'pr-5 relative',
-  variants: {
-    slim: {
-      true: 'py-2',
-      false: 'py-4',
-    },
-    noIcon: {
-      true: 'pl-4',
-      false: 'pl-13',
+      true: {
+        content: 'pl-4',
+        indicator: 'hidden',
+      },
+      false: {
+        content: 'pl-13',
+      },
     },
   },
   compoundVariants: [
     {
       slim: false,
       noIcon: false,
-      className: 'pl-15',
+      className: { content: 'pl-15' },
     },
   ],
   defaultVariants: {
-    slim: false,
-    noIcon: false,
-  },
-})
-
-const alertIndicatorVariants = cva({
-  base: 'absolute left-4.5',
-  variants: {
-    slim: {
-      true: null,
-      false: 'top-3',
-    },
-    noIcon: {
-      true: 'hidden',
-    },
-  },
-  defaultVariants: {
-    slim: false,
-    noIcon: false,
-  },
-})
-
-const alertIconVariants = cva({
-  variants: {
-    variant: {
-      info: 'icon-[material-symbols--info]',
-      warning: 'icon-[material-symbols--warning]',
-      success: 'icon-[material-symbols--check-circle]',
-      error: 'icon-[material-symbols--error]',
-      emergency: 'icon-[material-symbols--info]',
-    },
-    slim: {
-      true: 'size-6',
-      false: 'size-8',
-    },
-  },
-  defaultVariants: {
-    slim: false,
     variant: 'info',
+    slim: false,
+    noIcon: false,
   },
 })
 
@@ -100,20 +82,22 @@ function useAlertContext() {
 
 const AlertRoot = React.forwardRef<HTMLDivElement, AlertRootProps>(
   ({ variant, slim, noIcon, className, ...props }, forwardedRef) => {
+    const { root } = alertVariants({ variant, slim, noIcon })
     return (
       <AlertContext.Provider value={{ variant, slim, noIcon }}>
-        <div {...props} className={alertVariants({ variant, slim, noIcon, className })} ref={forwardedRef} />
+        <div {...props} className={root({ className })} ref={forwardedRef} />
       </AlertContext.Provider>
     )
   },
 )
 
 function AlertContent({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  const { slim, noIcon } = useAlertContext()
+  const { variant, slim, noIcon } = useAlertContext()
+  const { content } = alertVariants({ variant, slim, noIcon })
   return (
     <div
       {...props}
-      className={alertContentVariants({ slim, noIcon, className })}
+      className={content({ className })}
     />
   )
 }
@@ -122,7 +106,7 @@ function AlertTitle({ className, ...props }: React.HTMLAttributes<HTMLElement>) 
   return (
     <div
       {...props}
-      className={cx('text-2xl font-bold mb-2 leading-none', className)}
+      className={cn('text-2xl font-bold mb-2 leading-none', className)}
     />
   )
 }
@@ -133,12 +117,13 @@ function AlertDescription({ className, ...props }: React.HTMLAttributes<HTMLElem
 
 function AlertIndicator({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) {
   const { variant, slim, noIcon } = useAlertContext()
+  const { indicator, icon } = alertVariants({ variant, slim, noIcon })
   return (
     <div
       {...props}
-      className={alertIndicatorVariants({ slim, className, noIcon })}
+      className={indicator({ className })}
     >
-      {children || <div className={alertIconVariants({ variant, slim })} />}
+      {children || <div className={icon()} />}
     </div>
   )
 }

@@ -162,9 +162,6 @@ catalogs:
     astro-seo:
       specifier: ^0.8.4
       version: 0.8.4
-    cva:
-      specifier: ^1.0.0-beta.4
-      version: 1.0.0-beta.4
     dedent:
       specifier: ^1.7.0
       version: 1.7.0
@@ -201,6 +198,9 @@ catalogs:
     tailwind-merge:
       specifier: ^3.4.0
       version: 3.5.0
+    tailwind-variants:
+      specifier: ^3.1.0
+      version: 3.2.2
     tailwindcss:
       specifier: 4.1.18
       version: 4.1.18
@@ -890,12 +890,12 @@ importers:
       '@zag-js/utils':
         specifier: 'catalog:'
         version: 1.40.0
-      cva:
-        specifier: 'catalog:'
-        version: 1.0.0-beta.4(typescript@5.9.3)
       tailwind-merge:
         specifier: 'catalog:'
         version: 3.5.0
+      tailwind-variants:
+        specifier: 'catalog:'
+        version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.1.18)
     devDependencies:
       '@storybook/addon-docs':
         specifier: 'catalog:'
@@ -4182,14 +4182,6 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
-  cva@1.0.0-beta.4:
-    resolution: {integrity: sha512-F/JS9hScapq4DBVQXcK85l9U91M6ePeXoBMSp7vypzShoefUBxjQTo3g3935PUHgQd+IW77DjbPRIxugy4/GCQ==}
-    peerDependencies:
-      typescript: '>= 4.5.5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   dataloader@1.4.0:
     resolution: {integrity: sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==}
 
@@ -6248,6 +6240,16 @@ packages:
 
   tailwind-merge@3.5.0:
     resolution: {integrity: sha512-I8K9wewnVDkL1NTGoqWmVEIlUcB9gFriAEkXkfCjX5ib8ezGxtR3xD7iZIxrfArjEsH7F1CHD4RFUtxefdqV/A==}
+
+  tailwind-variants@3.2.2:
+    resolution: {integrity: sha512-Mi4kHeMTLvKlM98XPnK+7HoBPmf4gygdFmqQPaDivc3DpYS6aIY6KiG/PgThrGvii5YZJqRsPz0aPyhoFzmZgg==}
+    engines: {node: '>=16.x', pnpm: '>=7.x'}
+    peerDependencies:
+      tailwind-merge: '>=3.0.0'
+      tailwindcss: '*'
+    peerDependenciesMeta:
+      tailwind-merge:
+        optional: true
 
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
@@ -10365,12 +10367,6 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  cva@1.0.0-beta.4(typescript@5.9.3):
-    dependencies:
-      clsx: 2.1.1
-    optionalDependencies:
-      typescript: 5.9.3
-
   dataloader@1.4.0: {}
 
   debug@4.4.3:
@@ -13048,6 +13044,12 @@ snapshots:
       '@pkgr/core': 0.2.9
 
   tailwind-merge@3.5.0: {}
+
+  tailwind-variants@3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.1.18):
+    dependencies:
+      tailwindcss: 4.1.18
+    optionalDependencies:
+      tailwind-merge: 3.5.0
 
   tailwindcss-animate@1.0.7(tailwindcss@4.1.18):
     dependencies:

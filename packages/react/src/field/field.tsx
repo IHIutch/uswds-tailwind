@@ -1,7 +1,7 @@
 import type { UseFieldProps } from './use-field'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 import { composeRefs } from '../utils/compose-refs'
 import { useField } from './use-field'
 
@@ -22,7 +22,7 @@ const FieldRoot = React.forwardRef<HTMLDivElement, FieldRootProps>(
       <FieldContext.Provider value={field}>
         <div
           {...mergedProps}
-          className={cx(
+          className={cn(
             'invalid:pl-4 invalid:-ml-5 invalid:border-red-60v invalid:border-l-4',
             className,
           )}
@@ -40,7 +40,7 @@ function FieldLabel({ className, ...props }: React.LabelHTMLAttributes<HTMLLabel
   return (
     <label
       {...mergedProps}
-      className={cx('block invalid:font-bold', className)}
+      className={cn('block invalid:font-bold', className)}
     />
   )
 }
@@ -52,7 +52,7 @@ function FieldDescription({ className, ...props }: React.HTMLAttributes<HTMLDivE
   return (
     <div
       {...mergedProps}
-      className={cx('text-gray-500', className)}
+      className={cn('text-gray-500', className)}
     />
   )
 }
@@ -65,7 +65,7 @@ function FieldErrorMessage({ className, ...props }: React.HTMLAttributes<HTMLDiv
     ? (
         <div
           {...mergedProps}
-          className={cx('mt-0.5 invalid:text-red-60v invalid:font-bold', className)}
+          className={cn('mt-0.5 invalid:text-red-60v invalid:font-bold', className)}
         />
       )
     : null

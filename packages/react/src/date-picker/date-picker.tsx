@@ -2,9 +2,9 @@ import type * as datepicker from '@uswds-tailwind/date-picker-compat'
 import type { UseDatePickerProps } from './use-date-picker'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
+import { cn } from '../tv.config'
 import { useDatePicker } from './use-date-picker'
 
 export interface DatePickerContextProps {
@@ -30,7 +30,7 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
 
     return (
       <DatePickerContext.Provider value={{ api }}>
-        <div {...mergedProps} className={cx('flex relative', className)} ref={forwardedRef} />
+        <div {...mergedProps} className={cn('flex relative', className)} ref={forwardedRef} />
       </DatePickerContext.Provider>
     )
   },
@@ -69,7 +69,7 @@ const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttrib
 
     const mergedProps = mergeProps(apiProps, fieldProps, props, { 'aria-describedby': describedBy })
 
-    return <Input {...mergedProps} className={cx('', className)} ref={forwardedRef} />
+    return <Input {...mergedProps} className={className} ref={forwardedRef} />
   },
 )
 
@@ -94,7 +94,7 @@ const DatePickerTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAt
     )
 
     return (
-      <button {...mergedProps} className={cx('cursor-pointer w-12 bg-transparent hover:bg-gray-10! data-[state=open]:bg-gray-5 active:bg-gray-30 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 flex items-center justify-center', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('cursor-pointer w-12 bg-transparent hover:bg-gray-10! data-[state=open]:bg-gray-5 active:bg-gray-30 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 flex items-center justify-center', className)} ref={forwardedRef}>
         {children || (
           <span className="icon-[material-symbols--calendar-today] size-7"></span>
         )}
@@ -112,7 +112,7 @@ function DatePickerControl({ className, bound, ...props }: DatePickerControlProp
   const value = React.useMemo(() => ({ bound }), [bound])
   return (
     <DatePickerControlContext.Provider value={value}>
-      <div {...props} className={cx('w-full flex', className)} />
+      <div {...props} className={cn('w-full flex', className)} />
     </DatePickerControlContext.Provider>
   )
 }
@@ -122,12 +122,12 @@ const DatePickerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
     const { api } = useDatePickerContext()
     const mergedProps = mergeProps(api.getCalendarProps(), props)
 
-    return <div {...mergedProps} className={cx('not-data-[state=open]:hidden', className)} ref={forwardedRef} />
+    return <div {...mergedProps} className={cn('not-data-[state=open]:hidden', className)} ref={forwardedRef} />
   },
 )
 
 function DatePickerViewControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={cx('flex w-full justify-between', className)} />
+  return <div {...props} className={cn('flex w-full justify-between', className)} />
 }
 
 const DatePickerNextMonthTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
@@ -136,7 +136,7 @@ const DatePickerNextMonthTrigger = React.forwardRef<HTMLButtonElement, React.But
     const mergedProps = mergeProps(api.getNextMonthTriggerProps(), props)
 
     return (
-      <button {...mergedProps} className={cx('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
         {children || (
           <div className="icon-[material-symbols--keyboard-arrow-right] size-6"></div>
         )}
@@ -151,7 +151,7 @@ const DatePickerPrevMonthTrigger = React.forwardRef<HTMLButtonElement, React.But
     const mergedProps = mergeProps(api.getPrevMonthTriggerProps(), props)
 
     return (
-      <button {...mergedProps} className={cx('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
         {children || (
           <div className="icon-[material-symbols--keyboard-arrow-left] size-6"></div>
         )}
@@ -166,7 +166,7 @@ const DatePickerNextYearTrigger = React.forwardRef<HTMLButtonElement, React.Butt
     const mergedProps = mergeProps(api.getNextYearTriggerProps(), props)
 
     return (
-      <button {...mergedProps} className={cx('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
         {children || (
           <div className="icon-[material-symbols--keyboard-double-arrow-right] size-6"></div>
         )}
@@ -181,7 +181,7 @@ const DatePickerPrevYearTrigger = React.forwardRef<HTMLButtonElement, React.Butt
     const mergedProps = mergeProps(api.getPrevYearTriggerProps(), props)
 
     return (
-      <button {...mergedProps} className={cx('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
         {children || (
           <div className="icon-[material-symbols--keyboard-double-arrow-left] size-6"></div>
         )}
@@ -196,7 +196,7 @@ const DatePickerMonthTrigger = React.forwardRef<HTMLButtonElement, React.ButtonH
     const mergedProps = mergeProps(api.getMonthSelectionProps(), props)
 
     return (
-      <button {...mergedProps} className={cx('h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', className)} ref={forwardedRef}>
         {children || api.monthLabel}
       </button>
     )
@@ -209,7 +209,7 @@ const DatePickerYearTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHT
     const mergedProps = mergeProps(api.getYearSelectionProps(), props)
 
     return (
-      <button {...mergedProps} className={cx('h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', className)} ref={forwardedRef}>
+      <button {...mergedProps} className={cn('h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', className)} ref={forwardedRef}>
         {children || api.yearLabel}
       </button>
     )
@@ -252,7 +252,7 @@ const DatePickerView = React.forwardRef<HTMLDivElement, Omit<React.HTMLAttribute
         <div
           {...mergedProps}
           className={
-            cx([
+            cn([
               view === 'month' || view === 'year' ? 'py-5 px-2' : '',
               view === 'year' ? 'flex items-center' : '',
               'bg-gray-5 w-mobile absolute top-10 right-0',
@@ -272,7 +272,7 @@ function DatePickerTable({ className, ...props }: React.TableHTMLAttributes<HTML
   const { api } = useDatePickerContext()
   const mergedProps = mergeProps(api.getGridProps(), props)
 
-  return <table {...mergedProps} className={cx('w-full', className)} />
+  return <table {...mergedProps} className={cn('w-full', className)} />
 }
 
 function DatePickerTableHead({ children, ...props }: Omit<React.HTMLAttributes<HTMLTableSectionElement>, 'children'> & {
@@ -300,7 +300,7 @@ function DatePickerTableHeader({ className, day, ...props }: Omit<React.ThHTMLAt
   const { api } = useDatePickerContext()
   const mergedProps = mergeProps(api.getHeaderCellProps({ day }), props)
   return (
-    <th {...mergedProps} className={cx('text-center py-1.5 font-normal', className)}>
+    <th {...mergedProps} className={cn('text-center py-1.5 font-normal', className)}>
       {props.children ?? day.narrow}
     </th>
   )
@@ -346,7 +346,7 @@ function DatePickerTableCellTrigger({ className, cell, children, ...props }: Dat
   return (
     <button
       {...mergedProps}
-      className={cx('w-full py-1.5 hover:bg-gray-10 cursor-pointer text-center data-previous-month:text-gray-warm-60 data-next-month:text-gray-warm-60 not-focus:data-focus:outline-2 not-focus:data-focus:outline-blue-warm-80v not-focus:data-focus:-outline-offset-2 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 data-range-start:bg-blue-warm-60v data-range-start:text-white data-range-start:rounded-s-sm data-range-end:bg-blue-warm-60v data-range-end:text-white data-range-end:rounded-e-sm data-in-range:bg-blue-warm-10v data-in-range:text-ink data-range-hover:bg-blue-warm-10v active:bg-gray-30 data-selected:bg-blue-warm-60v data-selected:text-white data-selected:active:bg-blue-warm-70v disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent', className)}
+      className={cn('w-full py-1.5 hover:bg-gray-10 cursor-pointer text-center data-previous-month:text-gray-warm-60 data-next-month:text-gray-warm-60 not-focus:data-focus:outline-2 not-focus:data-focus:outline-blue-warm-80v not-focus:data-focus:-outline-offset-2 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 data-range-start:bg-blue-warm-60v data-range-start:text-white data-range-start:rounded-s-sm data-range-end:bg-blue-warm-60v data-range-end:text-white data-range-end:rounded-e-sm data-in-range:bg-blue-warm-10v data-in-range:text-ink data-range-hover:bg-blue-warm-10v active:bg-gray-30 data-selected:bg-blue-warm-60v data-selected:text-white data-selected:active:bg-blue-warm-70v disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent', className)}
     >
       {children}
     </button>
@@ -358,7 +358,7 @@ function DatePickerPrevDecadeTrigger({ className, children, ...props }: React.Bu
   const mergedProps = mergeProps(api.getPrevYearChunkTriggerProps(), props)
 
   return (
-    <button {...mergedProps} className={cx('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
+    <button {...mergedProps} className={cn('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
       {children || (
         <div className="icon-[material-symbols--keyboard-arrow-left] size-8"></div>
       )}
@@ -371,7 +371,7 @@ function DatePickerNextDecadeTrigger({ className, children, ...props }: React.Bu
   const mergedProps = mergeProps(api.getNextYearChunkTriggerProps(), props)
 
   return (
-    <button {...mergedProps} className={cx('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
+    <button {...mergedProps} className={cn('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
       {children || (
         <div className="icon-[material-symbols--keyboard-arrow-right] size-8"></div>
       )}
@@ -382,7 +382,7 @@ function DatePickerNextDecadeTrigger({ className, children, ...props }: React.Bu
 function DatePickerStatus({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const { api } = useDatePickerContext()
   const mergedProps = mergeProps(api.getStatusProps(), props)
-  return <div {...mergedProps} className={cx('sr-only', className)}>{api.statusMessage}</div>
+  return <div {...mergedProps} className={cn('sr-only', className)}>{api.statusMessage}</div>
 }
 
 DatePickerRoot.displayName = 'DatePicker.Root'

@@ -1,16 +1,16 @@
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 export type CollectionRootProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionRoot({ className, ...props }: CollectionRootProps) {
-  return <div {...props} className={cx('', className)} />
+  return <div {...props} className={className} />
 }
 
 export type CollectionListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function CollectionList({ className, ...props }: CollectionListProps) {
-  return <ul {...props} className={cx('divide-y *:py-4 *:first:pt-0 *:last:pb-0', className)} />
+  return <ul {...props} className={cn('divide-y *:py-4 *:first:pt-0 *:last:pb-0', className)} />
 }
 
 export type CollectionItemProps = React.ComponentPropsWithoutRef<'li'> & {
@@ -21,7 +21,7 @@ function CollectionItem({ className, children, startElement, ...props }: Collect
   return (
     <li
       {...props}
-      className={cx('flex gap-4', className)}
+      className={cn('flex gap-4', className)}
     >
       {startElement ?? null}
       <div>{children}</div>
@@ -32,25 +32,25 @@ function CollectionItem({ className, children, startElement, ...props }: Collect
 export type CollectionHeadingProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionHeading({ className, ...props }: CollectionHeadingProps) {
-  return <div {...props} className={cx('text-lg font-bold', className)} />
+  return <div {...props} className={cn('text-lg font-bold', className)} />
 }
 
 export type CollectionDescriptionProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionDescription({ className, ...props }: CollectionDescriptionProps) {
-  return <div {...props} className={cx('mt-1', className)} />
+  return <div {...props} className={cn('mt-1', className)} />
 }
 
 export type CollectionMetaListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function CollectionMetaList({ className, ...props }: CollectionMetaListProps) {
-  return <ul {...props} className={cx('mt-2 flex flex-col gap-1', className)} />
+  return <ul {...props} className={cn('mt-2 flex flex-col gap-1', className)} />
 }
 
 export type CollectionMetadataProps = React.ComponentPropsWithoutRef<'li'>
 
 function CollectionMetaListItem({ className, ...props }: CollectionMetadataProps) {
-  return <li {...props} className={cx('text-sm leading-tight', className)} />
+  return <li {...props} className={cn('text-sm leading-tight', className)} />
 }
 
 export interface CollectionCalendarContextProps {
@@ -78,7 +78,7 @@ function CollectionCalendar({ className, dateTime, ...props }: CollectionCalenda
       }}
     >
       {/* Since this component only displays month/date, choose to format dateTime without time */}
-      <time {...props} dateTime={dateTime.toISOString().split('T')[0]} className={cx('text-lg w-20 shrink-0', className)} />
+      <time {...props} dateTime={dateTime.toISOString().split('T')[0]} className={cn('text-lg w-20 shrink-0', className)} />
     </CollectionCalendarContext.Provider>
   )
 }
@@ -88,7 +88,7 @@ export type CollectionCalendarDateProps = React.ComponentPropsWithoutRef<'div'>
 function CollectionCalendarDate({ className, children, ...props }: CollectionCalendarDateProps) {
   const { dateTime } = useCollectionCalendarContext()
   return (
-    <div {...props} className={cx('font-bold border text-blue-60v border-blue-60v flex items-center justify-center p-2 rounded-b-xs', className)}>
+    <div {...props} className={cn('font-bold border text-blue-60v border-blue-60v flex items-center justify-center p-2 rounded-b-xs', className)}>
       {children || dateTime.toLocaleString(undefined, { day: 'numeric' })}
     </div>
   )
@@ -99,7 +99,7 @@ export type CollectionCalendarMonthProps = React.ComponentPropsWithoutRef<'div'>
 function CollectionCalendarMonth({ className, children, ...props }: CollectionCalendarMonthProps) {
   const { dateTime } = useCollectionCalendarContext()
   return (
-    <div {...props} className={cx('text-white font-bold bg-blue-60v flex items-center justify-center p-2 rounded-t-xs', className)}>
+    <div {...props} className={cn('text-white font-bold bg-blue-60v flex items-center justify-center p-2 rounded-t-xs', className)}>
       {children || dateTime.toLocaleString(undefined, { month: 'short' })}
     </div>
   )
@@ -108,13 +108,13 @@ function CollectionCalendarMonth({ className, children, ...props }: CollectionCa
 export type CollectionThumbnailProps = React.ComponentPropsWithoutRef<'div'>
 
 function CollectionThumbnail({ className, ...props }: CollectionThumbnailProps) {
-  return <div {...props} className={cx('w-20 shrink-0', className)} />
+  return <div {...props} className={cn('w-20 shrink-0', className)} />
 }
 
 // type CollectionThumbnailImageProps = React.ImgHTMLAttributes<HTMLImageElement>
 
 // function CollectionThumbnailImage({ className, ...props }: CollectionThumbnailImageProps) {
-//   return <img {...props} className={cx('w-full h-auto object-cover', className)} />
+//   return <img {...props} className={cn('w-full h-auto object-cover', className)} />
 // }
 
 CollectionRoot.displayName = 'Collection.Root'

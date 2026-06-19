@@ -2,9 +2,9 @@ import type * as characterCount from '@uswds-tailwind/character-count-compat'
 import type { UseCharacterCountProps } from './use-character-count'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
+import { cn } from '../tv.config'
 import { useCharacterCount } from './use-character-count'
 
 export type CharacterCountRootProps = UseCharacterCountProps & React.ComponentPropsWithoutRef<'div'>
@@ -65,7 +65,7 @@ function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps
   return (
     <div
       {...mergedProps}
-      className={cx(
+      className={cn(
         'mt-1 text-gray-50 invalid:text-red-60v invalid:font-bold',
         className,
       )}
@@ -102,7 +102,7 @@ function CharacterCountLabel({ className, ...props }: CharacterCountLabelProps) 
   return (
     <label
       {...mergedProps}
-      className={cx('block', className)}
+      className={cn('block', className)}
     />
   )
 }

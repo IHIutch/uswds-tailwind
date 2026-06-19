@@ -1,117 +1,50 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { cn, tv } from '../tv.config'
 
 // Variants
 
-const footerContainer = cva({
-  base: '@desktop:px-8 max-w-desktop mx-auto px-4',
-})
-
-const footerPrimaryVariants = cva({
-  base: 'bg-gray-5',
+const footerVariants = tv({
+  slots: {
+    container: '@desktop:px-8 max-w-desktop mx-auto px-4',
+    primary: 'bg-gray-5',
+    primaryList: 'grid gap-x-4 @desktop:gap-8 @mobile-lg:flex-row divide-y @mobile-lg:divide-y-0 divide-gray-cool-30 border-y @mobile-lg:border-y-0 border-y-gray-cool-30 ',
+    primaryInner: 'px-0 @mobile-lg:px-4',
+    secondaryInner: '',
+    address: 'flex flex-wrap not-italic',
+    contactInfo: 'leading-tighter',
+    contactLink: 'text-gray-90 focus:outline-4 focus:outline-blue-40v underline',
+    contactHeading: 'text-2xl font-bold',
+    nav: 'px-4 @tablet:px-0 @tablet:pb-0',
+  },
   variants: {
     variant: {
-      default: '',
-      slim: '@desktop:px-4',
-      big: 'py-8',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerPrimaryListVariants = cva({
-  base: 'grid gap-x-4 @desktop:gap-8 @mobile-lg:flex-row divide-y @mobile-lg:divide-y-0 divide-gray-cool-30 border-y @mobile-lg:border-y-0 border-y-gray-cool-30 ',
-  variants: {
-    variant: {
-      default: 'grid-cols-1 @mobile-lg:grid-cols-3 @mobile-lg:col-span-2 @desktop:flex @tablet:flex-wrap',
-      slim: 'grid-cols-1 @mobile-lg:grid-cols-2 @mobile-lg:col-span-2 @tablet:w-2/3 @desktop:flex @tablet:flex-wrap @desktop:w-auto @desktop:grow @desktop:max-w-5xl',
-      big: 'grid-cols-2',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerPrimaryItemVariants = cva({
-  base: '',
-  variants: {
-    variant: {
-      default: '',
-      slim: '',
-      big: '',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerPrimaryInnerVariants = cva({
-  base: 'px-0 @mobile-lg:px-4',
-  variants: {
-    variant: {
-      default: '',
-      slim: '@mobile-lg:flex',
-      big: 'grid @tablet:grid-cols-3 gap-y-8 gap-x-4',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerSecondaryInnerVariants = cva({
-  variants: {
-    variant: {
-      default: 'grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4',
-      slim: 'flex flex-wrap items-center justify-between gap-4',
-      big: 'grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerAddressVariants = cva({
-  base: 'flex flex-wrap not-italic',
-  variants: {
-    variant: {
-      default: '@mobile-lg:justify-end gap-x-4 @desktop:gap-x-8',
-      slim: 'p-4 @mobile-lg:p-0 gap-x-8 @mobile-lg:gap-x-4',
-      big: '@mobile-lg:justify-end gap-x-4 @desktop:gap-x-8',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerContactInfoVariants = cva({
-  base: 'leading-tighter',
-  variants: {
-    variant: {
-      default: '',
-      slim: 'w-auto @desktop:py-4',
-      big: '',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
-
-const footerContactLinkVariants = cva({
-  base: 'text-gray-90 focus:outline-4 focus:outline-blue-40v underline',
-  variants: {
-    variant: {
-      default: '',
-      slim: '@mobile-lg:block @mobile-lg:p-4 @desktop:p-0 @desktop:inline',
-      big: '',
+      default: {
+        primaryList: 'grid-cols-1 @mobile-lg:grid-cols-3 @mobile-lg:col-span-2 @desktop:flex @tablet:flex-wrap',
+        secondaryInner: 'grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4',
+        address: '@mobile-lg:justify-end gap-x-4 @desktop:gap-x-8',
+        contactHeading: 'mb-6 @mobile-lg:mb-1',
+        nav: '@tablet:col-span-2',
+      },
+      slim: {
+        primary: '@desktop:px-4',
+        primaryList: 'grid-cols-1 @mobile-lg:grid-cols-2 @mobile-lg:col-span-2 @tablet:w-2/3 @desktop:flex @tablet:flex-wrap @desktop:w-auto @desktop:grow @desktop:max-w-5xl',
+        primaryInner: '@mobile-lg:flex',
+        secondaryInner: 'flex flex-wrap items-center justify-between gap-4',
+        address: 'p-4 @mobile-lg:p-0 gap-x-8 @mobile-lg:gap-x-4',
+        contactInfo: 'w-auto @desktop:py-4',
+        contactLink: '@mobile-lg:block @mobile-lg:p-4 @desktop:p-0 @desktop:inline',
+        contactHeading: 'mb-0',
+      },
+      big: {
+        primary: 'py-8',
+        primaryList: 'grid-cols-2',
+        primaryInner: 'grid @tablet:grid-cols-3 gap-y-8 gap-x-4',
+        secondaryInner: 'grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4',
+        address: '@mobile-lg:justify-end gap-x-4 @desktop:gap-x-8',
+        contactHeading: 'mb-6 @mobile-lg:mb-1',
+        nav: '@tablet:col-span-2 grid @mobile-lg:grid-cols-2 @desktop:grid-cols-4 gap-x-4 gap-y-8',
+      },
     },
   },
   defaultVariants: {
@@ -121,7 +54,7 @@ const footerContactLinkVariants = cva({
 
 // Context
 
-export type FooterContextProps = VariantProps<typeof footerPrimaryVariants>
+export type FooterContextProps = VariantProps<typeof footerVariants>
 
 const FooterContext = React.createContext<FooterContextProps | null>(null)
 
@@ -143,7 +76,7 @@ const FooterRoot = React.forwardRef<HTMLElement, FooterRootProps>(
       <FooterContext.Provider value={{ variant }}>
         <footer
           {...props}
-          className={cx('@container', className)}
+          className={cn('@container', className)}
           ref={forwardedRef}
         />
       </FooterContext.Provider>
@@ -156,10 +89,11 @@ const FooterRoot = React.forwardRef<HTMLElement, FooterRootProps>(
 export type FooterReturnToTopProps = React.ComponentPropsWithoutRef<'div'>
 
 function FooterReturnToTop({ className, ...props }: FooterReturnToTopProps) {
+  const { container } = footerVariants()
   return (
     <div
       {...props}
-      className={cx(footerContainer(), 'py-5', className)}
+      className={cn(container(), 'py-5', className)}
     />
   )
 }
@@ -170,26 +104,24 @@ export type FooterPrimaryProps = React.ComponentPropsWithoutRef<'nav'>
 
 function FooterPrimary({ className, ...props }: FooterPrimaryProps) {
   const { variant } = useFooterContext()
+  const { primary } = footerVariants({ variant })
 
   return (
     <nav
       aria-label="Footer navigation"
       {...props}
-      className={cx(footerPrimaryVariants({ variant }), className)}
+      className={primary({ className })}
     />
   )
 }
 
 function FooterPrimaryInner({ className, children, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const { variant } = useFooterContext()
+  const { container, primaryInner } = footerVariants({ variant })
   return (
     <div
       {...props}
-      className={cx(
-        footerContainer(),
-        footerPrimaryInnerVariants({ variant }),
-        className,
-      )}
+      className={cn(container(), primaryInner({ className }))}
     >
       {children}
     </div>
@@ -202,11 +134,12 @@ export type FooterPrimaryListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function FooterPrimaryList({ className, ...props }: FooterPrimaryListProps) {
   const { variant } = useFooterContext()
+  const { primaryList } = footerVariants({ variant })
 
   return (
     <ul
       {...props}
-      className={cx(footerPrimaryListVariants({ variant }), className)}
+      className={primaryList({ className })}
     />
   )
 }
@@ -216,12 +149,10 @@ function FooterPrimaryList({ className, ...props }: FooterPrimaryListProps) {
 export type FooterPrimaryItemProps = React.ComponentPropsWithoutRef<'li'>
 
 function FooterPrimaryItem({ className, ...props }: FooterPrimaryItemProps) {
-  const { variant } = useFooterContext()
-
   return (
     <li
       {...props}
-      className={cx(footerPrimaryItemVariants({ variant }), className)}
+      className={cn(className)}
     />
   )
 }
@@ -235,7 +166,7 @@ const FooterPrimaryLink = React.forwardRef<HTMLAnchorElement, FooterPrimaryLinkP
     return (
       <a
         {...props}
-        className={cx('block p-4 tablet:px-0 font-bold text-gray-90 focus:outline-4 focus:outline-blue-40v underline', className)}
+        className={cn('block p-4 tablet:px-0 font-bold text-gray-90 focus:outline-4 focus:outline-blue-40v underline', className)}
         ref={forwardedRef}
       />
     )
@@ -250,7 +181,7 @@ function FooterSecondary({ className, ...props }: FooterSecondaryProps) {
   return (
     <div
       {...props}
-      className={cx('bg-gray-cool-10 py-5', className)}
+      className={cn('bg-gray-cool-10 py-5', className)}
     />
   )
 }
@@ -259,15 +190,12 @@ function FooterSecondary({ className, ...props }: FooterSecondaryProps) {
 
 function FooterSecondaryInner({ className, children, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const { variant } = useFooterContext()
+  const { container, secondaryInner } = footerVariants({ variant })
 
   return (
     <div
       {...props}
-      className={cx(
-        footerContainer(),
-        footerSecondaryInnerVariants({ variant }),
-        className,
-      )}
+      className={cn(container(), secondaryInner({ className }))}
     >
       {children}
     </div>
@@ -282,7 +210,7 @@ function FooterLogo({ className, ...props }: FooterLogoProps) {
   return (
     <div
       {...props}
-      className={cx('flex flex-wrap flex-col @mobile-lg:flex-row @mobile-lg:items-center gap-4', className)}
+      className={cn('flex flex-wrap flex-col @mobile-lg:flex-row @mobile-lg:items-center gap-4', className)}
     />
   )
 }
@@ -295,32 +223,22 @@ function FooterLogoHeading({ className, ...props }: FooterLogoHeadingProps) {
   return (
     <div
       {...props}
-      className={cx('text-2xl font-bold @mobile-lg:mb-1', className)}
+      className={cn('text-2xl font-bold @mobile-lg:mb-1', className)}
     />
   )
 }
 
 // Contact Heading
 
-const footerContactHeadingVariants = cva({
-  base: 'text-2xl font-bold',
-  variants: {
-    variant: {
-      default: 'mb-6 @mobile-lg:mb-1',
-      slim: 'mb-0',
-      big: 'mb-6 @mobile-lg:mb-1',
-    },
-  },
-})
-
 export type FooterContactHeadingProps = React.ComponentPropsWithoutRef<'div'>
 
 function FooterContactHeading({ className, ...props }: FooterContactHeadingProps) {
   const { variant } = useFooterContext()
+  const { contactHeading } = footerVariants({ variant })
   return (
     <div
       {...props}
-      className={cx(footerContactHeadingVariants({ variant }), className)}
+      className={contactHeading({ className })}
     />
   )
 }
@@ -333,7 +251,7 @@ function FooterContact({ className, ...props }: FooterContactProps) {
   return (
     <div
       {...props}
-      className={cx('@mobile-lg:text-right grow', className)}
+      className={cn('@mobile-lg:text-right grow', className)}
     />
   )
 }
@@ -346,7 +264,7 @@ function FooterSocialLinks({ className, ...props }: FooterSocialLinksProps) {
   return (
     <div
       {...props}
-      className={cx('flex flex-wrap @mobile-lg:justify-end gap-2 mb-2', className)}
+      className={cn('flex flex-wrap @mobile-lg:justify-end gap-2 mb-2', className)}
     />
   )
 }
@@ -360,7 +278,7 @@ const FooterSocialLink = React.forwardRef<HTMLAnchorElement, FooterSocialLinkPro
     return (
       <a
         {...props}
-        className={cx('block text-black size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v', className)}
+        className={cn('block text-black size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v', className)}
         ref={forwardedRef}
       />
     )
@@ -373,11 +291,12 @@ export type FooterAddressProps = React.ComponentPropsWithoutRef<'address'>
 
 function FooterAddress({ className, ...props }: FooterAddressProps) {
   const { variant } = useFooterContext()
+  const { address } = footerVariants({ variant })
 
   return (
     <address
       {...props}
-      className={cx(footerAddressVariants({ variant }), className)}
+      className={address({ className })}
     />
   )
 }
@@ -388,11 +307,12 @@ export type FooterContactInfoProps = React.ComponentPropsWithoutRef<'div'>
 
 function FooterContactInfo({ className, ...props }: FooterContactInfoProps) {
   const { variant } = useFooterContext()
+  const { contactInfo } = footerVariants({ variant })
 
   return (
     <div
       {...props}
-      className={cx(footerContactInfoVariants({ variant }), className)}
+      className={contactInfo({ className })}
     />
   )
 }
@@ -404,30 +324,17 @@ export type FooterContactLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElemen
 const FooterContactLink = React.forwardRef<HTMLAnchorElement, FooterContactLinkProps>(
   ({ className, ...props }, forwardedRef) => {
     const { variant } = useFooterContext()
+    const { contactLink } = footerVariants({ variant })
 
     return (
       <a
         {...props}
-        className={cx(footerContactLinkVariants({ variant }), className)}
+        className={contactLink({ className })}
         ref={forwardedRef}
       />
     )
   },
 )
-
-const footerNavVariants = cva({
-  base: 'px-4 @tablet:px-0 @tablet:pb-0',
-  variants: {
-    variant: {
-      default: '@tablet:col-span-2',
-      slim: '',
-      big: '@tablet:col-span-2 grid @mobile-lg:grid-cols-2 @desktop:grid-cols-4 gap-x-4 gap-y-8',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-})
 
 // Nav (big variant)
 
@@ -435,12 +342,13 @@ export type FooterNavProps = React.ComponentPropsWithoutRef<'nav'>
 
 function FooterNav({ className, children, ...props }: FooterNavProps) {
   const { variant } = useFooterContext()
+  const { nav } = footerVariants({ variant })
 
   return (
     <nav
       aria-label="Footer navigation"
       {...props}
-      className={cx(footerNavVariants({ variant }), className)}
+      className={nav({ className })}
     >
       {/* <div className="grid "> */}
       {children}
@@ -454,7 +362,7 @@ function FooterNav({ className, children, ...props }: FooterNavProps) {
 export type FooterSectionProps = React.ComponentPropsWithoutRef<'section'>
 
 function FooterSection({ className, ...props }: FooterSectionProps) {
-  return <section {...props} className={cx(className)} />
+  return <section {...props} className={cn(className)} />
 }
 
 // SectionHeading (big variant)
@@ -465,7 +373,7 @@ function FooterSectionHeading({ className, ...props }: FooterSectionHeadingProps
   return (
     <div
       {...props}
-      className={cx('font-bold font-merriweather mb-4', className)}
+      className={cn('font-bold font-merriweather mb-4', className)}
     />
   )
 }
@@ -478,7 +386,7 @@ function FooterSectionList({ className, ...props }: FooterSectionListProps) {
   return (
     <ul
       {...props}
-      className={cx('space-y-4', className)}
+      className={cn('space-y-4', className)}
     />
   )
 }
@@ -488,7 +396,7 @@ function FooterSectionList({ className, ...props }: FooterSectionListProps) {
 export type FooterSectionItemProps = React.ComponentPropsWithoutRef<'li'>
 
 function FooterSectionItem({ className, ...props }: FooterSectionItemProps) {
-  return <li {...props} className={cx(className)} />
+  return <li {...props} className={cn(className)} />
 }
 
 // SectionLink (big variant)
@@ -500,7 +408,7 @@ const FooterSectionLink = React.forwardRef<HTMLAnchorElement, FooterSectionLinkP
     return (
       <a
         {...props}
-        className={cx('text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline', className)}
+        className={cn('text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline', className)}
         ref={forwardedRef}
       />
     )

@@ -1,8 +1,8 @@
 import type { UseSelectProps } from './use-select'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { useFieldContext } from '../field/field'
+import { cn } from '../tv.config'
 import { useSelect } from './use-select'
 
 export type SelectContextProps = ReturnType<typeof useSelect>
@@ -36,7 +36,7 @@ const SelectRoot = React.forwardRef<HTMLDivElement, SelectRootProps>(
       <SelectContext.Provider value={select}>
         <div
           {...select.getRootProps()}
-          className={cx(
+          className={cn(
             'relative flex items-center mt-2',
             className,
           )}
@@ -58,7 +58,7 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <select
         {...mergedProps}
-        className={cx('peer appearance-none p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:border-red-60v invalid:border-4 invalid:py-1 valid:border-green-cool-40v valid:border-4 valid:py-1 disabled:text-gray-70 disabled:cursor-not-allowed disabled:bg-gray-20', className)}
+        className={cn('peer appearance-none p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:border-red-60v invalid:border-4 invalid:py-1 valid:border-green-cool-40v valid:border-4 valid:py-1 disabled:text-gray-70 disabled:cursor-not-allowed disabled:bg-gray-20', className)}
         ref={forwardedRef}
       />
     )
@@ -72,7 +72,7 @@ function SelectIcon({ className, children, ...props }: SelectIconProps) {
   return (
     <div
       {...mergedProps}
-      className={cx('select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70', className)}
+      className={cn('select-none pointer-events-none h-full absolute right-0 whitespace-nowrap px-2 flex items-center text-gray-90 peer-disabled:text-gray-70', className)}
     >
       {children || (
         <div className="icon-[material-symbols--unfold-more] size-5" />

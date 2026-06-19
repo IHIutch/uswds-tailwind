@@ -1,10 +1,10 @@
 import type { UseMemorableDateProps, UseMemorableDateReturn } from './use-memorable-date'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { Field } from '../field'
 import { Input } from '../input'
 import { Select } from '../select'
+import { cn } from '../tv.config'
 import { useMemorableDate } from './use-memorable-date'
 
 const MemorableDateContext = React.createContext<UseMemorableDateReturn | null>(null)
@@ -50,7 +50,7 @@ function MemorableDateLegend({ className, ...props }: MemorableDateLegendProps) 
 export type MemorableDateControlProps = React.ComponentPropsWithoutRef<'div'>
 
 function MemorableDateControl({ className, ...props }: MemorableDateControlProps) {
-  return <div {...props} className={cx('flex flex-wrap gap-4 mt-4', className)} />
+  return <div {...props} className={cn('flex flex-wrap gap-4 mt-4', className)} />
 }
 
 const MONTHS = [
@@ -89,7 +89,7 @@ function MemorableDateDay({ className, ...props }: React.InputHTMLAttributes<HTM
   return (
     <Field.Root className="w-12">
       <Field.Label>Day</Field.Label>
-      <Input maxLength={2} inputMode="numeric" pattern="[0-9]*" {...props} className={cx('mt-2', className)} />
+      <Input maxLength={2} inputMode="numeric" pattern="[0-9]*" {...props} className={cn('mt-2', className)} />
     </Field.Root>
   )
 }
@@ -98,7 +98,7 @@ function MemorableDateYear({ className, ...props }: React.InputHTMLAttributes<HT
   return (
     <Field.Root className="w-20">
       <Field.Label>Year</Field.Label>
-      <Input minLength={4} maxLength={4} inputMode="numeric" pattern="[0-9]*" {...props} className={cx('mt-2', className)} />
+      <Input minLength={4} maxLength={4} inputMode="numeric" pattern="[0-9]*" {...props} className={cn('mt-2', className)} />
     </Field.Root>
   )
 }

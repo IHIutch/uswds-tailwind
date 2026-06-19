@@ -1,7 +1,7 @@
 import type { PageSlot, UsePaginationProps, UsePaginationReturn } from './use-pagination'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 import { splitProps } from './pagination.props'
 import { usePagination } from './use-pagination'
 
@@ -28,7 +28,7 @@ const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
       <PaginationContext.Provider value={pagination}>
         <nav
           {...mergedProps}
-          className={cx('@container flex justify-center', localProps.className)}
+          className={cn('@container flex justify-center', localProps.className)}
           ref={forwardedRef}
         >
           {localProps.children}
@@ -54,7 +54,7 @@ function PaginationList({
   return (
     <ul
       {...mergedProps}
-      className={cx('flex gap-2 *:inline-flex *:has-data-[part=prev-trigger]:hidden *:has-data-[part=prev-trigger]:@tablet:inline-flex *:has-data-[part=next-trigger]:hidden *:has-data-[part=next-trigger]:@tablet:inline-flex', className)}
+      className={cn('flex gap-2 *:inline-flex *:has-data-[part=prev-trigger]:hidden *:has-data-[part=prev-trigger]:@tablet:inline-flex *:has-data-[part=next-trigger]:hidden *:has-data-[part=next-trigger]:@tablet:inline-flex', className)}
     >
       {typeof children === 'function' ? children({ pages }) : children}
     </ul>
@@ -74,7 +74,7 @@ const PaginationPrevTrigger = React.forwardRef<HTMLButtonElement, React.Componen
       <li>
         <button
           {...mergedProps}
-          className={cx(
+          className={cn(
             'h-10 pr-2 mr-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
             className,
           )}
@@ -105,7 +105,7 @@ const PaginationNextTrigger = React.forwardRef<HTMLButtonElement, React.Componen
       <li>
         <button
           {...mergedProps}
-          className={cx(
+          className={cn(
             'h-10 pl-2 ml-3 cursor-pointer inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v',
             className,
           )}
@@ -137,7 +137,7 @@ export type PaginationItemProps = {
 const PaginationItem = React.forwardRef<HTMLLIElement, PaginationItemProps>(
   ({ className, value, render, ...props }, forwardedRef) => {
     const { isLastPage, isActivePage, getItemProps } = usePaginationContext()
-    const mergedClassName = cx(
+    const mergedClassName = cn(
       'h-10 min-w-10 p-2 cursor-pointer w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white',
       className,
     )
@@ -176,7 +176,7 @@ function PaginationEllipsis({ className, ...props }: React.ComponentPropsWithout
     <li
       {...mergedProps}
     >
-      <div className={cx('h-10 w-10 flex items-center justify-center', className)}>...</div>
+      <div className={cn('h-10 w-10 flex items-center justify-center', className)}>...</div>
     </li>
   )
 }
