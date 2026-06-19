@@ -143,7 +143,8 @@ const CardRoot = React.forwardRef<HTMLDivElement, CardRootProps>(
   },
 )
 
-export type CardMediaProps = React.ComponentPropsWithoutRef<'div'> & VariantProps<typeof cardVariants>
+export type CardMediaProps = React.ComponentPropsWithoutRef<'div'>
+  & Pick<VariantProps<typeof cardVariants>, 'variant'>
 
 function CardMedia({ className, variant, ...props }: CardMediaProps) {
   const { layout } = useCardContext()
