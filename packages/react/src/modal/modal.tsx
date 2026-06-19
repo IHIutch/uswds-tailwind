@@ -138,7 +138,7 @@ const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
   },
 )
 
-export type ModalTitleProps = React.ComponentPropsWithoutRef<'h2'>
+export type ModalTitleProps = React.ComponentPropsWithoutRef<'div'>
 
 function ModalTitle({ className, ...props }: ModalTitleProps) {
   const { api, size } = useModalContext()
@@ -153,7 +153,7 @@ function ModalTitle({ className, ...props }: ModalTitleProps) {
   )
 }
 
-export type ModalDescriptionProps = React.ComponentPropsWithoutRef<'p'>
+export type ModalDescriptionProps = React.ComponentPropsWithoutRef<'div'>
 
 function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   const { api, size } = useModalContext()
