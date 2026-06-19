@@ -113,7 +113,7 @@ function StepIndicatorRoot({ variant, counters, steps = [], currentStep, classNa
       <div
         aria-label="Progress"
         {...props}
-        className={cn('@container')}
+        className={cn('@container', className)}
       />
     </StepIndicatorContext.Provider>
   )
