@@ -15,7 +15,7 @@ export type RadioRootProps = React.ComponentPropsWithoutRef<'div'> & UseRadioGro
 export type RadioItemProps = React.ComponentPropsWithoutRef<'label'> & GroupItemProps
 export type RadioLabelProps = React.ComponentPropsWithoutRef<'div'>
 export type RadioInputProps = React.ComponentPropsWithoutRef<'input'>
-export type RadioControlProps = React.ComponentPropsWithoutRef<'input'>
+export type RadioControlProps = React.ComponentPropsWithoutRef<'div'>
 export type RadioDescriptionProps = React.ComponentPropsWithoutRef<'div'>
 
 export type RadioContextProps = ReturnType<typeof useRadioGroup> & VariantProps<typeof radioVariants>
@@ -119,7 +119,7 @@ const RadioGroupItemInput = React.forwardRef<HTMLInputElement, RadioInputProps>(
   },
 )
 
-const RadioGroupItemControl = React.forwardRef<HTMLInputElement, RadioControlProps>(
+const RadioGroupItemControl = React.forwardRef<HTMLDivElement, RadioControlProps>(
   ({ className, children, ...props }, forwardedRef) => {
     const radio = useRadioGroupContext()
     const radioItem = useRadioGroupItemContext()
