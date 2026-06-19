@@ -1,11 +1,16 @@
+import type { ComponentType } from 'react'
+import type { CardMediaProps, CardRootProps } from './card'
 import preview from '../../.storybook/preview'
 import { Button } from '../button'
 import { Card } from './card'
 
+// This is a composite demo: `layout` belongs to Card.Root and `variant` to Card.Media
+// Removing this interface causes a TypeScript error because the `variant` prop is not defined on Card.Root, which is the component being rendered in the story.
+interface CardStoryArgs extends Pick<CardRootProps, 'layout'>, Pick<CardMediaProps, 'variant'> {}
+
 const meta = preview.meta({
   title: 'Components/Card',
-  // Using Card.Media as component to expose both layout and variant controls
-  component: Card.Media,
+  component: Card.Root as ComponentType<CardStoryArgs>,
   argTypes: {
     layout: {
       control: 'select',

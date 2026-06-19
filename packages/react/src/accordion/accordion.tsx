@@ -2,7 +2,7 @@ import * as accordion from '@uswds-tailwind/accordion-compat'
 
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 export type AccordionRootProps = Omit<accordion.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
@@ -66,7 +66,7 @@ const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
 
     return (
       <AccordionContext.Provider value={{ api }}>
-        <div {...mergedProps} className={cx('space-y-2', className)} ref={forwardedRef} />
+        <div {...mergedProps} className={cn('space-y-2', className)} ref={forwardedRef} />
       </AccordionContext.Provider>
     )
   },
@@ -95,7 +95,7 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerPro
     return (
       <button
         {...mergedProps}
-        className={cx(
+        className={cn(
           'group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3',
           className,
         )}
@@ -115,7 +115,7 @@ const AccordionContent = React.forwardRef<HTMLDivElement, AccordionContentProps>
     return (
       <div
         {...mergedProps}
-        className={cx(
+        className={cn(
           'py-6 px-4 not-data-[state=open]:hidden',
           className,
         )}
@@ -133,7 +133,7 @@ function AccordionItemIndicator({ className, children, ...props }: AccordionItem
   return (
     <div
       className={
-        cx('h-full flex items-center ml-auto shrink-0', className)
+        cn('h-full flex items-center ml-auto shrink-0', className)
       }
       {...props}
     >

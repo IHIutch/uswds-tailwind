@@ -1,8 +1,8 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { tv } from '../tv.config'
 
-export const buttonVariants = cva({
+export const buttonVariants = tv({
   base: [
     'cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v',
     // Disabled
@@ -58,14 +58,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         {...props}
-        className={cx(
-          buttonVariants({
-            variant,
-            size: unstyled ? 'unset' : size,
-            unstyled,
-            className,
-          }),
-        )}
+        className={buttonVariants({
+          variant,
+          size: unstyled ? 'unset' : size,
+          unstyled,
+          className,
+        })}
         ref={forwardedRef}
       />
     )

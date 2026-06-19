@@ -1,8 +1,8 @@
-import type { VariantProps } from 'cva'
+import type { VariantProps } from '../tv.config'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { tv } from '../tv.config'
 
-export const tagVariants = cva({
+export const tagVariants = tv({
   base: 'bg-gray-60 text-white rounded-xs py-px px-2 uppercase',
   variants: {
     size: {
@@ -21,7 +21,7 @@ export function Tag({ className, size, ...props }: TagProps) {
   return (
     <span
       {...props}
-      className={cx(tagVariants({ size, className }))}
+      className={tagVariants({ size, className })}
     />
   )
 }

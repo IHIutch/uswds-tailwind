@@ -1,7 +1,7 @@
 import type { UseFieldsetProps } from './use-fieldset'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 import { composeRefs } from '../utils/compose-refs'
 import { useFieldset } from './use-fieldset'
 
@@ -35,7 +35,7 @@ function FieldsetLegend({ className, ...props }: React.HTMLAttributes<HTMLLegend
   return (
     <legend
       {...mergedProps}
-      className={cx('leading-snug max-w-mobile-lg mb-3', className)}
+      className={cn('leading-snug max-w-mobile-lg mb-3', className)}
     />
   )
 }
@@ -47,7 +47,7 @@ function FieldsetDescription({ className, ...props }: React.HTMLAttributes<HTMLD
   return (
     <div
       {...mergedProps}
-      className={cx('text-gray-500', className)}
+      className={cn('text-gray-500', className)}
     />
   )
 }
@@ -59,7 +59,7 @@ function FieldsetErrorMessage({ className, ...props }: React.HTMLAttributes<HTML
   return (
     <div
       {...mergedProps}
-      className={cx('invalid:text-red-60v invalid:font-bold', className)}
+      className={cn('invalid:text-red-60v invalid:font-bold', className)}
     />
   )
 }

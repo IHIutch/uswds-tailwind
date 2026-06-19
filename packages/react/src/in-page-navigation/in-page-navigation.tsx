@@ -1,6 +1,6 @@
 import { dataAttr } from '@zag-js/dom-query'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 import { useScrollspy } from './use-scrollspy'
 
 // ============================================================================
@@ -92,7 +92,7 @@ const InPageNavRoot = React.forwardRef<HTMLElement, InPageNavRootProps>(
         <nav
           aria-label="On this page"
           {...props}
-          className={cx('', className)}
+          className={className}
           ref={forwardedRef}
         >
           {children}
@@ -110,7 +110,7 @@ function InPageNavHeadingElement({ className, ...props }: InPageNavHeadingProps)
   return (
     <div
       {...props}
-      className={cx('text-sm font-bold mb-4 text-black', className)}
+      className={cn('text-sm font-bold mb-4 text-black', className)}
     />
   )
 }
@@ -125,7 +125,7 @@ function InPageNavList({ className, children, ...props }: InPageNavListProps) {
   return (
     <ul
       {...props}
-      className={cx('border-l border-l-gray-10', className)}
+      className={cn('border-l border-l-gray-10', className)}
     >
       {typeof children === 'function' ? children({ headings, activeHref }) : children}
     </ul>
@@ -138,7 +138,7 @@ function InPageNavList({ className, children, ...props }: InPageNavListProps) {
 
 function InPageNavItem({ className, ...props }: InPageNavItemProps) {
   return (
-    <li {...props} className={cx(className)} />
+    <li {...props} className={cn(className)} />
   )
 }
 
@@ -160,7 +160,7 @@ const InPageNavLink = React.forwardRef<HTMLAnchorElement, InPageNavLinkProps>(
         data-active={dataAttr(isActive)}
         data-depth={depth}
         data-primary={dataAttr(isPrimary)}
-        className={cx(
+        className={cn(
           'relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold',
           className,
         )}

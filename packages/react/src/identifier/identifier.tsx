@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 // Root
 
@@ -9,7 +9,7 @@ function IdentifierRoot({ className, ...props }: IdentifierRootProps) {
   return (
     <div
       {...props}
-      className={cx('@container bg-gray-90 text-white pb-4 font-public-sans', className)}
+      className={cn('@container bg-gray-90 text-white pb-4 font-public-sans', className)}
     />
   )
 }
@@ -22,7 +22,7 @@ function IdentifierContainer({ className, ...props }: IdentifierContainerProps) 
   return (
     <div
       {...props}
-      className={cx('max-w-desktop mx-auto px-4 desktop:px-8', className)}
+      className={cn('max-w-desktop mx-auto px-4 desktop:px-8', className)}
     />
   )
 }
@@ -35,7 +35,7 @@ function IdentifierMasthead({ className, ...props }: IdentifierMastheadProps) {
   return (
     <section
       {...props}
-      className={cx('py-4 flex flex-col @tablet:flex-row gap-4', className)}
+      className={cn('py-4 flex flex-col @tablet:flex-row gap-4', className)}
     />
   )
 }
@@ -48,7 +48,7 @@ function IdentifierLogoGroup({ className, ...props }: IdentifierLogoGroupProps) 
   return (
     <div
       {...props}
-      className={cx('flex gap-2', className)}
+      className={cn('flex gap-2', className)}
     />
   )
 }
@@ -62,7 +62,7 @@ const IdentifierLogo = React.forwardRef<HTMLAnchorElement, IdentifierLogoProps>(
     return (
       <a
         {...props}
-        className={cx('block focus:outline-4 focus:outline-blue-40v h-12 rounded-full overflow-hidden', className)}
+        className={cn('block focus:outline-4 focus:outline-blue-40v h-12 rounded-full overflow-hidden', className)}
         ref={forwardedRef}
       />
     )
@@ -77,7 +77,7 @@ function IdentifierIdentity({ className, ...props }: IdentifierIdentityProps) {
   return (
     <section
       {...props}
-      className={cx(className)}
+      className={cn(className)}
     />
   )
 }
@@ -90,7 +90,7 @@ function IdentifierDomain({ className, ...props }: IdentifierDomainProps) {
   return (
     <p
       {...props}
-      className={cx('text-gray-30', className)}
+      className={cn('text-gray-30', className)}
     />
   )
 }
@@ -103,7 +103,7 @@ function IdentifierDisclaimer({ className, ...props }: IdentifierDisclaimerProps
   return (
     <p
       {...props}
-      className={cx('font-bold', className)}
+      className={cn('font-bold', className)}
     />
   )
 }
@@ -116,7 +116,7 @@ function IdentifierRequiredLinks({ className, ...props }: IdentifierRequiredLink
   return (
     <nav
       {...props}
-      className={cx('py-2', className)}
+      className={cn('py-2', className)}
     />
   )
 }
@@ -129,7 +129,7 @@ function IdentifierRequiredLinksList({ className, ...props }: IdentifierRequired
   return (
     <ul
       {...props}
-      className={cx('columns-1 @tablet:columns-2 @desktop:columns-4 space-y-2', className)}
+      className={cn('columns-1 @tablet:columns-2 @desktop:columns-4 space-y-2', className)}
     />
   )
 }
@@ -142,7 +142,7 @@ function IdentifierLinkItem({ className, ...props }: IdentifierLinkItemProps) {
   return (
     <li
       {...props}
-      className={cx(className)}
+      className={cn(className)}
     />
   )
 }
@@ -156,7 +156,7 @@ const IdentifierLink = React.forwardRef<HTMLAnchorElement, IdentifierLinkProps>(
     return (
       <a
         {...props}
-        className={cx('text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline', className)}
+        className={cn('text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline', className)}
         ref={forwardedRef}
       />
     )
@@ -171,7 +171,7 @@ function IdentifierTagline({ className, children, ...props }: IdentifierTaglineP
   return (
     <section
       {...props}
-      className={cx('py-4', className)}
+      className={cn('py-4', className)}
     >
       {children}
     </section>

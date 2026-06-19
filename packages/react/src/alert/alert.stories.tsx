@@ -1,5 +1,5 @@
 import preview from '../../.storybook/preview'
-import { cx } from '../cva.config'
+import { Link } from '../link'
 import { Alert } from './alert'
 
 const meta = preview.meta({
@@ -48,7 +48,12 @@ export const Basic = meta.story({
         <Alert.Description>
           Lorem ipsum dolor sit amet,
           {' '}
-          <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+          <Link
+            href="#"
+            variant={variant === 'emergency' ? 'light' : undefined}
+          >
+            consectetur adipiscing
+          </Link>
           {' '}
           elit, sed do eiusmod.
         </Alert.Description>
@@ -66,7 +71,7 @@ export const Warning = meta.story({
         <Alert.Description>
           Lorem ipsum dolor sit amet,
           {' '}
-          <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+          <Link href="#">consectetur adipiscing</Link>
           {' '}
           elit, sed do eiusmod.
         </Alert.Description>
@@ -84,7 +89,7 @@ export const Success = meta.story({
         <Alert.Description>
           Lorem ipsum dolor sit amet,
           {' '}
-          <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+          <Link href="#">consectetur adipiscing</Link>
           {' '}
           elit, sed do eiusmod.
         </Alert.Description>
@@ -102,7 +107,7 @@ export const Error = meta.story({
         <Alert.Description>
           Lorem ipsum dolor sit amet,
           {' '}
-          <a href="#" className="text-blue-60v underline">consectetur adipiscing</a>
+          <Link href="#">consectetur adipiscing</Link>
           {' '}
           elit, sed do eiusmod.
         </Alert.Description>
@@ -120,7 +125,7 @@ export const Emergency = meta.story({
         <Alert.Description>
           Additional context and followup information including
           {' '}
-          <a href="#" className="text-gray-10 underline">a link</a>
+          <Link href="#" variant="light">a link</Link>
           .
         </Alert.Description>
       </Alert.Content>
@@ -140,14 +145,12 @@ export const Slim = meta.story({
             <Alert.Description>
               Lorem ipsum dolor sit amet,
               {' '}
-              <a
+              <Link
                 href="#"
-                className={cx('underline', variant === 'emergency'
-                  ? 'text-gray-10'
-                  : 'text-blue-60v')}
+                variant={variant === 'emergency' ? 'light' : undefined}
               >
                 consectetur adipiscing
-              </a>
+              </Link>
               {' '}
               elit, sed do eiusmod.
             </Alert.Description>
@@ -167,14 +170,12 @@ export const NoIcon = meta.story({
             <Alert.Description>
               Lorem ipsum dolor sit amet,
               {' '}
-              <a
+              <Link
                 href="#"
-                className={cx('underline', variant === 'emergency'
-                  ? 'text-gray-10'
-                  : 'text-blue-60v')}
+                variant={variant === 'emergency' ? 'light' : undefined}
               >
                 consectetur adipiscing
-              </a>
+              </Link>
               {' '}
               elit, sed do eiusmod.
             </Alert.Description>
@@ -194,14 +195,12 @@ export const SlimNoIcon = meta.story({
             <Alert.Description>
               Lorem ipsum dolor sit amet,
               {' '}
-              <a
+              <Link
                 href="#"
-                className={cx('underline', variant === 'emergency'
-                  ? 'text-gray-10'
-                  : 'text-blue-60v')}
+                variant={variant === 'emergency' ? 'light' : undefined}
               >
                 consectetur adipiscing
-              </a>
+              </Link>
               {' '}
               elit, sed do eiusmod.
             </Alert.Description>

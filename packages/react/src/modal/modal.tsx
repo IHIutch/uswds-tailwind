@@ -2,7 +2,7 @@ import * as modal from '@uswds-tailwind/modal-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { Button } from '../button'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 export interface ModalContextProps {
   api: modal.Api
@@ -62,7 +62,7 @@ function ModalBackdrop({ className, ...props }: ModalBackdropProps) {
   return (
     <div
       {...mergedProps}
-      className={cx('fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in', className)}
+      className={cn('fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in', className)}
     />
   )
 }
@@ -77,7 +77,7 @@ const ModalPositioner = React.forwardRef<HTMLDivElement, ModalPositionerProps>(
         hidden={!api.open}
         data-state={api.open ? 'open' : 'closed'}
         {...props}
-        className={cx('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in pointer-events-none', className)}
+        className={cn('fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in pointer-events-none', className)}
         ref={forwardedRef}
       />
     )
@@ -94,7 +94,7 @@ const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
     return (
       <div
         {...mergedProps}
-        className={cx('relative w-full max-w-lg rounded-lg bg-white shadow-lg pointer-events-auto', className)}
+        className={cn('relative w-full max-w-lg rounded-lg bg-white shadow-lg pointer-events-auto', className)}
         ref={forwardedRef}
       />
     )
@@ -110,7 +110,7 @@ function ModalTitle({ className, ...props }: ModalTitleProps) {
   return (
     <div
       {...mergedProps}
-      className={cx('text-xl font-bold font-merriweather', className)}
+      className={cn('text-xl font-bold font-merriweather', className)}
     />
   )
 }
@@ -124,7 +124,7 @@ function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   return (
     <div
       {...mergedProps}
-      className={cx('mt-2', className)}
+      className={cn('mt-2', className)}
     />
   )
 }

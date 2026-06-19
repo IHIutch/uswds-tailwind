@@ -1,7 +1,7 @@
 import type * as combobox from '@uswds-tailwind/combobox-compat'
 import * as React from 'react'
 import { Combobox } from '../combobox'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 // Pre-generated to avoid creating a new array on every render
 const DEFAULT_TIME_OPTIONS = generateTimeOptions()
@@ -16,7 +16,7 @@ function TimePickerRoot({ options = DEFAULT_TIME_OPTIONS, className, ...props }:
       options={options}
       customFilter={filterTimeOptions}
       {...props}
-      className={cx('max-w-40', className)}
+      className={cn('max-w-40', className)}
     />
   )
 }

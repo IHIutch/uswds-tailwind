@@ -1,33 +1,36 @@
+import type { VariantProps } from '../tv.config'
 import * as React from 'react'
-import { cva, cx } from '../cva.config'
+import { tv } from '../tv.config'
 
-export const linkVariants = cva({
-  base: 'text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline',
+export const linkVariants = tv({
+  base: 'focus:outline-4 focus:outline-blue-40v underline',
   variants: {
-    external: {
+    variant: {
+      light: 'text-gray-10 visited:text-gray-10 hover:text-gray-5',
+      blue: 'text-blue-60v visited:text-violet-70v hover:text-blue-70v ',
+    },
+    isExternal: {
       true: 'after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px',
     },
   },
   defaultVariants: {
-    external: false,
+    variant: 'blue',
+    isExternal: false,
   },
 })
 
-export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  isExternal?: boolean
-}
+export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & VariantProps<typeof linkVariants>
 
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ className, isExternal, ...props }, forwardedRef) => {
+  ({ className, variant, isExternal, ...props }, forwardedRef) => {
     return (
       <a
         {...props}
-        className={cx(
-          linkVariants({
-            external: isExternal,
-          }),
+        className={linkVariants({
+          isExternal,
+          variant,
           className,
-        )}
+        })}
         ref={forwardedRef}
       />
     )

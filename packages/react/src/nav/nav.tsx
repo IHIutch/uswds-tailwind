@@ -3,7 +3,7 @@ import type { UseNavProps } from './use-nav'
 import * as dropdown from '@uswds-tailwind/dropdown-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 import { useNav } from './use-nav'
 
 // Context
@@ -34,7 +34,7 @@ const NavRoot = React.forwardRef<HTMLDivElement, NavRootProps>(
       <NavContext.Provider value={{ api }}>
         <div
           {...props}
-          className={cx('', className)}
+          className={className}
           ref={forwardedRef}
         />
       </NavContext.Provider>
@@ -54,7 +54,7 @@ const NavTrigger = React.forwardRef<HTMLButtonElement, NavTriggerProps>(
     return (
       <button
         {...mergedProps}
-        className={cx(
+        className={cn(
           'cursor-pointer @desktop:hidden uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v',
           className,
         )}
@@ -75,7 +75,7 @@ function NavBackdrop({ className, ...props }: NavBackdropProps) {
   return (
     <div
       {...mergedProps}
-      className={cx(
+      className={cn(
         '@desktop:hidden fixed z-40 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in',
         className,
       )}
@@ -92,7 +92,7 @@ const NavPositioner = React.forwardRef<HTMLDivElement, NavPositionerProps>(
     return (
       <div
         {...props}
-        className={cx(
+        className={cn(
           '@max-desktop:fixed @max-desktop:inset-0 @max-desktop:z-50',
           '@max-desktop:not-data-[state=open]:pointer-events-none',
           '@desktop:static @desktop:contents',
@@ -116,7 +116,7 @@ const NavContent = React.forwardRef<HTMLElement, NavContentProps>(
     return (
       <nav
         {...contentProps}
-        className={cx(
+        className={cn(
           // Mobile: slide-in drawer
           '@max-desktop:flex @max-desktop:flex-col @max-desktop:gap-6 @max-desktop:pt-16 @max-desktop:pb-4 @max-desktop:px-4 @max-desktop:bg-white @max-desktop:w-60 @max-desktop:fixed @max-desktop:right-0 @max-desktop:inset-y-0 @max-desktop:overflow-auto @max-desktop:animate-in @max-desktop:duration-300 @max-desktop:ease-in-out @max-desktop:slide-in-from-right',
           // Mobile: hide when closed via data-state
@@ -144,7 +144,7 @@ const NavCloseTrigger = React.forwardRef<HTMLButtonElement, NavCloseTriggerProps
       <button
         {...mergedProps}
         aria-label="Close"
-        className={cx(
+        className={cn(
           'cursor-pointer @desktop:hidden absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v',
           className,
         )}
@@ -166,7 +166,7 @@ function NavList({ className, ...props }: NavListProps) {
   return (
     <ul
       {...props}
-      className={cx(
+      className={cn(
         '@max-desktop:flex @max-desktop:flex-col',
         '@desktop:flex',
         className,
@@ -183,7 +183,7 @@ function NavListItem({ className, ...props }: NavListItemProps) {
   return (
     <li
       {...props}
-      className={cx(
+      className={cn(
         '@max-desktop:border-t @max-desktop:border-t-gray-10',
         'leading-none',
         className,
@@ -201,7 +201,7 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
     return (
       <a
         {...props}
-        className={cx(
+        className={cn(
           'cursor-pointer p-4 flex @desktop:font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v',
           className,
         )}
@@ -243,7 +243,7 @@ function NavDropdown({ className, ...props }: NavDropdownProps) {
     <NavDropdownContext.Provider value={{ api }}>
       <div
         {...mergedProps}
-        className={cx('relative', className)}
+        className={cn('relative', className)}
       />
     </NavDropdownContext.Provider>
   )
@@ -264,7 +264,7 @@ const NavDropdownTrigger = React.forwardRef<HTMLButtonElement, NavDropdownTrigge
       <button
         data-current={isCurrent || undefined}
         {...mergedProps}
-        className={cx(
+        className={cn(
           // base
           'relative text-gray-60 cursor-pointer text-left flex items-center justify-between gap-3 leading-none ',
           // :after
@@ -299,7 +299,7 @@ const NavDropdownContent = React.forwardRef<HTMLUListElement, NavDropdownContent
     return (
       <ul
         {...mergedProps}
-        className={cx(
+        className={cn(
           'leading-snug z-10',
           '@desktop:bg-blue-warm-80v @desktop:py-2 @desktop:w-60 @desktop:absolute',
           className,
@@ -324,7 +324,7 @@ const NavDropdownItem = React.forwardRef<HTMLLIElement, NavDropdownItemProps>(
     return (
       <li
         {...mergedProps}
-        className={cx('@max-desktop:border-t @max-desktop:border-t-gray-10', className)}
+        className={cn('@max-desktop:border-t @max-desktop:border-t-gray-10', className)}
         ref={forwardedRef}
       />
     )
@@ -340,7 +340,7 @@ const NavDropdownLink = React.forwardRef<HTMLAnchorElement, NavDropdownLinkProps
     return (
       <a
         {...props}
-        className={cx(
+        className={cn(
           'block cursor-pointer py-2 pl-8 pr-4 text-gray-60 @max-desktop:hover:text-blue-60v @max-desktop:hover:bg-gray-5 focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v',
           '@desktop:text-white @desktop:px-4 @desktop:hover:underline',
           className,
@@ -360,10 +360,10 @@ function NavDropdownIndicator({ className, children, ...props }: NavDropdownIndi
     <div
       {...props}
       aria-hidden="true"
-      className={cx('group h-full flex items-center ml-auto shrink-0', className)}
+      className={cn('group h-full flex items-center ml-auto shrink-0', className)}
     >
       {children || (
-        <span className={cx(
+        <span className={cn(
           'size-5 text-black icon-[material-symbols--add] group-data-[state=open]:icon-[material-symbols--remove]',
           '@desktop:size-4 @desktop:text-current @desktop:icon-[material-symbols--keyboard-arrow-down] @desktop:group-data-[state=open]:icon-[material-symbols--keyboard-arrow-up]',
         )}

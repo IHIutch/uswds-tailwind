@@ -3,7 +3,7 @@ import * as dropdown from '@uswds-tailwind/dropdown-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { Button } from '../button'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 export type DropdownRootProps = Omit<dropdown.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
@@ -39,7 +39,7 @@ const DropdownRoot = React.forwardRef<HTMLDivElement, DropdownRootProps>(
 
     return (
       <DropdownContext.Provider value={{ api }}>
-        <div {...mergedProps} ref={forwardedRef} className={cx('relative', className)} />
+        <div {...mergedProps} ref={forwardedRef} className={cn('relative', className)} />
       </DropdownContext.Provider>
     )
   },
@@ -69,7 +69,7 @@ const DropdownContent = React.forwardRef<HTMLUListElement, DropdownContentProps>
     return (
       <ul
         {...mergedProps}
-        className={cx(
+        className={cn(
           'bg-blue-warm-80v w-60 z-30 absolute',
           className,
         )}
@@ -88,7 +88,7 @@ const DropdownItem = React.forwardRef<HTMLLIElement, DropdownItemProps>(
     return (
       <li
         {...mergedProps}
-        className={cx(
+        className={cn(
           'focus:outline-4 border-t border-t-gray-cool-10 focus:-outline-offset-4 focus:outline-blue-40v',
           className,
         )}
@@ -103,7 +103,7 @@ const DropdownLink = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttribu
     return (
       <a
         {...props}
-        className={cx(
+        className={cn(
           'text-decoration-none block hover:underline text-white p-2 focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v',
           className,
         )}

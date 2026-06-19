@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 export type BreadcrumbRootProps = React.ComponentPropsWithoutRef<'div'> & BreadcrumbContextProps & {
   'aria-label': string
@@ -43,7 +43,7 @@ const BreadcrumbRoot = React.forwardRef<HTMLElement, BreadcrumbRootProps>(
   ({ wrap = false, className, separator, previous, ...props }, forwardedRef) => {
     return (
       <BreadcrumbContext.Provider value={{ wrap, separator, previous }}>
-        <nav {...props} className={cx('@container flex p-1 -mx-1', className)} ref={forwardedRef} />
+        <nav {...props} className={cn('@container flex p-1 -mx-1', className)} ref={forwardedRef} />
       </BreadcrumbContext.Provider>
     )
   },
@@ -54,7 +54,7 @@ function BreadcrumbList({ className, ...props }: BreadcrumbListProps) {
   return (
     <ol
       {...props}
-      className={cx('list-none block', wrap ? '' : '@mobile-lg:truncate', className)}
+      className={cn('list-none block', wrap ? '' : '@mobile-lg:truncate', className)}
       aria-label="Breadcrumb"
     />
   )
@@ -66,7 +66,7 @@ function BreadcrumbItem({ className, children, isCurrent, ...props }: Breadcrumb
     <BreadcrumbItemContext.Provider value={{ isCurrent }}>
       <li
         {...props}
-        className={cx(
+        className={cn(
           wrap ? 'inline-block' : 'inline-flex @mobile-lg:inline',
           '@mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only', // USWDS uses sr-only styles here, but this causes earlier elements to still be tabbable
           className,
@@ -86,7 +86,7 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
       <Component
         {...props}
         aria-current={isCurrent ? 'page' : undefined} // In USWDS, they place aria-current on the <li>, but per MDN and w3, it is shown on the link
-        className={cx(
+        className={cn(
           isCurrent ? '' : 'text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline',
           className,
         )}

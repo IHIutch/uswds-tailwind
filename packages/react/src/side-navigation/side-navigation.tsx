@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 interface SideNavigationItemBase {
   label: string
@@ -15,7 +15,7 @@ export type SideNavigationRootProps = React.ComponentPropsWithoutRef<'nav'>
 const SideNavigationRoot = React.forwardRef<HTMLElement, SideNavigationRootProps>(
   ({ className, children, ...props }, forwardedRef) => {
     return (
-      <nav {...props} className={cx('border-b border-b-gray-10 [&_ul_ul_a]:pl-8 [&_ul_ul_ul_a]:pl-12 [&>ul>li:has([aria-current=page])>a]:after:block [&>ul>li:has([aria-current=page])>a]:after:absolute [&>ul>li:has([aria-current=page])>a]:after:bg-blue-60v [&>ul>li:has([aria-current=page])>a]:after:inset-y-1 [&>ul>li:has([aria-current=page])>a]:after:left-0 [&>ul>li:has([aria-current=page])>a]:after:w-1 [&>ul>li:has([aria-current=page])>a]:after:rounded-full [&>ul>li:has([aria-current=page])>a]:text-blue-60v [&>ul>li:has([aria-current=page])>a]:font-bold', className)} ref={forwardedRef}>
+      <nav {...props} className={cn('border-b border-b-gray-10 [&_ul_ul_a]:pl-8 [&_ul_ul_ul_a]:pl-12 [&>ul>li:has([aria-current=page])>a]:after:block [&>ul>li:has([aria-current=page])>a]:after:absolute [&>ul>li:has([aria-current=page])>a]:after:bg-blue-60v [&>ul>li:has([aria-current=page])>a]:after:inset-y-1 [&>ul>li:has([aria-current=page])>a]:after:left-0 [&>ul>li:has([aria-current=page])>a]:after:w-1 [&>ul>li:has([aria-current=page])>a]:after:rounded-full [&>ul>li:has([aria-current=page])>a]:text-blue-60v [&>ul>li:has([aria-current=page])>a]:font-bold', className)} ref={forwardedRef}>
         {children}
       </nav>
     )
@@ -28,7 +28,7 @@ function SideNavigationList({ className, ...props }: SideNavigationListProps) {
   return (
     <ul
       {...props}
-      className={cx('', className)}
+      className={className}
     />
   )
 }
@@ -39,7 +39,7 @@ function SideNavigationListItem({ className, ...props }: SideNavigationListItemP
   return (
     <li
       {...props}
-      className={cx('border-t border-t-gray-10', className)}
+      className={cn('border-t border-t-gray-10', className)}
     />
   )
 }
@@ -54,7 +54,7 @@ const SideNavigationLink = React.forwardRef<HTMLAnchorElement, SideNavigationLin
       <a
         {...props}
         aria-current={isCurrent ? 'page' : undefined}
-        className={cx(
+        className={cn(
           'block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold',
           className,
         )}

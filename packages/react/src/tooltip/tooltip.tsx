@@ -1,7 +1,7 @@
 import * as tooltip from '@uswds-tailwind/tooltip-compat'
 import { mergeProps, normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
+import { cn } from '../tv.config'
 
 // ============================================================================
 // Types
@@ -55,7 +55,7 @@ const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
       <TooltipContext.Provider value={{ api, content }}>
         <div
           {...mergedProps}
-          className={cx('relative isolate inline-block', className)}
+          className={cn('relative isolate inline-block', className)}
           ref={forwardedRef}
         />
       </TooltipContext.Provider>
@@ -85,7 +85,7 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
     return (
       <div
         {...mergedProps}
-        className={cx(
+        className={cn(
           'invisible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out left-(--tooltip-left) top-(--tooltip-top) m-(--tooltip-margin)',
           // Caret pseudo-element: positioned by --caret-top/--caret-left from
           // the machine's contentStyle, rotated 45° to form a triangle.

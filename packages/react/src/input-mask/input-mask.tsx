@@ -2,8 +2,8 @@ import type * as inputMask from '@uswds-tailwind/input-mask-compat'
 import type { UseInputMaskProps } from './use-input-mask'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
-import { cx } from '../cva.config'
 import { Input } from '../input'
+import { cn } from '../tv.config'
 import { useInputMask } from './use-input-mask'
 
 export interface InputMaskContextProps {
@@ -48,7 +48,7 @@ function InputMaskLabel({ className, ...props }: InputMaskLabelProps) {
   return (
     <label
       {...props}
-      className={cx('block', className)}
+      className={cn('block', className)}
     />
   )
 }
@@ -59,7 +59,7 @@ function InputMaskControl({ className, ...props }: InputMaskControlProps) {
   return (
     <div
       {...props}
-      className={cx('relative mt-2', className)}
+      className={cn('relative mt-2', className)}
     />
   )
 }
@@ -77,7 +77,7 @@ function InputMaskPlaceholder({ className, ...props }: InputMaskPlaceholderProps
           className="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
         >
           <span className="invisible">{api.enteredText}</span>
-          <span {...props} className={cx('text-gray-50', className)}>
+          <span {...props} className={cn('text-gray-50', className)}>
             {api.remainingPlaceholder}
           </span>
         </div>
@@ -95,7 +95,7 @@ const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
     return (
       <Input
         {...mergedProps}
-        className={cx('placeholder:invisible', className)}
+        className={cn('placeholder:invisible', className)}
         ref={forwardedRef}
       />
     )
