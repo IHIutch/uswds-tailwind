@@ -2,7 +2,7 @@ import { dataAttr } from '@zag-js/dom-query'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
 import { useFieldsetContext } from '../fieldset/fieldset'
-import { parts } from './radio.anatomy'
+import { parts } from './radio-group.anatomy'
 
 export interface ElementIds {
   root?: string | undefined

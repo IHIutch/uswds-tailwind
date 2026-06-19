@@ -149,9 +149,9 @@
       "types": "./dist/process-list/index.d.mts",
       "import": "./dist/process-list/index.mjs"
     },
-    "./radio": {
-      "types": "./dist/radio/index.d.mts",
-      "import": "./dist/radio/index.mjs"
+    "./radio-group": {
+      "types": "./dist/radio-group/index.d.mts",
+      "import": "./dist/radio-group/index.mjs"
     },
     "./range-slider": {
       "types": "./dist/range-slider/index.d.mts",

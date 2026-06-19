@@ -1,6 +1,6 @@
 import preview from '../../.storybook/preview'
 import { Fieldset } from '../fieldset/fieldset'
-import { RadioGroup } from './radio'
+import { RadioGroup } from './radio-group'
 
 const items = [
   {
