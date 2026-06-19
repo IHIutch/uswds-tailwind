@@ -133,7 +133,7 @@ function FileInputErrorMessage({ className, ...props }: FileInputErrorMessagePro
 }
 
 export type FileInputPreviewListProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'> & {
-  children: ((context: { files: File[] }) => React.ReactNode) | React.ReactNode
+  children: React.ReactNode | ((context: { files: File[] }) => React.ReactNode)
 }
 
 function FileInputPreviewList({ className, children, ...props }: FileInputPreviewListProps) {

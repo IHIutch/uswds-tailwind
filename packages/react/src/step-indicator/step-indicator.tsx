@@ -124,7 +124,7 @@ function StepIndicatorRoot({ variant, counters, steps = [], currentStep, classNa
 // ============================================================================
 
 export type StepIndicatorListProps = Omit<React.ComponentPropsWithoutRef<'ol'>, 'children'> & {
-  children: ((context: { steps: StepIndicatorComputedStep[] }) => React.ReactNode) | React.ReactNode
+  children: React.ReactNode | ((context: { steps: StepIndicatorComputedStep[] }) => React.ReactNode)
 }
 
 function StepIndicatorList({ className, children, ...props }: StepIndicatorListProps) {
@@ -225,7 +225,7 @@ function StepIndicatorSummary({ className, ...props }: StepIndicatorSummaryProps
 // ============================================================================
 
 export type StepIndicatorCounterProps = Omit<React.ComponentPropsWithoutRef<'span'>, 'children'> & {
-  children?: ((context: StepIndicatorContextProps) => React.ReactNode) | React.ReactNode
+  children?: React.ReactNode | ((context: StepIndicatorContextProps) => React.ReactNode)
 }
 
 function StepIndicatorCounter({ className, children, ...props }: StepIndicatorCounterProps) {

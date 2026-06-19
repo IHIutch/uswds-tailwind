@@ -117,12 +117,13 @@ const BannerTrigger = React.forwardRef<HTMLButtonElement, BannerTriggerProps>(
 )
 
 export type BannerIndicatorProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'> & {
-  children?: React.ReactNode | ((context: BannerContextProps) => React.ReactNode)
+  children?: React.ReactNode | ((context: { open: boolean }) => React.ReactNode)
 }
 
 function BannerIndicator({ className, children, ...props }: BannerIndicatorProps) {
+  const { api } = useBannerContext()
   const content = typeof children === 'function'
-    ? children(useBannerContext())
+    ? children({ open: api.open })
     : children
 
   return (

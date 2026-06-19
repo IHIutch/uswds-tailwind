@@ -39,7 +39,7 @@ const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
 )
 
 export type PaginationListProps = Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> & {
-  children?: ((context: { pages: PageSlot[] }) => React.ReactNode) | React.ReactNode
+  children?: React.ReactNode | ((context: { pages: PageSlot[] }) => React.ReactNode)
 }
 
 function PaginationList({

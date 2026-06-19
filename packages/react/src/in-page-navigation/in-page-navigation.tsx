@@ -30,7 +30,7 @@ export type InPageNavHeadingProps = React.ComponentPropsWithoutRef<'div'>
 export type InPageNavListContext = Pick<InPageNavContextProps, 'headings' | 'activeHref'>
 
 export type InPageNavListProps = Omit<React.ComponentPropsWithoutRef<'ul'>, 'children'> & {
-  children: ((context: InPageNavListContext) => React.ReactNode) | React.ReactNode
+  children: React.ReactNode | ((context: InPageNavListContext) => React.ReactNode)
 }
 
 export type InPageNavItemProps = React.ComponentPropsWithoutRef<'li'>
