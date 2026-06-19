@@ -15,7 +15,7 @@ function renderDatePicker() {
       </DatePicker.Control>
       <DatePicker.Content>
         <DatePicker.View view="day">
-          {({ api }) => (
+          {({ weekDays, weeks }) => (
             <>
               <DatePicker.ViewControl>
                 <DatePicker.PrevYearTrigger aria-label="Previous year" />
@@ -28,13 +28,13 @@ function renderDatePicker() {
               <DatePicker.Table>
                 <DatePicker.TableHead>
                   <DatePicker.TableRow>
-                    {api.weekDays.map(day => (
+                    {weekDays.map(day => (
                       <DatePicker.TableHeader key={day.long} day={day} />
                     ))}
                   </DatePicker.TableRow>
                 </DatePicker.TableHead>
                 <DatePicker.TableBody>
-                  {api.weeks.map((week, row) => (
+                  {weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
                       {week.map(cell => (
                         <DatePicker.TableCell key={cell.dateString} cell={cell}>
@@ -51,10 +51,10 @@ function renderDatePicker() {
           )}
         </DatePicker.View>
         <DatePicker.View view="month">
-          {({ api }) => (
+          {({ months }) => (
             <DatePicker.Table>
               <DatePicker.TableBody>
-                {chunk(api.months, 3).map((row, rowIdx) => (
+                {chunk(months, 3).map((row, rowIdx) => (
                   <DatePicker.TableRow key={rowIdx}>
                     {row.map(month => (
                       <DatePicker.TableCell key={month.month}>
@@ -70,12 +70,12 @@ function renderDatePicker() {
           )}
         </DatePicker.View>
         <DatePicker.View view="year">
-          {({ api }) => (
+          {({ years }) => (
             <>
               <DatePicker.PrevDecadeTrigger aria-label="Previous decade" />
               <DatePicker.Table>
                 <DatePicker.TableBody>
-                  {chunk(api.years, 3).map((row, rowIdx) => (
+                  {chunk(years, 3).map((row, rowIdx) => (
                     <DatePicker.TableRow key={rowIdx}>
                       {row.map(year => (
                         <DatePicker.TableCell key={year.year}>
@@ -229,10 +229,10 @@ it('`min` prop disables earlier dates in the calendar', async () => {
       </DatePicker.Control>
       <DatePicker.Content>
         <DatePicker.View view="day">
-          {({ api }) => (
+          {({ weeks }) => (
             <DatePicker.Table>
               <DatePicker.TableBody>
-                {api.weeks.map((week, row) => (
+                {weeks.map((week, row) => (
                   <DatePicker.TableRow key={row}>
                     {week.map(cell => (
                       <DatePicker.TableCell key={cell.dateString} cell={cell}>

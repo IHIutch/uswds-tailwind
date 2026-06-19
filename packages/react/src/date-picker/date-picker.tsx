@@ -11,6 +11,13 @@ export interface DatePickerContextProps {
   api: datepicker.Api
 }
 
+export interface DatePickerRenderContext {
+  weekDays: datepicker.Api['weekDays']
+  weeks: datepicker.Api['weeks']
+  months: datepicker.Api['months']
+  years: datepicker.Api['years']
+}
+
 const DatePickerContext = React.createContext<DatePickerContextProps | null>(null)
 
 function useDatePickerContext(): DatePickerContextProps {
@@ -230,7 +237,7 @@ function useDatePickerViewContext() {
 
 const DatePickerView = React.forwardRef<HTMLDivElement, Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & {
   view: datepicker.Api['view']
-  children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode
+  children?: React.ReactNode | ((context: DatePickerRenderContext) => React.ReactNode)
 }>(
   ({ className, view, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
@@ -242,7 +249,7 @@ const DatePickerView = React.forwardRef<HTMLDivElement, Omit<React.HTMLAttribute
     }[view]
 
     const content = typeof props.children === 'function'
-      ? props.children({ api })
+      ? props.children({ weekDays: api.weekDays, weeks: api.weeks, months: api.months, years: api.years })
       : props.children
 
     const mergedProps = mergeProps(viewProps, props)
@@ -276,12 +283,12 @@ function DatePickerTable({ className, ...props }: React.TableHTMLAttributes<HTML
 }
 
 function DatePickerTableHead({ children, ...props }: Omit<React.HTMLAttributes<HTMLTableSectionElement>, 'children'> & {
-  children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode
+  children?: React.ReactNode | ((context: DatePickerRenderContext) => React.ReactNode)
 }) {
   const { api } = useDatePickerContext()
   const mergedProps = mergeProps(api.getHeaderProps(), props)
   const content = typeof children === 'function'
-    ? children({ api })
+    ? children({ weekDays: api.weekDays, weeks: api.weeks, months: api.months, years: api.years })
     : children
 
   return <thead {...mergedProps}>{content}</thead>
@@ -307,12 +314,12 @@ function DatePickerTableHeader({ className, day, ...props }: Omit<React.ThHTMLAt
 }
 
 function DatePickerTableBody({ children, ...props }: Omit<React.HTMLAttributes<HTMLTableSectionElement>, 'children'> & {
-  children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode
+  children?: React.ReactNode | ((context: DatePickerRenderContext) => React.ReactNode)
 }) {
   const { api } = useDatePickerContext()
   const mergedProps = mergeProps(api.getBodyProps(), props)
   const content = typeof children === 'function'
-    ? children({ api })
+    ? children({ weekDays: api.weekDays, weeks: api.weeks, months: api.months, years: api.years })
     : children
   return <tbody {...mergedProps}>{content}</tbody>
 }

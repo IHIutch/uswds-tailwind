@@ -20,7 +20,7 @@ function renderRangePicker(
       </DatePicker.Control>
       <DatePicker.Content>
         <DatePicker.View view="day">
-          {({ api }) => (
+          {({ weekDays, weeks }) => (
             <>
               <DatePicker.ViewControl>
                 <DatePicker.PrevYearTrigger aria-label="Previous year" />
@@ -33,13 +33,13 @@ function renderRangePicker(
               <DatePicker.Table>
                 <DatePicker.TableHead>
                   <DatePicker.TableRow>
-                    {api.weekDays.map(day => (
+                    {weekDays.map(day => (
                       <DatePicker.TableHeader key={day.long} day={day} />
                     ))}
                   </DatePicker.TableRow>
                 </DatePicker.TableHead>
                 <DatePicker.TableBody>
-                  {api.weeks.map((week, row) => (
+                  {weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
                       {week.map(cell => (
                         <DatePicker.TableCell key={cell.dateString} cell={cell}>
