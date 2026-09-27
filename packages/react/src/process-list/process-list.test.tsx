@@ -7,7 +7,7 @@ it('renders ordered list with item titles', async () => {
     <ProcessList.Root>
       <ProcessList.Item>
         <ProcessList.Content>
-          <ProcessList.Title>First Step</ProcessList.Title>
+          <ProcessList.Title><h3>First Step</h3></ProcessList.Title>
           <ProcessList.Description>Do this first</ProcessList.Description>
         </ProcessList.Content>
       </ProcessList.Item>
@@ -21,6 +21,7 @@ it('renders ordered list with item titles', async () => {
   )
 
   await expect.element(screen.getByRole('list')).toBeVisible()
+  await expect.element(screen.getByRole('heading', { name: 'First Step' })).toBeVisible()
   await expect.element(screen.getByText('First Step')).toBeVisible()
   await expect.element(screen.getByText('Second Step')).toBeVisible()
 })
