@@ -1,10 +1,13 @@
 ---
 import type { NavLinks } from 'types'
 import logo from '#assets/img/logo.svg'
+import { libraryHref, resolveLibrary } from '#utils/library'
 // import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import DesktopNav from './desktop-nav.astro'
 import MobileNav from './mobile-nav.astro'
+
+const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
 
 const allComponents = await getCollection(
   'components',
@@ -94,7 +97,18 @@ const secondary: NavLinks['secondary'] = [
     href: 'https://forms.reform.app/szenkB/uswds-tailwind-feedback/sxml6n',
     target: '_blank',
   },
-];
+]
+
+for (const links of [desktopLinks.primary, mobileLinks.primary]) {
+  for (const link of links ?? []) {
+    if ('href' in link && link.href?.startsWith('/'))
+      link.href = libraryHref(link.href, library, Astro.url)
+    for (const child of link.children ?? []) {
+      if (child.href?.startsWith('/'))
+        child.href = libraryHref(child.href, library, Astro.url)
+    }
+  }
+}
 ---
 
 <header
@@ -108,14 +122,14 @@ const secondary: NavLinks['secondary'] = [
         <em class="font-bold not-italic">
           <a
             class="text-gray-90 text-xl flex gap-3 items-center focus:outline-4 focus:outline-blue-40v"
-            href="/"
+            href={libraryHref('/', library, Astro.url)}
           >
             <img src={logo.src} class="h-8 w-auto" alt="" />
             <span>USWDS + Tailwind</span>
           </a>
         </em>
         <div class="desktop:hidden ml-auto">
-          <MobileNav primary={mobileLinks.primary} secondary={secondary} />
+          <MobileNav primary={mobileLinks.primary} secondary={secondary} library={library} />
         </div>
       </div>
     </div>

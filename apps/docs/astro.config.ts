@@ -53,7 +53,4 @@ export default defineConfig({
       minify: false,
     },
   },
-  redirects: {
-    '/components': '/components/accordion',
-  },
 })

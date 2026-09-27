@@ -1,0 +1,25 @@
+---
+import type { Library } from '#content/component-coverage'
+import { switchLibraryHref } from '#utils/library'
+
+interface Props { library: Library }
+const { library } = Astro.props
+---
+
+<section aria-label="Library">
+  <div class="mb-3 flex items-center pl-4">
+    <h2 class="font-bold text-lg">Library</h2>
+  </div>
+  <ul class="divide-y divide-gray-10">
+    {(['vanilla', 'react'] as const).map(choice => (
+      <li>
+        <a
+          data-library-choice={choice}
+          href={switchLibraryHref(Astro.url, choice)}
+          aria-current={library === choice ? 'true' : undefined}
+          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=true]:text-blue-60v aria-[current=true]:font-bold aria-[current=true]:after:block aria-[current=true]:after:absolute aria-[current=true]:after:bg-blue-60v aria-[current=true]:after:inset-y-1 aria-[current=true]:after:left-0 aria-[current=true]:after:w-1 aria-[current=true]:after:rounded-full"
+        >{choice === 'vanilla' ? 'Vanilla JavaScript' : 'React'}</a>
+      </li>
+    ))}
+  </ul>
+</section>

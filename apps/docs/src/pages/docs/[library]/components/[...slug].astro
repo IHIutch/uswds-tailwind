@@ -1,0 +1,12 @@
+---
+import DocsComponentPage from '#components/docs-component-page.astro'
+import { prefersMarkdown } from '#utils/handle-prefers-markdown'
+import { isLibrary } from '#utils/library'
+
+const { library, slug } = Astro.params
+if (!isLibrary(library) || !slug)
+  return new Response('Page not found', { status: 404 })
+if (library === 'vanilla' && prefersMarkdown(Astro))
+  return Astro.redirect(`/components/${slug}.md`)
+---
+<DocsComponentPage library={library} slug={slug} />

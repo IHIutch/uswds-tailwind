@@ -1,0 +1,60 @@
+---
+import type { Library } from '#content/component-coverage'
+import Alert from '#components/alert.astro'
+import ProcessStep from '#components/process-list-step.astro'
+import ProcessList from '#components/process-list.astro'
+import TableOfContents from '#components/table-of-contents.astro'
+import BaseLayout from '#layouts/base-layout.astro'
+import ContentLayout from '#layouts/content-layout.astro'
+import { getEntry, render } from 'astro:content'
+
+interface Props { library: Library }
+const { library } = Astro.props
+
+const post = await getEntry('pages', 'getting-started')
+if (!post) {
+  throw new Error('Page not found')
+}
+
+const { Content, headings } = await render(post)
+
+const visibleHeadings = headings.filter(h => h.depth <= 3)
+const description = library === 'react'
+  ? 'React setup guidance for USWDS + Tailwind is being prepared.'
+  : post.data.description
+
+---
+
+<BaseLayout title={post.data.title} description={description}>
+  <ContentLayout>
+    <div class="flex w-full">
+      <TableOfContents headings={library === 'vanilla' ? visibleHeadings : []} />
+      <main id="main-content" class="px-4 tablet:px-12 py-12 min-w-0 w-full">
+        <div class="flex flex-col mx-auto max-w-5xl">
+          <div class="max-w-3xl">
+            <div class="mb-16">
+              <h1 class="text-4xl font-bold mb-4">
+                {post.data.title}
+              </h1>
+              <p class="text-xl font-light max-w-prose">
+                {description}
+              </p>
+            </div>
+            {library === 'vanilla'
+? (
+              <div class="docs-prose max-w-none">
+                <Content components={{ Alert, ProcessList, ProcessStep }} />
+              </div>
+            )
+: (
+              <section class="max-w-prose rounded border border-gray-cool-20 bg-gray-5 p-5">
+                <h2 class="text-xl font-bold mb-2">React setup is coming</h2>
+                <p>React setup instructions are being prepared. The existing setup guide covers Vanilla HTML and JavaScript, so it is not shown for the React selection.</p>
+              </section>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  </ContentLayout>
+</BaseLayout>

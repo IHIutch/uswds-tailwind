@@ -1,8 +1,11 @@
 ---
 import Footer from '#components/footer.astro'
+import LibraryList from '#components/library-list.astro'
+import { libraryHref, resolveLibrary } from '#utils/library'
 import { getCollection } from 'astro:content'
 
 const { pathname } = Astro.url
+const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
 
 const allComponents = await getCollection(
   'components',
@@ -17,23 +20,24 @@ const sortedComponents = allComponents.sort((a, b) => {
 <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
   <nav
     aria-label="Side navigation"
-    class="px-4 pt-12 pb-16 h-full overflow-y-auto"
-    id="sidenav"
+    class="px-4 pt-12 pb-16 h-full min-h-0 flex flex-col"
   >
-    <div class="mb-3 flex items-center pl-4">
+    <div class="mb-8 shrink-0"><LibraryList library={library} /></div>
+    <div class="mb-3 flex items-center pl-4 shrink-0">
       <span class="font-bold text-lg">Components</span>
     </div>
     <ul
-      class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+      id="sidenav"
+      class="min-h-0 overflow-y-auto divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
     >
       {
         sortedComponents.map(comps => (
           <li>
             <a
-              href={`/components/${comps.id}`}
+              href={libraryHref(`/components/${comps.id}`, library, Astro.url)}
               class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
               aria-current={
-                pathname === `/components/${comps.id}` ? 'page' : false
+                pathname === `/docs/${library}/components/${comps.id}` ? 'page' : false
               }
             >
               {comps.data.title}
@@ -50,8 +54,8 @@ const sortedComponents = allComponents.sort((a, b) => {
 </div>
 
 <script>
-  type ScrollTopJSON =
-    | undefined
+type ScrollTopJSON
+  = | undefined
     | {
       scrollTop: number
     }

@@ -1,48 +1,24 @@
 ---
+import type { Library } from '#content/component-coverage'
 import type { NavLinks } from 'types'
+import LibraryList from '#components/library-list.astro'
 import Search from '#components/search'
 
-type Props = NavLinks
+type Props = NavLinks & { library: Library }
 
-const { primary, secondary } = Astro.props;
+const { primary, secondary, library } = Astro.props;
 ---
 
-<div>
-  <button
-    data-part="modal-trigger"
-    data-target="mobile-docs-menu"
-    class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
-  >Menu</button
-  >
-
-  <div
-    data-part="modal-backdrop"
-    data-value="mobile-docs-menu"
-    class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
-  >
-  </div>
-
-  <div
-    data-part="modal-positioner"
-    data-value="mobile-docs-menu"
-    class="fixed z-50 inset-0 overflow-y-auto"
-  >
+<details class="group" data-mobile-docs-menu>
+  <summary
+    class="relative z-50 list-none cursor-pointer uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v flex items-center"
+  ><span class="group-open:hidden">Menu</span><span class="hidden group-open:inline">Close menu</span></summary>
     <nav
-      data-part="modal-content"
-      class="hidden data-[state=open]:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto animate-in duration-300 ease-in-out slide-in-from-right"
+      aria-label="Mobile navigation"
+      class="hidden group-open:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed z-40 right-0 inset-y-0 overflow-auto shadow-lg"
     >
-      <header data-part="modal-title" class="sr-only">Menu</header>
-
-      <button
-        type="button"
-        data-part="modal-close-trigger"
-        class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-        aria-label="Close"
-      >
-        <div class="icon-[material-symbols--close] size-6"></div>
-      </button>
-
       <Search isMobile client:load />
+      <LibraryList library={library} />
 
       <ul
         class="flex flex-col divide-y divide-gray-10 border-y border-y-gray-10"
@@ -53,13 +29,8 @@ const { primary, secondary } = Astro.props;
                 <li>
                   {item.children !== undefined
 ? (
-                    <div data-part="accordion-root">
-                      <div
-                        data-part="accordion-item"
-                        data-value={`nav-item-${item.label.replace(/\s+/g, '-').toLowerCase()}`}
-                      >
-                        <button
-                          data-part="accordion-trigger"
+                    <details class="group/components">
+                        <summary
                           class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
                           data-current={item.isActive ? true : undefined}
                         >
@@ -67,10 +38,10 @@ const { primary, secondary } = Astro.props;
                             {item.label}
                           </span>
                           <span class="h-full flex items-center">
-                            <span class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]" />
+                            <span class="size-5 icon-[material-symbols--add] group-open/components:icon-[material-symbols--remove]" />
                           </span>
-                        </button>
-                        <ul data-part="accordion-content">
+                        </summary>
+                        <ul>
                           {item.children.map(child => (
                             <li class="border-t border-t-gray-10">
                               <a
@@ -83,8 +54,7 @@ const { primary, secondary } = Astro.props;
                             </li>
                           ))}
                         </ul>
-                      </div>
-                    </div>
+                    </details>
                   )
 : (
                     <a
@@ -146,5 +116,28 @@ const { primary, secondary } = Astro.props;
         </a>
       </p>
     </nav>
-  </div>
-</div>
+</details>
+
+<script>
+  const getMobileMenu = () => document.querySelector<HTMLDetailsElement>('[data-mobile-docs-menu]')
+
+  document.addEventListener('keydown', (event) => {
+    const menu = getMobileMenu()
+    if (event.key === 'Escape' && menu?.open) {
+      menu.open = false
+      menu.querySelector('summary')?.focus()
+    }
+  })
+
+  document.addEventListener('focusin', (event) => {
+    const menu = getMobileMenu()
+    if (menu?.open && event.target instanceof Node && !menu.contains(event.target))
+      menu.open = false
+  })
+
+  document.addEventListener('pointerdown', (event) => {
+    const menu = getMobileMenu()
+    if (menu?.open && event.target instanceof Node && !menu.contains(event.target))
+      menu.open = false
+  })
+</script>

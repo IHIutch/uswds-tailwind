@@ -1,0 +1,6 @@
+---
+import { libraryHref, privateRedirect, resolveLibrary } from '#utils/library'
+
+const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
+return privateRedirect(Astro.redirect(libraryHref('/components/accordion', library, Astro.url)))
+---

@@ -1,58 +1,12 @@
 ---
-import Alert from '#components/alert.astro'
-import ComponentPreview from '#components/component-preview.astro'
-import ContentList from '#components/content-list.astro'
-import TableOfContents from '#components/table-of-contents.astro'
-import BaseLayout from '#layouts/base-layout.astro'
-import ContentLayout from '#layouts/content-layout.astro'
-
 import { prefersMarkdown } from '#utils/handle-prefers-markdown'
-import { getEntry, render } from 'astro:content'
+import { libraryHref, privateRedirect, resolveLibrary } from '#utils/library'
 
 const { slug } = Astro.params
-if (!slug) {
-  throw new Error('Page not found')
-}
-
-const entry = await getEntry('components', slug)
-if (!entry) {
-  throw new Error('Page not found')
-}
-
-if (prefersMarkdown(Astro)) {
-  return Astro.redirect(`/components/${entry.id}.md`)
-}
-const { Content, headings } = await render(entry)
-
-// const activeHeading = ''
-const visibleHeadings = headings.filter(h => h.depth <= 3);
+if (!slug)
+  return new Response('Page not found', { status: 404 })
+const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
+if (library === 'vanilla' && prefersMarkdown(Astro))
+  return privateRedirect(Astro.redirect(`/components/${slug}.md`))
+return privateRedirect(Astro.redirect(libraryHref(`/components/${slug}`, library, Astro.url)))
 ---
-
-<BaseLayout title={entry.data.title} description={entry.data.description}>
-  <ContentLayout>
-    <div class="flex w-full">
-      <TableOfContents headings={visibleHeadings} />
-      <main id="main-content" class="px-4 tablet:px-12 py-12 min-w-0 w-full">
-        <div class="flex flex-col mx-auto max-w-6xl">
-          <div class="mb-16">
-            <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
-            <p class="text-xl font-light max-w-prose">
-              {entry.data.description}
-            </p>
-          </div>
-          <div
-            class="docs-prose max-w-none [&_>_*:not(.not-docs-prose)]:max-w-prose"
-          >
-            <Content
-              components={{
-                ContentList,
-                ComponentPreview,
-                Alert,
-              }}
-            />
-          </div>
-        </div>
-      </main>
-    </div>
-  </ContentLayout>
-</BaseLayout>
