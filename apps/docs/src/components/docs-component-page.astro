@@ -46,6 +46,22 @@ import CardHorizontalDemo from '../examples/card-horizontal-demo'
 import cardHorizontalSource from '../examples/card-horizontal-demo.tsx?raw'
 import CardVerticalDemo from '../examples/card-vertical-demo'
 import cardVerticalSource from '../examples/card-vertical-demo.tsx?raw'
+import CollectionCalendarDemo from '../examples/collection-calendar-demo'
+import collectionCalendarSource from '../examples/collection-calendar-demo.tsx?raw'
+import CollectionDemo from '../examples/collection-demo'
+import collectionSource from '../examples/collection-demo.tsx?raw'
+import CollectionHeadingsDemo from '../examples/collection-headings-demo'
+import collectionHeadingsSource from '../examples/collection-headings-demo.tsx?raw'
+import CollectionThumbnailDemo from '../examples/collection-thumbnail-demo'
+import collectionThumbnailSource from '../examples/collection-thumbnail-demo.tsx?raw'
+import SummaryBoxDemo from '../examples/summary-box-demo'
+import summaryBoxSource from '../examples/summary-box-demo.tsx?raw'
+import TagDemo from '../examples/tag-demo'
+import tagSource from '../examples/tag-demo.tsx?raw'
+import TagLargeDemo from '../examples/tag-large-demo'
+import tagLargeSource from '../examples/tag-large-demo.tsx?raw'
+import TagMultipleDemo from '../examples/tag-multiple-demo'
+import tagMultipleSource from '../examples/tag-multiple-demo.tsx?raw'
 
 interface Props { slug: string, library: Library }
 const { slug, library } = Astro.props
@@ -99,6 +115,21 @@ const reactExamples = slug === 'button'
                 { heading: 'Horizontal', source: cardHorizontalSource, filename: 'card-horizontal-demo.tsx', files: { 'card-horizontal-demo.tsx': cardHorizontalSource } },
                 { heading: 'Group', source: cardGroupSource, filename: 'card-group-demo.tsx', files: { 'card-group-demo.tsx': cardGroupSource } },
               ]
+            : slug === 'collection'
+              ? [
+                  { heading: 'Default', source: collectionSource, filename: 'collection-demo.tsx', files: { 'collection-demo.tsx': collectionSource } },
+                  { heading: 'Headings Only', source: collectionHeadingsSource, filename: 'collection-headings-demo.tsx', files: { 'collection-headings-demo.tsx': collectionHeadingsSource } },
+                  { heading: 'Calendar', source: collectionCalendarSource, filename: 'collection-calendar-demo.tsx', files: { 'collection-calendar-demo.tsx': collectionCalendarSource } },
+                  { heading: 'Media Thumbnail', source: collectionThumbnailSource, filename: 'collection-thumbnail-demo.tsx', files: { 'collection-thumbnail-demo.tsx': collectionThumbnailSource } },
+                ]
+              : slug === 'summary-box'
+                ? [{ heading: 'Example', source: summaryBoxSource, filename: 'summary-box-demo.tsx', files: { 'summary-box-demo.tsx': summaryBoxSource } }]
+                : slug === 'tag'
+                  ? [
+                      { heading: 'Default', source: tagSource, filename: 'tag-demo.tsx', files: { 'tag-demo.tsx': tagSource } },
+                      { heading: 'Large', source: tagLargeSource, filename: 'tag-large-demo.tsx', files: { 'tag-large-demo.tsx': tagLargeSource } },
+                      { heading: 'Multiple', source: tagMultipleSource, filename: 'tag-multiple-demo.tsx', files: { 'tag-multiple-demo.tsx': tagMultipleSource } },
+                    ]
     : null
 ---
 
@@ -142,7 +173,7 @@ const reactExamples = slug === 'button'
               <h2>Examples</h2>
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
                     title={example.heading}
@@ -170,6 +201,14 @@ const reactExamples = slug === 'button'
                     {slug === 'card' && example.heading === 'Vertical' && <CardVerticalDemo client:load />}
                     {slug === 'card' && example.heading === 'Horizontal' && <CardHorizontalDemo client:load />}
                     {slug === 'card' && example.heading === 'Group' && <CardGroupDemo client:load />}
+                    {slug === 'collection' && example.heading === 'Default' && <CollectionDemo client:load />}
+                    {slug === 'collection' && example.heading === 'Headings Only' && <CollectionHeadingsDemo client:load />}
+                    {slug === 'collection' && example.heading === 'Calendar' && <CollectionCalendarDemo client:load />}
+                    {slug === 'collection' && example.heading === 'Media Thumbnail' && <CollectionThumbnailDemo client:load />}
+                    {slug === 'summary-box' && <SummaryBoxDemo client:load />}
+                    {slug === 'tag' && example.heading === 'Default' && <TagDemo client:load />}
+                    {slug === 'tag' && example.heading === 'Large' && <TagLargeDemo client:load />}
+                    {slug === 'tag' && example.heading === 'Multiple' && <TagMultipleDemo client:load />}
                   </ComponentPreview>
                 </section>
               ))}

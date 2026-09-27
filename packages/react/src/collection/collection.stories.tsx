@@ -27,7 +27,7 @@ export const Default = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
               <Tag className="bg-orange-50v">NEW</Tag>
             </Collection.MetaListItem>
@@ -54,7 +54,7 @@ export const Default = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
               <Tag className="bg-gray-10 text-ink">SBA</Tag>
             </Collection.MetaListItem>
@@ -75,7 +75,7 @@ export const Default = meta.story({
               <time>September 17, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
               <Tag className="bg-gray-10 text-ink">QUARTERLY UPDATE</Tag>
             </Collection.MetaListItem>
@@ -255,7 +255,7 @@ export const WithThumbnail = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
               <Tag className="bg-orange-50v">NEW</Tag>
             </Collection.MetaListItem>
@@ -287,7 +287,7 @@ export const WithThumbnail = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
               <Tag className="bg-gray-10 text-ink">SBA</Tag>
             </Collection.MetaListItem>
@@ -313,7 +313,7 @@ export const WithThumbnail = meta.story({
               <time>September 17, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
               <Tag className="bg-gray-10 text-ink">QUARTERLY UPDATE</Tag>
             </Collection.MetaListItem>

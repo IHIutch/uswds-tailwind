@@ -44,7 +44,7 @@ function CollectionDescription({ className, ...props }: CollectionDescriptionPro
 export type CollectionMetaListProps = React.ComponentPropsWithoutRef<'ul'>
 
 function CollectionMetaList({ className, ...props }: CollectionMetaListProps) {
-  return <ul {...props} className={cn('mt-2 flex flex-col gap-1', className)} />
+  return <ul {...props} className={cn('mt-2 flex flex-col flex-wrap gap-1', className)} />
 }
 
 export type CollectionMetadataProps = React.ComponentPropsWithoutRef<'li'>
