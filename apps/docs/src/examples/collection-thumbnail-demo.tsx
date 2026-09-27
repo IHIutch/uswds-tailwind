@@ -23,9 +23,9 @@ export default function CollectionThumbnailDemo() {
             <Collection.MetaListItem><time dateTime="2020-09-30">September 30, 2020</time></Collection.MetaListItem>
           </Collection.MetaList>
           <Collection.MetaList aria-label="Topics" className="flex-row">
-            <Collection.MetaListItem><Tag className="bg-orange-50v">NEW</Tag></Collection.MetaListItem>
-            <Collection.MetaListItem><Tag className="bg-gray-10 text-ink">PMA</Tag></Collection.MetaListItem>
-            <Collection.MetaListItem><Tag className="bg-gray-10 text-ink">OMB</Tag></Collection.MetaListItem>
+            <Collection.MetaListItem><Tag variant="vivid-orange">NEW</Tag></Collection.MetaListItem>
+            <Collection.MetaListItem><Tag variant="light-gray">PMA</Tag></Collection.MetaListItem>
+            <Collection.MetaListItem><Tag variant="light-gray">OMB</Tag></Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
         <Collection.Item startElement={(
@@ -45,7 +45,7 @@ export default function CollectionThumbnailDemo() {
             <Collection.MetaListItem><time dateTime="2020-09-30">September 30, 2020</time></Collection.MetaListItem>
           </Collection.MetaList>
           <Collection.MetaList aria-label="Topics" className="flex-row">
-            <Collection.MetaListItem><Tag className="bg-gray-10 text-ink">SBA</Tag></Collection.MetaListItem>
+            <Collection.MetaListItem><Tag variant="light-gray">SBA</Tag></Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
       </Collection.List>

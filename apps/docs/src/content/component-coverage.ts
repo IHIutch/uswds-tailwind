@@ -136,7 +136,7 @@ export const componentCoverage = {
   'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels']),
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
   'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Sortable']),
-  'tag': page(html(), component('tag'), ['Default', 'Large', 'Multiple'], { reactCovered: true }),
+  'tag': page(html(), component('tag'), ['Default', 'Large', 'Vivid orange', 'Light gray'], { reactCovered: true }),
   'text-input': page(html(), component('input', 'Exported as Input.'), ['Example']),
   'time-picker': page(vanillaComposition(['combobox']), component('time-picker'), ['Example'], { variants: { Example: { dependencies: ['combobox'] } } }),
   'tooltip': page(component('tooltip'), component('tooltip'), ['Example']),
