@@ -23,7 +23,7 @@ export default defineConfig({
         codeBackground: '#f7f9fa',
       },
       shiki: {
-        bundledLangs: ['html', 'ts', 'js', 'css', 'json', 'bash', 'graphql'],
+        bundledLangs: ['html', 'ts', 'tsx', 'js', 'jsx', 'css', 'json', 'bash', 'graphql'],
         engine: 'javascript',
       },
     }),

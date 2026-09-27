@@ -98,22 +98,15 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
       });
     </script> -->
     <script>
-      import { initAll } from "@uswds-tailwind/compat";
+      import { destroyAllComponents, initAll } from "@uswds-tailwind/compat";
 
       document.addEventListener("astro:page-load", () => {
-        initAll();
-
-        const previewContainers = document.querySelectorAll(".not-docs-prose");
-        Array.from(previewContainers).forEach((previewContainer) => {
-          previewContainer.addEventListener("click", (event) => {
-            // Prevent all clicks within the component preview from executing
-            if (event.target && (event.target as HTMLElement).tagName === "A") {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-          });
-        });
+        // React and compat share data-part names, including accordion-root.
+        // Only vanilla pages contain compat-owned demos.
+        if (document.documentElement.dataset.library === "vanilla")
+          initAll();
       });
+      document.addEventListener("astro:before-swap", destroyAllComponents);
     </script>
     <script>
       import '#utils/library-client'

@@ -11,6 +11,8 @@ import { modalInit } from './modal'
 import { tableInit } from './table'
 import { tooltipInit } from './tooltip'
 
+export { destroyAllComponents } from './lib/component'
+
 // Auto-initialize all components when DOM is ready
 export function initAll() {
   accordionInit()

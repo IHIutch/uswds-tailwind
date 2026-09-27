@@ -12,9 +12,14 @@ interface ComponentInterface<Api> {
   render: () => void
 }
 
-// One instance per element, regardless of component type. Entries are
-// collected automatically with their element even without an explicit
-// `destroy()` call.
+const activeComponents = new Set<Component<any, any>>()
+
+export function destroyAllComponents() {
+  for (const component of [...activeComponents])
+    component.destroy()
+}
+
+// One instance per element, regardless of component type.
 const instances = new WeakMap<Element, Component<any, any>>()
 
 function resolve(target: Element | string | null): HTMLElement | null {
@@ -65,6 +70,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   abstract initApi(): Api
 
   init() {
+    activeComponents.add(this)
     this.render()
     this.machine.subscribe(() => {
       this.api = this.initApi()
@@ -79,6 +85,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
       this.machine.stop()
     }
     finally {
+      activeComponents.delete(this)
       if (instances.get(this.rootEl) === this)
         instances.delete(this.rootEl)
     }

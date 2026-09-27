@@ -1,8 +1,7 @@
 /**
  * Public package availability for the existing component routes.
  * Example IDs are the visible MDX headings immediately before ComponentPreview.
- * The Vanilla examples are the current HTML previews; React examples are tracked
- * separately until the React preview work lands.
+ * The Vanilla examples are HTML previews; React coverage tracks live TSX demos.
  */
 export type Library = 'vanilla' | 'react'
 export type LibraryCoverage
@@ -13,7 +12,7 @@ export type LibraryCoverage
 export interface ExampleCoverage {
   heading: string
   vanilla: { status: 'covered' | 'blocked', reason: string, dependencies: readonly string[] }
-  react: { status: 'deferred' | 'unsupported', reason: string }
+  react: { status: 'covered' | 'deferred' | 'unsupported', reason: string }
 }
 
 export interface PageCoverage {
@@ -38,6 +37,7 @@ function vanillaComposition(dependencies: readonly string[]): LibraryCoverage {
 }
 
 const reactExampleReason = 'React package API exists, but this page currently provides only an HTML/Vanilla example. React source and live preview are deferred to the React examples work.'
+const reactCoveredReason = 'A live React preview and its TSX source are available on the React page.'
 const unsupportedReason = 'This page has no equivalent React package component. Use the linked composition or styling guidance.'
 const vanillaCoveredReason = 'The existing HTML preview covers this variant.'
 const accordionBlockReason = 'The Vanilla Accordion wrapper calls getTriggerProps/getContentProps/open/close, but the machine exposes getItemTriggerProps/getItemContentProps/show/hide.'
@@ -51,7 +51,7 @@ function page(
   vanilla: LibraryCoverage,
   react: LibraryCoverage,
   headings: readonly string[],
-  options: { published?: false, variants?: Record<string, VariantOverride>, publicBlockNotice?: string } = {},
+  options: { published?: false, variants?: Record<string, VariantOverride>, publicBlockNotice?: string, reactCovered?: boolean } = {},
 ): PageCoverage {
   for (const heading of Object.keys(options.variants ?? {})) {
     if (!headings.includes(heading))
@@ -70,8 +70,8 @@ function page(
           dependencies: variant?.dependencies ?? [],
         },
         react: {
-          status: react.kind === 'component' ? 'deferred' : 'unsupported',
-          reason: react.kind === 'component' ? reactExampleReason : unsupportedReason,
+          status: react.kind === 'component' ? (options.reactCovered ? 'covered' : 'deferred') : 'unsupported',
+          reason: react.kind === 'component' ? (options.reactCovered ? reactCoveredReason : reactExampleReason) : unsupportedReason,
         },
       }
     }),
@@ -85,15 +85,16 @@ function html(note = 'Use the documented HTML and Tailwind classes; this page ha
 }
 
 export const componentCoverage = {
-  'accordion': page(component('accordion'), component('accordion'), ['Default', 'Multiselectable', 'Bordered'], {
-    variants: Object.fromEntries(['Default', 'Multiselectable', 'Bordered'].map(heading => [heading, { blockedReason: accordionBlockReason }])),
+  'accordion': page(component('accordion'), component('accordion'), ['Default', 'With headings', 'Multiselectable', 'Bordered'], {
+    reactCovered: true,
+    variants: Object.fromEntries(['Default', 'With headings', 'Multiselectable', 'Bordered'].map(heading => [heading, { blockedReason: accordionBlockReason }])),
     publicBlockNotice: 'Accordion interaction is temporarily unavailable in these examples.',
   }),
   'alert': page(html(), component('alert'), ['Default', 'Slim', 'No Icon']),
   'banner': page(vanillaComposition(['collapse']), component('banner'), ['Usage'], { variants: { Usage: { dependencies: ['collapse'] } } }),
   'breadcrumb': page(html(), component('breadcrumb'), ['Default', 'Wrapping']),
   'button-group': page(html(), component('button-group'), ['Default', 'Segmented']),
-  'button': page(html(), component('button'), ['Examples']),
+  'button': page(html(), component('button'), ['Examples'], { reactCovered: true }),
   'card': page(html(), component('card'), ['Vertical', 'Horizontal']),
   'character-count': page(component('character-count'), component('character-count'), ['Example']),
   'checkbox': page(html(), component('checkbox'), ['Default', 'Tiled']),

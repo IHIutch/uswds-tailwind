@@ -46,10 +46,10 @@ for (const slug of pages) {
   for (const [index, example] of item.examples.entries()) {
     if (!['covered', 'blocked'].includes(example.vanilla.status) || !example.vanilla.reason)
       errors.push(`${slug}/${example.heading}: Vanilla status needs a reason`)
-    if (!['deferred', 'unsupported'].includes(example.react.status) || !example.react.reason)
+    if (!['covered', 'deferred', 'unsupported'].includes(example.react.status) || !example.react.reason)
       errors.push(`${slug}/${example.heading}: React status needs a reason`)
-    if (item.react.kind === 'component' && example.react.status !== 'deferred')
-      errors.push(`${slug}/${example.heading}: React source is not available yet`)
+    if (item.react.kind === 'component' && example.react.status === 'unsupported')
+      errors.push(`${slug}/${example.heading}: React component cannot be unsupported`)
     if (item.react.kind !== 'component' && example.react.status !== 'unsupported')
       errors.push(`${slug}/${example.heading}: React package has no corresponding component`)
     const preview = previews[index]
