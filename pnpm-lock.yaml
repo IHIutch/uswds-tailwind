@@ -344,6 +344,9 @@ importers:
       '@uswds-tailwind/compat':
         specifier: workspace:*
         version: link:../../packages/compat
+      '@uswds-tailwind/react':
+        specifier: workspace:*
+        version: link:../../packages/react
       '@uswds-tailwind/theme':
         specifier: workspace:*
         version: link:../../packages/theme

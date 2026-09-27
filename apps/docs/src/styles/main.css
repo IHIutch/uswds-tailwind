@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@uswds-tailwind/theme";
+@import "@uswds-tailwind/react/styles.css";
 
 @import "@fontsource-variable/open-sans";
 @import "@fontsource-variable/public-sans";

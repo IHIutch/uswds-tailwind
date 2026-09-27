@@ -10,6 +10,16 @@ import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
 import { libraryHref } from '#utils/library'
 import { getEntry, render } from 'astro:content'
+import AccordionBorderedDemo from '../examples/accordion-bordered-demo'
+import accordionBorderedSource from '../examples/accordion-bordered-demo.tsx?raw'
+import AccordionDemo from '../examples/accordion-demo'
+import accordionSource from '../examples/accordion-demo.tsx?raw'
+import AccordionHeadingsDemo from '../examples/accordion-headings-demo'
+import accordionHeadingsSource from '../examples/accordion-headings-demo.tsx?raw'
+import AccordionMultipleDemo from '../examples/accordion-multiple-demo'
+import accordionMultipleSource from '../examples/accordion-multiple-demo.tsx?raw'
+import ButtonDemo from '../examples/button-demo'
+import buttonSource from '../examples/button-demo.tsx?raw'
 
 interface Props { slug: string, library: Library }
 const { slug, library } = Astro.props
@@ -28,7 +38,17 @@ const reactAvailability = coverage?.react
 const blockedVanillaExamples = coverage?.examples.filter(example => example.vanilla.status === 'blocked') ?? []
 
 // const activeHeading = ''
-const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 3) : [];
+const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 3) : []
+const reactExamples = slug === 'button'
+  ? [{ heading: 'Examples', source: buttonSource, filename: 'button-demo.tsx', files: { 'button-demo.tsx': buttonSource } }]
+  : slug === 'accordion'
+    ? [
+        { heading: 'Default', source: accordionSource, filename: 'accordion-demo.tsx', files: { 'accordion-demo.tsx': accordionSource } },
+        { heading: 'With headings', source: accordionHeadingsSource, filename: 'accordion-headings-demo.tsx', files: { 'accordion-headings-demo.tsx': accordionHeadingsSource } },
+        { heading: 'Multiselectable', source: accordionMultipleSource, filename: 'accordion-multiple-demo.tsx', files: { 'accordion-multiple-demo.tsx': accordionMultipleSource } },
+        { heading: 'Bordered', source: accordionBorderedSource, filename: 'accordion-bordered-demo.tsx', files: { 'accordion-bordered-demo.tsx': accordionBorderedSource } },
+      ]
+    : null
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description}>
@@ -63,6 +83,32 @@ const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 
 ? (
             <div class="docs-prose max-w-none [&_>_*:not(.not-docs-prose)]:max-w-prose">
               <Content components={{ ContentList, ComponentPreview, Alert }} />
+            </div>
+          )
+: reactExamples
+? (
+            <div class="docs-prose max-w-none">
+              <h2>Examples</h2>
+              {reactExamples.map(example => (
+                <section aria-label={example.heading}>
+                  {slug === 'accordion' && <h3>{example.heading}</h3>}
+                  {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
+                  <ComponentPreview
+                    title={example.heading}
+                    demo
+                    code={example.source}
+                    language="tsx"
+                    filename={example.filename}
+                    playgroundFiles={example.files as Record<string, string>}
+                  >
+                    {slug === 'button' && <ButtonDemo client:load />}
+                    {slug === 'accordion' && example.heading === 'Default' && <AccordionDemo client:load />}
+                    {slug === 'accordion' && example.heading === 'With headings' && <AccordionHeadingsDemo client:load />}
+                    {slug === 'accordion' && example.heading === 'Multiselectable' && <AccordionMultipleDemo client:load />}
+                    {slug === 'accordion' && example.heading === 'Bordered' && <AccordionBorderedDemo client:load />}
+                  </ComponentPreview>
+                </section>
+              ))}
             </div>
           )
 : (
