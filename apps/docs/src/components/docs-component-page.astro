@@ -32,6 +32,20 @@ import BreadcrumbWrappingDemo from '../examples/breadcrumb-wrapping-demo'
 import breadcrumbWrappingSource from '../examples/breadcrumb-wrapping-demo.tsx?raw'
 import ButtonDemo from '../examples/button-demo'
 import buttonSource from '../examples/button-demo.tsx?raw'
+import ButtonGroupDemo from '../examples/button-group-demo'
+import buttonGroupSource from '../examples/button-group-demo.tsx?raw'
+import ButtonGroupSegmentedDemo from '../examples/button-group-segmented-demo'
+import buttonGroupSegmentedSource from '../examples/button-group-segmented-demo.tsx?raw'
+import ButtonGroupSegmentedOutlineDemo from '../examples/button-group-segmented-outline-demo'
+import buttonGroupSegmentedOutlineSource from '../examples/button-group-segmented-outline-demo.tsx?raw'
+import ButtonGroupSegmentedRedDemo from '../examples/button-group-segmented-red-demo'
+import buttonGroupSegmentedRedSource from '../examples/button-group-segmented-red-demo.tsx?raw'
+import CardGroupDemo from '../examples/card-group-demo'
+import cardGroupSource from '../examples/card-group-demo.tsx?raw'
+import CardHorizontalDemo from '../examples/card-horizontal-demo'
+import cardHorizontalSource from '../examples/card-horizontal-demo.tsx?raw'
+import CardVerticalDemo from '../examples/card-vertical-demo'
+import cardVerticalSource from '../examples/card-vertical-demo.tsx?raw'
 
 interface Props { slug: string, library: Library }
 const { slug, library } = Astro.props
@@ -72,6 +86,19 @@ const reactExamples = slug === 'button'
             { heading: 'Default', source: breadcrumbSource, filename: 'breadcrumb-demo.tsx', files: { 'breadcrumb-demo.tsx': breadcrumbSource } },
             { heading: 'Wrapping', source: breadcrumbWrappingSource, filename: 'breadcrumb-wrapping-demo.tsx', files: { 'breadcrumb-wrapping-demo.tsx': breadcrumbWrappingSource } },
           ]
+        : slug === 'button-group'
+          ? [
+              { heading: 'Default', source: buttonGroupSource, filename: 'button-group-demo.tsx', files: { 'button-group-demo.tsx': buttonGroupSource } },
+              { heading: 'Segmented', source: buttonGroupSegmentedSource, filename: 'button-group-segmented-demo.tsx', files: { 'button-group-segmented-demo.tsx': buttonGroupSegmentedSource } },
+              { heading: 'Segmented Red', source: buttonGroupSegmentedRedSource, filename: 'button-group-segmented-red-demo.tsx', files: { 'button-group-segmented-red-demo.tsx': buttonGroupSegmentedRedSource } },
+              { heading: 'Segmented Outline', source: buttonGroupSegmentedOutlineSource, filename: 'button-group-segmented-outline-demo.tsx', files: { 'button-group-segmented-outline-demo.tsx': buttonGroupSegmentedOutlineSource } },
+            ]
+          : slug === 'card'
+            ? [
+                { heading: 'Vertical', source: cardVerticalSource, filename: 'card-vertical-demo.tsx', files: { 'card-vertical-demo.tsx': cardVerticalSource } },
+                { heading: 'Horizontal', source: cardHorizontalSource, filename: 'card-horizontal-demo.tsx', files: { 'card-horizontal-demo.tsx': cardHorizontalSource } },
+                { heading: 'Group', source: cardGroupSource, filename: 'card-group-demo.tsx', files: { 'card-group-demo.tsx': cardGroupSource } },
+              ]
     : null
 ---
 
@@ -115,7 +142,7 @@ const reactExamples = slug === 'button'
               <h2>Examples</h2>
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card') && <h3>{example.heading}</h3>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
                     title={example.heading}
@@ -136,6 +163,13 @@ const reactExamples = slug === 'button'
                     {slug === 'alert' && example.heading === 'Slim No Icon' && <AlertSlimNoIconDemo client:load />}
                     {slug === 'breadcrumb' && example.heading === 'Default' && <BreadcrumbDemo client:load />}
                     {slug === 'breadcrumb' && example.heading === 'Wrapping' && <BreadcrumbWrappingDemo client:load />}
+                    {slug === 'button-group' && example.heading === 'Default' && <ButtonGroupDemo client:load />}
+                    {slug === 'button-group' && example.heading === 'Segmented' && <ButtonGroupSegmentedDemo client:load />}
+                    {slug === 'button-group' && example.heading === 'Segmented Red' && <ButtonGroupSegmentedRedDemo client:load />}
+                    {slug === 'button-group' && example.heading === 'Segmented Outline' && <ButtonGroupSegmentedOutlineDemo client:load />}
+                    {slug === 'card' && example.heading === 'Vertical' && <CardVerticalDemo client:load />}
+                    {slug === 'card' && example.heading === 'Horizontal' && <CardHorizontalDemo client:load />}
+                    {slug === 'card' && example.heading === 'Group' && <CardGroupDemo client:load />}
                   </ComponentPreview>
                 </section>
               ))}
