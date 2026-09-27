@@ -106,6 +106,24 @@ const blockedVanillaExamples = coverage?.examples.filter(example => example.vani
 
 // const activeHeading = ''
 const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 3) : []
+const paginationShortcut = `<Pagination.List>
+  <Pagination.PrevTrigger />
+  <Pagination.Pages />
+  <Pagination.NextTrigger />
+</Pagination.List>`
+const paginationExpanded = `<Pagination.List>
+  {({ pages }) => (
+    <>
+      <Pagination.PrevTrigger />
+      {pages.map((page, index) =>
+        page.type === 'page'
+          ? <Pagination.Item key={page.value} value={page.value} />
+          : <Pagination.Ellipsis key={'ellipsis-' + index} />,
+      )}
+      <Pagination.NextTrigger />
+    </>
+  )}
+</Pagination.List>`
 const stepIndicatorShortcut = `<StepIndicator.List>
   <StepIndicator.Segments />
 </StepIndicator.List>`
@@ -282,6 +300,15 @@ const reactExamples = slug === 'button'
                     {slug === 'tag' && example.heading === 'Vivid orange' && <TagVividOrangeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Light gray' && <TagLightGrayDemo client:load />}
                   </ComponentPreview>
+                  {slug === 'pagination' && example.heading === 'Bounded' && (
+                    <div class="max-w-prose mb-12">
+                      <h4>Pages shortcut</h4>
+                      <p><code>Pagination.Pages</code> renders a <code>Pagination.Item</code> for each visible page and a <code>Pagination.Ellipsis</code> for each gap. Inside <code>Pagination.List</code>, this:</p>
+                      <Code code={paginationShortcut} lang="tsx" />
+                      <p>is shorthand for the render function used in the full example above:</p>
+                      <Code code={paginationExpanded} lang="tsx" />
+                    </div>
+                  )}
                   {slug === 'step-indicator' && example.heading === 'Default' && (
                     <div class="max-w-prose mb-12">
                       <h4>Segments shortcut</h4>
