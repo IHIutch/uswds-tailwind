@@ -54,6 +54,18 @@ import CollectionHeadingsDemo from '../examples/collection-headings-demo'
 import collectionHeadingsSource from '../examples/collection-headings-demo.tsx?raw'
 import CollectionThumbnailDemo from '../examples/collection-thumbnail-demo'
 import collectionThumbnailSource from '../examples/collection-thumbnail-demo.tsx?raw'
+import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
+import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
+import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
+import paginationUnboundedSource from '../examples/pagination-unbounded-demo.tsx?raw'
+import ProcessListCustomSizingDemo from '../examples/process-list-custom-sizing-demo'
+import processListCustomSizingSource from '../examples/process-list-custom-sizing-demo.tsx?raw'
+import ProcessListDemo from '../examples/process-list-demo'
+import processListSource from '../examples/process-list-demo.tsx?raw'
+import ProcessListHeadingsDemo from '../examples/process-list-headings-demo'
+import processListHeadingsSource from '../examples/process-list-headings-demo.tsx?raw'
+import ProcessListNoTextDemo from '../examples/process-list-no-text-demo'
+import processListNoTextSource from '../examples/process-list-no-text-demo.tsx?raw'
 import SummaryBoxDemo from '../examples/summary-box-demo'
 import summaryBoxSource from '../examples/summary-box-demo.tsx?raw'
 import TagDemo from '../examples/tag-demo'
@@ -126,6 +138,18 @@ const reactExamples = slug === 'button'
                 ]
               : slug === 'summary-box'
                 ? [{ heading: 'Example', source: summaryBoxSource, filename: 'summary-box-demo.tsx', files: { 'summary-box-demo.tsx': summaryBoxSource } }]
+                : slug === 'pagination'
+                  ? [
+                      { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
+                      { heading: 'Unbounded', source: paginationUnboundedSource, filename: 'pagination-unbounded-demo.tsx', files: { 'pagination-unbounded-demo.tsx': paginationUnboundedSource } },
+                    ]
+                : slug === 'process-list'
+                  ? [
+                      { heading: 'Default', source: processListSource, filename: 'process-list-demo.tsx', files: { 'process-list-demo.tsx': processListSource } },
+                      { heading: 'With headings', source: processListHeadingsSource, filename: 'process-list-headings-demo.tsx', files: { 'process-list-headings-demo.tsx': processListHeadingsSource } },
+                      { heading: 'No Text', source: processListNoTextSource, filename: 'process-list-no-text-demo.tsx', files: { 'process-list-no-text-demo.tsx': processListNoTextSource } },
+                      { heading: 'Custom Sizing', source: processListCustomSizingSource, filename: 'process-list-custom-sizing-demo.tsx', files: { 'process-list-custom-sizing-demo.tsx': processListCustomSizingSource } },
+                    ]
                 : slug === 'tag'
                   ? [
                       { heading: 'Default', source: tagSource, filename: 'tag-demo.tsx', files: { 'tag-demo.tsx': tagSource } },
@@ -176,8 +200,9 @@ const reactExamples = slug === 'button'
               <h2>Examples</h2>
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'pagination' || slug === 'process-list' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
+                  {slug === 'process-list' && example.heading === 'With headings' && <p>Place a heading inside each title when the step represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
                     title={example.heading}
                     demo
@@ -209,6 +234,12 @@ const reactExamples = slug === 'button'
                     {slug === 'collection' && example.heading === 'Calendar' && <CollectionCalendarDemo client:load />}
                     {slug === 'collection' && example.heading === 'Media Thumbnail' && <CollectionThumbnailDemo client:load />}
                     {slug === 'summary-box' && <SummaryBoxDemo client:load />}
+                    {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
+                    {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
+                    {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}
+                    {slug === 'process-list' && example.heading === 'With headings' && <ProcessListHeadingsDemo client:load />}
+                    {slug === 'process-list' && example.heading === 'No Text' && <ProcessListNoTextDemo client:load />}
+                    {slug === 'process-list' && example.heading === 'Custom Sizing' && <ProcessListCustomSizingDemo client:load />}
                     {slug === 'tag' && example.heading === 'Default' && <TagDemo client:load />}
                     {slug === 'tag' && example.heading === 'Large' && <TagLargeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Vivid orange' && <TagVividOrangeDemo client:load />}
