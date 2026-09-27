@@ -18,6 +18,18 @@ import AccordionHeadingsDemo from '../examples/accordion-headings-demo'
 import accordionHeadingsSource from '../examples/accordion-headings-demo.tsx?raw'
 import AccordionMultipleDemo from '../examples/accordion-multiple-demo'
 import accordionMultipleSource from '../examples/accordion-multiple-demo.tsx?raw'
+import AlertDemo from '../examples/alert-demo'
+import alertSource from '../examples/alert-demo.tsx?raw'
+import AlertNoIconDemo from '../examples/alert-no-icon-demo'
+import alertNoIconSource from '../examples/alert-no-icon-demo.tsx?raw'
+import AlertSlimDemo from '../examples/alert-slim-demo'
+import alertSlimSource from '../examples/alert-slim-demo.tsx?raw'
+import AlertSlimNoIconDemo from '../examples/alert-slim-no-icon-demo'
+import alertSlimNoIconSource from '../examples/alert-slim-no-icon-demo.tsx?raw'
+import BreadcrumbDemo from '../examples/breadcrumb-demo'
+import breadcrumbSource from '../examples/breadcrumb-demo.tsx?raw'
+import BreadcrumbWrappingDemo from '../examples/breadcrumb-wrapping-demo'
+import breadcrumbWrappingSource from '../examples/breadcrumb-wrapping-demo.tsx?raw'
 import ButtonDemo from '../examples/button-demo'
 import buttonSource from '../examples/button-demo.tsx?raw'
 
@@ -48,6 +60,18 @@ const reactExamples = slug === 'button'
         { heading: 'Multiselectable', source: accordionMultipleSource, filename: 'accordion-multiple-demo.tsx', files: { 'accordion-multiple-demo.tsx': accordionMultipleSource } },
         { heading: 'Bordered', source: accordionBorderedSource, filename: 'accordion-bordered-demo.tsx', files: { 'accordion-bordered-demo.tsx': accordionBorderedSource } },
       ]
+    : slug === 'alert'
+      ? [
+          { heading: 'Default', source: alertSource, filename: 'alert-demo.tsx', files: { 'alert-demo.tsx': alertSource } },
+          { heading: 'Slim', source: alertSlimSource, filename: 'alert-slim-demo.tsx', files: { 'alert-slim-demo.tsx': alertSlimSource } },
+          { heading: 'No Icon', source: alertNoIconSource, filename: 'alert-no-icon-demo.tsx', files: { 'alert-no-icon-demo.tsx': alertNoIconSource } },
+          { heading: 'Slim No Icon', source: alertSlimNoIconSource, filename: 'alert-slim-no-icon-demo.tsx', files: { 'alert-slim-no-icon-demo.tsx': alertSlimNoIconSource } },
+        ]
+      : slug === 'breadcrumb'
+        ? [
+            { heading: 'Default', source: breadcrumbSource, filename: 'breadcrumb-demo.tsx', files: { 'breadcrumb-demo.tsx': breadcrumbSource } },
+            { heading: 'Wrapping', source: breadcrumbWrappingSource, filename: 'breadcrumb-wrapping-demo.tsx', files: { 'breadcrumb-wrapping-demo.tsx': breadcrumbWrappingSource } },
+          ]
     : null
 ---
 
@@ -91,7 +115,7 @@ const reactExamples = slug === 'button'
               <h2>Examples</h2>
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {slug === 'accordion' && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb') && <h3>{example.heading}</h3>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
                     title={example.heading}
@@ -106,6 +130,12 @@ const reactExamples = slug === 'button'
                     {slug === 'accordion' && example.heading === 'With headings' && <AccordionHeadingsDemo client:load />}
                     {slug === 'accordion' && example.heading === 'Multiselectable' && <AccordionMultipleDemo client:load />}
                     {slug === 'accordion' && example.heading === 'Bordered' && <AccordionBorderedDemo client:load />}
+                    {slug === 'alert' && example.heading === 'Default' && <AlertDemo client:load />}
+                    {slug === 'alert' && example.heading === 'Slim' && <AlertSlimDemo client:load />}
+                    {slug === 'alert' && example.heading === 'No Icon' && <AlertNoIconDemo client:load />}
+                    {slug === 'alert' && example.heading === 'Slim No Icon' && <AlertSlimNoIconDemo client:load />}
+                    {slug === 'breadcrumb' && example.heading === 'Default' && <BreadcrumbDemo client:load />}
+                    {slug === 'breadcrumb' && example.heading === 'Wrapping' && <BreadcrumbWrappingDemo client:load />}
                   </ComponentPreview>
                 </section>
               ))}

@@ -10,56 +10,55 @@ description: "An alert keeps users informed of important and sometimes time-sens
 <ComponentPreview title="Alert" code={`
   <div class="space-y-4">
 
-    <div role="status" class="@container bg-cyan-5 border-l-8 border-l-cyan-30v">
-      <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6 top-3">
+    <div role="status" class="bg-cyan-5 border-l-8 border-l-cyan-30v">
+      <div class="relative pr-5 py-4 pl-15">
+        <div class="absolute left-4.5 top-3">
           <div class="icon-[material-symbols--info] size-8"></div>
         </div>
-        <h4 class="text-2xl font-bold mb-2 leading-none">Informative status</h4>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div class="text-2xl font-bold mb-2 leading-none">Info status</div>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="status" class="@container bg-yellow-5 border-l-8 border-l-gold-20v">
-      <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6 top-3">
+    <div role="status" class="bg-yellow-5 border-l-8 border-l-gold-20v">
+      <div class="relative pr-5 py-4 pl-15">
+        <div class="absolute left-4.5 top-3">
           <div class="icon-[material-symbols--warning] size-8"></div>
         </div>
-        <h4 class="text-2xl font-bold mb-2 leading-none">Warning status</h4>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div class="text-2xl font-bold mb-2 leading-none">Warning status</div>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="status" class="@container bg-green-cool-5 border-l-8 border-l-green-cool-40v">
-      <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6 top-3">
+    <div role="status" class="bg-green-cool-5 border-l-8 border-l-green-cool-40v">
+      <div class="relative pr-5 py-4 pl-15">
+        <div class="absolute left-4.5 top-3">
           <div class="icon-[material-symbols--check-circle] size-8"></div>
         </div>
-        <h4 class="text-2xl font-bold mb-2 leading-none">Success status</h4>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div class="text-2xl font-bold mb-2 leading-none">Success status</div>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="alert" class="@container bg-red-warm-10 border-l-8 border-l-red-warm-50v">
-      <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6 top-3">
+    <div role="alert" class="bg-red-warm-10 border-l-8 border-l-red-warm-50v">
+      <div class="relative pr-5 py-4 pl-15">
+        <div class="absolute left-4.5 top-3">
           <div class="icon-[material-symbols--error] size-8"></div>
         </div>
-        <h4 class="text-2xl font-bold mb-2 leading-none">Error status</h4>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div class="text-2xl font-bold mb-2 leading-none">Error status</div>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="alert" class="@container bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
-      <div class="py-4 pl-12 pr-4 @desktop:px-16 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6 top-3">
-          <div class="icon-[material-symbols--error] size-8"></div>
+    <div role="alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+      <div class="relative pr-5 py-4 pl-15">
+        <div class="absolute left-4.5 top-3">
+          <div class="icon-[material-symbols--info] size-8"></div>
         </div>
-        <h4 class="text-2xl font-bold mb-2 leading-none">Emergency status</h4>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-gray-10 underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div class="text-2xl font-bold mb-2 leading-none">Emergency alert message</div>
+        <div>Additional context and followup information including <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">a link</a>.</div>
       </div>
     </div>
-
   </div>
 `} />
 
@@ -68,51 +67,50 @@ description: "An alert keeps users informed of important and sometimes time-sens
 <ComponentPreview title="Alert Slim" code={`
   <div class="space-y-4">
 
-    <div role="status" class="@container bg-cyan-5 border-l-8 border-l-cyan-30v">
-      <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6">
+    <div role="status" class="bg-cyan-5 border-l-8 border-l-cyan-30v">
+      <div class="relative pr-5 py-2 pl-13">
+        <div class="absolute left-4.5">
           <div class="icon-[material-symbols--info] size-6"></div>
         </div>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="status" class="@container bg-yellow-5 border-l-8 border-l-gold-20v">
-      <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6">
+    <div role="status" class="bg-yellow-5 border-l-8 border-l-gold-20v">
+      <div class="relative pr-5 py-2 pl-13">
+        <div class="absolute left-4.5">
           <div class="icon-[material-symbols--warning] size-6"></div>
         </div>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="status" class="@container bg-green-cool-5 border-l-8 border-l-green-cool-40v">
-      <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6">
+    <div role="status" class="bg-green-cool-5 border-l-8 border-l-green-cool-40v">
+      <div class="relative pr-5 py-2 pl-13">
+        <div class="absolute left-4.5">
           <div class="icon-[material-symbols--check-circle] size-6"></div>
         </div>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="alert" class="@container bg-red-warm-10 border-l-8 border-l-red-warm-50v">
-      <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6">
+    <div role="alert" class="bg-red-warm-10 border-l-8 border-l-red-warm-50v">
+      <div class="relative pr-5 py-2 pl-13">
+        <div class="absolute left-4.5">
           <div class="icon-[material-symbols--error] size-6"></div>
         </div>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="alert" class="@container bg-red-warm-60v border-l-8 border-red-warm-60v text-white">
-      <div class="py-2 pl-12 pr-4 @desktop:px-14 relative max-w-5xl mx-auto">
-        <div class="absolute left-2 @desktop:left-6">
-          <div class="icon-[material-symbols--error] size-6"></div>
+    <div role="alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+      <div class="relative pr-5 py-2 pl-13">
+        <div class="absolute left-4.5">
+          <div class="icon-[material-symbols--info] size-6"></div>
         </div>
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-gray-10 underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
-
   </div>
 `} />
 
@@ -121,41 +119,76 @@ description: "An alert keeps users informed of important and sometimes time-sens
 <ComponentPreview title="Alert No Icon" code={`
   <div class="space-y-4">
 
-    <div role="status" class="@container bg-cyan-5 border-l-8 border-l-cyan-30v">
-      <div class="py-4 pl-2 pr-4 @desktop:pl-8 @desktop:pr-16 relative max-w-5xl mx-auto">
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    <div role="status" class="bg-cyan-5 border-l-8 border-l-cyan-30v">
+      <div class="relative pr-5 py-4 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="status" class="@container bg-yellow-5 border-l-8 border-l-gold-20v">
-      <div class="py-4 pl-2 pr-4 @desktop:pl-8 @desktop:pr-16 relative max-w-5xl mx-auto">
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    <div role="status" class="bg-yellow-5 border-l-8 border-l-gold-20v">
+      <div class="relative pr-5 py-4 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="status" class="@container bg-green-cool-5 border-l-8 border-l-green-cool-40v">
-      <div class="py-4 pl-2 pr-4 @desktop:pl-8 @desktop:pr-16 relative max-w-5xl mx-auto">
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    <div role="status" class="bg-green-cool-5 border-l-8 border-l-green-cool-40v">
+      <div class="relative pr-5 py-4 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="alert" class="@container bg-red-warm-10 border-l-8 border-l-red-warm-50v">
-      <div class="py-4 pl-2 pr-4 @desktop:pl-8 @desktop:pr-16 relative max-w-5xl mx-auto">
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-blue-60v underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    <div role="alert" class="bg-red-warm-10 border-l-8 border-l-red-warm-50v">
+      <div class="relative pr-5 py-4 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
-    <div role="alert" class="@container bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
-      <div class="py-4 pl-2 pr-4 @desktop:pl-8 @desktop:pr-16 relative max-w-5xl mx-auto">
-        <p class="leading-normal">Lorem ipsum dolor sit amet, <a href="#" class="text-gray-10 underline">consectetur adipiscing</a> elit, sed do eiusmod.</p>
+    <div role="alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+      <div class="relative pr-5 py-4 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">consectetur adipiscing</a> elit, sed do eiusmod.</div>
+      </div>
+    </div>
+  </div>
+`} />
+
+### Slim No Icon
+
+<ComponentPreview title="Alert Slim No Icon" code={`
+  <div class="space-y-4">
+
+    <div role="status" class="bg-cyan-5 border-l-8 border-l-cyan-30v">
+      <div class="relative pr-5 py-2 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
       </div>
     </div>
 
+    <div role="status" class="bg-yellow-5 border-l-8 border-l-gold-20v">
+      <div class="relative pr-5 py-2 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
+      </div>
+    </div>
+
+    <div role="status" class="bg-green-cool-5 border-l-8 border-l-green-cool-40v">
+      <div class="relative pr-5 py-2 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
+      </div>
+    </div>
+
+    <div role="alert" class="bg-red-warm-10 border-l-8 border-l-red-warm-50v">
+      <div class="relative pr-5 py-2 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v">consectetur adipiscing</a> elit, sed do eiusmod.</div>
+      </div>
+    </div>
+
+    <div role="alert" class="bg-red-warm-60v border-l-8 border-l-red-warm-60v text-white">
+      <div class="relative pr-5 py-2 pl-4">
+        <div>Lorem ipsum dolor sit amet, <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">consectetur adipiscing</a> elit, sed do eiusmod.</div>
+      </div>
+    </div>
   </div>
 `} />
 
 ## Accessibility
 
-- The `role` attribute can notify assistive technologies of time-sensitive and important messages. 
-
-  For messages that demand users' immediate attention, like in cases when using the **error** or **emergency** alerts documented above, use `role="alert"`. Otherwise, use `role="status"` to provide advisory information.
+- Use `role="alert"` for messages that demand immediate attention, such as error or emergency alerts. Use `role="status"` for advisory messages.
+- If an alert has a title, consider whether it needs a heading in the page structure. The component uses a styled `div` for its title; use an appropriate heading element when the title should appear in heading navigation.
