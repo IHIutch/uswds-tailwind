@@ -133,7 +133,7 @@ export const componentCoverage = {
   'search': page(html(), component('search'), ['Default', 'Large', 'Icon Button']),
   'select': page(html(), component('select'), ['Default', 'Disabled']),
   'site-alert': page(html(), composition('Site alert has no React SiteAlert export.', 'Compose a sitewide alert with the React Alert component and the styling on this page.', 'alert'), ['Default', 'Emergency', 'List', 'No Header', 'No Icon', 'Slim']),
-  'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels']),
+  'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels'], { reactCovered: true }),
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
   'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Sortable']),
   'tag': page(html(), component('tag'), ['Default', 'Large', 'Vivid orange', 'Light gray'], { reactCovered: true }),

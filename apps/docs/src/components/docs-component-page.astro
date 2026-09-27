@@ -9,6 +9,7 @@ import { componentCoverage } from '#content/component-coverage'
 import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
 import { libraryHref } from '#utils/library'
+import { Code } from 'astro-expressive-code/components'
 import { getEntry, render } from 'astro:content'
 import AccordionBorderedDemo from '../examples/accordion-bordered-demo'
 import accordionBorderedSource from '../examples/accordion-bordered-demo.tsx?raw'
@@ -66,6 +67,16 @@ import ProcessListHeadingsDemo from '../examples/process-list-headings-demo'
 import processListHeadingsSource from '../examples/process-list-headings-demo.tsx?raw'
 import ProcessListNoTextDemo from '../examples/process-list-no-text-demo'
 import processListNoTextSource from '../examples/process-list-no-text-demo.tsx?raw'
+import StepIndicatorCenteredDemo from '../examples/step-indicator-centered-demo'
+import stepIndicatorCenteredSource from '../examples/step-indicator-centered-demo.tsx?raw'
+import StepIndicatorCountersDemo from '../examples/step-indicator-counters-demo'
+import stepIndicatorCountersSource from '../examples/step-indicator-counters-demo.tsx?raw'
+import StepIndicatorCountersSmallDemo from '../examples/step-indicator-counters-small-demo'
+import stepIndicatorCountersSmallSource from '../examples/step-indicator-counters-small-demo.tsx?raw'
+import StepIndicatorDemo from '../examples/step-indicator-demo'
+import stepIndicatorSource from '../examples/step-indicator-demo.tsx?raw'
+import StepIndicatorNoLabelsDemo from '../examples/step-indicator-no-labels-demo'
+import stepIndicatorNoLabelsSource from '../examples/step-indicator-no-labels-demo.tsx?raw'
 import SummaryBoxDemo from '../examples/summary-box-demo'
 import summaryBoxSource from '../examples/summary-box-demo.tsx?raw'
 import TagDemo from '../examples/tag-demo'
@@ -95,6 +106,19 @@ const blockedVanillaExamples = coverage?.examples.filter(example => example.vani
 
 // const activeHeading = ''
 const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 3) : []
+const stepIndicatorShortcut = `<StepIndicator.List>
+  <StepIndicator.Segments />
+</StepIndicator.List>`
+const stepIndicatorExpanded = `<StepIndicator.List>
+  {({ steps }) =>
+    steps.map(step => (
+      <StepIndicator.ListItem key={step.label} status={step.status}>
+        <StepIndicator.Segment status={step.status}>
+          {step.label}
+        </StepIndicator.Segment>
+      </StepIndicator.ListItem>
+    ))}
+</StepIndicator.List>`
 const reactExamples = slug === 'button'
   ? [{ heading: 'Examples', source: buttonSource, filename: 'button-demo.tsx', files: { 'button-demo.tsx': buttonSource } }]
   : slug === 'accordion'
@@ -150,6 +174,14 @@ const reactExamples = slug === 'button'
                       { heading: 'No Text', source: processListNoTextSource, filename: 'process-list-no-text-demo.tsx', files: { 'process-list-no-text-demo.tsx': processListNoTextSource } },
                       { heading: 'Custom Sizing', source: processListCustomSizingSource, filename: 'process-list-custom-sizing-demo.tsx', files: { 'process-list-custom-sizing-demo.tsx': processListCustomSizingSource } },
                     ]
+                  : slug === 'step-indicator'
+                    ? [
+                        { heading: 'Default', source: stepIndicatorSource, filename: 'step-indicator-demo.tsx', files: { 'step-indicator-demo.tsx': stepIndicatorSource } },
+                        { heading: 'Centered', source: stepIndicatorCenteredSource, filename: 'step-indicator-centered-demo.tsx', files: { 'step-indicator-centered-demo.tsx': stepIndicatorCenteredSource } },
+                        { heading: 'Counters', source: stepIndicatorCountersSource, filename: 'step-indicator-counters-demo.tsx', files: { 'step-indicator-counters-demo.tsx': stepIndicatorCountersSource } },
+                        { heading: 'Counters Small', source: stepIndicatorCountersSmallSource, filename: 'step-indicator-counters-small-demo.tsx', files: { 'step-indicator-counters-small-demo.tsx': stepIndicatorCountersSmallSource } },
+                        { heading: 'No Labels', source: stepIndicatorNoLabelsSource, filename: 'step-indicator-no-labels-demo.tsx', files: { 'step-indicator-no-labels-demo.tsx': stepIndicatorNoLabelsSource } },
+                      ]
                 : slug === 'tag'
                   ? [
                       { heading: 'Default', source: tagSource, filename: 'tag-demo.tsx', files: { 'tag-demo.tsx': tagSource } },
@@ -200,7 +232,7 @@ const reactExamples = slug === 'button'
               <h2>Examples</h2>
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'pagination' || slug === 'process-list' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   {slug === 'process-list' && example.heading === 'With headings' && <p>Place a heading inside each title when the step represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
@@ -240,11 +272,25 @@ const reactExamples = slug === 'button'
                     {slug === 'process-list' && example.heading === 'With headings' && <ProcessListHeadingsDemo client:load />}
                     {slug === 'process-list' && example.heading === 'No Text' && <ProcessListNoTextDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Custom Sizing' && <ProcessListCustomSizingDemo client:load />}
+                    {slug === 'step-indicator' && example.heading === 'Default' && <StepIndicatorDemo client:load />}
+                    {slug === 'step-indicator' && example.heading === 'Centered' && <StepIndicatorCenteredDemo client:load />}
+                    {slug === 'step-indicator' && example.heading === 'Counters' && <StepIndicatorCountersDemo client:load />}
+                    {slug === 'step-indicator' && example.heading === 'Counters Small' && <StepIndicatorCountersSmallDemo client:load />}
+                    {slug === 'step-indicator' && example.heading === 'No Labels' && <StepIndicatorNoLabelsDemo client:load />}
                     {slug === 'tag' && example.heading === 'Default' && <TagDemo client:load />}
                     {slug === 'tag' && example.heading === 'Large' && <TagLargeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Vivid orange' && <TagVividOrangeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Light gray' && <TagLightGrayDemo client:load />}
                   </ComponentPreview>
+                  {slug === 'step-indicator' && example.heading === 'Default' && (
+                    <div class="max-w-prose mb-12">
+                      <h4>Segments shortcut</h4>
+                      <p><code>StepIndicator.Segments</code> renders a <code>ListItem</code> and <code>Segment</code> for each step, passing the computed status to both. Inside <code>StepIndicator.List</code>, this:</p>
+                      <Code code={stepIndicatorShortcut} lang="tsx" />
+                      <p>is shorthand for the render function used in the full example above:</p>
+                      <Code code={stepIndicatorExpanded} lang="tsx" />
+                    </div>
+                  )}
                 </section>
               ))}
             </div>
