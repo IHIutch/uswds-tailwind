@@ -8,11 +8,21 @@ description: "A tag draws attention to new or categorized content elements."
 ### Default
 
 <ComponentPreview title="Tag Default" code={`
-  <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase">Info</span>
+  <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase text-sm">New</span>
 `} />
 
 ### Large
 
 <ComponentPreview title="Tag Large" code={`
-  <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase text-lg">Big</span>
+  <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase text-base">New</span>
+`} />
+
+### Multiple
+
+<ComponentPreview title="Tag Multiple" code={`
+  <div class="flex gap-2">
+    <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase text-sm">New</span>
+    <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase text-sm">Pending</span>
+    <span class="bg-gray-60 text-white rounded-xs py-px px-2 uppercase text-sm">Active</span>
+  </div>
 `} />
