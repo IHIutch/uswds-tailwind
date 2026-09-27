@@ -39,15 +39,11 @@ export default defineConfig({
   //     }
   //   }
   // },
-  adapter: cloudflare(),
+  // Expressive Code's transitive CommonJS modules cannot run in workerd's dev module runner.
+  // Production builds and previews still use the Cloudflare adapter.
+  adapter: import.meta.env.DEV ? undefined : cloudflare(),
   vite: {
     plugins: [tailwindcss()],
-    // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#nodejs-compatibility
-    ssr: {
-      external: ['node:fs', 'node:path'],
-      noExternal: ['@uswds-tailwind/compat'],
-    },
-
     build: {
       // https://docs.astro.build/en/guides/integrations-guide/cloudflare/#meaningful-error-messages
       minify: false,

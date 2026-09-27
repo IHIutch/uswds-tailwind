@@ -1,6 +1,6 @@
 import type { IconifyJSON } from '@iconify/types'
+import { z } from 'astro/zod'
 import { defineAction } from 'astro:actions'
-import { z } from 'astro:schema'
 import Fuse from 'fuse.js'
 
 // Cache for all icons and Fuse instance to avoid repeated API calls and initialization
