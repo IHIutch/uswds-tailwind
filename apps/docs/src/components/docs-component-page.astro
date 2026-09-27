@@ -60,8 +60,10 @@ import TagDemo from '../examples/tag-demo'
 import tagSource from '../examples/tag-demo.tsx?raw'
 import TagLargeDemo from '../examples/tag-large-demo'
 import tagLargeSource from '../examples/tag-large-demo.tsx?raw'
-import TagMultipleDemo from '../examples/tag-multiple-demo'
-import tagMultipleSource from '../examples/tag-multiple-demo.tsx?raw'
+import TagLightGrayDemo from '../examples/tag-light-gray-demo'
+import tagLightGraySource from '../examples/tag-light-gray-demo.tsx?raw'
+import TagVividOrangeDemo from '../examples/tag-vivid-orange-demo'
+import tagVividOrangeSource from '../examples/tag-vivid-orange-demo.tsx?raw'
 
 interface Props { slug: string, library: Library }
 const { slug, library } = Astro.props
@@ -128,7 +130,8 @@ const reactExamples = slug === 'button'
                   ? [
                       { heading: 'Default', source: tagSource, filename: 'tag-demo.tsx', files: { 'tag-demo.tsx': tagSource } },
                       { heading: 'Large', source: tagLargeSource, filename: 'tag-large-demo.tsx', files: { 'tag-large-demo.tsx': tagLargeSource } },
-                      { heading: 'Multiple', source: tagMultipleSource, filename: 'tag-multiple-demo.tsx', files: { 'tag-multiple-demo.tsx': tagMultipleSource } },
+                      { heading: 'Vivid orange', source: tagVividOrangeSource, filename: 'tag-vivid-orange-demo.tsx', files: { 'tag-vivid-orange-demo.tsx': tagVividOrangeSource } },
+                      { heading: 'Light gray', source: tagLightGraySource, filename: 'tag-light-gray-demo.tsx', files: { 'tag-light-gray-demo.tsx': tagLightGraySource } },
                     ]
     : null
 ---
@@ -208,7 +211,8 @@ const reactExamples = slug === 'button'
                     {slug === 'summary-box' && <SummaryBoxDemo client:load />}
                     {slug === 'tag' && example.heading === 'Default' && <TagDemo client:load />}
                     {slug === 'tag' && example.heading === 'Large' && <TagLargeDemo client:load />}
-                    {slug === 'tag' && example.heading === 'Multiple' && <TagMultipleDemo client:load />}
+                    {slug === 'tag' && example.heading === 'Vivid orange' && <TagVividOrangeDemo client:load />}
+                    {slug === 'tag' && example.heading === 'Light gray' && <TagLightGrayDemo client:load />}
                   </ComponentPreview>
                 </section>
               ))}
