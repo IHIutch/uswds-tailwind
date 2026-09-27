@@ -1,5 +1,6 @@
 ---
 import GlobalNav from "#components/global-nav/index.astro";
+import { LIBRARY_COOKIE, libraryFromPath, resolveLibrary } from '#utils/library'
 import { SEO } from "astro-seo";
 import { ClientRouter } from "astro:transitions";
 
@@ -30,10 +31,18 @@ if (title) ogImageUrl.searchParams.set("title", title);
 if (description) ogImageUrl.searchParams.set("description", description);
 
 const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
+const library = resolveLibrary(Astro.url, Astro.cookies.get(LIBRARY_COOKIE)?.value)
+
+// Canonical docs routes carry the preference into shared design pages, even
+// without JavaScript. Shared pages can then vary by cookie.
+const pathLibrary = libraryFromPath(Astro.url.pathname)
+if (pathLibrary)
+  Astro.cookies.set(LIBRARY_COOKIE, pathLibrary, { path: '/', sameSite: 'lax', maxAge: 31536000 })
+Astro.response.headers.set('Cache-Control', 'private, no-store')
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-library={library}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -105,6 +114,9 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
           });
         });
       });
+    </script>
+    <script>
+      import '#utils/library-client'
     </script>
 
     <!-- Fathom - beautiful, simple website analytics -->

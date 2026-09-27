@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "check:coverage": "node scripts/check-component-coverage.mjs",
     "dev": "wrangler types && astro dev",
     "start": "wrangler types && astro dev",
-    "build": "wrangler types && astro build",
+    "build": "pnpm check:coverage && wrangler types && astro build",
     "preview": "wrangler types && astro preview",
     "deploy": "wrangler deploy",
     "astro": "astro"
