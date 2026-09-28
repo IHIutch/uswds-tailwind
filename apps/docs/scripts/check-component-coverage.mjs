@@ -76,11 +76,13 @@ for (const slug of pages) {
   for (const library of ['vanilla', 'react']) {
     const coverage = getComponentCoverage(slug, library)
     if (coverage.kind === 'component') {
-      if (!packageExports[library][`./${coverage.subpath}`])
-        errors.push(`${slug}: ${library} subpath ${coverage.subpath} is not exported`)
       const index = library === 'react' ? reactIndex : compatIndex
-      if (!(library === 'react' && ['in-page-navigation', 'link'].includes(coverage.subpath)) && !index.includes(`'./${coverage.subpath}'`))
-        errors.push(`${slug}: ${library} ${coverage.subpath} is missing from root index`)
+      for (const subpath of [coverage.subpath, ...(coverage.additionalSubpaths ?? [])]) {
+        if (!packageExports[library][`./${subpath}`])
+          errors.push(`${slug}: ${library} subpath ${subpath} is not exported`)
+        if (!(library === 'react' && ['in-page-navigation', 'link'].includes(subpath)) && !index.includes(`'./${subpath}'`))
+          errors.push(`${slug}: ${library} ${subpath} is missing from root index`)
+      }
     }
     else if (!coverage.note || !coverage.alternative) {
       errors.push(`${slug}: ${library} ${coverage.kind} needs a reason and useful alternative`)
@@ -99,7 +101,7 @@ for (const library of ['vanilla', 'react']) {
   const mapped = new Set(Object.values(componentCoverage)
     .map(page => page[library])
     .filter(coverage => coverage.kind === 'component')
-    .map(coverage => coverage.subpath))
+    .flatMap(coverage => [coverage.subpath, ...(coverage.additionalSubpaths ?? [])]))
   const missing = missingComponentDocs[library]
   for (const subpath of Object.keys(packageExports[library]).filter(path => path.startsWith('./')).map(path => path.slice(2))) {
     if (['auto', 'init-all', 'styles.css'].includes(subpath))

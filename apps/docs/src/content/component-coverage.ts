@@ -5,7 +5,7 @@
  */
 export type Library = 'vanilla' | 'react'
 export type LibraryCoverage
-  = | { kind: 'component', subpath: string, note?: string }
+  = | { kind: 'component', subpath: string, additionalSubpaths?: readonly string[], note?: string }
     | { kind: 'composition' | 'styling', note: string, alternative: string, alternativePage?: string, dependencies?: readonly string[] }
     | { kind: 'unavailable', note: string, alternative: string, alternativePage?: string }
 
@@ -23,7 +23,7 @@ export interface PageCoverage {
   published?: false
 }
 
-const component = (subpath: string, note?: string): LibraryCoverage => ({ kind: 'component', subpath, note })
+const component = (subpath: string, note?: string, additionalSubpaths?: readonly string[]): LibraryCoverage => ({ kind: 'component', subpath, note, additionalSubpaths })
 const styling = (note: string, alternative: string): LibraryCoverage => ({ kind: 'styling', note, alternative })
 const composition = (note: string, alternative: string, alternativePage?: string): LibraryCoverage => ({ kind: 'composition', note, alternative, alternativePage })
 const unavailable = (note: string, alternative: string, alternativePage?: string): LibraryCoverage => ({ kind: 'unavailable', note, alternative, alternativePage })
@@ -102,7 +102,7 @@ export const componentCoverage = {
   'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value']),
   'date-picker': page(component('date-picker'), component('date-picker'), ['Example']),
   'date-range-picker': page(component('date-range-picker'), component('date-picker', 'Use DatePicker with range selection; there is no React DateRangePicker export.'), ['Example']),
-  'field': page(html('Field composition uses native labels, hints, and validity states in Vanilla; there is no Field initializer.'), component('field'), ['Input and hint', 'Error message', 'Success state', 'Select', 'Textarea'], { reactCovered: true }),
+  'field': page(html('Field composition uses native labels, hints, and validity states in Vanilla; there is no Field initializer.'), component('field', undefined, ['fieldset']), ['Input and hint', 'Error message', 'Success state', 'Select', 'Textarea', 'Fieldset'], { reactCovered: true }),
   'file-input': page(component('file-input'), component('file-input'), ['Default', 'Specific File Types', 'Accept Multiple Files']),
   'footer': page(vanillaComposition(['accordion']), component('footer'), ['Default', 'Medium', 'Slim'], {
     variants: { Default: { dependencies: ['accordion'], blockedReason: accordionBlockReason } },
@@ -152,7 +152,6 @@ export const missingComponentDocs = {
   },
   react: {
     'dropdown': { reason: 'Component is exported but has no dedicated docs page.', alternative: 'language-selector' },
-    'fieldset': { reason: 'Form grouping primitive is exported but has no dedicated docs page.', alternative: 'radio-buttons' },
     'nav': { reason: 'Navigation primitive is exported but has no dedicated docs page.', alternative: 'header' },
     'side-navigation': { reason: 'Navigation component is exported but has no dedicated docs page.', alternative: 'in-page-navigation' },
   },
