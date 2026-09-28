@@ -167,6 +167,20 @@ import TagLightGrayDemo from '../examples/tag-light-gray-demo'
 import tagLightGraySource from '../examples/tag-light-gray-demo.tsx?raw'
 import TagVividOrangeDemo from '../examples/tag-vivid-orange-demo'
 import tagVividOrangeSource from '../examples/tag-vivid-orange-demo.tsx?raw'
+import TableBorderlessDemo from '../examples/table-borderless-demo'
+import tableBorderlessSource from '../examples/table-borderless-demo.tsx?raw'
+import TableCompactDemo from '../examples/table-compact-demo'
+import tableCompactSource from '../examples/table-compact-demo.tsx?raw'
+import TableDemo from '../examples/table-demo'
+import tableSource from '../examples/table-demo.tsx?raw'
+import TableScrollableDemo from '../examples/table-scrollable-demo'
+import tableScrollableSource from '../examples/table-scrollable-demo.tsx?raw'
+import TableStickyColumnDemo from '../examples/table-sticky-column-demo'
+import tableStickyColumnSource from '../examples/table-sticky-column-demo.tsx?raw'
+import TableStickyHeaderDemo from '../examples/table-sticky-header-demo'
+import tableStickyHeaderSource from '../examples/table-sticky-header-demo.tsx?raw'
+import TableStripedDemo from '../examples/table-striped-demo'
+import tableStripedSource from '../examples/table-striped-demo.tsx?raw'
 import TextInputDemo from '../examples/text-input-demo'
 import textInputSource from '../examples/text-input-demo.tsx?raw'
 import TooltipDemo from '../examples/tooltip-demo'
@@ -390,6 +404,16 @@ const reactExamples = slug === 'button'
                     ]
                 : slug === 'tooltip'
                   ? [{ heading: 'Example', source: tooltipSource, filename: 'tooltip-demo.tsx', files: { 'tooltip-demo.tsx': tooltipSource } }]
+                : slug === 'table'
+                  ? [
+                      { heading: 'Default', source: tableSource, filename: 'table-demo.tsx', files: { 'table-demo.tsx': tableSource } },
+                      { heading: 'Striped', source: tableStripedSource, filename: 'table-striped-demo.tsx', files: { 'table-striped-demo.tsx': tableStripedSource } },
+                      { heading: 'Borderless', source: tableBorderlessSource, filename: 'table-borderless-demo.tsx', files: { 'table-borderless-demo.tsx': tableBorderlessSource } },
+                      { heading: 'Compact', source: tableCompactSource, filename: 'table-compact-demo.tsx', files: { 'table-compact-demo.tsx': tableCompactSource } },
+                      { heading: 'Scrollable', source: tableScrollableSource, filename: 'table-scrollable-demo.tsx', files: { 'table-scrollable-demo.tsx': tableScrollableSource } },
+                      { heading: 'Sticky Header', source: tableStickyHeaderSource, filename: 'table-sticky-header-demo.tsx', files: { 'table-sticky-header-demo.tsx': tableStickyHeaderSource } },
+                      { heading: 'Sticky Column', source: tableStickyColumnSource, filename: 'table-sticky-column-demo.tsx', files: { 'table-sticky-column-demo.tsx': tableStickyColumnSource } },
+                    ]
                 : slug === 'time-picker'
                   ? [{ heading: 'Example', source: timePickerSource, filename: 'time-picker-demo.tsx', files: { 'time-picker-demo.tsx': timePickerSource } }]
                 : slug === 'text-input'
@@ -438,7 +462,7 @@ const reactExamples = slug === 'button'
               {slug === 'field' && <p class="max-w-prose">Use <code>Field.Root</code> when you want a React form control to share a label, hint, and validation state. Wrap one control per field. <code>Field.Label</code> and <code>Field.Description</code> provide the control’s label and accessible description; <code>Input</code>, <code>Textarea</code>, and <code>Select.Field</code> read that context.</p>}
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'checkbox' || slug === 'collection' || slug === 'combo-box' || slug === 'field' || slug === 'file-input' || slug === 'footer' || slug === 'header' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'radio-buttons' || slug === 'search' || slug === 'select' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'checkbox' || slug === 'collection' || slug === 'combo-box' || slug === 'field' || slug === 'file-input' || slug === 'footer' || slug === 'header' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'radio-buttons' || slug === 'search' || slug === 'select' || slug === 'step-indicator' || slug === 'table' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'field' && example.heading === 'Error message' && <p class="max-w-prose">Set <code>invalid</code> on <code>Field.Root</code> after validation. <code>Field.ErrorMessage</code> then appears, and the control receives <code>aria-invalid</code> and a description that includes the error. <code>required</code> and <code>disabled</code> on the root also reach the control.</p>}
                   {slug === 'field' && example.heading === 'Fieldset' && <p class="max-w-prose">Use <code>Fieldset.Root</code> to group related controls and <code>Fieldset.Legend</code> to name the group. Each nested <code>Field.Root</code> keeps its own label and control association.</p>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
@@ -529,6 +553,13 @@ const reactExamples = slug === 'button'
                     {slug === 'tag' && example.heading === 'Large' && <TagLargeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Vivid orange' && <TagVividOrangeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Light gray' && <TagLightGrayDemo client:load />}
+                    {slug === 'table' && example.heading === 'Default' && <TableDemo client:load />}
+                    {slug === 'table' && example.heading === 'Striped' && <TableStripedDemo client:load />}
+                    {slug === 'table' && example.heading === 'Borderless' && <TableBorderlessDemo client:load />}
+                    {slug === 'table' && example.heading === 'Compact' && <TableCompactDemo client:load />}
+                    {slug === 'table' && example.heading === 'Scrollable' && <TableScrollableDemo client:load />}
+                    {slug === 'table' && example.heading === 'Sticky Header' && <TableStickyHeaderDemo client:load />}
+                    {slug === 'table' && example.heading === 'Sticky Column' && <TableStickyColumnDemo client:load />}
                     {slug === 'tooltip' && <TooltipDemo client:load />}
                     {slug === 'time-picker' && <TimePickerDemo client:load />}
                     {slug === 'text-input' && <TextInputDemo client:load />}

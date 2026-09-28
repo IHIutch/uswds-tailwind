@@ -45,6 +45,8 @@ const accordionBlockReason = 'The Vanilla Accordion wrapper calls getTriggerProp
 interface VariantOverride {
   dependencies?: readonly string[]
   blockedReason?: string
+  reactStatus?: 'covered' | 'deferred'
+  reactReason?: string
 }
 
 function page(
@@ -70,8 +72,8 @@ function page(
           dependencies: variant?.dependencies ?? [],
         },
         react: {
-          status: react.kind === 'component' ? (options.reactCovered ? 'covered' : 'deferred') : 'unsupported',
-          reason: react.kind === 'component' ? (options.reactCovered ? reactCoveredReason : reactExampleReason) : unsupportedReason,
+          status: react.kind === 'component' ? (variant?.reactStatus ?? (options.reactCovered ? 'covered' : 'deferred')) : 'unsupported',
+          reason: react.kind === 'component' ? (variant?.reactReason ?? (options.reactCovered ? reactCoveredReason : reactExampleReason)) : unsupportedReason,
         },
       }
     }),
@@ -138,7 +140,10 @@ export const componentCoverage = {
   'site-alert': page(html(), composition('Site alert has no React SiteAlert export.', 'Compose a sitewide alert with the React Alert component and the styling on this page.', 'alert'), ['Default', 'Emergency', 'List', 'No Header', 'No Icon', 'Slim']),
   'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels'], { reactCovered: true }),
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
-  'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Sortable']),
+  'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Sortable'], {
+    reactCovered: true,
+    variants: { Sortable: { reactStatus: 'deferred', reactReason: 'React Table does not provide built-in sorting. An example composing it with a table library is planned.' } },
+  }),
   'tag': page(html(), component('tag'), ['Default', 'Large', 'Vivid orange', 'Light gray'], { reactCovered: true }),
   'text-input': page(html(), component('input', 'Exported as Input.'), ['Example'], { reactCovered: true }),
   'time-picker': page(vanillaComposition(['combobox']), component('time-picker'), ['Example'], { reactCovered: true, variants: { Example: { dependencies: ['combobox'] } } }),
