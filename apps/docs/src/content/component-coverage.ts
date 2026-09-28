@@ -131,7 +131,7 @@ export const componentCoverage = {
   'prose': page(html(), styling('Prose is a typography styling pattern, with no React Prose export.', 'Apply the documented prose classes to a semantic container in React.'), ['Usage']),
   'radio-buttons': page(html(), component('radio-group', 'Exported as RadioGroup.'), ['Default', 'Tiled'], { reactCovered: true }),
   'range-slider': page(html(), component('range-slider'), ['Example'], { reactCovered: true }),
-  'search': page(html(), component('search'), ['Default', 'Large', 'Icon Button']),
+  'search': page(html(), component('search'), ['Default', 'Large', 'Icon Button'], { reactCovered: true }),
   'select': page(html(), component('select'), ['Default', 'Disabled']),
   'site-alert': page(html(), composition('Site alert has no React SiteAlert export.', 'Compose a sitewide alert with the React Alert component and the styling on this page.', 'alert'), ['Default', 'Emergency', 'List', 'No Header', 'No Icon', 'Slim']),
   'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels'], { reactCovered: true }),
