@@ -116,7 +116,7 @@ export const componentCoverage = {
     publicBlockNotice: 'The mobile accordion menus are temporarily unavailable in these examples.',
   }),
   'icon-list': page(html(), composition('Icon list is a markup pattern, with no React IconList export.', 'Compose list elements, icons, and the documented classes in React.'), ['Default', 'Simple Content', 'Rich Content', 'Custom Size', 'Custom Size & Rich Content']),
-  'identifier': page(html(), component('identifier'), ['Default']),
+  'identifier': page(html(), component('identifier'), ['Default', 'Multiple parents and logos', 'No logos'], { reactCovered: true }),
   'in-page-navigation': page(html(), component('in-page-navigation', 'InPageNav is available through the component subpath but is not re-exported by the React root index.'), ['Default', 'Nested', 'Deeply Nested']),
   'input-group': page(html(), component('input-group'), ['Example']),
   'input-mask': page(component('input-mask'), component('input-mask'), ['Example']),

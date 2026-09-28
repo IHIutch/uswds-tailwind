@@ -8,7 +8,7 @@ const meta = preview.meta({
 })
 
 const requiredLinks = [
-  { label: 'About Your Agency', href: '#' },
+  { label: 'About Parent Agency', href: '#' },
   { label: 'Accessibility statement', href: '#' },
   { label: 'FOIA requests', href: '#' },
   { label: 'No FEAR Act data', href: '#' },
@@ -17,38 +17,37 @@ const requiredLinks = [
   { label: 'Privacy policy', href: '#' },
 ]
 
-export const Default = meta.story({
-  render: () => (
+function IdentifierExample({ logoCount }: { logoCount: 0 | 1 | 2 }) {
+  return (
     <Identifier.Root>
       <Identifier.Container>
         <Identifier.Masthead aria-label="Agency identifier">
-          <Identifier.LogoGroup>
-            <Identifier.Logo href="#">
-              <img
-                src=""
-                alt="Agency name"
-                className="size-12 bg-gray-30 object-cover"
-              />
-            </Identifier.Logo>
-            <Identifier.Logo href="#">
-              <img
-                src=""
-                alt="Agency name"
-                className="size-12 bg-gray-30 object-cover"
-              />
-            </Identifier.Logo>
-          </Identifier.LogoGroup>
+          {logoCount > 0 && (
+            <Identifier.LogoGroup>
+              <Identifier.Logo href="#" aria-label="Parent agency homepage">
+                <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-gray-30 font-bold text-gray-90">A</span>
+              </Identifier.Logo>
+              {logoCount === 2 && (
+                <Identifier.Logo href="#" aria-label="Partner agency homepage">
+                  <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-gray-30 font-bold text-gray-90">B</span>
+                </Identifier.Logo>
+              )}
+            </Identifier.LogoGroup>
+          )}
           <Identifier.Identity aria-label="Agency description">
             <Identifier.Domain>domain.gov</Identifier.Domain>
             <Identifier.Disclaimer>
               An official website of the
               {' '}
-              <Link
-                href="#"
-                className="text-gray-cool-10 hover:text-gray-5 focus:outline-4 focus:outline-blue-40v underline"
-              >
-                Your Agency
-              </Link>
+              <Link href="#" variant="light">Parent Agency</Link>
+              {logoCount === 2 && (
+                <>
+                  {' '}
+                  and the
+                  {' '}
+                  <Link href="#" variant="light">Partner Agency</Link>
+                </>
+              )}
             </Identifier.Disclaimer>
           </Identifier.Identity>
         </Identifier.Masthead>
@@ -65,17 +64,14 @@ export const Default = meta.story({
           <p>
             Looking for U.S. government information and services?
             {' '}
-
-            <Link
-              isExternal
-              href="https://www.usa.gov/"
-              className="text-gray-cool-10 hover:text-gray-5 focus:outline-4 focus:outline-blue-40v underline after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px font-bold block @desktop:inline"
-            >
-              Visit USA.gov
-            </Link>
+            <Link href="https://www.usa.gov/" variant="light" isExternal className="font-bold block @desktop:inline">Visit USA.gov</Link>
           </p>
         </Identifier.Tagline>
       </Identifier.Container>
     </Identifier.Root>
-  ),
-})
+  )
+}
+
+export const Default = meta.story({ render: () => <IdentifierExample logoCount={1} /> })
+export const MultipleParentsAndLogos = meta.story({ render: () => <IdentifierExample logoCount={2} /> })
+export const NoLogos = meta.story({ render: () => <IdentifierExample logoCount={0} /> })
