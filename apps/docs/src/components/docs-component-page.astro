@@ -67,6 +67,8 @@ import ComboBoxDefaultValueDemo from '../examples/combo-box-default-value-demo'
 import comboBoxDefaultValueSource from '../examples/combo-box-default-value-demo.tsx?raw'
 import ComboBoxDemo from '../examples/combo-box-demo'
 import comboBoxSource from '../examples/combo-box-demo.tsx?raw'
+import DatePickerDemo from '../examples/date-picker-demo'
+import datePickerSource from '../examples/date-picker-demo.tsx?raw'
 import FieldErrorDemo from '../examples/field-error-demo'
 import fieldErrorSource from '../examples/field-error-demo.tsx?raw'
 import FieldFieldsetDemo from '../examples/field-fieldset-demo'
@@ -274,6 +276,8 @@ const reactExamples = slug === 'button'
                     { heading: 'Default', source: comboBoxSource, filename: 'combo-box-demo.tsx', files: { 'combo-box-demo.tsx': comboBoxSource } },
                     { heading: 'With Default Value', source: comboBoxDefaultValueSource, filename: 'combo-box-default-value-demo.tsx', files: { 'combo-box-default-value-demo.tsx': comboBoxDefaultValueSource } },
                   ]
+              : slug === 'date-picker'
+                ? [{ heading: 'Example', source: datePickerSource, filename: 'date-picker-demo.tsx', files: { 'date-picker-demo.tsx': datePickerSource } }]
               : slug === 'field'
                 ? [
                     { heading: 'Input and hint', source: fieldInputSource, filename: 'field-input-demo.tsx', files: { 'field-input-demo.tsx': fieldInputSource } },
@@ -446,6 +450,7 @@ const reactExamples = slug === 'button'
                     {slug === 'collection' && example.heading === 'Media Thumbnail' && <CollectionThumbnailDemo client:load />}
                     {slug === 'combo-box' && example.heading === 'Default' && <ComboBoxDemo client:load />}
                     {slug === 'combo-box' && example.heading === 'With Default Value' && <ComboBoxDefaultValueDemo client:load />}
+                    {slug === 'date-picker' && <DatePickerDemo client:load />}
                     {slug === 'field' && example.heading === 'Input and hint' && <FieldInputDemo client:load />}
                     {slug === 'field' && example.heading === 'Error message' && <FieldErrorDemo client:load />}
                     {slug === 'field' && example.heading === 'Select' && <FieldSelectDemo client:load />}
