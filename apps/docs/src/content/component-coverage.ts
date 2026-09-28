@@ -111,6 +111,7 @@ export const componentCoverage = {
   }),
   'grid': page(html('Grid is a Tailwind layout pattern, with no Vanilla initializer.'), styling('Grid is a Tailwind layout pattern, with no React Grid export.', 'Use the grid classes in this page with ordinary React elements.'), ['Grid Layout', 'Grid vs Flex', 'Gutters', 'Column Offset', 'Column Wrapping', 'Responsive']),
   'header': page(vanillaComposition(['dropdown', 'modal', 'accordion']), component('header'), ['Default', 'Extended'], {
+    reactCovered: true,
     variants: {
       Default: { dependencies: ['dropdown', 'modal', 'accordion'], blockedReason: accordionBlockReason },
       Extended: { dependencies: ['dropdown', 'modal', 'accordion'], blockedReason: accordionBlockReason },

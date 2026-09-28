@@ -93,6 +93,10 @@ import FooterMediumDemo from '../examples/footer-medium-demo'
 import footerMediumSource from '../examples/footer-medium-demo.tsx?raw'
 import FooterSlimDemo from '../examples/footer-slim-demo'
 import footerSlimSource from '../examples/footer-slim-demo.tsx?raw'
+import HeaderDemo from '../examples/header-demo'
+import headerSource from '../examples/header-demo.tsx?raw'
+import HeaderExtendedDemo from '../examples/header-extended-demo'
+import headerExtendedSource from '../examples/header-extended-demo.tsx?raw'
 import IdentifierDemo from '../examples/identifier-demo'
 import identifierSource from '../examples/identifier-demo.tsx?raw'
 import IdentifierMultipleLogosDemo from '../examples/identifier-multiple-logos-demo'
@@ -310,6 +314,11 @@ const reactExamples = slug === 'button'
                     { heading: 'Medium', source: footerMediumSource, filename: 'footer-medium-demo.tsx', files: { 'footer-medium-demo.tsx': footerMediumSource } },
                     { heading: 'Slim', source: footerSlimSource, filename: 'footer-slim-demo.tsx', files: { 'footer-slim-demo.tsx': footerSlimSource } },
                   ]
+              : slug === 'header'
+                ? [
+                    { heading: 'Default', source: headerSource, filename: 'header-demo.tsx', files: { 'header-demo.tsx': headerSource } },
+                    { heading: 'Extended', source: headerExtendedSource, filename: 'header-extended-demo.tsx', files: { 'header-extended-demo.tsx': headerExtendedSource } },
+                  ]
               : slug === 'summary-box'
                 ? [{ heading: 'Example', source: summaryBoxSource, filename: 'summary-box-demo.tsx', files: { 'summary-box-demo.tsx': summaryBoxSource } }]
                 : slug === 'identifier'
@@ -429,7 +438,7 @@ const reactExamples = slug === 'button'
               {slug === 'field' && <p class="max-w-prose">Use <code>Field.Root</code> when you want a React form control to share a label, hint, and validation state. Wrap one control per field. <code>Field.Label</code> and <code>Field.Description</code> provide the control’s label and accessible description; <code>Input</code>, <code>Textarea</code>, and <code>Select.Field</code> read that context.</p>}
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'checkbox' || slug === 'collection' || slug === 'combo-box' || slug === 'field' || slug === 'file-input' || slug === 'footer' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'radio-buttons' || slug === 'search' || slug === 'select' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'checkbox' || slug === 'collection' || slug === 'combo-box' || slug === 'field' || slug === 'file-input' || slug === 'footer' || slug === 'header' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'radio-buttons' || slug === 'search' || slug === 'select' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'field' && example.heading === 'Error message' && <p class="max-w-prose">Set <code>invalid</code> on <code>Field.Root</code> after validation. <code>Field.ErrorMessage</code> then appears, and the control receives <code>aria-invalid</code> and a description that includes the error. <code>required</code> and <code>disabled</code> on the root also reach the control.</p>}
                   {slug === 'field' && example.heading === 'Fieldset' && <p class="max-w-prose">Use <code>Fieldset.Root</code> to group related controls and <code>Fieldset.Legend</code> to name the group. Each nested <code>Field.Root</code> keeps its own label and control association.</p>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
@@ -483,6 +492,8 @@ const reactExamples = slug === 'button'
                     {slug === 'footer' && example.heading === 'Default' && <FooterDemo client:load />}
                     {slug === 'footer' && example.heading === 'Medium' && <FooterMediumDemo client:load />}
                     {slug === 'footer' && example.heading === 'Slim' && <FooterSlimDemo client:load />}
+                    {slug === 'header' && example.heading === 'Default' && <HeaderDemo client:load />}
+                    {slug === 'header' && example.heading === 'Extended' && <HeaderExtendedDemo client:load />}
                     {slug === 'summary-box' && <SummaryBoxDemo client:load />}
                     {slug === 'identifier' && example.heading === 'Default' && <IdentifierDemo client:load />}
                     {slug === 'identifier' && example.heading === 'Multiple parents and logos' && <IdentifierMultipleLogosDemo client:load />}
