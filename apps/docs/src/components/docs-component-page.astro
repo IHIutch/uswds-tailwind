@@ -61,6 +61,8 @@ import IdentifierMultipleLogosDemo from '../examples/identifier-multiple-logos-d
 import identifierMultipleLogosSource from '../examples/identifier-multiple-logos-demo.tsx?raw'
 import IdentifierNoLogosDemo from '../examples/identifier-no-logos-demo'
 import identifierNoLogosSource from '../examples/identifier-no-logos-demo.tsx?raw'
+import InPageNavigationDemo from '../examples/in-page-navigation-demo'
+import inPageNavigationSource from '../examples/in-page-navigation-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -143,6 +145,18 @@ const stepIndicatorExpanded = `<StepIndicator.List>
       </StepIndicator.ListItem>
     ))}
 </StepIndicator.List>`
+const inPageNavShortcut = `<InPageNav.List>
+  <InPageNav.Items />
+</InPageNav.List>`
+const inPageNavExpanded = `<InPageNav.List>
+  {({ headings }) => headings.map(heading => (
+    <InPageNav.Item key={heading.href}>
+      <InPageNav.Link href={heading.href} depth={heading.depth}>
+        {heading.label}
+      </InPageNav.Link>
+    </InPageNav.Item>
+  ))}
+</InPageNav.List>`
 const reactExamples = slug === 'button'
   ? [{ heading: 'Examples', source: buttonSource, filename: 'button-demo.tsx', files: { 'button-demo.tsx': buttonSource } }]
   : slug === 'accordion'
@@ -192,6 +206,8 @@ const reactExamples = slug === 'button'
                       { heading: 'Multiple parents and logos', source: identifierMultipleLogosSource, filename: 'identifier-multiple-logos-demo.tsx', files: { 'identifier-multiple-logos-demo.tsx': identifierMultipleLogosSource } },
                       { heading: 'No logos', source: identifierNoLogosSource, filename: 'identifier-no-logos-demo.tsx', files: { 'identifier-no-logos-demo.tsx': identifierNoLogosSource } },
                     ]
+                  : slug === 'in-page-navigation'
+                    ? [{ heading: 'Default', source: inPageNavigationSource, filename: 'in-page-navigation-demo.tsx', files: { 'in-page-navigation-demo.tsx': inPageNavigationSource } }]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -262,7 +278,7 @@ const reactExamples = slug === 'button'
               <h2>Examples</h2>
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'identifier' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   {slug === 'process-list' && example.heading === 'With headings' && <p>Place a heading inside each title when the step represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
@@ -299,6 +315,7 @@ const reactExamples = slug === 'button'
                     {slug === 'identifier' && example.heading === 'Default' && <IdentifierDemo client:load />}
                     {slug === 'identifier' && example.heading === 'Multiple parents and logos' && <IdentifierMultipleLogosDemo client:load />}
                     {slug === 'identifier' && example.heading === 'No logos' && <IdentifierNoLogosDemo client:load />}
+                    {slug === 'in-page-navigation' && <InPageNavigationDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}
@@ -316,6 +333,15 @@ const reactExamples = slug === 'button'
                     {slug === 'tag' && example.heading === 'Light gray' && <TagLightGrayDemo client:load />}
                   </ComponentPreview>
                   {slug === 'identifier' && example.heading === 'Default' && <p class="max-w-prose mb-12">Replace the placeholder seal with your agency logo and update the agency name, domain, and required links for your site. These examples follow the <a href="https://designsystem.digital.gov/components/identifier/">USWDS identifier patterns</a>.</p>}
+                  {slug === 'in-page-navigation' && (
+                    <div class="max-w-prose mb-12">
+                      <h4>Items shortcut</h4>
+                      <p><code>InPageNav.Items</code> renders an <code>Item</code> and <code>Link</code> for each heading. Inside <code>InPageNav.List</code>, this:</p>
+                      <Code code={inPageNavShortcut} lang="tsx" />
+                      <p>is shorthand for the render function used in the full example above:</p>
+                      <Code code={inPageNavExpanded} lang="tsx" />
+                    </div>
+                  )}
                   {slug === 'pagination' && example.heading === 'Bounded' && (
                     <div class="max-w-prose mb-12">
                       <h4>Pages shortcut</h4>

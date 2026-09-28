@@ -184,7 +184,7 @@ function InPageNavScrollspy({ root, options }: InPageNavScrollspyProps) {
     hrefs,
     options: {
       ...options,
-      root: root?.current ?? null,
+      root,
     },
     onIntersect: setActiveHref,
   })

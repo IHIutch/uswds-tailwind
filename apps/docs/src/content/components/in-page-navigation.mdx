@@ -7,147 +7,46 @@ description: "The in-page navigation allows navigation to specific sections on a
 
 ### Default
 
-<ComponentPreview title="In Page Navigation Default" code={`
-  <nav aria-label="Side navigation">
-    <ul class="border-b border-b-gray-10 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12">
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-        >Parent Link</a>
-      </li>
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-          aria-current="page"
-        >Parent Link</a>
-      </li>
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-        >Parent Link</a>
-      </li>
-    </ul>
-  </nav>
+<ComponentPreview title="In-page navigation Default" code={`
+<div class="flex flex-col gap-8 tablet:flex-row">
+  <div class="tablet:w-64 tablet:shrink-0 tablet:order-last">
+    <nav aria-label="On this page">
+      <div class="text-sm font-bold mb-4 text-black"><h4>On this page</h4></div>
+      <ul class="border-l border-l-gray-10">
+        <li>
+          <a href="#nav-overview" data-depth="1" data-primary class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">Overview</a>
+        </li>
+        <li>
+          <a href="#nav-eligibility" data-depth="2" class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">Eligibility</a>
+        </li>
+        <li>
+          <a href="#nav-application" data-depth="2" class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">How to apply</a>
+        </li>
+        <li>
+          <a href="#nav-next-steps" data-depth="1" data-primary class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">Next steps</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="flex-1 space-y-8 max-h-96 overflow-auto border">
+    <section class="min-h-40">
+      <h4 id="nav-overview" class="text-xl font-bold">Overview</h4>
+      <p>Start with the program overview and the services available to applicants.</p>
+    </section>
+    <section class="min-h-40">
+      <h4 id="nav-eligibility" class="text-xl font-bold">Eligibility</h4>
+      <p>Check the eligibility requirements before preparing an application.</p>
+    </section>
+    <section class="min-h-40">
+      <h4 id="nav-application" class="text-xl font-bold">How to apply</h4>
+      <p>Gather the required documents and submit your application.</p>
+    </section>
+    <section class="min-h-40">
+      <h4 id="nav-next-steps" class="text-xl font-bold">Next steps</h4>
+      <p>Review what happens after you submit your application.</p>
+    </section>
+  </div>
+</div>
 `} />
 
-### Nested
-
-<ComponentPreview title="In Page Navigation Nested" code={`
-  <nav aria-label="Side navigation nested">
-    <ul class="border-b border-b-gray-10 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12">
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-        >Parent Link</a>
-      </li>
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-          aria-current="page"
-        >Parent Link</a>
-        <ul>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-            >Child Link</a>
-          </li>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-              aria-current="true"
-            >Child Link</a>
-          </li>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-            >Child Link</a>
-          </li>
-        </ul>
-      </li>
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-        >Parent Link</a>
-      </li>
-    </ul>
-  </nav>
-`} />
-
-### Deeply Nested
-
-<ComponentPreview title="In Page Navigation Deeply Nested" code={`
-  <nav aria-label="Side navigation deeply nested">
-    <ul class="border-b border-b-gray-10 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12">
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-        >Parent Link</a>
-      </li>
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-          aria-current="page"
-        >Parent Link</a>
-        <ul>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-            >Child Link</a>
-          </li>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-              aria-current="true"
-            >Child Link</a>
-            <ul>
-              <li class="border-t border-t-gray-10">
-                <a
-                  href="#"
-                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-                >Grandchild Link</a>
-              </li>
-              <li class="border-t border-t-gray-10">
-                <a
-                  href="#"
-                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-                  aria-current="true"
-                >Grandchild Link</a>
-              </li>
-              <li class="border-t border-t-gray-10">
-                <a
-                  href="#"
-                  class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-                >Grandchild Link</a>
-              </li>
-            </ul>
-          </li>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-            >Child Link</a>
-          </li>
-        </ul>
-      </li>
-      <li class="border-t border-t-gray-10">
-        <a
-          href="#"
-          class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current]:text-blue-60v aria-[current]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
-        >Parent Link</a>
-      </li>
-    </ul>
-  </nav>
-`} />
+The links use native fragment navigation. The React version also uses `InPageNav.Scrollspy` to track the active section as its content scrolls.
