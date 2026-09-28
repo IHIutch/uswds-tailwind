@@ -97,7 +97,7 @@ export const componentCoverage = {
   'button': page(html(), component('button'), ['Examples'], { reactCovered: true }),
   'card': page(html(), component('card'), ['Vertical', 'Horizontal', 'Group'], { reactCovered: true }),
   'character-count': page(component('character-count'), component('character-count'), ['Example']),
-  'checkbox': page(html(), component('checkbox'), ['Default', 'Tiled']),
+  'checkbox': page(html(), component('checkbox'), ['Default', 'Tiled'], { reactCovered: true }),
   'collection': page(html(), component('collection'), ['Default', 'Headings Only', 'Calendar', 'Media Thumbnail'], { reactCovered: true }),
   'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value']),
   'date-picker': page(component('date-picker'), component('date-picker'), ['Example']),
