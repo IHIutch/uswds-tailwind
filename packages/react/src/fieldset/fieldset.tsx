@@ -16,11 +16,12 @@ export function useFieldsetContext() {
 const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootProps>(
   (props, forwardedRef) => {
     const fieldset = useFieldset(props)
+    const mergedProps = mergeProps(fieldset.getRootProps(), props)
 
     return (
       <FieldsetContext.Provider value={fieldset}>
         <fieldset
-          {...props}
+          {...mergedProps}
           ref={composeRefs(fieldset.refs.rootRef, forwardedRef)}
         />
       </FieldsetContext.Provider>
