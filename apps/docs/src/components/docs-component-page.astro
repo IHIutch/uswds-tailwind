@@ -47,6 +47,8 @@ import CardHorizontalDemo from '../examples/card-horizontal-demo'
 import cardHorizontalSource from '../examples/card-horizontal-demo.tsx?raw'
 import CardVerticalDemo from '../examples/card-vertical-demo'
 import cardVerticalSource from '../examples/card-vertical-demo.tsx?raw'
+import CharacterCountDemo from '../examples/character-count-demo'
+import characterCountSource from '../examples/character-count-demo.tsx?raw'
 import CheckboxDemo from '../examples/checkbox-demo'
 import checkboxSource from '../examples/checkbox-demo.tsx?raw'
 import CheckboxTiledDemo from '../examples/checkbox-tiled-demo'
@@ -239,6 +241,8 @@ const reactExamples = slug === 'button'
                 { heading: 'Horizontal', source: cardHorizontalSource, filename: 'card-horizontal-demo.tsx', files: { 'card-horizontal-demo.tsx': cardHorizontalSource } },
                 { heading: 'Group', source: cardGroupSource, filename: 'card-group-demo.tsx', files: { 'card-group-demo.tsx': cardGroupSource } },
               ]
+            : slug === 'character-count'
+              ? [{ heading: 'Example', source: characterCountSource, filename: 'character-count-demo.tsx', files: { 'character-count-demo.tsx': characterCountSource } }]
             : slug === 'checkbox'
               ? [
                   { heading: 'Default', source: checkboxSource, filename: 'checkbox-demo.tsx', files: { 'checkbox-demo.tsx': checkboxSource } },
@@ -407,6 +411,7 @@ const reactExamples = slug === 'button'
                     {slug === 'card' && example.heading === 'Vertical' && <CardVerticalDemo client:load />}
                     {slug === 'card' && example.heading === 'Horizontal' && <CardHorizontalDemo client:load />}
                     {slug === 'card' && example.heading === 'Group' && <CardGroupDemo client:load />}
+                    {slug === 'character-count' && <CharacterCountDemo client:load />}
                     {slug === 'checkbox' && example.heading === 'Default' && <CheckboxDemo client:load />}
                     {slug === 'checkbox' && example.heading === 'Tiled' && <CheckboxTiledDemo client:load />}
                     {slug === 'collection' && example.heading === 'Default' && <CollectionDemo client:load />}

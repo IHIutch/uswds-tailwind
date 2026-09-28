@@ -96,7 +96,7 @@ export const componentCoverage = {
   'button-group': page(html(), component('button-group'), ['Default', 'Segmented', 'Segmented Red', 'Segmented Outline'], { reactCovered: true }),
   'button': page(html(), component('button'), ['Examples'], { reactCovered: true }),
   'card': page(html(), component('card'), ['Vertical', 'Horizontal', 'Group'], { reactCovered: true }),
-  'character-count': page(component('character-count'), component('character-count'), ['Example']),
+  'character-count': page(component('character-count'), component('character-count'), ['Example'], { reactCovered: true }),
   'checkbox': page(html(), component('checkbox'), ['Default', 'Tiled'], { reactCovered: true }),
   'collection': page(html(), component('collection'), ['Default', 'Headings Only', 'Calendar', 'Media Thumbnail'], { reactCovered: true }),
   'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value']),
