@@ -138,7 +138,7 @@ export const componentCoverage = {
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
   'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Sortable']),
   'tag': page(html(), component('tag'), ['Default', 'Large', 'Vivid orange', 'Light gray'], { reactCovered: true }),
-  'text-input': page(html(), component('input', 'Exported as Input.'), ['Example']),
+  'text-input': page(html(), component('input', 'Exported as Input.'), ['Example'], { reactCovered: true }),
   'time-picker': page(vanillaComposition(['combobox']), component('time-picker'), ['Example'], { reactCovered: true, variants: { Example: { dependencies: ['combobox'] } } }),
   'tooltip': page(component('tooltip'), component('tooltip'), ['Example'], { reactCovered: true }),
   'validation': page(html('Unpublished guidance; no Vanilla initializer.'), unavailable('Validation is unpublished and has no React Validation export.', 'Use Field, Input, and native validation attributes for accessible form feedback.', 'text-input'), [], { published: false }),
