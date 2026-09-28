@@ -102,6 +102,7 @@ export const componentCoverage = {
   'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value']),
   'date-picker': page(component('date-picker'), component('date-picker'), ['Example']),
   'date-range-picker': page(component('date-range-picker'), component('date-picker', 'Use DatePicker with range selection; there is no React DateRangePicker export.'), ['Example']),
+  'field': page(html('Field composition uses native labels, hints, and validity states in Vanilla; there is no Field initializer.'), component('field'), ['Input and hint', 'Error message', 'Success state', 'Select', 'Textarea'], { reactCovered: true }),
   'file-input': page(component('file-input'), component('file-input'), ['Default', 'Specific File Types', 'Accept Multiple Files']),
   'footer': page(vanillaComposition(['accordion']), component('footer'), ['Default', 'Medium', 'Slim'], {
     variants: { Default: { dependencies: ['accordion'], blockedReason: accordionBlockReason } },
@@ -119,7 +120,7 @@ export const componentCoverage = {
   'identifier': page(html(), component('identifier'), ['Default', 'Multiple parents and logos', 'No logos'], { reactCovered: true }),
   'in-page-navigation': page(html(), component('in-page-navigation'), ['Default'], { reactCovered: true }),
   'input-group': page(html(), component('input-group'), ['Example'], { reactCovered: true }),
-  'input-mask': page(component('input-mask'), component('input-mask'), ['Example']),
+  'input-mask': page(component('input-mask'), component('input-mask'), ['Example'], { reactCovered: true }),
   'language-selector': page(vanillaComposition(['dropdown']), composition('Language selector has no React package export.', 'Compose a language switcher with native links or the React Dropdown component where a menu is appropriate.', 'link'), ['Toggle', 'Dropdown'], { variants: { Dropdown: { dependencies: ['dropdown'] } } }),
   'link': page(html(), component('link'), ['Example']),
   'list': page(html(), styling('List is a Tailwind styling pattern, with no React List export.', 'Use semantic ul/ol elements and the classes shown here.'), ['Example']),
@@ -151,7 +152,6 @@ export const missingComponentDocs = {
   },
   react: {
     'dropdown': { reason: 'Component is exported but has no dedicated docs page.', alternative: 'language-selector' },
-    'field': { reason: 'Form composition primitive is exported but has no dedicated docs page.', alternative: 'text-input' },
     'fieldset': { reason: 'Form grouping primitive is exported but has no dedicated docs page.', alternative: 'radio-buttons' },
     'nav': { reason: 'Navigation primitive is exported but has no dedicated docs page.', alternative: 'header' },
     'side-navigation': { reason: 'Navigation component is exported but has no dedicated docs page.', alternative: 'in-page-navigation' },
