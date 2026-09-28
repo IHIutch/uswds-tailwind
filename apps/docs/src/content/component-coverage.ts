@@ -105,6 +105,7 @@ export const componentCoverage = {
   'field': page(html('Field composition uses native labels, hints, and validity states in Vanilla; there is no Field initializer.'), component('field', undefined, ['fieldset']), ['Input and hint', 'Error message', 'Select', 'Textarea', 'Fieldset'], { reactCovered: true }),
   'file-input': page(component('file-input'), component('file-input'), ['Default', 'Specific File Types', 'Accept Multiple Files'], { reactCovered: true }),
   'footer': page(vanillaComposition(['accordion']), component('footer'), ['Default', 'Medium', 'Slim'], {
+    reactCovered: true,
     variants: { Default: { dependencies: ['accordion'], blockedReason: accordionBlockReason } },
     publicBlockNotice: 'The Default footer’s accordion sections are temporarily unavailable; Medium and Slim remain usable.',
   }),
