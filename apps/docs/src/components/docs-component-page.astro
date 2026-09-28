@@ -135,6 +135,8 @@ import TagLightGrayDemo from '../examples/tag-light-gray-demo'
 import tagLightGraySource from '../examples/tag-light-gray-demo.tsx?raw'
 import TagVividOrangeDemo from '../examples/tag-vivid-orange-demo'
 import tagVividOrangeSource from '../examples/tag-vivid-orange-demo.tsx?raw'
+import TooltipDemo from '../examples/tooltip-demo'
+import tooltipSource from '../examples/tooltip-demo.tsx?raw'
 
 interface Props { slug: string, library: Library }
 const { slug, library } = Astro.props
@@ -315,6 +317,8 @@ const reactExamples = slug === 'button'
                       { heading: 'Vivid orange', source: tagVividOrangeSource, filename: 'tag-vivid-orange-demo.tsx', files: { 'tag-vivid-orange-demo.tsx': tagVividOrangeSource } },
                       { heading: 'Light gray', source: tagLightGraySource, filename: 'tag-light-gray-demo.tsx', files: { 'tag-light-gray-demo.tsx': tagLightGraySource } },
                     ]
+                : slug === 'tooltip'
+                  ? [{ heading: 'Example', source: tooltipSource, filename: 'tooltip-demo.tsx', files: { 'tooltip-demo.tsx': tooltipSource } }]
     : null
 ---
 
@@ -434,6 +438,7 @@ const reactExamples = slug === 'button'
                     {slug === 'tag' && example.heading === 'Large' && <TagLargeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Vivid orange' && <TagVividOrangeDemo client:load />}
                     {slug === 'tag' && example.heading === 'Light gray' && <TagLightGrayDemo client:load />}
+                    {slug === 'tooltip' && <TooltipDemo client:load />}
                   </ComponentPreview>
                   {slug === 'identifier' && example.heading === 'Default' && <p class="max-w-prose mb-12">Replace the placeholder seal with your agency logo and update the agency name, domain, and required links for your site. These examples follow the <a href="https://designsystem.digital.gov/components/identifier/">USWDS identifier patterns</a>.</p>}
                   {slug === 'in-page-navigation' && (

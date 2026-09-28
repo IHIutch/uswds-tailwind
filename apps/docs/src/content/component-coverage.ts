@@ -140,7 +140,7 @@ export const componentCoverage = {
   'tag': page(html(), component('tag'), ['Default', 'Large', 'Vivid orange', 'Light gray'], { reactCovered: true }),
   'text-input': page(html(), component('input', 'Exported as Input.'), ['Example']),
   'time-picker': page(vanillaComposition(['combobox']), component('time-picker'), ['Example'], { variants: { Example: { dependencies: ['combobox'] } } }),
-  'tooltip': page(component('tooltip'), component('tooltip'), ['Example']),
+  'tooltip': page(component('tooltip'), component('tooltip'), ['Example'], { reactCovered: true }),
   'validation': page(html('Unpublished guidance; no Vanilla initializer.'), unavailable('Validation is unpublished and has no React Validation export.', 'Use Field, Input, and native validation attributes for accessible form feedback.', 'text-input'), [], { published: false }),
 } as const satisfies Record<string, PageCoverage>
 
