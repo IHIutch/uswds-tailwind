@@ -122,7 +122,7 @@ export const componentCoverage = {
   'input-group': page(html(), component('input-group'), ['Example'], { reactCovered: true }),
   'input-mask': page(component('input-mask'), component('input-mask'), ['Example'], { reactCovered: true }),
   'language-selector': page(vanillaComposition(['dropdown']), composition('Language selector has no React package export.', 'Compose a language switcher with native links or the React Dropdown component where a menu is appropriate.', 'link'), ['Toggle', 'Dropdown'], { variants: { Dropdown: { dependencies: ['dropdown'] } } }),
-  'link': page(html(), component('link'), ['Example']),
+  'link': page(html(), component('link'), ['Example'], { reactCovered: true }),
   'list': page(html(), styling('List is a Tailwind styling pattern, with no React List export.', 'Use semantic ul/ol elements and the classes shown here.'), ['Example']),
   'memorable-date': page(html(), component('memorable-date'), ['Example']),
   'modal': page(component('modal'), component('modal'), ['Default', 'Large', 'Forced Action']),
