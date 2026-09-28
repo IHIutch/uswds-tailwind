@@ -25,7 +25,7 @@ export interface RadioGroupItemContextProps {
 }
 
 // ============================================================================
-// Variants (CVA)
+// Variants
 // ============================================================================
 
 const radioVariants = tv({
