@@ -7,62 +7,22 @@ description: "Use input prefixes and suffixes to show symbols or abbreviations t
 
 <ComponentPreview title="Input Group" code={`
   <div class="space-y-12">
-
     <div class="max-w-xs">
-      <label
-        for="prefix"
-        class="block"
-      >Credit card number</label>
-      <div class="mt-2 relative flex items-center">
-        <div
-          aria-hidden="true"
-          class="select-none pointer-events-none absolute left-0 whitespace-nowrap px-2 text-gray-50 flex items-center"
-        >
+      <label for="card-number" class="block">Credit card number</label>
+      <div class="mt-2 max-w-mobile-lg relative flex items-center">
+        <div aria-hidden="true" class="select-none pointer-events-none absolute left-0 whitespace-nowrap px-2 text-gray-50 flex items-center">
           <div class="icon-[material-symbols--credit-card-outline] size-6"></div>
         </div>
-        <input
-          id="prefix"
-          class="pl-10 p-2 w-full h-10 border border-gray-60-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-        />
+        <input id="card-number" inputmode="numeric" autocomplete="cc-number" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:border-red-60v invalid:border-4 invalid:py-1 valid:border-green-cool-40v valid:border-4 valid:py-1 bg-white pl-10" />
       </div>
     </div>
 
-    <div class="max-w-xs">
-      <label
-        for="prefix-error"
-        class="block"
-      >Credit card number (Error)</label>
-      <div class="mt-2 relative flex items-center">
-        <div
-          aria-hidden="true"
-          class="select-none pointer-events-none absolute left-0 whitespace-nowrap px-2 text-gray-50 flex items-center"
-        >
-          <div class="icon-[material-symbols--credit-card-outline] size-6"></div>
-        </div>
-        <input
-          id="prefix-error"
-          class="pl-10 p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-          data-invalid="true"
-        />
+    <div class="max-w-28">
+      <label for="weight" class="block">Weight, in pounds</label>
+      <div class="mt-2 max-w-mobile-lg relative flex items-center">
+        <input id="weight" inputmode="decimal" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:border-red-60v invalid:border-4 invalid:py-1 valid:border-green-cool-40v valid:border-4 valid:py-1 bg-white pr-10" />
+        <div aria-hidden="true" class="select-none pointer-events-none absolute right-0 whitespace-nowrap px-2 text-gray-50">lbs.</div>
       </div>
     </div>
-
-    <div class="max-w-xs">
-      <label
-        for="suffix"
-        class="block"
-      >Weight, in pounds</label>
-      <div class="mt-2 relative flex items-center w-28">
-        <input
-          id="suffix"
-          class="pr-10 p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-        />
-        <div
-          aria-hidden="true"
-          class="select-none pointer-events-none absolute right-0 whitespace-nowrap px-2 text-gray-50"
-        >lbs.</div>
-      </div>
-    </div>
-
   </div>
 `} />
