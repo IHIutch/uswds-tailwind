@@ -63,6 +63,8 @@ import IdentifierNoLogosDemo from '../examples/identifier-no-logos-demo'
 import identifierNoLogosSource from '../examples/identifier-no-logos-demo.tsx?raw'
 import InPageNavigationDemo from '../examples/in-page-navigation-demo'
 import inPageNavigationSource from '../examples/in-page-navigation-demo.tsx?raw'
+import InputGroupDemo from '../examples/input-group-demo'
+import inputGroupSource from '../examples/input-group-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -208,6 +210,8 @@ const reactExamples = slug === 'button'
                     ]
                   : slug === 'in-page-navigation'
                     ? [{ heading: 'Default', source: inPageNavigationSource, filename: 'in-page-navigation-demo.tsx', files: { 'in-page-navigation-demo.tsx': inPageNavigationSource } }]
+                  : slug === 'input-group'
+                    ? [{ heading: 'Example', source: inputGroupSource, filename: 'input-group-demo.tsx', files: { 'input-group-demo.tsx': inputGroupSource } }]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -316,6 +320,7 @@ const reactExamples = slug === 'button'
                     {slug === 'identifier' && example.heading === 'Multiple parents and logos' && <IdentifierMultipleLogosDemo client:load />}
                     {slug === 'identifier' && example.heading === 'No logos' && <IdentifierNoLogosDemo client:load />}
                     {slug === 'in-page-navigation' && <InPageNavigationDemo client:load />}
+                    {slug === 'input-group' && <InputGroupDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}

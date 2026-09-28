@@ -118,7 +118,7 @@ export const componentCoverage = {
   'icon-list': page(html(), composition('Icon list is a markup pattern, with no React IconList export.', 'Compose list elements, icons, and the documented classes in React.'), ['Default', 'Simple Content', 'Rich Content', 'Custom Size', 'Custom Size & Rich Content']),
   'identifier': page(html(), component('identifier'), ['Default', 'Multiple parents and logos', 'No logos'], { reactCovered: true }),
   'in-page-navigation': page(html(), component('in-page-navigation'), ['Default'], { reactCovered: true }),
-  'input-group': page(html(), component('input-group'), ['Example']),
+  'input-group': page(html(), component('input-group'), ['Example'], { reactCovered: true }),
   'input-mask': page(component('input-mask'), component('input-mask'), ['Example']),
   'language-selector': page(vanillaComposition(['dropdown']), composition('Language selector has no React package export.', 'Compose a language switcher with native links or the React Dropdown component where a menu is appropriate.', 'link'), ['Toggle', 'Dropdown'], { variants: { Dropdown: { dependencies: ['dropdown'] } } }),
   'link': page(html(), component('link'), ['Example']),
