@@ -55,8 +55,7 @@ description: "A select for month followed by two text fields is the easiest way 
           <input
             id="day"
             class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-            minlength="4"
-            maxlength="4"
+            maxlength="2"
             pattern="[0-9]*"
             inputmode="numeric"
             aria-describedby="date-hint"
@@ -73,7 +72,8 @@ description: "A select for month followed by two text fields is the easiest way 
           <input
             id="year"
             class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-            maxlength="2"
+            minlength="4"
+            maxlength="4"
             pattern="[0-9]*"
             inputmode="numeric"
             aria-describedby="date-hint"
