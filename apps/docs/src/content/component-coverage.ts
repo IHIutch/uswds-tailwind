@@ -129,7 +129,7 @@ export const componentCoverage = {
   'pagination': page(html(), component('pagination'), ['Bounded', 'Unbounded'], { reactCovered: true }),
   'process-list': page(html(), component('process-list'), ['Default', 'With headings', 'No Text', 'Custom Sizing'], { reactCovered: true }),
   'prose': page(html(), styling('Prose is a typography styling pattern, with no React Prose export.', 'Apply the documented prose classes to a semantic container in React.'), ['Usage']),
-  'radio-buttons': page(html(), component('radio-group', 'Exported as RadioGroup.'), ['Default', 'Tiled']),
+  'radio-buttons': page(html(), component('radio-group', 'Exported as RadioGroup.'), ['Default', 'Tiled'], { reactCovered: true }),
   'range-slider': page(html(), component('range-slider'), ['Example']),
   'search': page(html(), component('search'), ['Default', 'Large', 'Icon Button']),
   'select': page(html(), component('select'), ['Default', 'Disabled']),
