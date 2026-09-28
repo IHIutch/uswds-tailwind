@@ -125,7 +125,7 @@ export const componentCoverage = {
   'link': page(html(), component('link'), ['Example'], { reactCovered: true }),
   'list': page(html(), styling('List is a Tailwind styling pattern, with no React List export.', 'Use semantic ul/ol elements and the classes shown here.'), ['Example']),
   'memorable-date': page(html(), component('memorable-date'), ['Example'], { reactCovered: true }),
-  'modal': page(component('modal'), component('modal'), ['Default', 'Large', 'Forced Action']),
+  'modal': page(component('modal'), component('modal'), ['Default', 'Large', 'Forced Action'], { reactCovered: true }),
   'pagination': page(html(), component('pagination'), ['Bounded', 'Unbounded'], { reactCovered: true }),
   'process-list': page(html(), component('process-list'), ['Default', 'With headings', 'No Text', 'Custom Sizing'], { reactCovered: true }),
   'prose': page(html(), styling('Prose is a typography styling pattern, with no React Prose export.', 'Apply the documented prose classes to a semantic container in React.'), ['Usage']),
