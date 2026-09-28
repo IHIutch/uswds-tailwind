@@ -79,6 +79,8 @@ import InputMaskDemo from '../examples/input-mask-demo'
 import inputMaskSource from '../examples/input-mask-demo.tsx?raw'
 import LinkDemo from '../examples/link-demo'
 import linkSource from '../examples/link-demo.tsx?raw'
+import MemorableDateDemo from '../examples/memorable-date-demo'
+import memorableDateSource from '../examples/memorable-date-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -238,6 +240,8 @@ const reactExamples = slug === 'button'
                     ? [{ heading: 'Example', source: inputMaskSource, filename: 'input-mask-demo.tsx', files: { 'input-mask-demo.tsx': inputMaskSource } }]
                   : slug === 'link'
                     ? [{ heading: 'Example', source: linkSource, filename: 'link-demo.tsx', files: { 'link-demo.tsx': linkSource } }]
+                  : slug === 'memorable-date'
+                    ? [{ heading: 'Example', source: memorableDateSource, filename: 'memorable-date-demo.tsx', files: { 'memorable-date-demo.tsx': memorableDateSource } }]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -357,6 +361,7 @@ const reactExamples = slug === 'button'
                     {slug === 'input-group' && <InputGroupDemo client:load />}
                     {slug === 'input-mask' && <InputMaskDemo client:load />}
                     {slug === 'link' && <LinkDemo client:load />}
+                    {slug === 'memorable-date' && <MemorableDateDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}

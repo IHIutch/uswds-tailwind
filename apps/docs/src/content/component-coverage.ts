@@ -124,7 +124,7 @@ export const componentCoverage = {
   'language-selector': page(vanillaComposition(['dropdown']), composition('Language selector has no React package export.', 'Compose a language switcher with native links or the React Dropdown component where a menu is appropriate.', 'link'), ['Toggle', 'Dropdown'], { variants: { Dropdown: { dependencies: ['dropdown'] } } }),
   'link': page(html(), component('link'), ['Example'], { reactCovered: true }),
   'list': page(html(), styling('List is a Tailwind styling pattern, with no React List export.', 'Use semantic ul/ol elements and the classes shown here.'), ['Example']),
-  'memorable-date': page(html(), component('memorable-date'), ['Example']),
+  'memorable-date': page(html(), component('memorable-date'), ['Example'], { reactCovered: true }),
   'modal': page(component('modal'), component('modal'), ['Default', 'Large', 'Forced Action']),
   'pagination': page(html(), component('pagination'), ['Bounded', 'Unbounded'], { reactCovered: true }),
   'process-list': page(html(), component('process-list'), ['Default', 'With headings', 'No Text', 'Custom Sizing'], { reactCovered: true }),
