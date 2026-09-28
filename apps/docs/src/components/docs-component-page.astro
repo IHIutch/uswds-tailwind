@@ -55,6 +55,16 @@ import CollectionHeadingsDemo from '../examples/collection-headings-demo'
 import collectionHeadingsSource from '../examples/collection-headings-demo.tsx?raw'
 import CollectionThumbnailDemo from '../examples/collection-thumbnail-demo'
 import collectionThumbnailSource from '../examples/collection-thumbnail-demo.tsx?raw'
+import FieldErrorDemo from '../examples/field-error-demo'
+import fieldErrorSource from '../examples/field-error-demo.tsx?raw'
+import FieldInputDemo from '../examples/field-input-demo'
+import fieldInputSource from '../examples/field-input-demo.tsx?raw'
+import FieldSelectDemo from '../examples/field-select-demo'
+import fieldSelectSource from '../examples/field-select-demo.tsx?raw'
+import FieldSuccessDemo from '../examples/field-success-demo'
+import fieldSuccessSource from '../examples/field-success-demo.tsx?raw'
+import FieldTextareaDemo from '../examples/field-textarea-demo'
+import fieldTextareaSource from '../examples/field-textarea-demo.tsx?raw'
 import IdentifierDemo from '../examples/identifier-demo'
 import identifierSource from '../examples/identifier-demo.tsx?raw'
 import IdentifierMultipleLogosDemo from '../examples/identifier-multiple-logos-demo'
@@ -65,6 +75,8 @@ import InPageNavigationDemo from '../examples/in-page-navigation-demo'
 import inPageNavigationSource from '../examples/in-page-navigation-demo.tsx?raw'
 import InputGroupDemo from '../examples/input-group-demo'
 import inputGroupSource from '../examples/input-group-demo.tsx?raw'
+import InputMaskDemo from '../examples/input-mask-demo'
+import inputMaskSource from '../examples/input-mask-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -200,6 +212,14 @@ const reactExamples = slug === 'button'
                   { heading: 'Calendar', source: collectionCalendarSource, filename: 'collection-calendar-demo.tsx', files: { 'collection-calendar-demo.tsx': collectionCalendarSource } },
                   { heading: 'Media Thumbnail', source: collectionThumbnailSource, filename: 'collection-thumbnail-demo.tsx', files: { 'collection-thumbnail-demo.tsx': collectionThumbnailSource } },
                 ]
+              : slug === 'field'
+                ? [
+                    { heading: 'Input and hint', source: fieldInputSource, filename: 'field-input-demo.tsx', files: { 'field-input-demo.tsx': fieldInputSource } },
+                    { heading: 'Error message', source: fieldErrorSource, filename: 'field-error-demo.tsx', files: { 'field-error-demo.tsx': fieldErrorSource } },
+                    { heading: 'Success state', source: fieldSuccessSource, filename: 'field-success-demo.tsx', files: { 'field-success-demo.tsx': fieldSuccessSource } },
+                    { heading: 'Select', source: fieldSelectSource, filename: 'field-select-demo.tsx', files: { 'field-select-demo.tsx': fieldSelectSource } },
+                    { heading: 'Textarea', source: fieldTextareaSource, filename: 'field-textarea-demo.tsx', files: { 'field-textarea-demo.tsx': fieldTextareaSource } },
+                  ]
               : slug === 'summary-box'
                 ? [{ heading: 'Example', source: summaryBoxSource, filename: 'summary-box-demo.tsx', files: { 'summary-box-demo.tsx': summaryBoxSource } }]
                 : slug === 'identifier'
@@ -212,6 +232,8 @@ const reactExamples = slug === 'button'
                     ? [{ heading: 'Default', source: inPageNavigationSource, filename: 'in-page-navigation-demo.tsx', files: { 'in-page-navigation-demo.tsx': inPageNavigationSource } }]
                   : slug === 'input-group'
                     ? [{ heading: 'Example', source: inputGroupSource, filename: 'input-group-demo.tsx', files: { 'input-group-demo.tsx': inputGroupSource } }]
+                  : slug === 'input-mask'
+                    ? [{ heading: 'Example', source: inputMaskSource, filename: 'input-mask-demo.tsx', files: { 'input-mask-demo.tsx': inputMaskSource } }]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -280,9 +302,12 @@ const reactExamples = slug === 'button'
 ? (
             <div class="docs-prose max-w-none">
               <h2>Examples</h2>
+              {slug === 'field' && <p class="max-w-prose">Use <code>Field.Root</code> when you want a React form control to share a label, hint, and validation state. Wrap one control per field. <code>Field.Label</code> and <code>Field.Description</code> provide the control’s label and accessible description; <code>Input</code>, <code>Textarea</code>, and <code>Select.Field</code> read that context.</p>}
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'field' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {slug === 'field' && example.heading === 'Error message' && <p class="max-w-prose">Set <code>invalid</code> on <code>Field.Root</code> after validation. <code>Field.ErrorMessage</code> then appears, and the control receives <code>aria-invalid</code> and a description that includes the error. <code>required</code> and <code>disabled</code> on the root also reach the control.</p>}
+                  {slug === 'field' && example.heading === 'Success state' && <p class="max-w-prose">Apply the <a href="https://designsystem.digital.gov/components/text-input/">USWDS success style</a> after validation succeeds. It uses a 4px green border and reduced vertical padding.</p>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   {slug === 'process-list' && example.heading === 'With headings' && <p>Place a heading inside each title when the step represents a section of the page. Choose the heading level to fit the page structure.</p>}
                   <ComponentPreview
@@ -315,12 +340,18 @@ const reactExamples = slug === 'button'
                     {slug === 'collection' && example.heading === 'Headings Only' && <CollectionHeadingsDemo client:load />}
                     {slug === 'collection' && example.heading === 'Calendar' && <CollectionCalendarDemo client:load />}
                     {slug === 'collection' && example.heading === 'Media Thumbnail' && <CollectionThumbnailDemo client:load />}
+                    {slug === 'field' && example.heading === 'Input and hint' && <FieldInputDemo client:load />}
+                    {slug === 'field' && example.heading === 'Error message' && <FieldErrorDemo client:load />}
+                    {slug === 'field' && example.heading === 'Success state' && <FieldSuccessDemo client:load />}
+                    {slug === 'field' && example.heading === 'Select' && <FieldSelectDemo client:load />}
+                    {slug === 'field' && example.heading === 'Textarea' && <FieldTextareaDemo client:load />}
                     {slug === 'summary-box' && <SummaryBoxDemo client:load />}
                     {slug === 'identifier' && example.heading === 'Default' && <IdentifierDemo client:load />}
                     {slug === 'identifier' && example.heading === 'Multiple parents and logos' && <IdentifierMultipleLogosDemo client:load />}
                     {slug === 'identifier' && example.heading === 'No logos' && <IdentifierNoLogosDemo client:load />}
                     {slug === 'in-page-navigation' && <InPageNavigationDemo client:load />}
                     {slug === 'input-group' && <InputGroupDemo client:load />}
+                    {slug === 'input-mask' && <InputMaskDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}

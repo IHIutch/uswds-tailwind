@@ -1,0 +1,68 @@
+---
+title: "Field"
+description: "Group a form control with its label, helpful instructions, and validation message."
+---
+
+Use one field for each form control. In React, `Field.Root` shares the label, description, and validation state with an `Input`, `Textarea`, or `Select.Field` inside it. The Vanilla examples show the equivalent HTML relationships.
+
+In Vanilla, connect each label with `for` and each hint or error with `aria-describedby`. Set `aria-invalid="true"` when validation fails. Apply the [USWDS success style](https://designsystem.digital.gov/components/text-input/) explicitly when validation succeeds. There is no separate Field initializer.
+
+## Examples
+
+### Input and hint
+
+<ComponentPreview title="Input and hint" code={`
+  <div class="max-w-xs">
+    <label for="field-email" class="block">Email address</label>
+    <div id="field-email-hint" class="text-gray-50">We will send updates to this address.</div>
+    <input id="field-email" type="email" aria-describedby="field-email-hint" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
+  </div>
+`} />
+
+### Error message
+
+<ComponentPreview title="Error message" code={`
+  <div class="max-w-xs">
+    <label for="field-error-email" class="block">Email address</label>
+    <div id="field-error-hint" class="text-gray-50">Enter the address where we can reach you.</div>
+    <div id="field-error-text" class="mt-0.5 text-red-60v font-bold">Enter a valid email address.</div>
+    <input id="field-error-email" type="email" aria-invalid="true" aria-describedby="field-error-hint field-error-text" class="p-2 w-full h-10 border-4 border-red-60v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
+  </div>
+`} />
+
+### Success state
+
+<ComponentPreview title="Success state" code={`
+  <div class="max-w-xs">
+    <label for="field-success-email" class="block">Email address</label>
+    <div id="field-success-hint" class="text-gray-50">We will send updates to this address.</div>
+    <input id="field-success-email" type="email" value="alex@example.gov" aria-describedby="field-success-hint" class="p-2 w-full h-10 border-4 border-green-cool-40v py-1 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
+  </div>
+`} />
+
+### Select
+
+<ComponentPreview title="Select" code={`
+  <div class="max-w-xs">
+    <label for="field-select" class="block">Contact method</label>
+    <div id="field-select-hint" class="text-gray-50">Choose how you would like a reply.</div>
+    <div class="relative flex items-center mt-2">
+      <select id="field-select" aria-describedby="field-select-hint" class="appearance-none p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v">
+        <option value="" disabled selected>Select a method</option>
+        <option value="email">Email</option>
+        <option value="phone">Phone</option>
+      </select>
+      <div aria-hidden="true" class="pointer-events-none absolute right-0 px-2"><div class="icon-[material-symbols--unfold-more] size-5"></div></div>
+    </div>
+  </div>
+`} />
+
+### Textarea
+
+<ComponentPreview title="Textarea" code={`
+  <div class="max-w-xs">
+    <label for="field-message" class="block">Message</label>
+    <div id="field-message-hint" class="text-gray-50">Include any details that will help us respond.</div>
+    <textarea id="field-message" aria-describedby="field-message-hint" class="p-2 w-full max-w-mobile-lg h-40 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"></textarea>
+  </div>
+`} />

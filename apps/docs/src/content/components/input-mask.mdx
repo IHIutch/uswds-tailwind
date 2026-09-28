@@ -6,220 +6,55 @@ description: "An input mask is a string expression that constrains input to supp
 ## Example
 
 <ComponentPreview title="Input Mask" code={`
- <div class="space-y-12">
-
-    <div
-      class="max-w-xs"
-      data-part="input-mask-root"
-    >
-      <label
-        for="ssn"
-        class="block"
-      >Social Security Number</label>
-      <div
-        id="input-hint"
-        class="text-gray-50"
-      >For example, 123 45 6789</div>
-      <div class="mt-2 relative">
-        <div
-          aria-hidden="true"
-          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
-        >
-          <span
-            data-part="placeholder"
-            class="text-gray-50"
-          ></span>
+  <div class="space-y-12">
+    <div class="max-w-xs" data-part="input-mask-root">
+      <label for="mask-ssn" class="block">Social Security Number</label>
+      <div id="hint-ssn" class="text-gray-50">For example, 123 45 6789</div>
+      <div class="relative mt-2">
+        <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
+          <span data-part="placeholder" class="text-gray-50"></span>
         </div>
-        <input
-          data-part="input-mask-input"
-          id="ssn"
-          pattern="^(?!(000|666|9))\d{3} (?!00)\d{2} (?!0000)\d{4}$"
-          placeholder="___ __ ____"
-          aria-describedby="input-hint"
-          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
-        />
+        <input id="mask-ssn" data-part="input-mask-input" inputmode="numeric" autocomplete="off" placeholder="___ __ ____" aria-describedby="hint-ssn" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
 
-    <div
-      class="max-w-xs"
-      data-part="input-mask-root"
-    >
-      <label
-        for="phone"
-        class="block"
-      >US Telephone Number</label>
-      <div
-        id="input-hint-phone"
-        class="text-gray-50"
-      >For example, (123) 456-7890</div>
-      <div class="mt-2 relative">
-        <div
-          aria-hidden="true"
-          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
-        >
-          <span
-            data-part="placeholder"
-            class="text-gray-50"
-          ></span>
+    <div class="max-w-xs" data-part="input-mask-root">
+      <label for="mask-phone" class="block">US Telephone Number</label>
+      <div id="hint-phone" class="text-gray-50">For example, 123-456-7890</div>
+      <div class="relative mt-2">
+        <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
+          <span data-part="placeholder" class="text-gray-50"></span>
         </div>
-        <input
-          data-part="input-mask-input"
-          id="phone"
-          pattern="\d{3}-\d{3}-\d{4}"
-          placeholder="___-___-____"
-          aria-describedby="input-hint-phone"
-          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
-        />
+        <input id="mask-phone" data-part="input-mask-input" inputmode="tel" autocomplete="tel" placeholder="___-___-____" aria-describedby="hint-phone" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
 
-
-    <div
-      class="max-w-xs"
-      data-part="input-mask-root"
-    >
-      <label
-        for="zip"
-        class="block"
-      >ZIP Code</label>
-      <div
-        id="input-hint-zip"
-        class="text-gray-50"
-      >For example, 12345-6789</div>
-      <div class="mt-2 relative">
-        <div
-          aria-hidden="true"
-          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
-        >
-          <span
-            data-part="placeholder"
-            class="text-gray-50"
-          ></span>
+    <div class="max-w-xs" data-part="input-mask-root">
+      <label for="mask-zip" class="block">ZIP Code</label>
+      <div id="hint-zip" class="text-gray-50">For example, 12345-6789</div>
+      <div class="relative mt-2">
+        <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
+          <span data-part="placeholder" class="text-gray-50"></span>
         </div>
-        <input
-          data-part="input-mask-input"
-          pattern="^[0-9]{5}(?:-[0-9]{4})?$"
-          placeholder="_____-____"
-          id="zip"
-          aria-describedby="input-hint-zip"
-          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
-        />
+        <input id="mask-zip" data-part="input-mask-input" inputmode="numeric" autocomplete="postal-code" placeholder="_____-____" aria-describedby="hint-zip" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
 
-    <div
-      class="max-w-xs"
-      data-part="input-mask-root"
-    >
-      <label
-        for="alpha"
-        class="block"
-      >Alphanumeric</label>
-      <div
-        id="input-hint-alpha"
-        class="text-gray-50"
-      >For example, A1B 2C3</div>
-      <div class="mt-2 relative">
-        <div
-          aria-hidden="true"
-          class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
-        >
-          <span
-            data-part="placeholder"
-            class="text-gray-50"
-          ></span>
+    <div class="max-w-xs" data-part="input-mask-root">
+      <label for="mask-alpha" class="block">Alphanumeric</label>
+      <div id="hint-alpha" class="text-gray-50">For example, A1B 2C3</div>
+      <div class="relative mt-2">
+        <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
+          <span data-part="placeholder" class="text-gray-50"></span>
         </div>
-        <input
-          data-part="input-mask-input"
-          pattern="\w\d\w \d\w\d"
-          placeholder="___ ___"
-          data-charset="A#A #A#"
-          id="alpha"
-          aria-describedby="input-hint-alpha"
-          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
-        />
+        <input id="mask-alpha" data-part="input-mask-input" data-charset="A#A #A#" autocomplete="off" placeholder="___ ___" aria-describedby="hint-alpha" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
-
   </div>
-  `} />
+`} />
 
-## Component API
+## Vanilla API
 
-### Root
+Call `inputMaskInit()` from `@uswds-tailwind/compat/input-mask` or include the package's auto initializer. Add `data-part="input-mask-root"` to each wrapper and `data-part="input-mask-input"` to its input. Set the native `placeholder` to the mask format. For mixed letters and numbers, add a `data-charset` pattern such as `A#A #A#` (`A` accepts a letter and `#` accepts a digit). An optional `pattern` attribute validates the completed value.
 
-<ContentList>
-
-  - #### `x-input-mask`
-    
-    Custom **Alpine** directive that marks the **Input Mask Root**.
-
-</ContentList>
-
-### Input
-
-<ContentList>
-
-  - #### `x-input-mask:input`
-    
-    Custom **Alpine** directive that marks the **Input Mask**.
-
-  - #### `x-mask`
-
-    **Type:** `string`
-
-    This attribute defines the values that the input will accept. `9` allows any number, `a` allows any letter, `*` allows any character.
-
-  - #### `placeholder`
-
-    **Type:** `string`
-
-    The displayed "empty" values of the input. Used to show the **Input Mask Mask Placeholder** value.
-  
-  - #### `pattern`
-
-     **Type:** `RegExp`
-
-    Native form validation attribute. 
-    
-    Take care to ensure this value validates according to your `x-mask` attribute. A mismatch may lead to a confusing user experience where users are unable to submit a form.
-
-</ContentList>
-
-### Input Display
-
-  Matches the value entered in the input. Match the width of the value entered in the input.
-
-<ContentList>
-
-  - #### `x-input-mask:input-placeholder`
-    
-    Custom **Alpine** directive that marks the **Input Mask Input Placeholder**.
-
-</ContentList>
-
-### Mask Display
-
-Displays the updated mask value as the user types.
-
-<ContentList>
-
-  - #### `x-input-mask:mask-placeholder`
-    
-    Custom **Alpine** directive that marks the **Input Mask Mask Placeholder**.
-
-
-</ContentList>
-
-## Progressive Enhancement
-
-Because this component relies on JavaScript, use the native `placeholder` attribute to define the "mask" value. 
-
-Once JavaScript loads, the `placeholder` attribute will be removed and used as the initial value of the **Input Mask Mask Placeholder**. If JavaScript doesn't load, users will see the native placeholder.
-
-## Accessibility
-
-Be sure to show an example of the proper expected formatting. While a placeholder can sometimes be a useful affordance, when used alone, it's not reliable enough to ensure users understand the expected format.
-
-This can be achieved by creating an "input hint" and linking that value to the input via the `aria-describedby` attribute, as demonstrated in the examples above.
+The optional `data-part="placeholder"` element shows the remaining mask as users type. Keep a visible format hint and connect it to the input with `aria-describedby`.
