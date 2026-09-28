@@ -5,81 +5,106 @@ description: "The identifier communicates a site's parent agency and displays ag
 
 ## Examples
 
+The examples follow the [USWDS identifier patterns](https://designsystem.digital.gov/components/identifier/) for one parent agency, multiple parents, and no logos.
+
 ### Default
 
-<ComponentPreview title="Identifier" code={`
-  <div class="@container bg-gray-90 text-white pb-4 font-public-sans">
-    <section aria-label="Agency identifier" class="py-4 flex flex-col @tablet:flex-row px-8 gap-4">
-      <div>
-        <a href="#" class="block focus:outline-4 focus:outline-blue-40v">
-          <img src="#" alt="Agency name" class="size-10 rounded-full bg-gray-10 object-cover">
+<ComponentPreview title="Identifier Default" code={`
+<div class="@container bg-gray-90 text-white pb-4 font-public-sans">
+  <div class="max-w-desktop mx-auto px-4 desktop:px-8">
+    <section aria-label="Agency identifier" class="py-4 flex flex-col @tablet:flex-row gap-4">
+      <div class="flex gap-2">
+        <a href="#" aria-label="Parent agency homepage" class="block focus:outline-4 focus:outline-blue-40v h-12 rounded-full overflow-hidden">
+          <span aria-hidden="true" class="flex size-12 items-center justify-center rounded-full bg-gray-30 font-bold text-gray-90">A</span>
         </a>
       </div>
       <section aria-label="Agency description">
         <p class="text-gray-30">domain.gov</p>
-        <p class="font-bold">An official website of the
-          <a href="#" class="text-gray-10 hover:text-gray-5 focus:outline-4 focus:outline-blue-40v underline">Your Agency</a>
-        </p>
+        <p class="font-bold">An official website of the <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">Parent Agency</a></p>
       </section>
     </section>
-    <nav class="px-8 py-2">
+    <nav aria-label="Important links" class="py-2">
       <ul class="columns-1 @tablet:columns-2 @desktop:columns-4 space-y-2">
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >About {Agency shortname}</a>
-        </li>
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >Accessibility statement</a>
-        </li>
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >FOIA requests</a>
-        </li>
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >No FEAR Act data</a>
-        </li>
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >Office of the Inspector General</a>
-        </li>
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >Performance reports</a>
-        </li>
-        <li>
-          <a
-            href="#"
-            class="text-gray-30 hover:text-gray-10 focus:outline-4 focus:outline-blue-40v underline"
-          >Privacy policy</a>
-        </li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">About Parent Agency</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Accessibility statement</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">FOIA requests</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">No FEAR Act data</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Office of the Inspector General</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Performance reports</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Privacy policy</a></li>
       </ul>
     </nav>
-    <section aria-label="U.S. government information and services" class="py-4 px-8">
-      <p>Looking for U.S. government information and services?
-        <a href="#" rel="noreferrer" target="_blank" class="text-gray-10 hover:text-gray-5 focus:outline-4 focus:outline-blue-40v underline after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px font-bold">Visit USA.gov
-          <span class="sr-only">External, opens in a new tab</span>
-        </a>
-      </p>
+    <section aria-label="U.S. government information and services" class="py-4">
+      <p>Looking for U.S. government information and services? <a href="https://www.usa.gov/" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5 after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px font-bold block @desktop:inline">Visit USA.gov</a></p>
     </section>
   </div>
+</div>
 `} />
 
-{/* Multiple parents */}
+Replace the placeholder seal with your agency logo and update the agency name, domain, and required links for your site.
 
-{/* No logos */}
+### Multiple parents and logos
 
-{/* Taxpayer Disclaimer */}
+<ComponentPreview title="Identifier Multiple parents and logos" code={`
+<div class="@container bg-gray-90 text-white pb-4 font-public-sans">
+  <div class="max-w-desktop mx-auto px-4 desktop:px-8">
+    <section aria-label="Agency identifier" class="py-4 flex flex-col @tablet:flex-row gap-4">
+      <div class="flex gap-2">
+        <a href="#" aria-label="Parent agency homepage" class="block focus:outline-4 focus:outline-blue-40v h-12 rounded-full overflow-hidden">
+          <span aria-hidden="true" class="flex size-12 items-center justify-center rounded-full bg-gray-30 font-bold text-gray-90">A</span>
+        </a>
+        <a href="#" aria-label="Partner agency homepage" class="block focus:outline-4 focus:outline-blue-40v h-12 rounded-full overflow-hidden">
+          <span aria-hidden="true" class="flex size-12 items-center justify-center rounded-full bg-gray-30 font-bold text-gray-90">B</span>
+        </a>
+      </div>
+      <section aria-label="Agency description">
+        <p class="text-gray-30">domain.gov</p>
+        <p class="font-bold">An official website of the <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">Parent Agency</a> and the <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">Partner Agency</a></p>
+      </section>
+    </section>
+    <nav aria-label="Important links" class="py-2">
+      <ul class="columns-1 @tablet:columns-2 @desktop:columns-4 space-y-2">
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">About Parent Agency</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Accessibility statement</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">FOIA requests</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">No FEAR Act data</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Office of the Inspector General</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Performance reports</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Privacy policy</a></li>
+      </ul>
+    </nav>
+    <section aria-label="U.S. government information and services" class="py-4">
+      <p>Looking for U.S. government information and services? <a href="https://www.usa.gov/" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5 after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px font-bold block @desktop:inline">Visit USA.gov</a></p>
+    </section>
+  </div>
+</div>
+`} />
+
+### No logos
+
+<ComponentPreview title="Identifier No logos" code={`
+<div class="@container bg-gray-90 text-white pb-4 font-public-sans">
+  <div class="max-w-desktop mx-auto px-4 desktop:px-8">
+    <section aria-label="Agency identifier" class="py-4 flex flex-col @tablet:flex-row gap-4">
+      <section aria-label="Agency description">
+        <p class="text-gray-30">domain.gov</p>
+        <p class="font-bold">An official website of the <a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5">Parent Agency</a></p>
+      </section>
+    </section>
+    <nav aria-label="Important links" class="py-2">
+      <ul class="columns-1 @tablet:columns-2 @desktop:columns-4 space-y-2">
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">About Parent Agency</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Accessibility statement</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">FOIA requests</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">No FEAR Act data</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Office of the Inspector General</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Performance reports</a></li>
+        <li><a href="#" class="text-gray-cool-30 hover:text-gray-cool-10 focus:outline-4 focus:outline-blue-40v underline">Privacy policy</a></li>
+      </ul>
+    </nav>
+    <section aria-label="U.S. government information and services" class="py-4">
+      <p>Looking for U.S. government information and services? <a href="https://www.usa.gov/" class="focus:outline-4 focus:outline-blue-40v underline text-gray-10 visited:text-gray-10 hover:text-gray-5 after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px font-bold block @desktop:inline">Visit USA.gov</a></p>
+    </section>
+  </div>
+</div>
+`} />
