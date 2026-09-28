@@ -99,7 +99,7 @@ export const componentCoverage = {
   'character-count': page(component('character-count'), component('character-count'), ['Example'], { reactCovered: true }),
   'checkbox': page(html(), component('checkbox'), ['Default', 'Tiled'], { reactCovered: true }),
   'collection': page(html(), component('collection'), ['Default', 'Headings Only', 'Calendar', 'Media Thumbnail'], { reactCovered: true }),
-  'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value']),
+  'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value'], { reactCovered: true }),
   'date-picker': page(component('date-picker'), component('date-picker'), ['Example']),
   'date-range-picker': page(component('date-range-picker'), component('date-picker', 'Use DatePicker with range selection; there is no React DateRangePicker export.'), ['Example']),
   'field': page(html('Field composition uses native labels, hints, and validity states in Vanilla; there is no Field initializer.'), component('field', undefined, ['fieldset']), ['Input and hint', 'Error message', 'Select', 'Textarea', 'Fieldset'], { reactCovered: true }),
