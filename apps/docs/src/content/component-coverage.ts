@@ -132,7 +132,7 @@ export const componentCoverage = {
   'radio-buttons': page(html(), component('radio-group', 'Exported as RadioGroup.'), ['Default', 'Tiled'], { reactCovered: true }),
   'range-slider': page(html(), component('range-slider'), ['Example'], { reactCovered: true }),
   'search': page(html(), component('search'), ['Default', 'Large', 'Icon Button'], { reactCovered: true }),
-  'select': page(html(), component('select'), ['Default', 'Disabled']),
+  'select': page(html(), component('select'), ['Default', 'Disabled'], { reactCovered: true }),
   'site-alert': page(html(), composition('Site alert has no React SiteAlert export.', 'Compose a sitewide alert with the React Alert component and the styling on this page.', 'alert'), ['Default', 'Emergency', 'List', 'No Header', 'No Icon', 'Slim']),
   'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels'], { reactCovered: true }),
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
