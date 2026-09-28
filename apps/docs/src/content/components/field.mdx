@@ -5,7 +5,7 @@ description: "Group a form control with its label, helpful instructions, and val
 
 Use one field for each form control. In React, `Field.Root` shares the label, description, and validation state with an `Input`, `Textarea`, or `Select.Field` inside it. Use `Fieldset.Root` and `Fieldset.Legend` to name a group of related fields. The Vanilla examples show the equivalent HTML relationships.
 
-In Vanilla, connect each label with `for` and each hint or error with `aria-describedby`. Set `aria-invalid="true"` when validation fails. Apply the [USWDS success style](https://designsystem.digital.gov/components/text-input/) explicitly when validation succeeds. There is no separate Field initializer.
+In Vanilla, connect each label with `for` and each hint or error with `aria-describedby`. Set `aria-invalid="true"` when validation fails. There is no separate Field initializer.
 
 ## Examples
 
@@ -27,16 +27,6 @@ In Vanilla, connect each label with `for` and each hint or error with `aria-desc
     <div id="field-error-hint" class="text-gray-50">Enter the address where we can reach you.</div>
     <div id="field-error-text" class="mt-0.5 text-red-60v font-bold">Enter a valid email address.</div>
     <input id="field-error-email" type="email" aria-invalid="true" aria-describedby="field-error-hint field-error-text" class="p-2 w-full h-10 border-4 border-red-60v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
-  </div>
-`} />
-
-### Success state
-
-<ComponentPreview title="Success state" code={`
-  <div class="max-w-xs">
-    <label for="field-success-email" class="block">Email address</label>
-    <div id="field-success-hint" class="text-gray-50">We will send updates to this address.</div>
-    <input id="field-success-email" type="email" value="alex@example.gov" aria-describedby="field-success-hint" class="p-2 w-full h-10 border-4 border-green-cool-40v py-1 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
   </div>
 `} />
 
