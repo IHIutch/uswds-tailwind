@@ -7,6 +7,10 @@
     "dev": "vite",
     "preview": "vite preview"
   },
+  "stackblitz": {
+    "installDependencies": false,
+    "startCommand": "node .stackblitz.js && npm install && npm run dev"
+  },
   "dependencies": {
     "@fontsource-variable/merriweather": "catalog:",
     "@fontsource-variable/open-sans": "catalog:",
