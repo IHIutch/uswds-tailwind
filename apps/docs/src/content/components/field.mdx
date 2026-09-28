@@ -3,7 +3,7 @@ title: "Field"
 description: "Group a form control with its label, helpful instructions, and validation message."
 ---
 
-Use one field for each form control. In React, `Field.Root` shares the label, description, and validation state with an `Input`, `Textarea`, or `Select.Field` inside it. The Vanilla examples show the equivalent HTML relationships.
+Use one field for each form control. In React, `Field.Root` shares the label, description, and validation state with an `Input`, `Textarea`, or `Select.Field` inside it. Use `Fieldset.Root` and `Fieldset.Legend` to name a group of related fields. The Vanilla examples show the equivalent HTML relationships.
 
 In Vanilla, connect each label with `for` and each hint or error with `aria-describedby`. Set `aria-invalid="true"` when validation fails. Apply the [USWDS success style](https://designsystem.digital.gov/components/text-input/) explicitly when validation succeeds. There is no separate Field initializer.
 
@@ -65,4 +65,24 @@ In Vanilla, connect each label with `for` and each hint or error with `aria-desc
     <div id="field-message-hint" class="text-gray-50">Include any details that will help us respond.</div>
     <textarea id="field-message" aria-describedby="field-message-hint" class="p-2 w-full max-w-mobile-lg h-40 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v"></textarea>
   </div>
+`} />
+
+### Fieldset
+
+Use a `fieldset` and `legend` for a group of related controls. Keep each control's label associated with its own input.
+
+<ComponentPreview title="Fieldset" code={`
+  <fieldset class="max-w-xs">
+    <legend class="leading-snug max-w-mobile-lg mb-3">Personal information</legend>
+    <div class="space-y-4">
+      <div>
+        <label for="field-first-name" class="block">First name</label>
+        <input id="field-first-name" type="text" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
+      </div>
+      <div>
+        <label for="field-last-name" class="block">Last name</label>
+        <input id="field-last-name" type="text" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v bg-white" />
+      </div>
+    </div>
+  </fieldset>
 `} />
