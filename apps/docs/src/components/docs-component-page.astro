@@ -77,6 +77,8 @@ import InputGroupDemo from '../examples/input-group-demo'
 import inputGroupSource from '../examples/input-group-demo.tsx?raw'
 import InputMaskDemo from '../examples/input-mask-demo'
 import inputMaskSource from '../examples/input-mask-demo.tsx?raw'
+import LinkDemo from '../examples/link-demo'
+import linkSource from '../examples/link-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -234,6 +236,8 @@ const reactExamples = slug === 'button'
                     ? [{ heading: 'Example', source: inputGroupSource, filename: 'input-group-demo.tsx', files: { 'input-group-demo.tsx': inputGroupSource } }]
                   : slug === 'input-mask'
                     ? [{ heading: 'Example', source: inputMaskSource, filename: 'input-mask-demo.tsx', files: { 'input-mask-demo.tsx': inputMaskSource } }]
+                  : slug === 'link'
+                    ? [{ heading: 'Example', source: linkSource, filename: 'link-demo.tsx', files: { 'link-demo.tsx': linkSource } }]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -352,6 +356,7 @@ const reactExamples = slug === 'button'
                     {slug === 'in-page-navigation' && <InPageNavigationDemo client:load />}
                     {slug === 'input-group' && <InputGroupDemo client:load />}
                     {slug === 'input-mask' && <InputMaskDemo client:load />}
+                    {slug === 'link' && <LinkDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}
