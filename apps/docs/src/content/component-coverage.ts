@@ -91,7 +91,7 @@ export const componentCoverage = {
     publicBlockNotice: 'Accordion interaction is temporarily unavailable in these examples.',
   }),
   'alert': page(html(), component('alert'), ['Default', 'Slim', 'No Icon', 'Slim No Icon'], { reactCovered: true }),
-  'banner': page(vanillaComposition(['collapse']), component('banner'), ['Usage'], { variants: { Usage: { dependencies: ['collapse'] } } }),
+  'banner': page(vanillaComposition(['collapse']), component('banner'), ['Usage'], { reactCovered: true, variants: { Usage: { dependencies: ['collapse'] } } }),
   'breadcrumb': page(html(), component('breadcrumb'), ['Default', 'Wrapping'], { reactCovered: true }),
   'button-group': page(html(), component('button-group'), ['Default', 'Segmented', 'Segmented Red', 'Segmented Outline'], { reactCovered: true }),
   'button': page(html(), component('button'), ['Examples'], { reactCovered: true }),
