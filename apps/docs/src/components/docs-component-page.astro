@@ -103,6 +103,8 @@ import RadioButtonsDemo from '../examples/radio-buttons-demo'
 import radioButtonsSource from '../examples/radio-buttons-demo.tsx?raw'
 import RadioButtonsTiledDemo from '../examples/radio-buttons-tiled-demo'
 import radioButtonsTiledSource from '../examples/radio-buttons-tiled-demo.tsx?raw'
+import RangeSliderDemo from '../examples/range-slider-demo'
+import rangeSliderSource from '../examples/range-slider-demo.tsx?raw'
 import StepIndicatorCenteredDemo from '../examples/step-indicator-centered-demo'
 import stepIndicatorCenteredSource from '../examples/step-indicator-centered-demo.tsx?raw'
 import StepIndicatorCountersDemo from '../examples/step-indicator-counters-demo'
@@ -275,6 +277,8 @@ const reactExamples = slug === 'button'
                       { heading: 'Default', source: radioButtonsSource, filename: 'radio-buttons-demo.tsx', files: { 'radio-buttons-demo.tsx': radioButtonsSource } },
                       { heading: 'Tiled', source: radioButtonsTiledSource, filename: 'radio-buttons-tiled-demo.tsx', files: { 'radio-buttons-tiled-demo.tsx': radioButtonsTiledSource } },
                     ]
+                  : slug === 'range-slider'
+                    ? [{ heading: 'Example', source: rangeSliderSource, filename: 'range-slider-demo.tsx', files: { 'range-slider-demo.tsx': rangeSliderSource } }]
                   : slug === 'step-indicator'
                     ? [
                         { heading: 'Default', source: stepIndicatorSource, filename: 'step-indicator-demo.tsx', files: { 'step-indicator-demo.tsx': stepIndicatorSource } },
@@ -394,6 +398,7 @@ const reactExamples = slug === 'button'
                     {slug === 'process-list' && example.heading === 'Custom Sizing' && <ProcessListCustomSizingDemo client:load />}
                     {slug === 'radio-buttons' && example.heading === 'Default' && <RadioButtonsDemo client:load />}
                     {slug === 'radio-buttons' && example.heading === 'Tiled' && <RadioButtonsTiledDemo client:load />}
+                    {slug === 'range-slider' && <RangeSliderDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Default' && <StepIndicatorDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Centered' && <StepIndicatorCenteredDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Counters' && <StepIndicatorCountersDemo client:load />}
