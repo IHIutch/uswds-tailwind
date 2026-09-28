@@ -99,6 +99,10 @@ import ProcessListHeadingsDemo from '../examples/process-list-headings-demo'
 import processListHeadingsSource from '../examples/process-list-headings-demo.tsx?raw'
 import ProcessListNoTextDemo from '../examples/process-list-no-text-demo'
 import processListNoTextSource from '../examples/process-list-no-text-demo.tsx?raw'
+import RadioButtonsDemo from '../examples/radio-buttons-demo'
+import radioButtonsSource from '../examples/radio-buttons-demo.tsx?raw'
+import RadioButtonsTiledDemo from '../examples/radio-buttons-tiled-demo'
+import radioButtonsTiledSource from '../examples/radio-buttons-tiled-demo.tsx?raw'
 import StepIndicatorCenteredDemo from '../examples/step-indicator-centered-demo'
 import stepIndicatorCenteredSource from '../examples/step-indicator-centered-demo.tsx?raw'
 import StepIndicatorCountersDemo from '../examples/step-indicator-counters-demo'
@@ -266,6 +270,11 @@ const reactExamples = slug === 'button'
                       { heading: 'No Text', source: processListNoTextSource, filename: 'process-list-no-text-demo.tsx', files: { 'process-list-no-text-demo.tsx': processListNoTextSource } },
                       { heading: 'Custom Sizing', source: processListCustomSizingSource, filename: 'process-list-custom-sizing-demo.tsx', files: { 'process-list-custom-sizing-demo.tsx': processListCustomSizingSource } },
                     ]
+                : slug === 'radio-buttons'
+                  ? [
+                      { heading: 'Default', source: radioButtonsSource, filename: 'radio-buttons-demo.tsx', files: { 'radio-buttons-demo.tsx': radioButtonsSource } },
+                      { heading: 'Tiled', source: radioButtonsTiledSource, filename: 'radio-buttons-tiled-demo.tsx', files: { 'radio-buttons-tiled-demo.tsx': radioButtonsTiledSource } },
+                    ]
                   : slug === 'step-indicator'
                     ? [
                         { heading: 'Default', source: stepIndicatorSource, filename: 'step-indicator-demo.tsx', files: { 'step-indicator-demo.tsx': stepIndicatorSource } },
@@ -325,7 +334,7 @@ const reactExamples = slug === 'button'
               {slug === 'field' && <p class="max-w-prose">Use <code>Field.Root</code> when you want a React form control to share a label, hint, and validation state. Wrap one control per field. <code>Field.Label</code> and <code>Field.Description</code> provide the control’s label and accessible description; <code>Input</code>, <code>Textarea</code>, and <code>Select.Field</code> read that context.</p>}
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'field' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'field' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'radio-buttons' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'field' && example.heading === 'Error message' && <p class="max-w-prose">Set <code>invalid</code> on <code>Field.Root</code> after validation. <code>Field.ErrorMessage</code> then appears, and the control receives <code>aria-invalid</code> and a description that includes the error. <code>required</code> and <code>disabled</code> on the root also reach the control.</p>}
                   {slug === 'field' && example.heading === 'Success state' && <p class="max-w-prose">Apply the <a href="https://designsystem.digital.gov/components/text-input/">USWDS success style</a> after validation succeeds. It uses a 4px green border and reduced vertical padding.</p>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
@@ -383,6 +392,8 @@ const reactExamples = slug === 'button'
                     {slug === 'process-list' && example.heading === 'With headings' && <ProcessListHeadingsDemo client:load />}
                     {slug === 'process-list' && example.heading === 'No Text' && <ProcessListNoTextDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Custom Sizing' && <ProcessListCustomSizingDemo client:load />}
+                    {slug === 'radio-buttons' && example.heading === 'Default' && <RadioButtonsDemo client:load />}
+                    {slug === 'radio-buttons' && example.heading === 'Tiled' && <RadioButtonsTiledDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Default' && <StepIndicatorDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Centered' && <StepIndicatorCenteredDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Counters' && <StepIndicatorCountersDemo client:load />}
