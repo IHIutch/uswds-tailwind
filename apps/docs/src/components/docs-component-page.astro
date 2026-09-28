@@ -81,6 +81,12 @@ import LinkDemo from '../examples/link-demo'
 import linkSource from '../examples/link-demo.tsx?raw'
 import MemorableDateDemo from '../examples/memorable-date-demo'
 import memorableDateSource from '../examples/memorable-date-demo.tsx?raw'
+import ModalDefaultDemo from '../examples/modal-default-demo'
+import modalDefaultSource from '../examples/modal-default-demo.tsx?raw'
+import ModalForcedActionDemo from '../examples/modal-forced-action-demo'
+import modalForcedActionSource from '../examples/modal-forced-action-demo.tsx?raw'
+import ModalLargeDemo from '../examples/modal-large-demo'
+import modalLargeSource from '../examples/modal-large-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -242,6 +248,12 @@ const reactExamples = slug === 'button'
                     ? [{ heading: 'Example', source: linkSource, filename: 'link-demo.tsx', files: { 'link-demo.tsx': linkSource } }]
                   : slug === 'memorable-date'
                     ? [{ heading: 'Example', source: memorableDateSource, filename: 'memorable-date-demo.tsx', files: { 'memorable-date-demo.tsx': memorableDateSource } }]
+                  : slug === 'modal'
+                    ? [
+                        { heading: 'Default', source: modalDefaultSource, filename: 'modal-default-demo.tsx', files: { 'modal-default-demo.tsx': modalDefaultSource } },
+                        { heading: 'Large', source: modalLargeSource, filename: 'modal-large-demo.tsx', files: { 'modal-large-demo.tsx': modalLargeSource } },
+                        { heading: 'Forced Action', source: modalForcedActionSource, filename: 'modal-forced-action-demo.tsx', files: { 'modal-forced-action-demo.tsx': modalForcedActionSource } },
+                      ]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -313,7 +325,7 @@ const reactExamples = slug === 'button'
               {slug === 'field' && <p class="max-w-prose">Use <code>Field.Root</code> when you want a React form control to share a label, hint, and validation state. Wrap one control per field. <code>Field.Label</code> and <code>Field.Description</code> provide the control’s label and accessible description; <code>Input</code>, <code>Textarea</code>, and <code>Select.Field</code> read that context.</p>}
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
-                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'field' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
+                  {(slug === 'accordion' || slug === 'alert' || slug === 'breadcrumb' || slug === 'button-group' || slug === 'card' || slug === 'collection' || slug === 'field' || slug === 'identifier' || slug === 'in-page-navigation' || slug === 'modal' || slug === 'pagination' || slug === 'process-list' || slug === 'step-indicator' || slug === 'tag') && <h3>{example.heading}</h3>}
                   {slug === 'field' && example.heading === 'Error message' && <p class="max-w-prose">Set <code>invalid</code> on <code>Field.Root</code> after validation. <code>Field.ErrorMessage</code> then appears, and the control receives <code>aria-invalid</code> and a description that includes the error. <code>required</code> and <code>disabled</code> on the root also reach the control.</p>}
                   {slug === 'field' && example.heading === 'Success state' && <p class="max-w-prose">Apply the <a href="https://designsystem.digital.gov/components/text-input/">USWDS success style</a> after validation succeeds. It uses a 4px green border and reduced vertical padding.</p>}
                   {slug === 'accordion' && example.heading === 'With headings' && <p>Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.</p>}
@@ -362,6 +374,9 @@ const reactExamples = slug === 'button'
                     {slug === 'input-mask' && <InputMaskDemo client:load />}
                     {slug === 'link' && <LinkDemo client:load />}
                     {slug === 'memorable-date' && <MemorableDateDemo client:load />}
+                    {slug === 'modal' && example.heading === 'Default' && <ModalDefaultDemo client:load />}
+                    {slug === 'modal' && example.heading === 'Large' && <ModalLargeDemo client:load />}
+                    {slug === 'modal' && example.heading === 'Forced Action' && <ModalForcedActionDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}
