@@ -3,16 +3,19 @@ title: "Tooltip"
 description: "A tooltip is a short descriptive message that appears when a user hovers or focuses on an element."
 ---
 
-This component requires the following JavaScript plugins:
+import ApiTable from "#components/api-table.astro"
+
+
+The Vanilla examples use these JavaScript initializers:
   - [Tooltip](/javascript#tooltip)
 
 ## Example
 
 <ComponentPreview title="Tooltips" code={`
   <div class="p-12 space-y-12">
-    <div data-part="tooltip-root" data-placement="top" class="relative isolate">
+    <div data-scope="tooltip" data-part="root" data-placement="top" class="relative isolate">
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip" data-part="trigger"
         type="button"
         title="Top"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
@@ -20,14 +23,14 @@ This component requires the following JavaScript plugins:
         Show on top
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip" data-part="content"
+        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-visible:opacity-100 opacity-0 absolute top-(--tooltip-top) bottom-(--tooltip-bottom) left-(--tooltip-left) right-(--tooltip-right) m-(--tooltip-margin) transition-opacity duration-100 ease-in-out not-data-[state=open]:hidden data-wrap:max-w-64 data-wrap:whitespace-normal"
       ></div>
     </div>
 
-     <div data-part="tooltip-root" data-placement="right" class="relative isolate">
+     <div data-scope="tooltip" data-part="root" data-placement="right" class="relative isolate">
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip" data-part="trigger"
         type="button"
         title="Right"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
@@ -35,14 +38,14 @@ This component requires the following JavaScript plugins:
         Show on right
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip" data-part="content"
+        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-visible:opacity-100 opacity-0 absolute top-(--tooltip-top) bottom-(--tooltip-bottom) left-(--tooltip-left) right-(--tooltip-right) m-(--tooltip-margin) transition-opacity duration-100 ease-in-out not-data-[state=open]:hidden data-wrap:max-w-64 data-wrap:whitespace-normal"
       ></div>
     </div>
 
-     <div data-part="tooltip-root" data-placement="bottom" class="relative isolate">
+     <div data-scope="tooltip" data-part="root" data-placement="bottom" class="relative isolate">
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip" data-part="trigger"
         type="button"
         title="Bottom"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
@@ -50,14 +53,14 @@ This component requires the following JavaScript plugins:
         Show on bottom
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip" data-part="content"
+        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-visible:opacity-100 opacity-0 absolute top-(--tooltip-top) bottom-(--tooltip-bottom) left-(--tooltip-left) right-(--tooltip-right) m-(--tooltip-margin) transition-opacity duration-100 ease-in-out not-data-[state=open]:hidden data-wrap:max-w-64 data-wrap:whitespace-normal"
       ></div>
     </div>
 
-     <div data-part="tooltip-root" data-placement="left" class="relative isolate">
+     <div data-scope="tooltip" data-part="root" data-placement="left" class="relative isolate">
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip" data-part="trigger"
         type="button"
         title="Left"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
@@ -65,9 +68,139 @@ This component requires the following JavaScript plugins:
         Show on left
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip" data-part="content"
+        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-visible:opacity-100 opacity-0 absolute top-(--tooltip-top) bottom-(--tooltip-bottom) left-(--tooltip-left) right-(--tooltip-right) m-(--tooltip-margin) transition-opacity duration-100 ease-in-out not-data-[state=open]:hidden data-wrap:max-w-64 data-wrap:whitespace-normal"
       ></div>
     </div>
   </div>
 `} />
+
+## Component API
+
+### Initialization
+
+Run after the component markup exists:
+
+```js
+import { tooltipInit } from '@uswds-tailwind/compat/tooltip'
+
+tooltipInit()
+```
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+#### `root`
+
+Wraps the trigger and tooltip content.
+
+<ApiTable label="tooltip root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"tooltip"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `data-placement` | `"top" \| "bottom" \| "left" \| "right"` | **Authored.** Preferred side: `top`, `bottom`, `left`, or `right`. Defaults to `top`; invalid values fall back to `top`. The `placement` option takes precedence. |
+
+</ApiTable>
+
+#### `trigger`
+
+The element described by the tooltip.
+
+<ApiTable label="tooltip trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"trigger"` | **Authored.** Identifies this part. |
+| `title` | `string` | **Authored.** Optional tooltip text. Copied to the content and removed during initialization. |
+| `aria-describedby` | `ID references` | **Generated.** Relationship to tooltip content. |
+
+</ApiTable>
+
+#### `content`
+
+Author tooltip text here when not using a trigger `title`.
+
+<ApiTable label="tooltip content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"content"` | **Authored.** Identifies this part. |
+| `role` | `"tooltip"` | **Generated.** Accessibility role. |
+| `aria-hidden` | `"true" \| "false"` | **Generated.** Accessibility visibility. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `data-visible` | `presence attribute` | **Generated.** Present after positioning; use for the fade-in. |
+| `data-placement` | `"top" \| "bottom" \| "left" \| "right"` | **Generated.** Resolved side of the trigger; may differ from the preferred side to fit available space. |
+| `data-wrap` | `presence attribute` | **Generated.** Present when width needs to be constrained. |
+
+</ApiTable>
+
+**CSS variables**
+
+<ApiTable label="Tooltip CSS variables">
+
+| Variable | Purpose |
+| --- | --- |
+| `--tooltip-top`, `--tooltip-bottom` | Vertical position. |
+| `--tooltip-left`, `--tooltip-right` | Horizontal position. |
+| `--tooltip-margin` | Positioning offset. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="tooltip JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `placement` | Preferred side: `top`, `bottom`, `left`, or `right`. Overrides `data-placement`; defaults to `top`. |
+| `defaultOpen` | `boolean`. Initial uncontrolled state; defaults to `false`. |
+| `open` | `boolean`. Controlled state; your application supplies updates after change callbacks. |
+| `id, ids` | Customize the instance identifier and generated element IDs. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Tooltip methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `api.setOpen(open)` | `void` | Requests an open-state change. |
+| `destroy()` | `void` | Stops the instance; does not restore a removed title or the original HTML. |
+
+</ApiTable>
+
+```js
+import { Tooltip } from '@uswds-tailwind/compat/tooltip'
+
+const tooltip = Tooltip.getOrCreateInstance(
+  '[data-scope="tooltip"][data-part="root"]',
+)
+
+tooltip.api.setOpen(true)
+```
+
+See [initialization and cleanup](/javascript#instance-lifecycle).
+
+### Callbacks
+
+<ApiTable label="Tooltip callbacks">
+
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onOpenChange` | `{ open: boolean }` | An open-state change is requested. |
+
+</ApiTable>
+
+Pass callbacks in instance options. These are JavaScript functions, not emitted DOM events.
+
+### Accessibility
+
+- Give the trigger an accessible name independently of the tooltip.
+- Hover or focus reveals it; leaving, blurring, or Escape dismisses it.
+- Keep essential instructions visible and interactive controls outside the tooltip.

@@ -3,6 +3,9 @@ title: "Date range picker"
 description: "A date range picker helps users select a range between two dates."
 ---
 
+import ApiTable from "#components/api-table.astro"
+
+
 ## Example
 
 <ComponentPreview title="Date Picker" minHeight="384px" resize={false}  mark={[/data-part="[^\"]*"/g]} code={`
@@ -189,3 +192,99 @@ description: "A date range picker helps users select a range between two dates."
   </div>
 `} />
 
+## Component API
+
+### Initialization
+
+```js
+import { dateRangePickerInit } from '@uswds-tailwind/compat/date-range-picker'
+
+dateRangePickerInit()
+```
+
+`DateRangePicker` is the Vanilla instance class. It uses the date-picker machine in range mode, not a separate range machine. React uses `DatePicker` with range selection and has no `DateRangePicker` export.
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+Use each part name as its `data-part` value. Keep the shared calendar template from the example.
+
+#### `date-range-picker-root`
+
+Wraps both inputs and the calendar.
+
+<ApiTable label="date-range-picker-root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-min-date, data-max-date` | `ISO date strings` | **Authored.** Date bounds using ISO strings such as `2026-09-28`. |
+| `disabled, readonly` | `boolean attributes` | **Authored.** Presence enables the corresponding state. |
+
+</ApiTable>
+
+#### `date-range-picker-start-input`
+
+Start date entry field.
+
+<ApiTable label="date-range-picker-start-input attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | **Authored.** Initial start date. |
+
+</ApiTable>
+
+#### `date-range-picker-end-input`
+
+End date entry field.
+
+<ApiTable label="date-range-picker-end-input attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | **Authored.** Initial end date. |
+
+</ApiTable>
+
+#### `date-picker-trigger`
+
+Calendar button for one endpoint.
+
+<ApiTable label="date-picker-trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-target` | `"start" \| "end"` | **Authored.** `"start"` or `"end"`, identifying the endpoint. |
+
+</ApiTable>
+
+#### `date-picker-content`
+
+Shared calendar with the day, month, and year views and their templates from the example.
+
+#### `date-picker-start-status`
+
+Optional start-date announcement region.
+
+#### `date-picker-end-status`
+
+Optional end-date announcement region.
+
+### Configuration
+
+The wrapper always sets `selectionMode` to `range`.
+
+At construction, the wrapper reads date bounds and disabled or read-only state from the root, and initial dates from the inputs. These values override matching constructor options. Later attribute changes do not update the component.
+
+### Accessibility
+
+Give each endpoint a distinct visible label, form `name`, and format hint. Preserve separate hint/error relationships so users can identify which endpoint needs attention.
+
+### Lifecycle
+
+Retain an explicitly constructed `DateRangePicker` for cleanup and call `destroy()` before removing its markup.
+
+The convenience initializer returns no instance array and this wrapper has no legacy ID-based `getInstance()` map.
+
+See [instance lifecycle](/javascript#instance-lifecycle).

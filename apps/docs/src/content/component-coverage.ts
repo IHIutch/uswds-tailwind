@@ -40,7 +40,6 @@ const reactExampleReason = 'React package API exists, but this page currently pr
 const reactCoveredReason = 'A live React preview and its TSX source are available on the React page.'
 const unsupportedReason = 'This page has no equivalent React package component. Use the linked composition or styling guidance.'
 const vanillaCoveredReason = 'The existing HTML preview covers this variant.'
-const accordionBlockReason = 'The Vanilla Accordion wrapper calls getTriggerProps/getContentProps/open/close, but the machine exposes getItemTriggerProps/getItemContentProps/show/hide.'
 
 interface VariantOverride {
   dependencies?: readonly string[]
@@ -89,8 +88,6 @@ function html(note = 'Use the documented HTML and Tailwind classes; this page ha
 export const componentCoverage = {
   'accordion': page(component('accordion'), component('accordion'), ['Default', 'With headings', 'Multiselectable', 'Bordered'], {
     reactCovered: true,
-    variants: Object.fromEntries(['Default', 'With headings', 'Multiselectable', 'Bordered'].map(heading => [heading, { blockedReason: accordionBlockReason }])),
-    publicBlockNotice: 'Accordion interaction is temporarily unavailable in these examples.',
   }),
   'alert': page(html(), component('alert'), ['Default', 'Slim', 'No Icon', 'Slim No Icon'], { reactCovered: true }),
   'banner': page(vanillaComposition(['collapse']), component('banner'), ['Usage'], { reactCovered: true, variants: { Usage: { dependencies: ['collapse'] } } }),
@@ -108,17 +105,15 @@ export const componentCoverage = {
   'file-input': page(component('file-input'), component('file-input'), ['Default', 'Specific File Types', 'Accept Multiple Files'], { reactCovered: true }),
   'footer': page(vanillaComposition(['accordion']), component('footer'), ['Default', 'Medium', 'Slim'], {
     reactCovered: true,
-    variants: { Default: { dependencies: ['accordion'], blockedReason: accordionBlockReason } },
-    publicBlockNotice: 'The Default footer’s accordion sections are temporarily unavailable; Medium and Slim remain usable.',
+    variants: { Default: { dependencies: ['accordion'] } },
   }),
   'grid': page(html('Grid is a Tailwind layout pattern, with no Vanilla initializer.'), styling('Grid is a Tailwind layout pattern, with no React Grid export.', 'Use the grid classes in this page with ordinary React elements.'), ['Grid Layout', 'Grid vs Flex', 'Gutters', 'Column Offset', 'Column Wrapping', 'Responsive']),
   'header': page(vanillaComposition(['dropdown', 'modal', 'accordion']), component('header'), ['Default', 'Extended'], {
     reactCovered: true,
     variants: {
-      Default: { dependencies: ['dropdown', 'modal', 'accordion'], blockedReason: accordionBlockReason },
-      Extended: { dependencies: ['dropdown', 'modal', 'accordion'], blockedReason: accordionBlockReason },
+      Default: { dependencies: ['dropdown', 'modal', 'accordion'] },
+      Extended: { dependencies: ['dropdown', 'modal', 'accordion'] },
     },
-    publicBlockNotice: 'The mobile accordion menus are temporarily unavailable in these examples.',
   }),
   'icon-list': page(html(), composition('Icon list is a markup pattern, with no React IconList export.', 'Compose list elements, icons, and the documented classes in React.'), ['Default', 'Simple Content', 'Rich Content', 'Custom Size', 'Custom Size & Rich Content']),
   'identifier': page(html(), component('identifier'), ['Default', 'Multiple parents and logos', 'No logos'], { reactCovered: true }),

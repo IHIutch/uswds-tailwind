@@ -3,7 +3,10 @@ title: "Character count"
 description: "Character count helps users know how much text they can enter when there is a limit on the number of characters."
 ---
 
-This component requires the following JavaScript plugins:
+import ApiTable from "#components/api-table.astro"
+
+
+The Vanilla examples use these JavaScript initializers:
   - [Character Count](/javascript#character-count)
 
 ## Example
@@ -50,69 +53,77 @@ This component requires the following JavaScript plugins:
 
 ## Component API
 
-### Root
+### Initialization
 
-<ContentList>
+```js
+import { characterCountInit } from '@uswds-tailwind/compat/character-count'
 
-  - #### `x-character-count`
-    
-    Custom **Alpine** directive that marks the **Character Count Root**.
-</ContentList>
+characterCountInit()
+```
 
-### Input / Textarea
+Initialize after the markup exists. `CharacterCount` is the corresponding instance class. See [initialization and cleanup](/javascript#instance-lifecycle).
 
-<ContentList>
+### Anatomy
 
-  - #### `x-character-count:input`
-    
-    Custom **Alpine** directive that marks the **Character Count Input**.
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
 
-  - #### `maxlength`
+Use `data-part="character-count-root"` with these descendants:
 
-    **Type:** `number`
-    
-    Sets the limit on the number of characters allowed in the input. This attribute is validated natively by the browser.
+#### `character-count-label`
 
-  - #### `aria-describedby`
+Optional label for the input.
 
-    **Type:** `string`
+<ApiTable label="character-count-label attributes">
 
-    Accessibility attribute that links various input descriptors to the input itself. This attribute accepts multiple values, seperated by a space. 
-    
-</ContentList>
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
 
-### Hint
+</ApiTable>
 
-<ContentList>
+#### `character-count-input`
 
-  <Alert>
-    A hint is made up of several (seemingly redundant) elements to account for [progressive enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) and assisted technology.
-  </Alert>
-      
-  - #### `id`
+Required input or textarea.
 
-    **Type:** `string`
+<ApiTable label="character-count-input attributes">
 
-    Unique value that links static hint element to the input via `aria-describedby`.
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `maxlength` | `integer` | **Authored.** Maximum length. Converted with `Number()` at construction; overrides the `maxLength` option, even when missing or empty. Missing or empty means no limit. Also constrains native browser entry. |
+| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
 
-  - #### `x-character-count:status`
-  
-    Custom **Alpine** directive that marks the **Character Count Status**.
+</ApiTable>
 
-  - #### `aria-hidden="true"`
+#### `character-count-status`
 
-    **Type:** `boolean`
-  
-    Accessibility attribute that hides this element from screen readers.
+Required visual count message.
 
-  - #### `x-character-count:sr-status`
+<ApiTable label="character-count-status attributes">
 
-    Custom **Alpine** directive that marks the **Character Count Screen Reader Status**.
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
+| `aria-hidden` | `"true" \| "false"` | **Generated.** Hides the visual count from assistive technology. |
 
-  - #### `aria-live="polite"`
+</ApiTable>
 
-    **Type:** `string`
+#### `character-count-sr-status`
 
-    Accessibility attribute that is used to notify screen readers of the current character count status when it is changed.
-    
-</ContentList>
+Required screen-reader count message.
+
+<ApiTable label="character-count-sr-status attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `aria-live` | `"polite"` | **Generated.** `"polite"`; announces count updates. |
+
+</ApiTable>
+
+### Accessibility
+
+- Provide a visible label and a static limit hint linked with `aria-describedby`.
+- Keep both status elements: the visual status uses `aria-hidden`; the separate announcement region uses `aria-live="polite"`.
+
+### Lifecycle
+
+Retain explicitly constructed instances and call `destroy()` before removing their markup; the legacy initializer does not return an instance array.

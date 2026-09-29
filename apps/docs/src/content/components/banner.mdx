@@ -3,14 +3,17 @@ title: "Banner"
 description: "Banners identify official websites of government organizations in the United States. They also help visitors understand whether a website is official and secure."
 ---
 
-This component requires the following JavaScript plugins:
+import ApiTable from "#components/api-table.astro"
+
+
+The Vanilla examples use these JavaScript initializers:
   - [Collapse](/javascript#collapse)
 
 ## Usage
 
 <ComponentPreview title="Banner" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} code={`
   <section
-    data-part="collapse-root"
+    data-scope="collapse" data-part="root"
     class="@container bg-gray-5 group"
     aria-label="Official website of the United States government"
   >
@@ -32,7 +35,7 @@ This component requires the following JavaScript plugins:
         </div>
         <button
           type="button"
-          data-part="collapse-trigger"
+          data-scope="collapse" data-part="trigger"
           class="group text-blue-60v cursor-pointer inline-flex items-center underline @max-tablet:data-[state=open]:text-transparent focus:outline-0 @tablet:focus:outline-4 @tablet:focus:outline-blue-40v @max-tablet:after:absolute after:inset-0 focus:after:outline-4 focus:after:-outline-offset-4 focus:after:outline-blue-40v"
         >
           Here&#8217;s how you know
@@ -47,7 +50,7 @@ This component requires the following JavaScript plugins:
       </div>
     </header>
     <div
-      data-part="collapse-content"
+      data-scope="collapse" data-part="content"
       class="py-6 px-3 grid @tablet:grid-cols-2 gap-6 mx-auto max-w-5xl not-data-[state=open]:hidden"
     >
       <div class="flex gap-2">
@@ -95,75 +98,120 @@ This component requires the following JavaScript plugins:
 
 ## Component API
 
-A banner is composed using a `x-collapse` directive, using the following elements: 
+### Initialization
 
-### Root
+Run after the component markup exists:
 
-<ContentList>
-  - #### `<section>`
-    
-    Using a `<section>` element ensures banners can be found by navigating by landmark when using assistive technologies.
+```js
+import { collapseInit } from '@uswds-tailwind/compat/collapse'
 
-  - #### `x-collapse`
-    
-    Custom **Alpine** directive that marks the **Banner Root**.
+collapseInit()
+```
 
-  - #### `aria-label`
+Banner uses Collapse; there is no separate Banner initializer.
 
-    **Type:** `string`
-    
-    **.gov** websites should use the following `aria-label`: 
-    
-    *"Official website of the United States government"*
+### Anatomy
 
-</ContentList>
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
 
-### Trigger
+#### `root`
 
-<ContentList>
-  - #### `<button>`
-    
-    Use a button element as a banner's trigger.
-    
-  - #### `x-collapse:trigger`
-    
-    Custom **Alpine** directive that marks the **Collapse Trigger**.
+The banner section.
 
-    - #### `aria-controls`
-    
-    **Type:** `string`
-  
-    Accessibility attribute that links the **Accordion Trigger** control to it's respective **Accordion Content**. 
-    
-    **Automatically handled with JavaScript.**
-  
-  - #### `aria-expanded`
-    
-    **Type:** `boolean`
-  
-    Accessibility attribute that communicates whether an element is expanded or collapsed. 
-    
-    **Automatically handled with JavaScript.**
-</ContentList>
+<ApiTable label="collapse root attributes">
 
-### Content
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"collapse"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `aria-label` | `string` | **Authored.** Descriptive name for the banner landmark. |
+| `data-state` | `"open" \| "closed"` | **Authored.** Use `"open"` to expand initially; defaults to closed. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
 
-<ContentList>
-  - #### `x-collapse:content`
-    
-    Custom **Alpine** directive that marks the **Collapse Content**.
-  
-  - #### `id`
-    **Type:** `string`
-  
-    Links the **Collapse Content** an it's respective **Collapse Trigger**. 
-    
-    **Automatically handled with JavaScript.**
-  
-  - #### `hidden`
-    **Type:** `boolean`
-  
-    When `true`, content will be hidden. When `false`, content will be visible and `hidden` attribute will be removed. 
-    
-    **Automatically handled with JavaScript.**
-</ContentList>
+</ApiTable>
+
+#### `trigger`
+
+A native button with descriptive text.
+
+<ApiTable label="collapse trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"trigger"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `aria-expanded` | `"true" \| "false"` | **Generated.** Whether the content is expanded. |
+| `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
+
+</ApiTable>
+
+#### `content`
+
+The expandable panel. Keep it inside the same root as its trigger.
+
+<ApiTable label="collapse content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"content"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="collapse JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `defaultOpen` | Initial uncontrolled open state; overrides the authored initial state. |
+| `open` | Controlled open state. Your application must supply the updated value after a change callback. |
+| `id, ids` | Customize the instance identifier and generated element IDs. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Banner methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `open()` | `Promise<void>` | Requests expansion. |
+| `close()` | `Promise<void>` | Requests collapse. |
+| `destroy()` | `void` | Stops the instance and clears its lookup. |
+
+</ApiTable>
+
+```js
+import { Collapse } from '@uswds-tailwind/compat/collapse'
+
+const banner = Collapse.getOrCreateInstance(
+  '[data-scope="collapse"][data-part="root"]',
+)
+
+await banner.open()
+```
+
+Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
+
+See [initialization and cleanup](/javascript#instance-lifecycle).
+
+### Callbacks
+
+<ApiTable label="Banner callbacks">
+
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onOpenChange` | `{ open: boolean }` | An open-state change is requested. |
+
+</ApiTable>
+
+Pass callbacks in instance options. These are JavaScript functions, not emitted DOM events.
+
+### Accessibility
+
+- Supply the landmark name, banner copy, and visible focus styles.
+- Use Enter or Space to activate the native button.

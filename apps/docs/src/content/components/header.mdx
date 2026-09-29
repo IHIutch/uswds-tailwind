@@ -3,7 +3,7 @@ title: "Header"
 description: "A header helps users identify where they are and provides a quick, organized way to reach the main sections of a website."
 ---
 
-This component requires the following JavaScript plugins:
+The Vanilla examples use these JavaScript initializers:
   - [Dropdown](/javascript#dropdown)
   - [Modal](/javascript#modal)
 
@@ -27,7 +27,7 @@ This component requires the following JavaScript plugins:
         </div>
         <div class="@desktop:hidden">
           <button
-            data-part="modal-trigger"
+            data-scope="modal" data-part="trigger"
             data-target="mobile-menu"
             class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
           >Menu</button>
@@ -36,9 +36,9 @@ This component requires the following JavaScript plugins:
           <nav class="flex justify-end items-center pl-2 pb-1">
             <ul class="flex">
               <li class="leading-none">
-                <div data-part="dropdown-root">
+                <div data-scope="dropdown" data-part="root">
                   <button
-                    data-part="dropdown-trigger"
+                    data-scope="dropdown" data-part="trigger"
                     class="after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1 relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden"
                   >
                     <span>Dropdown</span>
@@ -52,26 +52,24 @@ This component requires the following JavaScript plugins:
                     </div>
                   </button>
                   <div
-                    data-part="dropdown-content"
+                    data-scope="dropdown" data-part="content"
                     class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug"
                   >
-                    <a
-                      data-part="dropdown-item"
+                    <div data-scope="dropdown" data-part="item"><a
                       href="#"
                       class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                    >Action</a>
-                    <a
-                      data-part="dropdown-item"
+                    >Action</a></div>
+                    <div data-scope="dropdown" data-part="item"><a
                       href="#"
                       class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                    >Another action</a>
+                    >Another action</a></div>
                   </div>
                 </div>
               </li>
               <li class="leading-none">
-                <div data-part="dropdown-root">
+                <div data-scope="dropdown" data-part="root">
                   <button
-                    data-part="dropdown-trigger"
+                    data-scope="dropdown" data-part="trigger"
                     class=" relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden"
                   >
                     <span>Dropdown</span>
@@ -85,19 +83,17 @@ This component requires the following JavaScript plugins:
                     </div>
                   </button>
                   <div
-                    data-part="dropdown-content"
+                    data-scope="dropdown" data-part="content"
                     class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug"
                   >
-                    <a
-                      data-part="dropdown-item"
+                    <div data-scope="dropdown" data-part="item"><a
                       href="#"
                       class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                    >Action</a>
-                    <a
-                      data-part="dropdown-item"
+                    >Action</a></div>
+                    <div data-scope="dropdown" data-part="item"><a
                       href="#"
                       class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                    >Another action</a>
+                    >Another action</a></div>
                   </div>
                 </div>
               </li>
@@ -137,25 +133,25 @@ This component requires the following JavaScript plugins:
       </div>
     </div>
 
-    <div>
+    <div data-scope="modal" data-part="root" data-value="mobile-menu">
       <div
-        data-part="modal-positioner"
+        data-scope="modal" data-part="positioner"
         data-value="mobile-menu"
         class="fixed z-50 inset-0 overflow-y-auto"
       >
         <nav
-          data-part="modal-content"
+          data-scope="modal" data-part="content"
           class="hidden data-[state=open]:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto animate-in duration-300 ease-in-out slide-in-from-right"
         >
 
           <header
-            data-part="modal-title"
+            data-scope="modal" data-part="title"
             class="sr-only"
           >Menu</header>
 
           <button
             type="button"
-            data-part="modal-close-trigger"
+            data-scope="modal" data-part="close-trigger"
             class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
             aria-label="Close"
           >
@@ -186,13 +182,13 @@ This component requires the following JavaScript plugins:
 
           <ul class="flex flex-col">
             <li class="border-t border-t-gray-10">
-              <div data-part="accordion-root">
+              <div data-scope="accordion" data-part="root">
                 <div
-                  data-part="accordion-item"
+                  data-scope="accordion" data-part="item"
                   data-value="mobile-dropdown-1"
                 >
                   <button
-                    data-part="accordion-trigger"
+                    data-scope="accordion" data-part="item-trigger"
                     class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
                     data-current="true"
                   >
@@ -204,7 +200,7 @@ This component requires the following JavaScript plugins:
                       ></span>
                     </span>
                   </button>
-                  <ul data-part="accordion-content">
+                  <ul data-scope="accordion" data-part="item-content">
                     <li class="border-t border-t-gray-10">
                       <a
                         href="#"
@@ -222,13 +218,13 @@ This component requires the following JavaScript plugins:
               </div>
             </li>
             <li class="border-t border-t-gray-10">
-              <div data-part="accordion-root">
+              <div data-scope="accordion" data-part="root">
                 <div
-                  data-part="accordion-item"
+                  data-scope="accordion" data-part="item"
                   data-value="mobile-dropdown-2"
                 >
                   <button
-                    data-part="accordion-trigger"
+                    data-scope="accordion" data-part="item-trigger"
                     class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
                   >
                     <span
@@ -239,7 +235,7 @@ This component requires the following JavaScript plugins:
                       ></span>
                     </span>
                   </button>
-                  <ul data-part="accordion-content">
+                  <ul data-scope="accordion" data-part="item-content">
                     <li class="border-t border-t-gray-10">
                       <a
                         href="#"
@@ -268,7 +264,7 @@ This component requires the following JavaScript plugins:
       </div>
 
       <div
-        data-part="modal-backdrop"
+        data-scope="modal" data-part="backdrop"
         data-value="mobile-menu"
         class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in-0"
       ></div>
@@ -295,7 +291,7 @@ This component requires the following JavaScript plugins:
         </div>
         <div class="@desktop:hidden">
           <button
-            data-part="modal-trigger"
+            data-scope="modal" data-part="trigger"
             data-target="mobile-extended-menu"
             class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
           >Menu</button>
@@ -305,9 +301,9 @@ This component requires the following JavaScript plugins:
         <nav class="max-w-5xl px-4 mx-auto relative">
           <ul class="flex">
             <li class="leading-none">
-              <div data-part="dropdown-root">
+              <div data-scope="dropdown" data-part="root">
                 <button
-                  data-part="dropdown-trigger"
+                  data-scope="dropdown" data-part="trigger"
                   class="after:bg-blue-60v after:absolute after:-bottom-1 after:inset-x-4 after:h-1 relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden"
                 >
                   <span>Dropdown</span>
@@ -318,26 +314,24 @@ This component requires the following JavaScript plugins:
                   </div>
                 </button>
                 <div
-                  data-part="dropdown-content"
+                  data-scope="dropdown" data-part="content"
                   class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug"
                 >
-                  <a
-                    data-part="dropdown-item"
+                  <div data-scope="dropdown" data-part="item"><a
                     href="#"
                     class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                  >Action</a>
-                  <a
-                    data-part="dropdown-item"
+                  >Action</a></div>
+                  <div data-scope="dropdown" data-part="item"><a
                     href="#"
                     class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                  >Another action</a>
+                  >Another action</a></div>
                 </div>
               </div>
             </li>
             <li class="leading-none">
-              <div data-part="dropdown-root">
+              <div data-scope="dropdown" data-part="root">
                 <button
-                  data-part="dropdown-trigger"
+                  data-scope="dropdown" data-part="trigger"
                   class=" relative flex items-center gap-1 group p-4 aria-expanded:bg-blue-warm-80v aria-[expanded=true]:text-white font-bold text-gray-cool-60 focus:outline-4 focus:outline-blue-40v hover:text-blue-60v hover:after:bg-blue-60v hover:after:absolute hover:after:-bottom-1 hover:after:inset-x-4 hover:after:h-1 aria-expanded:after:hidden"
                 >
                   <span>Dropdown</span>
@@ -348,19 +342,17 @@ This component requires the following JavaScript plugins:
                   </div>
                 </button>
                 <div
-                  data-part="dropdown-content"
+                  data-scope="dropdown" data-part="content"
                   class="outline-none z-10 bg-blue-warm-80v py-2 w-60 leading-snug"
                 >
-                  <a
-                    data-part="dropdown-item"
+                  <div data-scope="dropdown" data-part="item"><a
                     href="#"
                     class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                  >Action</a>
-                  <a
-                    data-part="dropdown-item"
+                  >Action</a></div>
+                  <div data-scope="dropdown" data-part="item"><a
                     href="#"
                     class="flex text-white py-2 px-4 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-                  >Another action</a>
+                  >Another action</a></div>
                 </div>
               </div>
             </li>
@@ -420,30 +412,31 @@ This component requires the following JavaScript plugins:
       </div>
     </div>
 
+    <div data-scope="modal" data-part="root" data-value="mobile-extended-menu">
     <div
-      data-part="modal-backdrop"
+      data-scope="modal" data-part="backdrop"
       data-value="mobile-extended-menu"
       class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in-0"
     ></div>
 
     <div
-      data-part="modal-positioner"
+      data-scope="modal" data-part="positioner"
       data-value="mobile-extended-menu"
       class="fixed z-50 inset-0 overflow-y-auto"
     >
       <nav
-        data-part="modal-content"
+        data-scope="modal" data-part="content"
         class="hidden data-[state=open]:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto animate-in duration-300 ease-in-out slide-in-from-right"
       >
 
         <header
-          data-part="modal-title"
+          data-scope="modal" data-part="title"
           class="sr-only"
         >Menu</header>
 
         <button
           type="button"
-          data-part="modal-close-trigger"
+          data-scope="modal" data-part="close-trigger"
           class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           aria-label="Close"
         >
@@ -452,13 +445,13 @@ This component requires the following JavaScript plugins:
 
         <ul class="flex flex-col">
           <li class="border-t border-t-gray-10">
-            <div data-part="accordion-root">
+            <div data-scope="accordion" data-part="root">
               <div
-                data-part="accordion-item"
+                data-scope="accordion" data-part="item"
                 data-value="mobile-dropdown-1"
               >
                 <button
-                  data-part="accordion-trigger"
+                  data-scope="accordion" data-part="item-trigger"
                   class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
                   data-current="true"
                 >
@@ -470,7 +463,7 @@ This component requires the following JavaScript plugins:
                     ></span>
                   </span>
                 </button>
-                <ul data-part="accordion-content">
+                <ul data-scope="accordion" data-part="item-content">
                   <li class="border-t border-t-gray-10">
                     <a
                       href="#"
@@ -488,13 +481,13 @@ This component requires the following JavaScript plugins:
             </div>
           </li>
           <li class="border-t border-t-gray-10">
-            <div data-part="accordion-root">
+            <div data-scope="accordion" data-part="root">
               <div
-                data-part="accordion-item"
+                data-scope="accordion" data-part="item"
                 data-value="mobile-dropdown-2"
               >
                 <button
-                  data-part="accordion-trigger"
+                  data-scope="accordion" data-part="item-trigger"
                   class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
                 >
                   <span
@@ -505,7 +498,7 @@ This component requires the following JavaScript plugins:
                     ></span>
                   </span>
                 </button>
-                <ul data-part="accordion-content">
+                <ul data-scope="accordion" data-part="item-content">
                   <li class="border-t border-t-gray-10">
                     <a
                       href="#"
@@ -571,6 +564,7 @@ This component requires the following JavaScript plugins:
 
       </nav>
 
+    </div>
     </div>
   </header>
 `} />

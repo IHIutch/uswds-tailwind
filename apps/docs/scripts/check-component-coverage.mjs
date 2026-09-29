@@ -57,7 +57,7 @@ for (const slug of pages) {
       continue
     const markup = lines.slice(preview.start, preview.end).join('\n')
     for (const subpath of Object.keys(packageExports.vanilla).filter(path => path.startsWith('./')).map(path => path.slice(2))) {
-      const used = markup.includes(`data-part="${subpath}-`)
+      const used = markup.includes(`data-part="${subpath}-`) || markup.includes(`data-scope="${subpath}"`)
       const declared = example.vanilla.dependencies.includes(subpath)
       if (item.vanilla.kind !== 'component' && used !== declared)
         errors.push(`${slug}/${example.heading}: ${subpath} initializer use differs from coverage`)

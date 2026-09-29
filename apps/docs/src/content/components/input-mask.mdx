@@ -3,58 +3,172 @@ title: "Input mask"
 description: "An input mask is a string expression that constrains input to support valid input values."
 ---
 
+import ApiTable from "#components/api-table.astro"
+
+
 ## Example
 
 <ComponentPreview title="Input Mask" code={`
   <div class="space-y-12">
-    <div class="max-w-xs" data-part="input-mask-root">
-      <label for="mask-ssn" class="block">Social Security Number</label>
+    <div class="max-w-xs" data-scope="input-mask" data-part="root" id="mask-ssn">
+      <label for="input-mask:mask-ssn:input" class="block">Social Security Number</label>
       <div id="hint-ssn" class="text-gray-50">For example, 123 45 6789</div>
       <div class="relative mt-2">
         <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
-          <span data-part="placeholder" class="text-gray-50"></span>
+          <span data-scope="input-mask" data-part="content" class="text-gray-50 [&>i]:invisible [&>i]:not-italic"></span>
         </div>
-        <input id="mask-ssn" data-part="input-mask-input" inputmode="numeric" autocomplete="off" placeholder="___ __ ____" aria-describedby="hint-ssn" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
+        <input id="input-mask:mask-ssn:input" data-scope="input-mask" data-part="input" inputmode="numeric" autocomplete="off" placeholder="___ __ ____" aria-describedby="hint-ssn" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
 
-    <div class="max-w-xs" data-part="input-mask-root">
-      <label for="mask-phone" class="block">US Telephone Number</label>
+    <div class="max-w-xs" data-scope="input-mask" data-part="root" id="mask-phone">
+      <label for="input-mask:mask-phone:input" class="block">US Telephone Number</label>
       <div id="hint-phone" class="text-gray-50">For example, 123-456-7890</div>
       <div class="relative mt-2">
         <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
-          <span data-part="placeholder" class="text-gray-50"></span>
+          <span data-scope="input-mask" data-part="content" class="text-gray-50 [&>i]:invisible [&>i]:not-italic"></span>
         </div>
-        <input id="mask-phone" data-part="input-mask-input" inputmode="tel" autocomplete="tel" placeholder="___-___-____" aria-describedby="hint-phone" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
+        <input id="input-mask:mask-phone:input" data-scope="input-mask" data-part="input" inputmode="tel" autocomplete="tel" placeholder="___-___-____" aria-describedby="hint-phone" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
 
-    <div class="max-w-xs" data-part="input-mask-root">
-      <label for="mask-zip" class="block">ZIP Code</label>
+    <div class="max-w-xs" data-scope="input-mask" data-part="root" id="mask-zip">
+      <label for="input-mask:mask-zip:input" class="block">ZIP Code</label>
       <div id="hint-zip" class="text-gray-50">For example, 12345-6789</div>
       <div class="relative mt-2">
         <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
-          <span data-part="placeholder" class="text-gray-50"></span>
+          <span data-scope="input-mask" data-part="content" class="text-gray-50 [&>i]:invisible [&>i]:not-italic"></span>
         </div>
-        <input id="mask-zip" data-part="input-mask-input" inputmode="numeric" autocomplete="postal-code" placeholder="_____-____" aria-describedby="hint-zip" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
+        <input id="input-mask:mask-zip:input" data-scope="input-mask" data-part="input" inputmode="numeric" autocomplete="postal-code" placeholder="_____-____" aria-describedby="hint-zip" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
 
-    <div class="max-w-xs" data-part="input-mask-root">
-      <label for="mask-alpha" class="block">Alphanumeric</label>
+    <div class="max-w-xs" data-scope="input-mask" data-part="root" id="mask-alpha">
+      <label for="input-mask:mask-alpha:input" class="block">Alphanumeric</label>
       <div id="hint-alpha" class="text-gray-50">For example, A1B 2C3</div>
       <div class="relative mt-2">
         <div aria-hidden="true" class="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre">
-          <span data-part="placeholder" class="text-gray-50"></span>
+          <span data-scope="input-mask" data-part="content" class="text-gray-50 [&>i]:invisible [&>i]:not-italic"></span>
         </div>
-        <input id="mask-alpha" data-part="input-mask-input" data-charset="A#A #A#" autocomplete="off" placeholder="___ ___" aria-describedby="hint-alpha" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
+        <input id="input-mask:mask-alpha:input" data-scope="input-mask" data-part="input" data-charset="A#A #A#" autocomplete="off" placeholder="___ ___" aria-describedby="hint-alpha" class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v placeholder:invisible" />
       </div>
     </div>
   </div>
 `} />
 
-## Vanilla API
+## Component API
 
-Call `inputMaskInit()` from `@uswds-tailwind/compat/input-mask` or include the package's auto initializer. Add `data-part="input-mask-root"` to each wrapper and `data-part="input-mask-input"` to its input. Set the native `placeholder` to the mask format. For mixed letters and numbers, add a `data-charset` pattern such as `A#A #A#` (`A` accepts a letter and `#` accepts a digit). An optional `pattern` attribute validates the completed value.
+### Initialization
 
-The optional `data-part="placeholder"` element shows the remaining mask as users type. Keep a visible format hint and connect it to the input with `aria-describedby`.
+Run after the component markup exists:
+
+```js
+import { inputMaskInit } from '@uswds-tailwind/compat/input-mask'
+
+inputMaskInit()
+```
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+#### `root`
+
+Wraps the input and mask overlay.
+
+<ApiTable label="input-mask root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"input-mask"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+
+</ApiTable>
+
+#### `input`
+
+Required native input.
+
+<ApiTable label="input-mask input attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"input"` | **Authored.** Identifies this part. |
+| `placeholder` | `string` | **Authored.** Mask format, such as `___-___-____`. The `mask` option takes precedence. |
+| `data-charset` | `string` | **Authored.** Character rules, such as `A#A #A#`: `A` accepts a letter and `#` a digit. The `charset` option takes precedence. |
+| `value` | `string` | **Authored.** Initial value; the `defaultValue` option takes precedence. |
+| `pattern` | `string` | **Authored.** Native browser validation pattern; does not configure the mask. |
+| `maxlength` | `integer` | **Generated.** Derived from the mask. |
+| `data-placeholder` | `string` | **Generated.** Derived from the mask; the native `placeholder` is removed. |
+| `id` | `string` | **Generated.** Defaults to `input-mask:<root-id>:input`; use `ids.input` to override. |
+
+</ApiTable>
+
+#### `content`
+
+Required overlay. The runtime generates children for entered text and the remaining mask. Style the generated `i` with `visibility: hidden` and normal font style to reserve space for entered text.
+
+<ApiTable label="input-mask content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"content"` | **Authored.** Identifies this part. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="input-mask JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `mask` | `string`. Mask format; overrides the input placeholder. |
+| `charset` | `string`. Character rules; overrides `data-charset`. |
+| `defaultValue` | `string`. Initial value; overrides the input value. |
+| `value` | `string`. Controlled value; takes precedence over the default. |
+| `ids.input` | Custom input ID for label composition. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Input Mask methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `api.setValue(value)` | `void` | Requests a formatted value update. |
+| `destroy()` | `void` | Stops the instance; does not restore original markup. |
+
+</ApiTable>
+
+```js
+import { InputMask } from '@uswds-tailwind/compat/input-mask'
+
+const mask = InputMask.getOrCreateInstance(
+  '[data-scope="input-mask"][data-part="root"]',
+)
+
+mask.api.setValue('2025550123')
+```
+
+See [initialization and cleanup](/javascript#instance-lifecycle).
+
+### Callbacks
+
+<ApiTable label="Input Mask callbacks">
+
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onValueChange` | `{ value: string }` | The formatted value changes or a controlled change is requested. |
+
+</ApiTable>
+
+Pass callbacks in instance options. These are JavaScript functions, not emitted DOM events.
+
+### Accessibility
+
+- Link the label to the generated input ID, or supply `ids.input`.
+- Keep a visible format hint and connect it with `aria-describedby`.
+- For a controlled value, your application must supply updates after change callbacks. See [shared lifecycle](/javascript#instance-lifecycle).

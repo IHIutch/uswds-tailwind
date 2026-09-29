@@ -3,6 +3,9 @@ title: "Language selector"
 description: "The consistent placement, interface, and behavior of the language selection component allows users to easily find and access content in the language the user is most comfortable in."
 ---
 
+import ApiTable from "#components/api-table.astro"
+
+
 ## Examples
 
 ### Toggle
@@ -22,80 +25,73 @@ This component requires the following JavaScript plugin:
   <div class="space-y-8">
 
     <section>
-      <div data-part="dropdown-root">
+      <div data-scope="dropdown" data-part="root">
         <button
-          data-part="dropdown-trigger"
+          data-scope="dropdown" data-part="trigger"
           class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
         >
           Languages
         </button>
         <div
-          data-part="dropdown-content"
+          data-scope="dropdown" data-part="content"
           class="outline-hidden bg-blue-warm-80v w-60 divide-y divide-gray-cool-10 z-30"
         >
-          <a
-            data-part="dropdown-item"
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="ar">
               <strong>العربية</strong>
               (Arabic) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="zh">
               <strong>简体字</strong>
               (Chinese - Simplified) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="en">
               <strong>English</strong>
             </span>
-          </a>
-          <a
-            data-part="dropdown-item"
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="es">
               <strong>Español</strong>
               (Spanish) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="fr">
               <strong>Français</strong>
               (French) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="it">
               <strong>Italiano</strong>
               (Italian) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
             href="#"
             class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
           >
             <span lang="ru">
               <strong>Pусский</strong>
               (Russian) </span>
-          </a>
+          </a></div>
         </div>
       </div>
     </section>
@@ -105,130 +101,133 @@ This component requires the following JavaScript plugin:
 
 ## Component API
 
-### Root
+### Initialization
 
-<ContentList>
+Run after the component markup exists:
 
-  - #### `x-dropdown`
-    
-    Custom **Alpine** directive that marks the **Dropdown Root**.
-  
-</ContentList>
+```js
+import { dropdownInit } from '@uswds-tailwind/compat/dropdown'
 
-### Trigger
+dropdownInit()
+```
 
-<ContentList>
+Only the Dropdown example needs initialization. Toggle uses ordinary links.
 
-  - #### `x-dropdown:trigger`
-    
-    Custom **Alpine** directive that marks the **Dropdown Trigger**.
+### Anatomy
 
-  - #### `aria-controls`
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
 
-    **Type:** `string`
+#### `root`
 
-    Accessibility attribute that communicates that the **Dropdown Trigger** controls the state and visibility of the **Dropdown Menu**.
+Wraps the disclosure.
 
-    **Automatically handled with JavaScript.**
+<ApiTable label="dropdown root attributes">
 
-  - #### `aria-expanded`
-    
-    **Type:** `boolean`<br/>**Default:** `false`
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"dropdown"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Authored.** Use `"open"` to expand initially; defaults to closed. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
 
-    Accessibility attribute that communicates whether the **Dropdown Menu** is expanded or collapsed. 
+</ApiTable>
 
-    **Automatically handled with JavaScript.**
+#### `trigger`
 
-  - #### `aria-haspopup`
+A native button with descriptive text.
 
-    **Type:** `string`
+<ApiTable label="dropdown trigger attributes">
 
-    Accessibility attribute that communicates that this component has an interactive popup element.
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"trigger"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `aria-expanded` | `"true" \| "false"` | **Generated.** Whether the content is expanded. |
+| `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
 
-    **Automatically handled with JavaScript.**
-  
-</ContentList>
+</ApiTable>
 
-### Content
+#### `content`
 
-<ContentList>
+Contains the language links.
 
-  - #### `x-dropdown:content`
-    
-    Custom **Alpine** directive that marks the **Dropdown Content**.
+<ApiTable label="dropdown content attributes">
 
-  - #### `role`
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"content"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
 
-    **Type:** `string`<br/>**Value:** `'menu'`
+</ApiTable>
 
-    **Automatically handled with JavaScript.**
+#### `item`
 
-  - #### `aria-labelledby`
+Wraps each link. Links follow their native destinations.
 
-    **Type:** `string`
+<ApiTable label="dropdown item attributes">
 
-    Accessibility attribute that links the **Dropdown Content** to the **Dropdown Trigger** via `id`. 
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item"` | **Authored.** Identifies this part. |
+| `data-value` | `string` | **Authored.** Identifies the selected item in `onItemSelect`; falls back to `id`. |
 
-    **Automatically handled with JavaScript.**
+</ApiTable>
 
-  - #### `tabindex`
+### Configuration
 
-    **Type:** `number`<br/>**Value:** `-1`
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
 
-    Prevents users from tabbing to this element.
+<ApiTable label="dropdown JavaScript options">
 
-    **Automatically handled with JavaScript.**
-  
-</ContentList>
+| Option | Description |
+| --- | --- |
+| `defaultOpen` | Initial uncontrolled open state; overrides the authored initial state. |
+| `open` | Controlled open state. Your application must supply the updated value after a change callback. |
+| `id, ids` | Customize the instance identifier and generated element IDs. |
 
-### Item
+</ApiTable>
 
-<ContentList>
+### Methods
 
-  - #### `x-dropdown:item`
-    
-    Custom **Alpine** directive that marks the **Dropdown Item**.
+<ApiTable label="Dropdown methods">
 
-  - #### `role`
+| Method | Returns | Description |
+| --- | --- | --- |
+| `open()` | `Promise<void>` | Requests opening. |
+| `close()` | `Promise<void>` | Requests closing. |
+| `destroy()` | `void` | Stops the machine and clears the lookup. |
 
-    **Type:** `string`<br/>**Value:** `'menuitem'`
+</ApiTable>
 
-    **Automatically handled with JavaScript.**
+```js
+import { Dropdown } from '@uswds-tailwind/compat/dropdown'
 
-  - #### `tabindex`
+const dropdown = Dropdown.getOrCreateInstance(
+  '[data-scope="dropdown"][data-part="root"]',
+)
 
-    **Type:** `number`<br/>**Value:** `-1`
+await dropdown.open()
+```
 
-    Prevents users from tabbing to this element.
+Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
 
-    **Automatically handled with JavaScript.**
-  
-</ContentList>
+See [initialization and cleanup](/javascript#instance-lifecycle).
 
-## Keyboard Interactions
+### Callbacks
 
-<ContentList>
-  - <kbd>Down Arrow</kbd>
-    
-    When focus is on **Dropdown Trigger**, opens and moves focus to **Dropdown Content**.
+<ApiTable label="Dropdown callbacks">
 
-    When focus is on the **Dropdown Content**, moves focus to first **Dropdown Item**.
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onOpenChange` | `{ open: boolean }` | An open-state change is requested. |
+| `onItemSelect` | `{ value: string }` | A link with an item value is selected. |
 
-    When focus is on a **Dropdown Item**, moves focus to next **Dropdown Item**.
+</ApiTable>
 
-  - <kbd>Up Arrow</kbd>
-  
-    When focus is on **Dropdown Trigger**, opens and moves focus to **Dropdown Content**.
+Pass callbacks in instance options. These are JavaScript functions, not emitted DOM events.
 
-    When focus is on the **Dropdown Content**, moves focus to last **Dropdown Item**.
+### Accessibility
 
-    When focus is on a **Dropdown Item**, moves focus to previous **Dropdown Item**.
-
-  - <kbd>Enter</kbd>
-  
-    When focus is on an **Dropdown Item**, selects that item.
-
-  - <kbd>Escape</kbd>
-  
-    When the **Dropdown Content** is open, closes the **Dropdown Content** and moves focus to the **Dropdown Trigger**.
-</ContentList>
+- Supply real `href`, `lang`, and `hreflang` values as appropriate. Selection does not translate the page automatically.
+- Preserve native link focus and navigation. This is a disclosure for links, not an application menu.

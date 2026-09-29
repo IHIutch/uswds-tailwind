@@ -9,7 +9,7 @@ The USWDS has played an incredible role unifying the federal government's digita
 
 Given the USWDS's existing utility classes, I saw an opportunity to modernize it by using [Tailwind CSS](https://tailwindcss.com/), which offers similar functionality out of the box. This project is an experiment combining Tailwind's utility-first approach with the USWDS's design tokens. 
 
-Additionally, (while originally unintended) updating the JavaScript workflow with [Alpine.js](https://alpinejs.dev/) felt natural, allowing for declarative, streamlined event handling without needing to target custom classes.
+Earlier versions used Alpine.js directives. The current packages use Zag state machines through Vanilla JavaScript and React adapters; Alpine is not a current dependency. See the [JavaScript guide](/javascript) for initialization.
 
 My hope is that this project makes working with the USWDS a simpler, easier, and more efficient tool for developers, **and therefore users**.
 
@@ -65,16 +65,9 @@ Parcel doesn't require an `index.html` or a custom configuration file. We can co
 ### Tailwind Compatibility
 Parcel integrates seamlessly with Tailwind by using <code>[lightningcss](https://lightningcss.dev/)</code> to generate efficient CSS. Tailwind is adopting the same tool for its CLI in a [coming release](https://tailwindcss.com/blog/tailwindcss-v4-alpha#unified-toolchain).
 
-## Alpine.js
+## JavaScript behavior
 
-### Declarative and Intuitive Syntax
-Alpine.js complements Tailwind's declarative nature with a Vue-like syntax, making event binding and attribute manipulation straightforward and easy to understand.
-
-### Component Encapsulation
-Custom directives in Alpine.js allow us to build encapsulated components without worrying about event bubbling or behavior leakage, enhancing modularity and maintainability.
-
-### Rich Plugin Ecosystem
-Alpine.js offers a variety of plugins that simplify complex functionalities such as input masking, popovers, and focus management, accelerating development and reducing code complexity.
+The Vanilla package binds state machines to authored HTML, while React components render the corresponding machine state. Use the [Vanilla getting-started guide](/docs/vanilla/getting-started) or [React getting-started guide](/docs/react/getting-started) for the current setup. Per-component availability and release limitations are documented in the [JavaScript guide](/javascript).
 
 ## Twig
 
