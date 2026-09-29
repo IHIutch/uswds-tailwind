@@ -1,6 +1,6 @@
 ---
 import ApiTable from './api-table.astro'
-import { partSlug, type ReactReference } from '../reference/react/catalog'
+import { partSlug, type ReactReference } from '../reference/react/schema'
 
 interface Props {
   reference: ReactReference
@@ -21,10 +21,10 @@ const { reference } = Astro.props
     {part.props && part.props.length > 0 && (
       <ApiTable label={`React ${reference.name} ${part.name} props`}>
         <table>
-          <thead><tr><th scope="col">Prop</th><th scope="col">Type</th>{part.props.some(prop => prop[3] !== undefined) && <th scope="col">Default</th>}<th scope="col">Description</th></tr></thead>
+          <thead><tr><th scope="col">Prop</th><th scope="col">Type</th>{part.props.some(prop => prop.defaultValue !== undefined) && <th scope="col">Default</th>}<th scope="col">Description</th></tr></thead>
           <tbody>
             {part.props.map(prop => (
-              <tr><td><span id={prop[4]}><code>{prop[0]}</code></span></td><td><code>{prop[1]}</code></td>{part.props?.some(row => row[3] !== undefined) && <td><code>{prop[3] ?? '—'}</code></td>}<td>{prop[2]}</td></tr>
+              <tr><td><span id={prop.anchor}><code>{prop.name}</code></span></td><td><code>{prop.type}</code></td>{part.props?.some(row => row.defaultValue !== undefined) && <td><code>{prop.defaultValue ?? '—'}</code></td>}<td>{prop.description}</td></tr>
             ))}
           </tbody>
         </table>
@@ -37,7 +37,7 @@ const { reference } = Astro.props
           <thead><tr><th scope="col">Attribute</th><th scope="col">Value</th><th scope="col">Purpose</th></tr></thead>
           <tbody>
             {part.data.map(attribute => (
-              <tr><td><code>{attribute[0]}</code></td><td><code>{attribute[1]}</code></td><td>{attribute[2]}</td></tr>
+              <tr><td><code>{attribute.attribute}</code></td><td><code>{attribute.value}</code></td><td>{attribute.purpose}</td></tr>
             ))}
           </tbody>
         </table>

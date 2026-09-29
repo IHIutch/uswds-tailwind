@@ -1,0 +1,77 @@
+{
+  "name": "Checkbox",
+  "intro": "Put Input, Control, Label, and optional Description inside Root. Group coordinates multiple checkboxes by value.",
+  "parts": [
+    {
+      "name": "Group",
+      "element": "div",
+      "description": "Collects selected item values.",
+      "props": [
+        {
+          "name": "defaultValue",
+          "type": "string[]",
+          "description": "Initially selected values."
+        },
+        {
+          "name": "onValueChange",
+          "type": "(values: string[]) => void",
+          "description": "Receives the selected values."
+        }
+      ]
+    },
+    {
+      "name": "Root",
+      "element": "label",
+      "description": "Connects Input, Control, Label, and optional Description.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Value used when Root is inside Group."
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "({ checked: boolean }) => void",
+          "description": "Receives checked-state changes."
+        },
+        {
+          "name": "tile",
+          "type": "boolean",
+          "description": "Uses the tiled visual treatment."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Native checkbox control; pass native disabled and required props here.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Shows a check mark when Input is checked."
+    },
+    {
+      "name": "Label",
+      "element": "div",
+      "description": "Put the checkbox text beside Control."
+    },
+    {
+      "name": "Description",
+      "element": "div",
+      "description": "Add optional help text for this choice."
+    }
+  ]
+}

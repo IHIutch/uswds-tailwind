@@ -1,0 +1,31 @@
+{
+  "name": "ProcessList",
+  "intro": "Put one Item per step inside Root. Add a Title and optional Description to each Item.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "ol",
+      "description": "Orders the process steps."
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Use one Item for each step in order."
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Groups the step text."
+    },
+    {
+      "name": "Title",
+      "element": "div",
+      "description": "Styles the step title; use a heading inside when the step introduces a section."
+    },
+    {
+      "name": "Description",
+      "element": "div",
+      "description": "Holds explanatory step text."
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "Search",
+  "intro": "Put Label, Input, and Button inside Root to form a search control.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Sets the shared search size and field state.",
+      "props": [
+        {
+          "name": "size",
+          "type": "default | sm | lg",
+          "description": "Changes the input and button size."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Form field name."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Requires a query."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables the search control."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Provides a visually hidden accessible name.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives the search query.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "element": "button",
+      "description": "Submits the search; children replace the default search icon. Give the icon-only button an accessible name, such as aria-label=\"Search\".",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    }
+  ]
+}

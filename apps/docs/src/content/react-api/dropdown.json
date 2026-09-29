@@ -1,0 +1,76 @@
+{
+  "name": "Dropdown",
+  "intro": "Put Trigger and Content inside Root. Place each Link inside an Item with a unique value.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns menu visibility and selection behavior.",
+      "props": [
+        {
+          "name": "closeOnSelect",
+          "type": "boolean",
+          "description": "Closes the menu after selecting an item."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "({ open: boolean }) => void",
+          "description": "Receives open-state changes."
+        },
+        {
+          "name": "onSelect",
+          "type": "({ value: string }) => void",
+          "description": "Receives an item selection."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Trigger",
+      "element": "button",
+      "description": "Opens and closes the menu; accepts Button styling props.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "element": "ul",
+      "description": "Put Item parts here; visibility follows Root state.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Provides an item value to the menu.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string (required)",
+          "description": "Unique value for selection."
+        }
+      ]
+    },
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Put a destination link inside Item."
+    }
+  ]
+}

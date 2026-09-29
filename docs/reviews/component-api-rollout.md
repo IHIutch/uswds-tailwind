@@ -20,7 +20,7 @@ These are proposed launch references, not a claim that the current branch's Vani
 
 ## Rollout status
 
-- React API sections and selected-library TOC: authored for all 40 published component routes. Every React reference uses the per-part catalog and renderer, including Accordion, Button, and Modal.
+- React API sections and selected-library TOC: authored for all 40 published component routes. Every React reference lives in a slug-matched JSON content entry, validated by the shared schema and displayed through one renderer.
 - Vanilla Button reference: authored. Vanilla Accordion and Modal references: carried forward from 05. New Dropdown, Nav, and Side Navigation pages include Vanilla examples and concise markup guidance.
 - The existing first live example shows the basic composition. Those example modules compile as part of the site.
 - The API reference explains nesting in its introduction, then groups props and styling-oriented `data-*` attributes under each React part. Generated ARIA relationships, roles, IDs, form button types, and hidden state stay out of attribute tables; author-supplied accessibility props remain documented where applicable.

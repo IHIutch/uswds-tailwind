@@ -3,10 +3,11 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { componentCoverage, getComponentCoverage, missingComponentDocs } from '../src/content/component-coverage.ts'
-import { partSlug, reactReferences } from '../src/reference/react/catalog.ts'
+import { partSlug, reactApiSchema } from '../src/reference/react/schema.ts'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 const docs = resolve(root, 'apps/docs/src/content/components')
+const reactApiDir = resolve(root, 'apps/docs/src/content/react-api')
 const packageExports = {
   vanilla: JSON.parse(readFileSync(resolve(root, 'packages/compat/package.json'), 'utf8')).exports,
   react: JSON.parse(readFileSync(resolve(root, 'packages/react/package.json'), 'utf8')).exports,
@@ -16,6 +17,21 @@ const compatIndex = readFileSync(resolve(root, 'packages/compat/src/index.ts'), 
 const errors = []
 const pages = readdirSync(docs).filter(name => name.endsWith('.mdx')).map(name => name.slice(0, -4))
 const knownPages = new Set(pages)
+const reactReferences = {}
+
+for (const filename of readdirSync(reactApiDir).filter(name => name.endsWith('.json'))) {
+  const slug = filename.slice(0, -5)
+  try {
+    const parsed = reactApiSchema.safeParse(JSON.parse(readFileSync(resolve(reactApiDir, filename), 'utf8')))
+    if (parsed.success)
+      reactReferences[slug] = parsed.data
+    else
+      errors.push(`${slug}: invalid React API reference: ${parsed.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`).join('; ')}`)
+  }
+  catch (error) {
+    errors.push(`${slug}: invalid React API JSON: ${error.message}`)
+  }
+}
 
 for (const [slug, page] of Object.entries(componentCoverage)) {
   if (page.published === false || page.react.kind !== 'component')
@@ -35,7 +51,7 @@ for (const [slug, reference] of Object.entries(reactReferences)) {
     headingIds.push(partSlug(reference.accessibilityHeading ?? 'Accessibility'))
   if (new Set(headingIds).size !== headingIds.length)
     errors.push(`${slug}: React API reference repeats a heading ID`)
-  const propIds = reference.parts.flatMap(part => part.props?.map(prop => prop[4]).filter(Boolean) ?? [])
+  const propIds = reference.parts.flatMap(part => part.props?.map(prop => prop.anchor).filter(Boolean) ?? [])
   if (new Set(propIds).size !== propIds.length)
     errors.push(`${slug}: React API reference repeats a prop anchor`)
 }

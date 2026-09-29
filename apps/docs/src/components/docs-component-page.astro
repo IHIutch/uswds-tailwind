@@ -12,7 +12,7 @@ import { libraryHref } from '#utils/library'
 import { Code } from 'astro-expressive-code/components'
 import { getEntry, render } from 'astro:content'
 import ReactApiReference from './react-api-reference.astro'
-import { partSlug, reactReferences } from '../reference/react/catalog'
+import { partSlug } from '../reference/react/schema'
 import AccordionBorderedDemo from '../examples/accordion-bordered-demo'
 import accordionBorderedSource from '../examples/accordion-bordered-demo.tsx?raw'
 import AccordionDemo from '../examples/accordion-demo'
@@ -213,7 +213,7 @@ const reactAvailability = coverage?.react
 const blockedVanillaExamples = coverage?.examples.filter(example => example.vanilla.status === 'blocked') ?? []
 
 // const activeHeading = ''
-const reactReference = reactReferences[slug]
+const reactReference = (await getEntry('react-api', slug))?.data
 const reactReferenceHeadings = reactReference?.parts.map(part => ({
   depth: 3,
   slug: part.slug ?? partSlug(part.name),

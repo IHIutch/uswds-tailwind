@@ -1,0 +1,65 @@
+{
+  "name": "Header",
+  "intro": "Compose branding and navigation inside Root. Use the Extended and SecondaryNav parts for the extended layout.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "header",
+      "description": "Supplies the header layout to its children.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "default | extended",
+          "description": "Selects the header layout."
+        }
+      ]
+    },
+    {
+      "name": "Container",
+      "element": "div",
+      "description": "Constrains header content width."
+    },
+    {
+      "name": "Branding",
+      "element": "div",
+      "description": "Holds agency identity.",
+      "props": [
+        {
+          "name": "size",
+          "type": "md | lg",
+          "description": "Sets the branding text size."
+        }
+      ]
+    },
+    {
+      "name": "Primary",
+      "element": "div",
+      "description": "Place the main navigation beside Branding."
+    },
+    {
+      "name": "Extended",
+      "element": "div",
+      "description": "Arranges extended header content."
+    },
+    {
+      "name": "SecondaryNav",
+      "element": "div",
+      "description": "Contains secondary navigation."
+    },
+    {
+      "name": "SecondaryList",
+      "element": "ul",
+      "description": "Lists secondary destinations."
+    },
+    {
+      "name": "SecondaryItem",
+      "element": "li",
+      "description": "Wrap a SecondaryLink in each list item."
+    },
+    {
+      "name": "SecondaryLink",
+      "element": "a",
+      "description": "Use this for a destination in SecondaryList."
+    }
+  ]
+}
