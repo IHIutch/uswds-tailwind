@@ -14,22 +14,21 @@ const library = resolveLibrary(
 const allComponents = await getCollection('vanilla-components')
 const aboutNavigation = {
   label: 'About',
-  isActive: ['/about', '/compare'].includes(Astro.url.pathname),
+  isActive: ['/about', '/headless', '/compare'].includes(Astro.url.pathname),
   children: [
     { label: 'About this project', href: '/about' },
+    { label: 'What is headless?', href: '/headless' },
     { label: 'Compare', href: '/compare' },
   ],
 }
+const isComponentsActive = Astro.url.pathname.startsWith(`/docs/${library}/components`)
 const desktopLinks: NavLinks = {
   primary: [
     {
       label: 'Getting Started',
       href: `/docs/${library}/getting-started`,
     },
-    {
-      label: 'Components',
-      href: `/docs/${library}/components`,
-    },
+    { label: 'Components', href: `/docs/${library}/components` },
     {
       label: 'JavaScript',
       href: `/docs/${library}/javascript`,
@@ -62,6 +61,7 @@ const mobileLinks: NavLinks = {
     },
     {
       label: 'Components',
+      isActive: isComponentsActive,
       children: allComponents.map(c => ({
         label: c.data.title,
         href: `/docs/${library}/components/${c.id}`,

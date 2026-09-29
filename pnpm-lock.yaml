@@ -350,6 +350,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.7)
+      '@uswds-tailwind/accordion-compat':
+        specifier: workspace:*
+        version: link:../../packages/machines/accordion-compat
       '@uswds-tailwind/compat':
         specifier: workspace:*
         version: link:../../packages/compat
@@ -407,6 +410,9 @@ importers:
       sharp:
         specifier: 'catalog:'
         version: 0.34.5
+      tailwind-variants:
+        specifier: 'catalog:'
+        version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.3.3)
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3

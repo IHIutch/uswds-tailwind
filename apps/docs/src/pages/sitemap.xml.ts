@@ -17,6 +17,7 @@ export const GET: APIRoute = async ({ site }) => {
     '/colors',
     '/icons',
     '/typography',
+    '/headless',
     ...['vanilla', 'react'].flatMap(library => [
       `/docs/${library}/getting-started`,
       `/docs/${library}/javascript`,
