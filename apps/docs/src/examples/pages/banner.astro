@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import BannerDemo from '../banner-demo'
+import bannerSource from '../banner-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Usage" demo code={bannerSource} language="tsx" filename="banner-demo.tsx" playgroundFiles={{ 'banner-demo.tsx': bannerSource }}>
+  <BannerDemo client:load />
+</ComponentPreview>

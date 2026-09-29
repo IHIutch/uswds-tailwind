@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import TextInputDemo from '../text-input-demo'
+import textInputSource from '../text-input-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={textInputSource} language="tsx" filename="text-input-demo.tsx" playgroundFiles={{ 'text-input-demo.tsx': textInputSource }}>
+  <TextInputDemo client:load />
+</ComponentPreview>

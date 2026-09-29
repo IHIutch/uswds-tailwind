@@ -1,0 +1,26 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import FooterDemo from '../footer-demo'
+import footerSource from '../footer-demo.tsx?raw'
+import FooterMediumDemo from '../footer-medium-demo'
+import footerMediumSource from '../footer-medium-demo.tsx?raw'
+import FooterSlimDemo from '../footer-slim-demo'
+import footerSlimSource from '../footer-slim-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Default</h3>
+<ComponentPreview title="Default" demo code={footerSource} language="tsx" filename="footer-demo.tsx" playgroundFiles={{ 'footer-demo.tsx': footerSource }}>
+  <FooterDemo client:load />
+</ComponentPreview>
+
+<h3>Medium</h3>
+<ComponentPreview title="Medium" demo code={footerMediumSource} language="tsx" filename="footer-medium-demo.tsx" playgroundFiles={{ 'footer-medium-demo.tsx': footerMediumSource }}>
+  <FooterMediumDemo client:load />
+</ComponentPreview>
+
+<h3>Slim</h3>
+<ComponentPreview title="Slim" demo code={footerSlimSource} language="tsx" filename="footer-slim-demo.tsx" playgroundFiles={{ 'footer-slim-demo.tsx': footerSlimSource }}>
+  <FooterSlimDemo client:load />
+</ComponentPreview>

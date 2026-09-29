@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import RangeSliderDemo from '../range-slider-demo'
+import rangeSliderSource from '../range-slider-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={rangeSliderSource} language="tsx" filename="range-slider-demo.tsx" playgroundFiles={{ 'range-slider-demo.tsx': rangeSliderSource }}>
+  <RangeSliderDemo client:load />
+</ComponentPreview>

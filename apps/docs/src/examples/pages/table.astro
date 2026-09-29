@@ -1,0 +1,54 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import TableDemo from '../table-demo'
+import tableSource from '../table-demo.tsx?raw'
+import TableStripedDemo from '../table-striped-demo'
+import tableStripedSource from '../table-striped-demo.tsx?raw'
+import TableBorderlessDemo from '../table-borderless-demo'
+import tableBorderlessSource from '../table-borderless-demo.tsx?raw'
+import TableCompactDemo from '../table-compact-demo'
+import tableCompactSource from '../table-compact-demo.tsx?raw'
+import TableScrollableDemo from '../table-scrollable-demo'
+import tableScrollableSource from '../table-scrollable-demo.tsx?raw'
+import TableStickyHeaderDemo from '../table-sticky-header-demo'
+import tableStickyHeaderSource from '../table-sticky-header-demo.tsx?raw'
+import TableStickyColumnDemo from '../table-sticky-column-demo'
+import tableStickyColumnSource from '../table-sticky-column-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Default</h3>
+<ComponentPreview title="Default" demo code={tableSource} language="tsx" filename="table-demo.tsx" playgroundFiles={{ 'table-demo.tsx': tableSource }}>
+  <TableDemo client:load />
+</ComponentPreview>
+
+<h3>Striped</h3>
+<ComponentPreview title="Striped" demo code={tableStripedSource} language="tsx" filename="table-striped-demo.tsx" playgroundFiles={{ 'table-striped-demo.tsx': tableStripedSource }}>
+  <TableStripedDemo client:load />
+</ComponentPreview>
+
+<h3>Borderless</h3>
+<ComponentPreview title="Borderless" demo code={tableBorderlessSource} language="tsx" filename="table-borderless-demo.tsx" playgroundFiles={{ 'table-borderless-demo.tsx': tableBorderlessSource }}>
+  <TableBorderlessDemo client:load />
+</ComponentPreview>
+
+<h3>Compact</h3>
+<ComponentPreview title="Compact" demo code={tableCompactSource} language="tsx" filename="table-compact-demo.tsx" playgroundFiles={{ 'table-compact-demo.tsx': tableCompactSource }}>
+  <TableCompactDemo client:load />
+</ComponentPreview>
+
+<h3>Scrollable</h3>
+<ComponentPreview title="Scrollable" demo code={tableScrollableSource} language="tsx" filename="table-scrollable-demo.tsx" playgroundFiles={{ 'table-scrollable-demo.tsx': tableScrollableSource }}>
+  <TableScrollableDemo client:load />
+</ComponentPreview>
+
+<h3>Sticky Header</h3>
+<ComponentPreview title="Sticky Header" demo code={tableStickyHeaderSource} language="tsx" filename="table-sticky-header-demo.tsx" playgroundFiles={{ 'table-sticky-header-demo.tsx': tableStickyHeaderSource }}>
+  <TableStickyHeaderDemo client:load />
+</ComponentPreview>
+
+<h3>Sticky Column</h3>
+<ComponentPreview title="Sticky Column" demo code={tableStickyColumnSource} language="tsx" filename="table-sticky-column-demo.tsx" playgroundFiles={{ 'table-sticky-column-demo.tsx': tableStickyColumnSource }}>
+  <TableStickyColumnDemo client:load />
+</ComponentPreview>

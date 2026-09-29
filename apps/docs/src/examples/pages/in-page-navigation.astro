@@ -1,0 +1,33 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import { Code } from 'astro-expressive-code/components'
+import InPageNavigationDemo from '../in-page-navigation-demo'
+import inPageNavigationSource from '../in-page-navigation-demo.tsx?raw'
+
+const inPageNavShortcut = `<InPageNav.List>
+  <InPageNav.Items />
+</InPageNav.List>`
+const inPageNavExpanded = `<InPageNav.List>
+  {({ headings }) => headings.map(heading => (
+    <InPageNav.Item key={heading.href}>
+      <InPageNav.Link href={heading.href} depth={heading.depth}>
+        {heading.label}
+      </InPageNav.Link>
+    </InPageNav.Item>
+  ))}
+</InPageNav.List>`
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Default</h3>
+<ComponentPreview title="Default" demo code={inPageNavigationSource} language="tsx" filename="in-page-navigation-demo.tsx" playgroundFiles={{ 'in-page-navigation-demo.tsx': inPageNavigationSource }}>
+  <InPageNavigationDemo client:load />
+</ComponentPreview>
+<div class="max-w-prose mb-12">
+  <h4>Items shortcut</h4>
+  <p><code>InPageNav.Items</code> renders an <code>Item</code> and <code>Link</code> for each heading. Inside <code>InPageNav.List</code>, this:</p>
+  <Code code={inPageNavShortcut} lang="tsx" />
+  <p>is shorthand for the render function used in the full example above:</p>
+  <Code code={inPageNavExpanded} lang="tsx" />
+                    </div>

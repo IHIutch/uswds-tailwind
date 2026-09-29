@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import CharacterCountDemo from '../character-count-demo'
+import characterCountSource from '../character-count-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={characterCountSource} language="tsx" filename="character-count-demo.tsx" playgroundFiles={{ 'character-count-demo.tsx': characterCountSource }}>
+  <CharacterCountDemo client:load />
+</ComponentPreview>
