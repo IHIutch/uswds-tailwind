@@ -1,0 +1,139 @@
+{
+  "name": "Table",
+  "intro": "Compose native table parts inside Root. Use column indices for machine-driven sorting and stacked cell labels.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "table",
+      "description": "Provides visual variants and sorting state.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "bordered | striped | borderless",
+          "description": "Selects border and row styling."
+        },
+        {
+          "name": "compact",
+          "type": "boolean",
+          "description": "Reduces cell padding."
+        },
+        {
+          "name": "stacked",
+          "type": "boolean",
+          "description": "Stacks cells on narrow screens."
+        },
+        {
+          "name": "captionText",
+          "type": "string",
+          "description": "Caption text for table sorting status."
+        },
+        {
+          "name": "columnNames",
+          "type": "Record<number, string>",
+          "description": "Column names for sorting announcements."
+        },
+        {
+          "name": "defaultSortedColumnIndex",
+          "type": "number",
+          "description": "Initially sorted column."
+        },
+        {
+          "name": "defaultSortDirection",
+          "type": "ascending | descending",
+          "description": "Initial sort direction."
+        },
+        {
+          "name": "onSortChange",
+          "type": "table.Props[\"onSortChange\"]",
+          "description": "Receives sorting requests."
+        }
+      ]
+    },
+    {
+      "name": "Caption",
+      "element": "caption",
+      "description": "Names the table."
+    },
+    {
+      "name": "Header",
+      "element": "thead",
+      "description": "Contains column headings.",
+      "props": [
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "description": "Keeps the header visible while scrolling."
+        }
+      ]
+    },
+    {
+      "name": "Body",
+      "element": "tbody",
+      "description": "Contains data rows."
+    },
+    {
+      "name": "Footer",
+      "element": "tfoot",
+      "description": "Contains footer rows."
+    },
+    {
+      "name": "Row",
+      "element": "tr",
+      "description": "Contains cells."
+    },
+    {
+      "name": "ColumnHeader",
+      "element": "th",
+      "description": "Labels a column.",
+      "props": [
+        {
+          "name": "columnIndex",
+          "type": "number",
+          "description": "Connects this heading to the sorting machine."
+        },
+        {
+          "name": "sortable",
+          "type": "boolean",
+          "description": "Renders a sort button when columnIndex is supplied."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-sortable",
+          "value": "Present when sortable",
+          "purpose": "Style sortable column headings."
+        }
+      ]
+    },
+    {
+      "name": "Cell",
+      "element": "td",
+      "description": "Displays one value. Supply data-label for a stacked cell heading.",
+      "props": [
+        {
+          "name": "columnIndex",
+          "type": "number",
+          "description": "Connects this cell to the active sorted column."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-sort-active",
+          "value": "Present for cells in the sorted column",
+          "purpose": "Styles the active sorted column."
+        }
+      ]
+    },
+    {
+      "name": "ScrollArea",
+      "element": "div",
+      "description": "Wraps the table in a horizontally scrollable region."
+    },
+    {
+      "name": "SrStatus",
+      "element": "div",
+      "description": "Announces sort changes to assistive technology."
+    }
+  ],
+  "accessibility": "Provide a caption and column headings. Handle onSortChange in the data source so sorted rows match the announced sort state."
+}

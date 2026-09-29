@@ -1,0 +1,71 @@
+{
+  "name": "Identifier",
+  "intro": "Build the site identifier with masthead, required links, and optional identity and tagline blocks.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Place Masthead and RequiredLinks inside Root."
+    },
+    {
+      "name": "Container",
+      "element": "div",
+      "description": "Constrains the content width."
+    },
+    {
+      "name": "Masthead",
+      "element": "section",
+      "description": "Contains logo and identity information."
+    },
+    {
+      "name": "LogoGroup",
+      "element": "div",
+      "description": "Groups one or more organization logos."
+    },
+    {
+      "name": "Logo",
+      "element": "a",
+      "description": "Links from an organization logo."
+    },
+    {
+      "name": "Identity",
+      "element": "section",
+      "description": "Holds identity text."
+    },
+    {
+      "name": "Domain",
+      "element": "p",
+      "description": "Shows the site domain."
+    },
+    {
+      "name": "Disclaimer",
+      "element": "p",
+      "description": "Shows the site disclaimer."
+    },
+    {
+      "name": "RequiredLinks",
+      "element": "nav",
+      "description": "Contains required site links."
+    },
+    {
+      "name": "RequiredLinksList",
+      "element": "ul",
+      "description": "Lists required destinations."
+    },
+    {
+      "name": "LinkItem",
+      "element": "li",
+      "description": "Wrap a Link for each required destination."
+    },
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Set href to the required destination."
+    },
+    {
+      "name": "Tagline",
+      "element": "section",
+      "description": "Holds a short agency tagline."
+    }
+  ]
+}

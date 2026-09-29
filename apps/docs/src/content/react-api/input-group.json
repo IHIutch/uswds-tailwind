@@ -1,0 +1,23 @@
+{
+  "name": "InputGroup",
+  "intro": "Use InputGroup around a form control with optional leading or trailing content.",
+  "parts": [
+    {
+      "name": "InputGroup",
+      "element": "div",
+      "description": "Arranges the control and adjacent content.",
+      "props": [
+        {
+          "name": "startElement",
+          "type": "ReactNode",
+          "description": "Adds content before the control."
+        },
+        {
+          "name": "endElement",
+          "type": "ReactNode",
+          "description": "Adds content after the control."
+        }
+      ]
+    }
+  ]
+}

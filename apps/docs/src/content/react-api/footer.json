@@ -1,0 +1,133 @@
+{
+  "name": "Footer",
+  "intro": "Compose a footer from primary navigation, identity, contact, and optional section parts.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "footer",
+      "description": "Provides the layout variant.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "default | slim | big",
+          "description": "Selects the footer layout."
+        }
+      ]
+    },
+    {
+      "name": "ReturnToTop",
+      "element": "div",
+      "description": "Holds a return-to-top link."
+    },
+    {
+      "name": "Primary",
+      "element": "nav",
+      "description": "Contains primary footer navigation."
+    },
+    {
+      "name": "PrimaryInner",
+      "element": "div",
+      "description": "Constrains primary content width."
+    },
+    {
+      "name": "PrimaryList",
+      "element": "ul",
+      "description": "Place PrimaryItem parts here."
+    },
+    {
+      "name": "PrimaryItem",
+      "element": "li",
+      "description": "Wrap one PrimaryLink within PrimaryList."
+    },
+    {
+      "name": "PrimaryLink",
+      "element": "a",
+      "description": "Uses primary footer link styling."
+    },
+    {
+      "name": "Secondary",
+      "element": "div",
+      "description": "Contains identity and contact information."
+    },
+    {
+      "name": "SecondaryInner",
+      "element": "div",
+      "description": "Arranges the secondary content."
+    },
+    {
+      "name": "Logo",
+      "element": "div",
+      "description": "Place the organization logo in the secondary identity block."
+    },
+    {
+      "name": "LogoHeading",
+      "element": "div",
+      "description": "Displays the organization name."
+    },
+    {
+      "name": "Contact",
+      "element": "div",
+      "description": "Groups contact details."
+    },
+    {
+      "name": "SocialLinks",
+      "element": "div",
+      "description": "Groups social links."
+    },
+    {
+      "name": "SocialLink",
+      "element": "a",
+      "description": "Put the social account name or icon here."
+    },
+    {
+      "name": "Address",
+      "element": "address",
+      "description": "Holds postal or contact information."
+    },
+    {
+      "name": "ContactHeading",
+      "element": "div",
+      "description": "Labels the contact block."
+    },
+    {
+      "name": "ContactInfo",
+      "element": "div",
+      "description": "Arranges contact methods."
+    },
+    {
+      "name": "ContactLink",
+      "element": "a",
+      "description": "Set href to a contact destination."
+    },
+    {
+      "name": "Nav",
+      "element": "nav",
+      "description": "Groups footer sections."
+    },
+    {
+      "name": "Section",
+      "element": "section",
+      "description": "Contains a footer link section."
+    },
+    {
+      "name": "SectionHeading",
+      "element": "div",
+      "description": "Labels a link section."
+    },
+    {
+      "name": "SectionList",
+      "element": "ul",
+      "description": "Lists section links."
+    },
+    {
+      "name": "SectionItem",
+      "element": "li",
+      "description": "Wrap one SectionLink so the section remains a list."
+    },
+    {
+      "name": "SectionLink",
+      "element": "a",
+      "description": "Uses section link spacing and focus styles."
+    }
+  ]
+}

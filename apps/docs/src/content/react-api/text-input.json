@@ -1,0 +1,16 @@
+{
+  "name": "Input",
+  "intro": "Input and Textarea are styled native form controls. Pair either with Field for a connected label, hint, and error message.",
+  "parts": [
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Accepts native input props and forwards its ref."
+    },
+    {
+      "name": "Textarea",
+      "element": "textarea",
+      "description": "Accepts native textarea props and forwards its ref."
+    }
+  ]
+}

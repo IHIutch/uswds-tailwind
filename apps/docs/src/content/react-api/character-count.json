@@ -1,0 +1,84 @@
+{
+  "name": "CharacterCount",
+  "intro": "Use Root with Label, Input, and visible Status. SrStatus announces count changes to assistive technology.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the input value and character limit.",
+      "props": [
+        {
+          "name": "maxLength",
+          "type": "number",
+          "description": "Sets the permitted character count."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "description": "Initial uncontrolled value."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Controlled value."
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: string }) => void",
+          "description": "Receives value changes."
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "description": "Message shown when the count exceeds the limit."
+        },
+        {
+          "name": "getStatusText",
+          "type": "({ count, max, isOverLimit }) => string",
+          "description": "Formats the visible and announced count message."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Labels the input.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives text and exposes over-limit state.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Status",
+      "element": "div",
+      "description": "Displays the remaining-character message.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "SrStatus",
+      "element": "div",
+      "description": "Announces count changes without duplicating visible text."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Tag",
+  "intro": "Tag is a styled text label.",
+  "parts": [
+    {
+      "name": "Tag",
+      "element": "span",
+      "description": "Accepts native span props.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "default | vivid-orange | light-gray",
+          "description": "Selects the color treatment."
+        },
+        {
+          "name": "size",
+          "type": "md | lg",
+          "description": "Selects the text size."
+        }
+      ]
+    }
+  ]
+}

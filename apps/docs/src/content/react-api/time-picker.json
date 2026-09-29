@@ -1,0 +1,208 @@
+{
+  "name": "TimePicker",
+  "intro": "TimePicker uses the Combobox parts. Root supplies half-hour options and time-aware filtering by default; pass options to replace the generated list.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Manages time selection, query text, filtering, and list visibility.",
+      "props": [
+        {
+          "name": "options",
+          "type": "{ text: string; value: string; disabled?: boolean }[]",
+          "description": "Replaces the generated half-hour time options."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Controlled selected time."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "description": "Initial selected time."
+        },
+        {
+          "name": "inputValue",
+          "type": "string",
+          "description": "Controlled query text."
+        },
+        {
+          "name": "defaultInputValue",
+          "type": "string",
+          "description": "Initial query text."
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "description": "Receives time selection."
+        },
+        {
+          "name": "onInputValueChange",
+          "type": "({ inputValue: string }) => void",
+          "description": "Receives query changes."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "({ open: boolean }) => void",
+          "description": "Receives list visibility changes."
+        },
+        {
+          "name": "customFilter",
+          "type": "(query, options) => options",
+          "description": "Overrides time-aware option filtering."
+        },
+        {
+          "name": "disableFiltering",
+          "type": "boolean",
+          "description": "Shows supplied options without filtering."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables selection."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Requires a value."
+        },
+        {
+          "name": "showClearButton",
+          "type": "boolean",
+          "description": "Renders the clear button when true."
+        },
+        {
+          "name": "showToggleButton",
+          "type": "boolean",
+          "description": "Renders the toggle button when true."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        },
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Names the time field.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Groups the input and buttons."
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives a typed time query.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "List",
+      "element": "ul",
+      "description": "Displays matching time options.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | ({ options }) => ReactNode",
+          "description": "Renders items from the filtered options or supplied children."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Match value, text, and index to an option in the filtered list.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string (required)",
+          "description": "Option value."
+        },
+        {
+          "name": "text",
+          "type": "string (required)",
+          "description": "Option label."
+        },
+        {
+          "name": "index",
+          "type": "number (required)",
+          "description": "Index in the rendered option list."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables this option."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-selected",
+          "value": "Present when selected",
+          "purpose": "Styles the selected option."
+        },
+        {
+          "attribute": "data-highlighted",
+          "value": "Present when highlighted",
+          "purpose": "Styles the highlighted option."
+        },
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "EmptyItem",
+      "element": "li",
+      "description": "Displays when no option matches."
+    },
+    {
+      "name": "IndicatorGroup",
+      "element": "div",
+      "description": "Groups clear and toggle buttons."
+    },
+    {
+      "name": "ClearButton",
+      "element": "button",
+      "description": "Clears the selected time."
+    },
+    {
+      "name": "ToggleButton",
+      "element": "button",
+      "description": "Opens or closes the option list."
+    }
+  ],
+  "accessibility": "Provide a visible Label or another accessible name. Keep Item indices aligned with the filtered options passed to List."
+}
