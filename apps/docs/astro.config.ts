@@ -12,6 +12,9 @@ export default defineConfig({
   output: 'server',
   integrations: [
     expressiveCode({
+      // ClientRouter only preloads head stylesheets. Inline code styles so body
+      // swaps cannot expose Tailwind Typography's dark pre background.
+      emitExternalStylesheet: false,
       themes: ['light-plus', 'dark-plus'],
       styleOverrides: {
         frames: {
