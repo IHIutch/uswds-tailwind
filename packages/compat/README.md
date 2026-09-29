@@ -12,7 +12,7 @@ USWDS components as drop-in vanilla JavaScript modules. Auto-initializes element
 ## Install
 
 ```bash
-npm install @uswds-tailwind/compat@alpha
+npm install @uswds-tailwind/compat@alpha @uswds-tailwind/theme@alpha tailwindcss
 ```
 
 ## Usage
@@ -30,14 +30,17 @@ import '@uswds-tailwind/compat/auto'
 If you'd rather opt in to individual components:
 
 ```js
-import { accordion } from '@uswds-tailwind/compat/accordion'
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
 
-accordion.on(document.querySelector('.usa-accordion'))
+// Run once after the accordion markup is in the document.
+accordionInit()
 ```
 
 ## Components
 
 `accordion`, `character-count`, `collapse`, `combobox`, `date-picker`, `date-range-picker`, `dropdown`, `file-input`, `input-mask`, `modal`, `table`, `tooltip`.
+
+The [Vanilla getting-started guide](https://uswds-tailwind.com/docs/vanilla/getting-started) shows how to use these packages in a plain HTML project. Use either the auto import or selective initialization for a component, not both.
 
 ## Documentation
 

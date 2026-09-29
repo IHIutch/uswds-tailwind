@@ -18,13 +18,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({ plugins: [react(), tailwindcss()] })
 `
 
-const vanillaStyles = `@import "@fontsource-variable/open-sans";
-@import "@fontsource-variable/public-sans";
-@import "@fontsource-variable/roboto-mono";
-@import "@fontsource-variable/source-sans-3";
-@import "@fontsource-variable/merriweather";
-
-@import "tailwindcss";
+const vanillaStyles = `@import "tailwindcss";
 @import "@uswds-tailwind/theme";
 `
 

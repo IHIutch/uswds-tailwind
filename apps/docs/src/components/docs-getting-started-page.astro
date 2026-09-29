@@ -11,7 +11,7 @@ import { getEntry, render } from 'astro:content'
 interface Props { library: Library }
 const { library } = Astro.props
 
-const post = await getEntry('pages', 'getting-started')
+const post = await getEntry('pages', library === 'react' ? 'getting-started-react' : 'getting-started')
 if (!post) {
   throw new Error('Page not found')
 }
@@ -19,16 +19,13 @@ if (!post) {
 const { Content, headings } = await render(post)
 
 const visibleHeadings = headings.filter(h => h.depth <= 3)
-const description = library === 'react'
-  ? 'React setup guidance for USWDS + Tailwind is being prepared.'
-  : post.data.description
 
 ---
 
-<BaseLayout title={post.data.title} description={description}>
+<BaseLayout title={post.data.title} description={post.data.description}>
   <ContentLayout>
     <div class="flex w-full">
-      <TableOfContents headings={library === 'vanilla' ? visibleHeadings : []} />
+      <TableOfContents headings={visibleHeadings} />
       <main id="main-content" class="px-4 tablet:px-12 py-12 min-w-0 w-full">
         <div class="flex flex-col mx-auto max-w-5xl">
           <div class="max-w-3xl">
@@ -37,21 +34,12 @@ const description = library === 'react'
                 {post.data.title}
               </h1>
               <p class="text-xl font-light max-w-prose">
-                {description}
+                {post.data.description}
               </p>
             </div>
-            {library === 'vanilla'
-? (
-              <div class="docs-prose max-w-none">
-                <Content components={{ Alert, ProcessList, ProcessStep }} />
-              </div>
-            )
-: (
-              <section class="max-w-prose rounded border border-gray-cool-20 bg-gray-5 p-5">
-                <h2 class="text-xl font-bold mb-2">React setup is coming</h2>
-                <p>React setup instructions are being prepared. The existing setup guide covers Vanilla HTML and JavaScript, so it is not shown for the React selection.</p>
-              </section>
-            )}
+            <div class="docs-prose max-w-none">
+              <Content components={{ Alert, ProcessList, ProcessStep }} />
+            </div>
           </div>
         </div>
       </main>
