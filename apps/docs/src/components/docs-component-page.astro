@@ -11,6 +11,8 @@ import ContentLayout from '#layouts/content-layout.astro'
 import { libraryHref } from '#utils/library'
 import { Code } from 'astro-expressive-code/components'
 import { getEntry, render } from 'astro:content'
+import ReactApiReference from './react-api-reference.astro'
+import { partSlug, reactReferences } from '../reference/react/catalog'
 import AccordionBorderedDemo from '../examples/accordion-bordered-demo'
 import accordionBorderedSource from '../examples/accordion-bordered-demo.tsx?raw'
 import AccordionDemo from '../examples/accordion-demo'
@@ -71,6 +73,8 @@ import DatePickerDemo from '../examples/date-picker-demo'
 import datePickerSource from '../examples/date-picker-demo.tsx?raw'
 import DateRangePickerDemo from '../examples/date-range-picker-demo'
 import dateRangePickerSource from '../examples/date-range-picker-demo.tsx?raw'
+import DropdownDemo from '../examples/dropdown-demo'
+import dropdownSource from '../examples/dropdown-demo.tsx?raw'
 import FieldErrorDemo from '../examples/field-error-demo'
 import fieldErrorSource from '../examples/field-error-demo.tsx?raw'
 import FieldFieldsetDemo from '../examples/field-fieldset-demo'
@@ -119,6 +123,8 @@ import ModalForcedActionDemo from '../examples/modal-forced-action-demo'
 import modalForcedActionSource from '../examples/modal-forced-action-demo.tsx?raw'
 import ModalLargeDemo from '../examples/modal-large-demo'
 import modalLargeSource from '../examples/modal-large-demo.tsx?raw'
+import NavDemo from '../examples/nav-demo'
+import navSource from '../examples/nav-demo.tsx?raw'
 import PaginationBoundedDemo from '../examples/pagination-bounded-demo'
 import paginationBoundedSource from '../examples/pagination-bounded-demo.tsx?raw'
 import PaginationUnboundedDemo from '../examples/pagination-unbounded-demo'
@@ -147,6 +153,8 @@ import SelectDemo from '../examples/select-demo'
 import selectSource from '../examples/select-demo.tsx?raw'
 import SelectDisabledDemo from '../examples/select-disabled-demo'
 import selectDisabledSource from '../examples/select-disabled-demo.tsx?raw'
+import SideNavigationDemo from '../examples/side-navigation-demo'
+import sideNavigationSource from '../examples/side-navigation-demo.tsx?raw'
 import StepIndicatorCenteredDemo from '../examples/step-indicator-centered-demo'
 import stepIndicatorCenteredSource from '../examples/step-indicator-centered-demo.tsx?raw'
 import StepIndicatorCountersDemo from '../examples/step-indicator-counters-demo'
@@ -205,7 +213,24 @@ const reactAvailability = coverage?.react
 const blockedVanillaExamples = coverage?.examples.filter(example => example.vanilla.status === 'blocked') ?? []
 
 // const activeHeading = ''
-const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 3) : []
+const reactReference = reactReferences[slug]
+const reactReferenceHeadings = reactReference?.parts.map(part => ({
+  depth: 3,
+  slug: part.slug ?? partSlug(part.name),
+  text: part.name,
+})) ?? []
+if (reactReference?.accessibility) {
+  const text = reactReference.accessibilityHeading ?? 'Accessibility'
+  reactReferenceHeadings.push({ depth: 3, slug: partSlug(text), text })
+}
+const reactPageHeadings = reactReference
+  ? [
+      { depth: 2, slug: 'examples', text: 'Examples' },
+      { depth: 2, slug: 'component-api', text: 'Component API' },
+      ...reactReferenceHeadings,
+    ]
+  : []
+const visibleHeadings = library === 'vanilla' ? headings.filter(h => h.depth <= 3) : reactPageHeadings
 const paginationShortcut = `<Pagination.List>
   <Pagination.PrevTrigger />
   <Pagination.Pages />
@@ -308,6 +333,8 @@ const reactExamples = slug === 'button'
                 ? [{ heading: 'Example', source: datePickerSource, filename: 'date-picker-demo.tsx', files: { 'date-picker-demo.tsx': datePickerSource } }]
               : slug === 'date-range-picker'
                 ? [{ heading: 'Example', source: dateRangePickerSource, filename: 'date-range-picker-demo.tsx', files: { 'date-range-picker-demo.tsx': dateRangePickerSource } }]
+              : slug === 'dropdown'
+                ? [{ heading: 'Examples', source: dropdownSource, filename: 'dropdown-demo.tsx', files: { 'dropdown-demo.tsx': dropdownSource } }]
               : slug === 'field'
                 ? [
                     { heading: 'Input and hint', source: fieldInputSource, filename: 'field-input-demo.tsx', files: { 'field-input-demo.tsx': fieldInputSource } },
@@ -357,6 +384,8 @@ const reactExamples = slug === 'button'
                         { heading: 'Large', source: modalLargeSource, filename: 'modal-large-demo.tsx', files: { 'modal-large-demo.tsx': modalLargeSource } },
                         { heading: 'Forced Action', source: modalForcedActionSource, filename: 'modal-forced-action-demo.tsx', files: { 'modal-forced-action-demo.tsx': modalForcedActionSource } },
                       ]
+                : slug === 'nav'
+                  ? [{ heading: 'Examples', source: navSource, filename: 'nav-demo.tsx', files: { 'nav-demo.tsx': navSource } }]
                 : slug === 'pagination'
                   ? [
                       { heading: 'Bounded', source: paginationBoundedSource, filename: 'pagination-bounded-demo.tsx', files: { 'pagination-bounded-demo.tsx': paginationBoundedSource } },
@@ -387,6 +416,8 @@ const reactExamples = slug === 'button'
                         { heading: 'Default', source: selectSource, filename: 'select-demo.tsx', files: { 'select-demo.tsx': selectSource } },
                         { heading: 'Disabled', source: selectDisabledSource, filename: 'select-disabled-demo.tsx', files: { 'select-disabled-demo.tsx': selectDisabledSource } },
                       ]
+                  : slug === 'side-navigation'
+                    ? [{ heading: 'Examples', source: sideNavigationSource, filename: 'side-navigation-demo.tsx', files: { 'side-navigation-demo.tsx': sideNavigationSource } }]
                   : slug === 'step-indicator'
                     ? [
                         { heading: 'Default', source: stepIndicatorSource, filename: 'step-indicator-demo.tsx', files: { 'step-indicator-demo.tsx': stepIndicatorSource } },
@@ -458,7 +489,7 @@ const reactExamples = slug === 'button'
 : reactExamples
 ? (
             <div class="docs-prose max-w-none">
-              <h2>Examples</h2>
+              <h2 id="examples">Examples</h2>
               {slug === 'field' && <p class="max-w-prose">Use <code>Field.Root</code> when you want a React form control to share a label, hint, and validation state. Wrap one control per field. <code>Field.Label</code> and <code>Field.Description</code> provide the control’s label and accessible description; <code>Input</code>, <code>Textarea</code>, and <code>Select.Field</code> read that context.</p>}
               {reactExamples.map(example => (
                 <section aria-label={example.heading}>
@@ -505,6 +536,7 @@ const reactExamples = slug === 'button'
                     {slug === 'combo-box' && example.heading === 'With Default Value' && <ComboBoxDefaultValueDemo client:load />}
                     {slug === 'date-picker' && <DatePickerDemo client:load />}
                     {slug === 'date-range-picker' && <DateRangePickerDemo client:load />}
+                    {slug === 'dropdown' && <DropdownDemo client:load />}
                     {slug === 'field' && example.heading === 'Input and hint' && <FieldInputDemo client:load />}
                     {slug === 'field' && example.heading === 'Error message' && <FieldErrorDemo client:load />}
                     {slug === 'field' && example.heading === 'Select' && <FieldSelectDemo client:load />}
@@ -530,6 +562,7 @@ const reactExamples = slug === 'button'
                     {slug === 'modal' && example.heading === 'Default' && <ModalDefaultDemo client:load />}
                     {slug === 'modal' && example.heading === 'Large' && <ModalLargeDemo client:load />}
                     {slug === 'modal' && example.heading === 'Forced Action' && <ModalForcedActionDemo client:load />}
+                    {slug === 'nav' && <NavDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Bounded' && <PaginationBoundedDemo client:load />}
                     {slug === 'pagination' && example.heading === 'Unbounded' && <PaginationUnboundedDemo client:load />}
                     {slug === 'process-list' && example.heading === 'Default' && <ProcessListDemo client:load />}
@@ -544,6 +577,7 @@ const reactExamples = slug === 'button'
                     {slug === 'search' && example.heading === 'Icon Button' && <SearchIconButtonDemo client:load />}
                     {slug === 'select' && example.heading === 'Default' && <SelectDemo client:load />}
                     {slug === 'select' && example.heading === 'Disabled' && <SelectDisabledDemo client:load />}
+                    {slug === 'side-navigation' && <SideNavigationDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Default' && <StepIndicatorDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Centered' && <StepIndicatorCenteredDemo client:load />}
                     {slug === 'step-indicator' && example.heading === 'Counters' && <StepIndicatorCountersDemo client:load />}
@@ -594,6 +628,7 @@ const reactExamples = slug === 'button'
                   )}
                 </section>
               ))}
+              {reactReference && <ReactApiReference reference={reactReference} />}
             </div>
           )
 : (

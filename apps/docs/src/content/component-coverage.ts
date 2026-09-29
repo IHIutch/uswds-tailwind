@@ -101,6 +101,7 @@ export const componentCoverage = {
   'combo-box': page(component('combobox'), component('combobox', 'Exported as Combobox.'), ['Default', 'With Default Value'], { reactCovered: true }),
   'date-picker': page(component('date-picker'), component('date-picker'), ['Example'], { reactCovered: true }),
   'date-range-picker': page(component('date-range-picker'), component('date-picker', 'Use DatePicker with range selection; there is no React DateRangePicker export.'), ['Example'], { reactCovered: true }),
+  'dropdown': page(component('dropdown'), component('dropdown'), ['Examples'], { reactCovered: true }),
   'field': page(html('Field composition uses native labels, hints, and validity states in Vanilla; there is no Field initializer.'), component('field', undefined, ['fieldset']), ['Input and hint', 'Error message', 'Select', 'Textarea', 'Fieldset'], { reactCovered: true }),
   'file-input': page(component('file-input'), component('file-input'), ['Default', 'Specific File Types', 'Accept Multiple Files'], { reactCovered: true }),
   'footer': page(vanillaComposition(['accordion']), component('footer'), ['Default', 'Medium', 'Slim'], {
@@ -125,6 +126,7 @@ export const componentCoverage = {
   'list': page(html(), styling('List is a Tailwind styling pattern, with no React List export.', 'Use semantic ul/ol elements and the classes shown here.'), ['Example']),
   'memorable-date': page(html(), component('memorable-date'), ['Example'], { reactCovered: true }),
   'modal': page(component('modal'), component('modal'), ['Default', 'Large', 'Forced Action'], { reactCovered: true }),
+  'nav': page(html('Use semantic navigation markup and Tailwind classes; there is no Vanilla Nav initializer.'), component('nav'), ['Examples'], { reactCovered: true }),
   'pagination': page(html(), component('pagination'), ['Bounded', 'Unbounded'], { reactCovered: true }),
   'process-list': page(html(), component('process-list'), ['Default', 'With headings', 'No Text', 'Custom Sizing'], { reactCovered: true }),
   'prose': page(html(), styling('Prose is a typography styling pattern, with no React Prose export.', 'Apply the documented prose classes to a semantic container in React.'), ['Usage']),
@@ -132,6 +134,7 @@ export const componentCoverage = {
   'range-slider': page(html(), component('range-slider'), ['Example'], { reactCovered: true }),
   'search': page(html(), component('search'), ['Default', 'Large', 'Icon Button'], { reactCovered: true }),
   'select': page(html(), component('select'), ['Default', 'Disabled'], { reactCovered: true }),
+  'side-navigation': page(html('Use nested list markup and Tailwind classes; there is no Vanilla SideNavigation initializer.'), component('side-navigation'), ['Examples'], { reactCovered: true }),
   'site-alert': page(html(), composition('Site alert has no React SiteAlert export.', 'Compose a sitewide alert with the React Alert component and the styling on this page.', 'alert'), ['Default', 'Emergency', 'List', 'No Header', 'No Icon', 'Slim']),
   'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels'], { reactCovered: true }),
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
@@ -150,13 +153,8 @@ export const componentCoverage = {
 export const missingComponentDocs = {
   vanilla: {
     collapse: { reason: 'Used by the Banner composition; no dedicated Collapse docs page.', alternative: 'banner' },
-    dropdown: { reason: 'Used by Header and Language Selector compositions; no dedicated Dropdown docs page.', alternative: 'language-selector' },
   },
-  react: {
-    'dropdown': { reason: 'Component is exported but has no dedicated docs page.', alternative: 'language-selector' },
-    'nav': { reason: 'Navigation primitive is exported but has no dedicated docs page.', alternative: 'header' },
-    'side-navigation': { reason: 'Navigation component is exported but has no dedicated docs page.', alternative: 'in-page-navigation' },
-  },
+  react: {},
 } as const
 
 export function getComponentCoverage(slug: string, library: Library): LibraryCoverage {

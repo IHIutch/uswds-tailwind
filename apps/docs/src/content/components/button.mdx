@@ -92,8 +92,16 @@ description: "A button draws attention to important actions with a large selecta
   </div>
 `} />
 
-## Accessibility
+## Component API
 
-- Don't rely on color alone to communicate the intention of a button. Assistive technologies, such as screen readers, will not be able to convey this information. 
+### Anatomy
 
-  Ensure the intention is obvious from the contents of the button itself.
+Use a native `<button>` for an action. Set `type="button"` for in-form controls such as a dialog trigger, or `type="submit"` for form submission. Apply Tailwind classes for the visual treatment.
+
+### Configuration and styling
+
+Choose the colors, size, and outline treatment with classes as shown in the examples. The native `disabled` attribute prevents activation and form submission. Keep visible focus styles when customizing classes.
+
+### Accessibility
+
+Give the button an accessible name through its text or an appropriate label. Use a link for navigation. Native button keyboard behavior, focus, and disabled semantics are provided by the browser.

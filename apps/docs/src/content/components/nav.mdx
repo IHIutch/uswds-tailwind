@@ -1,0 +1,19 @@
+---
+title: "Navigation"
+description: "Build primary navigation with links, an optional mobile drawer, and nested menus."
+---
+
+## Examples
+
+<ComponentPreview title="Navigation" code={`<nav aria-label="Primary navigation" class="border-b border-gray-20">
+  <ul class="flex flex-wrap list-none p-0 m-0">
+    <li><a href="#services" class="block p-4 font-bold text-blue-60v hover:underline focus:outline-4 focus:outline-blue-40v">Services</a></li>
+    <li><a href="#about" class="block p-4 font-bold text-blue-60v hover:underline focus:outline-4 focus:outline-blue-40v">About</a></li>
+  </ul>
+</nav>`} />
+
+## Component API
+
+### Markup
+
+Use a labeled `<nav>` with a list of links. For a collapsible mobile menu, use [Modal](/components/modal) markup and call `modalInit()`. For nested menus, use [Dropdown](/components/dropdown) markup and call `dropdownInit()`.
