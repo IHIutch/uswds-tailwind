@@ -19,15 +19,15 @@ npm install @uswds-tailwind/compat@alpha @uswds-tailwind/theme@alpha tailwindcss
 
 ### Auto-initialize all components
 
-Import once at the top of your entry file. Every supported USWDS component on the page is wired up automatically:
+Import the auto entry once. It scans the document on `DOMContentLoaded`, or immediately if the document is already ready:
 
 ```js
 import '@uswds-tailwind/compat/auto'
 ```
 
-### Initialize specific components
+For manual control, import `initAll` from `@uswds-tailwind/compat` and call it after the markup exists. Do not combine auto and manual initialization on the same elements. These scans do not observe later DOM insertions, and not every wrapper deduplicates repeated initialization.
 
-If you'd rather opt in to individual components:
+### Initialize specific components
 
 ```js
 import { accordionInit } from '@uswds-tailwind/compat/accordion'
@@ -35,6 +35,24 @@ import { accordionInit } from '@uswds-tailwind/compat/accordion'
 // Run once after the accordion markup is in the document.
 accordionInit()
 ```
+
+Accordion markup uses `data-scope="accordion" data-part="root"`, then `data-part="item"`, `data-part="item-trigger"`, and `data-part="item-content"`. Each item needs a unique `data-value`. CSS classes supply presentation; they are not initialization selectors.
+
+### Own an instance
+
+```js
+import { Accordion } from '@uswds-tailwind/compat/accordion'
+
+const root = document.querySelector('#questions')
+if (!root) throw new Error('Accordion root is missing')
+const accordion = Accordion.getOrCreateInstance(root, { id: 'questions' })
+await accordion.open('eligibility')
+
+// Before removing the component:
+accordion.destroy()
+```
+
+Retain the element reference because rendering can change its ID. `getInstance` accepts an element or CSS selector, `getOrCreateInstance` reuses an existing instance without reapplying options, and `destroy` stops it without restoring the original HTML. Accordion, Collapse, Dropdown, Input Mask, Modal, and Tooltip share this factory API; other wrappers still have legacy lifecycle differences. See the [JavaScript reference](https://uswds-tailwind.com/javascript#instance-lifecycle).
 
 ## Components
 

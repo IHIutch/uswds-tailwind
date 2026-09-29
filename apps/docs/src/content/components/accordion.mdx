@@ -3,6 +3,9 @@ title: "Accordion"
 description: "An accordion is a list of headers that hide or reveal additional content when selected."
 ---
 
+import ApiTable from "#components/api-table.astro"
+
+
 This component requires the following JavaScript plugin:
   - [Accordion](/javascript#accordion)
 
@@ -12,15 +15,15 @@ This component requires the following JavaScript plugin:
 
 <ComponentPreview title="Accordion Default" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} code={`
   <div
-    data-part="accordion-root"
+    data-scope="accordion" data-part="root"
     class="space-y-2"
   >
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="one"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         First Amendment
@@ -29,7 +32,7 @@ This component requires the following JavaScript plugin:
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -40,11 +43,11 @@ This component requires the following JavaScript plugin:
       </div>
     </div>
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="two"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         Second Amendment
@@ -53,7 +56,7 @@ This component requires the following JavaScript plugin:
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -63,11 +66,11 @@ This component requires the following JavaScript plugin:
       </div>
     </div>
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="third"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         Third Amendment
@@ -76,7 +79,7 @@ This component requires the following JavaScript plugin:
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -94,16 +97,16 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
 
 <ComponentPreview title="Accordion With headings" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} code={`
   <div
-    data-part="accordion-root"
+    data-scope="accordion" data-part="root"
     class="space-y-2"
   >
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="one"
     >
       <h4>
         <button
-          data-part="accordion-trigger"
+          data-scope="accordion" data-part="item-trigger"
           class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
         >
           First Amendment
@@ -113,7 +116,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </button>
       </h4>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -130,16 +133,16 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
 
 <ComponentPreview title="Accordion Multiple" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} ins={["data-multiple"]} code={`
   <div
-    data-part="accordion-root"
+    data-scope="accordion" data-part="root"
     data-multiple
     class="space-y-2"
   >
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="one"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         First Amendment
@@ -148,7 +151,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -161,11 +164,11 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
       </div>
     </div>
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="two"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         Second Amendment
@@ -174,7 +177,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -184,11 +187,11 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
       </div>
     </div>
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="third"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         Third Amendment
@@ -197,7 +200,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden"
       >
         <p class="leading-normal max-w-prose">
@@ -213,15 +216,15 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
 
 <ComponentPreview title="Accordion Bordered" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} ins={["border-b-4 border-x-4 border-gray-5"]} code={`
   <div
-    data-part="accordion-root"
+    data-scope="accordion" data-part="root"
     class="space-y-2"
   >
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="one"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         First Amendment
@@ -230,7 +233,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden border-b-4 border-x-4 border-gray-5"
       >
         <p class="leading-normal max-w-prose">
@@ -243,11 +246,11 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
       </div>
     </div>
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="two"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         Second Amendment
@@ -256,7 +259,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden border-b-4 border-x-4 border-gray-5"
       >
         <p class="leading-normal max-w-prose">
@@ -266,11 +269,11 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
       </div>
     </div>
     <div
-      data-part="accordion-item"
+      data-scope="accordion" data-part="item"
       data-value="third"
     >
       <button
-        data-part="accordion-trigger"
+        data-scope="accordion" data-part="item-trigger"
         class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
       >
         Third Amendment
@@ -279,7 +282,7 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
         </div>
       </button>
       <div
-        data-part="accordion-content"
+        data-scope="accordion" data-part="item-content"
         class="py-6 px-4 not-[[data-state=open]]:hidden border-b-4 border-x-4 border-gray-5"
       >
         <p class="leading-normal max-w-prose">
@@ -293,98 +296,136 @@ Wrap each trigger in a heading when its panel represents a section of the page. 
 
 ## Component API
 
-Accordions are made up of 4 primary elements:
+### Initialization
 
-### Root
+Run once after the accordion markup exists:
 
-<ContentList>
-  - #### `x-accordion`
-    
-    Custom **Alpine** directive that marks the **Accordion Root**.
-</ContentList>
+```js
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
 
-### Item
+accordionInit()
+```
 
-<ContentList>
-  - #### `x-accordion:item`
-    
-    Custom **Alpine** directive that marks a single **Accordion Item**.
-</ContentList>
+For an instance you can control, use `Accordion.getOrCreateInstance(root, options)`. See [shared instance methods](/javascript#instance-lifecycle).
 
-### Trigger
+### Anatomy
 
-<ContentList>
-  - #### `x-accordion:trigger`
-    
-    Custom **Alpine** directive that marks the **Accordion Trigger**.
-  
-  - #### `aria-controls`
-    
-    **Type:** `string`
-  
-    Accessibility attribute that links the **Accordion Trigger** control to it's respective **Accordion Content**. 
-    
-    **Automatically handled with JavaScript.**
-  
-  - #### `aria-expanded`
-    
-    **Type:** `boolean`
-  
-    Accessibility attribute that communicates whether an element is expanded or collapsed. 
-    
-    **Automatically handled with JavaScript.**
-</ContentList>
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
 
-### Content
+#### `root`
 
-<ContentList>
-  - #### `x-accordion:content`
-    
-    Custom **Alpine** directive that marks the **Accordion Content**.
-  
-  - #### `id`
-    **Type:** `string`
-  
-    Links the **Accordion Content** to it's respective **Accordion Trigger**. 
-    
-    **Automatically handled with JavaScript.**
-  
-  - #### `hidden`
-    **Type:** `'until-found' | false`
-  
-    Handles the visibility of the **Accordion Content**. When `until-found`, content will be hidden but discoverable to browser search. When `false`, content will be visible and `hidden` attribute will be removed. 
-    
-    **Automatically handled with JavaScript.**
-</ContentList>
+Groups the accordion items.
 
-## Keyboard Interactions
+<ApiTable label="accordion root attributes">
 
-<ContentList>
-  - <kbd>Enter</kbd> or <kbd>Space</kbd>
-  
-    When focus is on an **Accordion Item** for a collapsed panel, expands the associated panel. If the implementation allows only one panel to be expanded, the previously expanded panel is collapsed.
-  
-  - <kbd>Tab</kbd>
-  
-    Moves focus to the next focusable element. All **Accordion Items** in the **Accordion List** must be included in the page <kbd>Tab</kbd> sequence.
-  
-  - <kbd>Down Arrow</kbd>
-  
-    If focus is on an **Accordion Item**, moves focus to the next **Accordion Item**. If focus is on the last **Accordion Item**, moves focus to the first **Accordion Item**.
-  
-  - <kbd>Shift</kbd> + <kbd>Tab</kbd>
-  
-    Moves focus to the previous focusable element. All **Accordion Items** in the **Accordion List** must be included in the page <kbd>Tab</kbd> sequence.
-  
-  - <kbd>Up Arrow</kbd>
-  
-    If focus is on an **Accordion Item**, moves focus to the previous **Accordion Item**. If focus is on the first **Accordion Item**, moves focus to the last **Accordion Item**.
-  
-  - <kbd>Home</kbd> or <kbd>fn</kbd> + <kbd>Left Arrow</kbd> (Mac)
-  
-    If focus is on an **Accordion Item**, moves focus to the first **Accordion Item**.
-  
-  - <kbd>End</kbd> or <kbd>fn</kbd> + <kbd>Right Arrow</kbd> (Mac)
-  
-    If focus is on an **Accordion Item**, moves focus to the last **Accordion Item**.
-</ContentList>
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"accordion"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `data-multiple` | `boolean-like attribute` | **Authored.** Allows several open panels. Bare attribute is true; omission or `"false"` is false. Overrides the `multiple` option, even when omitted. |
+
+</ApiTable>
+
+#### `item`
+
+One panel, containing its trigger and content.
+
+<ApiTable label="accordion item attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item"` | **Authored.** Identifies this part. |
+| `data-value` | `string` | **Authored.** Required unique, nonempty item value; `id` is used as a fallback. |
+| `data-state` | `"open" \| "closed"` | **Authored.** Use `"open"` to expand initially. In single-open mode, only the first marked item is used. `defaultValue` overrides these markers. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+
+</ApiTable>
+
+#### `item-trigger`
+
+Toggles its panel. Place inside a heading when introducing a section.
+
+<ApiTable label="accordion item-trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item-trigger"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `aria-expanded` | `"true" \| "false"` | **Generated.** Whether the content is expanded. |
+| `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
+
+</ApiTable>
+
+#### `item-content`
+
+Panel content, inside the same item as its trigger.
+
+<ApiTable label="accordion item-content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item-content"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="accordion JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `defaultValue` | `string[]`. Initial expanded item values; overrides item state markers. |
+| `value` | `string[]`. Controlled expanded values; takes precedence over `defaultValue`. |
+| `id` | Instance identifier; defaults to the root ID or a generated value. |
+| `ids` | Override root, item-trigger, and item-content IDs for composition. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Accordion instance methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `open(value)` | `Promise<void>` | Requests expansion of the item. |
+| `close(value)` | `Promise<void>` | Requests collapse of the item. |
+| `toggle(value)` | `Promise<void>` | Requests the opposite expanded state. |
+| `destroy()` | `void` | Stops the instance and removes its lookup. Does not restore the original HTML. |
+
+</ApiTable>
+
+```js
+import { Accordion } from '@uswds-tailwind/compat/accordion'
+
+const accordion = Accordion.getOrCreateInstance(
+  '[data-scope="accordion"][data-part="root"]',
+)
+
+await accordion.open('one')
+```
+
+Pass the item’s `data-value` (or fallback `id`) as the `value` argument. Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
+
+See [initialization and cleanup](/javascript#instance-lifecycle).
+
+### Callbacks
+
+<ApiTable label="Accordion callbacks">
+
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onValueChange` | `{ value: string[] }` | Expanded values change, or a controlled change is requested. |
+
+</ApiTable>
+
+Pass callbacks in instance options. They are JavaScript functions, not emitted DOM events.
+
+### Accessibility
+
+- Supply meaningful button text and appropriate heading levels.
+- Enter and Space activate the focused button.
+- Arrow-key navigation between headings is not provided.

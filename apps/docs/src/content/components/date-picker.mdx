@@ -3,6 +3,9 @@ title: "Date picker"
 description: "A date picker helps users select a single date."
 ---
 
+import ApiTable from "#components/api-table.astro"
+
+
 ## Example
 
 <ComponentPreview title="Date Picker" minHeight="384px" resize={false} mark={[/data-part="[^\"]*"/g, /data-unit="[^\"]*"/g, /data-value="[^\"]*"/g]} code={`
@@ -160,3 +163,75 @@ description: "A date picker helps users select a single date."
     </div>
   </div>
 `} />
+
+## Component API
+
+### Initialization
+
+```js
+import { datePickerInit } from '@uswds-tailwind/compat/date-picker'
+
+datePickerInit()
+```
+
+`DatePicker` is the corresponding instance class. Initialize after the complete calendar template and input exist.
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+Use each part name as its `data-part` value. Keep the complete calendar template from the example; the runtime owns generated calendar cells.
+
+#### `date-picker-root`
+
+Wraps the input and calendar.
+
+<ApiTable label="date-picker-root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-min-date, data-max-date` | `ISO date strings` | **Authored.** Date bounds. |
+| `data-range-date` | `ISO date string` | **Authored.** Reference date for range styling. |
+| `data-default-value` | `string` | **Authored.** Initial date; falls back to `data-default-date` when empty or absent. |
+| `disabled, readonly` | `boolean attributes` | **Authored.** Presence enables the corresponding state. |
+
+</ApiTable>
+
+#### `date-picker-input`
+
+Date entry field.
+
+<ApiTable label="date-picker-input attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | **Authored.** Nonempty initial input value overrides both root default attributes. |
+| `disabled, readonly` | `boolean attributes` | **Authored.** Presence enables the corresponding state. |
+
+</ApiTable>
+
+#### `date-picker-trigger`
+
+Named button that opens the calendar.
+
+#### `date-picker-content`
+
+Contains the day, month, and year views: `date-picker-day`, `date-picker-month`, and `date-picker-year`. Keep the day-header, date-button, month-button, and year-button templates from the example.
+
+#### `date-picker-status`
+
+Optional announcement region.
+
+### Configuration
+
+Use ISO date strings such as `2026-09-28` for date configuration. These attributes are read at construction and override corresponding constructor configuration; later attribute changes are not observed automatically.
+
+Keep the displayed input format explicit in a visible hint.
+
+### Accessibility and lifecycle
+
+Provide a visible label, a named calendar trigger, and hint/error relationships.
+
+Keep date labels and navigation controls from the complete example instead of replacing generated calendar children.
+
+Retain explicit instances and call `destroy()` before removing the markup. See [instance lifecycle](/javascript#instance-lifecycle).

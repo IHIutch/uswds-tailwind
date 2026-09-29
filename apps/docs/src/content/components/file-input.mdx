@@ -3,6 +3,9 @@ title: "File input"
 description: "File input allows users to attach one or multiple files."
 ---
 
+import ApiTable from "#components/api-table.astro"
+
+
 This component requires the following JavaScript plugin:
   - [File Input](/javascript#file-input)
 
@@ -202,102 +205,89 @@ This component requires the following JavaScript plugin:
 
 ## Component API
 
-### Root
+### Initialization
 
-<ContentList>
+```js
+import { fileInputInit } from '@uswds-tailwind/compat/file-input'
 
-  - #### `x-file-input`
-    
-    Custom **Alpine** directive that marks the **File Input Root**.
+fileInputInit()
+```
 
-  - #### `data-dragging`
+`FileInput` is the corresponding instance class. Initialize after all parts and the preview template exist.
 
-     **Type:** `boolean`<br/>**Default:** `false`
-    
-    Attribute used to style **File Input Root** when a file is dragged over the **File Input Dropzone**.
+### Anatomy
 
-  - #### `data-invalid`
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
 
-    **Type:** `boolean`<br/>**Default:** `false`
-    
-    Attribute used to style **File Input Root** when an invalid file is provided.
+Use `data-part="file-input-root"` with these descendants:
 
-</ContentList>
+#### `file-input-label`
 
-### Dropzone
+Required label.
 
-<ContentList>
+#### `file-input-dropzone`
 
-  - #### `x-file-input:dropzone`
-    
-    Custom **Alpine** directive that marks the **File Input Dropzone**.
+Required drop target.
 
-  - #### `data-dragging`
+#### `file-input-input`
 
-     **Type:** `boolean`<br/>**Default:** `false`
-    
-    Attribute used to style **File Input Root** when a file is dragged over the **File Input Dropzone**.
+Required native file input.
 
-  - #### `data-invalid`
+<ApiTable label="file-input-input attributes">
 
-    **Type:** `boolean`<br/>**Default:** `false`
-    
-    Attribute used to style **File Input Root** when an invalid file is provided.
-    
-</ContentList>
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `accept` | `comma-separated string` | **Authored.** Accepted file types. |
+| `disabled` | `boolean attribute` | **Authored.** Disables selection. |
+| `multiple` | `boolean attribute` | **Authored.** Allows the native input to select multiple files. |
+| `data-errormessage` | `string` | **Authored.** Message displayed for an invalid file type. |
 
-### Input
+</ApiTable>
 
-<ContentList>
+#### `file-input-instructions`
 
-  - #### `x-file-input:input`
-    
-    Custom **Alpine** directive that marks the **File Input Input**.
+Required visible selection instructions.
 
-  - #### `aria-label`
+#### `file-input-sr-status`
 
-    **Default:** `'Drag file here or choose from folder'`
-    
-    Accessibility attribute describing the file input to assistive technology.
+Required announcement region.
 
-  - #### `accept`
+#### `file-input-preview-header`
 
-    **Type:** `string | undefined`<br/>**Default:** `undefined`
-    
-    Native attribute used to describe the file types accepted by this input.
+Required preview heading.
 
-  - #### `data-minsize`
+#### `file-input-preview-list`
 
-    **Type:** `number | undefined`<br/>**Default:** `undefined`
-    
-    Custom attribute use to provide the minimum acceptable file size, in bytes.
+Required preview container.
 
-  - #### `data-maxsize`
+#### `file-input-preview-item`
 
-    **Type:** `number | undefined`<br/>**Default:** `undefined`
-    
-    Custom attribute use to provide the maximum acceptable file size, in bytes.
+Required initial template inside the preview list.
 
-  - #### `data-invalid`
+#### `file-input-preview-item-icon`
 
-    **Type:** `boolean`<br/>**Default:** `false`
-    
-    Attribute used to style **File Input Root** when an invalid file is provided.
-    
-  - #### `aria-invalid`
+Optional preview icon template.
 
-    **Type:** `boolean`<br/>**Default:** `false`
-    
-    Accessibility attribute that communicates when a provided file was invalid.
-    
-</ContentList>
+#### `file-input-preview-item-content`
 
-### Error Message
+Optional filename template.
 
-<ContentList>
+#### `file-input-error-message`
 
-  - #### `x-file-input:error-message`
-    
-    Custom **Alpine** directive that marks the **File Input Error Message**.
-    
-</ContentList>
+Optional visual error message.
+
+The wrapper owns the generated preview children. Keep the file input in the form with a meaningful label and `name`.
+
+### Configuration
+
+The wrapper reads `accept`, `disabled`, and `data-errormessage` during construction; these DOM-derived values override their corresponding constructor options, including when an attribute is absent.
+
+`accept` is a file-picker hint and client-side type constraint, not a server validation rule. The component manages selection and previews; it does not upload files. The application owns submission and server validation.
+
+### Lifecycle
+
+Retain explicitly constructed instances and call `destroy()` before removing the markup. The legacy convenience initializer returns no instance array.
+
+See [instance lifecycle](/javascript#instance-lifecycle).
+
+Keep status and error elements separate from generated preview children.
