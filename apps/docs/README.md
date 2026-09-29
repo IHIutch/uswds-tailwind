@@ -1,54 +1,28 @@
-# Astro Starter Kit: Basics
+# Documentation site
+
+The Astro site in this workspace publishes the Vanilla and React guides, component pages, live previews, and StackBlitz projects.
+
+## Run locally
+
+From the repository root, install dependencies with `pnpm install`, then run:
 
 ```sh
-npm create astro@latest -- --template basics
+pnpm build:packages
+pnpm --filter website dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+For a production build and content/type checks:
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+pnpm --filter website exec astro check
+pnpm build:website
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Edit content
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- Shared pages live in `src/content/pages/`. `getting-started.mdx` is the Vanilla guide; `getting-started-react.mdx` is the React guide. `src/components/docs-getting-started-page.astro` selects the page using the library route.
+- Component prose lives in `src/content/components/`. Keep shared descriptions and accessibility advice together; use the existing library routes for library-specific examples.
+- Live demos and their source are registered in `src/components/docs-component-page.astro` and stored under `src/examples/`. Keep the visible preview, copied source, and StackBlitz export aligned.
+- The component availability map is `src/content/component-coverage.ts`. Run `pnpm --filter website exec astro check` and `pnpm build:website` after adding a page or example.
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Use the package's public imports in copyable examples. Check the published release version before changing install instructions; the site name does not determine npm semver.

@@ -11,7 +11,7 @@ A [Tailwind CSS v4](https://tailwindcss.com/) theme that exposes USWDS design to
 ## Install
 
 ```bash
-npm install -D @uswds-tailwind/theme@alpha tailwindcss
+npm install @uswds-tailwind/theme@alpha tailwindcss
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ If you're using `@uswds-tailwind/react`, you don't need to import this package d
 - [`@tailwindcss/forms`](https://github.com/tailwindlabs/tailwindcss-forms) and [`@tailwindcss/typography`](https://github.com/tailwindlabs/tailwindcss-typography) presets
 - [`tailwindcss-animate`](https://github.com/jamiebuilds/tailwindcss-animate) utilities
 
-USWDS-recommended fonts ([Public Sans](https://public-sans.digital.gov/), Source Sans 3, Merriweather, Roboto Mono, Open Sans) and icon sets (`material-symbols`, Font Awesome via `@iconify/tailwind4`) are declared as `optionalDependencies`. Install only what you use.
+USWDS-recommended fonts ([Public Sans](https://public-sans.digital.gov/), Source Sans 3, Merriweather, Roboto Mono, Open Sans) and icon sets (`material-symbols`, Font Awesome via `@iconify/tailwind4`) are declared as `optionalDependencies` and are installed by default with npm. The theme CSS already imports the fonts. If your package manager omits optional dependencies, install the fonts referenced by the theme CSS before building.
 
 ## License
 
