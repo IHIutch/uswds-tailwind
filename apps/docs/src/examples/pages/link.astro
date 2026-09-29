@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import LinkDemo from '../link-demo'
+import linkSource from '../link-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={linkSource} language="tsx" filename="link-demo.tsx" playgroundFiles={{ 'link-demo.tsx': linkSource }}>
+  <LinkDemo client:load />
+</ComponentPreview>

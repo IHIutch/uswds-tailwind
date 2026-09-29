@@ -1,0 +1,33 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import CollectionDemo from '../collection-demo'
+import collectionSource from '../collection-demo.tsx?raw'
+import CollectionHeadingsDemo from '../collection-headings-demo'
+import collectionHeadingsSource from '../collection-headings-demo.tsx?raw'
+import CollectionCalendarDemo from '../collection-calendar-demo'
+import collectionCalendarSource from '../collection-calendar-demo.tsx?raw'
+import CollectionThumbnailDemo from '../collection-thumbnail-demo'
+import collectionThumbnailSource from '../collection-thumbnail-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Default</h3>
+<ComponentPreview title="Default" demo code={collectionSource} language="tsx" filename="collection-demo.tsx" playgroundFiles={{ 'collection-demo.tsx': collectionSource }}>
+  <CollectionDemo client:load />
+</ComponentPreview>
+
+<h3>Headings Only</h3>
+<ComponentPreview title="Headings Only" demo code={collectionHeadingsSource} language="tsx" filename="collection-headings-demo.tsx" playgroundFiles={{ 'collection-headings-demo.tsx': collectionHeadingsSource }}>
+  <CollectionHeadingsDemo client:load />
+</ComponentPreview>
+
+<h3>Calendar</h3>
+<ComponentPreview title="Calendar" demo code={collectionCalendarSource} language="tsx" filename="collection-calendar-demo.tsx" playgroundFiles={{ 'collection-calendar-demo.tsx': collectionCalendarSource }}>
+  <CollectionCalendarDemo client:load />
+</ComponentPreview>
+
+<h3>Media Thumbnail</h3>
+<ComponentPreview title="Media Thumbnail" demo code={collectionThumbnailSource} language="tsx" filename="collection-thumbnail-demo.tsx" playgroundFiles={{ 'collection-thumbnail-demo.tsx': collectionThumbnailSource }}>
+  <CollectionThumbnailDemo client:load />
+</ComponentPreview>

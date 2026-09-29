@@ -1,0 +1,19 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import BreadcrumbDemo from '../breadcrumb-demo'
+import breadcrumbSource from '../breadcrumb-demo.tsx?raw'
+import BreadcrumbWrappingDemo from '../breadcrumb-wrapping-demo'
+import breadcrumbWrappingSource from '../breadcrumb-wrapping-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Default</h3>
+<ComponentPreview title="Default" demo code={breadcrumbSource} language="tsx" filename="breadcrumb-demo.tsx" playgroundFiles={{ 'breadcrumb-demo.tsx': breadcrumbSource }}>
+  <BreadcrumbDemo client:load />
+</ComponentPreview>
+
+<h3>Wrapping</h3>
+<ComponentPreview title="Wrapping" demo code={breadcrumbWrappingSource} language="tsx" filename="breadcrumb-wrapping-demo.tsx" playgroundFiles={{ 'breadcrumb-wrapping-demo.tsx': breadcrumbWrappingSource }}>
+  <BreadcrumbWrappingDemo client:load />
+</ComponentPreview>

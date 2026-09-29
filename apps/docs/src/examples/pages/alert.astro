@@ -1,0 +1,33 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import AlertDemo from '../alert-demo'
+import alertSource from '../alert-demo.tsx?raw'
+import AlertSlimDemo from '../alert-slim-demo'
+import alertSlimSource from '../alert-slim-demo.tsx?raw'
+import AlertNoIconDemo from '../alert-no-icon-demo'
+import alertNoIconSource from '../alert-no-icon-demo.tsx?raw'
+import AlertSlimNoIconDemo from '../alert-slim-no-icon-demo'
+import alertSlimNoIconSource from '../alert-slim-no-icon-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Default</h3>
+<ComponentPreview title="Default" demo code={alertSource} language="tsx" filename="alert-demo.tsx" playgroundFiles={{ 'alert-demo.tsx': alertSource }}>
+  <AlertDemo client:load />
+</ComponentPreview>
+
+<h3>Slim</h3>
+<ComponentPreview title="Slim" demo code={alertSlimSource} language="tsx" filename="alert-slim-demo.tsx" playgroundFiles={{ 'alert-slim-demo.tsx': alertSlimSource }}>
+  <AlertSlimDemo client:load />
+</ComponentPreview>
+
+<h3>No Icon</h3>
+<ComponentPreview title="No Icon" demo code={alertNoIconSource} language="tsx" filename="alert-no-icon-demo.tsx" playgroundFiles={{ 'alert-no-icon-demo.tsx': alertNoIconSource }}>
+  <AlertNoIconDemo client:load />
+</ComponentPreview>
+
+<h3>Slim No Icon</h3>
+<ComponentPreview title="Slim No Icon" demo code={alertSlimNoIconSource} language="tsx" filename="alert-slim-no-icon-demo.tsx" playgroundFiles={{ 'alert-slim-no-icon-demo.tsx': alertSlimNoIconSource }}>
+  <AlertSlimNoIconDemo client:load />
+</ComponentPreview>

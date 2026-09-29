@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import DateRangePickerDemo from '../date-range-picker-demo'
+import dateRangePickerSource from '../date-range-picker-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={dateRangePickerSource} language="tsx" filename="date-range-picker-demo.tsx" playgroundFiles={{ 'date-range-picker-demo.tsx': dateRangePickerSource }}>
+  <DateRangePickerDemo client:load />
+</ComponentPreview>

@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import ButtonDemo from '../button-demo'
+import buttonSource from '../button-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Examples" demo code={buttonSource} language="tsx" filename="button-demo.tsx" playgroundFiles={{ 'button-demo.tsx': buttonSource }}>
+  <ButtonDemo client:load />
+</ComponentPreview>

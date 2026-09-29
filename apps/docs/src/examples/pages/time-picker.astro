@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import TimePickerDemo from '../time-picker-demo'
+import timePickerSource from '../time-picker-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={timePickerSource} language="tsx" filename="time-picker-demo.tsx" playgroundFiles={{ 'time-picker-demo.tsx': timePickerSource }}>
+  <TimePickerDemo client:load />
+</ComponentPreview>

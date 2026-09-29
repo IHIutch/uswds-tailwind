@@ -1,0 +1,46 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import { Code } from 'astro-expressive-code/components'
+import PaginationBoundedDemo from '../pagination-bounded-demo'
+import paginationBoundedSource from '../pagination-bounded-demo.tsx?raw'
+import PaginationUnboundedDemo from '../pagination-unbounded-demo'
+import paginationUnboundedSource from '../pagination-unbounded-demo.tsx?raw'
+
+const paginationShortcut = `<Pagination.List>
+  <Pagination.PrevTrigger />
+  <Pagination.Pages />
+  <Pagination.NextTrigger />
+</Pagination.List>`
+const paginationExpanded = `<Pagination.List>
+  {({ pages }) => (
+    <>
+      <Pagination.PrevTrigger />
+      {pages.map((page, index) =>
+        page.type === 'page'
+          ? <Pagination.Item key={page.value} value={page.value} />
+          : <Pagination.Ellipsis key={'ellipsis-' + index} />,
+      )}
+      <Pagination.NextTrigger />
+    </>
+  )}
+</Pagination.List>`
+---
+
+<h2 id="examples">Examples</h2>
+
+<h3>Bounded</h3>
+<ComponentPreview title="Bounded" demo code={paginationBoundedSource} language="tsx" filename="pagination-bounded-demo.tsx" playgroundFiles={{ 'pagination-bounded-demo.tsx': paginationBoundedSource }}>
+  <PaginationBoundedDemo client:load />
+</ComponentPreview>
+<div class="max-w-prose mb-12">
+  <h4>Pages shortcut</h4>
+  <p><code>Pagination.Pages</code> renders a <code>Pagination.Item</code> for each visible page and a <code>Pagination.Ellipsis</code> for each gap. Inside <code>Pagination.List</code>, this:</p>
+  <Code code={paginationShortcut} lang="tsx" />
+  <p>is shorthand for the render function used in the full example above:</p>
+  <Code code={paginationExpanded} lang="tsx" />
+                    </div>
+
+<h3>Unbounded</h3>
+<ComponentPreview title="Unbounded" demo code={paginationUnboundedSource} language="tsx" filename="pagination-unbounded-demo.tsx" playgroundFiles={{ 'pagination-unbounded-demo.tsx': paginationUnboundedSource }}>
+  <PaginationUnboundedDemo client:load />
+</ComponentPreview>

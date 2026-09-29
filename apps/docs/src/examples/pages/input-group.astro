@@ -1,0 +1,11 @@
+---
+import ComponentPreview from '#components/component-preview.astro'
+import InputGroupDemo from '../input-group-demo'
+import inputGroupSource from '../input-group-demo.tsx?raw'
+---
+
+<h2 id="examples">Examples</h2>
+
+<ComponentPreview title="Example" demo code={inputGroupSource} language="tsx" filename="input-group-demo.tsx" playgroundFiles={{ 'input-group-demo.tsx': inputGroupSource }}>
+  <InputGroupDemo client:load />
+</ComponentPreview>
