@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { componentCoverage, getComponentCoverage, missingComponentDocs } from '../src/content/component-coverage.ts'
+import { partSlug, reactReferences } from '../src/reference/react/catalog.ts'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 const docs = resolve(root, 'apps/docs/src/content/components')
@@ -15,6 +16,29 @@ const compatIndex = readFileSync(resolve(root, 'packages/compat/src/index.ts'), 
 const errors = []
 const pages = readdirSync(docs).filter(name => name.endsWith('.mdx')).map(name => name.slice(0, -4))
 const knownPages = new Set(pages)
+
+for (const [slug, page] of Object.entries(componentCoverage)) {
+  if (page.published === false || page.react.kind !== 'component')
+    continue
+  if (!reactReferences[slug])
+    errors.push(`${slug}: missing React component API reference`)
+}
+for (const [slug, reference] of Object.entries(reactReferences)) {
+  if (!componentCoverage[slug] || componentCoverage[slug].react.kind !== 'component')
+    errors.push(`${slug}: React API reference has no component page`)
+  if (!reference.parts.length)
+    errors.push(`${slug}: React API reference has no parts`)
+  if (new Set(reference.parts.map(part => part.name)).size !== reference.parts.length)
+    errors.push(`${slug}: React API reference repeats a part`)
+  const headingIds = reference.parts.map(part => part.slug ?? partSlug(part.name))
+  if (reference.accessibility)
+    headingIds.push(partSlug(reference.accessibilityHeading ?? 'Accessibility'))
+  if (new Set(headingIds).size !== headingIds.length)
+    errors.push(`${slug}: React API reference repeats a heading ID`)
+  const propIds = reference.parts.flatMap(part => part.props?.map(prop => prop[4]).filter(Boolean) ?? [])
+  if (new Set(propIds).size !== propIds.length)
+    errors.push(`${slug}: React API reference repeats a prop anchor`)
+}
 
 for (const slug of pages) {
   const item = componentCoverage[slug]
