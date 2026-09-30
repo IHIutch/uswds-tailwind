@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro'
 import { getCollection, getEntry } from 'astro:content'
 import dedent from 'dedent'
 
+export const prerender = true
+
 export const GET: APIRoute = async () => {
   const siteUrl = import.meta.env.SITE
 
@@ -27,15 +29,10 @@ Build federal websites and applications faster than ever.
 - [JavaScript](${siteUrl}/${javascript?.id}.md)
 - [Typography](${siteUrl}/${typography?.id}.md)
 
-## Components
+${['vanilla', 'react'].map(library => `## ${library === 'react' ? 'React' : 'Vanilla'} components
 
-${components.map((c) => {
-  const line = `- [${c.data.title}](${siteUrl}/components/${c.id}.md)`
-  if (c.data.description) {
-    return line.concat(`: ${c.data.description}`)
-  }
-  return line
-}).join('\n')}
+${components.map(c => `- [${c.data.title} (${library === 'react' ? 'React' : 'Vanilla'})](${siteUrl}/docs/${library}/components/${c.id}.md): ${c.data.description}`).join('\n')}`).join('\n\n')}
+
 `), {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',

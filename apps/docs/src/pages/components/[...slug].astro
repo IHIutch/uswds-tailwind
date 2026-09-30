@@ -6,7 +6,6 @@ const { slug } = Astro.params
 if (!slug)
   return new Response('Page not found', { status: 404 })
 const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
-if (library === 'vanilla' && prefersMarkdown(Astro))
-  return privateRedirect(Astro.redirect(`/components/${slug}.md`))
-return privateRedirect(Astro.redirect(libraryHref(`/components/${slug}`, library, Astro.url)))
+const suffix = prefersMarkdown(Astro) ? '.md' : ''
+return privateRedirect(Astro.redirect(libraryHref(`/components/${slug}${suffix}`, library, Astro.url)))
 ---

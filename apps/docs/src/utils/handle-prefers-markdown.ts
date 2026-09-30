@@ -1,7 +1,8 @@
 import type { AstroGlobal } from 'astro'
 
+/** Match the Markdown media type, ignoring parameters. */
 export function prefersMarkdown(Astro: AstroGlobal) {
-  const acceptHeader = Astro.request.headers.get('accept')
-  return acceptHeader?.includes('text/plain')
-    || acceptHeader?.includes('text/markdown')
+  return (Astro.request.headers.get('accept') ?? '')
+    .split(',')
+    .some(type => type.split(';')[0].trim().toLowerCase() === 'text/markdown')
 }
