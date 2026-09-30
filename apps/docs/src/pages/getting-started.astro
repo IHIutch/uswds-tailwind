@@ -1,9 +1,6 @@
 ---
-import { prefersMarkdown } from '#utils/handle-prefers-markdown'
 import { libraryHref, privateRedirect, resolveLibrary } from '#utils/library'
 
 const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
-if (library === 'vanilla' && prefersMarkdown(Astro))
-  return privateRedirect(Astro.redirect('/getting-started.md'))
 return privateRedirect(Astro.redirect(libraryHref('/getting-started', library, Astro.url)))
 ---

@@ -1,12 +1,12 @@
 ---
 import DocsJavascriptPage from '#components/docs-javascript-page.astro'
 import { prefersMarkdown } from '#utils/handle-prefers-markdown'
-import { isLibrary } from '#utils/library'
+import { isLibrary, privateRedirect } from '#utils/library'
 
 const { library } = Astro.params
 if (!isLibrary(library))
   return new Response('Page not found', { status: 404 })
-if (library === 'vanilla' && prefersMarkdown(Astro))
-  return Astro.redirect('/javascript.md')
+if (prefersMarkdown(Astro))
+  return privateRedirect(Astro.redirect(`${Astro.url.pathname}.md${Astro.url.search}`))
 ---
 <DocsJavascriptPage library={library} />
