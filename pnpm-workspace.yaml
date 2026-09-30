@@ -34,6 +34,7 @@ catalog:
   '@tailwindcss/typography': 0.5.16
   '@tailwindcss/vite': 4.3.3
   '@types/fs-extra': 11.0.1
+  '@types/hast': ^3.0.5
   '@types/node': ^25.0.1
   '@types/react': ^19.2.7
   '@types/react-dom': ^19.2.3
@@ -67,7 +68,6 @@ catalog:
   fuse.js: ^7.1.0
   github-slugger: ^2.0.0
   hast-util-from-html: ^2.0.3
-  yaml: ^2.9.1
   hast-util-select: ^6.0.4
   hast-util-to-mdast: ^10.1.2
   mdast-util-gfm: ^3.1.0
@@ -93,6 +93,7 @@ catalog:
   vitest: ^4.0.16
   vitest-browser-react: ^2.1.0
   wrangler: ^4.142.0
+  yaml: ^2.9.1
 
 catalogMode: prefer
 

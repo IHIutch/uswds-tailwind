@@ -7,9 +7,7 @@ export const prerender = true
 export const GET: APIRoute = async () => {
   const siteUrl = import.meta.env.SITE
 
-  const gettingStarted = await getEntry('pages', 'getting-started')
   const about = await getEntry('pages', 'about')
-  const javascript = await getEntry('pages', 'javascript')
   const typography = await getEntry('pages', 'typography')
 
   const components = await getCollection(
@@ -24,9 +22,10 @@ Build federal websites and applications faster than ever.
 
 ## Overview
 
-- [Getting Started](${siteUrl}/${gettingStarted?.id}.md)
+- [Getting Started (Vanilla)](${siteUrl}/docs/vanilla/getting-started.md)
+- [Getting Started (React)](${siteUrl}/docs/react/getting-started.md)
 - [About](${siteUrl}/${about?.id}.md)
-- [JavaScript](${siteUrl}/${javascript?.id}.md)
+- [JavaScript (Vanilla)](${siteUrl}/docs/vanilla/javascript.md)
 - [Typography](${siteUrl}/${typography?.id}.md)
 
 ${['vanilla', 'react'].map(library => `## ${library === 'react' ? 'React' : 'Vanilla'} components

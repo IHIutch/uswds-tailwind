@@ -1,16 +1,21 @@
+import type { Element, ElementContent, Nodes, Root } from 'hast'
+import { fromHtml } from 'hast-util-from-html'
 import { select, selectAll } from 'hast-util-select'
 import { toMdast } from 'hast-util-to-mdast'
 import { gfmToMarkdown } from 'mdast-util-gfm'
 import { toMarkdown } from 'mdast-util-to-markdown'
-import { fromHtml } from 'hast-util-from-html'
 import { stringify } from 'yaml'
-import { isLibraryDocumentation, libraryFromPath, libraryHref } from './library.ts'
+import { isLibraryDocumentation, libraryFromPath, libraryHref } from './library'
 
-function textContent(node) {
-  return node.type === 'text' ? node.value : (node.children ?? []).map(textContent).join('')
+function textContent(node: Nodes | undefined): string {
+  if (!node)
+    return ''
+  if (node.type === 'text')
+    return node.value
+  return 'children' in node ? node.children.map(textContent).join('') : ''
 }
 
-function sourceBlock(pre) {
+function sourceBlock(pre: Element): Element {
   // Expressive Code splits rendered source lines into highlighted spans.
   const lines = selectAll('.ec-line .code', pre)
   const source = lines.length
@@ -30,11 +35,12 @@ function sourceBlock(pre) {
   }
 }
 
-function clean(node, url) {
+function clean(node: ElementContent, url: URL): ElementContent[] {
   if (node.type !== 'element')
     return [node]
 
-  if (node.properties?.className?.includes('md-ignore'))
+  const classes = node.properties.className
+  if (Array.isArray(classes) && classes.includes('md-ignore'))
     return []
 
   if (node.properties?.dataPreviewLibrary) {
@@ -44,7 +50,7 @@ function clean(node, url) {
     return [sourceBlock(pre)]
   }
 
-  if (node.properties?.className?.includes('expressive-code'))
+  if (Array.isArray(classes) && classes.includes('expressive-code'))
     return selectAll('pre', node).map(sourceBlock)
 
   if (node.tagName === 'pre')
@@ -56,7 +62,7 @@ function clean(node, url) {
   if (node.tagName === 'h3') {
     // The HTML uses a CSS margin before element names like `<div>`.
     // Markdown needs an actual space there.
-    node.children = node.children.flatMap(child =>
+    node.children = node.children.flatMap<ElementContent>(child =>
       child.type === 'element' && child.tagName === 'span'
         ? [{ type: 'text', value: ' ' }, child]
         : [child],
@@ -70,7 +76,7 @@ function clean(node, url) {
   if (['div', 'section', 'main'].includes(node.tagName))
     return node.children
 
-  if (node.tagName === 'a' && node.properties?.href) {
+  if (node.tagName === 'a' && typeof node.properties.href === 'string') {
     const target = new URL(node.properties.href, url)
     const library = libraryFromPath(url.pathname)
     if (target.origin === url.origin && library && isLibraryDocumentation(target.pathname))
@@ -82,18 +88,18 @@ function clean(node, url) {
   return [node]
 }
 
-export function htmlToMarkdown(html, url) {
-  url = new URL(url)
+export function htmlToMarkdown(html: string, url: string | URL): string {
+  const pageUrl = new URL(url)
   // Adapted from the pipeline in Cloudflare's historical docs utility:
   // https://github.com/cloudflare/cloudflare-docs/blob/c0382a6bf6e6d0cf095a8cdac375b0c339c4ae87/src/util/markdown.ts
   const tree = fromHtml(html)
   const main = select('#main-content', tree)
   if (!main)
-    throw new Error(`No documentation content found in ${url}`)
+    throw new Error(`No documentation content found in ${pageUrl}`)
 
   const title = textContent(select('title', tree)).trim()
   const description = select('meta[name="description"]', tree)?.properties?.content ?? ''
-  const content = { type: 'root', children: main.children.flatMap(child => clean(child, url)) }
+  const content: Root = { type: 'root', children: main.children.flatMap(child => clean(child, pageUrl)) }
   const markdown = toMarkdown(toMdast(content, { document: true }), {
     fences: true,
     extensions: [gfmToMarkdown({ tablePipeAlign: false })],
