@@ -31,18 +31,9 @@
           "name": "onOpenChange",
           "type": "({ open: boolean }) => void",
           "description": "Receives requested open-state changes."
-        },
-        {
-          "name": "closeOnEscape",
-          "type": "boolean",
-          "description": "Allows Escape to dismiss."
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "Disables the tooltip."
         }
-      ]
+      ],
+      "note": "Escape dismisses an open tooltip. In controlled mode, update open after onOpenChange requests dismissal."
     },
     {
       "name": "Trigger",

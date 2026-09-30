@@ -1,6 +1,6 @@
 {
   "name": "Modal",
-  "intro": "Root provides context. Keep Backdrop and Positioner beside the trigger inside Root, and place Content inside Positioner. Give the dialog an accessible name through Title or an explicit aria-label on Content.",
+  "intro": "Root provides context. Keep Backdrop and Positioner beside the trigger inside Root, and place Content inside Positioner. Give the dialog an accessible name through Title or aria-label on Root.",
   "parts": [
     {
       "name": "Root",
@@ -42,48 +42,12 @@
           "anchor": "modal-force-action"
         },
         {
-          "name": "initialFocusEl",
-          "type": "() => HTMLElement | null",
-          "description": "Selects the element to focus when the dialog opens.",
-          "defaultValue": "undefined",
-          "anchor": "modal-focus-options"
-        },
-        {
-          "name": "trapFocus",
-          "type": "boolean",
-          "description": "Keeps keyboard focus inside the open dialog.",
-          "defaultValue": "true",
-          "anchor": "modal-trap-focus"
-        },
-        {
-          "name": "restoreFocus",
-          "type": "boolean",
-          "description": "Returns focus to the trigger when the dialog closes.",
-          "defaultValue": "true",
-          "anchor": "modal-restore-focus"
-        },
-        {
-          "name": "preventScroll",
-          "type": "boolean",
-          "description": "Prevents background scrolling while the dialog is open.",
-          "defaultValue": "true",
-          "anchor": "modal-scroll-options"
-        },
-        {
-          "name": "modal",
-          "type": "boolean",
-          "description": "Controls modal accessibility behavior.",
-          "defaultValue": "true",
-          "anchor": "modal-modal"
-        },
-        {
-          "name": "role",
-          "type": "\"dialog\" | \"alertdialog\"",
-          "description": "Dialog role.",
-          "defaultValue": "\"dialog\"",
-          "anchor": "modal-role"
+          "name": "aria-label",
+          "type": "string",
+          "description": "Names the dialog directly and takes precedence over the Title relationship."
         }
-      ]
+      ],
+      "note": "The dialog traps focus, prevents background scrolling, and restores focus after closing. These behaviors are managed automatically; the dialog role is fixed to dialog."
     },
     {
       "name": "Trigger",
@@ -134,15 +98,7 @@
     {
       "name": "Content",
       "element": "div",
-      "description": "Holds the dialog content. An aria-label can supply its accessible name.",
-      "props": [
-        {
-          "name": "aria-label",
-          "type": "string",
-          "description": "Gives the dialog an accessible name directly.",
-          "anchor": "modal-content-aria-label"
-        }
-      ],
+      "description": "Holds the dialog content. Use Title or aria-label on Root to name the dialog.",
       "data": [
         {
           "attribute": "data-scope, data-part",
@@ -208,11 +164,6 @@
           "attribute": "data-scope, data-part",
           "value": "modal, close-trigger",
           "purpose": "Select the close button."
-        },
-        {
-          "attribute": "data-state",
-          "value": "open | closed",
-          "purpose": "Style the open and closed states."
         }
       ]
     }
