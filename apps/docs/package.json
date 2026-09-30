@@ -54,7 +54,13 @@
     "sharp": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "wrangler": "catalog:"
+    "wrangler": "catalog:",
+    "hast-util-select": "catalog:",
+    "hast-util-to-mdast": "catalog:",
+    "mdast-util-gfm": "catalog:",
+    "mdast-util-to-markdown": "catalog:",
+    "hast-util-from-html": "catalog:",
+    "yaml": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
