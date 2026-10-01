@@ -9,13 +9,8 @@
       "props": [
         {
           "name": "options",
-          "type": "{ text: string; value: string; disabled?: boolean }[]",
+          "type": "{ value: string; label: string }[]",
           "description": "Replaces the generated half-hour time options."
-        },
-        {
-          "name": "value",
-          "type": "string",
-          "description": "Controlled selected time."
         },
         {
           "name": "defaultValue",
@@ -23,29 +18,9 @@
           "description": "Initial selected time."
         },
         {
-          "name": "inputValue",
-          "type": "string",
-          "description": "Controlled query text."
-        },
-        {
-          "name": "defaultInputValue",
-          "type": "string",
-          "description": "Initial query text."
-        },
-        {
           "name": "onValueChange",
-          "type": "(value: string) => void",
-          "description": "Receives time selection."
-        },
-        {
-          "name": "onInputValueChange",
-          "type": "({ inputValue: string }) => void",
-          "description": "Receives query changes."
-        },
-        {
-          "name": "onOpenChange",
-          "type": "({ open: boolean }) => void",
-          "description": "Receives list visibility changes."
+          "type": "({ value, label }) => void",
+          "description": "Receives the selected time value and its visible label."
         },
         {
           "name": "customFilter",
