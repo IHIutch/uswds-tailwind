@@ -1,6 +1,6 @@
 {
   "name": "DatePicker range",
-  "intro": "The React range picker uses DatePicker with selectionMode=\"range\". Render one Control with bound=\"start\" and another with bound=\"end\" inside the same Root.",
+  "intro": "The React range picker uses DatePicker with selectionMode=\"range\". Render one Control with bound=\"start\" and another with bound=\"end\" inside the same Root. The visible fields use MM/DD/YYYY; callback valueAsString uses ISO YYYY-MM-DD.",
   "parts": [
     {
       "name": "Root",
@@ -14,28 +14,28 @@
         },
         {
           "name": "defaultValue",
-          "type": "string[]",
+          "type": "(Date | undefined)[]",
           "description": "Initial start and end dates."
         },
         {
           "name": "value",
-          "type": "Date[]",
+          "type": "(Date | undefined)[]",
           "description": "Controlled start and end dates."
         },
         {
           "name": "min",
-          "type": "string",
+          "type": "Date",
           "description": "Earliest selectable date."
         },
         {
           "name": "max",
-          "type": "string",
+          "type": "Date",
           "description": "Latest selectable date."
         },
         {
           "name": "onValueChange",
-          "type": "({ value }) => void",
-          "description": "Receives range changes."
+          "type": "({ value, valueAsString, view }) => void",
+          "description": "Receives both endpoint slots as Dates and ISO strings; an unset endpoint stays undefined with an empty ISO string."
         }
       ]
     },
@@ -54,7 +54,7 @@
     {
       "name": "Input",
       "element": "input",
-      "description": "Receives a typed start or end date."
+      "description": "Receives a typed MM/DD/YYYY start or end date. Each field sets aria-invalid for malformed text or a date outside its effective bounds."
     },
     {
       "name": "Trigger",
@@ -107,5 +107,6 @@
         }
       ]
     }
-  ]
+  ],
+  "accessibility": "Give the start and end fields distinct visible labels, names, and format hints. An end date cannot precede the start; a start date cannot follow the end. Root min and max further limit both endpoints."
 }

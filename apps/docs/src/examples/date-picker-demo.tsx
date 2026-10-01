@@ -1,5 +1,9 @@
 import { DatePicker } from '@uswds-tailwind/react'
 
+const minDate = new Date(2026, 8, 1)
+const maxDate = new Date(2026, 9, 31)
+const initialDate = [new Date(2026, 8, 28)]
+
 function rowsOfThree<T>(items: T[]): T[][] {
   const rows: T[][] = []
   for (let index = 0; index < items.length; index += 3) {
@@ -12,10 +16,17 @@ export default function DatePickerDemo() {
   return (
     <div>
       <label htmlFor="appointment-date" className="block">Appointment date</label>
-      <div id="appointment-date-hint" className="text-gray-50">mm/dd/yyyy</div>
-      <DatePicker.Root className="max-w-mobile-lg">
+      <div id="appointment-date-hint" className="text-gray-50">
+        MM/DD/YYYY, September 1 through October 31, 2026. Try an unavailable or impossible date.
+      </div>
+      <DatePicker.Root
+        min={minDate}
+        max={maxDate}
+        defaultValue={initialDate}
+        className="max-w-mobile-lg"
+      >
         <DatePicker.Control>
-          <DatePicker.Input id="appointment-date" aria-describedby="appointment-date-hint" />
+          <DatePicker.Input id="appointment-date" name="appointmentDate" aria-describedby="appointment-date-hint" />
           <DatePicker.Trigger />
         </DatePicker.Control>
         <DatePicker.Content>

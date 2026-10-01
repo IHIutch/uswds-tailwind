@@ -1,6 +1,6 @@
 {
   "name": "DatePicker",
-  "intro": "Root supplies date state. Place Input and Trigger in Control, with Content containing the calendar views and tables.",
+  "intro": "Root supplies date state. Place Input and Trigger in Control, with Content containing the calendar views and tables. The visible input uses MM/DD/YYYY; valueAsString in onValueChange uses ISO YYYY-MM-DD.",
   "parts": [
     {
       "name": "Root",
@@ -14,22 +14,22 @@
         },
         {
           "name": "min",
-          "type": "string",
+          "type": "Date",
           "description": "Earliest selectable date."
         },
         {
           "name": "max",
-          "type": "string",
+          "type": "Date",
           "description": "Latest selectable date."
         },
         {
           "name": "defaultValue",
-          "type": "string[]",
+          "type": "(Date | undefined)[]",
           "description": "Initial date values."
         },
         {
           "name": "value",
-          "type": "Date[]",
+          "type": "(Date | undefined)[]",
           "description": "Controlled selected dates."
         },
         {
@@ -44,8 +44,8 @@
         },
         {
           "name": "onValueChange",
-          "type": "({ value }) => void",
-          "description": "Receives selected dates."
+          "type": "({ value, valueAsString, view }) => void",
+          "description": "Receives selected Date values and ISO strings; an empty range endpoint is undefined with an empty string in valueAsString."
         },
         {
           "name": "onOpenChange",
@@ -81,7 +81,7 @@
     {
       "name": "Input",
       "element": "input",
-      "description": "Receives a typed date."
+      "description": "Receives a typed MM/DD/YYYY date. Malformed or out-of-bounds text sets aria-invalid; blur and Enter update native validity."
     },
     {
       "name": "Trigger",
@@ -252,5 +252,6 @@
       "element": "div",
       "description": "Displays calendar status text."
     }
-  ]
+  ],
+  "accessibility": "Provide a visible label and format hint. A typed date must be a real calendar date within Root's min and max; an empty optional input remains valid."
 }
