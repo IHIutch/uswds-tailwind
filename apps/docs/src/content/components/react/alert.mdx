@@ -1,0 +1,36 @@
+---
+title: "Alert"
+description: "Use alerts to communicate important or time-sensitive information. Compare standard, slim, and icon-free message styles."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import AlertDemo from '../../../examples/alert-demo'
+import AlertNoIconDemo from '../../../examples/alert-no-icon-demo'
+import AlertSlimDemo from '../../../examples/alert-slim-demo'
+import AlertSlimNoIconDemo from '../../../examples/alert-slim-no-icon-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="alert-demo">
+  <AlertDemo client:load />
+</ReactPreview>
+
+### Slim
+
+<ReactPreview variant="Slim" example="alert-slim-demo">
+  <AlertSlimDemo client:load />
+</ReactPreview>
+
+### No Icon
+
+<ReactPreview variant="No Icon" example="alert-no-icon-demo">
+  <AlertNoIconDemo client:load />
+</ReactPreview>
+
+### Slim No Icon
+
+<ReactPreview variant="Slim No Icon" example="alert-slim-no-icon-demo">
+  <AlertSlimNoIconDemo client:load />
+</ReactPreview>

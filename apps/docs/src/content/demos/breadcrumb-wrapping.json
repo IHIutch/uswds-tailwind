@@ -1,6 +1,0 @@
-{
-  "component": "breadcrumb",
-  "variant": "breadcrumb-wrapping.twig",
-  "propsPath": "src/__demos__/breadcrumb/breadcrumb-props.json",
-  "componentPath": "src/__demos__/breadcrumb/examples/breadcrumb-wrapping.twig"
-}

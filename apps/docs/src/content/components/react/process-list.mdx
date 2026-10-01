@@ -1,0 +1,38 @@
+---
+title: "Process list"
+description: "Show the steps of a task with a process list. See examples with headings, steps without body text, and custom sizing."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import ProcessListCustomSizingDemo from '../../../examples/process-list-custom-sizing-demo'
+import ProcessListDemo from '../../../examples/process-list-demo'
+import ProcessListHeadingsDemo from '../../../examples/process-list-headings-demo'
+import ProcessListNoTextDemo from '../../../examples/process-list-no-text-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="process-list-demo">
+  <ProcessListDemo client:load />
+</ReactPreview>
+
+### With headings
+
+Place a heading inside each title when the step represents a section of the page. Choose the heading level to fit the page structure.
+
+<ReactPreview variant="With headings" example="process-list-headings-demo">
+  <ProcessListHeadingsDemo client:load />
+</ReactPreview>
+
+### No Text
+
+<ReactPreview variant="No Text" example="process-list-no-text-demo">
+  <ProcessListNoTextDemo client:load />
+</ReactPreview>
+
+### Custom Sizing
+
+<ReactPreview variant="Custom Sizing" example="process-list-custom-sizing-demo">
+  <ProcessListCustomSizingDemo client:load />
+</ReactPreview>

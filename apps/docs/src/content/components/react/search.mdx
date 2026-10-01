@@ -1,0 +1,29 @@
+---
+title: "Search"
+description: "Add a search form to help visitors find site content. Compare default, large, and icon-button layouts."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import SearchDemo from '../../../examples/search-demo'
+import SearchIconButtonDemo from '../../../examples/search-icon-button-demo'
+import SearchLargeDemo from '../../../examples/search-large-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="search-demo">
+  <SearchDemo client:load />
+</ReactPreview>
+
+### Large
+
+<ReactPreview variant="Large" example="search-large-demo">
+  <SearchLargeDemo client:load />
+</ReactPreview>
+
+### Icon Button
+
+<ReactPreview variant="Icon Button" example="search-icon-button-demo">
+  <SearchIconButtonDemo client:load />
+</ReactPreview>

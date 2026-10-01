@@ -1,0 +1,19 @@
+---
+title: "Date picker"
+description: "Let people enter or choose a single date with a date picker and calendar controls."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import DatePickerDemo from '../../../examples/date-picker-demo'
+
+## Examples
+
+<ReactPreview variant="Example" example="date-picker-demo">
+  <DatePickerDemo client:load />
+</ReactPreview>
+
+## Dates and bounds
+
+The visible input uses `MM/DD/YYYY`. Set `min` and `max` on `DatePicker.Root` when only part of the calendar is available. A typed date must be a real calendar date within those bounds; an empty optional field remains valid.
+
+Provide a visible format hint and a label for the input. The calendar trigger lets people choose a date without typing, while the same bounds apply to both paths. Malformed or out-of-bounds text sets `aria-invalid`; leaving the field or pressing Enter updates native validity.

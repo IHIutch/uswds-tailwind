@@ -1,13 +1,12 @@
 ---
-import { getEntry } from 'astro:content'
-import DocsComponentPage from '#components/docs-component-page.astro'
 import { prefersMarkdown } from '#utils/handle-prefers-markdown'
 import { isLibrary, privateRedirect } from '#utils/library'
+import { getEntry } from 'astro:content'
 
 const { library, slug } = Astro.params
-if (!isLibrary(library) || !slug || !await getEntry('components', slug))
+if (!isLibrary(library) || !slug || !await getEntry(library === 'react' ? 'react-components' : 'vanilla-components', slug))
   return new Response('Page not found', { status: 404 })
 if (prefersMarkdown(Astro))
   return privateRedirect(Astro.redirect(`${Astro.url.pathname}.md${Astro.url.search}`))
+return Astro.rewrite(new URL(`/components/${library}/${slug}${Astro.url.search}`, Astro.url))
 ---
-<DocsComponentPage library={library} slug={slug} />

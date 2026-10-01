@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
-import { getCollection } from 'astro:content'
 import { getPageLinks } from '#utils/metadata'
+import { getCollection } from 'astro:content'
 
 export const prerender = true
 
@@ -8,7 +8,8 @@ export const GET: APIRoute = async ({ site }) => {
   if (!site)
     throw new Error('Astro site URL is required for sitemap generation')
 
-  const components = await getCollection('components')
+  const components = await getCollection('vanilla-components')
+  const reactComponents = await getCollection('react-components')
   const paths = [
     '/',
     '/about',
@@ -18,7 +19,7 @@ export const GET: APIRoute = async ({ site }) => {
     ...['vanilla', 'react'].flatMap(library => [
       `/docs/${library}/getting-started`,
       `/docs/${library}/javascript`,
-      ...components.map(entry => `/docs/${library}/components/${entry.id}`),
+      ...(library === 'react' ? reactComponents : components).map(entry => `/docs/${library}/components/${entry.id}`),
     ]),
   ]
   const urls = paths.map(path => getPageLinks(path, site).canonical.href).sort()

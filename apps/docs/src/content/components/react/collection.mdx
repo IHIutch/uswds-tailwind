@@ -1,0 +1,36 @@
+---
+title: "Collection"
+description: "Display related articles, events, or other items in a compact collection, with heading, calendar, and thumbnail examples."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import CollectionCalendarDemo from '../../../examples/collection-calendar-demo'
+import CollectionDemo from '../../../examples/collection-demo'
+import CollectionHeadingsDemo from '../../../examples/collection-headings-demo'
+import CollectionThumbnailDemo from '../../../examples/collection-thumbnail-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="collection-demo">
+  <CollectionDemo client:load />
+</ReactPreview>
+
+### Headings Only
+
+<ReactPreview variant="Headings Only" example="collection-headings-demo">
+  <CollectionHeadingsDemo client:load />
+</ReactPreview>
+
+### Calendar
+
+<ReactPreview variant="Calendar" example="collection-calendar-demo">
+  <CollectionCalendarDemo client:load />
+</ReactPreview>
+
+### Media Thumbnail
+
+<ReactPreview variant="Media Thumbnail" example="collection-thumbnail-demo">
+  <CollectionThumbnailDemo client:load />
+</ReactPreview>
