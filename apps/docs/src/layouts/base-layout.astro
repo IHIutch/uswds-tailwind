@@ -1,6 +1,7 @@
 ---
 import GlobalNav from "#components/global-nav/index.astro";
 import { LIBRARY_COOKIE, libraryFromPath, resolveLibrary } from '#utils/library'
+import { getPageLinks } from '#utils/metadata'
 import { SEO } from "astro-seo";
 import { ClientRouter } from "astro:transitions";
 
@@ -17,6 +18,7 @@ interface Props {
   title?: string;
   description: string;
   ogImageUrl?: URL;
+  markdown?: boolean
 }
 
 const SITE_NAME = "USWDS + Tailwind";
@@ -24,8 +26,11 @@ const SITE_NAME = "USWDS + Tailwind";
 const {
   title = SITE_NAME,
   description,
-  ogImageUrl = new URL("og.jpg", Astro.url.origin),
+  markdown = false,
 } = Astro.props;
+const links = getPageLinks(Astro.url.pathname, Astro.site ?? Astro.url)
+const { canonical } = links
+const ogImageUrl = new URL(Astro.props.ogImageUrl ?? '/og.jpg', canonical)
 
 if (title) ogImageUrl.searchParams.set("title", title);
 if (description) ogImageUrl.searchParams.set("description", description);
@@ -49,12 +54,13 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
     <SEO
       title={metaTitle}
       description={description}
+      canonical={canonical}
       openGraph={{
         basic: {
           title: metaTitle,
-          type: "Website",
+          type: "website",
           image: ogImageUrl.toString(),
-          url: Astro.url,
+          url: canonical,
         },
         optional: {
           description,
@@ -75,7 +81,8 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
       extend={{
         link: [
           { rel: "icon", type: "image/svg+xml", href: "/logo.svg" },
-          { rel: "sitemap", href: "/sitemap-index.xml" },
+          { rel: "sitemap", href: "/sitemap.xml" },
+          ...(markdown ? [{ rel: 'alternate', type: 'text/markdown', href: links.markdown.href, title: `${title} (Markdown)` }] : []),
         ],
         meta: [
           { name: "generator", content: Astro.generator },

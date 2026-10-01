@@ -16,11 +16,11 @@ const { Content, headings } = await render(post)
 
 const visibleHeadings = headings.filter(h => h.depth <= 3)
 const description = library === 'react'
-  ? 'React integration guidance for USWDS + Tailwind is being prepared.'
+  ? 'React integration guidance for this component library is being prepared.'
   : post.data.description
 ---
 
-<BaseLayout title={post.data.title} description={description}>
+<BaseLayout title={`${post.data.title} (${library === 'react' ? 'React' : 'Vanilla'})`} description={description} markdown>
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={library === 'vanilla' ? visibleHeadings : []} />

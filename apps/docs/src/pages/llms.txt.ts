@@ -10,10 +10,7 @@ export const GET: APIRoute = async () => {
   const about = await getEntry('pages', 'about')
   const typography = await getEntry('pages', 'typography')
 
-  const components = await getCollection(
-    'components',
-    entry => entry.data.isPublished !== false,
-  )
+  const components = await getCollection('components')
 
   return new Response(dedent(`
 # USWDS + Tailwind Documentation

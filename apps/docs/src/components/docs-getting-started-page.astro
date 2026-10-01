@@ -22,7 +22,7 @@ const visibleHeadings = headings.filter(h => h.depth <= 3)
 
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={`${post.data.title} (${library === 'react' ? 'React' : 'Vanilla'})`} description={post.data.description} markdown>
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={visibleHeadings} />

@@ -34,7 +34,7 @@ for (const filename of readdirSync(reactApiDir).filter(name => name.endsWith('.j
 }
 
 for (const [slug, page] of Object.entries(componentCoverage)) {
-  if (page.published === false || page.react.kind !== 'component')
+  if (page.react.kind !== 'component')
     continue
   if (!reactReferences[slug])
     errors.push(`${slug}: missing React component API reference`)
@@ -63,10 +63,6 @@ for (const slug of pages) {
     continue
   }
   const source = readFileSync(resolve(docs, `${slug}.mdx`), 'utf8')
-  const published = !/^isPublished:\s*false\s*$/m.test(source)
-  if (published === (item.published === false))
-    errors.push(`${slug}: published flag disagrees with MDX`)
-
   const previews = []
   let lastHeading = ''
   const lines = source.split('\n')
