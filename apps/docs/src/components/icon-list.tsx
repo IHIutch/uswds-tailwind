@@ -117,12 +117,17 @@ function IconButton({ icon }: { icon: Props['initialIcons'][number] }) {
   const [isCopied, setIsCopied] = React.useState(false)
   const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
 
-  const handleCopyToClipboard = () => {
-    copyToClipboard(`icon-[material-symbols--${icon.name}]`)
-    setIsCopied(true)
-    setCopyMessage(`material symbols ${icon.name} copied to clipboard`)
-
-    setTimeout(() => setIsCopied(false), 1000)
+  const handleCopyToClipboard = async () => {
+    setCopyMessage(null)
+    try {
+      await copyToClipboard(`icon-[material-symbols--${icon.name}]`)
+      setIsCopied(true)
+      setCopyMessage(`material symbols ${icon.name} copied to clipboard`)
+      setTimeout(() => setIsCopied(false), 1000)
+    }
+    catch {
+      setCopyMessage(`Unable to copy material symbols ${icon.name} to clipboard`)
+    }
   }
 
   return (

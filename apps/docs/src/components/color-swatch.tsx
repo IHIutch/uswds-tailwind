@@ -10,9 +10,15 @@ export default function ColorSwatch({ hex, level, name }: {
 
   const readableName = name.replaceAll('-', ' ').replace('v', ' vivid')
 
-  const handleCopyToClipboard = () => {
-    copyToClipboard(hex)
-    setCopyMessage(`${readableName} copied to clipboard`)
+  const handleCopyToClipboard = async () => {
+    setCopyMessage(null)
+    try {
+      await copyToClipboard(hex)
+      setCopyMessage(`${readableName} copied to clipboard`)
+    }
+    catch {
+      setCopyMessage(`Unable to copy ${readableName} to clipboard`)
+    }
   }
 
   return (
