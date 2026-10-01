@@ -18,15 +18,15 @@ const sortedComponents = allComponents.sort((a, b) => {
 <div class="hidden desktop:block w-64 fixed inset-y-0 left-0 top-28">
   <nav
     aria-label="Side navigation"
-    class="px-4 pt-12 pb-16 h-full min-h-0 flex flex-col"
+    class="px-4 pt-12 pb-16 h-full overflow-y-auto"
+    id="sidenav"
   >
-    <div class="mb-8 shrink-0"><LibraryList library={library} /></div>
-    <div class="mb-3 flex items-center pl-4 shrink-0">
+    <div class="mb-8"><LibraryList library={library} /></div>
+    <div class="mb-3 flex items-center pl-4">
       <span class="font-bold text-lg">Components</span>
     </div>
     <ul
-      id="sidenav"
-      class="min-h-0 overflow-y-auto divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
+      class="divide-y divide-gray-10 [&_a]:pl-4 [&_ul_a]:pl-8 [&_ul_ul_a]:pl-12"
     >
       {
         sortedComponents.map(comps => (
