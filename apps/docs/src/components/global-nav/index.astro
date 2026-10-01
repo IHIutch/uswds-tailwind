@@ -109,6 +109,7 @@ for (const links of [desktopLinks.primary, mobileLinks.primary]) {
 ---
 
 <header
+  id="docs-header"
   class="border-b desktop:border-b-2 border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
 >
   <div class="desktop:px-8">
@@ -135,3 +136,47 @@ for (const links of [desktopLinks.primary, mobileLinks.primary]) {
     <DesktopNav primary={desktopLinks.primary} secondary={secondary} />
   </div>
 </header>
+
+<script>
+  import { Accordion } from '@uswds-tailwind/compat/accordion'
+  import { Dropdown } from '@uswds-tailwind/compat/dropdown'
+  import { Modal } from '@uswds-tailwind/compat/modal'
+
+  let cleanup: (() => void) | undefined
+
+  document.addEventListener('astro:page-load', () => {
+    cleanup?.()
+    const header = document.getElementById('docs-header')
+    const root = document.getElementById('mobile-docs-menu')
+    if (!header || !root)
+      return
+
+    const accordions = Accordion.createAll(header)
+    const dropdowns = Dropdown.createAll(header)
+    const menu = Modal.getOrCreateInstance(root)
+    const desktop = window.matchMedia('(min-width: 1024px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches)
+        void menu.close()
+    }
+    const closeOnNavigation = (event: MouseEvent) => {
+      if (event.target instanceof Element && event.target.closest('a[href]'))
+        void menu.close()
+    }
+
+    desktop.addEventListener('change', closeOnDesktop)
+    root.addEventListener('click', closeOnNavigation)
+    closeOnDesktop()
+
+    cleanup = () => {
+      desktop.removeEventListener('change', closeOnDesktop)
+      root.removeEventListener('click', closeOnNavigation)
+      menu.destroy()
+      accordions.forEach(instance => instance.destroy())
+      dropdowns.forEach(instance => instance.destroy())
+      cleanup = undefined
+    }
+  })
+
+  document.addEventListener('astro:before-swap', () => cleanup?.())
+</script>

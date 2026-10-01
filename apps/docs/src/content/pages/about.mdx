@@ -18,7 +18,7 @@ My hope is that this project makes working with the USWDS a simpler, easier, and
 ### Efficiency and Performance
 Tailwind optimizes our projects by generating only the necessary CSS, significantly reducing the CSS footprint compared to SCSS functions and nesting. This leads to faster load times and improved performance for end users by minimizing the resources they need to download. 
 
-By using Tailwind alone to build the components of the USWDS, we're able to ship only **123 KB**. If we use fewer components, we ship even less!
+The CSS your application ships depends on the components and utilities it uses. Tailwind generates styles from the classes present in your source.
 
 ### Enhanced Developer Experience
 I've got to say it: the USWDS has some really complicated SCSS. This makes it particularly difficult to work with and extend. 
@@ -55,15 +55,10 @@ Dynamic generation of icons with Iconify removes the burden of managing icon lib
 ### Enhanced Flexibility
 By installing fonts within projects, we're able to have greater flexibility over how we manage, update, or rollback fonts. Relying on updates from the USWDS means we're forced to update all or nothing. This puts extra stress on individual teams and on USDWS maintainers when consuming and publishing updates.
 
-## Parcel
+## Build tooling
 
-### Speed and Simplicity
-[Parcel](https://parceljs.org/) is a compiler and bundler that is extremely fast. It's able to compile all of our assets in **600ms**. Compiling our CSS happens faster than you can blink, at **60ms**! 
+The component packages are built with [tsdown](https://tsdown.dev/). The documentation site uses Astro and Tailwind CSS. Your application can use its own build tooling; follow the [Vanilla getting-started guide](/docs/vanilla/getting-started) or [React getting-started guide](/docs/react/getting-started) for the packages and styles to install.
 
-Parcel doesn't require an `index.html` or a custom configuration file. We can configure how we want Parcel to work right in our `package.json`.
-
-### Tailwind Compatibility
-Parcel integrates seamlessly with Tailwind by using <code>[lightningcss](https://lightningcss.dev/)</code> to generate efficient CSS. Tailwind is adopting the same tool for its CLI in a [coming release](https://tailwindcss.com/blog/tailwindcss-v4-alpha#unified-toolchain).
 
 ## JavaScript behavior
 

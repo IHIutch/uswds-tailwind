@@ -52,17 +52,17 @@ await accordion.open('eligibility')
 accordion.destroy()
 ```
 
-Retain the element reference because rendering can change its ID. `getInstance` accepts an element or CSS selector, `getOrCreateInstance` reuses an existing instance without reapplying options, and `destroy` stops it without restoring the original HTML. Accordion, Collapse, Dropdown, Input Mask, Modal, and Tooltip share this factory API; other wrappers still have legacy lifecycle differences. See the [JavaScript reference](https://uswds-tailwind.com/javascript#instance-lifecycle).
+Retain the element reference because rendering can change its ID. `getInstance` accepts an element or CSS selector, `getOrCreateInstance` reuses an existing instance without reapplying options, and `destroy` stops it without restoring the original HTML. Accordion, Collapse, Dropdown, Input Mask, Modal, and Tooltip share this factory API; other wrappers still have legacy lifecycle differences. See the [JavaScript reference](https://v2.uswds-tailwind.com/javascript#instance-lifecycle).
 
 ## Components
 
 `accordion`, `character-count`, `collapse`, `combobox`, `date-picker`, `date-range-picker`, `dropdown`, `file-input`, `input-mask`, `modal`, `table`, `tooltip`.
 
-The [Vanilla getting-started guide](https://uswds-tailwind.com/docs/vanilla/getting-started) shows how to use these packages in a plain HTML project. Use either the auto import or selective initialization for a component, not both.
+The [Vanilla getting-started guide](https://v2.uswds-tailwind.com/docs/vanilla/getting-started) shows how to use these packages in a plain HTML project. Use either the auto import or selective initialization for a component, not both.
 
 ## Documentation
 
-[uswds-tailwind.com](https://uswds-tailwind.com)
+[v2.uswds-tailwind.com](https://v2.uswds-tailwind.com)
 
 ## License
 

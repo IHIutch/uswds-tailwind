@@ -39,11 +39,11 @@ export default function App() {
 
 Use a public component subpath, such as `@uswds-tailwind/react/accordion`, for component imports. The React stylesheet imports the theme and its fonts; there is no separate theme CSS import.
 
-For setup in an existing React app, follow the [React getting-started guide](https://uswds-tailwind.com/docs/react/getting-started).
+For setup in an existing React app, follow the [React getting-started guide](https://v2.uswds-tailwind.com/docs/react/getting-started).
 
 ## Documentation
 
-Component API, props, and Storybook examples: [uswds-tailwind.com](https://uswds-tailwind.com)
+Component API, props, and Storybook examples: [v2.uswds-tailwind.com](https://v2.uswds-tailwind.com)
 
 ## License
 
