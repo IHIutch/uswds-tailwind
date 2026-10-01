@@ -1,19 +1,21 @@
 ---
 import ComponentPreview from '#components/component-preview.astro'
-import TableDemo from '../table-demo'
-import tableSource from '../table-demo.tsx?raw'
-import TableStripedDemo from '../table-striped-demo'
-import tableStripedSource from '../table-striped-demo.tsx?raw'
 import TableBorderlessDemo from '../table-borderless-demo'
 import tableBorderlessSource from '../table-borderless-demo.tsx?raw'
 import TableCompactDemo from '../table-compact-demo'
 import tableCompactSource from '../table-compact-demo.tsx?raw'
+import TableDemo from '../table-demo'
+import tableSource from '../table-demo.tsx?raw'
 import TableScrollableDemo from '../table-scrollable-demo'
 import tableScrollableSource from '../table-scrollable-demo.tsx?raw'
-import TableStickyHeaderDemo from '../table-sticky-header-demo'
-import tableStickyHeaderSource from '../table-sticky-header-demo.tsx?raw'
+import TableStackedDemo from '../table-stacked-demo'
+import tableStackedSource from '../table-stacked-demo.tsx?raw'
 import TableStickyColumnDemo from '../table-sticky-column-demo'
 import tableStickyColumnSource from '../table-sticky-column-demo.tsx?raw'
+import TableStickyHeaderDemo from '../table-sticky-header-demo'
+import tableStickyHeaderSource from '../table-sticky-header-demo.tsx?raw'
+import TableStripedDemo from '../table-striped-demo'
+import tableStripedSource from '../table-striped-demo.tsx?raw'
 ---
 
 <h2 id="examples">Examples</h2>
@@ -52,3 +54,10 @@ import tableStickyColumnSource from '../table-sticky-column-demo.tsx?raw'
 <ComponentPreview title="Sticky Column" demo code={tableStickyColumnSource} language="tsx" filename="table-sticky-column-demo.tsx" playgroundFiles={{ 'table-sticky-column-demo.tsx': tableStickyColumnSource }}>
   <TableStickyColumnDemo client:load />
 </ComponentPreview>
+
+<h3>Stacked</h3>
+<ComponentPreview title="Stacked" demo code={tableStackedSource} language="tsx" filename="table-stacked-demo.tsx" playgroundFiles={{ 'table-stacked-demo.tsx': tableStackedSource }}>
+  <TableStackedDemo client:load />
+</ComponentPreview>
+
+<p>On narrow screens, <code>stacked</code> hides the visual header row and places each cell on its own line. Keep the native caption and column headers, and add a <code>data-label</code> that matches its column heading to every body cell.</p>
