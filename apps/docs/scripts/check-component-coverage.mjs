@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { componentCoverage, getComponentCoverage, missingComponentDocs } from '../src/content/component-coverage.ts'
-import { partSlug, reactApiSchema } from '../src/reference/react/schema.ts'
+import { apiHeadingSlug, reactApiSchema } from '../src/reference/react/schema.ts'
 import { checkReactPreviews } from './check-react-previews.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
@@ -55,9 +55,9 @@ for (const [slug, reference] of Object.entries(reactReferences)) {
     errors.push(`${slug}: React API reference has no parts`)
   if (new Set(reference.parts.map(part => part.name)).size !== reference.parts.length)
     errors.push(`${slug}: React API reference repeats a part`)
-  const headingIds = reference.parts.map(part => part.slug ?? partSlug(part.name))
+  const headingIds = reference.parts.map(part => apiHeadingSlug(part.name, part.slug))
   if (reference.accessibility)
-    headingIds.push(partSlug(reference.accessibilityHeading ?? 'Accessibility'))
+    headingIds.push(apiHeadingSlug(reference.accessibilityHeading ?? 'Accessibility'))
   if (new Set(headingIds).size !== headingIds.length)
     errors.push(`${slug}: React API reference repeats a heading ID`)
   const propIds = reference.parts.flatMap(part => part.props?.map(prop => prop.anchor).filter(Boolean) ?? [])

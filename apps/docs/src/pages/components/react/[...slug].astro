@@ -6,7 +6,7 @@ import ContentLayout from '#layouts/content-layout.astro'
 import { prefersMarkdown } from '#utils/handle-prefers-markdown'
 import { getPageLinks } from '#utils/metadata'
 import { getEntry, render } from 'astro:content'
-import { partSlug } from '../../../reference/react/schema'
+import { apiHeadingSlug } from '../../../reference/react/schema'
 
 const { slug } = Astro.params
 const entry = slug ? await getEntry('react-components', slug) : undefined
@@ -19,12 +19,12 @@ const { Content, headings } = await render(entry)
 const reference = await getEntry('react-api', entry.id)
 const referenceHeadings = reference?.data.parts.map(part => ({
   depth: 3,
-  slug: part.slug ?? partSlug(part.name),
+  slug: apiHeadingSlug(part.name, part.slug),
   text: part.name,
 })) ?? []
 if (reference?.data.accessibility) {
   const text = reference.data.accessibilityHeading ?? 'Accessibility'
-  referenceHeadings.push({ depth: 3, slug: partSlug(text), text })
+  referenceHeadings.push({ depth: 3, slug: apiHeadingSlug(text), text })
 }
 const visibleHeadings = [
   ...headings.filter(heading => heading.depth <= 3),
