@@ -9,3 +9,9 @@ import datePickerSource from '../date-picker-demo.tsx?raw'
 <ComponentPreview title="Example" demo code={datePickerSource} language="tsx" filename="date-picker-demo.tsx" playgroundFiles={{ 'date-picker-demo.tsx': datePickerSource }}>
   <DatePickerDemo client:load />
 </ComponentPreview>
+
+<h2 id="dates-and-bounds">Dates and bounds</h2>
+
+<p>The visible input uses <code>MM/DD/YYYY</code>. Set <code>min</code> and <code>max</code> on <code>DatePicker.Root</code> when only part of the calendar is available. A typed date must be a real calendar date within those bounds; an empty optional field remains valid.</p>
+
+<p>Provide a visible format hint and a label for the input. The calendar trigger lets people choose a date without typing, while the same bounds apply to both paths. Malformed or out-of-bounds text sets <code>aria-invalid</code>; leaving the field or pressing Enter updates native validity.</p>

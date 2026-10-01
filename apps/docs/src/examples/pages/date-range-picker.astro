@@ -9,3 +9,11 @@ import dateRangePickerSource from '../date-range-picker-demo.tsx?raw'
 <ComponentPreview title="Example" demo code={dateRangePickerSource} language="tsx" filename="date-range-picker-demo.tsx" playgroundFiles={{ 'date-range-picker-demo.tsx': dateRangePickerSource }}>
   <DateRangePickerDemo client:load />
 </ComponentPreview>
+
+<h2 id="range-endpoints">Range endpoints</h2>
+
+<p>React uses one <code>DatePicker.Root</code> with <code>selectionMode="range"</code>. Put a <code>DatePicker.Control</code> with <code>bound="start"</code> around the start input and another with <code>bound="end"</code> around the end input. There is no separate React <code>DateRangePicker</code> export.</p>
+
+<p>Give each endpoint its own visible label, format hint, and form name. The start cannot be after the end, and the end cannot be before the start. Root bounds further limit both fields and the shared calendar.</p>
+
+<p><code>onValueChange</code> receives the two endpoint slots as <code>Date</code> values or <code>undefined</code>. Its <code>valueAsString</code> array contains ISO <code>YYYY-MM-DD</code> strings, with an empty string for a missing endpoint; the visible fields still use <code>MM/DD/YYYY</code>.</p>
