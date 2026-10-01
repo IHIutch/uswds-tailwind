@@ -34,7 +34,7 @@ export const reactApiSchema = z.object({
 
 export type ReactReference = z.infer<typeof reactApiSchema>
 
-export function partSlug(name: string): string {
+function partSlug(name: string): string {
   return name.replaceAll('.', '-').replace(/([a-z])([A-Z])/g, '$1-$2').replaceAll(' ', '-').toLowerCase()
 }
 

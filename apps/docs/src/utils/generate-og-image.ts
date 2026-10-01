@@ -1,5 +1,5 @@
 import type { SatoriOptions } from '@cf-wasm/satori'
-import type { ogImageProps } from 'types'
+import type { ogImageProps } from '../types'
 import { satori } from '@cf-wasm/satori'
 import ogImageTemplate from './og-image-template'
 
@@ -54,13 +54,6 @@ async function getOptions(): Promise<SatoriOptions> {
   }
 }
 
-// async function svgBufferToJpgBuffer(svg: string) {
-// async function svgBufferToJpgBuffer(svg: string) {
-//   // const trasformer = Transformer.fromSvg(svg)
-//   // return await trasformer.jpeg()
-
-//   const transformer = sharp(Buffer.from(svg)).jpeg();
-//   return transformer.toBuffer();
 export async function generateOgImage(props: ogImageProps) {
   const options = await getOptions()
   const svg = await satori(

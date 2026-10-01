@@ -24,12 +24,7 @@
     "@fontsource-variable/public-sans": "catalog:",
     "@fontsource-variable/roboto-mono": "catalog:",
     "@fontsource-variable/source-sans-3": "catalog:",
-    "@iconify-json/fa-solid": "catalog:",
-    "@iconify-json/fa6-brands": "catalog:",
-    "@iconify-json/material-symbols": "catalog:",
-    "@iconify/tailwind4": "catalog:",
     "@iconify/types": "catalog:",
-    "@iconify/utils": "catalog:",
     "@stackblitz/sdk": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "@tailwindcss/vite": "catalog:",
@@ -38,10 +33,8 @@
     "@types/react-dom": "catalog:",
     "@uswds-tailwind/compat": "workspace:*",
     "@uswds-tailwind/react": "workspace:*",
-    "@uswds-tailwind/theme": "workspace:*",
     "@zag-js/react": "catalog:",
     "@zag-js/splitter": "catalog:",
-    "@zag-js/toggle": "catalog:",
     "astro": "catalog:",
     "astro-expressive-code": "catalog:",
     "astro-favicons": "catalog:",
@@ -65,7 +58,6 @@
   "devDependencies": {
     "@mdx-js/mdx": "catalog:",
     "@types/hast": "catalog:",
-    "@types/node": "catalog:",
-    "@zag-js/types": "catalog:"
+    "@types/node": "catalog:"
   }
 }

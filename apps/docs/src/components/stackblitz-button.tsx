@@ -16,7 +16,7 @@ export default function StackBlitzButton({ componentName, htmlContent, descripti
   return <StackBlitzExportButton componentName={componentName} library="vanilla" onOpen={open} />
 }
 
-export function openInStackBlitz({ htmlContent, title, description }: {
+function openInStackBlitz({ htmlContent, title, description }: {
   htmlContent: string
   title: string
   description: string

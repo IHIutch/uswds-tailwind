@@ -37,11 +37,11 @@ import ButtonDemo from '../../../examples/button-demo'
 
 ## Examples
 
-<ReactPreview variant="Examples" example="button-demo">
+<ReactPreview title="Examples" example="button-demo">
   <ButtonDemo client:load />
 </ReactPreview>
 ```
 
-Write headings and explanatory text as ordinary Markdown outside `ReactPreview`. `variant` sets the default preview title; `title` can override it. Add `playgroundDependencies` when the demo needs another package. No per-component Astro template is needed.
+Write headings and explanatory text as ordinary Markdown outside `ReactPreview`. `title` sets the preview title. Add `playgroundDependencies` when the demo needs another package. No per-component Astro template is needed.
 
 Run `pnpm --filter website exec astro check` and `pnpm build:website` after adding a page or example.

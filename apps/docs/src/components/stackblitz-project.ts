@@ -3,7 +3,7 @@ import stackblitzRelease from '../../../../examples/vanilla-ts/stackblitz-releas
 
 // Keep both generated templates on the published release until the launch
 // channel changes.
-export const playgroundPackageVersion = stackblitzRelease.version
+const playgroundPackageVersion = stackblitzRelease.version
 
 const vanillaViteConfig = `import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
