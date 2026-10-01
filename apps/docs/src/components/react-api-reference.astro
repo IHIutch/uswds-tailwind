@@ -1,6 +1,7 @@
 ---
+import type { ReactReference } from '../reference/react/schema'
+import { apiHeadingSlug } from '../reference/react/schema'
 import ApiTable from './api-table.astro'
-import { partSlug, type ReactReference } from '../reference/react/schema'
 
 interface Props {
   reference: ReactReference
@@ -13,7 +14,7 @@ const { reference } = Astro.props
 {reference.intro && <p class="max-w-prose">{reference.intro}</p>}
 {reference.parts.map(part => (
   <section>
-    <h3 id={part.slug ?? partSlug(part.name)}>
+    <h3 id={apiHeadingSlug(part.name, part.slug)}>
       {part.name}
       {part.element && <span class="ml-3 text-sm font-normal text-gray-60"><code>{`<${part.element}>`}</code></span>}
     </h3>
@@ -45,4 +46,4 @@ const { reference } = Astro.props
     )}
   </section>
 ))}
-{reference.accessibility && <><h3 id={reference.accessibilityHeading ? partSlug(reference.accessibilityHeading) : 'accessibility'}>{reference.accessibilityHeading ?? 'Accessibility'}</h3><p class="max-w-prose">{reference.accessibility}</p></>}
+{reference.accessibility && <><h3 id={apiHeadingSlug(reference.accessibilityHeading ?? 'Accessibility')}>{reference.accessibilityHeading ?? 'Accessibility'}</h3><p class="max-w-prose">{reference.accessibility}</p></>}
