@@ -10,7 +10,8 @@ export const GET: APIRoute = async () => {
   const about = await getEntry('pages', 'about')
   const typography = await getEntry('pages', 'typography')
 
-  const components = await getCollection('components')
+  const components = await getCollection('vanilla-components')
+  const reactComponents = await getCollection('react-components')
 
   return new Response(dedent(`
 # USWDS + Tailwind Documentation
@@ -27,7 +28,7 @@ Build federal websites and applications faster than ever.
 
 ${['vanilla', 'react'].map(library => `## ${library === 'react' ? 'React' : 'Vanilla'} components
 
-${components.map(c => `- [${c.data.title} (${library === 'react' ? 'React' : 'Vanilla'})](${siteUrl}/docs/${library}/components/${c.id}.md): ${c.data.description}`).join('\n')}`).join('\n\n')}
+${(library === 'react' ? reactComponents : components).map(c => `- [${c.data.title} (${library === 'react' ? 'React' : 'Vanilla'})](${siteUrl}/docs/${library}/components/${c.id}.md): ${c.data.description}`).join('\n')}`).join('\n\n')}
 
 `), {
     headers: {

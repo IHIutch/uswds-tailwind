@@ -1,0 +1,29 @@
+---
+title: "File input"
+description: "Let people attach one or more files with a file input. See examples for accepted file types and multiple uploads."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import FileInputDemo from '../../../examples/file-input-demo'
+import FileInputMultipleDemo from '../../../examples/file-input-multiple-demo'
+import FileInputSpecificTypesDemo from '../../../examples/file-input-specific-types-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="file-input-demo">
+  <FileInputDemo client:load />
+</ReactPreview>
+
+### Specific File Types
+
+<ReactPreview variant="Specific File Types" example="file-input-specific-types-demo">
+  <FileInputSpecificTypesDemo client:load />
+</ReactPreview>
+
+### Accept Multiple Files
+
+<ReactPreview variant="Accept Multiple Files" example="file-input-multiple-demo">
+  <FileInputMultipleDemo client:load />
+</ReactPreview>

@@ -1,0 +1,31 @@
+---
+title: "Identifier"
+description: "Show a federal site's parent agency and required agency links with the identifier."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import IdentifierDemo from '../../../examples/identifier-demo'
+import IdentifierMultipleLogosDemo from '../../../examples/identifier-multiple-logos-demo'
+import IdentifierNoLogosDemo from '../../../examples/identifier-no-logos-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="identifier-demo">
+  <IdentifierDemo client:load />
+</ReactPreview>
+
+<p class="max-w-prose mb-12">Replace the placeholder seal with your agency logo and update the agency name, domain, and required links for your site. These examples follow the <a href="https://designsystem.digital.gov/components/identifier/">USWDS identifier patterns</a>.</p>
+
+### Multiple parents and logos
+
+<ReactPreview variant="Multiple parents and logos" example="identifier-multiple-logos-demo">
+  <IdentifierMultipleLogosDemo client:load />
+</ReactPreview>
+
+### No logos
+
+<ReactPreview variant="No logos" example="identifier-no-logos-demo">
+  <IdentifierNoLogosDemo client:load />
+</ReactPreview>

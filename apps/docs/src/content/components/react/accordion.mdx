@@ -1,0 +1,38 @@
+---
+title: "Accordion"
+description: "Use accordions to organize related content in expandable sections. Explore examples with headings, borders, and multiple open panels."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import AccordionBorderedDemo from '../../../examples/accordion-bordered-demo'
+import AccordionDemo from '../../../examples/accordion-demo'
+import AccordionHeadingsDemo from '../../../examples/accordion-headings-demo'
+import AccordionMultipleDemo from '../../../examples/accordion-multiple-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="accordion-demo">
+  <AccordionDemo client:load />
+</ReactPreview>
+
+### With headings
+
+Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure.
+
+<ReactPreview variant="With headings" example="accordion-headings-demo">
+  <AccordionHeadingsDemo client:load />
+</ReactPreview>
+
+### Multiselectable
+
+<ReactPreview variant="Multiselectable" example="accordion-multiple-demo">
+  <AccordionMultipleDemo client:load />
+</ReactPreview>
+
+### Bordered
+
+<ReactPreview variant="Bordered" example="accordion-bordered-demo">
+  <AccordionBorderedDemo client:load />
+</ReactPreview>

@@ -1,0 +1,24 @@
+---
+import ComponentPreview from './component-preview.astro'
+
+interface Props {
+  /** The coverage heading; it can differ from the visible React title. */
+  variant: string
+  /** TSX filename without its extension, relative to src/examples. */
+  example: string
+  title?: string
+  playgroundDependencies?: Record<string, string>
+}
+
+const { variant, example, title = variant, playgroundDependencies } = Astro.props
+const sources = import.meta.glob<string>('../examples/*.tsx', { query: '?raw', import: 'default' })
+const filename = `${example}.tsx`
+const loadSource = sources[`../examples/${filename}`]
+if (!loadSource)
+  throw new Error(`Unknown React preview source: ${filename}`)
+const source = await loadSource()
+---
+
+<ComponentPreview title={title} demo code={source} language="tsx" filename={filename} playgroundFiles={{ [filename]: source }} playgroundDependencies={playgroundDependencies}>
+  <slot />
+</ComponentPreview>

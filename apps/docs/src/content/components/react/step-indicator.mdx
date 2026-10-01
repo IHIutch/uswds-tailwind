@@ -1,0 +1,68 @@
+---
+title: "Step indicator"
+description: "Show progress through a multi-step process with step indicators, labels, and counters."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import { Code } from 'astro-expressive-code/components'
+import StepIndicatorCenteredDemo from '../../../examples/step-indicator-centered-demo'
+import StepIndicatorCountersDemo from '../../../examples/step-indicator-counters-demo'
+import StepIndicatorCountersSmallDemo from '../../../examples/step-indicator-counters-small-demo'
+import StepIndicatorDemo from '../../../examples/step-indicator-demo'
+import StepIndicatorNoLabelsDemo from '../../../examples/step-indicator-no-labels-demo'
+
+export const stepIndicatorShortcut = `<StepIndicator.List>
+  <StepIndicator.Segments />
+</StepIndicator.List>`
+export const stepIndicatorExpanded = `<StepIndicator.List>
+  {({ steps }) =>
+    steps.map(step => (
+      <StepIndicator.ListItem key={step.label} status={step.status}>
+        <StepIndicator.Segment status={step.status}>
+          {step.label}
+        </StepIndicator.Segment>
+      </StepIndicator.ListItem>
+    ))}
+</StepIndicator.List>`
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="step-indicator-demo">
+  <StepIndicatorDemo client:load />
+</ReactPreview>
+
+<div class="max-w-prose mb-12">
+
+#### Segments shortcut
+
+`StepIndicator.Segments` renders a `ListItem` and `Segment` for each step, passing the computed status to both. Inside `StepIndicator.List`, this:
+<Code code={stepIndicatorShortcut} lang="tsx" />
+is shorthand for the render function used in the full example above:
+<Code code={stepIndicatorExpanded} lang="tsx" />
+</div>
+
+### Centered
+
+<ReactPreview variant="Centered" example="step-indicator-centered-demo">
+  <StepIndicatorCenteredDemo client:load />
+</ReactPreview>
+
+### Counters
+
+<ReactPreview variant="Counters" example="step-indicator-counters-demo">
+  <StepIndicatorCountersDemo client:load />
+</ReactPreview>
+
+### Counters Small
+
+<ReactPreview variant="Counters Small" example="step-indicator-counters-small-demo">
+  <StepIndicatorCountersSmallDemo client:load />
+</ReactPreview>
+
+### No Labels
+
+<ReactPreview variant="No Labels" example="step-indicator-no-labels-demo">
+  <StepIndicatorNoLabelsDemo client:load />
+</ReactPreview>

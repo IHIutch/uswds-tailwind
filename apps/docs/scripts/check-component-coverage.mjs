@@ -4,9 +4,10 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { componentCoverage, getComponentCoverage, missingComponentDocs } from '../src/content/component-coverage.ts'
 import { partSlug, reactApiSchema } from '../src/reference/react/schema.ts'
+import { checkReactPreviews } from './check-react-previews.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
-const docs = resolve(root, 'apps/docs/src/content/components')
+const docs = resolve(root, 'apps/docs/src/content/components/vanilla')
 const reactApiDir = resolve(root, 'apps/docs/src/content/react-api')
 const packageExports = {
   vanilla: JSON.parse(readFileSync(resolve(root, 'packages/compat/package.json'), 'utf8')).exports,
@@ -18,6 +19,14 @@ const errors = []
 const pages = readdirSync(docs).filter(name => name.endsWith('.mdx')).map(name => name.slice(0, -4))
 const knownPages = new Set(pages)
 const reactReferences = {}
+const examplesDir = resolve(root, 'apps/docs/src/examples')
+const previewPagesDir = resolve(root, 'apps/docs/src/content/components/react')
+errors.push(...checkReactPreviews({
+  coverage: componentCoverage,
+  pageSources: Object.fromEntries(readdirSync(previewPagesDir).filter(name => name.endsWith('.mdx'))
+    .map(name => [name.slice(0, -4), readFileSync(resolve(previewPagesDir, name), 'utf8')])),
+  exampleNames: new Set(readdirSync(examplesDir).filter(name => name.endsWith('.tsx')).map(name => name.slice(0, -4))),
+}))
 
 for (const filename of readdirSync(reactApiDir).filter(name => name.endsWith('.json'))) {
   const slug = filename.slice(0, -5)
@@ -107,8 +116,6 @@ for (const slug of pages) {
   const pageDependencies = item.vanilla.kind === 'composition' ? item.vanilla.dependencies ?? [] : []
   if (JSON.stringify([...composedDependencies].sort()) !== JSON.stringify([...pageDependencies].sort()))
     errors.push(`${slug}: page composition dependencies differ from variants`)
-  if (item.examples.some(example => example.vanilla.status === 'blocked') && !item.publicBlockNotice)
-    errors.push(`${slug}: blocked variants need public guidance`)
   for (const library of ['vanilla', 'react']) {
     const coverage = getComponentCoverage(slug, library)
     if (coverage.kind === 'component') {
@@ -116,7 +123,7 @@ for (const slug of pages) {
       for (const subpath of [coverage.subpath, ...(coverage.additionalSubpaths ?? [])]) {
         if (!packageExports[library][`./${subpath}`])
           errors.push(`${slug}: ${library} subpath ${subpath} is not exported`)
-        if (!(library === 'react' && ['in-page-navigation', 'link'].includes(subpath)) && !index.includes(`'./${subpath}'`))
+        if (!index.includes(`'./${subpath}'`))
           errors.push(`${slug}: ${library} ${subpath} is missing from root index`)
       }
     }
@@ -169,5 +176,5 @@ if (errors.length) {
   process.exitCode = 1
 }
 else {
-  console.log(`Coverage verified: ${pages.length} MDX entries and all public component subpaths.`)
+  console.log(`Coverage verified: ${pages.length} Vanilla and ${readdirSync(previewPagesDir).filter(name => name.endsWith('.mdx')).length} React MDX documents and all public component subpaths.`)
 }

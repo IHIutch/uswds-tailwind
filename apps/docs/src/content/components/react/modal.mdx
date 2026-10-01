@@ -1,0 +1,29 @@
+---
+title: "Modal"
+description: "Focus attention on one task or message with a modal. Compare default, large, and required-action dialogs."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import ModalDefaultDemo from '../../../examples/modal-default-demo'
+import ModalForcedActionDemo from '../../../examples/modal-forced-action-demo'
+import ModalLargeDemo from '../../../examples/modal-large-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview variant="Default" example="modal-default-demo">
+  <ModalDefaultDemo client:load />
+</ReactPreview>
+
+### Large
+
+<ReactPreview variant="Large" example="modal-large-demo">
+  <ModalLargeDemo client:load />
+</ReactPreview>
+
+### Forced Action
+
+<ReactPreview variant="Forced Action" example="modal-forced-action-demo">
+  <ModalForcedActionDemo client:load />
+</ReactPreview>

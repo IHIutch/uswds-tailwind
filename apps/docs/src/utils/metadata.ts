@@ -1,6 +1,6 @@
 /** Canonical HTML and its Markdown representation share one URL policy. */
 export function getPageLinks(pathname: string, site: URL) {
-  const path = pathname.replace(/\.md$/, '').replace(/\/+$/, '') || '/'
+  const path = pathname.replace(/\.md$/, '').replace(/\/+$/, '').replace(/^\/components\/(vanilla|react)\//, '/docs/$1/components/') || '/'
   const canonical = new URL(path, site)
   return {
     canonical,

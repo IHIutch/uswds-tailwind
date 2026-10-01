@@ -13,6 +13,7 @@ export function isLibrary(value: unknown): value is Library {
 
 export function libraryFromPath(pathname: string): Library | undefined {
   const match = /^\/docs\/(vanilla|react)(?:\/|$)/.exec(pathname)
+    ?? /^\/components\/(vanilla|react)(?:\/|$)/.exec(pathname)
   return match?.[1] as Library | undefined
 }
 
@@ -33,6 +34,7 @@ export function isLibraryDocumentation(pathname: string): boolean {
 
 export function docsPath(pathname: string, library: Library): string {
   const suffix = pathname.replace(/^\/docs\/(?:vanilla|react)(?=\/|$)/, '')
+    .replace(/^\/components\/(?:vanilla|react)(?=\/|$)/, '/components')
   if (!isLibraryDocumentation(suffix))
     throw new Error(`Not a library documentation path: ${pathname}`)
   return `/docs/${library}${suffix}`
