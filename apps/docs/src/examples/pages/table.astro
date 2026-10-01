@@ -8,6 +8,8 @@ import TableDemo from '../table-demo'
 import tableSource from '../table-demo.tsx?raw'
 import TableScrollableDemo from '../table-scrollable-demo'
 import tableScrollableSource from '../table-scrollable-demo.tsx?raw'
+import TableSortedDemo from '../table-sorted-demo'
+import tableSortedSource from '../table-sorted-demo.tsx?raw'
 import TableStackedDemo from '../table-stacked-demo'
 import tableStackedSource from '../table-stacked-demo.tsx?raw'
 import TableStickyColumnDemo from '../table-sticky-column-demo'
@@ -61,3 +63,10 @@ import tableStripedSource from '../table-striped-demo.tsx?raw'
 </ComponentPreview>
 
 <p>On narrow screens, <code>stacked</code> hides the visual header row and places each cell on its own line. Keep the native caption and column headers, and add a <code>data-label</code> that matches its column heading to every body cell.</p>
+
+<h3>Sortable</h3>
+<ComponentPreview title="Sortable" demo code={tableSortedSource} language="tsx" filename="table-sorted-demo.tsx" playgroundFiles={{ 'table-sorted-demo.tsx': tableSortedSource }} playgroundDependencies={{ '@tanstack/react-table': '9.2.4' }}>
+  <TableSortedDemo client:load />
+</ComponentPreview>
+
+<p>Install <code>@tanstack/react-table</code> to sort the data. <code>Table.Root</code> supplies sort buttons, <code>aria-sort</code>, and a status announcement; <code>onSortChange</code> forwards the requested column and direction to TanStack Table, whose row model supplies the reordered rows. Keep the Table sort state and row order in sync so the announcement describes the visible data.</p>

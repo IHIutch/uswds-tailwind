@@ -22,13 +22,14 @@ type Props = {
   language?: 'html' | 'tsx'
   filename?: string
   playgroundFiles?: Record<string, string>
+  playgroundDependencies?: Record<string, string>
   title?: string
   mark?: ExpressiveCodeBlockProps['mark']
   ins?: ExpressiveCodeBlockProps['ins']
   del?: ExpressiveCodeBlockProps['del']
 }
 
-const { minHeight, resize = true, code, demo, language = 'html', filename, playgroundFiles, title, mark, ins, del } = Astro.props
+const { minHeight, resize = true, code, demo, language = 'html', filename, playgroundFiles, playgroundDependencies, title, mark, ins, del } = Astro.props
 
 const markup = Array.isArray(code) ? code.join('\n') : code;
 ---
@@ -111,6 +112,7 @@ const markup = Array.isArray(code) ? code.join('\n') : code;
                 componentName={title}
                 entryFile={filename}
                 files={playgroundFiles}
+                dependencies={playgroundDependencies}
                 client:load
               />
             )}
