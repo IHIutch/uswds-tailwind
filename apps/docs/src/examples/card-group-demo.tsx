@@ -7,7 +7,7 @@ export default function CardGroupDemo() {
       <li>
         <Card.Root>
           <Card.Media>
-            <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+            <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
           </Card.Media>
           <Card.Header>
             <Card.Title>Card title 1</Card.Title>
@@ -23,7 +23,7 @@ export default function CardGroupDemo() {
       <li>
         <Card.Root>
           <Card.Media>
-            <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+            <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
           </Card.Media>
           <Card.Header>
             <Card.Title>Card title 2</Card.Title>
@@ -39,7 +39,7 @@ export default function CardGroupDemo() {
       <li>
         <Card.Root>
           <Card.Media>
-            <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+            <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
           </Card.Media>
           <Card.Header>
             <Card.Title>Card title 3</Card.Title>

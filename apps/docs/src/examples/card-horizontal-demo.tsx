@@ -6,7 +6,7 @@ export default function CardHorizontalDemo() {
     <div className="space-y-4">
       <Card.Root layout="ltr">
         <Card.Media>
-          <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+          <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
         </Card.Media>
         <Card.Header>
           <Card.Title>Media left</Card.Title>
@@ -20,7 +20,7 @@ export default function CardHorizontalDemo() {
       </Card.Root>
       <Card.Root layout="rtl">
         <Card.Media>
-          <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+          <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
         </Card.Media>
         <div>
           <Card.Header>

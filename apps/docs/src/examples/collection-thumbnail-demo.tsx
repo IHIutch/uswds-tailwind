@@ -8,7 +8,7 @@ export default function CollectionThumbnailDemo() {
       <Collection.List>
         <Collection.Item startElement={(
           <Collection.Thumbnail>
-            <img src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+            <img src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
           </Collection.Thumbnail>
         )}
         >
@@ -30,7 +30,7 @@ export default function CollectionThumbnailDemo() {
         </Collection.Item>
         <Collection.Item startElement={(
           <Collection.Thumbnail>
-            <img src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+            <img src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
           </Collection.Thumbnail>
         )}
         >
