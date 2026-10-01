@@ -314,6 +314,30 @@ import ApiTable from "#components/api-table.astro"
   </div>
 `} />
 
+### Stacked
+
+<ComponentPreview title="Table Stacked" code={`
+  <div class="@container">
+    <table class="w-full border-spacing-0">
+      <caption class="mb-3 text-left font-bold">Historic documents</caption>
+      <thead class="@max-tablet:hidden">
+        <tr class="*:border-b *:border-black *:px-4 *:py-2 *:text-left">
+          <th scope="col">Document title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Year</th>
+        </tr>
+      </thead>
+      <tbody class="[&>tr]:@max-tablet:block [&>tr]:@max-tablet:border-b [&>tr]:@max-tablet:py-2">
+        <tr>
+          <th scope="row" class="px-4 py-2 text-left font-normal" data-label="Document title">Declaration of Independence</th>
+          <td class="px-4 py-2 @max-tablet:block @max-tablet:before:block @max-tablet:before:font-bold @max-tablet:before:content-[attr(data-label)]" data-label="Description">Statement declaring independence from the British Empire.</td>
+          <td class="px-4 py-2 @max-tablet:block @max-tablet:before:block @max-tablet:before:font-bold @max-tablet:before:content-[attr(data-label)]" data-label="Year">1776</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+`} />
+
 ### Sortable
 
 <ComponentPreview title="Table Sortable" mark={[/data-part="[^\"]*"/g, /data-sortable/g, /data-value="[^\"]*"/g]} code={`

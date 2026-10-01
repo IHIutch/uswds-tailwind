@@ -136,7 +136,7 @@ export const componentCoverage = {
   'site-alert': page(html(), composition('Site alert has no React SiteAlert export.', 'Compose a sitewide alert with the React Alert component and the styling on this page.', 'alert'), ['Default', 'Emergency', 'List', 'No Header', 'No Icon', 'Slim']),
   'step-indicator': page(html(), component('step-indicator'), ['Default', 'Centered', 'Counters', 'Counters Small', 'No Labels'], { reactCovered: true }),
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
-  'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Sortable'], {
+  'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Stacked', 'Sortable'], {
     reactCovered: true,
     variants: { Sortable: { reactStatus: 'deferred', reactReason: 'React Table does not provide built-in sorting. An example composing it with a table library is planned.' } },
   }),
