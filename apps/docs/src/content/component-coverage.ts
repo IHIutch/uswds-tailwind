@@ -25,7 +25,6 @@ export interface PageCoverage {
 const component = (subpath: string, note?: string, additionalSubpaths?: readonly string[]): LibraryCoverage => ({ kind: 'component', subpath, note, additionalSubpaths })
 const styling = (note: string, alternative: string): LibraryCoverage => ({ kind: 'styling', note, alternative })
 const composition = (note: string, alternative: string, alternativePage?: string): LibraryCoverage => ({ kind: 'composition', note, alternative, alternativePage })
-const unavailable = (note: string, alternative: string, alternativePage?: string): LibraryCoverage => ({ kind: 'unavailable', note, alternative, alternativePage })
 function vanillaComposition(dependencies: readonly string[]): LibraryCoverage {
   return {
     kind: 'composition',
@@ -138,7 +137,7 @@ export const componentCoverage = {
   'summary-box': page(html(), component('summary-box'), ['Example'], { reactCovered: true }),
   'table': page(component('table'), component('table'), ['Default', 'Striped', 'Borderless', 'Compact', 'Scrollable', 'Sticky Header', 'Sticky Column', 'Stacked', 'Sortable'], {
     reactCovered: true,
-    variants: { Sortable: { reactStatus: 'deferred', reactReason: 'React Table does not provide built-in sorting. An example composing it with a table library is planned.' } },
+    variants: { Sortable: { reactStatus: 'covered' } },
   }),
   'tag': page(html(), component('tag'), ['Default', 'Large', 'Vivid orange', 'Light gray'], { reactCovered: true }),
   'text-input': page(html(), component('input', 'Exported as Input.'), ['Example'], { reactCovered: true }),

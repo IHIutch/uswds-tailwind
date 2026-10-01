@@ -86,10 +86,11 @@ ${htmlContent.trim()}
   }
 }
 
-export function createReactStackBlitzProject({ componentName, entryFile, files }: {
+export function createReactStackBlitzProject({ componentName, entryFile, files, dependencies = {} }: {
   componentName: string
   entryFile: string
   files: Record<string, string>
+  dependencies?: Record<string, string>
 }): Project {
   const packageJson = {
     name: 'uswds-tailwind-react-example',
@@ -102,6 +103,7 @@ export function createReactStackBlitzProject({ componentName, entryFile, files }
       'tailwindcss': '4.3.3',
       'react': '^19.2.3',
       'react-dom': '^19.2.3',
+      ...dependencies,
     },
     devDependencies: {
       '@types/react': '^19.2.7',

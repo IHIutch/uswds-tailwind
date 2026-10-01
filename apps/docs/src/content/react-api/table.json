@@ -39,13 +39,23 @@
         },
         {
           "name": "defaultSortDirection",
-          "type": "ascending | descending",
+          "type": "asc | desc",
           "description": "Initial sort direction."
         },
         {
+          "name": "sortColumn",
+          "type": "number | null",
+          "description": "Controlled sorted column index. Supply with sortDirection when an external data source owns row order."
+        },
+        {
+          "name": "sortDirection",
+          "type": "asc | desc | null",
+          "description": "Controlled sort direction. Supply with sortColumn."
+        },
+        {
           "name": "onSortChange",
-          "type": "table.Props[\"onSortChange\"]",
-          "description": "Receives sorting requests."
+          "type": "({ columnIndex: number | null, direction: 'asc' | 'desc' | null }) => void",
+          "description": "Receives sorting requests; reorder rows in the data source to match."
         }
       ]
     },
