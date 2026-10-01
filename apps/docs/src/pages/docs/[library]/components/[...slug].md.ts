@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro'
 import { htmlToMarkdown } from '#utils/html-to-markdown'
+import { getPageLinks } from '#utils/metadata'
 
-export const GET: APIRoute = async ({ request, url, rewrite }) => {
+export const GET: APIRoute = async ({ request, url, rewrite, site }) => {
   const htmlUrl = new URL(url)
   htmlUrl.pathname = htmlUrl.pathname.slice(0, -3)
   // Existing component aliases retain their Vanilla interpretation.
@@ -21,5 +22,6 @@ export const GET: APIRoute = async ({ request, url, rewrite }) => {
     })
   }
   const markdown = htmlToMarkdown(await response.text(), htmlUrl)
+  responseHeaders.set('Link', getPageLinks(htmlUrl.pathname, site ?? url).markdownHeader)
   return new Response(markdown, { headers: responseHeaders })
 }

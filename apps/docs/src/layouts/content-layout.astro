@@ -7,10 +7,7 @@ import { getCollection } from 'astro:content'
 const { pathname } = Astro.url
 const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
 
-const allComponents = await getCollection(
-  'components',
-  entry => entry.data.isPublished !== false,
-)
+const allComponents = await getCollection('components')
 
 const sortedComponents = allComponents.sort((a, b) => {
   return a.data.title.localeCompare(b.data.title)

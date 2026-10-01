@@ -12,7 +12,6 @@ const componentsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    isPublished: z.boolean().optional(),
   }),
 })
 

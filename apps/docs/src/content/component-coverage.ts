@@ -20,7 +20,6 @@ export interface PageCoverage {
   react: LibraryCoverage
   examples: readonly ExampleCoverage[]
   publicBlockNotice?: string
-  published?: false
 }
 
 const component = (subpath: string, note?: string, additionalSubpaths?: readonly string[]): LibraryCoverage => ({ kind: 'component', subpath, note, additionalSubpaths })
@@ -52,7 +51,7 @@ function page(
   vanilla: LibraryCoverage,
   react: LibraryCoverage,
   headings: readonly string[],
-  options: { published?: false, variants?: Record<string, VariantOverride>, publicBlockNotice?: string, reactCovered?: boolean } = {},
+  options: { variants?: Record<string, VariantOverride>, publicBlockNotice?: string, reactCovered?: boolean } = {},
 ): PageCoverage {
   for (const heading of Object.keys(options.variants ?? {})) {
     if (!headings.includes(heading))
@@ -76,7 +75,6 @@ function page(
         },
       }
     }),
-    ...(options.published === false && { published: false as const }),
     ...(options.publicBlockNotice && { publicBlockNotice: options.publicBlockNotice }),
   }
 }
@@ -146,7 +144,6 @@ export const componentCoverage = {
   'text-input': page(html(), component('input', 'Exported as Input.'), ['Example'], { reactCovered: true }),
   'time-picker': page(vanillaComposition(['combobox']), component('time-picker'), ['Example'], { reactCovered: true, variants: { Example: { dependencies: ['combobox'] } } }),
   'tooltip': page(component('tooltip'), component('tooltip'), ['Example'], { reactCovered: true }),
-  'validation': page(html('Unpublished guidance; no Vanilla initializer.'), unavailable('Validation is unpublished and has no React Validation export.', 'Use Field, Input, and native validation attributes for accessible form feedback.', 'text-input'), [], { published: false }),
 } as const satisfies Record<string, PageCoverage>
 
 /** Public component subpaths without a matching docs page. */

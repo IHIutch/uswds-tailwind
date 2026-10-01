@@ -55,7 +55,7 @@ const Examples = loadExamples ? (await loadExamples()).default : null
 
 ---
 
-<BaseLayout title={`${entry.data.title} (${library === 'react' ? 'React' : 'Vanilla'})`} description={entry.data.description}>
+<BaseLayout title={`${entry.data.title} (${library === 'react' ? 'React' : 'Vanilla'})`} description={entry.data.description} markdown>
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={visibleHeadings} />

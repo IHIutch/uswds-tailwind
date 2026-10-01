@@ -9,10 +9,7 @@ import MobileNav from './mobile-nav.astro'
 
 const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
 
-const allComponents = await getCollection(
-  'components',
-  entry => entry.data.isPublished !== false,
-)
+const allComponents = await getCollection('components')
 const desktopLinks: NavLinks = {
   primary: [
     {
