@@ -6,7 +6,7 @@ export default function CardVerticalDemo() {
     <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
       <Card.Root>
         <Card.Media>
-          <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+          <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
         </Card.Media>
         <Card.Header>
           <Card.Title>Card title</Card.Title>
@@ -20,7 +20,7 @@ export default function CardVerticalDemo() {
       </Card.Root>
       <Card.Root>
         <Card.Media variant="flush">
-          <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+          <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
         </Card.Media>
         <Card.Header>
           <Card.Title>Flush media</Card.Title>
@@ -34,7 +34,7 @@ export default function CardVerticalDemo() {
       </Card.Root>
       <Card.Root>
         <Card.Media variant="exdent" className="order-0 py-2">
-          <img className="size-full object-cover" src="https://uswds-tailwind.com/assets/images/preview.jpg" alt="" />
+          <img className="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="" />
         </Card.Media>
         <Card.Header className="order-first">
           <Card.Title>Header first</Card.Title>
