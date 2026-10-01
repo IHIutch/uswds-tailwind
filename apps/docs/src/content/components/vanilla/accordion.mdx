@@ -1,0 +1,430 @@
+---
+title: "Accordion"
+description: "Use accordions to organize related content in expandable sections. Explore examples with headings, borders, and multiple open panels."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+This component requires the following JavaScript plugin:
+  - [Accordion](/docs/vanilla/javascript#accordion)
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Accordion Default" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} code={`
+  <div
+    data-scope="accordion" data-part="root"
+    class="space-y-2"
+  >
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="one"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        First Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof;
+          or abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to petition the
+          Government for a redress of grievances.
+        </p>
+      </div>
+    </div>
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="two"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        Second Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and
+          bear Arms, shall not be infringed.
+        </p>
+      </div>
+    </div>
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="third"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        Third Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          No Soldier shall, in time of peace be quartered in any house, without the consent of the Owner, nor in time of
+          war, but in a manner to be prescribed by law.
+        </p>
+      </div>
+    </div>
+  </div>
+`} />
+
+### With headings
+
+Wrap each trigger in a heading when its panel represents a section of the page. Choose the heading level to fit the page structure, following the [WAI-ARIA accordion pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/).
+
+<ComponentPreview title="Accordion With headings" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} code={`
+  <div
+    data-scope="accordion" data-part="root"
+    class="space-y-2"
+  >
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="one"
+    >
+      <h4>
+        <button
+          data-scope="accordion" data-part="item-trigger"
+          class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+        >
+          First Amendment
+          <div class="h-full flex items-center ml-auto shrink-0">
+            <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+          </div>
+        </button>
+      </h4>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof;
+          or abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to petition the
+          Government for a redress of grievances.
+        </p>
+      </div>
+    </div>
+  </div>
+`} />
+
+### Multiselectable
+
+<ComponentPreview title="Accordion Multiple" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} ins={["data-multiple"]} code={`
+  <div
+    data-scope="accordion" data-part="root"
+    data-multiple
+    class="space-y-2"
+  >
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="one"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        First Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof;
+          or
+          abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to
+          petition the
+          Government for a redress of grievances.
+        </p>
+      </div>
+    </div>
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="two"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        Second Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and
+          bear Arms, shall not be infringed.
+        </p>
+      </div>
+    </div>
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="third"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        Third Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden"
+      >
+        <p class="leading-normal max-w-prose">
+          No Soldier shall, in time of peace be quartered in any house, without the consent of the Owner, nor in time of
+          war, but in a manner to be prescribed by law.
+        </p>
+      </div>
+    </div>
+  </div>
+`} />
+
+### Bordered
+
+<ComponentPreview title="Accordion Bordered" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g]} ins={["border-b-4 border-x-4 border-gray-5"]} code={`
+  <div
+    data-scope="accordion" data-part="root"
+    class="space-y-2"
+  >
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="one"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        First Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden border-b-4 border-x-4 border-gray-5"
+      >
+        <p class="leading-normal max-w-prose">
+          Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof;
+          or
+          abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to
+          petition the
+          Government for a redress of grievances.
+        </p>
+      </div>
+    </div>
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="two"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        Second Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden border-b-4 border-x-4 border-gray-5"
+      >
+        <p class="leading-normal max-w-prose">
+          A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and
+          bear Arms, shall not be infringed.
+        </p>
+      </div>
+    </div>
+    <div
+      data-scope="accordion" data-part="item"
+      data-value="third"
+    >
+      <button
+        data-scope="accordion" data-part="item-trigger"
+        class="group flex items-center w-full py-4 px-5 bg-gray-5 hover:bg-gray-10 font-bold focus:outline-4 focus:outline-blue-40v cursor-pointer text-left gap-3"
+      >
+        Third Amendment
+        <div class="h-full flex items-center ml-auto shrink-0">
+          <div class="size-6 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"></div>
+        </div>
+      </button>
+      <div
+        data-scope="accordion" data-part="item-content"
+        class="py-6 px-4 not-[[data-state=open]]:hidden border-b-4 border-x-4 border-gray-5"
+      >
+        <p class="leading-normal max-w-prose">
+          No Soldier shall, in time of peace be quartered in any house, without the consent of the Owner, nor in time of
+          war, but in a manner to be prescribed by law.
+        </p>
+      </div>
+    </div>
+  </div>
+`} />
+
+## Component API
+
+### Initialization
+
+Run once after the accordion markup exists:
+
+```js
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
+
+accordionInit()
+```
+
+For an instance you can control, use `Accordion.getOrCreateInstance(root, options)`. See [shared instance methods](/docs/vanilla/javascript#instance-lifecycle).
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+#### `root`
+
+Groups the accordion items.
+
+<ApiTable label="accordion root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"accordion"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `data-multiple` | `boolean-like attribute` | **Authored.** Allows several open panels. Bare attribute is true; omission or `"false"` is false. Overrides the `multiple` option, even when omitted. |
+
+</ApiTable>
+
+#### `item`
+
+One panel, containing its trigger and content.
+
+<ApiTable label="accordion item attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item"` | **Authored.** Identifies this part. |
+| `data-value` | `string` | **Authored.** Required unique, nonempty item value; `id` is used as a fallback. |
+| `data-state` | `"open" \| "closed"` | **Authored.** Use `"open"` to expand initially. In single-open mode, only the first marked item is used. `defaultValue` overrides these markers. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+
+</ApiTable>
+
+#### `item-trigger`
+
+Toggles its panel. Place inside a heading when introducing a section.
+
+<ApiTable label="accordion item-trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item-trigger"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `aria-expanded` | `"true" \| "false"` | **Generated.** Whether the content is expanded. |
+| `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
+
+</ApiTable>
+
+#### `item-content`
+
+Panel content, inside the same item as its trigger.
+
+<ApiTable label="accordion item-content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item-content"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="accordion JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `defaultValue` | `string[]`. Initial expanded item values; overrides item state markers. |
+| `value` | `string[]`. Controlled expanded values; takes precedence over `defaultValue`. |
+| `id` | Instance identifier; defaults to the root ID or a generated value. |
+| `ids` | Override root, item-trigger, and item-content IDs for composition. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Accordion instance methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `open(value)` | `Promise<void>` | Requests expansion of the item. |
+| `close(value)` | `Promise<void>` | Requests collapse of the item. |
+| `toggle(value)` | `Promise<void>` | Requests the opposite expanded state. |
+| `destroy()` | `void` | Stops the instance and removes its lookup. Does not restore the original HTML. |
+
+</ApiTable>
+
+```js
+import { Accordion } from '@uswds-tailwind/compat/accordion'
+
+const accordion = Accordion.getOrCreateInstance(
+  '[data-scope="accordion"][data-part="root"]',
+)
+
+await accordion.open('one')
+```
+
+Pass the item’s `data-value` (or fallback `id`) as the `value` argument. Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
+
+See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
+
+### Callbacks
+
+<ApiTable label="Accordion callbacks">
+
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onValueChange` | `{ value: string[] }` | Expanded values change, or a controlled change is requested. |
+
+</ApiTable>
+
+Pass callbacks in instance options. They are JavaScript functions, not emitted DOM events.
+
+### Accessibility
+
+- Supply meaningful button text and appropriate heading levels.
+- Enter and Space activate the focused button.

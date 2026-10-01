@@ -10,6 +10,13 @@ interface ComponentInterface<Api> {
   render: () => void
 }
 
+const activeComponents = new Set<Component<any, any>>()
+
+export function destroyAllComponents() {
+  for (const component of [...activeComponents])
+    component.destroy()
+}
+
 export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   rootEl: HTMLElement
   machine: VanillaMachine<any>
@@ -31,6 +38,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   abstract initApi(): Api
 
   init = () => {
+    activeComponents.add(this)
     this.render()
     this.machine.subscribe(() => {
       this.api = this.initApi()
@@ -41,6 +49,11 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
 
   destroy = () => {
     this.machine.stop()
+    activeComponents.delete(this)
+    const instances = (this.constructor as { instances?: Map<string, Component<Props, Api>> }).instances
+    const id = this.machine.service.scope.id
+    if (id && instances?.get(id) === this)
+      instances.delete(id)
   }
 
   abstract render(): void

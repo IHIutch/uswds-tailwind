@@ -1,0 +1,207 @@
+{
+  "name": "FileInput",
+  "intro": "Root connects the file control, dropzone, instructions, error, and preview parts.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns accepted and rejected files.",
+      "props": [
+        {
+          "name": "accept",
+          "type": "string",
+          "description": "Accepted file types."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "description": "Allows more than one file."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Form field name."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Requires a file."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables selection."
+        },
+        {
+          "name": "errorMessage",
+          "type": "string",
+          "description": "Message for rejected files."
+        },
+        {
+          "name": "srStatusText",
+          "type": "string",
+          "description": "Overrides the announced status text."
+        },
+        {
+          "name": "onFileChange",
+          "type": "({ acceptedFiles, rejectedFiles }) => void",
+          "description": "Receives file changes."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Names the file input.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "SrStatus",
+      "element": "div",
+      "description": "Announces file selection status."
+    },
+    {
+      "name": "Dropzone",
+      "element": "div",
+      "description": "Displays the drag and drop target.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        },
+        {
+          "attribute": "data-dragging",
+          "value": "Present while dragging files",
+          "purpose": "Styles drag feedback."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Native file input over the dropzone."
+    },
+    {
+      "name": "Instructions",
+      "element": "div",
+      "description": "Explains how to choose files; children replace the default text."
+    },
+    {
+      "name": "ErrorMessage",
+      "element": "div",
+      "description": "Displays rejected-file feedback."
+    },
+    {
+      "name": "PreviewList",
+      "element": "div",
+      "description": "Contains previews of accepted files.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | ({ files: File[] }) => ReactNode",
+          "description": "Can render from accepted files."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        },
+        {
+          "attribute": "data-valid",
+          "value": "Present when files are selected",
+          "purpose": "Style the populated preview."
+        }
+      ]
+    },
+    {
+      "name": "PreviewHeader",
+      "element": "div",
+      "description": "Groups the preview heading and change action."
+    },
+    {
+      "name": "PreviewTitle",
+      "element": "div",
+      "description": "Displays the selected-file heading."
+    },
+    {
+      "name": "Item",
+      "element": "div",
+      "description": "Provides one file to the preview parts.",
+      "props": [
+        {
+          "name": "file",
+          "type": "File (required)",
+          "description": "The file represented by this item."
+        }
+      ]
+    },
+    {
+      "name": "PreviewItem",
+      "element": "div",
+      "description": "Arranges the preview icon, thumbnail, name, and delete action."
+    },
+    {
+      "name": "PreviewItemIcon",
+      "element": "div",
+      "description": "Displays a file-type icon.",
+      "data": [
+        {
+          "attribute": "data-type",
+          "value": "pdf | word | excel | video | generic | image",
+          "purpose": "Styles the file icon."
+        }
+      ]
+    },
+    {
+      "name": "PreviewItemThumb",
+      "element": "img",
+      "description": "Displays an image thumbnail when available."
+    },
+    {
+      "name": "PreviewItemContent",
+      "element": "div",
+      "description": "Displays the file name by default."
+    },
+    {
+      "name": "ItemDeleteTrigger",
+      "element": "button",
+      "description": "Removes this file from the selection."
+    },
+    {
+      "name": "ChangeTrigger",
+      "element": "span",
+      "description": "Provides a visible change-files action."
+    }
+  ]
+}

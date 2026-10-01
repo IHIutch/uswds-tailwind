@@ -1,0 +1,233 @@
+---
+title: "Language selector"
+description: "Help visitors find content in their preferred language with language selector toggles and dropdowns."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+## Examples
+
+### Toggle
+
+<ComponentPreview title="Language Selector" code={`
+  <a href="#" class="inline-block rounded-sm font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v">
+    <span lang="en">Español</span>
+  </a>
+`} />
+
+### Dropdown
+
+This component requires the following JavaScript plugin:
+  - [Dropdown](/docs/vanilla/javascript#dropdown)
+
+<ComponentPreview title="Language Selector" code={`
+  <div class="space-y-8">
+
+    <section>
+      <div data-scope="dropdown" data-part="root">
+        <button
+          data-scope="dropdown" data-part="trigger"
+          class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+        >
+          Languages
+        </button>
+        <div
+          data-scope="dropdown" data-part="content"
+          class="outline-hidden bg-blue-warm-80v w-60 divide-y divide-gray-cool-10 z-30"
+        >
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="ar">
+              <strong>العربية</strong>
+              (Arabic) </span>
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="zh">
+              <strong>简体字</strong>
+              (Chinese - Simplified) </span>
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="en">
+              <strong>English</strong>
+            </span>
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="es">
+              <strong>Español</strong>
+              (Spanish) </span>
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="fr">
+              <strong>Français</strong>
+              (French) </span>
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="it">
+              <strong>Italiano</strong>
+              (Italian) </span>
+          </a></div>
+          <div data-scope="dropdown" data-part="item"><a
+            href="#"
+            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+          >
+            <span lang="ru">
+              <strong>Pусский</strong>
+              (Russian) </span>
+          </a></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+`} />
+
+## Component API
+
+### Initialization
+
+Run after the component markup exists:
+
+```js
+import { dropdownInit } from '@uswds-tailwind/compat/dropdown'
+
+dropdownInit()
+```
+
+Only the Dropdown example needs initialization. Toggle uses ordinary links.
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+#### `root`
+
+Wraps the disclosure.
+
+<ApiTable label="dropdown root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"dropdown"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Authored.** Use `"open"` to expand initially; defaults to closed. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+
+</ApiTable>
+
+#### `trigger`
+
+A native button with descriptive text.
+
+<ApiTable label="dropdown trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"trigger"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `aria-expanded` | `"true" \| "false"` | **Generated.** Whether the content is expanded. |
+| `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
+
+</ApiTable>
+
+#### `content`
+
+Contains the language links.
+
+<ApiTable label="dropdown content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"content"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
+
+</ApiTable>
+
+#### `item`
+
+Wraps each link. Links follow their native destinations.
+
+<ApiTable label="dropdown item attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"item"` | **Authored.** Identifies this part. |
+| `data-value` | `string` | **Authored.** Identifies the selected item in `onItemSelect`; falls back to `id`. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="dropdown JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `defaultOpen` | Initial uncontrolled open state; overrides the authored initial state. |
+| `open` | Controlled open state. Your application must supply the updated value after a change callback. |
+| `id, ids` | Customize the instance identifier and generated element IDs. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Dropdown methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `open()` | `Promise<void>` | Requests opening. |
+| `close()` | `Promise<void>` | Requests closing. |
+| `destroy()` | `void` | Stops the machine and clears the lookup. |
+
+</ApiTable>
+
+```js
+import { Dropdown } from '@uswds-tailwind/compat/dropdown'
+
+const dropdown = Dropdown.getOrCreateInstance(
+  '[data-scope="dropdown"][data-part="root"]',
+)
+
+await dropdown.open()
+```
+
+Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
+
+See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
+
+### Callbacks
+
+<ApiTable label="Dropdown callbacks">
+
+| Callback | Payload | When it runs |
+| --- | --- | --- |
+| `onOpenChange` | `{ open: boolean }` | An open-state change is requested. |
+| `onItemSelect` | `{ value: string }` | A link with an item value is selected. |
+
+</ApiTable>
+
+Pass callbacks in instance options. These are JavaScript functions, not emitted DOM events.
+
+### Accessibility
+
+- Supply real `href`, `lang`, and `hreflang` values as appropriate. Selection does not translate the page automatically.
+- Preserve native link focus and navigation. This is a disclosure for links, not an application menu.

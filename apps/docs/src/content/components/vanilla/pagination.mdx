@@ -1,0 +1,86 @@
+---
+title: "Pagination"
+description: "Help visitors move through paginated content with bounded and unbounded pagination patterns."
+---
+
+## Examples
+
+### Bounded
+
+The last page is known, so the final page number is always available.
+
+<ComponentPreview title="Pagination Bounded" code={`
+<nav aria-label="Pagination" class="@container flex justify-center">
+  <ul class="flex gap-2">
+    <li class="hidden @tablet:inline-flex">
+      <a href="?page=5" class="h-10 pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v"><span aria-hidden="true" class="icon-[material-symbols--chevron-left] align-middle size-4"></span>Previous</a>
+    </li>
+    <li>
+      <a href="?page=1" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 1">1</a>
+    </li>
+    <li aria-label="ellipsis indicating non-visible pages">
+      <span class="h-10 w-10 flex items-center justify-center">...</span>
+    </li>
+    <li>
+      <a href="?page=4" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 4">4</a>
+    </li>
+    <li>
+      <a href="?page=5" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 5">5</a>
+    </li>
+    <li>
+      <a href="?page=6" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 6" aria-current="page">6</a>
+    </li>
+    <li>
+      <a href="?page=7" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 7">7</a>
+    </li>
+    <li>
+      <a href="?page=8" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Last page, page 8">8</a>
+    </li>
+    <li class="hidden @tablet:inline-flex">
+      <a href="?page=7" class="h-10 pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v">Next<span aria-hidden="true" class="icon-[material-symbols--chevron-right] align-middle size-4"></span></a>
+    </li>
+  </ul>
+</nav>
+`} />
+
+### Unbounded
+
+Use this pattern when the final page is unknown. The ellipsis indicates that more pages may follow.
+
+<ComponentPreview title="Pagination Unbounded" code={`
+<nav aria-label="Pagination" class="@container flex justify-center">
+  <ul class="flex gap-2">
+    <li class="hidden @tablet:inline-flex">
+      <a href="?page=5" class="h-10 pr-2 mr-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v"><span aria-hidden="true" class="icon-[material-symbols--chevron-left] align-middle size-4"></span>Previous</a>
+    </li>
+    <li>
+      <a href="?page=3" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 3">3</a>
+    </li>
+    <li>
+      <a href="?page=4" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 4">4</a>
+    </li>
+    <li>
+      <a href="?page=5" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 5">5</a>
+    </li>
+    <li>
+      <a href="?page=6" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 6" aria-current="page">6</a>
+    </li>
+    <li>
+      <a href="?page=7" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 7">7</a>
+    </li>
+    <li>
+      <a href="?page=8" class="h-10 min-w-10 p-2 w-full flex rounded border border-gray-90/20 text-blue-60v justify-center items-center hover:text-blue-warm-70v hover:border-blue-warm-70v focus:text-blue-warm-70v focus:border-blue-warm-70v focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v aria-[current=page]:bg-gray-90 aria-[current=page]:text-white" aria-label="Page 8">8</a>
+    </li>
+    <li aria-label="ellipsis indicating non-visible pages">
+      <span class="h-10 w-10 flex items-center justify-center">...</span>
+    </li>
+    <li class="hidden @tablet:inline-flex">
+      <a href="?page=7" class="h-10 pl-2 ml-3 inline-flex items-center text-blue-60v hover:underline hover:text-blue-warm-70v focus:underline focus:text-blue-warm-70v focus:outline-4 focus:outline-blue-40v">Next<span aria-hidden="true" class="icon-[material-symbols--chevron-right] align-middle size-4"></span></a>
+    </li>
+  </ul>
+</nav>
+`} />
+
+## Component API
+
+Wrap the list in a `<nav aria-label="Pagination">`. Use a list item for each page, an ellipsis when pages are omitted, and `aria-current="page"` only on the current page link. Give each link a destination for its corresponding page.

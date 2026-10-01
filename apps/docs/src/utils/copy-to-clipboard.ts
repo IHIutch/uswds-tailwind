@@ -1,8 +1,3 @@
-export function copyToClipboard(text: string) {
-  if ('clipboard' in navigator) {
-    navigator.clipboard.writeText(text)
-  }
-  else {
-    document.execCommand('copy', true, text)
-  }
+export async function copyToClipboard(text: string): Promise<void> {
+  await navigator.clipboard.writeText(text)
 }

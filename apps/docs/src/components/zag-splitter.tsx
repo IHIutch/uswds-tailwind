@@ -6,7 +6,7 @@ export default function ZagSplitter({ resize = true, children }: { resize: boole
   if (!resize) {
     return (
       <div
-        className="bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4"
+        className="bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] py-4 px-8"
       >
         {children}
       </div>
@@ -30,7 +30,7 @@ export default function ZagSplitter({ resize = true, children }: { resize: boole
     >
       <div
         {...api.getPanelProps({ id: 'a' })}
-        className="bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] p-4"
+        className="bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] py-4 px-8"
       >
         {children}
       </div>

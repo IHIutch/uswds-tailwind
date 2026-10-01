@@ -1,0 +1,39 @@
+---
+title: "In-page navigation"
+description: "Help visitors jump between sections of a long page with in-page navigation."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import { Code } from 'astro-expressive-code/components'
+import InPageNavigationDemo from '../../../examples/in-page-navigation-demo'
+
+export const inPageNavShortcut = `<InPageNav.List>
+  <InPageNav.Items />
+</InPageNav.List>`
+export const inPageNavExpanded = `<InPageNav.List>
+  {({ headings }) => headings.map(heading => (
+    <InPageNav.Item key={heading.href}>
+      <InPageNav.Link href={heading.href} depth={heading.depth}>
+        {heading.label}
+      </InPageNav.Link>
+    </InPageNav.Item>
+  ))}
+</InPageNav.List>`
+
+## Examples
+
+### Default
+
+<ReactPreview title="Default" example="in-page-navigation-demo">
+  <InPageNavigationDemo client:load />
+</ReactPreview>
+
+<div class="max-w-prose mb-12">
+
+#### Items shortcut
+
+`InPageNav.Items` renders an `Item` and `Link` for each heading. Inside `InPageNav.List`, this:
+<Code code={inPageNavShortcut} lang="tsx" />
+is shorthand for the render function used in the full example above:
+<Code code={inPageNavExpanded} lang="tsx" />
+</div>

@@ -1,6 +1,0 @@
-{
-  "component": "grid",
-  "variant": "grid-wrapping.twig",
-  "propsPath": "",
-  "componentPath": "src/__demos__/grid/examples/grid-wrapping.twig"
-}

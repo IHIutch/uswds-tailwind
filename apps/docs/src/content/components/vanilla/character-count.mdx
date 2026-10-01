@@ -1,0 +1,129 @@
+---
+title: "Character count"
+description: "Show how many characters remain in a limited text field with a character count and live feedback."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+The Vanilla examples use these JavaScript initializers:
+  - [Character Count](/docs/vanilla/javascript#character-count)
+
+## Example
+
+<ComponentPreview title="Character Count" mark={[/data-part="[^\"]*"/g]} code={`
+  <div
+    class="max-w-xs"
+    data-part="character-count-root"
+  >
+    <label
+      data-part="character-count-label"
+      for="input-limit"
+      class="block"
+    >Text input</label>
+    <div>
+      <span
+        id="input-hint"
+        class="text-gray-50"
+      >This is an input with a character counter.</span>
+    </div>
+    <div class="mt-2 relative">
+      <input
+        data-part="character-count-input"
+        id="input-limit"
+        aria-describedby="input-hint character-count-hint"
+        class="p-2 w-full max-w-lg h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+        maxlength="20"
+      />
+    </div>
+    <div class="pt-2">
+      <span
+        id="character-count-hint"
+        class="sr-only"
+      >You can enter up to 20 characters</span>
+      <span
+        data-part="character-count-status"
+        aria-hidden="true"
+        class="text-gray-50 data-[invalid]:text-red-60v data-[invalid]:font-bold"
+      >20 characters allowed</span>
+      <span data-part="character-count-sr-status"></span>
+    </div>
+  </div>
+`} />
+
+## Component API
+
+### Initialization
+
+```js
+import { characterCountInit } from '@uswds-tailwind/compat/character-count'
+
+characterCountInit()
+```
+
+Initialize after the markup exists. `CharacterCount` is the corresponding instance class. See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+Use `data-part="character-count-root"` with these descendants:
+
+#### `character-count-label`
+
+Optional label for the input.
+
+<ApiTable label="character-count-label attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
+
+</ApiTable>
+
+#### `character-count-input`
+
+Required input or textarea.
+
+<ApiTable label="character-count-input attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `maxlength` | `integer` | **Authored.** Maximum length. Converted with `Number()` at construction; overrides the `maxLength` option, even when missing or empty. Missing or empty means no limit. Also constrains native browser entry. |
+| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
+
+</ApiTable>
+
+#### `character-count-status`
+
+Required visual count message.
+
+<ApiTable label="character-count-status attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
+| `aria-hidden` | `"true" \| "false"` | **Generated.** Hides the visual count from assistive technology. |
+
+</ApiTable>
+
+#### `character-count-sr-status`
+
+Required screen-reader count message.
+
+<ApiTable label="character-count-sr-status attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `aria-live` | `"polite"` | **Generated.** `"polite"`; announces count updates. |
+
+</ApiTable>
+
+### Accessibility
+
+- Provide a visible label and a static limit hint linked with `aria-describedby`.
+- Keep both status elements: the visual status uses `aria-hidden`; the separate announcement region uses `aria-live="polite"`.
+
+### Lifecycle
+
+Retain explicitly constructed instances and call `destroy()` before removing their markup; the legacy initializer does not return an instance array.

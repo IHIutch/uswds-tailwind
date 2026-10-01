@@ -1,21 +1,18 @@
 ---
 import GlobalNav from "#components/global-nav/index.astro";
+import { LIBRARY_COOKIE, libraryFromPath, resolveLibrary } from '#utils/library'
+import { getPageLinks } from '#utils/metadata'
 import { SEO } from "astro-seo";
 import { ClientRouter } from "astro:transitions";
 
 import "@docsearch/css/dist/style.css";
 import "#styles/main.css";
 
-// import '@fontsource-variable/open-sans'
-// import '@fontsource-variable/public-sans'
-// import '@fontsource-variable/roboto-mono'
-// import '@fontsource-variable/source-sans-3'
-// import '@fontsource-variable/merriweather'
-
 interface Props {
   title?: string;
   description: string;
   ogImageUrl?: URL;
+  markdown?: boolean
 }
 
 const SITE_NAME = "USWDS + Tailwind";
@@ -23,29 +20,41 @@ const SITE_NAME = "USWDS + Tailwind";
 const {
   title = SITE_NAME,
   description,
-  ogImageUrl = new URL("og.jpg", Astro.url.origin),
+  markdown = false,
 } = Astro.props;
+const links = getPageLinks(Astro.url.pathname, Astro.site ?? Astro.url)
+const { canonical } = links
+const ogImageUrl = new URL(Astro.props.ogImageUrl ?? '/og.jpg', canonical)
 
 if (title) ogImageUrl.searchParams.set("title", title);
 if (description) ogImageUrl.searchParams.set("description", description);
 
 const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
+const library = resolveLibrary(Astro.url, Astro.cookies.get(LIBRARY_COOKIE)?.value)
+
+// Docs routes carry the preference into shared design pages, even
+// without JavaScript. Shared pages can then vary by cookie.
+const pathLibrary = libraryFromPath(Astro.url.pathname)
+if (pathLibrary)
+  Astro.cookies.set(LIBRARY_COOKIE, pathLibrary, { path: '/', sameSite: 'lax', maxAge: 31536000 })
+Astro.response.headers.set('Cache-Control', 'private, no-store')
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-library={library}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SEO
       title={metaTitle}
       description={description}
+      canonical={canonical}
       openGraph={{
         basic: {
           title: metaTitle,
-          type: "Website",
+          type: "website",
           image: ogImageUrl.toString(),
-          url: Astro.url,
+          url: canonical,
         },
         optional: {
           description,
@@ -65,46 +74,26 @@ const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
       }}
       extend={{
         link: [
-          { rel: "icon", type: "image/svg+xml", href: "/logo.svg" },
-          { rel: "sitemap", href: "/sitemap-index.xml" },
+          { rel: "sitemap", href: "/sitemap.xml" },
+          ...(markdown ? [{ rel: 'alternate', type: 'text/markdown', href: links.markdown.href, title: `${title} (Markdown)` }] : []),
         ],
         meta: [
           { name: "generator", content: Astro.generator },
-          { name: "theme-color", content: "#112f4e" },
           { name: "color-scheme", content: "only light" },
         ],
       }}
     />
 
-    <!-- <script is:inline>
-      document.documentElement.classList.add("uswds-ready");
-
-      const fallback = setTimeout(() => {
-        document.documentElement.classList.remove("uswds-ready");
-      }, 3000);
-
-      window.addEventListener("alpine:init", () => {
-        clearTimeout(fallback);
-        document.documentElement.classList.add("uswds-ready");
-      });
-    </script> -->
     <script>
-      import { initAll } from "@uswds-tailwind/compat";
+      import { destroyAllComponents, initAll } from "@uswds-tailwind/compat";
 
       document.addEventListener("astro:page-load", () => {
-        initAll();
-
-        const previewContainers = document.querySelectorAll(".not-docs-prose");
-        Array.from(previewContainers).forEach((previewContainer) => {
-          previewContainer.addEventListener("click", (event) => {
-            // Prevent all clicks within the component preview from executing
-            if (event.target && (event.target as HTMLElement).tagName === "A") {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-          });
-        });
+        // React and compat share data-part names, including accordion-root.
+        // Only vanilla pages contain compat-owned demos.
+        if (document.documentElement.dataset.library === "vanilla")
+          initAll();
       });
+      document.addEventListener("astro:before-swap", destroyAllComponents);
     </script>
 
     <!-- Fathom - beautiful, simple website analytics -->

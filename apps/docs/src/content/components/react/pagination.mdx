@@ -1,0 +1,52 @@
+---
+title: "Pagination"
+description: "Help visitors move through paginated content with bounded and unbounded pagination patterns."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import { Code } from 'astro-expressive-code/components'
+import PaginationBoundedDemo from '../../../examples/pagination-bounded-demo'
+import PaginationUnboundedDemo from '../../../examples/pagination-unbounded-demo'
+
+export const paginationShortcut = `<Pagination.List>
+  <Pagination.PrevTrigger />
+  <Pagination.Pages />
+  <Pagination.NextTrigger />
+</Pagination.List>`
+export const paginationExpanded = `<Pagination.List>
+  {({ pages }) => (
+    <>
+      <Pagination.PrevTrigger />
+      {pages.map((page, index) =>
+        page.type === 'page'
+          ? <Pagination.Item key={page.value} value={page.value} />
+          : <Pagination.Ellipsis key={'ellipsis-' + index} />,
+      )}
+      <Pagination.NextTrigger />
+    </>
+  )}
+</Pagination.List>`
+
+## Examples
+
+### Bounded
+
+<ReactPreview title="Bounded" example="pagination-bounded-demo">
+  <PaginationBoundedDemo client:load />
+</ReactPreview>
+
+<div class="max-w-prose mb-12">
+
+#### Pages shortcut
+
+`Pagination.Pages` renders a `Pagination.Item` for each visible page and a `Pagination.Ellipsis` for each gap. Inside `Pagination.List`, this:
+<Code code={paginationShortcut} lang="tsx" />
+is shorthand for the render function used in the full example above:
+<Code code={paginationExpanded} lang="tsx" />
+</div>
+
+### Unbounded
+
+<ReactPreview title="Unbounded" example="pagination-unbounded-demo">
+  <PaginationUnboundedDemo client:load />
+</ReactPreview>

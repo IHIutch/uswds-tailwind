@@ -1,0 +1,236 @@
+---
+title: "Combo box"
+description: "Help people find and select an option from a long list with a searchable combo box."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+The Vanilla examples use these JavaScript initializers:
+  - [Combobox](/docs/vanilla/javascript#combobox)
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Combo Box" resize={false} mark={[/data-part="[^\"]*"/g]} code={`
+  <div
+    class="max-w-lg"
+    data-part="combobox-root"
+  >
+    <label
+      data-part="combobox-label"
+      class="combobox-label block"
+    >Select a fruit:</label>
+
+    <select
+      data-part="combobox-select"
+      hidden
+    >
+      <option value>Select a fruit</option>
+      <option value="apple">Apple</option>
+      <option value="apricot">Apricot</option>
+      <option value="avocado">Avocado</option>
+      <option value="banana">Banana</option>
+      <option value="blackberry">Blackberry</option>
+      <option value="blood orange">Blood orange</option>
+      <option value="blueberry">Blueberry</option>
+      <option value="boysenberry">Boysenberry</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="buddhas hand citron">Buddha's hand citron</option>
+    </select>
+
+    <div class="relative mt-2">
+      <div class="flex w-full">
+        <input
+          required
+          data-part="combobox-input"
+          class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+        >
+        <div class="absolute z-10 inset-y-0 right-0 flex">
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-clear"
+            type="button"
+          >
+            <div class="icon-[material-symbols--close] size-6"></div>
+          </button>
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-toggle"
+            type="button"
+          >
+            <div class="icon-[material-symbols--expand-more] size-8"></div>
+          </button>
+        </div>
+      </div>
+      <ul
+        data-part="combobox-list"
+        class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+      >
+        <li
+          data-part="combobox-item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+        ></li>
+      </ul>
+    </div>
+  </div>
+`} />
+
+### With Default Value
+
+<ComponentPreview title="Combo Box Default Value" resize={false} ins={[/data-default-value="[^\"]*"/g]} code={`
+  <div
+    class="max-w-lg"
+    data-part="combobox-root"
+    data-default-value="banana"
+  >
+    <label
+      data-part="combobox-label"
+      class="combobox-label block"
+    >Select a fruit:</label>
+
+    <select
+      data-part="combobox-select"
+      hidden
+    >
+      <option value>Select a fruit</option>
+      <option value="apple">Apple</option>
+      <option value="apricot">Apricot</option>
+      <option value="avocado">Avocado</option>
+      <option value="banana">Banana</option>
+      <option value="blackberry">Blackberry</option>
+      <option value="blood orange">Blood orange</option>
+      <option value="blueberry">Blueberry</option>
+      <option value="boysenberry">Boysenberry</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="breadfruit">Breadfruit</option>
+      <option value="buddhas hand citron">Buddha's hand citron</option>
+    </select>
+
+    <div class="relative mt-2">
+      <div class="flex w-full">
+        <input
+          required
+          data-part="combobox-input"
+          class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+        >
+        <div class="absolute z-10 inset-y-0 right-0 flex">
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-clear"
+            type="button"
+          >
+            <div class="icon-[material-symbols--close] size-6"></div>
+          </button>
+          <button
+            class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
+            data-part="combobox-toggle"
+            type="button"
+          >
+            <div class="icon-[material-symbols--expand-more] size-8"></div>
+          </button>
+        </div>
+      </div>
+      <ul
+        data-part="combobox-list"
+        class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
+      >
+        <li
+          data-part="combobox-item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+        ></li>
+      </ul>
+    </div>
+  </div>
+`} />
+
+## Component API
+
+### Initialization
+
+```js
+import { comboboxInit } from '@uswds-tailwind/compat/combobox'
+
+comboboxInit()
+```
+
+`Combobox` is the corresponding instance class. Run initialization after the select options and other parts exist. Time Picker uses this same initializer.
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+#### `combobox-root`
+
+Component wrapper.
+
+<ApiTable label="combobox-root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-default-value` | `string` | **Authored.** Nonempty value overrides the select’s initial value. |
+| `data-placeholder` | `string` | **Authored.** Initial placeholder; overrides constructor configuration. |
+| `data-disabled` | `presence attribute` | **Authored.** Presence disables the component, including `"false"`. A disabled select also contributes disabled state. |
+| `data-disable-filtering` | `presence attribute` | **Authored.** Presence disables filtering, including `"false"`. |
+
+</ApiTable>
+
+#### `combobox-select`
+
+Native select supplying options and the form field name.
+
+<ApiTable label="combobox-select attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `name` | `string` | **Authored.** Name used for form submission. |
+| `required` | `boolean attribute` | **Authored.** Native required-field configuration. |
+| `disabled` | `boolean attribute` | **Authored.** Contributes disabled state. |
+
+</ApiTable>
+
+#### `combobox-input`
+
+Text entry control.
+
+#### `combobox-list`
+
+Container for generated options.
+
+#### `combobox-item`
+
+Option template; the wrapper owns generated list items.
+
+#### `combobox-label`
+
+Optional label.
+
+#### `combobox-toggle`
+
+Optional button that opens the list.
+
+#### `combobox-clear`
+
+Optional button that clears selection.
+
+Use each name as its `data-part` value.
+
+Supply nonempty option values and meaningful option text; the empty-value option is excluded from the suggestion list.
+
+Do not store application content or listeners in generated list children, which may be replaced during rendering.
+
+### Lifecycle
+
+The constructor reads configuration from the markup once. Changing data attributes afterward does not update the component. Markup can override constructor options; check the precedence rules in the attribute table.
+
+Retain explicit instances for cleanup and call `destroy()` before removing the component. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
+
+### Changes and accessibility
+
+Do not infer a named DOM event from a machine or React callback.
+
+Use the native form controls for submission and preserve labels, hints, and visible focus styles.
+
+The list, options, and expanded/highlighted state are owned by the component; configuration attributes are distinct from generated ARIA and state output.

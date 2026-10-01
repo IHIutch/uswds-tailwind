@@ -1,0 +1,83 @@
+---
+title: "Getting Started"
+description: "Set up the component library with Tailwind CSS in a React project using Vite."
+---
+
+<ProcessList>
+<ProcessStep class="*:first:mt-0 before:top-0">
+## Setup
+
+Create a React TypeScript project with Vite, enter the project directory, and install its dependencies:
+
+```bash
+npm create vite@latest my-project -- --template react-ts
+cd my-project
+npm install
+```
+
+Install USWDS + Tailwind, Tailwind CSS, and Tailwind's Vite plugin:
+
+```bash
+npm install @uswds-tailwind/react@alpha
+npm install -D tailwindcss @tailwindcss/vite
+```
+</ProcessStep>
+
+<ProcessStep class="*:first:mt-0 before:top-0">
+## Configure project
+
+### Vite
+
+Add the Tailwind CSS plugin in `vite.config.ts`:
+
+```ts title="vite.config.ts"
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+})
+```
+
+### CSS
+
+Replace `src/index.css` with the Tailwind CSS and USWDS + Tailwind imports:
+
+```css title="src/index.css"
+@import 'tailwindcss';
+@import '@uswds-tailwind/react';
+```
+
+Import the stylesheet from `src/main.tsx`:
+
+```tsx title="src/main.tsx"
+import './index.css'
+```
+
+### React component
+
+Add a USWDS + Tailwind button to `src/App.tsx`:
+
+```tsx title="src/App.tsx"
+import { Button } from '@uswds-tailwind/react/button'
+
+export default function App() {
+  return (
+    <main className="mx-auto max-w-prose p-6 font-source-sans">
+      <h1 className="mb-6 text-3xl font-bold">Hello, USWDS + Tailwind!</h1>
+      <Button>Button</Button>
+    </main>
+  )
+}
+```
+</ProcessStep>
+
+<ProcessStep class="*:first:mt-0 before:top-0">
+## Complete!
+
+Run `npm run dev` and open the local URL Vite prints. You should see the button styled with USWDS + Tailwind.
+
+When you're ready to deploy, run `npm run build` and publish the generated `dist` directory.
+</ProcessStep>
+</ProcessList>

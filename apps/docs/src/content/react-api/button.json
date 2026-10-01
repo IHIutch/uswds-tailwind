@@ -1,0 +1,43 @@
+{
+  "name": "Button",
+  "parts": [
+    {
+      "name": "Button",
+      "element": "button",
+      "description": "Accepts native button attributes and forwards its ref.",
+      "note": "Other native button props, including type, name, value, event handlers, and aria-* pass through. buttonVariants is exported for using the same style recipe in a custom composition.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"blue\" | \"red\" | \"cyan\" | \"orange\" | \"gray\" | \"outline\" | \"inverse\"",
+          "description": "Visual color treatment. Use inverse on a dark surface.",
+          "defaultValue": "\"blue\"",
+          "anchor": "button-variant"
+        },
+        {
+          "name": "size",
+          "type": "\"md\" | \"lg\" | \"unset\"",
+          "description": "Padding and text size. unset leaves sizing to custom classes.",
+          "defaultValue": "\"md\"",
+          "anchor": "button-size"
+        },
+        {
+          "name": "unstyled",
+          "type": "boolean",
+          "description": "Uses the text-link treatment, with spacing and font size controlled by custom classes.",
+          "defaultValue": "false",
+          "anchor": "button-unstyled"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Native disabled behavior and disabled styling.",
+          "defaultValue": "false",
+          "anchor": "button-disabled"
+        }
+      ]
+    }
+  ],
+  "accessibility": "Set type=\"button\" for in-form controls such as a dialog trigger; use type=\"submit\" for form submission. The visible text or an appropriate label must name the action. Keep the supplied focus outline when extending styles. Use a link for navigation.",
+  "accessibilityHeading": "Styling and accessibility"
+}

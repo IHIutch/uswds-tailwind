@@ -1,0 +1,52 @@
+---
+title: "In-page navigation"
+description: "Help visitors jump between sections of a long page with in-page navigation."
+---
+
+## Examples
+
+### Default
+
+<ComponentPreview title="In-page navigation Default" code={`
+<div class="flex flex-col gap-8 tablet:flex-row">
+  <div class="tablet:w-64 tablet:shrink-0 tablet:order-last">
+    <nav aria-label="On this page">
+      <div class="text-sm font-bold mb-4 text-black"><h4>On this page</h4></div>
+      <ul class="border-l border-l-gray-10">
+        <li>
+          <a href="#nav-overview" data-depth="1" data-primary class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">Overview</a>
+        </li>
+        <li>
+          <a href="#nav-eligibility" data-depth="2" class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">Eligibility</a>
+        </li>
+        <li>
+          <a href="#nav-application" data-depth="2" class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">How to apply</a>
+        </li>
+        <li>
+          <a href="#nav-next-steps" data-depth="1" data-primary class="relative block py-2 px-4 text-sm leading-tight text-blue-60v focus:outline-4 focus:outline-blue-40v focus:outline-offset-0 hover:underline data-active:text-black data-active:after:block data-active:after:w-1 data-active:after:bg-black data-active:after:top-0 data-active:after:-bottom-px data-active:after:left-0 data-active:after:absolute data-primary:font-bold">Next steps</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="flex-1 space-y-8 max-h-96 overflow-auto border">
+    <section class="min-h-40">
+      <h4 id="nav-overview" class="text-xl font-bold">Overview</h4>
+      <p>Start with the program overview and the services available to applicants.</p>
+    </section>
+    <section class="min-h-40">
+      <h4 id="nav-eligibility" class="text-xl font-bold">Eligibility</h4>
+      <p>Check the eligibility requirements before preparing an application.</p>
+    </section>
+    <section class="min-h-40">
+      <h4 id="nav-application" class="text-xl font-bold">How to apply</h4>
+      <p>Gather the required documents and submit your application.</p>
+    </section>
+    <section class="min-h-40">
+      <h4 id="nav-next-steps" class="text-xl font-bold">Next steps</h4>
+      <p>Review what happens after you submit your application.</p>
+    </section>
+  </div>
+</div>
+`} />
+
+The links use native fragment navigation. The React version also uses `InPageNav.Scrollspy` to track the active section as its content scrolls.

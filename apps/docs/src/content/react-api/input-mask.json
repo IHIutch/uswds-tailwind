@@ -1,0 +1,65 @@
+{
+  "name": "InputMask",
+  "intro": "Put Label, Control, Placeholder, and Input inside Root to guide entry in a fixed format.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the mask and input value.",
+      "props": [
+        {
+          "name": "placeholder",
+          "type": "string (required)",
+          "description": "Defines the mask format."
+        },
+        {
+          "name": "charset",
+          "type": "string",
+          "description": "Defines accepted characters for placeholder positions."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "description": "Initial uncontrolled value."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Controlled value."
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: string }) => void",
+          "description": "Receives value changes."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Names the masked input."
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Aligns the placeholder guide and input."
+    },
+    {
+      "name": "Placeholder",
+      "element": "span",
+      "description": "Displays the unentered mask characters."
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives the typed value.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    }
+  ]
+}

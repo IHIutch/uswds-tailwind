@@ -1,0 +1,192 @@
+---
+title: "Collection"
+description: "Display related articles, events, or other items in a compact collection, with heading, calendar, and thumbnail examples."
+---
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Collection Default" code={`
+  <div>
+    <ul class="divide-y *:py-4 *:first:pt-0 *:last:pb-0">
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Gears of Government President&#x27;s Award winners</a></h4></div>
+          <div class="mt-1">Today, the Administration announces the winners of the Gears of Government President&#x27;s Award. This program recognizes contributions across the federal workforce.</div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight">By Sondra Ainsworth and Constance Lu</li>
+            <li class="text-sm leading-tight"><time datetime="2020-09-30">September 30, 2020</time></li>
+          </ul>
+          <ul aria-label="Topics" class="mt-2 flex flex-wrap gap-1 flex-row">
+            <li class="text-sm leading-tight"><span class="text-white rounded-xs py-px px-2 uppercase text-sm bg-orange-50v">NEW</span></li>
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">PMA</span></li>
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">OMB</span></li>
+          </ul>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Women-owned small business dashboard</a></h4></div>
+          <div class="mt-1">In honor of National Women&#x27;s Small Business Month, this dashboard highlights data about women-owned small businesses.</div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight">By Constance Lu</li>
+            <li class="text-sm leading-tight"><time datetime="2020-09-30">September 30, 2020</time></li>
+          </ul>
+          <ul aria-label="Topics" class="mt-2 flex flex-wrap gap-1 flex-row">
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">SBA</span></li>
+          </ul>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">September 2020 updates show progress on cross-agency and agency priority goals</a></h4></div>
+          <div class="mt-1">Progress updates highlight recent milestones and initiatives across federal agencies.</div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight">By Eric L. Miller</li>
+            <li class="text-sm leading-tight"><time datetime="2020-09-17">September 17, 2020</time></li>
+          </ul>
+          <ul aria-label="Topics" class="mt-2 flex flex-wrap gap-1 flex-row">
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">QUARTERLY UPDATE</span></li>
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">CAP GOAL</span></li>
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">APG</span></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+`} />
+
+### Headings Only
+
+<ComponentPreview title="Collection Headings Only" code={`
+  <div>
+    <ul class="divide-y *:py-2 *:first:pt-0 *:last:pb-0">
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">The eight principles of mobile-friendliness</a></h4></div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight"><div class="flex items-center gap-1"><div class="icon-[material-symbols--globe] size-4"></div><span>Digital.gov</span></div></li>
+          </ul>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">The USWDS maturity model</a></h4></div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight"><div class="flex items-center gap-1"><div class="icon-[material-symbols--globe] size-4"></div><span>U.S. Web Design System</span></div></li>
+          </ul>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">A news item that&#x27;s on our own site</a></h4></div>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">The key role of product owners in federated data projects</a></h4></div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight"><div class="flex items-center gap-1"><div class="icon-[material-symbols--globe] size-4"></div><span>18F</span></div></li>
+          </ul>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Progress on Cross-Agency Priority (CAP) goals and Agency Priority Goals (APGs)</a></h4></div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight"><div class="flex items-center gap-1"><div class="icon-[material-symbols--globe] size-4"></div><span>Performance.gov</span></div></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+`} />
+
+### Calendar
+
+<ComponentPreview title="Collection Calendar" code={`
+  <div>
+    <ul class="divide-y *:py-4 *:first:pt-0 *:last:pb-0">
+      <li class="flex gap-4">
+        <time datetime="2020-09-30" class="text-lg w-20 shrink-0">
+          <div class="text-white font-bold bg-blue-60v flex items-center justify-center p-2 rounded-t-xs">Sep</div>
+          <div class="font-bold border text-blue-60v border-blue-60v flex items-center justify-center p-2 rounded-b-xs">30</div>
+        </time>
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Gears of Government President&#x27;s Award winners</a></h4></div>
+          <div class="mt-1">Today, the Administration announces the winners of the Gears of Government President&#x27;s Award. This program recognizes contributions across the federal workforce.</div>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <time datetime="2020-09-30" class="text-lg w-20 shrink-0">
+          <div class="text-white font-bold bg-blue-60v flex items-center justify-center p-2 rounded-t-xs">Sep</div>
+          <div class="font-bold border text-blue-60v border-blue-60v flex items-center justify-center p-2 rounded-b-xs">30</div>
+        </time>
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Women-owned small business dashboard</a></h4></div>
+          <div class="mt-1">In honor of National Women&#x27;s Small Business Month, this dashboard highlights data about women-owned small businesses.</div>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <time datetime="2020-09-17" class="text-lg w-20 shrink-0">
+          <div class="text-white font-bold bg-blue-60v flex items-center justify-center p-2 rounded-t-xs">Sep</div>
+          <div class="font-bold border text-blue-60v border-blue-60v flex items-center justify-center p-2 rounded-b-xs">17</div>
+        </time>
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">September 2020 updates show progress on cross-agency and agency priority goals</a></h4></div>
+          <div class="mt-1">Progress updates highlight recent milestones and initiatives across federal agencies.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+`} />
+
+### Media Thumbnail
+
+<ComponentPreview title="Collection Media Thumbnail" code={`
+  <div>
+    <ul class="divide-y *:py-4 *:first:pt-0 *:last:pb-0">
+      <li class="flex gap-4">
+        <div class="w-20 shrink-0">
+          <img src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+        </div>
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Gears of Government President&#x27;s Award winners</a></h4></div>
+          <div class="mt-1">Today, the Administration announces the winners of the Gears of Government President&#x27;s Award. This program recognizes contributions across the federal workforce.</div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight">By Sondra Ainsworth and Constance Lu</li>
+            <li class="text-sm leading-tight"><time datetime="2020-09-30">September 30, 2020</time></li>
+          </ul>
+          <ul aria-label="Topics" class="mt-2 flex flex-wrap gap-1 flex-row">
+            <li class="text-sm leading-tight"><span class="text-white rounded-xs py-px px-2 uppercase text-sm bg-orange-50v">NEW</span></li>
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">PMA</span></li>
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">OMB</span></li>
+          </ul>
+        </div>
+      </li>
+      <li class="flex gap-4">
+        <div class="w-20 shrink-0">
+          <img src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+        </div>
+        <div>
+          <div class="text-lg font-bold"><h4><a href="#" class="focus:outline-4 focus:outline-blue-40v underline text-blue-60v visited:text-violet-70v hover:text-blue-70v after:icon-[material-symbols--open-in-new] after:size-4 after:align-middle after:ml-px">Women-owned small business dashboard</a></h4></div>
+          <div class="mt-1">In honor of National Women&#x27;s Small Business Month, this dashboard highlights data about women-owned small businesses.</div>
+          <ul aria-label="More information" class="mt-2 flex flex-col flex-wrap gap-1">
+            <li class="text-sm leading-tight">By Constance Lu</li>
+            <li class="text-sm leading-tight"><time datetime="2020-09-30">September 30, 2020</time></li>
+          </ul>
+          <ul aria-label="Topics" class="mt-2 flex flex-wrap gap-1 flex-row">
+            <li class="text-sm leading-tight"><span class="rounded-xs py-px px-2 uppercase text-sm bg-gray-10 text-ink">SBA</span></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+`} />
+
+## Accessibility
+
+- Keep collection entries in a list so assistive technology can announce the number of items.
+- Use a heading level that fits the page outline for each item title.
+- Include the full date in the `datetime` attribute when showing calendar badges.

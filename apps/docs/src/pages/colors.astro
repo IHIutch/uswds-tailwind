@@ -8,6 +8,7 @@ import { getColors } from '#utils/get-colors'
 import { slug } from 'github-slugger'
 
 const formattedColors = getColors()
+const description = 'Explore color tokens and palette swatches provided by the Tailwind CSS theme.'
 
 const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
   heading => ({
@@ -20,7 +21,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
 
 <BaseLayout
   title="Colors"
-  description="Color is a practical and emotional tool. It conveys personality, sets a tone, attracts attention, and indicates importance."
+  description={description}
 >
   <ContentLayout>
     <div class="flex w-full">
@@ -31,8 +32,7 @@ const headings: MarkdownHeading[] = Object.keys(formattedColors).map(
             <div class="mb-16">
               <h1 class="text-4xl font-bold mb-4">Colors</h1>
               <p class="text-xl font-light max-w-prose">
-                Color is a practical and emotional tool. It conveys personality,
-                sets a tone, attracts attention, and indicates importance.
+                {description}
               </p>
             </div>
             <div class="space-y-16 desktop:space-y-32">

@@ -28,6 +28,9 @@ jobs:
       - name: Build packages
         run: pnpm build:packages
 
+      - name: Build documentation site
+        run: pnpm build:website
+
       - run: pnpm dlx pkg-pr-new publish ./packages/**/*
 
   lint:

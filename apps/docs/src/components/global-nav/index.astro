@@ -1,15 +1,14 @@
 ---
-import type { NavLinks } from 'types'
+import type { NavLinks } from '../../types'
 import logo from '#assets/img/logo.svg'
-// import { Image } from 'astro:assets'
+import { resolveLibrary } from '#utils/library'
 import { getCollection } from 'astro:content'
 import DesktopNav from './desktop-nav.astro'
 import MobileNav from './mobile-nav.astro'
 
-const allComponents = await getCollection(
-  'components',
-  entry => entry.data.isPublished !== false,
-)
+const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
+
+const allComponents = await getCollection('vanilla-components')
 const desktopLinks: NavLinks = {
   primary: [
     {
@@ -18,15 +17,15 @@ const desktopLinks: NavLinks = {
     },
     {
       label: 'Getting Started',
-      href: '/getting-started',
+      href: `/docs/${library}/getting-started`,
     },
     {
       label: 'Components',
-      href: '/components',
+      href: `/docs/${library}/components`,
     },
     {
       label: 'JavaScript',
-      href: '/javascript',
+      href: `/docs/${library}/javascript`,
     },
     {
       label: 'Colors',
@@ -55,19 +54,18 @@ const mobileLinks: NavLinks = {
     },
     {
       label: 'Getting Started',
-      href: '/getting-started',
+      href: `/docs/${library}/getting-started`,
     },
     {
       label: 'Components',
-      // href: '/components',
       children: allComponents.map(c => ({
         label: c.data.title,
-        href: `/components/${c.id}`,
+        href: `/docs/${library}/components/${c.id}`,
       })),
     },
     {
       label: 'JavaScript',
-      href: '/javascript',
+      href: `/docs/${library}/javascript`,
     },
     {
       label: 'Colors',
@@ -94,10 +92,12 @@ const secondary: NavLinks['secondary'] = [
     href: 'https://forms.reform.app/szenkB/uswds-tailwind-feedback/sxml6n',
     target: '_blank',
   },
-];
+]
+
 ---
 
 <header
+  id="docs-header"
   class="border-b desktop:border-b-2 border-b-gray-cool-10 z-20 bg-white fixed top-0 inset-x-0"
 >
   <div class="desktop:px-8">
@@ -115,7 +115,7 @@ const secondary: NavLinks['secondary'] = [
           </a>
         </em>
         <div class="desktop:hidden ml-auto">
-          <MobileNav primary={mobileLinks.primary} secondary={secondary} />
+          <MobileNav primary={mobileLinks.primary} secondary={secondary} library={library} />
         </div>
       </div>
     </div>
@@ -124,3 +124,47 @@ const secondary: NavLinks['secondary'] = [
     <DesktopNav primary={desktopLinks.primary} secondary={secondary} />
   </div>
 </header>
+
+<script>
+  import { Accordion } from '@uswds-tailwind/compat/accordion'
+  import { Dropdown } from '@uswds-tailwind/compat/dropdown'
+  import { Modal } from '@uswds-tailwind/compat/modal'
+
+  let cleanup: (() => void) | undefined
+
+  document.addEventListener('astro:page-load', () => {
+    cleanup?.()
+    const header = document.getElementById('docs-header')
+    const root = document.getElementById('mobile-docs-menu')
+    if (!header || !root)
+      return
+
+    const accordions = Accordion.createAll(header)
+    const dropdowns = Dropdown.createAll(header)
+    const menu = Modal.getOrCreateInstance(root)
+    const desktop = window.matchMedia('(min-width: 1024px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches)
+        void menu.close()
+    }
+    const closeOnNavigation = (event: MouseEvent) => {
+      if (event.target instanceof Element && event.target.closest('a[href]'))
+        void menu.close()
+    }
+
+    desktop.addEventListener('change', closeOnDesktop)
+    root.addEventListener('click', closeOnNavigation)
+    closeOnDesktop()
+
+    cleanup = () => {
+      desktop.removeEventListener('change', closeOnDesktop)
+      root.removeEventListener('click', closeOnNavigation)
+      menu.destroy()
+      accordions.forEach(instance => instance.destroy())
+      dropdowns.forEach(instance => instance.destroy())
+      cleanup = undefined
+    }
+  })
+
+  document.addEventListener('astro:before-swap', () => cleanup?.())
+</script>

@@ -5,6 +5,15 @@ const meta = preview.meta({
   title: 'Components/Tag',
   component: Tag,
   argTypes: {
+    variant: {
+      control: 'select',
+      options: ['default', 'vivid-orange', 'light-gray'],
+      table: {
+        defaultValue: {
+          summary: 'default',
+        },
+      },
+    },
     size: {
       control: 'select',
       options: ['md', 'lg'],
@@ -19,25 +28,24 @@ const meta = preview.meta({
 
 export const Default = meta.story({
   args: {
+    variant: 'default',
     size: 'md',
   },
-  render: ({ size }) => (
-    <Tag size={size}>New</Tag>
+  render: ({ size, variant }) => (
+    <Tag size={size} variant={variant}>New</Tag>
   ),
+})
+
+export const VividOrange = meta.story({
+  render: () => <Tag variant="vivid-orange">New</Tag>,
+})
+
+export const LightGray = meta.story({
+  render: () => <Tag variant="light-gray">Topic</Tag>,
 })
 
 export const Large = meta.story({
   render: () => (
     <Tag size="lg">New</Tag>
-  ),
-})
-
-export const Multiple = meta.story({
-  render: () => (
-    <div className="flex gap-2">
-      <Tag>New</Tag>
-      <Tag>Pending</Tag>
-      <Tag>Active</Tag>
-    </div>
   ),
 })

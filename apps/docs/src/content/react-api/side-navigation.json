@@ -1,0 +1,45 @@
+{
+  "name": "SideNavigation",
+  "intro": "Build a nested side navigation with List, ListItem, and Link. Items renders nested lists from an item tree.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "nav",
+      "description": "Set a navigation label when the page has multiple navigation landmarks."
+    },
+    {
+      "name": "List",
+      "element": "ul",
+      "description": "Nest another List inside ListItem for child destinations."
+    },
+    {
+      "name": "ListItem",
+      "element": "li",
+      "description": "Contains a link and optional nested List."
+    },
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Set href to the destination and isCurrent for the active page.",
+      "props": [
+        {
+          "name": "isCurrent",
+          "type": "boolean",
+          "description": "Marks this link as the current page."
+        }
+      ]
+    },
+    {
+      "name": "Items",
+      "description": "Renders nested lists from item data.",
+      "props": [
+        {
+          "name": "items",
+          "type": "SideNavigationItem[] (required)",
+          "description": "Tree of labels, hrefs, current-page flags, and child items."
+        }
+      ]
+    }
+  ],
+  "accessibility": "Give Root a useful navigation label when the page has more than one navigation landmark."
+}

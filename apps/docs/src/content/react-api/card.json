@@ -1,0 +1,55 @@
+{
+  "name": "Card",
+  "intro": "Build a card with Root and its media, header, title, body, and footer parts. Group multiple cards with Group.",
+  "parts": [
+    {
+      "name": "Group",
+      "element": "ul",
+      "description": "Lays out a collection of cards. Put each Root inside an li."
+    },
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Controls card orientation.",
+      "props": [
+        {
+          "name": "layout",
+          "type": "vertical | ltr | rtl",
+          "description": "Places media above, left of, or right of the content."
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "element": "div",
+      "description": "Contains an image or other media.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "indent | flush | exdent",
+          "description": "Controls how the media meets the card edge."
+        }
+      ]
+    },
+    {
+      "name": "Header",
+      "element": "div",
+      "description": "Groups the card title and introductory content."
+    },
+    {
+      "name": "Title",
+      "element": "div",
+      "description": "Styles the card title; place a heading or link inside as needed."
+    },
+    {
+      "name": "Body",
+      "element": "div",
+      "description": "Put the main card content below Header."
+    },
+    {
+      "name": "Footer",
+      "element": "div",
+      "description": "Holds secondary content or actions."
+    }
+  ]
+}
