@@ -10,6 +10,7 @@ import { defineConfig } from 'astro/config'
 export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://v2.uswds-tailwind.com',
   output: 'server',
+  session: false,
   integrations: [
     favicons({
       name: 'USWDS + Tailwind',
