@@ -45,6 +45,7 @@
     "@zag-js/toggle": "catalog:",
     "astro": "catalog:",
     "astro-expressive-code": "catalog:",
+    "astro-favicons": "catalog:",
     "astro-seo": "catalog:",
     "dedent": "catalog:",
     "fuse.js": "catalog:",

@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/vite'
 import expressiveCode from 'astro-expressive-code'
+import favicons from 'astro-favicons'
 import { defineConfig } from 'astro/config'
 
 // https://astro.build/config
@@ -10,6 +11,14 @@ export default defineConfig({
   site: import.meta.env.DEV ? 'http://localhost:4321' : 'https://v2.uswds-tailwind.com',
   output: 'server',
   integrations: [
+    favicons({
+      name: 'USWDS + Tailwind',
+      themes: ['#112f4e'],
+      manifest: {
+        display: 'browser',
+        display_override: [],
+      },
+    }),
     expressiveCode({
       // ClientRouter only preloads head stylesheets. Inline code styles so body
       // swaps cannot expose Tailwind Typography's dark pre background.

@@ -80,13 +80,11 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
       }}
       extend={{
         link: [
-          { rel: "icon", type: "image/svg+xml", href: "/logo.svg" },
           { rel: "sitemap", href: "/sitemap.xml" },
           ...(markdown ? [{ rel: 'alternate', type: 'text/markdown', href: links.markdown.href, title: `${title} (Markdown)` }] : []),
         ],
         meta: [
           { name: "generator", content: Astro.generator },
-          { name: "theme-color", content: "#112f4e" },
           { name: "color-scheme", content: "only light" },
         ],
       }}
