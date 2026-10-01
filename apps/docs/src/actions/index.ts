@@ -65,14 +65,6 @@ export const server = {
         }
       }
 
-      // Get SVGs for each icon
-      // const filteredIcons = await Promise.all(
-      //   iconNames.map(async (name: string) => {
-      //     const svg = await fetch(`https://api.iconify.design/material-symbols:${name}.svg?height=unset`).then(r => r.text())
-      //     return { name, svg }
-      //   })
-      // )
-
       const iconRes = await fetch(`https://api.iconify.design/material-symbols.json?icons=${iconNames.join(',')}`)
       const filteredIcons = await iconRes.json() as IconifyJSON
 

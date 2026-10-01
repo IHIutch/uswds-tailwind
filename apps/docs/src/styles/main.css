@@ -10,7 +10,6 @@
 @plugin "@tailwindcss/typography"{
   className: docs-prose;
 }
-/* @config "@uswds-tailwind/theme/tailwind.config.ts"; */
 
 .docs-prose {
   &

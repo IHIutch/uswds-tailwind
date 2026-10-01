@@ -2,15 +2,13 @@
 import ComponentPreview from './component-preview.astro'
 
 interface Props {
-  /** The default preview title; title can override it. */
-  variant: string
+  title: string
   /** TSX filename without its extension, relative to src/examples. */
   example: string
-  title?: string
   playgroundDependencies?: Record<string, string>
 }
 
-const { variant, example, title = variant, playgroundDependencies } = Astro.props
+const { title, example, playgroundDependencies } = Astro.props
 const sources = import.meta.glob<string>('../examples/*.tsx', { query: '?raw', import: 'default' })
 const filename = `${example}.tsx`
 const loadSource = sources[`../examples/${filename}`]

@@ -66,9 +66,6 @@ catalogs:
     '@iconify/types':
       specifier: ^2.0.0
       version: 2.0.0
-    '@iconify/utils':
-      specifier: ^3.1.0
-      version: 3.1.0
     '@mdx-js/mdx':
       specifier: ^3.1.1
       version: 3.1.1
@@ -142,9 +139,6 @@ catalogs:
       specifier: ^1.40.0
       version: 1.40.0
     '@zag-js/store':
-      specifier: ^1.40.0
-      version: 1.40.0
-    '@zag-js/toggle':
       specifier: ^1.40.0
       version: 1.40.0
     '@zag-js/types':
@@ -329,24 +323,9 @@ importers:
       '@fontsource-variable/source-sans-3':
         specifier: 'catalog:'
         version: 5.2.9
-      '@iconify-json/fa-solid':
-        specifier: 'catalog:'
-        version: 1.2.2
-      '@iconify-json/fa6-brands':
-        specifier: 'catalog:'
-        version: 1.2.6
-      '@iconify-json/material-symbols':
-        specifier: 'catalog:'
-        version: 1.2.42
-      '@iconify/tailwind4':
-        specifier: 'catalog:'
-        version: 1.2.0(tailwindcss@4.3.3)
       '@iconify/types':
         specifier: 'catalog:'
         version: 2.0.0
-      '@iconify/utils':
-        specifier: 'catalog:'
-        version: 3.1.0
       '@stackblitz/sdk':
         specifier: 'catalog:'
         version: 1.11.0
@@ -371,16 +350,10 @@ importers:
       '@uswds-tailwind/react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@uswds-tailwind/theme':
-        specifier: workspace:*
-        version: link:../../packages/theme
       '@zag-js/react':
         specifier: 'catalog:'
         version: 1.40.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@zag-js/splitter':
-        specifier: 'catalog:'
-        version: 1.40.0
-      '@zag-js/toggle':
         specifier: 'catalog:'
         version: 1.40.0
       astro:
@@ -450,9 +423,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 25.0.1
-      '@zag-js/types':
-        specifier: 'catalog:'
-        version: 1.40.0
 
   examples/vanilla-ts:
     dependencies:
@@ -4193,9 +4163,6 @@ packages:
 
   '@zag-js/store@1.40.0':
     resolution: {integrity: sha512-EmgYIdbNZ4TN4Qht/jugY4UVkaWx69l8P1qiX23U4YwqNLq10tyOJmcXWbvsrprU1dGb24B+xq0WBm/RIjw4WA==}
-
-  '@zag-js/toggle@1.40.0':
-    resolution: {integrity: sha512-DW7682lzTP2eDlMvrS7tUX3zAm7ufrrKr7VDiX8BB6oXBRETXrVIxCYNuoIdqjwXebdjAoxaCiUZEreRVucYQg==}
 
   '@zag-js/types@1.40.0':
     resolution: {integrity: sha512-LVvxEyqFv/u9SEe5xdivvG2vYb9cCmbkD+5r6s+IGljpDLaRgv4BYyxEh40ri1ai070tL08ZKmoLfx2/xfvY/A==}
@@ -8459,6 +8426,7 @@ snapshots:
   '@cyberalien/svg-utils@1.0.11':
     dependencies:
       '@iconify/types': 2.0.0
+    optional: true
 
   '@docsearch/core@4.3.1(@types/react@19.2.7)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     optionalDependencies:
@@ -9015,6 +8983,7 @@ snapshots:
       '@iconify/types': 2.0.0
       '@iconify/utils': 3.1.0
       tailwindcss: 4.3.3
+    optional: true
 
   '@iconify/tools@5.0.0':
     dependencies:
@@ -9025,6 +8994,7 @@ snapshots:
       modern-tar: 0.7.2
       pathe: 2.0.3
       svgo: 4.0.0
+    optional: true
 
   '@iconify/types@2.0.0': {}
 
@@ -9033,6 +9003,7 @@ snapshots:
       '@antfu/install-pkg': 1.1.0
       '@iconify/types': 2.0.0
       mlly: 1.8.0
+    optional: true
 
   '@img/colour@1.0.0': {}
 
@@ -10579,14 +10550,6 @@ snapshots:
     dependencies:
       proxy-compare: 3.0.1
 
-  '@zag-js/toggle@1.40.0':
-    dependencies:
-      '@zag-js/anatomy': 1.40.0
-      '@zag-js/core': 1.40.0
-      '@zag-js/dom-query': 1.40.0
-      '@zag-js/types': 1.40.0
-      '@zag-js/utils': 1.40.0
-
   '@zag-js/types@1.40.0':
     dependencies:
       csstype: 3.2.3
@@ -11051,6 +11014,7 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.2.2
       nth-check: 2.1.1
+    optional: true
 
   css-select@6.0.0:
     dependencies:
@@ -11078,7 +11042,8 @@ snapshots:
       mdn-data: 2.12.2
       source-map-js: 1.2.1
 
-  css-what@6.2.2: {}
+  css-what@6.2.2:
+    optional: true
 
   css-what@7.0.0: {}
 
@@ -11762,7 +11727,8 @@ snapshots:
 
   fflate@0.7.4: {}
 
-  fflate@0.8.2: {}
+  fflate@0.8.2:
+    optional: true
 
   file-entry-cache@8.0.0:
     dependencies:
@@ -12882,7 +12848,8 @@ snapshots:
       pkg-types: 1.3.1
       ufo: 1.6.1
 
-  modern-tar@0.7.2: {}
+  modern-tar@0.7.2:
+    optional: true
 
   mri@1.2.0: {}
 
@@ -13489,7 +13456,8 @@ snapshots:
       '@bruits/satteri-win32-arm64-msvc': 0.10.5
       '@bruits/satteri-win32-x64-msvc': 0.10.5
 
-  sax@1.4.1: {}
+  sax@1.4.1:
+    optional: true
 
   sax@1.6.1: {}
 
@@ -13792,6 +13760,7 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
       sax: 1.4.1
+    optional: true
 
   svgo@4.1.0:
     dependencies:

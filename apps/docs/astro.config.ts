@@ -41,14 +41,6 @@ export default defineConfig({
     mdx(),
     react(),
   ],
-  // markdown: {
-  //   shikiConfig: {
-  //     themes: {
-  //       light: 'light-plus',
-  //       dark: 'dark-plus'
-  //     }
-  //   }
-  // },
   // Expressive Code's transitive CommonJS modules cannot run in workerd's dev module runner.
   // Production builds and previews still use the Cloudflare adapter.
   adapter: import.meta.env.DEV ? undefined : cloudflare(),

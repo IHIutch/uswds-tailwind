@@ -25,7 +25,6 @@ catalog:
   '@iconify-json/material-symbols': 1.2.42
   '@iconify/tailwind4': ^1.2.0
   '@iconify/types': ^2.0.0
-  '@iconify/utils': ^3.1.0
   '@mdx-js/mdx': ^3.1.1
   '@stackblitz/sdk': ^1.11.0
   '@storybook/addon-docs': 10.1.11
@@ -53,7 +52,6 @@ catalog:
   '@zag-js/remove-scroll': ^1.40.0
   '@zag-js/splitter': ^1.40.0
   '@zag-js/store': ^1.40.0
-  '@zag-js/toggle': ^1.40.0
   '@zag-js/types': ^1.40.0
   '@zag-js/utils': ^1.40.0
   '@zag-js/vanilla': ^1.40.0
