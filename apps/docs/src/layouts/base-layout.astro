@@ -38,7 +38,7 @@ if (description) ogImageUrl.searchParams.set("description", description);
 const metaTitle = title === SITE_NAME ? title : `${title} - ${SITE_NAME}`;
 const library = resolveLibrary(Astro.url, Astro.cookies.get(LIBRARY_COOKIE)?.value)
 
-// Canonical docs routes carry the preference into shared design pages, even
+// Docs routes carry the preference into shared design pages, even
 // without JavaScript. Shared pages can then vary by cookie.
 const pathLibrary = libraryFromPath(Astro.url.pathname)
 if (pathLibrary)
@@ -100,9 +100,6 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
           initAll();
       });
       document.addEventListener("astro:before-swap", destroyAllComponents);
-    </script>
-    <script>
-      import '#utils/library-client'
     </script>
 
     <!-- Fathom - beautiful, simple website analytics -->

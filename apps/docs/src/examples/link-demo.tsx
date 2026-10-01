@@ -5,7 +5,7 @@ export default function LinkDemo() {
     <div className="space-y-12">
       <div className="space-y-4">
         <p>
-          This is <Link href="/getting-started">a text link</Link> on a light background.
+          This is <Link href="/docs/react/getting-started">a text link</Link> on a light background.
         </p>
         <p>
           This is
@@ -29,7 +29,7 @@ export default function LinkDemo() {
 
       <div className="space-y-4 bg-gray-90 p-4 text-white">
         <p>
-          This is <Link href="/getting-started" variant="light">a text link</Link> on a dark background.
+          This is <Link href="/docs/react/getting-started" variant="light">a text link</Link> on a dark background.
         </p>
         <p>
           This is

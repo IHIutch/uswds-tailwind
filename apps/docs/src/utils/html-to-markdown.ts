@@ -5,7 +5,6 @@ import { toMdast } from 'hast-util-to-mdast'
 import { gfmToMarkdown } from 'mdast-util-gfm'
 import { toMarkdown } from 'mdast-util-to-markdown'
 import { stringify } from 'yaml'
-import { isLibraryDocumentation, libraryFromPath, libraryHref } from './library'
 
 function textContent(node: Nodes | undefined): string {
   if (!node)
@@ -76,14 +75,8 @@ function clean(node: ElementContent, url: URL): ElementContent[] {
   if (['div', 'section', 'main'].includes(node.tagName))
     return node.children
 
-  if (node.tagName === 'a' && typeof node.properties.href === 'string') {
-    const target = new URL(node.properties.href, url)
-    const library = libraryFromPath(url.pathname)
-    if (target.origin === url.origin && library && isLibraryDocumentation(target.pathname))
-      node.properties.href = new URL(libraryHref(target.href, library), url).href
-    else
-      node.properties.href = target.href
-  }
+  if (node.tagName === 'a' && typeof node.properties.href === 'string')
+    node.properties.href = new URL(node.properties.href, url).href
 
   return [node]
 }

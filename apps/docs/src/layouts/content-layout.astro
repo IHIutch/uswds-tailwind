@@ -1,7 +1,7 @@
 ---
 import Footer from '#components/footer.astro'
 import LibraryList from '#components/library-list.astro'
-import { libraryHref, resolveLibrary } from '#utils/library'
+import { resolveLibrary } from '#utils/library'
 import { getPageLinks } from '#utils/metadata'
 import { getCollection } from 'astro:content'
 
@@ -32,7 +32,7 @@ const sortedComponents = allComponents.sort((a, b) => {
         sortedComponents.map(comps => (
           <li>
             <a
-              href={libraryHref(`/components/${comps.id}`, library, Astro.url)}
+              href={`/docs/${library}/components/${comps.id}`}
               class="block relative py-2 px-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-offset-0 focus:outline-blue-40v aria-[current=page]:text-blue-60v aria-[current=page]:font-bold aria-[current=page]:after:block aria-[current=page]:after:absolute aria-[current=page]:after:bg-blue-60v aria-[current=page]:after:inset-y-1 aria-[current=page]:after:left-0 aria-[current=page]:after:w-1 aria-[current=page]:after:rounded-full"
               aria-current={
                 pathname === `/docs/${library}/components/${comps.id}` ? 'page' : false

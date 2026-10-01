@@ -1,7 +1,7 @@
 ---
 import type { NavLinks } from 'types'
 import logo from '#assets/img/logo.svg'
-import { libraryHref, resolveLibrary } from '#utils/library'
+import { resolveLibrary } from '#utils/library'
 // import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import DesktopNav from './desktop-nav.astro'
@@ -18,15 +18,15 @@ const desktopLinks: NavLinks = {
     },
     {
       label: 'Getting Started',
-      href: '/getting-started',
+      href: `/docs/${library}/getting-started`,
     },
     {
       label: 'Components',
-      href: '/components',
+      href: `/docs/${library}/components`,
     },
     {
       label: 'JavaScript',
-      href: '/javascript',
+      href: `/docs/${library}/javascript`,
     },
     {
       label: 'Colors',
@@ -55,19 +55,18 @@ const mobileLinks: NavLinks = {
     },
     {
       label: 'Getting Started',
-      href: '/getting-started',
+      href: `/docs/${library}/getting-started`,
     },
     {
       label: 'Components',
-      // href: '/components',
       children: allComponents.map(c => ({
         label: c.data.title,
-        href: `/components/${c.id}`,
+        href: `/docs/${library}/components/${c.id}`,
       })),
     },
     {
       label: 'JavaScript',
-      href: '/javascript',
+      href: `/docs/${library}/javascript`,
     },
     {
       label: 'Colors',
@@ -96,16 +95,6 @@ const secondary: NavLinks['secondary'] = [
   },
 ]
 
-for (const links of [desktopLinks.primary, mobileLinks.primary]) {
-  for (const link of links ?? []) {
-    if ('href' in link && link.href?.startsWith('/'))
-      link.href = libraryHref(link.href, library, Astro.url)
-    for (const child of link.children ?? []) {
-      if (child.href?.startsWith('/'))
-        child.href = libraryHref(child.href, library, Astro.url)
-    }
-  }
-}
 ---
 
 <header
@@ -120,7 +109,7 @@ for (const links of [desktopLinks.primary, mobileLinks.primary]) {
         <em class="font-bold not-italic">
           <a
             class="text-gray-90 text-xl flex gap-3 items-center focus:outline-4 focus:outline-blue-40v"
-            href={libraryHref('/', library, Astro.url)}
+            href="/"
           >
             <img src={logo.src} class="h-8 w-auto" alt="" />
             <span>USWDS + Tailwind</span>
