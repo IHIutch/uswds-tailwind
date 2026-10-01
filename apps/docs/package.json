@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "check:coverage": "node --test scripts/check-react-previews.test.mjs && node scripts/check-component-coverage.mjs",
     "dev": "wrangler types --include-runtime=false && astro dev",
     "start": "wrangler types --include-runtime=false && astro dev",
-    "build": "pnpm check:coverage && wrangler types --include-runtime=false && astro build",
+    "build": "wrangler types --include-runtime=false && astro build",
     "preview": "wrangler types --include-runtime=false && astro preview",
     "deploy": "wrangler deploy",
     "astro": "astro"

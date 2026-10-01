@@ -5,11 +5,6 @@ import { getPageLinks } from '#utils/metadata'
 export const GET: APIRoute = async ({ request, url, rewrite, site }) => {
   const htmlUrl = new URL(url)
   htmlUrl.pathname = htmlUrl.pathname.slice(0, -3)
-  // Existing component aliases retain their Vanilla interpretation.
-  if (/^\/components\/(?:react|vanilla)\//.test(htmlUrl.pathname))
-    htmlUrl.pathname = htmlUrl.pathname.replace(/^\/components\/(react|vanilla)\//, '/docs/$1/components/')
-  else if (htmlUrl.pathname.startsWith('/components/'))
-    htmlUrl.pathname = `/docs/vanilla${htmlUrl.pathname}`
   const headers = new Headers(request.headers)
   // Render the selected page without triggering its Markdown redirect.
   headers.set('Accept', 'text/html')

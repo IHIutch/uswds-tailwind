@@ -7,7 +7,7 @@ import ApiTable from "#components/api-table.astro"
 
 
 This component requires the following JavaScript plugin:
-  - [Accordion](/javascript#accordion)
+  - [Accordion](/docs/vanilla/javascript#accordion)
 
 ## Examples
 
@@ -306,7 +306,7 @@ import { accordionInit } from '@uswds-tailwind/compat/accordion'
 accordionInit()
 ```
 
-For an instance you can control, use `Accordion.getOrCreateInstance(root, options)`. See [shared instance methods](/javascript#instance-lifecycle).
+For an instance you can control, use `Accordion.getOrCreateInstance(root, options)`. See [shared instance methods](/docs/vanilla/javascript#instance-lifecycle).
 
 ### Anatomy
 
@@ -410,7 +410,7 @@ await accordion.open('one')
 
 Pass the item’s `data-value` (or fallback `id`) as the `value` argument. Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
 
-See [initialization and cleanup](/javascript#instance-lifecycle).
+See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
 
 ### Callbacks
 
