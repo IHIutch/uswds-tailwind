@@ -19,3 +19,20 @@ it('a click inside the content that is not a closer leaves the modal open', { ta
   await userEvent.click(getCloseTriggerEl(id)!)
   expect(getContentEl(id)?.hasAttribute('hidden')).toBeTruthy()
 })
+
+it('a nested component close trigger leaves the modal open', { tags: ['new'] }, async () => {
+  const content = `
+    <div data-scope="dialog" data-part="root">
+      <button data-part="close-trigger">Close nested dialog</button>
+    </div>
+  `
+  await using component = createDisposableModals(`${TRIGGER({ id })}${MODAL({ id, content })}`)
+  const { getTriggerEl, getContentEl, getCloseTriggerEl } = component.elements
+  await userEvent.click(getTriggerEl(id)!)
+
+  await userEvent.click(document.querySelector('[data-scope="dialog"] button')!)
+  expect(getContentEl(id)?.hasAttribute('hidden')).toBe(false)
+
+  await userEvent.click(getCloseTriggerEl(id)!)
+  expect(getContentEl(id)?.hasAttribute('hidden')).toBe(true)
+})
