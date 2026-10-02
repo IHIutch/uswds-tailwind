@@ -5,11 +5,11 @@ import { createDisposableTooltip } from './_utils.js'
 const rootId = 'tooltip-test'
 
 const template = `
-  <div data-part="tooltip-root" id="${rootId}">
-    <button data-part="tooltip-trigger" class="usa-button" title="This is a tooltip">
+  <div data-scope="tooltip" data-part="root" id="${rootId}">
+    <button data-part="trigger" class="usa-button" title="This is a tooltip">
       Button
     </button>
-    <div data-part="tooltip-content"></div>
+    <div data-part="content"></div>
   </div>
 `
 
@@ -90,11 +90,11 @@ it('tooltip is hidden on escape keydown', async () => {
 it('should not allow for innerHTML of child elements', async () => {
   const unsafeContent = 'Apricot &lt;img src=\'\' onerror=alert(\'ouch\')&gt;'
   const maliciousTemplate = `
-  <div data-part="tooltip-root" id="${rootId}">
-    <button data-part="tooltip-trigger" class="usa-button" title="${unsafeContent}">
+  <div data-scope="tooltip" data-part="root" id="${rootId}">
+    <button data-part="trigger" class="usa-button" title="${unsafeContent}">
       Button
     </button>
-    <div data-part="tooltip-content"></div>
+    <div data-part="content"></div>
   </div>
   `
 
