@@ -77,7 +77,7 @@ export const CustomIcons = meta.story({
           <Accordion.ItemTrigger>
             {item.title}
             <Accordion.ItemIndicator>
-              {({ isOpen }) => (<div>{isOpen ? '-' : '+'}</div>)}
+              {({ open }) => (<div>{open ? '-' : '+'}</div>)}
             </Accordion.ItemIndicator>
           </Accordion.ItemTrigger>
           <Accordion.ItemContent>

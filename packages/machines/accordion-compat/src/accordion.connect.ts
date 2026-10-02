@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
-import type { AccordionApi, AccordionSchema, ItemProps } from './accordion.types'
-import { isSafari } from '@zag-js/dom-query'
+import type { AccordionApi, AccordionSchema, ItemProps, ItemState } from './accordion.types'
+import { dataAttr } from '@zag-js/dom-query'
 import { parts } from './accordion.anatomy'
 import * as dom from './accordion.dom'
 
@@ -9,7 +9,7 @@ export function connect<T extends PropTypes>(
   service: Service<AccordionSchema>,
   normalize: NormalizeProps<T>,
 ): AccordionApi<T> {
-  const { state, context, send, prop, scope } = service
+  const { send, context, scope, prop } = service
 
   const value = context.get('value')
   const multiple = prop('multiple')
@@ -31,24 +31,23 @@ export function connect<T extends PropTypes>(
     }
   }
 
-  function setValue(nextValue: string[]) {
-    let coerced = nextValue
-    if (!multiple && coerced.length > 1) {
-      coerced = [coerced[0]!]
+  function setValue(value: string[]) {
+    let nextValue = value
+    if (!multiple && nextValue.length > 1) {
+      // @ts-expect-error: TS doesn't know that `multiple` is false here, so it thinks `nextValue` could be empty.
+      nextValue = [nextValue[0]]
     }
-    send({ type: 'VALUE.SET', value: coerced })
+
+    send({ type: 'VALUE.SET', value: nextValue })
   }
 
-  function getItemState(props: ItemProps) {
+  function getItemState(props: ItemProps): ItemState {
     return {
       expanded: value.includes(props.value),
     }
   }
 
-  const focused = state.matches('focused')
-
   return {
-    focused,
     value,
     setValue,
     getItemState,
@@ -59,58 +58,43 @@ export function connect<T extends PropTypes>(
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
+        'data-multiple': dataAttr(multiple),
         'id': dom.getRootId(scope),
-        'data-allow-multiple': multiple || undefined,
       })
     },
 
     getItemProps(props) {
       const itemState = getItemState(props)
+
       return normalize.element({
         ...parts.item.attrs,
-        'id': dom.getItemId(scope, props.value),
         'data-state': itemState.expanded ? 'open' : 'closed',
       })
     },
 
     getItemTriggerProps(props) {
-      const { value: itemValue } = props
+      const { value } = props
       const itemState = getItemState(props)
 
       return normalize.button({
         ...parts.itemTrigger.attrs,
+        'id': dom.getItemTriggerId(scope, value),
         'type': 'button',
-        'id': dom.getItemTriggerId(scope, itemValue),
         'aria-expanded': itemState.expanded,
-        'aria-controls': dom.getItemContentId(scope, itemValue),
-        // data-controls and data-ownedby used by dom.ts getTriggerEls
-        // to filter buttons to this accordion instance
-        'data-controls': dom.getItemContentId(scope, itemValue),
-        'data-ownedby': dom.getRootId(scope),
+        'aria-controls': dom.getItemContentId(scope, value),
         'data-state': itemState.expanded ? 'open' : 'closed',
-        onClick(event) {
-          // Safari doesn't focus buttons on click — normalize behavior
-          if (isSafari()) {
-            event.currentTarget.focus()
-          }
-          send({ type: 'TRIGGER.CLICK', value: itemValue })
-        },
-        onFocus() {
-          send({ type: 'TRIGGER.FOCUS', value: itemValue })
-        },
-        onBlur() {
-          send({ type: 'TRIGGER.BLUR', value: itemValue })
+        onClick() {
+          send({ type: 'TRIGGER.CLICK', value })
         },
       })
     },
 
     getItemContentProps(props) {
       const itemState = getItemState(props)
+
       return normalize.element({
         ...parts.itemContent.attrs,
-        'role': 'region',
         'id': dom.getItemContentId(scope, props.value),
-        'aria-labelledby': dom.getItemTriggerId(scope, props.value),
         'hidden': !itemState.expanded,
         'data-state': itemState.expanded ? 'open' : 'closed',
       })
