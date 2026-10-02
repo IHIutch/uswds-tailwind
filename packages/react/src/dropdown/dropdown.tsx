@@ -18,6 +18,7 @@ export interface DropdownContextProps {
 }
 
 const DropdownContext = React.createContext<DropdownContextProps | null>(null)
+const DropdownItemContext = React.createContext<string | null>(null)
 
 function useDropdownContext() {
   const context = React.useContext(DropdownContext)
@@ -25,6 +26,13 @@ function useDropdownContext() {
     throw new Error('Dropdown components must be used within a Dropdown.Root')
   }
   return context
+}
+
+function useDropdownItemValue() {
+  const value = React.useContext(DropdownItemContext)
+  if (value === null)
+    throw new Error('Dropdown.Link must be used within a Dropdown.Item')
+  return value
 }
 
 const DropdownRoot = React.forwardRef<HTMLDivElement, DropdownRootProps>(
@@ -86,23 +94,29 @@ const DropdownItem = React.forwardRef<HTMLLIElement, DropdownItemProps>(
     const mergedProps = mergeProps(api.getItemProps({ value }), props)
 
     return (
-      <li
-        {...mergedProps}
-        className={cn(
-          'focus:outline-4 border-t border-t-gray-cool-10 focus:-outline-offset-4 focus:outline-blue-40v',
-          className,
-        )}
-        ref={forwardedRef}
-      />
+      <DropdownItemContext.Provider value={value}>
+        <li
+          {...mergedProps}
+          className={cn(
+            'focus:outline-4 border-t border-t-gray-cool-10 focus:-outline-offset-4 focus:outline-blue-40v',
+            className,
+          )}
+          ref={forwardedRef}
+        />
+      </DropdownItemContext.Provider>
     )
   },
 )
 
 const DropdownLink = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
   ({ className, ...props }, forwardedRef) => {
+    const { api } = useDropdownContext()
+    const value = useDropdownItemValue()
+    const mergedProps = mergeProps(api.getItemLinkProps({ value }), props)
+
     return (
       <a
-        {...props}
+        {...mergedProps}
         className={cn(
           'text-decoration-none block hover:underline text-white p-2 focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v',
           className,
