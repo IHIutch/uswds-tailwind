@@ -46,18 +46,18 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
     const el = resolve(target)
     if (!el)
       throw new Error('Root element not found')
-    this.rootEl = el
-    this.machine = this.initMachine(props)
-    this.api = this.initApi()
 
     const existing = instances.get(el)
-    if (existing && existing.constructor !== this.constructor) {
-      console.error(
+    if (existing) {
+      throw new Error(
         `[compat] <${el.tagName.toLowerCase()}> is already bound to `
         + `${existing.constructor.name}; refusing to also bind ${this.constructor.name}.`,
       )
-      return
     }
+
+    this.rootEl = el
+    this.machine = this.initMachine(props)
+    this.api = this.initApi()
     instances.set(el, this)
   }
 
