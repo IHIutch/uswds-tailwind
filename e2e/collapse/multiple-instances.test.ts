@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { createDisposableCollapses } from './_utils.js'
 
@@ -44,89 +44,87 @@ function expectOwnParts(elements: Collapses, ids: string[]) {
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-banner/src/index.js#L15-L21 (toggleBanner toggles only the clicked trigger)
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/uswds-core/src/js/utils/toggle.js#L14-L20 (content is resolved from the trigger's own aria-controls)
-describe('multiple collapses', { tags: ['parity'] }, () => {
-  it('sibling collapses stay isolated through alternating clicks', async () => {
-    await using component = createDisposableCollapses(`${COLLAPSE('one')}${COLLAPSE('two')}`)
-    const { elements } = component
+it('sibling collapses stay isolated through alternating clicks', { tags: ['parity'] }, async () => {
+  await using component = createDisposableCollapses(`${COLLAPSE('one')}${COLLAPSE('two')}`)
+  const { elements } = component
 
-    expectOwnParts(elements, ['one', 'two'])
-    expectClosed(elements, 'one')
-    expectClosed(elements, 'two')
+  expectOwnParts(elements, ['one', 'two'])
+  expectClosed(elements, 'one')
+  expectClosed(elements, 'two')
 
-    await userEvent.click(elements.getTriggerEl('one')!)
-    expectOpen(elements, 'one')
-    expectClosed(elements, 'two')
+  await userEvent.click(elements.getTriggerEl('one')!)
+  expectOpen(elements, 'one')
+  expectClosed(elements, 'two')
 
-    await userEvent.click(elements.getTriggerEl('two')!)
-    expectOpen(elements, 'one')
-    expectOpen(elements, 'two')
+  await userEvent.click(elements.getTriggerEl('two')!)
+  expectOpen(elements, 'one')
+  expectOpen(elements, 'two')
 
-    await userEvent.click(elements.getTriggerEl('one')!)
-    expectClosed(elements, 'one')
-    expectOpen(elements, 'two')
+  await userEvent.click(elements.getTriggerEl('one')!)
+  expectClosed(elements, 'one')
+  expectOpen(elements, 'two')
 
-    await userEvent.click(elements.getTriggerEl('two')!)
-    expectClosed(elements, 'one')
-    expectClosed(elements, 'two')
+  await userEvent.click(elements.getTriggerEl('two')!)
+  expectClosed(elements, 'one')
+  expectClosed(elements, 'two')
 
-    expectOwnParts(elements, ['one', 'two'])
-  })
+  expectOwnParts(elements, ['one', 'two'])
+})
 
-  it('nested collapses stay scoped through alternating clicks', async () => {
-    await using component = createDisposableCollapses(COLLAPSE('outer', COLLAPSE('inner')))
-    const { elements } = component
+it('nested collapses stay scoped through alternating clicks', { tags: ['parity'] }, async () => {
+  await using component = createDisposableCollapses(COLLAPSE('outer', COLLAPSE('inner')))
+  const { elements } = component
 
-    expectOwnParts(elements, ['outer', 'inner'])
-    expect(elements.getContentEl('outer')?.contains(elements.getRootEl('inner'))).toBe(true)
-    expectClosed(elements, 'outer')
-    expectClosed(elements, 'inner')
+  expectOwnParts(elements, ['outer', 'inner'])
+  expect(elements.getContentEl('outer')?.contains(elements.getRootEl('inner'))).toBe(true)
+  expectClosed(elements, 'outer')
+  expectClosed(elements, 'inner')
 
-    await userEvent.click(elements.getTriggerEl('outer')!)
-    expectOpen(elements, 'outer')
-    expectClosed(elements, 'inner')
+  await userEvent.click(elements.getTriggerEl('outer')!)
+  expectOpen(elements, 'outer')
+  expectClosed(elements, 'inner')
 
-    await userEvent.click(elements.getTriggerEl('inner')!)
-    expectOpen(elements, 'outer')
-    expectOpen(elements, 'inner')
+  await userEvent.click(elements.getTriggerEl('inner')!)
+  expectOpen(elements, 'outer')
+  expectOpen(elements, 'inner')
 
-    await userEvent.click(elements.getTriggerEl('inner')!)
-    expectOpen(elements, 'outer')
-    expectClosed(elements, 'inner')
+  await userEvent.click(elements.getTriggerEl('inner')!)
+  expectOpen(elements, 'outer')
+  expectClosed(elements, 'inner')
 
-    await userEvent.click(elements.getTriggerEl('outer')!)
-    expectClosed(elements, 'outer')
-    expectClosed(elements, 'inner')
+  await userEvent.click(elements.getTriggerEl('outer')!)
+  expectClosed(elements, 'outer')
+  expectClosed(elements, 'inner')
 
-    expectOwnParts(elements, ['outer', 'inner'])
-  })
+  expectOwnParts(elements, ['outer', 'inner'])
+})
 
-  // https://github.com/uswds/uswds/blob/v3.14.0/packages/uswds-core/src/js/utils/behavior.js#L108-L114 (off() removes one target's listeners, leaving peers bound)
-  it.each([
-    { removed: 'first', survivor: 'second' },
-    { removed: 'second', survivor: 'first' },
-  ])('removal of the $removed peer retains the opened survivor', async ({ removed, survivor }) => {
-    await using component = createDisposableCollapses(`${COLLAPSE('first')}${COLLAPSE('second')}`)
-    const { elements } = component
-    const removedRootEl = elements.getRootEl(removed)!
-    const removedTriggerEl = elements.getTriggerEl(removed)!
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/uswds-core/src/js/utils/behavior.js#L108-L114 (off() removes one target's listeners, leaving peers bound)
+it.each([
+  { removed: 'first', survivor: 'second' },
+  { removed: 'second', survivor: 'first' },
+])('removal of the $removed peer retains the opened survivor', { tags: ['parity'] }, async ({ removed, survivor }) => {
+  await using component = createDisposableCollapses(`${COLLAPSE('first')}${COLLAPSE('second')}`)
+  const { elements } = component
+  const removedRootEl = elements.getRootEl(removed)!
+  const removedTriggerEl = elements.getTriggerEl(removed)!
 
-    await userEvent.click(elements.getTriggerEl(survivor)!)
-    expectOpen(elements, survivor)
-    expectClosed(elements, removed)
+  await userEvent.click(elements.getTriggerEl(survivor)!)
+  expectOpen(elements, survivor)
+  expectClosed(elements, removed)
 
-    elements.getInstance(removed)!.destroy()
-    removedRootEl.remove()
+  elements.getInstance(removed)!.destroy()
+  removedRootEl.remove()
 
-    expect(elements.getInstance(survivor)).not.toBeNull()
-    expectOwnParts(elements, [survivor])
-    expectOpen(elements, survivor)
+  expect(elements.getInstance(survivor)).not.toBeNull()
+  expectOwnParts(elements, [survivor])
+  expectOpen(elements, survivor)
 
-    await userEvent.click(elements.getTriggerEl(survivor)!)
-    expectClosed(elements, survivor)
+  await userEvent.click(elements.getTriggerEl(survivor)!)
+  expectClosed(elements, survivor)
 
-    // A click on the removed, detached trigger must not reach the survivor.
-    removedTriggerEl.click()
-    await userEvent.click(elements.getTriggerEl(survivor)!)
-    expectOpen(elements, survivor)
-  })
+  // A click on the removed, detached trigger must not reach the survivor.
+  removedTriggerEl.click()
+  await userEvent.click(elements.getTriggerEl(survivor)!)
+  expectOpen(elements, survivor)
 })
