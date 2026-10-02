@@ -1,5 +1,31 @@
 # @uswds-tailwind/react
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- d1405bd: Begin the V2 beta release series.
+
+### Patch Changes
+
+- f2b7180: Replace CVA with tailwind-variants
+- b10075e: Update modal anatomy, trigger aria attributes
+- b3180ad: Rename radio to radio group to match component naming
+- 6834323: Update radio item control type from input to div
+- Updated dependencies [b10075e]
+  - @uswds-tailwind/modal-compat@2.0.0-beta.0
+  - @uswds-tailwind/accordion-compat@2.0.0-beta.0
+  - @uswds-tailwind/character-count-compat@2.0.0-beta.0
+  - @uswds-tailwind/collapse-compat@2.0.0-beta.0
+  - @uswds-tailwind/combobox-compat@2.0.0-beta.0
+  - @uswds-tailwind/date-picker-compat@2.0.0-beta.0
+  - @uswds-tailwind/dropdown-compat@2.0.0-beta.0
+  - @uswds-tailwind/file-input-compat@2.0.0-beta.0
+  - @uswds-tailwind/input-mask-compat@2.0.0-beta.0
+  - @uswds-tailwind/table-compat@2.0.0-beta.0
+  - @uswds-tailwind/tooltip-compat@2.0.0-beta.0
+  - @uswds-tailwind/theme@2.0.0-beta.0
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes

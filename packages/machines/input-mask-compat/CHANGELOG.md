@@ -1,5 +1,9 @@
 # @uswds-tailwind/input-mask-compat
 
+## 2.0.0-beta.0
+
+No changes in this release.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

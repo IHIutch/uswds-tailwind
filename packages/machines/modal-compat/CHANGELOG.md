@@ -1,5 +1,11 @@
 # @uswds-tailwind/modal-compat
 
+## 2.0.0-beta.0
+
+### Patch Changes
+
+- b10075e: Update modal anatomy, trigger aria attributes
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6
