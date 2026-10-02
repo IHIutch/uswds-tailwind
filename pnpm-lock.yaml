@@ -722,40 +722,6 @@ importers:
         specifier: 'catalog:'
         version: 0.3.18
 
-  packages/machines/modal:
-    dependencies:
-      '@zag-js/anatomy':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/aria-hidden':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/core':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/dismissable':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/dom-query':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/focus-trap':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/remove-scroll':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/types':
-        specifier: 'catalog:'
-        version: 1.44.0
-      '@zag-js/utils':
-        specifier: 'catalog:'
-        version: 1.44.0
-    devDependencies:
-      publint:
-        specifier: 'catalog:'
-        version: 0.3.18
-
   packages/machines/modal-compat:
     dependencies:
       '@zag-js/anatomy':
