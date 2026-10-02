@@ -69,7 +69,7 @@ const template = `
 it('should display month in english by default', async () => {
   document.documentElement.lang = 'en'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -82,7 +82,7 @@ it('should display month in english by default', async () => {
 it('should display month in the document language', async () => {
   document.documentElement.lang = 'es'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -95,7 +95,7 @@ it('should display month in the document language', async () => {
 it('should display the correct aria-label in the document language', async () => {
   document.documentElement.lang = 'es'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -108,7 +108,7 @@ it('should display the correct aria-label in the document language', async () =>
 it('should display the full list of months in english by default', async () => {
   document.documentElement.lang = 'en'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -140,7 +140,7 @@ it('should display the full list of months in english by default', async () => {
 it('should display the full list of months in the document language', async () => {
   document.documentElement.lang = 'es'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -172,7 +172,7 @@ it('should display the full list of months in the document language', async () =
 it('should display the days of the week headers in english by default', async () => {
   document.documentElement.lang = 'en'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -188,7 +188,7 @@ it('should display the days of the week headers in english by default', async ()
 it('should display the days of the week headers in the document language', async () => {
   document.documentElement.lang = 'es'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -204,7 +204,7 @@ it('should display the days of the week headers in the document language', async
 it('should display the aria-label in the document language', async () => {
   document.documentElement.lang = 'es'
 
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const button = component.elements.getTriggerEl()!
 

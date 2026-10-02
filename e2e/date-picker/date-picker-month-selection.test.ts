@@ -80,7 +80,7 @@ async function setupMonthSelectionView(component: ReturnType<typeof createDispos
 }
 
 it('should show month of June as focused', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -89,7 +89,7 @@ it('should show month of June as focused', async () => {
 })
 
 it('should show month of June as selected', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -98,7 +98,7 @@ it('should show month of June as selected', async () => {
 })
 
 it('should navigate back three months when pressing up', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -111,7 +111,7 @@ it('should navigate back three months when pressing up', async () => {
 })
 
 it('should navigate ahead three months when pressing down', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -124,7 +124,7 @@ it('should navigate ahead three months when pressing down', async () => {
 })
 
 it('should navigate back one month when pressing left', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -137,7 +137,7 @@ it('should navigate back one month when pressing left', async () => {
 })
 
 it('should navigate ahead one month when pressing right', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -150,7 +150,7 @@ it('should navigate ahead one month when pressing right', async () => {
 })
 
 it('should navigate to the beginning of the month row when pressing home', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -163,7 +163,7 @@ it('should navigate to the beginning of the month row when pressing home', async
 })
 
 it('should navigate to the end of the month row when pressing end', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -176,7 +176,7 @@ it('should navigate to the end of the month row when pressing end', async () => 
 })
 
 it('should navigate to January when pressing page up', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')
@@ -189,7 +189,7 @@ it('should navigate to January when pressing page up', async () => {
 })
 
 it('should navigate to December when pressing page down', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
   const monthView = calendar.querySelector('[data-part="date-picker-month"]')

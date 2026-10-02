@@ -16,6 +16,8 @@
     "publint": "turbo run publint --filter='./packages/**'",
     "typecheck": "turbo run typecheck --filter='./packages/**' --filter='!./packages/compat'",
     "test": "turbo run test",
+    "test:e2e": "vitest run",
+    "test:e2e:all": "E2E_BROWSERS=all vitest run",
     "changeset": "changeset",
     "changeset:version": "changeset version && pnpm install --no-frozen-lockfile",
     "changeset:publish": "pnpm build:packages && changeset publish && pnpm release:latest",

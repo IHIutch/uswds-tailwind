@@ -67,7 +67,7 @@ const template = `
 `
 
 it('should not display the calendar when the button is clicked as it is disabled', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -78,7 +78,7 @@ it('should not display the calendar when the button is clicked as it is disabled
 })
 
 it('should display the calendar when the button is clicked once the component is enabled', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 

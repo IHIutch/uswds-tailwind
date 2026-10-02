@@ -128,8 +128,8 @@ const TEMPLATE = `<div
       ></div> -->
     </div>`
 
-it('enhances a select element into a combo box component', () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+it('enhances a select element into a combo box component', async () => {
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -157,7 +157,7 @@ it('enhances a select element into a combo box component', () => {
 })
 
 it('should show the list by clicking the input', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -168,7 +168,7 @@ it('should show the list by clicking the input', async () => {
 })
 
 it('should show the list by clicking the toggle button', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const toggle = component.elements.getToggleButtonEl()!
   const list = component.elements.getListEl()!
 
@@ -177,7 +177,7 @@ it('should show the list by clicking the toggle button', async () => {
 })
 
 it('should show the list by clicking when clicking the input twice', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -186,7 +186,7 @@ it('should show the list by clicking when clicking the input twice', async () =>
 })
 
 it('should toggle the list and close by clicking when clicking the toggle button twice', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const toggle = component.elements.getToggleButtonEl()!
   const list = component.elements.getListEl()!
 
@@ -197,7 +197,7 @@ it('should toggle the list and close by clicking when clicking the toggle button
 })
 
 it('should set up the list items for accessibility', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -217,7 +217,7 @@ it('should set up the list items for accessibility', async () => {
 })
 
 it('should close the list by clicking away', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -228,7 +228,7 @@ it('should close the list by clicking away', async () => {
 })
 
 it('should select an item from the option list when clicking a list option', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -242,7 +242,7 @@ it('should select an item from the option list when clicking a list option', asy
 })
 
 it('should display and filter the option list after a character is typed', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -253,7 +253,7 @@ it('should display and filter the option list after a character is typed', async
 })
 
 it('should sort matches by options that start with the query, then options that contain the query', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -265,7 +265,7 @@ it('should sort matches by options that start with the query, then options that 
 })
 
 it('should reset input values when an incomplete item is remaining on blur', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -285,7 +285,7 @@ it('should reset input values when an incomplete item is remaining on blur', asy
 })
 
 it('should reset input values when an incomplete item is submitted through enter', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -304,7 +304,7 @@ it('should reset input values when an incomplete item is submitted through enter
 })
 
 it('should not allow enter to perform default action when the list is hidden', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -315,7 +315,7 @@ it('should not allow enter to perform default action when the list is hidden', a
 })
 
 it('should close the list and reset input value when escape is performed while the list is open', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -334,7 +334,7 @@ it('should close the list and reset input value when escape is performed while t
 })
 
 it('should reset the input value when a complete selection is left on blur from the input element', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -353,7 +353,7 @@ it('should reset the input value when a complete selection is left on blur from 
 })
 
 it('should set the input value when a complete selection is submitted by pressing enter', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -372,7 +372,7 @@ it('should set the input value when a complete selection is submitted by pressin
 })
 
 it('should show the no results item when a nonexistent option is typed', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -384,7 +384,7 @@ it('should show the no results item when a nonexistent option is typed', async (
 })
 
 it('status should not allow innerHTML', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -394,7 +394,7 @@ it('status should not allow innerHTML', async () => {
 })
 
 it('should show the list when pressing down from an empty input', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -406,7 +406,7 @@ it('should show the list when pressing down from an empty input', async () => {
 })
 
 it('should focus the first item in the list when pressing down from the input', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -422,7 +422,7 @@ it('should focus the first item in the list when pressing down from the input', 
 })
 
 it('should select the focused list item in the list when pressing enter on a focused item', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
@@ -440,7 +440,7 @@ it('should select the focused list item in the list when pressing enter on a foc
 })
 
 it('should select the focused list item in the list when pressing space on a focused item', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
@@ -459,7 +459,7 @@ it('should select the focused list item in the list when pressing space on a foc
 })
 
 it('should not select the focused list item in the list when blurring component from a focused item', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
@@ -475,7 +475,7 @@ it('should not select the focused list item in the list when blurring component 
 })
 
 it('should focus the last item in the list when pressing down many times from the input', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -494,7 +494,7 @@ it('should focus the last item in the list when pressing down many times from th
 })
 
 it('should not select the focused item in the list when pressing escape from the focused item', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -515,7 +515,7 @@ it('should not select the focused item in the list when pressing escape from the
 })
 
 it('should focus the input and hide the list when pressing up from the first item in the list', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -533,7 +533,7 @@ it('should focus the input and hide the list when pressing up from the first ite
 })
 
 it('should not allow for innerHTML of child elements ', async () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
@@ -546,8 +546,8 @@ it('should not allow for innerHTML of child elements ', async () => {
   })
 })
 
-it('should have attribute type of string', () => {
-  using component = createDisposableCombobox(rootId, TEMPLATE)
+it('should have attribute type of string', async () => {
+  await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
 
   expect(typeof (input.getAttribute('aria-label') || '')).toBe('string')

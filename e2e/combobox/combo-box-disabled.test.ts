@@ -129,8 +129,8 @@ const template = `<div
       ></div> -->
     </div>`
 
-it('enhances a select element into a combo box component', () => {
-  using component = createDisposableCombobox(rootId, template)
+it('enhances a select element into a combo box component', async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
 
@@ -140,7 +140,7 @@ it('enhances a select element into a combo box component', () => {
 })
 
 it('should not show the list when clicking the disabled input', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
 
@@ -149,7 +149,7 @@ it('should not show the list when clicking the disabled input', async () => {
 })
 
 it('should not show the list when clicking the disabled button', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const root = component.elements.getRootEl()
   const toggle = root!.querySelector('[data-part="combobox-toggle"]')!
   const list = component.elements.getListEl()
@@ -159,7 +159,7 @@ it('should not show the list when clicking the disabled button', async () => {
 })
 
 it('should show the list when clicking the input once the component has been enabled', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
 

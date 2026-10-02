@@ -2,29 +2,23 @@ import process from 'node:process'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
-export default defineConfig({
+const allBrowsers = !!process.env.GITHUB_ACTIONS || process.env.E2E_BROWSERS === 'all'
 
+export default defineConfig({
   test: {
     reporters: process.env.GITHUB_ACTIONS ? ['github-actions'] : ['dot'],
-    globals: true,
     include: ['e2e/**/*.{test,spec}.ts'],
-    exclude: [
-      'node_modules/**',
-      'dist/**',
-      '.storybook/**',
+    tags: [
+      { name: 'legacy', description: 'Tests migrated from the USWDS source test suite.' },
+      { name: 'parity', description: 'Repo-original tests that hold the component to USWDS behavior.' },
+      { name: 'new', description: 'Tests for functionality that only the ported version has.' },
     ],
     browser: {
-      provider: playwright({
-        // https://vitest.dev/guide/browser/playwright
-        launchOptions: {
-          channel: 'chromium',
-        },
-      }),
-      headless: !!process.env.GITHUB_ACTIONS,
+      provider: playwright(),
       enabled: true,
-      // at least one instance is required
       instances: [
         { browser: 'chromium' },
+        ...(allBrowsers ? [{ browser: 'firefox' as const }, { browser: 'webkit' as const }] : []),
       ],
     },
   },

@@ -24,7 +24,7 @@ const template = `
 `
 
 it('shows the language dropdown when the language button is clicked', async () => {
-  using component = createDisposableDropdown(rootId, template)
+  await using component = createDisposableDropdown(rootId, template)
   const content = component.elements.getContentEl()!
   const trigger = component.elements.getTriggerEl()
 
@@ -33,7 +33,7 @@ it('shows the language dropdown when the language button is clicked', async () =
 })
 
 it('hides the visible language menu when the body is clicked', async () => {
-  using component = createDisposableDropdown(rootId, template)
+  await using component = createDisposableDropdown(rootId, template)
   const content = component.elements.getContentEl()!
   const trigger = component.elements.getTriggerEl()
 
@@ -45,7 +45,7 @@ it('hides the visible language menu when the body is clicked', async () => {
 })
 
 it('collapses dropdown when a language link is clicked', async () => {
-  using component = createDisposableDropdown(rootId, template)
+  await using component = createDisposableDropdown(rootId, template)
   const languageLink = component.elements.getContentEl()!.querySelector('a')!
   const trigger = component.elements.getTriggerEl()
 
@@ -57,7 +57,7 @@ it('collapses dropdown when a language link is clicked', async () => {
 })
 
 it('collapses dropdown when the Escape key is hit', async () => {
-  using component = createDisposableDropdown(rootId, template)
+  await using component = createDisposableDropdown(rootId, template)
   const trigger = component.elements.getTriggerEl()
 
   await userEvent.click(trigger)
@@ -67,21 +67,21 @@ it('collapses dropdown when the Escape key is hit', async () => {
   expect(trigger.getAttribute('aria-expanded')).toBe('false')
 })
 
-it('contains a role of button', () => {
-  using component = createDisposableDropdown(rootId, template)
+it('contains a role of button', async () => {
+  await using component = createDisposableDropdown(rootId, template)
   const trigger = component.elements.getTriggerEl()
 
   expect(trigger.getAttribute('role')).toBe('button')
 })
 
-it('contains aria-controls of language-options', () => {
-  using component = createDisposableDropdown(rootId, template)
+it('contains aria-controls of language-options', async () => {
+  await using component = createDisposableDropdown(rootId, template)
   const trigger = component.elements.getTriggerEl()
 
   expect(trigger.getAttribute('aria-controls')).toBe(`dropdown:${rootId}:content`)
 })
 
-it('contains an id of language-options', () => {
-  using component = createDisposableDropdown(rootId, template)
+it('contains an id of language-options', async () => {
+  await using component = createDisposableDropdown(rootId, template)
   expect(component.elements.getContentEl()?.getAttribute('id')).toBe(`dropdown:${rootId}:content`)
 })

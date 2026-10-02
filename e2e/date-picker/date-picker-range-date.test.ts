@@ -71,7 +71,7 @@ const template = `
   `
 
 it('should display the range date when showing the month of the range date', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -85,7 +85,7 @@ it('should display the range date when showing the month of the range date', asy
 })
 
 it('should not display the range date when showing a month different from the range date month', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -98,7 +98,7 @@ it('should not display the range date when showing a month different from the ra
 })
 
 it('should display the days between the calendar date and the range date as within range when the calendar date is above the range date', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendarEl = component.elements.getCalendarEl()!
@@ -139,7 +139,7 @@ it('should display the days between the calendar date and the range date as with
 })
 
 it('should display the days between the calendar date and the range date as within range when the calendar date is below the range date', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
