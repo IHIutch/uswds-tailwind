@@ -30,6 +30,10 @@ export class Collapse extends Component<collapse.Props, collapse.Api> {
       this.renderTrigger(this.trigger)
     }
     this.renderContent(this.content)
+    const indicator = getParts<HTMLElement>(this.rootEl, parts.indicator)
+      .find(element => element.closest(rootSelector) === this.rootEl)
+    if (indicator)
+      spreadProps(indicator, this.api.getIndicatorProps())
   }
 
   private get trigger() {

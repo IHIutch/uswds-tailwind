@@ -10,6 +10,7 @@ function TEMPLATE({ defaultOpen = false }: { defaultOpen?: boolean } = {}) {
   <section data-scope="collapse" data-part="root" id="${rootId}"${defaultOpen ? ' data-state="open"' : ''}>
     <button data-part="trigger">
       Here's how you know
+      <span data-part="indicator"></span>
     </button>
     <div data-part="content">
       <p>Official websites use .gov</p>
@@ -63,4 +64,18 @@ it('prefers an explicit defaultOpen prop over authored state', { tags: ['new'] }
   expect(rootEl.getAttribute('data-state')).toBe('open')
 
   component.destroy()
+})
+
+it('updates the indicator when opened and closed', { tags: ['new'] }, async () => {
+  await using component = createDisposableCollapse(rootId, TEMPLATE())
+  const indicator = component.elements.getRootEl()!.querySelector('[data-part="indicator"]')!
+
+  expect(indicator.id).toBe(`collapse:${rootId}:indicator`)
+  expect(indicator.getAttribute('data-state')).toBe('closed')
+
+  await userEvent.click(component.elements.getTriggerEl()!)
+  expect(indicator.getAttribute('data-state')).toBe('open')
+
+  await userEvent.click(component.elements.getTriggerEl()!)
+  expect(indicator.getAttribute('data-state')).toBe('closed')
 })
