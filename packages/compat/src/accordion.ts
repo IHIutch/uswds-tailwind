@@ -1,22 +1,28 @@
 import * as accordion from '@uswds-tailwind/accordion-compat'
-import { nextTick } from '@zag-js/dom-query'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataBool, getDataString } from './lib/data-attr'
+import { getPart, getParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
+const parts = accordion.anatomy.build()
+const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
+
 export class Accordion extends Component<accordion.Props, accordion.Api> {
-  static instances = new Map<string, Accordion>()
+  static override root = parts.root
 
-  static getInstance(id: string) {
-    return Accordion.instances.get(id)
-  }
-
-  initMachine(props: accordion.Props): VanillaMachine<accordion.AccordionSchema> {
-    Accordion.instances.set(props.id, this)
+  initMachine(props: accordion.Props): VanillaMachine<accordion.Schema> {
+    const multiple = getDataBool(this.rootEl, 'multiple')
+    const authoredValue = this.items
+      .filter(item => getDataString(item, 'state') === 'open')
+      .map(item => this.getItemValue(item))
+      .filter(value => typeof value === 'string')
 
     return new VanillaMachine(accordion.machine, {
       ...props,
-      multiple: this.rootEl.hasAttribute('data-multiple'),
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'accordion'),
+      multiple,
+      defaultValue: props.defaultValue ?? (multiple ? authoredValue : authoredValue.slice(0, 1)),
     })
   }
 
@@ -30,45 +36,44 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
   }
 
   private get items() {
-    return Array.from(
-      this.rootEl.querySelectorAll<HTMLElement>('[data-part="accordion-item"]'),
-    )
+    return getParts<HTMLElement>(this.rootEl, parts.item)
+      // Prevent nested accordions from being assigned to the parent
+      .filter(item => item.closest(rootSelector) === this.rootEl)
+  }
+
+  private getItemValue(itemEl: HTMLElement) {
+    return getDataString(itemEl, 'value') || itemEl.id || undefined
   }
 
   private renderItem(itemEl: HTMLElement) {
-    const value = itemEl.dataset.value || itemEl.id
+    const value = this.getItemValue(itemEl)
     if (!value)
       return
     spreadProps(itemEl, this.api.getItemProps({ value }))
-    const trigger = itemEl.querySelector<HTMLElement>('[data-part="accordion-trigger"]')
-    const content = itemEl.querySelector<HTMLElement>('[data-part="accordion-content"]')
+    const trigger = getPart<HTMLElement>(itemEl, parts.itemTrigger)
+    const content = getPart<HTMLElement>(itemEl, parts.itemContent)
     if (trigger)
-      spreadProps(trigger, this.api.getTriggerProps({ value }))
+      spreadProps(trigger, this.api.getItemTriggerProps({ value }))
     if (content)
-      spreadProps(content, this.api.getContentProps({ value }))
+      spreadProps(content, this.api.getItemContentProps({ value }))
   }
 
   async open(value: string) {
-    this.api.open(value)
-    await new Promise<void>(resolve => nextTick(resolve))
+    this.api.show(value)
+    await this.settle()
   }
 
   async close(value: string) {
-    this.api.close(value)
-    await new Promise<void>(resolve => nextTick(resolve))
+    this.api.hide(value)
+    await this.settle()
   }
 
   async toggle(value: string) {
     this.api.toggle(value)
-    await new Promise<void>(resolve => nextTick(resolve))
+    await this.settle()
   }
 }
 
 export function accordionInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="accordion-root"]').forEach((targetEl) => {
-    const accordion = new Accordion(targetEl, {
-      id: targetEl.id || getId(targetEl, 'accordion'),
-    })
-    accordion.init()
-  })
+  return Accordion.createAll(document)
 }
