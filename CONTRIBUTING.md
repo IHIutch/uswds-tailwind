@@ -161,27 +161,12 @@ TypeScript settings live in each package's `tsconfig.json`, extending shared bas
 2. make your changes with clear, descriptive commits
 3. push your branch and open a pull request
 4. fill out the PR template (linked issue, context, description, changeset, test plan)
-5. ensure CI checks pass (lint, type check, build, tests, semantic-pr-title)
+5. ensure CI checks pass (lint, type check, build, tests)
 6. request review from maintainers
 
-### Conventional commits
+### Pull request titles
 
-We use [Conventional Commits](https://www.conventionalcommits.org/) for PR titles. Since we squash on merge, the PR title becomes the commit message on `next`, so the title matters more than individual commit messages within the PR.
-
-Format: `type(scope): description`
-
-**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
-
-**Scopes (optional):** `a11y`, `deps`, `docs`, `machine`, `react`, `vanilla`, etc.
-
-**Examples:**
-
-- `fix(machine): clear combobox input when value is reset`
-- `feat(react): add Card component`
-- `chore(deps): update zag-js to 1.41`
-- `docs: clarify theme install instructions`
-
-PR titles are checked automatically by the `Semantic Pull Request` workflow on every PR.
+Use a brief, descriptive title that summarizes the change. Since we squash on merge, the PR title becomes the commit message on `next`.
 
 ### Changesets
 
