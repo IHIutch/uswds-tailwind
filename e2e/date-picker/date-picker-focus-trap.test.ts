@@ -66,7 +66,7 @@ const template = `
   `
 
 it('should move focus when tabbing within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()
   const root = component.elements.getRootEl()!
 
@@ -85,7 +85,7 @@ it('should move focus when tabbing within the calendar', async () => {
 })
 
 it('should maintain focus within the component when navigating', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()
   const root = component.elements.getRootEl()!
 

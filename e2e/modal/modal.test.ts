@@ -128,8 +128,8 @@ const template = `
   </div>
 `
 
-it('creates new parent elements', () => {
-  using modal = createDisposableModalSetup(template)
+it('creates new parent elements', async () => {
+  await using modal = createDisposableModalSetup(template)
   const content = modal.elements.getContentEl(modal1)
   const backdrop = modal.elements.getBackdropEl(modal1)
   const positioner = modal.elements.getPositionerEl(modal1)
@@ -139,34 +139,34 @@ it('creates new parent elements', () => {
   expect(positioner).toBeTruthy()
 })
 
-it('adds role="dialog" to modal content', () => {
-  using modal = createDisposableModalSetup(template)
+it('adds role="dialog" to modal content', async () => {
+  await using modal = createDisposableModalSetup(template)
   const content = modal.elements.getContentEl(modal1)!
   expect(content.getAttribute('role')).toBe('dialog')
 })
 
-it('keeps aria-labelledby, aria-describedby on the content', () => {
-  using modal = createDisposableModalSetup(template)
+it('keeps aria-labelledby, aria-describedby on the content', async () => {
+  await using modal = createDisposableModalSetup(template)
   const content = modal.elements.getContentEl(modal1)!
   expect(content.getAttribute('aria-describedby')).toBe('describe-1')
   expect(content.getAttribute('aria-labelledby')).toBe('modal-sm-heading-1')
 })
 
-it('sets tabindex="-1" to the modal content', () => {
-  using modal = createDisposableModalSetup(template)
+it('sets tabindex="-1" to the modal content', async () => {
+  await using modal = createDisposableModalSetup(template)
   const content = modal.elements.getContentEl(modal1)!
   expect(content.getAttribute('tabindex')).toBe('-1')
 })
 
 // TODO: Fix this test. See comment in ./packages/compat/src/modal.ts
-it.skip('moves the modal to the bottom of the DOM', () => {
-  using modal = createDisposableModalSetup(template)
+it.skip('moves the modal to the bottom of the DOM', async () => {
+  await using modal = createDisposableModalSetup(template)
   const backdrop = modal.elements.getBackdropEl(modal2)!
   expect(document.body.lastElementChild).toBe(backdrop)
 })
 
-it('adds role="button" to any <a> opener, but not <button>', () => {
-  using modal = createDisposableModalSetup(template)
+it('adds role="button" to any <a> opener, but not <button>', async () => {
+  await using modal = createDisposableModalSetup(template)
   const trigger1 = modal.elements.getTriggerEl(modal1)!
   const trigger2 = modal.elements.getTriggerEl(modal2)!
 
@@ -174,8 +174,8 @@ it('adds role="button" to any <a> opener, but not <button>', () => {
   expect(trigger2.getAttribute('role')).toBeFalsy()
 })
 
-it('adds aria-controls to each opener', () => {
-  using modal = createDisposableModalSetup(template)
+it('adds aria-controls to each opener', async () => {
+  await using modal = createDisposableModalSetup(template)
   const trigger1 = modal.elements.getTriggerEl(modal1)!
   const trigger2 = modal.elements.getTriggerEl(modal2)!
 
@@ -189,7 +189,7 @@ it('adds aria-controls to each opener', () => {
 })
 
 it('makes the modal visible', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger1 = modal.elements.getTriggerEl(modal1)!
   const content1 = modal.elements.getContentEl(modal1)!
 
@@ -198,7 +198,7 @@ it('makes the modal visible', async () => {
 })
 
 it('focuses the modal content when opened', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger1 = modal.elements.getTriggerEl(modal1)!
   const content1 = modal.elements.getContentEl(modal1)!
 
@@ -209,7 +209,7 @@ it('focuses the modal content when opened', async () => {
 })
 
 it('makes all other page content invisible to screen readers', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger1 = modal.elements.getTriggerEl(modal1)!
   const positioner1 = modal.elements.getPositionerEl(modal1)!
 
@@ -221,7 +221,7 @@ it('makes all other page content invisible to screen readers', async () => {
 })
 
 it('allows event propagation and displays combobox list when toggle is clicked', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger1 = modal.elements.getTriggerEl(modal1)!
   const comboboxTrigger = modal.elements.getComboboxTriggerEl()!
   const comboboxList = modal.elements.getComboboxListEl()!
@@ -233,7 +233,7 @@ it('allows event propagation and displays combobox list when toggle is clicked',
 })
 
 it('hides the modal when close button is clicked', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
 
   const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
@@ -245,7 +245,7 @@ it('hides the modal when close button is clicked', async () => {
 })
 
 it('closes the modal when the overlay is clicked', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger2 = modal.elements.getTriggerEl(modal2)!
   const backdrop2 = modal.elements.getBackdropEl(modal2)!
   const content2 = modal.elements.getContentEl(modal2)!
@@ -256,7 +256,7 @@ it('closes the modal when the overlay is clicked', async () => {
 })
 
 it('sends focus to the element that opened it', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
 
@@ -267,7 +267,7 @@ it('sends focus to the element that opened it', async () => {
 })
 
 it('restores other page content screen reader visibility', async () => {
-  using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModalSetup(template)
   const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
 

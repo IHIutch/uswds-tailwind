@@ -127,7 +127,7 @@ const template = `<div
     </div>`
 
 it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -142,7 +142,7 @@ it('should display the full list and focus the selected item when the input is p
 })
 
 it('should display the filtered list when the input is dirty (characters inputted)', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -155,15 +155,15 @@ it('should display the filtered list when the input is dirty (characters inputte
   expect(list.children.length).toBe(1)
 })
 
-it('should show a clear button when the input has a selected value present', () => {
-  using component = createDisposableCombobox(rootId, template)
+it('should show a clear button when the input has a selected value present', async () => {
+  await using component = createDisposableCombobox(rootId, template)
 
   const clearButton = component.elements.getClearButtonEl()
   expect(clearButton).toBeTruthy()
 })
 
 it('should clear the input when the clear button is clicked', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
@@ -179,7 +179,7 @@ it('should clear the input when the clear button is clicked', async () => {
 })
 
 it('should update the filter and begin filtering once a pristine input value is changed', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!

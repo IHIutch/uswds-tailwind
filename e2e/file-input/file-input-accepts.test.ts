@@ -51,24 +51,24 @@ function createMockFile(name: string, size: number, mimeType: string): File {
 const size = 1024 * 1024 * 2 // 2MB
 const invalidFile = createMockFile('pic.jpg', size, 'image/jpeg')
 
-it('target ui is created', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('target ui is created', async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const dropZone = component.elements.getDropzoneEl()
 
   expect(dropZone).toBeTruthy()
   expect(dropZone?.getAttribute('data-part')).toBe('file-input-dropzone')
 })
 
-it('input element exists', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('input element exists', async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const inputEl = component.elements.getInputEl()
 
   expect(inputEl).toBeTruthy()
   expect(inputEl?.getAttribute('data-part')).toBe('file-input-input')
 })
 
-it('pluralizes "files" if there is a "multiple" attribute', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('pluralizes "files" if there is a "multiple" attribute', async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const dragText = component.elements.getInstructionsEl()
 
   expect(dragText?.textContent).toContain('Drag files here or')
@@ -82,7 +82,7 @@ it('mock file should be defined with specific values', () => {
 })
 
 it('mock file should not be allowed', async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const instance = FileInput.getInstance(rootId)
 
   await instance?.setFiles([invalidFile])
@@ -93,7 +93,7 @@ it('mock file should not be allowed', async () => {
 })
 
 it('should provide a default error message for invalid file type', async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const instance = FileInput.getInstance(rootId)
 
   await instance?.setFiles([invalidFile])
@@ -141,7 +141,7 @@ it('should allow a custom error message for invalid file type', async () => {
 </div>
 `
 
-  using component = createDisposableFileInput(rootId, customTemplate)
+  await using component = createDisposableFileInput(rootId, customTemplate)
 
   const instance = FileInput.getInstance(rootId)
 

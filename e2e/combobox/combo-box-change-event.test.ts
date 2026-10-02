@@ -123,8 +123,8 @@ const template = `<div
 
     </div>`
 
-it('enhances a select element into a combo box component', () => {
-  using component = createDisposableCombobox(rootId, template)
+it('enhances a select element into a combo box component', async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
   const list = component.elements.getListEl()
@@ -135,7 +135,7 @@ it('enhances a select element into a combo box component', () => {
 })
 
 it('should emit change events when selecting an item from the option list when clicking a list option', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -149,7 +149,7 @@ it('should emit change events when selecting an item from the option list when c
 })
 
 it('should emit change events when resetting input values when an incomplete item is submitted through enter', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -169,7 +169,7 @@ it('should emit change events when resetting input values when an incomplete ite
 })
 
 it('should emit change events when closing the list but not the clear the input value when escape is performed while the list is open', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -187,7 +187,7 @@ it('should emit change events when closing the list but not the clear the input 
 })
 
 it('should emit change events when setting the input value when a complete selection is submitted by pressing enter', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -205,7 +205,7 @@ it('should emit change events when setting the input value when a complete selec
 })
 
 it('should emit change events when selecting the focused list item in the list when pressing enter on a focused item', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
@@ -223,7 +223,7 @@ it('should emit change events when selecting the focused list item in the list w
 })
 
 it('should emit change events when pressing escape from a focused item', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!

@@ -67,8 +67,8 @@ const template = `
     </div>
   `
 
-it('should enhance the date input with a date picker button', () => {
-  using component = createDisposableDatePicker(rootId, template)
+it('should enhance the date input with a date picker button', async () => {
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
 
@@ -78,7 +78,7 @@ it('should enhance the date input with a date picker button', () => {
 
 // mouse interactions
 it('should display a calendar for the current date when the date picker button is clicked', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -89,7 +89,7 @@ it('should display a calendar for the current date when the date picker button i
 })
 
 it('should hide the calendar when the date picker button is clicked and the calendar is already open', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -101,7 +101,7 @@ it('should hide the calendar when the date picker button is clicked and the cale
 })
 
 it('should close the calendar you click outside of an active calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -113,7 +113,7 @@ it('should close the calendar you click outside of an active calendar', async ()
 })
 
 it('should close the calendar you press escape from the input', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -128,7 +128,7 @@ it('should close the calendar you press escape from the input', async () => {
 })
 
 it('should display a calendar for the inputted date when the date picker button is clicked with a date entered', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -148,7 +148,7 @@ it('should display a calendar for the inputted date when the date picker button 
 })
 
 it('should allow for the selection of a date within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -166,7 +166,7 @@ it('should allow for the selection of a date within the calendar', async () => {
 })
 
 it('should allow for navigation to the preceding month by clicking the left single arrow button within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -188,7 +188,7 @@ it('should allow for navigation to the preceding month by clicking the left sing
 })
 
 it('should allow for navigation to the succeeding month by clicking the right single arrow button within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -210,7 +210,7 @@ it('should allow for navigation to the succeeding month by clicking the right si
 })
 
 it('should allow for navigation to the preceding year by clicking the left double arrow button within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -232,7 +232,7 @@ it('should allow for navigation to the preceding year by clicking the left doubl
 })
 
 it('should allow for navigation to the succeeding year by clicking the right double arrow button within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -254,7 +254,7 @@ it('should allow for navigation to the succeeding year by clicking the right dou
 })
 
 it('should show an improper date as invalid as the user leaves the input', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
 
   await userEvent.fill(input, 'abcdefg... That means the convo is done')
@@ -264,7 +264,7 @@ it('should show an improper date as invalid as the user leaves the input', async
 })
 
 it('should show an improper date as invalid if the user presses enter from the input', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
 
   await userEvent.fill(input, '2/31/2019')
@@ -276,7 +276,7 @@ it('should show an improper date as invalid if the user presses enter from the i
 })
 
 it('should show an empty input as valid', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
 
   await userEvent.clear(input)
@@ -289,7 +289,7 @@ it('should show an empty input as valid', async () => {
 
 // Month and Year Selection Tests
 it('should display a month selection screen by clicking the month display within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -307,7 +307,7 @@ it('should display a month selection screen by clicking the month display within
 })
 
 it('should allow for the selection of a month within month selection screen', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -326,7 +326,7 @@ it('should allow for the selection of a month within month selection screen', as
 })
 
 it('should display a year selection screen by clicking the year display within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -343,7 +343,7 @@ it('should display a year selection screen by clicking the year display within t
 })
 
 it('should allow for navigation to the preceding dozen years by clicking the left arrow button within the year selection screen', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -361,7 +361,7 @@ it('should allow for navigation to the preceding dozen years by clicking the lef
 })
 
 it('should allow for navigation to the succeeding dozen years by clicking the right arrow button within the year selection screen', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -378,7 +378,7 @@ it('should allow for navigation to the succeeding dozen years by clicking the ri
 })
 
 it('should allow for the selection of a year within year selection screen', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -398,7 +398,7 @@ it('should allow for the selection of a year within year selection screen', asyn
 
 // Keyboard Navigation Tests
 it('should close the calendar when escape is pressed within the calendar', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
@@ -411,7 +411,7 @@ it('should close the calendar when escape is pressed within the calendar', async
 })
 
 it('should move focus to the same day of week of the previous week when up is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -432,7 +432,7 @@ it('should move focus to the same day of week of the previous week when up is pr
 })
 
 it('should move focus to the same day of week of the next week when down is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -453,7 +453,7 @@ it('should move focus to the same day of week of the next week when down is pres
 })
 
 it('should move focus to the previous day when left is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -474,7 +474,7 @@ it('should move focus to the previous day when left is pressed from the currentl
 })
 
 it('should move focus to the next day when right is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -495,7 +495,7 @@ it('should move focus to the next day when right is pressed from the currently f
 })
 
 it('should move focus to the first day (e.g. Sunday) of the current week when home is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -516,7 +516,7 @@ it('should move focus to the first day (e.g. Sunday) of the current week when ho
 })
 
 it('should move focus to the last day (e.g. Saturday) of the current week when end is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -537,7 +537,7 @@ it('should move focus to the last day (e.g. Saturday) of the current week when e
 })
 
 it('should move focus to the same day of the previous month when page up is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -558,7 +558,7 @@ it('should move focus to the same day of the previous month when page up is pres
 })
 
 it('should move focus to the same day of the next month when page down is pressed from the currently focused day', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -579,7 +579,7 @@ it('should move focus to the same day of the next month when page down is presse
 })
 
 it('should accept a parse-able date with a two digit year and display the calendar of that year in the current century', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -599,7 +599,7 @@ it('should accept a parse-able date with a two digit year and display the calend
 })
 
 it('should update the calendar when a valid date is entered in the input while the date picker is open', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -615,7 +615,7 @@ it('should update the calendar when a valid date is entered in the input while t
 })
 
 it('should validate the input when a date is selected', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!

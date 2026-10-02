@@ -15,7 +15,7 @@ const template = `<div data-part="character-count-root" id="${rootId}">
 </div>`
 
 it('assert that input constraint validation adds a validation message', async () => {
-  using component = createDisposableCharacterCount(rootId, template)
+  await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
   await userEvent.fill(input, 'abcd5')
@@ -24,7 +24,7 @@ it('assert that input constraint validation adds a validation message', async ()
 })
 
 it('assert that input constraint validation does not overwrite a custom message', async () => {
-  using component = createDisposableCharacterCount(rootId, template)
+  await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
   const instance = CharacterCount.getInstance(rootId)
@@ -35,7 +35,7 @@ it('assert that input constraint validation does not overwrite a custom message'
 })
 
 it('should not affect the validation message when a custom error message is already present', async () => {
-  using component = createDisposableCharacterCount(rootId, template)
+  await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
   const instance = CharacterCount.getInstance(rootId)
@@ -46,7 +46,7 @@ it('should not affect the validation message when a custom error message is alre
 })
 
 it('should not affect the validation message when the input is already invalid', async () => {
-  using component = createDisposableCharacterCount(rootId, template)
+  await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
   await userEvent.fill(input, 'abcde5')
@@ -55,7 +55,7 @@ it('should not affect the validation message when the input is already invalid',
 })
 
 it('should clear the validation message when input is only invalid by character count validation', async () => {
-  using component = createDisposableCharacterCount(rootId, template)
+  await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
   await userEvent.fill(input, 'abcdef')
