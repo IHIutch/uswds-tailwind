@@ -88,6 +88,9 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
    * `this.rootEl` reflects the new state once the method resolves.
    */
   protected async settle(): Promise<void> {
+    // Zag queues the machine update and subscriber notification in separate
+    // microtasks. Wait for both, matching its vanilla tests' tick() helper.
+    await Promise.resolve()
     await Promise.resolve()
   }
 
