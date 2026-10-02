@@ -1,5 +1,22 @@
 # @uswds-tailwind/compat
 
+## 2.0.0-beta.0
+
+### Patch Changes
+
+- Updated dependencies [b10075e]
+  - @uswds-tailwind/modal-compat@2.0.0-beta.0
+  - @uswds-tailwind/accordion-compat@2.0.0-beta.0
+  - @uswds-tailwind/character-count-compat@2.0.0-beta.0
+  - @uswds-tailwind/collapse-compat@2.0.0-beta.0
+  - @uswds-tailwind/combobox-compat@2.0.0-beta.0
+  - @uswds-tailwind/date-picker-compat@2.0.0-beta.0
+  - @uswds-tailwind/dropdown-compat@2.0.0-beta.0
+  - @uswds-tailwind/file-input-compat@2.0.0-beta.0
+  - @uswds-tailwind/input-mask-compat@2.0.0-beta.0
+  - @uswds-tailwind/table-compat@2.0.0-beta.0
+  - @uswds-tailwind/tooltip-compat@2.0.0-beta.0
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes
