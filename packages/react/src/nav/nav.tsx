@@ -218,6 +218,7 @@ interface NavDropdownContextProps {
 }
 
 const NavDropdownContext = React.createContext<NavDropdownContextProps | null>(null)
+const NavDropdownItemContext = React.createContext<string | null>(null)
 
 function useNavDropdownContext() {
   const context = React.useContext(NavDropdownContext)
@@ -225,6 +226,13 @@ function useNavDropdownContext() {
     throw new Error('Nav.DropdownTrigger/DropdownContent must be used within a Nav.Dropdown')
   }
   return context
+}
+
+function useNavDropdownItemValue() {
+  const value = React.useContext(NavDropdownItemContext)
+  if (value === null)
+    throw new Error('Nav.DropdownLink must be used within a Nav.DropdownItem')
+  return value
 }
 
 // Dropdown
@@ -322,11 +330,13 @@ const NavDropdownItem = React.forwardRef<HTMLLIElement, NavDropdownItemProps>(
     const mergedProps = mergeProps(api.getItemProps({ value }), props)
 
     return (
-      <li
-        {...mergedProps}
-        className={cn('@max-desktop:border-t @max-desktop:border-t-gray-10', className)}
-        ref={forwardedRef}
-      />
+      <NavDropdownItemContext.Provider value={value}>
+        <li
+          {...mergedProps}
+          className={cn('@max-desktop:border-t @max-desktop:border-t-gray-10', className)}
+          ref={forwardedRef}
+        />
+      </NavDropdownItemContext.Provider>
     )
   },
 )
@@ -337,9 +347,13 @@ export type NavDropdownLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement>
 
 const NavDropdownLink = React.forwardRef<HTMLAnchorElement, NavDropdownLinkProps>(
   ({ className, ...props }, forwardedRef) => {
+    const { api } = useNavDropdownContext()
+    const value = useNavDropdownItemValue()
+    const mergedProps = mergeProps(api.getItemLinkProps({ value }), props)
+
     return (
       <a
-        {...props}
+        {...mergedProps}
         className={cn(
           'block cursor-pointer py-2 pl-8 pr-4 text-gray-60 @max-desktop:hover:text-blue-60v @max-desktop:hover:bg-gray-5 focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v',
           '@desktop:text-white @desktop:px-4 @desktop:hover:underline',
