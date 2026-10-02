@@ -6,8 +6,8 @@ export type {
   ModalApi as Api,
   ElementIds,
   ModalMachine as Machine,
-  ModalSchema,
   OpenChangeDetails,
   ModalProps as Props,
+  ModalSchema as Schema,
   ModalService as Service,
 } from './modal.types'
