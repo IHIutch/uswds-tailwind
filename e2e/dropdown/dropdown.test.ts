@@ -32,6 +32,23 @@ it('shows the language dropdown when the language button is clicked', { tags: ['
   expect(content.getAttribute('hidden')).toBe(null)
 })
 
+it('keeps its state when a trigger click is cancelled', { tags: ['new'] }, async () => {
+  await using component = createDisposableDropdown(rootId, template)
+  const trigger = component.elements.getTriggerEl()
+  const content = component.elements.getContentEl()!
+  const cancelClick = (event: Event) => event.preventDefault()
+
+  trigger.addEventListener('click', cancelClick, { capture: true })
+  await userEvent.click(trigger)
+  expect(trigger.getAttribute('aria-expanded')).toBe('false')
+  expect(content.hasAttribute('hidden')).toBe(true)
+
+  trigger.removeEventListener('click', cancelClick, { capture: true })
+  await userEvent.click(trigger)
+  expect(trigger.getAttribute('aria-expanded')).toBe('true')
+  expect(content.hasAttribute('hidden')).toBe(false)
+})
+
 it('hides the visible language menu when the body is clicked', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const content = component.elements.getContentEl()!
