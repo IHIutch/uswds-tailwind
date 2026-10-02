@@ -34,7 +34,9 @@ export function connect<T extends PropTypes>(
         'aria-expanded': open,
         'aria-controls': dom.getContentId(scope),
         'data-state': open ? 'open' : 'closed',
-        onClick() {
+        onClick(event) {
+          if (event.defaultPrevented)
+            return
           send({ type: 'TRIGGER.CLICK' })
         },
       })
