@@ -3,15 +3,13 @@ import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<TooltipProps>()([
+  'defaultOpen',
+  'getRootNode',
   'id',
   'ids',
-  'getRootNode',
-  'position',
-  'closeOnEscape',
-  'disabled',
-  'open',
-  'defaultOpen',
   'onOpenChange',
+  'open',
+  'placement',
 ])
 
 export const splitProps = createSplitProps<Partial<TooltipProps>>(props)

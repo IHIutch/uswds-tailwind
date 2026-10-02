@@ -7,8 +7,9 @@ import { cn } from '../tv.config'
 // Types
 // ============================================================================
 
-export type TooltipRootProps = Omit<tooltip.Props, 'id'> & React.ComponentPropsWithoutRef<'div'> & {
+export type TooltipRootProps = Omit<tooltip.Props, 'id' | 'placement'> & React.ComponentPropsWithoutRef<'div'> & {
   content: string
+  position?: tooltip.Placement
 }
 export type TooltipTriggerProps = React.ComponentPropsWithoutRef<'div'>
 export type TooltipContentProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'>
@@ -37,12 +38,10 @@ function useTooltipContext() {
 // ============================================================================
 
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
-  ({ className, content, position, closeOnEscape, disabled, open, defaultOpen, onOpenChange, ...props }, forwardedRef) => {
+  ({ className, content, position, open, defaultOpen, onOpenChange, ...props }, forwardedRef) => {
     const service = useMachine(tooltip.machine, {
       id: React.useId(),
-      position,
-      closeOnEscape,
-      disabled,
+      placement: position,
       open,
       defaultOpen,
       onOpenChange,
@@ -105,7 +104,8 @@ TooltipRoot.displayName = 'Tooltip.Root'
 TooltipTrigger.displayName = 'Tooltip.Trigger'
 TooltipContent.displayName = 'Tooltip.Content'
 
-export interface TooltipProps extends Pick<tooltip.Props, 'position'> {
+export interface TooltipProps {
+  position?: tooltip.Placement
   content: string
   children?: React.ReactNode
 }

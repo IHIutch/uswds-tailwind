@@ -1,23 +1,8 @@
-import type { EventObject, Machine, Service } from '@zag-js/core'
+import type { Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
+import type { PositionStyles } from './tooltip.utils'
 
-/* -----------------------------------------------------------------------------
- * Position type
- * ----------------------------------------------------------------------------- */
-
-export type Position = 'top' | 'bottom' | 'right' | 'left'
-
-/* -----------------------------------------------------------------------------
- * Callback details
- * ----------------------------------------------------------------------------- */
-
-export interface OpenChangeDetails {
-  open: boolean
-}
-
-/* -----------------------------------------------------------------------------
- * Machine context
- * ----------------------------------------------------------------------------- */
+export type Placement = 'top' | 'bottom' | 'right' | 'left'
 
 export type ElementIds = Partial<{
   root: string
@@ -26,45 +11,60 @@ export type ElementIds = Partial<{
 }>
 
 export interface TooltipProps extends CommonProperties {
+  /** Element ids for composition. */
   ids?: ElementIds | undefined
-  position?: Position | undefined
-  closeOnEscape?: boolean | undefined
-  disabled?: boolean | undefined
+  /**
+   * Preferred placement.
+   * @default "top"
+   */
+  placement?: Placement | undefined
+  /** Controlled open state. Takes precedence over `defaultOpen`. */
   open?: boolean | undefined
+  /** The initial open value for an uncontrolled tooltip. Ignored when `open` is defined. */
   defaultOpen?: boolean | undefined
+  /** Called when the open state is intended to change. */
   onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
 }
 
-type PropsWithDefault
-  = | 'id'
-    | 'position'
-    | 'closeOnEscape'
+export interface OpenChangeDetails {
+  open: boolean
+}
+
+type PropsWithDefault = 'placement'
+
+interface TooltipEvent { type: 'SHOW' | 'HIDE' | 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
 
 export interface TooltipSchema {
-  state: 'closed' | 'open'
   props: RequiredBy<TooltipProps, PropsWithDefault>
+  state: 'closed' | 'open'
   context: {
-    currentPosition: Position
-    isVisible: boolean
-    isWrapped: boolean
-    contentStyle: Record<string, string>
+    resolvedPlacement: Placement | null
+    revealed: boolean
+    wrap: boolean
+    styles: PositionStyles | null
   }
-  event: EventObject
-  action: string
-  effect: string
-  guard: string
+  event: TooltipEvent
+  action:
+    | 'invokeOnOpen'
+    | 'invokeOnClose'
+    | 'syncControlledOpen'
+    | 'clearVisibility'
+  effect: 'reposition' | 'trackEscape' | 'waitForReveal'
+  guard: 'isOpenControlled'
 }
 
 export type TooltipService = Service<TooltipSchema>
 
 export type TooltipMachine = Machine<TooltipSchema>
 
-/* -----------------------------------------------------------------------------
- * Component API
- * ----------------------------------------------------------------------------- */
-
 export interface TooltipApi<T extends PropTypes = PropTypes> {
+  /** Whether the tooltip is open. */
   open: boolean
+  /** Whether the reveal delay has elapsed. */
+  visible: boolean
+  /** The resolved placement. Null until positioning has run once. */
+  placement: Placement | null
+  /** Request the next open state. A controlled parent must update `open` to accept the request. */
   setOpen: (open: boolean) => void
 
   getRootProps: () => T['element']
