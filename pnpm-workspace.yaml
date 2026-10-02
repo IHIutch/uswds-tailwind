@@ -13,7 +13,7 @@ catalog:
   '@astrojs/sitemap': ^3.6.0
   '@cf-wasm/satori': ^0.3.3
   '@changesets/changelog-github': ^0.5.2
-  '@changesets/cli': 2.29.7
+  '@changesets/cli': 3.0.3
   '@docsearch/css': ^4.3.2
   '@docsearch/react': ^4.3.2
   '@fontsource-variable/merriweather': ^5.2.6

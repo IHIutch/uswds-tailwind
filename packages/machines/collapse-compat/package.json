@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/collapse-compat",
   "type": "module",
-  "version": "0.3.0-alpha.7",
+  "version": "1.0.0",
   "description": "Headless state machine for the USWDS collapsible (zag-js).",
   "author": "Jonathan Hutchison",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "state-machine"
   ],
   "publishConfig": {
-    "tag": "alpha"
+    "tag": "beta"
   },
   "exports": {
     ".": {

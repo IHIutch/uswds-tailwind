@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/character-count-compat",
   "type": "module",
-  "version": "0.3.0-alpha.7",
+  "version": "1.0.0",
   "description": "Headless state machine for the USWDS character-count component (zag-js).",
   "author": "Jonathan Hutchison",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "accessibility"
   ],
   "publishConfig": {
-    "tag": "alpha"
+    "tag": "beta"
   },
   "exports": {
     ".": {
