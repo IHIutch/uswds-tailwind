@@ -75,6 +75,7 @@ export class Modal extends Component<modal.Props, modal.Api> {
 
   private get closeTriggers() {
     return getParts<HTMLButtonElement>(this.content, modal.parts.closeTrigger)
+      .filter(element => element.closest('[data-scope][data-part="root"]') === this.rootEl)
   }
 
   private renderPositioner(positionerEl: HTMLElement) {
