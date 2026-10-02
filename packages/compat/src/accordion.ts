@@ -2,11 +2,12 @@ import * as accordion from '@uswds-tailwind/accordion-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataBool, getDataString } from './lib/data-attr'
-import { getPart, getParts } from './lib/dom'
+import { getParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = accordion.anatomy.build()
 const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
+const itemSelector = `[data-part="${parts.item.attrs['data-part']}"]`
 
 export class Accordion extends Component<accordion.Props, accordion.Api> {
   static override root = parts.root
@@ -50,8 +51,10 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
     if (!value)
       return
     spreadProps(itemEl, this.api.getItemProps({ value }))
-    const trigger = getPart<HTMLElement>(itemEl, parts.itemTrigger)
-    const content = getPart<HTMLElement>(itemEl, parts.itemContent)
+    const trigger = getParts<HTMLElement>(itemEl, parts.itemTrigger)
+      .find(element => element.closest(itemSelector) === itemEl)
+    const content = getParts<HTMLElement>(itemEl, parts.itemContent)
+      .find(element => element.closest(itemSelector) === itemEl)
     if (trigger)
       spreadProps(trigger, this.api.getItemTriggerProps({ value }))
     if (content)
