@@ -8,18 +8,18 @@ const rootId = 'test'
 
 const TEMPLATE = `<div
       class="max-w-lg"
-      data-part="combobox-root"
+      data-scope="combobox" data-part="root"
       id="${rootId}"
     >
       <label
         class="combobox-label"
-        data-part="combobox-label"
+        data-part="label"
         class="block"
       >Select a fruit:</label>
 
       <select
         name="fruit"
-        data-part="combobox-select"
+        data-part="hidden-select"
         hidden
       >
          <option value>Select a fruit</option>
@@ -94,20 +94,20 @@ const TEMPLATE = `<div
         <div class="flex w-full">
           <input
             required
-            data-part="combobox-input"
+            data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
           >
           <div class="absolute z-10 inset-y-0 right-0 flex">
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
+              data-part="clear-trigger"
               type="button"
             >
               <div class="icon-[material-symbols--close] size-6"></div>
             </button>
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
+              data-part="trigger"
               type="button"
             >
               <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -115,14 +115,14 @@ const TEMPLATE = `<div
           </div>
         </div>
         <ul
-          data-part="combobox-list"
+          data-part="list"
           class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
         >
         </ul>
       </div>
       <!-- <div
         class="combobox-status"
-        data-part="combobox-status"
+        data-part="status"
         role="status"
 
       ></div> -->
@@ -270,7 +270,7 @@ it('should reset input values when an incomplete item is remaining on blur', asy
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apricot')
 
   await userEvent.fill(input, 'a')
@@ -290,7 +290,7 @@ it('should reset input values when an incomplete item is submitted through enter
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('cantaloupe')
 
   await userEvent.fill(input, 'a')
@@ -320,7 +320,7 @@ it('should close the list and reset input value when escape is performed while t
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('cherry')
 
   await userEvent.fill(input, 'a')
@@ -339,7 +339,7 @@ it('should reset the input value when a complete selection is left on blur from 
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('coconut')
 
   await userEvent.fill(input, 'date')
@@ -358,7 +358,7 @@ it('should set the input value when a complete selection is submitted by pressin
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('cranberry')
 
   await userEvent.fill(input, 'grape')
@@ -426,7 +426,7 @@ it('should select the focused list item in the list when pressing enter on a foc
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('pineapple')
   await userEvent.fill(input, 'berry')
   await userEvent.keyboard('{ArrowDown}')
@@ -444,7 +444,7 @@ it('should select the focused list item in the list when pressing space on a foc
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('cantaloupe')
 
   await userEvent.fill(input, 'berry')
@@ -499,7 +499,7 @@ it('should not select the focused item in the list when pressing escape from the
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('pineapple')
 
   await userEvent.fill(input, 'la')

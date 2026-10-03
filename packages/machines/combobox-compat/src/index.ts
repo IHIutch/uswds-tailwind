@@ -1,17 +1,15 @@
-export { anatomy, parts } from './combobox.anatomy'
+export { anatomy } from './combobox.anatomy'
 export { connect } from './combobox.connect'
 export { machine } from './combobox.machine'
-export { optionProps, props, splitOptionProps, splitProps } from './combobox.props'
+export * from './combobox.props'
 export type {
   ComboboxApi as Api,
   ComboboxOption,
-  ComboboxSchema,
+  ComboboxOptionData,
   ElementIds,
-  InputValueChangeDetails,
   ComboboxMachine as Machine,
-  OpenChangeDetails,
-  OptionProps,
-  OptionState,
   ComboboxProps as Props,
+  ComboboxSchema as Schema,
   ComboboxService as Service,
+  ValueChangeDetails,
 } from './combobox.types'

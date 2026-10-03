@@ -6,19 +6,19 @@ const rootId = 'basic-combobox'
 
 const template = `<div
   class="max-w-lg"
-  data-part="combobox-root"
+  data-scope="combobox" data-part="root"
   id="${rootId}"
   data-default-value="blackberry"
     >
       <label
         class="combobox-label"
-        data-part="combobox-label"
+        data-part="label"
         class="block"
       >Select a fruit:</label>
 
       <select
         name="fruit"
-        data-part="combobox-select"
+        data-part="hidden-select"
         hidden
       >
         <option value>Select a fruit</option>
@@ -92,20 +92,20 @@ const template = `<div
         <div class="flex w-full">
           <input
             required
-            data-part="combobox-input"
+            data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
           >
           <div class="absolute z-10 inset-y-0 right-0 flex">
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
+              data-part="clear-trigger"
               type="button"
             >
               <div class="icon-[material-symbols--close] size-6"></div>
             </button>
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
+              data-part="trigger"
               type="button"
             >
               <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -113,14 +113,14 @@ const template = `<div
           </div>
         </div>
         <ul
-          data-part="combobox-list"
+          data-part="list"
           class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
         >
         </ul>
       </div>
       <!-- <div
         class="combobox-status"
-        data-part="combobox-status"
+        data-part="status"
         role="status"
 
       ></div> -->
@@ -136,7 +136,7 @@ it('should display the full list and focus the selected item when the input is p
 
   expect(list.hidden).toBe(false)
   expect(list.children.length).toBe(select.options.length - 1)
-  const highlightedOption = list.querySelector('[data-active]')
+  const highlightedOption = list.querySelector('[data-highlighted]')
   expect(highlightedOption).toBeTruthy()
   expect(highlightedOption?.textContent).toBe('Blackberry')
 })
@@ -170,10 +170,10 @@ it('should clear the input when the clear button is clicked', async () => {
   expect(select.value).toBe('blackberry')
   expect(input.value).toBe('Blackberry')
 
-  const clearButton = document.querySelector('[data-part="combobox-clear"]')!
-  await userEvent.click(clearButton)
+  const clearButton = document.querySelector('[data-part="clear-trigger"]')!
+  clearButton.click()
 
-  expect(select.value).toBe('')
+  await expect.poll(() => select.value).toBe('')
   expect(input.value).toBe('')
   expect(document.activeElement).toBe(input)
 })

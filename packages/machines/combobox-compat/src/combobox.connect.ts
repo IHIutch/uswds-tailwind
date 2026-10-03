@@ -1,418 +1,258 @@
 import type { Service } from '@zag-js/core'
-import type { EventKeyMap, NormalizeProps, PropTypes } from '@zag-js/types'
-import type { ComboboxApi, ComboboxSchema, OptionProps } from './combobox.types'
-import { ariaAttr, dataAttr, getEventKey, isComposingEvent, isLeftClick } from '@zag-js/dom-query'
+import type { JSX, NormalizeProps, PropTypes } from '@zag-js/types'
+import type { ComboboxApi, ComboboxOption, ComboboxSchema } from './combobox.types'
+import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
+import { getAdjacentOption } from './combobox.utils'
+
+// USWDS's keymap requires an exact Shift/Alt/Control/Meta combination.
+type SourceModifierEvent = Pick<KeyboardEvent, 'shiftKey' | 'altKey' | 'ctrlKey' | 'metaKey'>
+
+function sourcePlainModifierMatch(event: SourceModifierEvent) {
+  return !event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey
+}
 
 export function connect<T extends PropTypes>(
   service: Service<ComboboxSchema>,
   normalize: NormalizeProps<T>,
 ): ComboboxApi<T> {
-  const { state, context, send, prop, scope, computed } = service
+  const { state, send, prop, context, scope } = service
+  const open = state.hasTag('open')
 
-  const open = state.matches('open')
-  const focused = state.matches('focused', 'open')
-  const disabled = !!prop('disabled')
-  const interactive = computed('isInteractive')
-  const required = !!prop('required')
-  const highlightedValue = context.get('highlightedValue')
-  const filteredOptions = computed('filteredOptions')
+  const value = context.get('value')
+  const inputValue = context.get('inputValue')
+  const highlightedId = context.get('highlightedId')
+  const isPristine = context.get('isPristine')
+  const options = context.get('filteredOptions')
+  const srStatusText = context.get('srStatusText')
 
-  // Compute the ID of the currently highlighted option for aria-activedescendant
-  const highlightedIndex = highlightedValue
-    ? filteredOptions.findIndex(o => o.value === highlightedValue)
-    : -1
-  const highlightedOptionId
-    = highlightedValue && highlightedIndex >= 0
-      ? dom.getOptionId(scope, highlightedValue, highlightedIndex)
-      : undefined
+  // Never reference an option removed by a list rebuild.
+  const activeDescendant = open
+    ? options.find(option => option.id === highlightedId)?.id
+    : undefined
 
-  // Compute status message for screen readers.
-  const numOptions = filteredOptions.length
-  const statusMessage = open
-    ? numOptions
-      ? `${numOptions} result${numOptions > 1 ? 's' : ''} available.`
-      : 'No results.'
-    : ''
+  const disabled = prop('disabled')
+  const ariaDisabled = prop('ariaDisabled')
 
-  function getOptionState(props: OptionProps) {
-    return {
-      value: props.option.value,
-      disabled: !!props.option.disabled,
-      selected: context.get('value') === props.option.value,
-      highlighted: highlightedValue === props.option.value,
-    }
-  }
+  const getItemState = ({ option }: { option: ComboboxOption }) => ({
+    // Duplicate values select the last rendered occurrence.
+    selected: Boolean(value) && option.id === [...options].reverse().find(item => item.value === value)?.id,
+    highlighted: option.id === highlightedId,
+  })
+  // Focus mounted options during keydown; lazy options use the deferred machine path.
+  const focusNow = (id: string | null) => dom.focusVisibleItem(scope, id)
 
   return {
-    /* ----- State properties ----- */
     open,
-    focused,
-    value: context.get('value'),
-    inputValue: context.get('inputValue'),
-    highlightedValue,
-    isPristine: context.get('isPristine'),
-    filteredOptions,
-    hasValue: computed('hasValue'),
-    disabled,
-    statusMessage,
+    value,
+    inputValue,
+    options,
+    srStatusText,
 
-    /* ----- Imperative methods ----- */
-    setValue(value) {
-      send({ type: 'VALUE.SET', value })
-    },
-    setInputValue(value) {
-      send({ type: 'INPUT_VALUE.SET', value })
-    },
-    clearValue() {
-      send({ type: 'VALUE.CLEAR' })
-    },
-    setOpen(nextOpen) {
-      const currentOpen = state.matches('open')
-      if (currentOpen === nextOpen)
-        return
-      send({ type: nextOpen ? 'OPEN' : 'CLOSE' })
+    setValue(next) {
+      send({ type: 'VALUE.SET', value: next })
     },
 
-    getOptionState,
-
-    /* ----- Root props ----- */
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
+        'dir': prop('dir'),
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
-        'data-disabled': dataAttr(disabled),
-        'data-pristine': dataAttr(context.get('isPristine')),
-        // USWDS uses onFocusout. However, in React onFocusout is not
-        // supported, and onBlur does not bubble. onBlur with relatedTarget
-        // is the closest equivalent.
-        onBlur(event) {
-          const rootEl = dom.getRootEl(scope)
-          if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
-            send({ type: 'FOCUS_OUTSIDE' })
-          }
-        },
-        //   [COMBO_BOX]: keymap({ Escape: handleEscape })
-        // handleEscape (lines 671-677): hideList + resetSelection + inputEl.focus()
-        // Escape is handled at the root level so it works regardless of
-        // whether physical focus is on the input or a list option.
+        'data-pristine': dataAttr(isPristine),
+        'data-disabled': dataAttr(disabled || ariaDisabled),
         onKeyDown(event) {
-          if (event.defaultPrevented)
-            return
-          if (!interactive)
-            return
-          const key = getEventKey(event)
-          if (key === 'Escape') {
+          if (event.key === 'Escape' && sourcePlainModifierMatch(event)) {
             send({ type: 'ESCAPE' })
-            event.preventDefault()
           }
         },
       })
     },
 
-    /* ----- Label props ----- */
     getLabelProps() {
       return normalize.label({
         ...parts.label.attrs,
-        'id': dom.getLabelId(scope),
-        'htmlFor': dom.getInputId(scope),
-        'data-disabled': dataAttr(disabled),
+        dir: prop('dir'),
+        id: dom.getLabelId(scope),
+        htmlFor: dom.getInputId(scope),
       })
     },
 
-    /* ----- Control props ----- */
-    // Wrapper around input + buttons
-    getControlProps() {
-      return normalize.element({
-        ...parts.control.attrs,
-        'id': dom.getControlId(scope),
-        'data-state': open ? 'open' : 'closed',
-        'data-disabled': dataAttr(disabled),
-        'data-focus': dataAttr(focused),
+    getHiddenSelectProps() {
+      return normalize.select({
+        ...parts.hiddenSelect.attrs,
+        'dir': prop('dir'),
+        'id': dom.getHiddenSelectId(scope),
+        'name': prop('name'),
+        'aria-hidden': true,
+        'tabIndex': -1,
+        'style': visuallyHiddenStyle,
+        // React requires onChange for the controlled native form bridge.
+        onChange() {},
+        value,
       })
     },
 
-    /* ----- Input props ----- */
-    // ArrowUp and Escape are NOT handled on the input — ArrowUp is on
-    // LIST_OPTION elements (lines 864-872), Escape is on COMBO_BOX (lines 856-858).
     getInputProps() {
+      const onValueInput = (event: JSX.FormEvent<HTMLInputElement>) => {
+        send({ type: 'INPUT.CHANGE', value: event.currentTarget.value })
+      }
+
       return normalize.input({
         ...parts.input.attrs,
+        'dir': prop('dir'),
         'id': dom.getInputId(scope),
         'type': 'text',
         'role': 'combobox',
+        'aria-owns': dom.getListId(scope),
+        'aria-controls': dom.getListId(scope),
         'aria-autocomplete': 'list',
-        'aria-owns': dom.getListboxId(scope),
-        'aria-controls': dom.getListboxId(scope),
         'aria-expanded': open,
-        //   inputEl.setAttribute("aria-activedescendant", nextEl.id)
-        'aria-activedescendant': highlightedOptionId,
+        'aria-activedescendant': activeDescendant,
+        'aria-label': prop('aria-label'),
+        'aria-labelledby': prop('aria-labelledby'),
+        'aria-disabled': ariaAttr(ariaDisabled),
         'autoCapitalize': 'off',
         'autoComplete': 'off',
+        'required': prop('required') || undefined,
         disabled,
-        required,
         'placeholder': prop('placeholder'),
-        'aria-label': prop('ariaLabel'),
-        'aria-labelledby': prop('ariaLabelledby'),
-        'data-state': open ? 'open' : 'closed',
-        // USWDS enhanceComboBox keeps the input as a real form element with
-        // its value driven by JS (selectItem writes `inputEl.value = textContent`).
-        // In React we need this to be a controlled input so that machine-driven
-        // updates to `inputValue` (option click, clear, etc.) propagate to the
-        // DOM. `defaultValue` makes it uncontrolled, and machine changes never
-        // reach the DOM after the initial render.
-        'value': context.get('inputValue'),
-
+        'value': inputValue,
         onClick(event) {
+          if (disabled)
+            return
           if (event.defaultPrevented)
             return
-          if (!interactive)
-            return
-          //   if (this.disabled) return; handleClickFromInput(this);
-          // handleClickFromInput (lines 819-825): if (listEl.hidden) displayList()
           send({ type: 'INPUT.CLICK' })
         },
-
-        onFocus() {
-          if (disabled)
-            return
-          send({ type: 'INPUT.FOCUS' })
-        },
-
-        onBlur() {
-          if (disabled)
-            return
-          send({ type: 'INPUT.BLUR' })
-        },
-
-        //   comboBoxEl.classList.remove(COMBO_BOX_PRISTINE_CLASS);
-        //   displayList(this);
-        onChange(event) {
-          send({ type: 'INPUT.CHANGE', value: event.currentTarget.value })
-        },
-
-        //   [INPUT]: keymap({ Enter: handleEnterFromInput,
-        //     ArrowDown: handleDownFromInput, Down: handleDownFromInput })
-        // Only ArrowDown and Enter — ArrowUp is handled on LIST_OPTION
-        // (lines 864-872), Escape is handled on COMBO_BOX root (lines 856-858).
+        // Native bridge change events must not be treated as input edits.
+        'onInput': onValueInput,
         onKeyDown(event) {
-          if (event.defaultPrevented)
+          const key = event.key
+          if (!sourcePlainModifierMatch(event))
             return
-          if (!interactive)
-            return
-          if (isComposingEvent(event))
-            return
-
-          const keymap: EventKeyMap = {
-            ArrowDown(event) {
-              send({ type: 'INPUT.ARROW_DOWN' })
-              event.preventDefault()
-            },
-            Enter(event) {
-              send({ type: 'INPUT.ENTER' })
-              event.preventDefault()
-            },
+          if (key === 'Enter') {
+            event.preventDefault()
+            send({ type: 'INPUT.ENTER' })
           }
-
-          const key = getEventKey(event)
-          const exec = keymap[key]
-          exec?.(event)
+          else if (key === 'ArrowDown' || key === 'Down') {
+            event.preventDefault()
+            const destination = open && (options.find(option => option.id === highlightedId) ?? options[0])?.id
+            send({ type: 'INPUT.ARROW_DOWN', focusHandled: focusNow(destination || null) })
+          }
         },
       })
     },
 
-    /* ----- Trigger (toggle) button props ----- */
-    // Created in enhanceComboBox (line 253)
+    getClearTriggerProps() {
+      return normalize.button({
+        ...parts.clearTrigger.attrs,
+        'dir': prop('dir'),
+        'id': dom.getClearTriggerId(scope),
+        'type': 'button',
+        'aria-label': 'Clear the select contents',
+        'aria-disabled': ariaAttr(ariaDisabled),
+        'hidden': disabled || ariaDisabled,
+        disabled,
+        onClick(event) {
+          if (disabled)
+            return
+          if (event.defaultPrevented)
+            return
+          send({ type: 'CLEAR.CLICK' })
+        },
+      })
+    },
+
     getTriggerProps() {
       return normalize.button({
         ...parts.trigger.attrs,
+        'dir': prop('dir'),
         'id': dom.getTriggerId(scope),
         'type': 'button',
         'tabIndex': -1,
         'aria-label': 'Toggle the dropdown list',
-        'aria-expanded': open,
-        'aria-controls': dom.getListboxId(scope),
+        'aria-disabled': ariaAttr(ariaDisabled),
         disabled,
-        'data-disabled': dataAttr(disabled),
-        'data-state': open ? 'open' : 'closed',
-
         onClick(event) {
+          if (disabled)
+            return
           if (event.defaultPrevented)
             return
-          if (!interactive)
-            return
-          if (!isLeftClick(event))
-            return
-          //   if (this.disabled) return; toggleList(this);
-          // toggleList (lines 802-812): if hidden → displayList, else → hideList + focus input
           send({ type: 'TRIGGER.CLICK' })
         },
-
-        // Prevent the button from stealing focus from the input
-        onPointerDown(event) {
-          if (!interactive)
-            return
-          if (!isLeftClick(event))
-            return
-          event.preventDefault()
-        },
       })
     },
 
-    /* ----- Clear button props ----- */
-    // Created in enhanceComboBox (line 249)
-    getClearTriggerProps() {
-      return normalize.button({
-        ...parts.clearTrigger.attrs,
-        'id': dom.getClearTriggerId(scope),
-        'type': 'button',
-        'tabIndex': -1,
-        'aria-label': 'Clear the select contents',
-        'aria-controls': dom.getInputId(scope),
-        disabled,
-        'data-disabled': dataAttr(disabled),
-        // Hidden when no value is selected (nothing to clear)
-        'hidden': !context.get('value'),
-
-        onClick(event) {
-          if (event.defaultPrevented)
-            return
-          if (!interactive)
-            return
-          //   if (this.disabled) return; clearInput(this);
-          // clearInput (lines 594-605): clear select + input, remove pristine, focus input
-          send({ type: 'CLEAR.CLICK' })
-        },
-
-        // Prevent the button from stealing focus from the input
-        onPointerDown(event) {
-          if (!interactive)
-            return
-          if (!isLeftClick(event))
-            return
-          event.preventDefault()
-        },
-      })
-    },
-
-    /* ----- Listbox props ----- */
-    // Created in enhanceComboBox (lines 255-262)
-    getListboxProps() {
+    getListProps() {
       return normalize.element({
-        ...parts.listbox.attrs,
-        'id': dom.getListboxId(scope),
+        ...parts.list.attrs,
+        'dir': prop('dir'),
+        'id': dom.getListId(scope),
         'role': 'listbox',
-        'tabIndex': -1,
         'aria-labelledby': dom.getLabelId(scope),
-        // and hideList (line 571): listEl.hidden = true
+        'tabIndex': -1,
         'hidden': !open,
         'data-state': open ? 'open' : 'closed',
-        'data-empty': dataAttr(numOptions === 0),
-
-        // Prevent listbox clicks from stealing focus from input
-        onPointerDown(event) {
-          if (!isLeftClick(event))
-            return
-          event.preventDefault()
-        },
       })
     },
 
-    /* ----- Option (list item) props ----- */
-    // Built dynamically in displayList (lines 484-514)
-    // Physical focus: the highlighted option receives .focus() (line 323) from the machine.
-    // tabIndex roving: highlighted gets tabIndex="0" (line 306), others get "-1" (line 301).
-    getOptionProps(props: OptionProps) {
-      const optionState = getOptionState(props)
-      const optionValue = optionState.value
-
+    getItemProps({ option }: { option: ComboboxOption }) {
+      const { selected, highlighted } = getItemState({ option })
+      const index = options.findIndex(o => o.id === option.id)
+      const selectItem = () => send({ type: 'ITEM.SELECT', value: option.value, label: option.label })
       return normalize.element({
-        ...parts.option.attrs,
-        'id': dom.getOptionId(scope, optionValue, props.index),
+        ...parts.item.attrs,
+        'id': option.id,
         'role': 'option',
-        //   nextEl.setAttribute("tabIndex", "0") (line 306)
-        //   focusedOptionEl.setAttribute("tabIndex", "-1") (line 301)
-        'tabIndex': optionState.highlighted ? 0 : -1,
-        'aria-selected': ariaAttr(optionState.selected),
-        'aria-setsize': numOptions,
-        'aria-posinset': props.index + 1,
-        'data-value': optionValue,
-        // LIST_OPTION_FOCUSED_CLASS (line 21) → data-highlighted
-        // LIST_OPTION_SELECTED_CLASS (line 22) → data-selected
-        'data-highlighted': dataAttr(optionState.highlighted),
-        'data-selected': dataAttr(optionState.selected),
-        'data-disabled': dataAttr(optionState.disabled),
-
-        //   if (this.disabled) return; selectItem(this);
-        // selectItem (lines 579-587): set value, set input text, set pristine, hide, focus input
+        'aria-setsize': options.length,
+        'aria-posinset': index + 1,
+        'aria-selected': selected,
+        'data-value': option.value,
+        'data-highlighted': dataAttr(highlighted),
+        'tabIndex': highlighted ? 0 : -1,
         onClick(event) {
+          if (disabled)
+            return
           if (event.defaultPrevented)
             return
-          if (optionState.disabled)
-            return
-          send({ type: 'ITEM.CLICK', value: optionValue })
+          selectItem()
         },
-
-        //   handleMouseover: if not already focused, highlightOption
-        //   with preventScroll=true (line 793)
-        onPointerMove() {
-          if (optionState.disabled)
+        onMouseOver() {
+          if (highlighted)
             return
-          if (optionState.highlighted)
-            return
-          send({ type: 'ITEM.POINTER_MOVE', value: optionValue })
+          send({ type: 'ITEM.POINTER_MOVE', id: option.id })
         },
-
-        //   ArrowUp/Up: handleUpFromListOption (lines 761-777)
-        //   ArrowDown/Down: handleDownFromListOption (lines 725-734)
-        //   Enter: handleEnterFromListOption (lines 751-754)
-        //   " ": handleSpaceFromListOption (lines 741-744)
-        //   "Shift+Tab": noop (line 871)
-        // Physical focus is on this option, so keyboard events fire here.
-        // Escape is handled at the root level COMBO_BOX (lines 856-858), not here.
         onKeyDown(event) {
-          if (event.defaultPrevented)
+          const key = event.key
+          if (!sourcePlainModifierMatch(event))
             return
-          if (optionState.disabled)
-            return
-
-          const key = getEventKey(event)
-          const keymap: Record<string, () => void> = {
-            ArrowDown() {
-              send({ type: 'OPTION.ARROW_DOWN' })
+          if (key === 'ArrowUp' || key === 'Up') {
+            if (open)
               event.preventDefault()
-            },
-            ArrowUp() {
-              send({ type: 'OPTION.ARROW_UP' })
-              event.preventDefault()
-            },
-            Enter() {
-              send({ type: 'OPTION.ENTER' })
-              event.preventDefault()
-            },
-            ' ': function () {
-              send({ type: 'OPTION.SPACE' })
-              event.preventDefault()
-            },
+            send({ type: 'ITEM.ARROW_UP', id: option.id })
           }
-
-          const exec = keymap[key]
-          exec?.()
+          else if (key === 'ArrowDown' || key === 'Down') {
+            event.preventDefault()
+            const destination = getAdjacentOption(options, option.id, 1)?.id ?? null
+            send({ type: 'ITEM.ARROW_DOWN', id: option.id, focusHandled: focusNow(destination) })
+          }
+          else if (key === 'Enter' || key === ' ') {
+            event.preventDefault()
+            selectItem()
+          }
         },
       })
     },
 
-    /* ----- Status props ----- */
-    // Created in enhanceComboBox (line 263): role="status"
     getStatusProps() {
       return normalize.element({
         ...parts.status.attrs,
+        'dir': prop('dir'),
         'id': dom.getStatusId(scope),
         'role': 'status',
         'aria-live': 'polite',
-        'aria-atomic': 'true',
       })
     },
   }

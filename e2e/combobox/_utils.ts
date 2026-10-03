@@ -6,14 +6,16 @@ export function createDisposableCombobox(id: string, template: string) {
     template,
     comboboxInit,
     () => {
-      const getRootEl = () => document.getElementById(`combobox:${id}`)!
-      const getLabelEl = () => document.getElementById(`combobox:${id}:label`)!
-      const getInputEl = () => document.getElementById(`combobox:${id}:input`)! as HTMLInputElement
-      const getSelectEl = () => document.getElementById(`combobox:${id}:select`)! as HTMLSelectElement
-      const getListEl = () => document.getElementById(`combobox:${id}:list`)!
-      const getItemEl = (value: string) => document.getElementById(`combobox:${id}:item:${value}`)!
-      const getClearButtonEl = () => document.getElementById(`combobox:${id}:clear-button`)! as HTMLButtonElement
-      const getToggleButtonEl = () => document.getElementById(`combobox:${id}:toggle-button`)! as HTMLButtonElement
+      const getRootEl = (rootId = id) => document.getElementById(`combobox:${rootId}`)!
+      const getLabelEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLElement>('[data-part="label"]')!
+      const getInputEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLInputElement>('[data-part="input"]')!
+      const getSelectEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLSelectElement>('[data-part="hidden-select"]')!
+      const getListEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLElement>('[data-part="list"]')!
+      const getItemEls = (rootId = id) => Array.from(getListEl(rootId).querySelectorAll<HTMLElement>('[role="option"]'))
+      const getItemEl = (value: string, rootId = id) => getItemEls(rootId).find(item => item.getAttribute('data-value') === value)!
+      const getStatusEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLElement>('[data-part="status"]')!
+      const getClearButtonEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLButtonElement>('[data-part="clear-trigger"]')!
+      const getToggleButtonEl = (rootId = id) => getRootEl(rootId).querySelector<HTMLButtonElement>('[data-part="trigger"]')!
 
       return {
         getRootEl,
@@ -22,6 +24,8 @@ export function createDisposableCombobox(id: string, template: string) {
         getSelectEl,
         getListEl,
         getItemEl,
+        getItemEls,
+        getStatusEl,
         getClearButtonEl,
         getToggleButtonEl,
       }

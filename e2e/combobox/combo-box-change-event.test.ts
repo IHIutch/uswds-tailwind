@@ -7,17 +7,17 @@ const rootId = 'basic-combobox'
 
 const template = `<div
   class="max-w-lg"
-  data-part="combobox-root"
+  data-scope="combobox" data-part="root"
   id="${rootId}"
     >
       <label
         class="combobox-label"
-        data-part="combobox-label"
+        data-part="label"
         class="block"
       >Select a fruit:</label>
 
       <select
-        data-part="combobox-select"
+        data-part="hidden-select"
         hidden
       >
         <option value>Select a fruit</option>
@@ -90,20 +90,20 @@ const template = `<div
       <div class="relative mt-2">
         <div class="flex w-full">
           <input
-            data-part="combobox-input"
+            data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
           >
           <div class="absolute z-10 inset-y-0 right-0 flex">
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
+              data-part="clear-trigger"
               type="button"
             >
               <div class="icon-[material-symbols--close] size-6"></div>
             </button>
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
+              data-part="trigger"
               type="button"
             >
               <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -111,14 +111,14 @@ const template = `<div
           </div>
         </div>
         <ul
-          data-part="combobox-list"
+          data-part="list"
           class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
         >
         </ul>
       </div>
       <!-- <div
         class="combobox-status"
-        data-part="combobox-status"
+        data-part="status"
         role="status"
 
     </div>`
@@ -154,7 +154,7 @@ it('should emit change events when resetting input values when an incomplete ite
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apple')
 
   await userEvent.clear(input)
@@ -174,7 +174,7 @@ it('should emit change events when closing the list but not the clear the input 
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apple')
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
@@ -192,7 +192,7 @@ it('should emit change events when setting the input value when a complete selec
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apple')
   await userEvent.fill(input, 'fig')
   expect(list.hidden).toBe(false)
@@ -209,7 +209,7 @@ it('should emit change events when selecting the focused list item in the list w
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'emo')
 
@@ -228,7 +228,7 @@ it('should emit change events when pressing escape from a focused item', async (
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'dew')
   expect(!list.hidden && list.children.length).toBeTruthy()
