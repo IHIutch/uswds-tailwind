@@ -36,7 +36,7 @@
         </div>
         <div class="@desktop:hidden">
           <button
-            data-part="modal-trigger"
+            data-scope="modal" data-part="trigger"
             data-target="mobile-extended-menu"
             class="uppercase ml-auto leading-none text-white text-sm h-12 px-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-blue-40v"
           >Menu</button>
@@ -161,157 +161,158 @@
       </div>
     </div>
 
-    <div
-      data-part="modal-backdrop"
-      data-value="mobile-extended-menu"
-      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in-0"
-    ></div>
+    <div data-scope="modal" data-part="root" id="mobile-extended-menu" data-value="mobile-extended-menu">
+      <div
+        data-part="backdrop"
+        class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in duration-150 ease-in-out fade-in-0"
+      ></div>
 
-    <div
-      data-part="modal-positioner"
-      data-value="mobile-extended-menu"
-      class="fixed z-50 inset-0 overflow-y-auto"
-    >
-      <nav
-        data-part="modal-content"
-        class="hidden data-[state=open]:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto animate-in duration-300 ease-in-out slide-in-from-right"
+      <div
+        data-part="positioner"
+     
+        class="fixed z-50 inset-0 overflow-y-auto"
       >
-
-        <header
-          data-part="modal-title"
-          class="sr-only"
-        >Menu</header>
-
-        <button
-          type="button"
-          data-part="modal-close-trigger"
-          class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          aria-label="Close"
+        <nav
+          data-part="content"
+          class="hidden data-[state=open]:flex flex-col gap-6 pt-16 pb-4 px-4 bg-white w-60 fixed right-0 inset-y-0 overflow-auto animate-in duration-300 ease-in-out slide-in-from-right"
         >
-          <div class="icon-[material-symbols--close] size-6"></div>
-        </button>
 
-        <ul class="flex flex-col">
-          <li class="border-t border-t-gray-10">
-            <div data-part="accordion-root">
-              <div
-                data-part="accordion-item"
-                data-value="mobile-dropdown-1"
-              >
-                <button
-                  data-part="accordion-trigger"
-                  class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
-                  data-current="true"
-                >
-                  <span
-                    class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">Dropdown</span>
-                  <span class="h-full flex items-center">
-                    <span
-                      class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
-                    ></span>
-                  </span>
-                </button>
-                <ul data-part="accordion-content">
-                  <li class="border-t border-t-gray-10">
-                    <a
-                      href="#"
-                      class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-                    >Dropdown</a>
-                  </li>
-                  <li class="border-t border-t-gray-10">
-                    <a
-                      href="#"
-                      class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-                    >Dropdown</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </li>
-          <li class="border-t border-t-gray-10">
-            <div data-part="accordion-root">
-              <div
-                data-part="accordion-item"
-                data-value="mobile-dropdown-2"
-              >
-                <button
-                  data-part="accordion-trigger"
-                  class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
-                >
-                  <span
-                    class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">Dropdown</span>
-                  <span class="h-full flex items-center">
-                    <span
-                      class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
-                    ></span>
-                  </span>
-                </button>
-                <ul data-part="accordion-content">
-                  <li class="border-t border-t-gray-10">
-                    <a
-                      href="#"
-                      class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-                    >Dropdown</a>
-                  </li>
-                  <li class="border-t border-t-gray-10">
-                    <a
-                      href="#"
-                      class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-                    >Dropdown</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </li>
-          <li class="border-t border-t-gray-10">
-            <a
-              href="#"
-              class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
-            >Link</a>
-          </li>
-        </ul>
+          <header
+            data-part="title"
+            class="sr-only"
+          >Menu</header>
 
-        <div class="flex flex-col gap-4">
-          <ul>
-            <li>
-              <a
-                href="#"
-                class="text-gray-50 text-sm hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v"
-              >Secondary Link</a>
+          <button
+            type="button"
+            data-part="close-trigger"
+            class="absolute top-0 right-0 size-12 flex items-center justify-center text-black bg-transparent focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+            aria-label="Close"
+          >
+            <div class="icon-[material-symbols--close] size-6"></div>
+          </button>
+
+          <ul class="flex flex-col">
+            <li class="border-t border-t-gray-10">
+              <div data-part="accordion-root">
+                <div
+                  data-part="accordion-item"
+                  data-value="mobile-dropdown-1"
+                >
+                  <button
+                    data-part="accordion-trigger"
+                    class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
+                    data-current="true"
+                  >
+                    <span
+                      class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">Dropdown</span>
+                    <span class="h-full flex items-center">
+                      <span
+                        class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
+                      ></span>
+                    </span>
+                  </button>
+                  <ul data-part="accordion-content">
+                    <li class="border-t border-t-gray-10">
+                      <a
+                        href="#"
+                        class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
+                      >Dropdown</a>
+                    </li>
+                    <li class="border-t border-t-gray-10">
+                      <a
+                        href="#"
+                        class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
+                      >Dropdown</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </li>
-            <li>
+            <li class="border-t border-t-gray-10">
+              <div data-part="accordion-root">
+                <div
+                  data-part="accordion-item"
+                  data-value="mobile-dropdown-2"
+                >
+                  <button
+                    data-part="accordion-trigger"
+                    class="text-left group relative flex items-center justify-between w-full py-3 pl-4 leading-none hover:bg-gray-5 focus:z-10 focus:outline-4 focus:outline-blue-40v gap-3 data-[current]:font-bold data-[current]:after:block data-[current]:after:absolute data-[current]:after:bg-blue-60v data-[current]:after:inset-y-1 data-[current]:after:left-0 data-[current]:after:w-1 data-[current]:after:rounded-full"
+                  >
+                    <span
+                      class="text-gray-60 group-hover:text-blue-60v group-[[data-current]]:text-blue-60v">Dropdown</span>
+                    <span class="h-full flex items-center">
+                      <span
+                        class="size-5 icon-[material-symbols--add] group-aria-expanded:icon-[material-symbols--remove]"
+                      ></span>
+                    </span>
+                  </button>
+                  <ul data-part="accordion-content">
+                    <li class="border-t border-t-gray-10">
+                      <a
+                        href="#"
+                        class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
+                      >Dropdown</a>
+                    </li>
+                    <li class="border-t border-t-gray-10">
+                      <a
+                        href="#"
+                        class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
+                      >Dropdown</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li class="border-t border-t-gray-10">
               <a
                 href="#"
-                class="text-gray-50 text-sm hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v"
-              >Another Secondary Link</a>
+                class="block py-3 px-4 leading-none text-gray-60 hover:text-blue-60v hover:bg-gray-5 focus:outline-4 focus:outline-blue-40v"
+              >Link</a>
             </li>
           </ul>
 
-          <section aria-label="search component">
-            <form role="search">
-              <label
-                for="mobile-nav-search"
-                class="sr-only"
-              >Search</label>
-              <div class="relative flex items-center">
-                <input
-                  id="mobile-nav-search"
-                  type="search"
-                  class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
-                >
-                <button
-                  aria-label="search"
-                  class="flex items-center rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-                >
-                  <div class="icon-[material-symbols--search] size-6"></div>
-                </button>
-              </div>
-            </form>
-          </section>
-        </div>
+          <div class="flex flex-col gap-4">
+            <ul>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-50 text-sm hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v"
+                >Secondary Link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-50 text-sm hover:underline hover:text-blue-60v focus:outline-4 focus:outline-blue-40v"
+                >Another Secondary Link</a>
+              </li>
+            </ul>
 
-      </nav>
+            <section aria-label="search component">
+              <form role="search">
+                <label
+                  for="mobile-nav-search"
+                  class="sr-only"
+                >Search</label>
+                <div class="relative flex items-center">
+                  <input
+                    id="mobile-nav-search"
+                    type="search"
+                    class="p-2 bg-transparent w-full max-w-lg h-8 border border-r-0 border-gray-60 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
+                  >
+                  <button
+                    aria-label="search"
+                    class="flex items-center rounded-r font-bold leading-none text-white px-3 h-8 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+                  >
+                    <div class="icon-[material-symbols--search] size-6"></div>
+                  </button>
+                </div>
+              </form>
+            </section>
+          </div>
 
+        </nav>
+
+      </div>
     </div>
   </header>
 
