@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
 
 const rootId = 'test'
@@ -8,99 +8,117 @@ const template = `
   <div>
     <div>
       <label for="input-dob">Date of birth</label>
-      <div data-part="date-picker-root" id="${rootId}">
-          <input data-part="date-picker-input" id="input-dob" name="input-dob" type="text">
-          <button data-part="date-picker-trigger" type="button"></button>
-          <div data-part="date-picker-content" hidden>
-            <div data-part="date-picker-day">
-              <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-              <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="year" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+      <div data-scope="date-picker" data-part="root" id="${rootId}">
+          <input data-part="input" id="input-dob" name="input-dob" type="text">
+          <input data-part="hidden-input" type="hidden">
+          <button data-part="trigger" type="button"></button>
+          <div data-part="content" hidden>
+            <div data-part="day-view">
+              <div data-part="view-control">
+                <button data-part="prev-year-trigger" type="button"></button>
+                <button data-part="prev-month-trigger" type="button"></button>
+                <button data-part="month-trigger" type="button"></button>
+                <button data-part="year-trigger" type="button"></button>
+                <button data-part="next-month-trigger" type="button"></button>
+                <button data-part="next-year-trigger" type="button"></button>
+              </div>
               <table>
                 <thead>
                   <tr>
-                    <th data-part="date-picker-day-header"></th>
+                    <th data-part="table-header"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-date-button"></button>
+                      <button data-part="cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-month">
+            <div data-part="month-view">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-month-button"></button>
+                      <button data-part="cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-year">
+            <div data-part="year-view">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-year-button"></button>
+                      <button data-part="cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-              <button data-part="date-picker-nav-next" data-unit="decade"></button>
+              <button data-part="prev-year-chunk-trigger"></button>
+              <button data-part="next-year-chunk-trigger"></button>
             </div>
           </div>
-          <div data-part="date-picker-status"></div>
+          <div data-part="status"></div>
         </div>
       </div>
     </div>
   `
 
-it('should move focus when tabbing within the calendar', async () => {
+async function openPicker(component: ReturnType<typeof createDisposableDatePicker>) {
+  await page.getByRole('textbox', { name: 'Date of birth' }).fill('06/15/2024')
+  await page.getByRole('button', { name: 'Toggle calendar' }).click()
+  return component.elements.getCalendarEl()!
+}
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-focus-trap.spec.js#L36
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-focus-trap.spec.js#L55
+it('wraps Tab from the focused day to previous year and Shift+Tab back to the day', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
-  const button = component.elements.getTriggerEl()
-  const root = component.elements.getRootEl()!
+  const calendar = await openPicker(component)
+  const previousYear = page.getByRole('button', { name: 'Navigate back one year' }).element()
+  const focusedDay = page.getByRole('button', { name: '15 June 2024 Saturday' }).element() as HTMLButtonElement
+  expect(focusedDay.dataset.value).toBe('2024-06-15')
+  expect(document.activeElement).toBe(focusedDay)
 
-  await userEvent.click(button)
-
-  // Verify the initially focused date in the calendar
-  const focusedDateButton = root.querySelector('[data-part="date-picker-date-button"][data-focus="true"]')
-  expect(focusedDateButton).toBeTruthy()
-
-  // Tab should move focus (actual behavior may differ from legacy)
   await userEvent.keyboard('{Tab}')
-
-  // Verify focus moved to some element within the focus trap
-  const input = root.querySelector('[data-part="date-picker-input"]')
-  expect(document.activeElement).toBe(input)
+  expect(document.activeElement).toBe(previousYear)
+  await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+  expect(document.activeElement).toBe(focusedDay)
+  expect(calendar.hidden).toBe(false)
 })
 
-it('should maintain focus within the component when navigating', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L2067-L2118 (the month view traps focus on its only focusable cell)
+it('keeps Tab and Shift+Tab on the sole focused month cell', { tags: ['parity'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
-  const button = component.elements.getTriggerEl()
-  const root = component.elements.getRootEl()!
+  const calendar = await openPicker(component)
+  await page.getByRole('button', { name: 'June. Select month' }).click()
+  const focusedMonth = page.getByRole('button', { name: 'June', exact: true }).element() as HTMLButtonElement
+  expect(focusedMonth.dataset.value).toBe('5')
+  expect(document.activeElement).toBe(focusedMonth)
 
-  await userEvent.click(button)
-
-  // Verify calendar is open and focused
-  const calendarContent = root.querySelector('[data-part="date-picker-content"]')
-  expect(calendarContent?.hasAttribute('hidden')).toBe(false)
-
-  // Tab to move focus
   await userEvent.keyboard('{Tab}')
+  expect(document.activeElement).toBe(focusedMonth)
+  await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+  expect(document.activeElement).toBe(focusedMonth)
+  expect(calendar.hidden).toBe(false)
+})
 
-  const input = root.querySelector('[data-part="date-picker-input"]')
-  expect(document.activeElement).toBe(input)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L2067-L2118 (the year view wraps from its focused year to the previous chunk control)
+it('wraps Tab from the focused year to the previous chunk and Shift+Tab back', { tags: ['parity'] }, async () => {
+  await using component = createDisposableDatePicker(rootId, template)
+  const calendar = await openPicker(component)
+  await page.getByRole('button', { name: '2024. Select year' }).click()
+  const previousChunk = page.getByRole('button', { name: 'Navigate back 12 years' }).element() as HTMLButtonElement
+  const focusedYear = page.getByRole('button', { name: '2024', exact: true }).element() as HTMLButtonElement
 
-  // Verify focus is still within the date picker component
-  expect(input?.closest('[data-part="date-picker-root"]')).toBe(root)
+  expect(document.activeElement).toBe(focusedYear)
+  await userEvent.keyboard('{Tab}')
+  expect(document.activeElement).toBe(previousChunk)
+  await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+  expect(document.activeElement).toBe(focusedYear)
+  expect(calendar.hidden).toBe(false)
 })

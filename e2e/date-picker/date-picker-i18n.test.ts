@@ -1,3 +1,4 @@
+import { query, queryAll } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
@@ -9,64 +10,68 @@ const template = `
     <div>
       <div>
         <label for="input-dob">Date of birth</label>
-        <div data-part="date-picker-root" id="${rootId}" data-default-value="2020-05-15">
-          <input data-part="date-picker-input" id="input-dob" name="input-dob" type="text">
-          <button data-part="date-picker-trigger" type="button"></button>
-          <div data-part="date-picker-content" hidden>
-            <div data-part="date-picker-day">
-              <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-              <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="year" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+        <div data-scope="date-picker" data-part="root" id="${rootId}" data-default-value="2020-05-15">
+          <input data-part="input" id="input-dob" name="input-dob" type="text">
+          <input data-part="hidden-input" type="hidden">
+          <button data-part="trigger" type="button"></button>
+          <div data-part="content" hidden>
+            <div data-part="day-view">
+              <div data-part="view-control">
+                <button data-part="prev-year-trigger" type="button"></button>
+                <button data-part="prev-month-trigger" type="button"></button>
+                <button data-part="month-trigger" type="button"></button>
+                <button data-part="year-trigger" type="button"></button>
+                <button data-part="next-month-trigger" type="button"></button>
+                <button data-part="next-year-trigger" type="button"></button>
+              </div>
               <table>
                 <thead>
                   <tr>
-                    <th data-part="date-picker-day-header"></th>
+                    <th data-part="table-header"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-date-button"></button>
+                      <button data-part="cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-month">
+            <div data-part="month-view">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-month-button"></button>
+                      <button data-part="cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-year">
+            <div data-part="year-view">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-year-button"></button>
+                      <button data-part="cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-              <button data-part="date-picker-nav-next" data-unit="decade"></button>
+              <button data-part="prev-year-chunk-trigger"></button>
+              <button data-part="next-year-chunk-trigger"></button>
             </div>
           </div>
-          <div data-part="date-picker-status"></div>
+          <div data-part="status"></div>
         </div>
       </div>
     </div>
   `
 
-it('should display month in english by default', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L43
+it('should display month in english by default', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'en'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -75,11 +80,12 @@ it('should display month in english by default', async () => {
 
   await userEvent.click(button)
 
-  const monthTrigger = root.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const monthTrigger = query(root, '[data-part="month-trigger"]')
   expect(monthTrigger?.textContent).toBe('May')
 })
 
-it('should display month in the document language', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L53
+it('should display month in the document language', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'es'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -88,11 +94,12 @@ it('should display month in the document language', async () => {
 
   await userEvent.click(button)
 
-  const monthTrigger = root.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const monthTrigger = query(root, '[data-part="month-trigger"]')
   expect(monthTrigger?.textContent).toBe('mayo')
 })
 
-it('should display the correct aria-label in the document language', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L65
+it('should display the correct aria-label in the document language', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'es'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -101,11 +108,12 @@ it('should display the correct aria-label in the document language', async () =>
 
   await userEvent.click(button)
 
-  const monthTrigger = root.querySelector('[data-part="date-view-trigger"][data-value="month"]')
+  const monthTrigger = query(root, '[data-part="month-trigger"]')
   expect(monthTrigger?.getAttribute('aria-label')).toBe('mayo. Select month')
 })
 
-it('should display the full list of months in english by default', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L80
+it('should display the full list of months in english by default', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'en'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -114,12 +122,10 @@ it('should display the full list of months in english by default', async () => {
 
   await userEvent.click(button)
 
-  const monthTrigger = root.querySelector('[data-part="date-view-trigger"][data-value="month"]')!
+  const monthTrigger = query(root, '[data-part="month-trigger"]')!
   await userEvent.click(monthTrigger)
 
-  const monthButtons = Array.from(
-    root.querySelectorAll('[data-part="date-picker-month-button"]'),
-  ).map(btn => btn.textContent)
+  const monthButtons = queryAll(root, '[data-part="month-view"] [data-part="cell-trigger"]').map(btn => btn.textContent)
 
   expect(monthButtons).toEqual([
     'January',
@@ -137,7 +143,8 @@ it('should display the full list of months in english by default', async () => {
   ])
 })
 
-it('should display the full list of months in the document language', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L109
+it('should display the full list of months in the document language', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'es'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -146,12 +153,10 @@ it('should display the full list of months in the document language', async () =
 
   await userEvent.click(button)
 
-  const monthTrigger = root.querySelector('[data-part="date-view-trigger"][data-value="month"]')!
+  const monthTrigger = query(root, '[data-part="month-trigger"]')!
   await userEvent.click(monthTrigger)
 
-  const monthButtons = Array.from(
-    root.querySelectorAll('[data-part="date-picker-month-button"]'),
-  ).map(btn => btn.textContent)
+  const monthButtons = queryAll(root, '[data-part="month-view"] [data-part="cell-trigger"]').map(btn => btn.textContent)
 
   expect(monthButtons).toEqual([
     'enero',
@@ -169,7 +174,8 @@ it('should display the full list of months in the document language', async () =
   ])
 })
 
-it('should display the days of the week headers in english by default', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L140
+it('should display the days of the week headers in english by default', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'en'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -178,14 +184,13 @@ it('should display the days of the week headers in english by default', async ()
 
   await userEvent.click(button)
 
-  const dayHeaders = Array.from(
-    root.querySelectorAll('[data-part="date-picker-day-header"]'),
-  ).map(header => header.textContent)
+  const dayHeaders = queryAll(root, '[data-part="table-header"]').map(header => header.textContent)
 
   expect(dayHeaders).toEqual(['S', 'M', 'T', 'W', 'T', 'F', 'S'])
 })
 
-it('should display the days of the week headers in the document language', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L150
+it('should display the days of the week headers in the document language', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'es'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -194,14 +199,13 @@ it('should display the days of the week headers in the document language', async
 
   await userEvent.click(button)
 
-  const dayHeaders = Array.from(
-    root.querySelectorAll('[data-part="date-picker-day-header"]'),
-  ).map(header => header.textContent)
+  const dayHeaders = queryAll(root, '[data-part="table-header"]').map(header => header.textContent)
 
   expect(dayHeaders).toEqual(['D', 'L', 'M', 'X', 'J', 'V', 'S'])
 })
 
-it('should display the aria-label in the document language', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-i18n.spec.js#L162
+it('should display the aria-label in the document language', { tags: ['legacy'] }, async () => {
   document.documentElement.lang = 'es'
 
   await using component = createDisposableDatePicker(rootId, template)
@@ -210,9 +214,7 @@ it('should display the aria-label in the document language', async () => {
 
   await userEvent.click(button)
 
-  const dayHeaders = Array.from(
-    root.querySelectorAll('[data-part="date-picker-day-header"]'),
-  ).map(header => header.getAttribute('aria-label'))
+  const dayHeaders = queryAll(root, '[data-part="table-header"]').map(header => header.getAttribute('aria-label'))
 
   expect(dayHeaders).toEqual([
     'domingo',

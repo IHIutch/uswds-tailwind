@@ -1,108 +1,138 @@
 import type { Scope } from '@zag-js/core'
+import type { DateValue, DateView } from './date-picker.types'
+import { query, queryAll } from '@zag-js/dom-query'
+import { validateDateInput } from './date-picker.utils'
 
-// --- ID helpers ---
+/* -----------------------------------------------------------------------------
+ * Ids
+ * ----------------------------------------------------------------------------- */
 
-export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `datepicker:${ctx.id}`
-
-function pickIndexedId(provided: string | string[] | undefined, fallback: string, index: number) {
-  if (Array.isArray(provided))
-    return provided[index] ?? `${fallback}:${index}`
-  if (typeof provided === 'string')
-    return index === 0 ? provided : `${provided}:${index}`
-  return index === 0 ? fallback : `${fallback}:${index}`
+// Connect OWNS these ids. USWDS derives structure from authored markup + `getDatePickerContext` DOM lookups
+// (L670); that id-derivation DISSOLVES under the headless port — the port emits ids on the parts and looks
+// elements up by them.
+//
+// Inputs are INDEXED — range mode is ONE calendar + TWO inputs bound to value[0]/value[1] (the original's two
+// coordinated single pickers, consolidated); single mode always uses 0. `getInputId` names the EXTERNAL input,
+// which carries the developer's id/name/form identity. The INTERNAL input gets no id helper at all — USWDS strips
+// its id+name (`single-index.js:946-947`); it is a non-submitting ISO mirror.
+export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `date-picker:${ctx.id}`
+export const getControlId = (ctx: Scope) => ctx.ids?.control ?? `date-picker:${ctx.id}:control`
+export function getInputId(ctx: Scope, index: number) {
+  const ids = ctx.ids?.input
+  if (typeof ids === 'function') {
+    return ids(index)
+  }
+  if (typeof ids === 'string') {
+    return index === 0 ? ids : `${ids}:${index}`
+  }
+  return `date-picker:${ctx.id}:input:${index}`
 }
-
-export const getInputId = (ctx: Scope, index: number = 0) => pickIndexedId(ctx.ids?.input, `datepicker:${ctx.id}:input`, index)
-export const getTriggerId = (ctx: Scope, index: number = 0) => pickIndexedId(ctx.ids?.trigger, `datepicker:${ctx.id}:trigger`, index)
-export const getCalendarId = (ctx: Scope) => ctx.ids?.calendar ?? `datepicker:${ctx.id}:calendar`
-export const getDayPickerId = (ctx: Scope) => ctx.ids?.dayPicker ?? `datepicker:${ctx.id}:day-picker`
-export const getMonthPickerId = (ctx: Scope) => ctx.ids?.monthPicker ?? `datepicker:${ctx.id}:month-picker`
-export const getYearPickerId = (ctx: Scope) => ctx.ids?.yearPicker ?? `datepicker:${ctx.id}:year-picker`
-export const getGridId = (ctx: Scope) => ctx.ids?.grid ?? `datepicker:${ctx.id}:grid`
-export const getStatusId = (ctx: Scope) => ctx.ids?.status ?? `datepicker:${ctx.id}:status`
-export function getCellTriggerId(ctx: Scope, dateString: string) {
-  return ctx.ids?.cellTrigger?.(dateString) ?? `datepicker:${ctx.id}:cell:${dateString}`
+// NO `getHiddenInputId` — the INTERNAL input carries NEITHER id nor name (USWDS removes both, `single-index.js:
+// 946-947`); it is a non-submitting ISO mirror the machine owns, so nothing queries it by id.
+export function getTriggerId(ctx: Scope, index = 0) {
+  const ids = ctx.ids?.trigger
+  if (typeof ids === 'function')
+    return ids(index)
+  if (typeof ids === 'string')
+    return index === 0 ? ids : `${ids}:${index}`
+  return index === 0 ? `date-picker:${ctx.id}:trigger` : `date-picker:${ctx.id}:trigger:${index}`
 }
-export const getPrevYearTriggerId = (ctx: Scope) => ctx.ids?.prevYearTrigger ?? `datepicker:${ctx.id}:prev-year`
-export const getPrevMonthTriggerId = (ctx: Scope) => ctx.ids?.prevMonthTrigger ?? `datepicker:${ctx.id}:prev-month`
-export const getMonthSelectionId = (ctx: Scope) => ctx.ids?.monthSelection ?? `datepicker:${ctx.id}:month-selection`
-export const getYearSelectionId = (ctx: Scope) => ctx.ids?.yearSelection ?? `datepicker:${ctx.id}:year-selection`
-export const getNextMonthTriggerId = (ctx: Scope) => ctx.ids?.nextMonthTrigger ?? `datepicker:${ctx.id}:next-month`
-export const getNextYearTriggerId = (ctx: Scope) => ctx.ids?.nextYearTrigger ?? `datepicker:${ctx.id}:next-year`
-export const getPrevYearChunkTriggerId = (ctx: Scope) => ctx.ids?.prevYearChunkTrigger ?? `datepicker:${ctx.id}:prev-year-chunk`
-export const getNextYearChunkTriggerId = (ctx: Scope) => ctx.ids?.nextYearChunkTrigger ?? `datepicker:${ctx.id}:next-year-chunk`
+export const getContentId = (ctx: Scope) => ctx.ids?.content ?? `date-picker:${ctx.id}:content`
+export const getStatusId = (ctx: Scope) => ctx.ids?.status ?? `date-picker:${ctx.id}:status`
 
-// --- Element getters ---
+/* -----------------------------------------------------------------------------
+ * Element getters (back the raf-wrapped physical `.focus()` calls — focus moves stay physical,
+ * deferred one frame so the consumer's re-render lands first)
+ * ----------------------------------------------------------------------------- */
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
-export const getInputEl = (ctx: Scope, index: number = 0) => ctx.getById<HTMLInputElement>(getInputId(ctx, index))
-export const getTriggerEl = (ctx: Scope, index: number = 0) => ctx.getById(getTriggerId(ctx, index))
-export const getCalendarEl = (ctx: Scope) => ctx.getById(getCalendarId(ctx))
-export const getDayPickerEl = (ctx: Scope) => ctx.getById(getDayPickerId(ctx))
-export const getMonthPickerEl = (ctx: Scope) => ctx.getById(getMonthPickerId(ctx))
-export const getYearPickerEl = (ctx: Scope) => ctx.getById(getYearPickerId(ctx))
-export const getGridEl = (ctx: Scope) => ctx.getById(getGridId(ctx))
-export const getStatusEl = (ctx: Scope) => ctx.getById(getStatusId(ctx))
-export const getPrevYearTriggerEl = (ctx: Scope) => ctx.getById(getPrevYearTriggerId(ctx))
-export const getPrevMonthTriggerEl = (ctx: Scope) => ctx.getById(getPrevMonthTriggerId(ctx))
-export const getMonthSelectionEl = (ctx: Scope) => ctx.getById(getMonthSelectionId(ctx))
-export const getYearSelectionEl = (ctx: Scope) => ctx.getById(getYearSelectionId(ctx))
-export const getNextMonthTriggerEl = (ctx: Scope) => ctx.getById(getNextMonthTriggerId(ctx))
-export const getNextYearTriggerEl = (ctx: Scope) => ctx.getById(getNextYearTriggerId(ctx))
-export const getPrevYearChunkTriggerEl = (ctx: Scope) => ctx.getById(getPrevYearChunkTriggerId(ctx))
-export const getNextYearChunkTriggerEl = (ctx: Scope) => ctx.getById(getNextYearChunkTriggerId(ctx))
-export const getCellTriggerEl = (ctx: Scope, dateString: string) => ctx.getById(getCellTriggerId(ctx, dateString))
+export const getContentEl = (ctx: Scope) => ctx.getById(getContentId(ctx))
 
-// --- Focus helpers ---
+// The EXTERNAL (visible) input at index 0 — `handleEscapeFromCalendar` restores focus here (`single-index.js:1731`
+// — the input, NOT the toggle button), and select restores here too (L1333). Single always uses 0; range's second
+// input is index 1.
+export const getExternalInputEl = (ctx: Scope, index = 0) => ctx.getById<HTMLInputElement>(getInputId(ctx, index))
 
-export function focusInputEl(ctx: Scope, index: number = 0) {
-  const inputEl = getInputEl(ctx, index)
-  if (ctx.isActiveElement(inputEl))
-    return
-  inputEl?.focus({ preventScroll: true })
+// The INTERNAL (hidden) input(s) — id-less by design (USWDS strips it, L946), so queried by part. Range has two
+// (start/end), in DOM order. It's the ISO value carrier `setCalendarValue` mirrors (`single-index.js:886`).
+export function getHiddenInputEl(ctx: Scope, index = 0) {
+  return queryAll<HTMLInputElement>(getRootEl(ctx), `[data-part=hidden-input]`)[index] ?? null
 }
 
-export function focusCellTriggerEl(ctx: Scope, dateString: string) {
-  const cellEl = getCellTriggerEl(ctx, dateString)
-  cellEl?.focus({ preventScroll: true })
+// `single-index.js:634` — set `.value` then dispatch a bubbling, cancelable `change` CustomEvent (`detail.value`).
+// This is the event the range wiring cross-syncs on; the value-carrier sync is library-functional (the
+// inputs ARE the value carriers, not rendered calendar parts), so a machine action owning it is faithful.
+//
+// The `CustomEvent` constructor comes from the input's own document (`single-index.js:634-644` dispatches from the
+// element it writes), so an iframe-hosted input dispatches its own window's event.
+export function changeElementValue(el: HTMLInputElement, value = ''): void {
+  el.value = value
+  const EventCtor = el.ownerDocument.defaultView?.CustomEvent ?? CustomEvent
+  el.dispatchEvent(new EventCtor('change', {
+    bubbles: true,
+    cancelable: true,
+    detail: { value },
+  }))
 }
 
-export function focusPrevYearTriggerEl(ctx: Scope) {
-  const el = getPrevYearTriggerEl(ctx)
-  el?.focus({ preventScroll: true })
+/** Preserve a foreign validity message unless date validation has a scoped update. */
+export function applyDateInputValidity(element: HTMLInputElement, text: string, min: DateValue, max: DateValue | undefined): void {
+  const validity = validateDateInput(text, min, max, element.validationMessage)
+  if (validity !== null)
+    element.setCustomValidity(validity)
 }
 
-export function focusPrevMonthTriggerEl(ctx: Scope) {
-  const el = getPrevMonthTriggerEl(ctx)
-  el?.focus({ preventScroll: true })
+// The roving-tabindex focused day cell inside the open calendar — `toggleCalendar` focuses it on open
+// (`single-index.js:1353`, the `CALENDAR_DATE_FOCUSED` `--focused` cell → headless `[data-focus]`). The selector
+// matches the `cell-trigger` part all three views' cell getters emit.
+export function getFocusedCell(ctx: Scope, view: DateView) {
+  return queryAll<HTMLElement>(getContentEl(ctx), `[data-part=cell-trigger][data-view=${view}][data-focus]`).find(el => !el.closest('[hidden]')) ?? null
 }
 
-export function focusNextMonthTriggerEl(ctx: Scope) {
-  const el = getNextMonthTriggerEl(ctx)
-  el?.focus({ preventScroll: true })
+// Day-view nav: after a nav re-render, focus the SAME button, or fall back to the `CALENDAR_DATE_PICKER` container
+// (`viewControl`, tabindex=-1) when that button is now disabled at a boundary (`single-index.js:1240-1243`).
+export function getNavTriggerEl(ctx: Scope, part: string) {
+  return query<HTMLButtonElement>(getContentEl(ctx), `[data-part=${part}]`)
 }
+export const getViewControlEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view-control]`)
 
-export function focusNextYearTriggerEl(ctx: Scope) {
-  const el = getNextYearTriggerEl(ctx)
-  el?.focus({ preventScroll: true })
-}
+// The `CALENDAR_YEAR_PICKER` container (tabindex=-1) — the year-chunk nav focus-fallback (L1667).
+export const getYearViewEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=year-view]`)
 
-export function focusPrevYearChunkTriggerEl(ctx: Scope) {
-  const el = getPrevYearChunkTriggerEl(ctx)
-  el?.focus({ preventScroll: true })
-}
+// NOTE: no id helpers for the structural calendar parts (table/tableRow/cellTrigger, prev/next nav, month/year
+// triggers, year-chunk) — nothing looks them up by id (focus targeting queries by `data-part`), so the helpers
+// would be dead code.
 
-export function focusNextYearChunkTriggerEl(ctx: Scope) {
-  const el = getNextYearChunkTriggerEl(ctx)
-  el?.focus({ preventScroll: true })
-}
-
-export function focusMonthSelectionEl(ctx: Scope) {
-  const el = getMonthSelectionEl(ctx)
-  el?.focus({ preventScroll: true })
-}
-
-export function focusYearSelectionEl(ctx: Scope) {
-  const el = getYearSelectionEl(ctx)
-  el?.focus({ preventScroll: true })
+/** Discover late initial input parts without requiring adapter-specific ref props. */
+export function observeInitialInputs(ctx: Scope, count: number, initialize: (element: HTMLInputElement, index: number, internal: boolean) => void): VoidFunction {
+  const win = ctx.getWin()
+  const seen = new WeakSet<HTMLInputElement>()
+  let observer: MutationObserver
+  let live = true
+  const visit = () => {
+    if (!live)
+      return
+    let complete = true
+    for (let index = 0; index < count; index++) {
+      for (const [element, internal] of [[getHiddenInputEl(ctx, index), true], [getExternalInputEl(ctx, index), false]] as const) {
+        if (!element) {
+          complete = false
+          continue
+        }
+        if (!seen.has(element)) {
+          seen.add(element)
+          initialize(element, index, internal)
+        }
+      }
+    }
+    if (complete)
+      observer.disconnect()
+  }
+  observer = new win.MutationObserver(visit)
+  observer.observe(ctx.getRootNode(), { childList: true, subtree: true, attributes: true, attributeFilter: ['id', 'data-part'] })
+  visit()
+  return () => {
+    live = false
+    observer.disconnect()
+  }
 }

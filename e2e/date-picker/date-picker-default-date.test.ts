@@ -1,3 +1,4 @@
+import { query } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
@@ -8,64 +9,68 @@ const template = `
   <div>
     <div>
       <label for="input-dates-of-use">Dates of use</label>
-      <div data-part="date-picker-root" id="${rootId}" data-default-value="2020-05-22">
-        <input data-part="date-picker-input" id="input-dates-of-use" name="input-dates-of-use" type="text">
-        <button data-part="date-picker-trigger" type="button"></button>
-        <div data-part="date-picker-content" hidden>
-          <div data-part="date-picker-day">
-            <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-            <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-            <button data-part="date-view-trigger" data-value="month" type="button"></button>
-            <button data-part="date-view-trigger" data-value="year" type="button"></button>
-            <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-            <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+      <div data-scope="date-picker" data-part="root" id="${rootId}" data-default-date="2020-05-22">
+        <input data-part="input" id="input-dates-of-use" name="input-dates-of-use" type="text">
+        <input data-part="hidden-input" type="hidden">
+        <button data-part="trigger" type="button"></button>
+        <div data-part="content" hidden>
+          <div data-part="day-view">
+            <div data-part="view-control">
+              <button data-part="prev-year-trigger" type="button"></button>
+              <button data-part="prev-month-trigger" type="button"></button>
+              <button data-part="month-trigger" type="button"></button>
+              <button data-part="year-trigger" type="button"></button>
+              <button data-part="next-month-trigger" type="button"></button>
+              <button data-part="next-year-trigger" type="button"></button>
+            </div>
             <table>
               <thead>
                 <tr>
-                  <th data-part="date-picker-day-header"></th>
+                  <th data-part="table-header"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-date-button"></button>
+                    <button data-part="cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="date-picker-month">
+          <div data-part="month-view">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-month-button"></button>
+                    <button data-part="cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="date-picker-year">
+          <div data-part="year-view">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-year-button"></button>
+                    <button data-part="cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-            <button data-part="date-picker-nav-next" data-unit="decade"></button>
+            <button data-part="prev-year-chunk-trigger"></button>
+            <button data-part="next-year-chunk-trigger"></button>
           </div>
         </div>
-        <div data-part="date-picker-status"></div>
+        <div data-part="status"></div>
       </div>
     </div>
   </div>
 `
 
-it('should display the input date when an input date is present', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-default-date.spec.js#L44
+it('should display the input date when an input date is present', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   const button = component.elements.getTriggerEl()
@@ -76,11 +81,12 @@ it('should display the input date when an input date is present', async () => {
 
   expect(calendar.hidden).toBe(false)
 
-  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2020-06-20')
 })
 
-it('should display the default date when the input date is empty', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-default-date.spec.js#L62
+it('should display the default date when the input date is empty', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   const button = component.elements.getTriggerEl()
@@ -91,11 +97,12 @@ it('should display the default date when the input date is empty', async () => {
 
   expect(calendar.hidden).toBe(false)
 
-  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-22')
 })
 
-it('should display the default date when the input date is invalid', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-default-date.spec.js#L80
+it('should display the default date when the input date is invalid', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   const button = component.elements.getTriggerEl()
@@ -106,6 +113,6 @@ it('should display the default date when the input date is invalid', async () =>
 
   expect(calendar.hidden).toBe(false)
 
-  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-22')
 })
