@@ -81,7 +81,7 @@ function getCellValuesByColumn(tbody: HTMLElement, index: number) {
 }
 
 it('is immediately followed by an "aria-live" region', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   const alphabeticalSortButton = sortableHeaders[0].querySelector('[data-part="table-sort-button"]')!
@@ -93,15 +93,15 @@ it('is immediately followed by an "aria-live" region', async () => {
   expect(root.nextElementSibling).toBe(ariaLive)
 })
 
-it('has at least one sortable column', () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+it('has at least one sortable column', async () => {
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   expect(sortableHeaders[0]).toBeTruthy()
 })
 
 it('sorts rows by cell content alphabetically when clicked', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const tbody = root.querySelector('tbody')!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
@@ -112,7 +112,7 @@ it('sorts rows by cell content alphabetically when clicked', async () => {
 })
 
 it('sorts rows by cell content numerically when clicked', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const tbody = root.querySelector('tbody')!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
@@ -123,7 +123,7 @@ it('sorts rows by cell content numerically when clicked', async () => {
 })
 
 it('sorts rows by "data-sort-value" attribute on cells when clicked', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const tbody = root.querySelector('tbody')!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
@@ -134,7 +134,7 @@ it('sorts rows by "data-sort-value" attribute on cells when clicked', async () =
 })
 
 it('sorts rows descending if already sorted ascending when clicked', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const tbody = root.querySelector('tbody')!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
@@ -150,7 +150,7 @@ it('sorts rows descending if already sorted ascending when clicked', async () =>
 })
 
 it('announces sort direction when sort changes', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   const alphabeticalSortButton = sortableHeaders[0].querySelector('[data-part="table-sort-button"]')!
@@ -164,7 +164,7 @@ it('announces sort direction when sort changes', async () => {
 })
 
 it('has an aria-label that describes the current sort direction', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   const alphabeticalSortButton = sortableHeaders[0].querySelector('[data-part="table-sort-button"]')!
@@ -196,7 +196,7 @@ it('has an aria-label that describes the current sort direction', async () => {
 })
 
 it('has sort button with a title that describes what the sort direction will be if clicked', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   const alphabeticalSortButton = sortableHeaders[0].querySelector('[data-part="table-sort-button"]')!
@@ -224,7 +224,7 @@ it('has sort button with a title that describes what the sort direction will be 
 })
 
 it('has the correct data-sort attribute for styling', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   const alphabeticalSortButton = sortableHeaders[0].querySelector('[data-part="table-sort-button"]')!
@@ -244,8 +244,8 @@ it('has the correct data-sort attribute for styling', async () => {
   expect(alphabeticalSortButton.getAttribute('data-sort')).toBe('desc')
 })
 
-it('does not have a sort button', () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+it('does not have a sort button', async () => {
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const unsortableHeader = root.querySelector('th:not([data-sortable])')
   const unsortableHeaderButton = unsortableHeader?.querySelector('[data-part="table-sort-button"]')

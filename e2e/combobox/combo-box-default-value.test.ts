@@ -119,11 +119,11 @@ const template = `<div
   </div>
 </div>`
 
-it('enhances a select element into a combo box component', () => {
-  using component = createDisposableCombobox(rootId, template)
+it('enhances a select element into a combo box component', async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
-  
+
   expect(input).toBeTruthy()
   expect(input.value).toBe('Blackberry')
   expect(select.value).toBe('blackberry')

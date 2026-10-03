@@ -122,12 +122,12 @@ export type FileInputErrorMessageProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputErrorMessage({ className, ...props }: FileInputErrorMessageProps) {
   const { api } = useFileInputContext()
-  const mergedProps = mergeProps(api.getErrorMessageProps(), props)
+  const mergedProps = mergeProps(api.getErrorTextProps(), props)
 
   return (
     <div
       {...mergedProps}
-      className={cn('hidden text-red-60v font-bold data-[invalid]:block -mt-6 mb-6 text-center', className)}
+      className={cn('text-red-60v font-bold -mt-6 mb-6 text-center', !api.invalid && 'hidden', className)}
     />
   )
 }
@@ -138,12 +138,12 @@ export type FileInputPreviewListProps = Omit<React.ComponentPropsWithoutRef<'div
 
 function FileInputPreviewList({ className, children, ...props }: FileInputPreviewListProps) {
   const { api } = useFileInputContext()
-  const mergedProps = mergeProps(api.getItemGroupProps(), props)
+  const mergedProps = mergeProps(api.getPreviewListProps(), props)
 
   return (
     <div
       {...mergedProps}
-      className={cn('relative z-30 pointer-events-none hidden data-[valid]:block data-[valid]:bg-blue-10 group', className)}
+      className={cn('relative z-30 pointer-events-none bg-blue-10 group', className)}
     >
       {typeof children === 'function' ? children({ files: api.acceptedFiles }) : children}
     </div>
@@ -207,7 +207,7 @@ export type FileInputPreviewItemIconProps = React.ComponentPropsWithoutRef<'div'
 function FileInputPreviewItemIcon({ className, children, ...props }: FileInputPreviewItemIconProps) {
   const { api } = useFileInputContext()
   const itemProps = usePreviewItemPropsContext()
-  const type = api.getFilePreviewType(itemProps.file)
+  const type = api.getPreviewType(itemProps.file)
 
   return (
     <div
@@ -226,7 +226,7 @@ function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItem
   const { api } = useFileInputContext()
   const itemProps = usePreviewItemPropsContext()
   const [url, setUrl] = React.useState('')
-  const mergedProps = mergeProps(api.getItemPreviewProps(itemProps), props)
+  const mergedProps = mergeProps(api.getItemPreviewImageProps({ file: itemProps.file, url }), props)
 
   React.useEffect(() => {
     return api.createFileUrl(itemProps.file, setUrl)
@@ -238,7 +238,6 @@ function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItem
   return (
     <img
       {...mergedProps}
-      src={url}
       className={cn('size-8 object-contain', className)}
     />
   )
@@ -247,34 +246,14 @@ function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItem
 export type FileInputPreviewItemContentProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputPreviewItemContent({ className, children, ...props }: FileInputPreviewItemContentProps) {
-  const { api } = useFileInputContext()
   const itemProps = usePreviewItemPropsContext()
-  const mergedProps = mergeProps(api.getItemNameProps(itemProps), props)
 
   return (
-    <div {...mergedProps} className={cn('flex items-center', className)}>
+    <div {...props} className={cn('flex items-center', className)}>
       {children ?? itemProps.file.name}
     </div>
   )
 }
-
-export type FileInputItemDeleteTriggerProps = React.ComponentPropsWithoutRef<'button'>
-
-const FileInputItemDeleteTrigger = React.forwardRef<HTMLButtonElement, FileInputItemDeleteTriggerProps>(
-  ({ className, ...props }, forwardedRef) => {
-    const { api } = useFileInputContext()
-    const itemProps = usePreviewItemPropsContext()
-    const mergedProps = mergeProps(api.getItemDeleteTriggerProps(itemProps), props)
-
-    return (
-      <button
-        {...mergedProps}
-        className={cn('pointer-events-auto text-blue-60v cursor-pointer', className)}
-        ref={forwardedRef}
-      />
-    )
-  },
-)
 
 export type FileInputPreviewHeaderProps = React.ComponentPropsWithoutRef<'div'>
 
@@ -288,7 +267,7 @@ function FileInputChangeTrigger({ className, children, ...props }: FileInputChan
   const { api } = useFileInputContext()
   return (
     <span {...props} className={cn('text-blue-60v underline', className)}>
-      {children ?? api.changeItemText}
+      {children ?? api.previewChangeText}
     </span>
   )
 }
@@ -308,7 +287,6 @@ FileInputPreviewItem.displayName = 'FileInput.PreviewItem'
 FileInputPreviewItemIcon.displayName = 'FileInput.PreviewItemIcon'
 FileInputPreviewItemThumb.displayName = 'FileInput.PreviewItemThumb'
 FileInputPreviewItemContent.displayName = 'FileInput.PreviewItemContent'
-FileInputItemDeleteTrigger.displayName = 'FileInput.ItemDeleteTrigger'
 FileInputChangeTrigger.displayName = 'FileInput.ChangeTrigger'
 
 export const FileInput = {
@@ -327,6 +305,5 @@ export const FileInput = {
   PreviewItemIcon: FileInputPreviewItemIcon,
   PreviewItemThumb: FileInputPreviewItemThumb,
   PreviewItemContent: FileInputPreviewItemContent,
-  ItemDeleteTrigger: FileInputItemDeleteTrigger,
   ChangeTrigger: FileInputChangeTrigger,
 }

@@ -13,27 +13,27 @@ const template = `
   </div>
 `
 
-it('trigger is created', () => {
-  using component = createDisposableTooltip(rootId, template)
+it('trigger is created', async () => {
+  await using component = createDisposableTooltip(rootId, template)
   const trigger = component.elements.getTriggerEl()
   expect(trigger).toBeTruthy()
 })
 
-it('title attribute on trigger is removed', () => {
-  using component = createDisposableTooltip(rootId, template)
+it('title attribute on trigger is removed', async () => {
+  await using component = createDisposableTooltip(rootId, template)
   const trigger = component.elements.getTriggerEl()
   expect(trigger.getAttribute('title')).toBeFalsy()
 })
 
-it('tooltip body is created', () => {
-  using component = createDisposableTooltip(rootId, template)
+it('tooltip body is created', async () => {
+  await using component = createDisposableTooltip(rootId, template)
   const content = component.elements.getContentEl()
   expect(content).toBeTruthy()
   expect(content.textContent?.trim()).toBe('This is a tooltip')
 })
 
 it('tooltip is visible on focus', async () => {
-  using component = createDisposableTooltip(rootId, template)
+  await using component = createDisposableTooltip(rootId, template)
   const content = component.elements.getContentEl()
 
   await userEvent.keyboard('{Tab}')
@@ -41,7 +41,7 @@ it('tooltip is visible on focus', async () => {
 })
 
 it('tooltip is hidden on blur', async () => {
-  using component = createDisposableTooltip(rootId, template)
+  await using component = createDisposableTooltip(rootId, template)
   const content = component.elements.getContentEl()
 
   await userEvent.keyboard('{Tab}')
@@ -50,7 +50,7 @@ it('tooltip is hidden on blur', async () => {
 })
 
 it('tooltip is visible on mouseover', async () => {
-  using component = createDisposableTooltip(rootId, template)
+  await using component = createDisposableTooltip(rootId, template)
   const trigger = component.elements.getTriggerEl()
   const content = component.elements.getContentEl()
 
@@ -59,7 +59,7 @@ it('tooltip is visible on mouseover', async () => {
 })
 
 it('tooltip is hidden on mouseleave', async () => {
-  using component = createDisposableTooltip(rootId, template)
+  await using component = createDisposableTooltip(rootId, template)
   const trigger = component.elements.getTriggerEl()
   const content = component.elements.getContentEl()
 
@@ -69,7 +69,7 @@ it('tooltip is hidden on mouseleave', async () => {
 })
 
 it('tooltip content is hoverable', async () => {
-  using component = createDisposableTooltip(rootId, template)
+  await using component = createDisposableTooltip(rootId, template)
   const trigger = component.elements.getTriggerEl()
   const content = component.elements.getContentEl()
 
@@ -79,7 +79,7 @@ it('tooltip content is hoverable', async () => {
 })
 
 it('tooltip is hidden on escape keydown', async () => {
-  using component = createDisposableTooltip(rootId, template)
+  await using component = createDisposableTooltip(rootId, template)
   const content = component.elements.getContentEl()
 
   await userEvent.keyboard('{Tab}')
@@ -98,7 +98,7 @@ it('should not allow for innerHTML of child elements', async () => {
   </div>
   `
 
-  using component = createDisposableTooltip(rootId, maliciousTemplate)
+  await using component = createDisposableTooltip(rootId, maliciousTemplate)
   const content = component.elements.getContentEl()
 
   expect(content.innerHTML).toBe(unsafeContent)

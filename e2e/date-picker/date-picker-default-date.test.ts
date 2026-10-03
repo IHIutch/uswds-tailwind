@@ -66,7 +66,7 @@ const template = `
 `
 
 it('should display the input date when an input date is present', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   const button = component.elements.getTriggerEl()
   const calendar = component.elements.getCalendarEl()!
@@ -81,7 +81,7 @@ it('should display the input date when an input date is present', async () => {
 })
 
 it('should display the default date when the input date is empty', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   const button = component.elements.getTriggerEl()
   const calendar = component.elements.getCalendarEl()!
@@ -96,7 +96,7 @@ it('should display the default date when the input date is empty', async () => {
 })
 
 it('should display the default date when the input date is invalid', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   const button = component.elements.getTriggerEl()
   const calendar = component.elements.getCalendarEl()!

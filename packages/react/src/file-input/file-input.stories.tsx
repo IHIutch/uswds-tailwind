@@ -1,3 +1,4 @@
+import { getFileId } from '@uswds-tailwind/file-input-compat'
 import preview from '../../.storybook/preview'
 import { Field } from '../field/field'
 import { FileInput } from './file-input'
@@ -21,7 +22,7 @@ export const Default = meta.story({
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
               {files.map(file => (
-                <FileInput.Item key={file.name} file={file}>
+                <FileInput.Item key={getFileId(file)} file={file}>
                   <FileInput.PreviewItem>
                     {file.type.startsWith('image/')
                       ? <FileInput.PreviewItemThumb />
@@ -57,7 +58,7 @@ export const WithFieldRoot = meta.story({
                   <FileInput.ChangeTrigger />
                 </FileInput.PreviewHeader>
                 {files.map(file => (
-                  <FileInput.Item key={file.name} file={file}>
+                  <FileInput.Item key={getFileId(file)} file={file}>
                     <FileInput.PreviewItem>
                       {file.type.startsWith('image/')
                         ? <FileInput.PreviewItemThumb />
@@ -92,7 +93,7 @@ export const Multiple = meta.story({
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
               {files.map(file => (
-                <FileInput.Item key={file.name} file={file}>
+                <FileInput.Item key={getFileId(file)} file={file}>
                   <FileInput.PreviewItem>
                     {file.type.startsWith('image/')
                       ? <FileInput.PreviewItemThumb />

@@ -1,15 +1,16 @@
-export { anatomy, parts } from './file-input.anatomy'
+export { anatomy } from './file-input.anatomy'
 export { connect } from './file-input.connect'
 export { machine } from './file-input.machine'
-export { itemProps, props, splitItemProps, splitProps } from './file-input.props'
+export * from './file-input.props'
 export type {
   FileInputApi as Api,
   ElementIds,
-  FileChangeDetails,
-  FileInputSchema,
-  FileRejection,
-  ItemProps,
   FileInputMachine as Machine,
+  PreviewImageProps,
+  PreviewStatus,
+  PreviewType,
   FileInputProps as Props,
+  FileInputSchema as Schema,
   FileInputService as Service,
 } from './file-input.types'
+export { getFileId } from './file-input.utils'

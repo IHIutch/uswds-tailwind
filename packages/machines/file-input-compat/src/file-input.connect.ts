@@ -1,117 +1,68 @@
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
-import type { FileInputApi, FileInputService, ItemProps } from './file-input.types'
-import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
+import type { FileInputApi, FileInputService } from './file-input.types'
+import { ariaAttr, dataAttr } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
-import { getFilePreviewType } from './file-input.utils'
+import { getDefaultAriaLabel, getFileId, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
 
 export function connect<T extends PropTypes>(
   service: FileInputService,
   normalize: NormalizeProps<T>,
 ): FileInputApi<T> {
-  const { state, context, send, prop, scope, computed } = service
-
-  const disabled = !!prop('disabled')
-  const focused = state.matches('focused')
+  const { state, send, prop, context, scope, refs } = service
   const dragging = state.matches('dragging')
-  const acceptedFiles = context.get('acceptedFiles')
-  const rejectedFiles = context.get('rejectedFiles')
-  const hasFiles = acceptedFiles.length > 0
-  const hasInvalidFiles = rejectedFiles.length > 0
-  const multiple = !!prop('multiple')
 
-  const itemsLabel = computed('itemsLabel')
+  const acceptedFiles = context.get('acceptedFiles')
+  const invalid = context.get('invalid')
+  const errorText = context.get('errorText')
+  const srStatusText = context.get('srStatusText')
+
+  const itemsLabel = getItemsLabel(prop('multiple'))
   const dragText = `Drag ${itemsLabel} here or`
   const chooseText = 'choose from folder'
+  const defaultAriaLabel = getDefaultAriaLabel(itemsLabel)
+  const ariaLabelText = invalid
+    ? `${errorText} ${defaultAriaLabel}`
+    : acceptedFiles.length > 1
+      ? 'Change files'
+      : acceptedFiles.length === 1
+        ? 'Change file'
+        : defaultAriaLabel
 
-  const changeItemText = multiple ? 'Change files' : 'Change file'
-  let previewHeadingText = ''
-  if (acceptedFiles.length === 1) {
-    previewHeadingText = 'Selected file'
-  }
-  else if (acceptedFiles.length > 1) {
-    previewHeadingText = `${acceptedFiles.length} files selected`
-  }
+  const disabled = prop('disabled')
+  const ariaDisabled = prop('ariaDisabled')
+  const hasFiles = acceptedFiles.length > 0
 
-  // Consumer can override with the `srStatusText` prop (i18n hook).
-  const defaultStatusText = `No ${itemsLabel} selected.`
-  let srStatusText = prop('srStatusText') ?? defaultStatusText
-  if (prop('srStatusText') == null) {
-    if (acceptedFiles.length === 1) {
-      srStatusText = `You have selected the file: ${acceptedFiles[0]!.name}`
-    }
-    else if (acceptedFiles.length > 1) {
-      const fileNames = acceptedFiles.map(f => f.name).join(', ')
-      srStatusText = `You have selected ${acceptedFiles.length} files: ${fileNames}`
-    }
-  }
-
-  const errorMessageText = prop('errorMessage')
-
-  // - Default: "Drag file(s) here or choose from folder" (L182-189)
-  // - After file selection: "Change file(s)" (L350)
-  // - After error: "Error: ... Drag file(s) here or choose from folder" (L522-524)
-  const defaultAriaLabel = `${dragText} ${chooseText}`
-  let inputAriaLabel = defaultAriaLabel
-  if (hasFiles) {
-    inputAriaLabel = changeItemText
-  }
-  else if (hasInvalidFiles) {
-    inputAriaLabel = `${errorMessageText} ${defaultAriaLabel}`
-  }
+  const changeText = acceptedFiles.length > 1 ? 'Change files' : 'Change file'
+  const previewHeadingText
+    = acceptedFiles.length === 1
+      ? 'Selected file'
+      : acceptedFiles.length > 1
+        ? `${acceptedFiles.length} files selected`
+        : ''
 
   return {
-    focused,
-    dragging,
-    disabled,
-    hasFiles,
-    hasInvalidFiles,
     acceptedFiles,
-    rejectedFiles,
-    errorMessageText,
+    invalid,
+    errorText,
     srStatusText,
     previewHeadingText,
-    changeItemText,
+    previewChangeText: changeText,
+
     dragText,
     chooseText,
-
-    openFilePicker() {
-      if (disabled)
-        return
-      send({ type: 'OPEN' })
-    },
-
-    clearFiles() {
-      if (disabled)
-        return
-      send({ type: 'FILES.CLEAR' })
-    },
-
-    deleteFile(file) {
-      if (disabled)
-        return
-      send({ type: 'FILE.DELETE', file })
-    },
-
-    // Uses URL.createObjectURL for efficiency; returns cleanup function
-    createFileUrl(file: File, cb: (url: string) => void) {
-      const win = scope.getWin()
-      const url = win.URL.createObjectURL(file)
-      cb(url)
-      return () => win.URL.revokeObjectURL(url)
-    },
-
-    getFilePreviewType(file: File) {
-      return getFilePreviewType(file)
+    disabled,
+    getFileId,
+    getPreviewType(file) {
+      return getPreviewType(file)
     },
 
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
+        'dir': prop('dir'),
         'id': dom.getRootId(scope),
-        'data-disabled': dataAttr(disabled),
-        'data-dragging': dataAttr(dragging),
-        'data-invalid': dataAttr(hasInvalidFiles),
+        'data-disabled': dataAttr(disabled || ariaDisabled),
       })
     },
 
@@ -120,7 +71,7 @@ export function connect<T extends PropTypes>(
         ...parts.label.attrs,
         'id': dom.getLabelId(scope),
         'htmlFor': dom.getInputId(scope),
-        'data-disabled': dataAttr(disabled),
+        'data-disabled': dataAttr(disabled || ariaDisabled),
       })
     },
 
@@ -128,33 +79,24 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.dropzone.attrs,
         'id': dom.getDropzoneId(scope),
-        'data-disabled': dataAttr(disabled),
         'data-dragging': dataAttr(dragging),
-        'data-invalid': dataAttr(hasInvalidFiles),
-
-        onDragOver(event) {
-          if (disabled)
-            return
-          event.preventDefault()
-          event.stopPropagation()
-          send({ type: 'DROPZONE.DRAG_OVER' })
+        'data-invalid': dataAttr(invalid),
+        onDragOver() {
+          send({ type: 'DRAG.OVER' })
         },
-
         onDragLeave() {
-          if (disabled)
-            return
-          send({ type: 'DROPZONE.DRAG_LEAVE' })
+          send({ type: 'DRAG.LEAVE' })
         },
+        onDrop() {
+          send({ type: 'DROP' })
+        },
+      })
+    },
 
-        // Also processes files from dataTransfer since the machine model
-        onDrop(event) {
-          if (disabled)
-            return
-          event.preventDefault()
-          event.stopPropagation()
-          const files = Array.from(event.dataTransfer?.files ?? [])
-          send({ type: 'DROPZONE.DROP', files })
-        },
+    getBoxProps() {
+      return normalize.element({
+        ...parts.box.attrs,
+        id: dom.getBoxId(scope),
       })
     },
 
@@ -163,117 +105,115 @@ export function connect<T extends PropTypes>(
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
         'type': 'file',
-        'name': prop('name'),
         'accept': prop('accept'),
-        'multiple': multiple || undefined,
-        'required': prop('required') || undefined,
+        'multiple': prop('multiple'),
         'disabled': disabled || undefined,
-        'aria-label': inputAriaLabel,
-
-        onClick(event) {
-          // Stop propagation to prevent dropzone click handler from firing
-          event.stopPropagation()
-          // Allow re-selection of the same file
-          event.currentTarget.value = ''
-        },
-
+        'aria-label': ariaLabelText,
+        'aria-disabled': ariaAttr(ariaDisabled),
         onInput(event) {
-          if (disabled)
-            return
-          const { files } = event.currentTarget
-          send({ type: 'INPUT.CHANGE', files: files ? Array.from(files) : [] })
-        },
-        onFocus() {
-          send({ type: 'INPUT.FOCUS' })
-        },
-        onBlur() {
-          send({ type: 'INPUT.BLUR' })
+          const input = event.currentTarget
+          const files = Array.from(input.files ?? [])
+          if (!isBatchValid(prop('accept'), files))
+            input.value = ''
+          send({ type: 'FILES.CHANGE', files })
         },
       })
     },
 
-    // Hidden when files are selected or error is showing
     getInstructionsProps() {
       return normalize.element({
         ...parts.instructions.attrs,
+        'id': dom.getInstructionsId(scope),
         'aria-hidden': true,
-        'hidden': hasFiles || hasInvalidFiles || undefined,
+        'hidden': hasFiles,
       })
     },
 
-    getSrStatusProps() {
-      return normalize.element({
-        ...parts.srStatus.attrs,
-        'aria-live': 'polite' as const,
-        'style': visuallyHiddenStyle,
-      })
+    getDragTextProps() {
+      return normalize.element({ ...parts.dragText.attrs })
     },
 
-    getErrorMessageProps() {
+    getChooseProps() {
+      return normalize.element({ ...parts.choose.attrs })
+    },
+
+    getPreviewListProps() {
       return normalize.element({
-        ...parts.errorMessage.attrs,
-        'aria-hidden': true,
-        'hidden': !hasInvalidFiles || undefined,
+        ...parts.previewList.attrs,
+        'id': dom.getPreviewListId(scope),
+        'hidden': !hasFiles,
+        'data-valid': dataAttr(hasFiles),
       })
     },
 
     getPreviewHeadingProps() {
       return normalize.element({
         ...parts.previewHeading.attrs,
-        hidden: !hasFiles || undefined,
+        'id': dom.getPreviewHeadingId(scope),
+        'hidden': !hasFiles,
+        'data-change-text': changeText,
       })
     },
 
-    getItemGroupProps() {
-      return normalize.element({
-        ...parts.itemGroup.attrs,
-        'data-disabled': dataAttr(disabled),
-        'data-valid': dataAttr(hasFiles),
-        'data-invalid': dataAttr(hasInvalidFiles),
-      })
-    },
-
-    getItemProps(props: ItemProps) {
-      const { file } = props
+    getItemProps({ file }) {
       return normalize.element({
         ...parts.item.attrs,
-        'id': dom.getItemId?.(scope, dom.getFileId(file)),
+        'id': dom.getItemId(scope, getFileId(file)),
         'aria-hidden': true,
-        'data-disabled': dataAttr(disabled),
       })
     },
 
-    getItemPreviewProps(props: ItemProps) {
-      const { file } = props
+    getItemPreviewImageProps({ file, url, status = 'loading', onLoad, onError }) {
       return normalize.img({
-        ...parts.itemPreview.attrs,
+        ...parts.itemPreviewImage.attrs,
+        'id': dom.getItemPreviewImageId(scope, getFileId(file)),
         'alt': '',
-        'data-type': getFilePreviewType(file),
-        'data-disabled': dataAttr(disabled),
+        'src': url,
+        'data-loading': dataAttr(status === 'loading'),
+        'data-preview-type': status === 'fallback' ? getPreviewType(file) : undefined,
+        onLoad,
+        onError,
       })
     },
 
-    getItemNameProps(_props: ItemProps) {
+    getErrorTextProps() {
       return normalize.element({
-        ...parts.itemName.attrs,
-        'data-disabled': dataAttr(disabled),
+        ...parts.errorText.attrs,
+        'id': dom.getErrorTextId(scope),
+        'aria-hidden': true,
+        'hidden': !invalid,
+        'data-invalid': dataAttr(invalid),
       })
     },
 
-    getItemDeleteTriggerProps(props: ItemProps) {
-      const { file } = props
-      return normalize.button({
-        ...parts.itemDeleteTrigger.attrs,
-        'type': 'button',
-        'disabled': disabled || undefined,
-        'data-disabled': dataAttr(disabled),
-        'aria-label': `Delete ${file.name}`,
-        onClick() {
-          if (disabled)
-            return
-          send({ type: 'FILE.DELETE', file })
-        },
+    getSrStatusProps() {
+      return normalize.element({
+        ...parts.srStatus.attrs,
+        'id': dom.getSrStatusId(scope),
+        'role': 'status',
+        'aria-live': 'polite',
+        'hidden': !refs.get('hasStatus'),
       })
+    },
+
+    createFileUrl(file, cb) {
+      const win = scope.getWin()
+      const url = win.URL.createObjectURL(file)
+      let revoked = false
+      const revoke = () => {
+        if (revoked)
+          return
+        revoked = true
+        win.URL.revokeObjectURL(url)
+      }
+      try {
+        cb(url)
+      }
+      catch (error) {
+        revoke()
+        throw error
+      }
+      return revoke
     },
   }
 }

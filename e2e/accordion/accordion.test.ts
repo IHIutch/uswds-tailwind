@@ -24,18 +24,18 @@ const TEMPLATE = `
   </ul>
 `
 
-it('has an "aria-expanded" attribute', () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+it('has an "aria-expanded" attribute', async () => {
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
   expect(component.elements.getTriggerEl(itemOne)?.getAttribute('aria-expanded')).toBeTruthy()
 })
 
-it('has an "aria-controls" attribute', () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+it('has an "aria-controls" attribute', async () => {
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
   expect(component.elements.getTriggerEl(itemOne)?.getAttribute('aria-controls')).toBeTruthy()
 })
 
 it('toggles button aria-expanded="true"', async () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
   const instance = Accordion.getInstance(rootId)
   await instance?.open(itemOne)
 
@@ -43,7 +43,7 @@ it('toggles button aria-expanded="true"', async () => {
 })
 
 it('toggles content "hidden" off', async () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
 
   const instance = Accordion.getInstance(rootId)
   await instance?.open(itemOne)
@@ -52,7 +52,7 @@ it('toggles content "hidden" off', async () => {
 })
 
 it('toggles button aria-expanded="false"', async () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
 
   const instance = Accordion.getInstance(rootId)
   await instance?.close(itemOne)
@@ -61,7 +61,7 @@ it('toggles button aria-expanded="false"', async () => {
 })
 
 it('toggles content "hidden" on', async () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
 
   const instance = Accordion.getInstance(rootId)
   await instance?.close(itemOne)
@@ -70,7 +70,7 @@ it('toggles content "hidden" on', async () => {
 })
 
 it('shows the second item when clicked', async () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE)
+  await using component = createDisposableAccordion(rootId, TEMPLATE)
 
   await userEvent.click(component.elements.getTriggerEl(itemTwo)!)
 
@@ -82,7 +82,7 @@ it('shows the second item when clicked', async () => {
 })
 
 it('keeps multiple sections open with data-allow-multiple', async () => {
-  using component = createDisposableAccordion(rootId, TEMPLATE.replace('data-part="accordion-root"', 'data-part="accordion-root" data-multiple'))
+  await using component = createDisposableAccordion(rootId, TEMPLATE.replace('data-part="accordion-root"', 'data-part="accordion-root" data-multiple'))
 
   await userEvent.click(component.elements.getTriggerEl(itemTwo)!)
   await userEvent.click(component.elements.getTriggerEl(itemOne)!)
