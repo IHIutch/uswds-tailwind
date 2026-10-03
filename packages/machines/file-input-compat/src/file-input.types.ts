@@ -35,7 +35,7 @@ export interface FileInputProps extends DirectionProperty, CommonProperties {
   accept?: string | undefined
   /** @default false */
   multiple?: boolean | undefined
-  /** Disables the native picker; scripted change events still run. @default false */
+  /** Disables the native picker; scripted input events still run. @default false */
   disabled?: boolean | undefined
   /** Marks the input disabled without blocking interaction. @default false */
   ariaDisabled?: boolean | undefined
@@ -53,15 +53,14 @@ export interface FileInputSchema {
     invalid: boolean
     errorText: string
     srStatusText: string
+  }
+  refs: {
+    statusTimers: Set<ReturnType<Window['setTimeout']>>
     /** Fixed at initialization: initially disabled inputs never gain a status region. */
     hasStatus: boolean
   }
-  refs: {
-    statusTimers: ReturnType<Window['setTimeout']>[]
-  }
-  guard: 'isValidBatch'
-  effect: 'cleanupTimers' | 'observeNativeInput'
-  action: 'acceptFiles' | 'rejectBatch' | 'scheduleStatus'
+  effect: 'cleanupTimers'
+  action: 'setFiles'
   event:
     | { type: 'FILES.CHANGE', files: File[] }
     | { type: 'DRAG.OVER' }
@@ -86,11 +85,8 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   dragText: string
   chooseText: string
   disabled: boolean
-  /**
-   * Stable framework key for a File object, including files with identical metadata.
-   * Repeating the same object within one list is unsupported.
-   */
-  getFileIdentity: (file: File) => string
+  /** Stable ID derived from the file name and size. */
+  getFileId: (file: File) => string
   getPreviewType: (file: File) => PreviewType
   getRootProps: () => T['element']
   getLabelProps: () => T['label']

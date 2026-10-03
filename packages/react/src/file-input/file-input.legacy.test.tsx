@@ -1,3 +1,4 @@
+import { getFileId } from '@uswds-tailwind/file-input-compat'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
@@ -79,6 +80,28 @@ it('disabled prop disables the underlying input', async () => {
   expect(input.disabled).toBe(true)
 })
 
+it('announces a selected file after the input is disabled and re-enabled', async () => {
+  const view = (disabled: boolean) => (
+    <FileInput.Root disabled={disabled}>
+      <FileInput.SrStatus />
+      <FileInput.Input />
+    </FileInput.Root>
+  )
+  const screen = await render(view(false))
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement
+
+  await screen.rerender(view(true))
+  expect(input).toBeDisabled()
+
+  await screen.rerender(view(false))
+  expect(input).not.toBeDisabled()
+
+  await userEvent.upload(input, createMockFile('report.pdf', 'application/pdf'))
+  const status = screen.getByRole('status')
+  await expect.element(status).toHaveAttribute('aria-live', 'polite')
+  await expect.element(status, { timeout: 2000 }).toHaveTextContent('You have selected the file: report.pdf')
+})
+
 it('accept prop is forwarded to the underlying input', async () => {
   await renderFileInput({ accept: '.pdf,.txt' })
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
@@ -89,6 +112,33 @@ it('multiple prop is forwarded to the underlying input', async () => {
   await renderFileInput({ multiple: true })
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
   expect(input.multiple).toBe(true)
+})
+
+it('updates the preview and accessible name together when replacing or clearing files', async () => {
+  const screen = await render(
+    <FileInput.Root>
+      <FileInput.Input />
+      <FileInput.Instructions />
+      <FileInput.PreviewList>
+        {({ files }) => files.map(file => <span key={getFileId(file)}>{file.name}</span>)}
+      </FileInput.PreviewList>
+    </FileInput.Root>,
+  )
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement
+
+  await userEvent.upload(input, createMockFile('first.txt', 'text/plain'))
+  await expect.element(screen.getByText('first.txt')).toBeVisible()
+  expect(input.getAttribute('aria-label')).toBe('Change file')
+
+  await userEvent.upload(input, createMockFile('second.txt', 'text/plain'))
+  await expect.element(screen.getByText('second.txt')).toBeVisible()
+  await expect.element(screen.getByText('first.txt')).not.toBeInTheDocument()
+  expect(input.getAttribute('aria-label')).toBe('Change file')
+
+  await userEvent.upload(input, [])
+  await expect.element(screen.getByText('second.txt')).not.toBeInTheDocument()
+  await expect.element(screen.getByText(/Drag file here or/)).toBeVisible()
+  expect(input.getAttribute('aria-label')).toBe('Drag file here or choose from folder')
 })
 
 // SUGGESTION (review): the `data-invalid` + anatomy-query pair below pins

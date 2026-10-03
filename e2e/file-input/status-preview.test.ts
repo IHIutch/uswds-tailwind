@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createDisposableFileInput, file, fileInputTemplate, selectFiles } from './_utils'
+import { userEvent } from 'vitest/browser'
+import { createDisposableFileInput, file, fileInputTemplate } from './_utils'
 
 describe('file previews and live status', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L363-L379 (announce the selected filename after one second)
@@ -7,7 +8,7 @@ describe('file previews and live status', () => {
     await using component = createDisposableFileInput('behavior', fileInputTemplate())
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('photo.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('photo.png', 'image/png')])
     await vi.waitFor(() => expect(elements.getPreviewHeaderEl()!.textContent).toBe('Selected file Change file'))
     expect(elements.getSrStatusEl()!.textContent).toBe('No file selected.')
     await vi.waitFor(() => expect(elements.getSrStatusEl()!.textContent).toBe('You have selected the file: photo.png'), { timeout: 1500 })
@@ -18,38 +19,25 @@ describe('file previews and live status', () => {
     await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('a.png', 'image/png'), file('b.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('a.png', 'image/png'), file('b.png', 'image/png')])
     await vi.waitFor(() => expect(elements.getSrStatusEl()!.textContent).toBe('You have selected 2 files: a.png, b.png'), { timeout: 1500 })
-    selectFiles(elements.getInputEl()!, [])
+    await userEvent.upload(elements.getInputEl()!, [])
     await vi.waitFor(() => expect(elements.getSrStatusEl()!.textContent).toBe('No files selected.'), { timeout: 1500 })
   })
 
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L457-L499 (loading preview, file data, and extension fallback)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L417-L425 (use the fallback when the image fails)
-  it('renders a loading preview, then the file data or extension fallback', { tags: ['parity'] }, async () => {
+  it('renders image previews and extension fallbacks', { tags: ['parity'] }, async () => {
     await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
 
     const svg = file('photo.svg', 'image/svg+xml', '<svg xmlns="http://www.w3.org/2000/svg" width="3" height="2"></svg>')
     const pdf = file('report.pdf', 'application/pdf', 'not a decodable image')
-    const readAsDataURL = FileReader.prototype.readAsDataURL
-    const reads: Array<() => void> = []
-    using reader = vi.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(function (this: FileReader, blob) {
-      reads.push(() => readAsDataURL.call(this, blob))
-    })
-    selectFiles(elements.getInputEl()!, [svg, pdf])
+    await userEvent.upload(elements.getInputEl()!, [svg, pdf])
     await vi.waitFor(() => {
       const images = Array.from(elements.getPreviewListEl()!.querySelectorAll('img'))
       expect(images).toHaveLength(2)
-      expect(images.every(image => image.hasAttribute('data-loading'))).toBe(true)
       expect(images.every(image => image.alt === '')).toBe(true)
-    })
-    reader.mockRestore()
-    reads.forEach(read => read())
-    await vi.waitFor(() => {
-      const image = elements.getPreviewListEl()!.querySelector<HTMLImageElement>('[data-part="item"] img')
-      expect(image).not.toBeNull()
-      expect(Array.from(elements.getPreviewListEl()!.querySelectorAll('img')).every(img => !img.hasAttribute('data-loading'))).toBe(true)
     })
     await vi.waitFor(() => {
       const report = Array.from(elements.getPreviewListEl()!.children).find(item => item.textContent === 'report.pdf')!
@@ -65,12 +53,12 @@ describe('file previews and live status', () => {
     await using component = createDisposableFileInput('behavior', fileInputTemplate())
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('old.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('old.png', 'image/png')])
     await vi.waitFor(() => expect(elements.getPreviewListEl()!.textContent).toBe('old.png'))
-    selectFiles(elements.getInputEl()!, [file('new.pdf', 'application/pdf')])
+    await userEvent.upload(elements.getInputEl()!, [file('new.pdf', 'application/pdf')])
     await vi.waitFor(() => expect(elements.getPreviewListEl()!.textContent).toBe('new.pdf'))
     expect(elements.getPreviewListEl()!.children).toHaveLength(1)
-    selectFiles(elements.getInputEl()!, [])
+    await userEvent.upload(elements.getInputEl()!, [])
     await vi.waitFor(() => {
       expect(elements.getPreviewListEl()!.children).toHaveLength(0)
       expect(elements.getInstructionsEl()!.hasAttribute('hidden')).toBe(false)

@@ -3,13 +3,13 @@ import type { FileInputApi, FileInputService } from './file-input.types'
 import { ariaAttr, dataAttr } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
-import * as utils from './file-input.utils'
+import { getDefaultAriaLabel, getFileId, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
 
 export function connect<T extends PropTypes>(
   service: FileInputService,
   normalize: NormalizeProps<T>,
 ): FileInputApi<T> {
-  const { state, send, prop, context, scope } = service
+  const { state, send, prop, context, scope, refs } = service
   const dragging = state.matches('dragging')
 
   const acceptedFiles = context.get('acceptedFiles')
@@ -17,10 +17,10 @@ export function connect<T extends PropTypes>(
   const errorText = context.get('errorText')
   const srStatusText = context.get('srStatusText')
 
-  const itemsLabel = utils.getItemsLabel(prop('multiple'))
+  const itemsLabel = getItemsLabel(prop('multiple'))
   const dragText = `Drag ${itemsLabel} here or`
   const chooseText = 'choose from folder'
-  const defaultAriaLabel = utils.getDefaultAriaLabel(itemsLabel)
+  const defaultAriaLabel = getDefaultAriaLabel(itemsLabel)
   const ariaLabelText = invalid
     ? `${errorText} ${defaultAriaLabel}`
     : acceptedFiles.length > 1
@@ -52,11 +52,9 @@ export function connect<T extends PropTypes>(
     dragText,
     chooseText,
     disabled,
-    getFileIdentity(file) {
-      return dom.getFileIdentity(file)
-    },
+    getFileId,
     getPreviewType(file) {
-      return utils.getPreviewType(file)
+      return getPreviewType(file)
     },
 
     getRootProps() {
@@ -102,7 +100,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    // The machine owns the native change listener so rejection can stop propagation.
     getInputProps() {
       return normalize.input({
         ...parts.input.attrs,
@@ -113,6 +110,13 @@ export function connect<T extends PropTypes>(
         'disabled': disabled || undefined,
         'aria-label': ariaLabelText,
         'aria-disabled': ariaAttr(ariaDisabled),
+        onInput(event) {
+          const input = event.currentTarget
+          const files = Array.from(input.files ?? [])
+          if (!isBatchValid(prop('accept'), files))
+            input.value = ''
+          send({ type: 'FILES.CHANGE', files })
+        },
       })
     },
 
@@ -154,7 +158,7 @@ export function connect<T extends PropTypes>(
     getItemProps({ file }) {
       return normalize.element({
         ...parts.item.attrs,
-        'id': dom.getItemId(scope, file),
+        'id': dom.getItemId(scope, getFileId(file)),
         'aria-hidden': true,
       })
     },
@@ -162,11 +166,11 @@ export function connect<T extends PropTypes>(
     getItemPreviewImageProps({ file, url, status = 'loading', onLoad, onError }) {
       return normalize.img({
         ...parts.itemPreviewImage.attrs,
-        'id': dom.getItemPreviewImageId(scope, file),
+        'id': dom.getItemPreviewImageId(scope, getFileId(file)),
         'alt': '',
         'src': url,
         'data-loading': dataAttr(status === 'loading'),
-        'data-preview-type': status === 'fallback' ? utils.getPreviewType(file) : undefined,
+        'data-preview-type': status === 'fallback' ? getPreviewType(file) : undefined,
         onLoad,
         onError,
       })
@@ -188,7 +192,7 @@ export function connect<T extends PropTypes>(
         'id': dom.getSrStatusId(scope),
         'role': 'status',
         'aria-live': 'polite',
-        'hidden': !context.get('hasStatus'),
+        'hidden': !refs.get('hasStatus'),
       })
     },
 

@@ -43,15 +43,6 @@ export function file(name: string, type = 'application/octet-stream', contents =
   return new File([contents], name, { type })
 }
 
-export function selectFiles(input: HTMLInputElement, files: File[]) {
-  const transfer = new DataTransfer()
-  files.forEach(file => transfer.items.add(file))
-  input.files = transfer.files
-  const event = new Event('change', { bubbles: true, cancelable: true })
-  input.dispatchEvent(event)
-  return event
-}
-
 interface FileInputOptions {
   id?: string
   multiple?: boolean
