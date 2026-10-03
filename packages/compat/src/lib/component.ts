@@ -74,7 +74,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
     return this
   }
 
-  destroy = () => {
+  destroy() {
     this.machine.stop()
     if (instances.get(this.rootEl) === this)
       instances.delete(this.rootEl)

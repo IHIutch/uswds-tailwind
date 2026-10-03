@@ -192,6 +192,17 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     spreadProps(entry.image, this.api.getItemPreviewImageProps({ file, status: 'fallback' }))
   }
 
+  override destroy() {
+    const entries = Array.from(this.previews.values())
+    this.previews.clear()
+    for (const entry of entries) {
+      entry.reader.onloadend = null
+      if (entry.reader.readyState === FileReader.LOADING)
+        entry.reader.abort()
+    }
+    super.destroy()
+  }
+
   async setFiles(files: File[]) {
     this.machine.service.send({ type: 'FILES.CHANGE', files })
     await this.settle()

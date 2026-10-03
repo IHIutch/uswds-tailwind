@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
+import { FileInput } from '../../packages/compat/src/file-input'
 import { createDisposableFileInput, file, fileInputTemplate } from './_utils'
 
 describe('file previews and live status', () => {
@@ -87,4 +88,36 @@ describe('file previews and live status', () => {
     })
   })
 
+  it('does not finish a preview after the component is destroyed', async () => {
+    await using component = createDisposableFileInput('behavior', fileInputTemplate())
+    const completions: (() => void)[] = []
+    const readAsDataURL = FileReader.prototype.readAsDataURL
+    const read = vi.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(function (this: FileReader, blob) {
+      const onloadend = this.onloadend
+      if (onloadend) {
+        this.onloadend = (event) => {
+          completions.push(() => onloadend.call(this, event))
+        }
+      }
+      readAsDataURL.call(this, blob)
+    })
+
+    try {
+      await userEvent.upload(component.elements.getInputEl()!, [file('photo.svg', 'image/svg+xml', '<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"></svg>')])
+      await vi.waitFor(() => expect(completions).toHaveLength(1))
+      const image = component.elements.getPreviewItemImageEl('photo.svg')!
+      expect(image.getAttribute('src')).toBeNull()
+
+      const root = component.elements.getRootEl()!
+      FileInput.getInstance(root)!.destroy()
+      for (const complete of completions)
+        complete()
+
+      expect(image.getAttribute('src')).toBeNull()
+      expect(FileInput.getInstance(root)).toBeNull()
+    }
+    finally {
+      read.mockRestore()
+    }
+  })
 })
