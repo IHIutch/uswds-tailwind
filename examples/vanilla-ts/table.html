@@ -19,8 +19,13 @@
   <div class="space-y-8">
     <section>
       <h2 class="text-2xl font-semibold mb-4">Basic Sortable Table</h2>
+      <div
+        data-scope="table"
+        data-part="root"
+      >
       <table
-        data-part="table-root"
+        data-scope="table"
+        data-part="table"
         class="border-separate border-spacing-0"
       >
         <caption class="mb-3 text-left font-bold">
@@ -172,6 +177,8 @@
           </tr>
         </tbody>
       </table>
+      <div data-scope="table" data-part="sr-status"></div>
+      </div>
     </section>
 
   </div>

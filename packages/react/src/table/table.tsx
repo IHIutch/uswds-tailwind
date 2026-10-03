@@ -64,9 +64,11 @@ export type TableRootProps = React.ComponentPropsWithoutRef<'table'> & {
   compact?: boolean
   stacked?: boolean
   captionText?: table.Props['captionText']
-  columnNames?: table.Props['columnNames']
-  defaultSortedColumnIndex?: table.Props['defaultSortedColumnIndex']
+  columnNames?: Record<number, string>
+  defaultSortedColumnIndex?: number
   defaultSortDirection?: table.Props['defaultSortDirection']
+  sortColumn?: table.Props['sortColumn']
+  sortDirection?: table.Props['sortDirection']
   onSortChange?: table.Props['onSortChange']
 }
 
@@ -78,6 +80,8 @@ function TableRoot({
   columnNames,
   defaultSortedColumnIndex,
   defaultSortDirection,
+  sortColumn,
+  sortDirection,
   onSortChange,
   className,
   ...props
@@ -86,18 +90,20 @@ function TableRoot({
     id: React.useId(),
     captionText,
     columnNames,
-    defaultSortedColumnIndex,
+    defaultSortColumn: defaultSortedColumnIndex,
     defaultSortDirection,
+    sortColumn,
+    sortDirection,
     onSortChange,
   })
   const api = table.connect(service, normalizeProps)
-  const rootProps = mergeProps(api.getRootProps(), props)
+  const tableProps = mergeProps(api.getTableProps(), props)
 
   return (
     <TableContext.Provider value={{ api, variant, compact, stacked }}>
-      <div className="@container">
+      <div {...api.getRootProps()} className="@container">
         <table
-          {...rootProps}
+          {...tableProps}
           className={cn('border-spacing-0 border-t border-l', className)}
         />
         <TableSrStatus />
@@ -192,7 +198,8 @@ export type TableColumnHeaderProps = React.ComponentPropsWithoutRef<'th'> & {
 function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, children, ...props }: TableColumnHeaderProps) {
   const { api, variant, compact } = useTableContext()
   const { columnHeader } = tableVariants({ variant, compact })
-  const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ index: columnIndex }) : {}
+  const headerName = typeof children === 'string' ? children : String(children ?? '')
+  const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ columnIndex, headerName }) : {}
   return (
     <th
       scope={scope}
@@ -201,7 +208,7 @@ function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, ch
       className={columnHeader({ className })}
     >
       {sortable && columnIndex !== undefined
-        ? <TableSortButton columnIndex={columnIndex}>{children}</TableSortButton>
+        ? <TableSortButton columnIndex={columnIndex} headerName={headerName}>{children}</TableSortButton>
         : children}
     </th>
   )
@@ -211,11 +218,12 @@ function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, ch
 
 type TableSortButtonProps = React.ComponentPropsWithoutRef<'button'> & {
   columnIndex: number
+  headerName: string
 }
 
-function TableSortButton({ columnIndex, className, ...props }: TableSortButtonProps) {
+function TableSortButton({ columnIndex, headerName, className, ...props }: TableSortButtonProps) {
   const { api } = useTableContext()
-  const mergedProps = mergeProps(api.getSortButtonProps({ index: columnIndex }), props)
+  const mergedProps = mergeProps(api.getSortButtonProps({ columnIndex, headerName }), props)
   return (
     <button
       {...mergedProps}
@@ -267,6 +275,7 @@ function TableSrStatus({ className, ...props }: TableSrStatusProps) {
   return (
     <div
       {...mergedProps}
+      role="status"
       className={cn(className)}
     >
       {api.announcement}

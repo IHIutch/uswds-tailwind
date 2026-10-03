@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
 import { Table } from './table'
@@ -104,6 +104,33 @@ it('announcement region exists with role=status and aria-live=polite', async () 
   const screen = await renderTable()
   const region = screen.getByRole('status')
   await expect.element(region).toHaveAttribute('aria-live', 'polite')
+  const root = region.element().closest('[data-scope="table"][data-part="root"]')
+  expect(root?.querySelector('table[data-part="table"]')).not.toBeNull()
+})
+
+it('keeps the announcement region unchanged when unrelated content rerenders', async () => {
+  const view = (caption: string) => (
+    <Table.Root captionText="Sortable example">
+      <Table.Caption>{caption}</Table.Caption>
+    </Table.Root>
+  )
+  const screen = await render(view('Before'))
+  const region = screen.container.querySelector('[data-part="sr-status"]') as HTMLElement
+  const mutations: MutationRecord[] = []
+  const observer = new MutationObserver(records => mutations.push(...records))
+  observer.observe(region, { attributes: true, childList: true, characterData: true, subtree: true })
+
+  try {
+    await screen.rerender(view('After'))
+
+    await expect.element(screen.getByText('After')).toBeVisible()
+    expect(screen.container.querySelector('[data-part="sr-status"]')).toBe(region)
+    expect(region.textContent).toBe('')
+    expect([...mutations, ...observer.takeRecords()]).toEqual([])
+  }
+  finally {
+    observer.disconnect()
+  }
 })
 
 it('announcement region fills with text after sorting', async () => {
@@ -130,4 +157,23 @@ it('sort direction cycles ascending → descending → ascending on repeated cli
 
   await userEvent.click(sortButton)
   expect(header.getAttribute('aria-sort')).toBe('ascending')
+})
+
+it('reports a controlled sort request without reordering rows', async () => {
+  const onSortChange = vi.fn()
+  const screen = await render(
+    <Table.Root captionText="People" columnNames={{ 0: 'Name' }} sortColumn={0} sortDirection="asc" onSortChange={onSortChange}>
+      <Table.Caption>People</Table.Caption>
+      <Table.Header><Table.Row><Table.ColumnHeader columnIndex={0} sortable>Name</Table.ColumnHeader></Table.Row></Table.Header>
+      <Table.Body>
+        <Table.Row><Table.Cell columnIndex={0}>Zoe</Table.Cell></Table.Row>
+        <Table.Row><Table.Cell columnIndex={0}>Alice</Table.Cell></Table.Row>
+      </Table.Body>
+    </Table.Root>,
+  )
+
+  await userEvent.click(screen.getByRole('button', { name: 'Name' }))
+  expect(onSortChange).toHaveBeenCalledWith({ columnIndex: 0, direction: 'desc' })
+  expect(screen.getByRole('status').element().textContent).toBe('The table named "People" is now sorted by Name in ascending order.')
+  expect(Array.from(screen.container.querySelectorAll('tbody td'), cell => cell.textContent)).toEqual(['Zoe', 'Alice'])
 })

@@ -1,25 +1,61 @@
 import * as table from '@uswds-tailwind/table-compat'
+import { query, queryAll } from '@zag-js/dom-query'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataEnum, getDataString } from './lib/data-attr'
+import { getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
-export class Table extends Component<table.Props, table.Api> {
-  static instances = new Map<string, Table>()
+const parts = table.anatomy.build()
 
-  static getInstance(id: string) {
-    return Table.instances.get(id)
-  }
+function getCellValue(cell: HTMLTableCellElement | undefined) {
+  // eslint-disable-next-line unicorn/prefer-dom-node-text-content -- USWDS sorts layout-aware innerText before falling back to textContent.
+  return cell?.getAttribute('data-sort-value') || cell?.dataset.sort || cell?.innerText || cell?.textContent || ''
+}
+
+function sortRows(tbody: HTMLTableSectionElement, columnIndex: number, direction: table.SortDirection) {
+  const rows = Array.from(tbody.rows, tr => ({
+    tr,
+    value: getCellValue(tr.cells[columnIndex]),
+  }))
+  rows.sort((a, b) => {
+    const first = direction === 'asc' ? a.value : b.value
+    const second = direction === 'asc' ? b.value : a.value
+    if (first && second && !Number.isNaN(Number(first)) && !Number.isNaN(Number(second)))
+      return Number(first) - Number(second)
+    return first.localeCompare(second, navigator.language, { numeric: true, ignorePunctuation: true })
+  })
+  tbody.append(...rows.map(row => row.tr))
+}
+
+export class Table extends Component<table.Props, table.Api> {
+  static override root = parts.root
 
   initMachine(props: table.Props): VanillaMachine<table.Schema> {
-    Table.instances.set(props.id, this)
-
-    const srStatusEl = document.createElement('div')
-    srStatusEl.setAttribute('data-part', 'table-sr-status')
-    srStatusEl.setAttribute('data-value', props.id)
-    this.rootEl.after(srStatusEl)
-
+    const column = getDataString(this.rootEl, 'sort-column')
+    const parsedColumn = column === undefined || column === '' ? undefined : Number(column)
+    const rootSortColumn = parsedColumn !== undefined && Number.isInteger(parsedColumn) && parsedColumn >= 0
+      ? parsedColumn
+      : undefined
+    const initialHeader = this.headers.find(header => ['ascending', 'descending'].includes(header.getAttribute('aria-sort') ?? ''))
+    const headerSortColumn = initialHeader
+      ? Array.from(initialHeader.parentElement!.children).indexOf(initialHeader)
+      : undefined
+    const headerSortDirection = initialHeader?.getAttribute('aria-sort') === 'ascending' ? 'asc' : initialHeader ? 'desc' : undefined
+    const columnNames: Record<number, string> = {}
+    for (const header of this.headers) {
+      const index = Array.from(header.parentElement!.children).indexOf(header)
+      // eslint-disable-next-line unicorn/prefer-dom-node-text-content -- USWDS uses layout-aware innerText.
+      columnNames[index] ??= header.innerText.trim()
+    }
     return new VanillaMachine(table.machine, {
       ...props,
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'table'),
+      defaultSortColumn: props.defaultSortColumn ?? rootSortColumn ?? headerSortColumn,
+      defaultSortDirection: props.defaultSortDirection ?? getDataEnum(this.rootEl, 'sort-direction', ['asc', 'desc']) ?? headerSortDirection,
+      // eslint-disable-next-line unicorn/prefer-dom-node-text-content -- USWDS uses layout-aware innerText.
+      captionText: props.captionText ?? query<HTMLElement>(this.table, 'caption')?.innerText,
+      columnNames: props.columnNames ?? columnNames,
     })
   }
 
@@ -29,119 +65,65 @@ export class Table extends Component<table.Props, table.Api> {
 
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
+    spreadProps(this.table, this.api.getTableProps())
+    this.renderStatus(this.status)
+    this.headers.forEach(header => this.renderHeader(header))
 
-    this.headerCells.forEach((cell) => {
-      const columnIndex = Array.from(this.rootEl.querySelectorAll('th')).indexOf(cell)
-      // Only render sortable headers
-      if (cell.hasAttribute('data-sortable')) {
-        this.renderHeaderCell(cell, columnIndex)
-      }
-    })
+    Array.from(this.tbody.rows).forEach(row => this.renderRow(row))
 
-    this.renderSrStatus(this.srStatus)
-    this.renderBodyCells()
-    this.sortTableRows()
-  }
-
-  private get headerCells() {
-    return Array.from(this.rootEl.querySelectorAll<HTMLTableCellElement>('[data-part="table-header-cell"]'))
-  }
-
-  private get bodyRows() {
-    return Array.from(this.rootEl.querySelectorAll<HTMLTableRowElement>('tbody tr'))
-  }
-
-  private renderHeaderCell(cell: HTMLTableCellElement, index: number) {
-    spreadProps(cell, this.api.getHeaderCellProps(index))
-
-    const button = cell.querySelector<HTMLButtonElement>('[data-part="table-sort-button"]')
-    if (button) {
-      this.renderSortButton(button, index)
+    if (this.api.sortColumn != null && this.api.sortDirection != null) {
+      sortRows(this.tbody, this.api.sortColumn, this.api.sortDirection)
     }
   }
 
-  private renderSortButton(button: HTMLButtonElement, index: number) {
-    spreadProps(button, this.api.getSortButtonProps(index))
+  private get status() {
+    const status = getPart<HTMLElement>(this.rootEl, parts.srStatus)
+    if (!status)
+      throw new Error('Expected table sort status element to be defined')
+    return status
   }
 
-  private renderBodyCells() {
-    this.bodyRows.forEach((row) => {
-      const cells = row.querySelectorAll<HTMLTableCellElement>('[data-part="table-body-cell"]')
-      cells.forEach((cell, columnIndex) => {
-        this.renderBodyCell(cell, columnIndex)
-      })
+  private get table() {
+    const tableEl = getPart<HTMLTableElement>(this.rootEl, parts.table)
+    if (!tableEl)
+      throw new Error('Expected table element to be defined')
+    return tableEl
+  }
+
+  private get headers() {
+    return queryAll<HTMLTableCellElement>(this.table, 'thead th[data-sortable]')
+  }
+
+  private get tbody() {
+    const tbodyEl = query<HTMLTableSectionElement>(this.table, 'tbody')
+    if (!tbodyEl)
+      throw new Error('Missing tbody')
+    return tbodyEl
+  }
+
+  private renderStatus(status: HTMLElement) {
+    spreadProps(status, this.api.getSrStatusProps())
+    status.textContent = this.api.announcement
+  }
+
+  private renderHeader(header: HTMLTableCellElement) {
+    const columnIndex = Array.from(header.parentElement!.children).indexOf(header)
+    // eslint-disable-next-line unicorn/prefer-dom-node-text-content
+    const headerName = header.innerText.trim()
+    const details = { columnIndex, headerName }
+    spreadProps(header, this.api.getHeaderProps(details))
+    const button = query<HTMLButtonElement>(header, 'button')
+    if (button)
+      spreadProps(button, this.api.getSortButtonProps(details))
+  }
+
+  private renderRow(row: HTMLTableRowElement) {
+    Array.from(row.cells).forEach((cell, columnIndex) => {
+      spreadProps(cell, this.api.getCellProps({ columnIndex }))
     })
-  }
-
-  private renderBodyCell(cell: HTMLTableCellElement, columnIndex: number) {
-    spreadProps(cell, this.api.getBodyCellProps(columnIndex))
-  }
-
-  private get srStatus() {
-    const srStatusEl = document.querySelector<HTMLElement>(`[data-part="table-sr-status"][data-value="${this.machine.scope.id}"]`)
-    if (!srStatusEl) {
-      throw new Error('Expected srStatus element to exist')
-    }
-    return srStatusEl
-  }
-
-  private renderSrStatus(srStatusEl: HTMLElement) {
-    spreadProps(srStatusEl, this.api.getSrStatusProps())
-    srStatusEl.textContent = this.machine.context.get('srStatus')
-  }
-
-  private sortTableRows() {
-    const { sortedColumn, sortDirection } = this.api
-    if (sortedColumn === -1 || !sortDirection)
-      return
-
-    const rows = this.bodyRows
-    rows.sort((a, b) => {
-      const cellA = a.querySelectorAll('[data-part="table-body-cell"]')[sortedColumn]
-      const cellB = b.querySelectorAll('[data-part="table-body-cell"]')[sortedColumn]
-
-      if (!cellA || !cellB)
-        return 0
-
-      const valueA = cellA.getAttribute('data-sort-value') || cellA.textContent || ''
-      const valueB = cellB.getAttribute('data-sort-value') || cellB.textContent || ''
-
-      if (Number.isNaN(Number(valueA)) || Number.isNaN(Number(valueB))) {
-        const result = valueA.localeCompare(valueB, navigator.language, {
-          numeric: true,
-          ignorePunctuation: true,
-        })
-        return sortDirection === 'asc' ? result : -result
-      }
-      else {
-        const result = Number(valueA) - Number(valueB)
-        return sortDirection === 'asc' ? result : -result
-      }
-    })
-
-    const tbodyEl = this.rootEl.querySelector<HTMLTableSectionElement>('tbody')
-    rows.forEach((row) => {
-      // Clear previous data-sort-active attributes
-      Array.from(row.children).forEach(cell => cell.removeAttribute('data-sort-active'))
-      // Set data-sort-active on the sorted column
-      if (row.children[sortedColumn]) {
-        row.children[sortedColumn].setAttribute('data-sort-active', 'true')
-      }
-      tbodyEl!.appendChild(row)
-    })
-  }
-
-  sortByColumn(columnIndex: number) {
-    this.api.sortByColumn(columnIndex)
   }
 }
 
 export function tableInit() {
-  document.querySelectorAll<HTMLTableElement>('[data-part="table-root"]').forEach((targetEl) => {
-    const table = new Table(targetEl, {
-      id: targetEl.id || getId(targetEl, 'table'),
-    })
-
-    table.init()
-  })
+  return Table.createAll(document)
 }
