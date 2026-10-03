@@ -5,8 +5,6 @@ import { useFieldContext } from '../field/field'
 
 export type UseCharacterCountProps = Omit<characterCount.Props, 'getRootNode' | 'id'>
 
-export type UseCharacterCountReturn = ReturnType<typeof useCharacterCount>
-
 export function useCharacterCount(props: UseCharacterCountProps) {
   const field = useFieldContext()
 
@@ -19,21 +17,13 @@ export function useCharacterCount(props: UseCharacterCountProps) {
   const service = useMachine(characterCount.machine, {
     id: React.useId(),
     ids: {
-      label: field?.ids.label,
       input: field?.ids.control,
-      status: field?.ids.description,
+      visualStatus: field?.ids.description,
     },
     // TODO: Fix disabled inheritance from field context
     // disabled,
     ...restProps,
   })
 
-  const api = characterCount.connect(service, normalizeProps)
-
-  return {
-    api,
-    service,
-    field,
-    maxLength: props.maxLength,
-  }
+  return characterCount.connect(service, normalizeProps)
 }

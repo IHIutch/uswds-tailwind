@@ -4,12 +4,11 @@ import { createDisposableCharacterCount } from './_utils.js'
 
 const rootId = 'test'
 
-const template = `<div data-part="character-count-root" id="${rootId}">
+const template = `<div data-scope="character-count" data-part="root" id="${rootId}">
   <div>
-    <label data-part="character-count-label"></label>
-    <input data-part="character-count-input" />
-    <div data-part="character-count-status"></div>
-    <div data-part="character-count-sr-status"></div>
+    <input data-part="input" />
+    <div data-part="visual-status"></div>
+    <div data-part="sr-status"></div>
   </div>
 </div>`
 

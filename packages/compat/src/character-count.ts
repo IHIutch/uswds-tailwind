@@ -1,23 +1,24 @@
 import * as characterCount from '@uswds-tailwind/character-count-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
+const parts = characterCount.anatomy.build()
+
 export class CharacterCount extends Component<characterCount.Props, characterCount.Api> {
-  static instances: Map<string, CharacterCount> = new Map()
+  static override root = parts.root
 
-  static getInstance(id: string) {
-    return CharacterCount.instances.get(id)
-  }
-
-  initMachine(props: characterCount.Props): VanillaMachine<characterCount.CharacterCountSchema> {
-    CharacterCount.instances.set(props.id, this)
-
-    const maxLength = this.input?.getAttribute('maxlength')
+  initMachine(props: characterCount.Props): VanillaMachine<characterCount.Schema> {
+    const input = this.input
+    const maxLength = input.getAttribute('maxlength')
 
     return new VanillaMachine(characterCount.machine, {
       ...props,
-      maxLength: maxLength ? Number(maxLength) : undefined,
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'character-count'),
+      ids: { ...props.ids, input: props.ids?.input ?? (input.id || undefined) },
+      maxLength: props.maxLength ?? (maxLength === null ? 0 : Number(maxLength)),
+      defaultValue: props.defaultValue ?? input.value,
     })
   }
 
@@ -27,70 +28,71 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
-
-    if (this.label) {
-      this.renderLabel(this.label)
-    }
+    const group = this.group
+    if (group)
+      spreadProps(group, this.api.getFormGroupProps())
     this.renderInput(this.input)
+    const hint = this.hint
+    if (hint)
+      this.renderHint(hint)
     this.renderStatus(this.status)
     this.renderSrStatus(this.srStatus)
   }
 
-  private get label() {
-    return this.rootEl.querySelector<HTMLElement>(`[data-part="character-count-label"]`)
+  private get group() {
+    return getPart<HTMLElement>(this.rootEl, parts.formGroup)
   }
 
   private get input() {
-    const inputEl = this.rootEl.querySelector<HTMLInputElement>(`[data-part="character-count-input"]`)
-    if (!inputEl)
-      throw new Error('Expected inputEl to be defined')
-    return inputEl
+    const el = getPart<HTMLInputElement | HTMLTextAreaElement>(this.rootEl, parts.input)
+    if (!el)
+      throw new Error('Expected input element')
+    return el
+  }
+
+  private get hint() {
+    return getPart<HTMLElement>(this.rootEl, parts.hint)
   }
 
   private get status() {
-    const statusEl = this.rootEl.querySelector<HTMLElement>(`[data-part="character-count-status"]`)
-    if (!statusEl)
-      throw new Error('Expected statusEl to be defined')
-    return statusEl
+    const el = getPart<HTMLElement>(this.rootEl, parts.visualStatus)
+    if (!el)
+      throw new Error('Expected visual-status element')
+    return el
   }
 
   private get srStatus() {
-    const srStatusEl = this.rootEl.querySelector<HTMLElement>(`[data-part="character-count-sr-status"]`)
-    if (!srStatusEl)
-      throw new Error('Expected srStatusEl to be defined')
-    return srStatusEl
+    const el = getPart<HTMLElement>(this.rootEl, parts.srStatus)
+    if (!el)
+      throw new Error('Expected sr-status element')
+    return el
   }
 
-  private renderLabel(labelEl: HTMLElement) {
-    spreadProps(labelEl, this.api.getLabelProps())
+  private renderInput(input: HTMLInputElement | HTMLTextAreaElement) {
+    const { ref, ...props } = this.api.getInputProps()
+    spreadProps(input, props)
+    ref?.(input)
   }
 
-  private renderInput(inputEl: HTMLElement) {
-    spreadProps(inputEl, this.api.getInputProps())
+  private renderHint(hint: HTMLElement) {
+    const { ref, ...props } = this.api.getHintProps()
+    spreadProps(hint, props)
+    ref?.(hint)
   }
 
-  private renderStatus(statusEl: HTMLElement) {
-    spreadProps(statusEl, this.api.getStatusProps())
-    statusEl.textContent = this.machine.context.get('statusText')
+  private renderStatus(status: HTMLElement) {
+    spreadProps(status, this.api.getVisualStatusProps())
+    status.textContent = this.api.maxLength ? this.api.statusText : ''
   }
 
-  private renderSrStatus(srStatusEl: HTMLElement) {
-    spreadProps(srStatusEl, this.api.getSrStatusProps())
-    srStatusEl.textContent = this.machine.context.get('srStatusText')
-  }
-
-  setCustomValidity(message: string) {
-    this.api.setCustomValidity(message)
+  private renderSrStatus(status: HTMLElement) {
+    spreadProps(status, this.api.getSrStatusProps())
+    status.textContent = this.api.maxLength ? this.api.srStatusText : ''
   }
 }
 
 export function characterCountInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="character-count-root"]').forEach((targetEl) => {
-    const characterCount = new CharacterCount(targetEl, {
-      id: targetEl.id || getId(targetEl, 'character-count'),
-    })
-    characterCount.init()
-  })
+  return CharacterCount.createAll(document)
 }
 
 if (typeof window !== 'undefined') {

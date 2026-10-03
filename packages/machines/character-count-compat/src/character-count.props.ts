@@ -3,15 +3,16 @@ import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<CharacterCountProps>()([
+  'inputDescriptionIds',
+  'defaultValue',
+  'getRootNode',
   'id',
   'ids',
-  'getRootNode',
+  'errorText',
   'maxLength',
-  'value',
-  'defaultValue',
-  'validationMessage',
   'onValueChange',
-  'getStatusText',
+  'statusLabel',
+  'value',
 ])
 
 export const splitProps = createSplitProps<Partial<CharacterCountProps>>(props)
