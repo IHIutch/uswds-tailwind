@@ -45,6 +45,33 @@ it('sr-status has default "No file selected" message on init', async () => {
   await expect.element(screen.getByText(/No file selected/i)).toBeInTheDocument()
 })
 
+it('keeps the sr-status unchanged when unrelated content rerenders', async () => {
+  const view = (label: string) => (
+    <FileInput.Root>
+      <FileInput.Label>{label}</FileInput.Label>
+      <FileInput.SrStatus />
+      <FileInput.Input />
+    </FileInput.Root>
+  )
+  const screen = await render(view('Before'))
+  const status = screen.getByRole('status').element()
+  const mutations: MutationRecord[] = []
+  const observer = new MutationObserver(records => mutations.push(...records))
+  observer.observe(status, { attributes: true, childList: true, characterData: true, subtree: true })
+
+  try {
+    await screen.rerender(view('After'))
+
+    await expect.element(screen.getByText('After')).toBeVisible()
+    expect(screen.getByRole('status').element()).toBe(status)
+    expect(status.textContent).toBe('No file selected.')
+    expect([...mutations, ...observer.takeRecords()]).toEqual([])
+  }
+  finally {
+    observer.disconnect()
+  }
+})
+
 it('disabled prop disables the underlying input', async () => {
   await renderFileInput({ disabled: true })
   // The input is visually hidden; locate by type=file via the DOM directly.
@@ -76,9 +103,9 @@ it('uploading an invalid file type sets data-invalid on root and shows error mes
 
   await userEvent.upload(input, invalidFile)
 
-  // Root gets data-invalid (dropzone/input too per anatomy)
-  const root = document.querySelector('[data-scope="file-input"][data-part="root"]')
-  expect(root?.hasAttribute('data-invalid')).toBe(true)
+  // USWDS marks the drop target when the selected file type is rejected.
+  const dropzone = document.querySelector('[data-scope="file-input"][data-part="dropzone"]')
+  expect(dropzone?.hasAttribute('data-invalid')).toBe(true)
 
   // Error message is rendered
   await expect.element(screen.getByText(/not a valid file type/i)).toBeInTheDocument()

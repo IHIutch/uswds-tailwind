@@ -1,29 +1,33 @@
 import * as fileInput from '@uswds-tailwind/file-input-compat'
-import { nextTick } from '@zag-js/dom-query'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataString } from './lib/data-attr'
+import { getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
+const parts = fileInput.anatomy.build()
+
+interface PreviewEntry {
+  item: HTMLElement
+  image: HTMLImageElement
+  reader: FileReader
+}
+
 export class FileInput extends Component<fileInput.Props, fileInput.Api> {
-  static instances = new Map<string, FileInput>()
+  static override root = parts.root
 
-  static getInstance(id: string) {
-    return FileInput.instances.get(id)
-  }
+  private previewItem: HTMLElement | null = null
+  private previews = new Map<File, PreviewEntry>()
 
-  // Lazily captured template elements
-  private _templates: Map<string, HTMLElement> | null = null
-
-  initMachine(props: fileInput.Props): VanillaMachine<fileInput.FileInputSchema> {
-    FileInput.instances.set(props.id, this)
-
-    const inputEl = this.input
-
+  initMachine(props: fileInput.Props): VanillaMachine<fileInput.Schema> {
     return new VanillaMachine(fileInput.machine, {
       ...props,
-      accept: inputEl.getAttribute('accept') || undefined,
-      disabled: inputEl.disabled,
-      errorMessage: inputEl.getAttribute('data-errormessage') || undefined,
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'file-input'),
+      accept: props.accept ?? this.input.getAttribute('accept') ?? undefined,
+      multiple: props.multiple ?? this.input.multiple,
+      disabled: props.disabled ?? this.input.disabled,
+      ariaDisabled: props.ariaDisabled ?? this.input.hasAttribute('aria-disabled'),
+      errorText: props.errorText ?? getDataString(this.input, 'errormessage'),
     })
   }
 
@@ -31,170 +35,169 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     return fileInput.connect(this.machine.service, normalizeProps)
   }
 
-  // Helper to clone element with attributes only
-  private cloneElementWithAttributes(element: HTMLElement): HTMLElement {
-    const clone = document.createElement(element.tagName.toLowerCase())
-    // Copy all attributes
-    for (const attr of element.attributes) {
-      clone.setAttribute(attr.name, attr.value)
-    }
-    return clone
-  }
-
-  // Helper to store template elements with attributes
-  private storeTemplates() {
-    if (!this._templates) {
-      this._templates = new Map()
-
-      const templateItem = this.previewList.querySelector<HTMLElement>('[data-part="file-input-preview-item"]')
-
-      if (!templateItem) {
-        throw new Error('Expected templateItem to be defined')
-      }
-
-      this._templates.set('listItem', this.cloneElementWithAttributes(templateItem))
-
-      const icon = templateItem.querySelector<HTMLElement>('[data-part="file-input-preview-item-icon"]')
-      if (icon) {
-        this._templates.set('icon', this.cloneElementWithAttributes(icon))
-      }
-
-      const content = templateItem.querySelector<HTMLElement>('[data-part="file-input-preview-item-content"]')
-      if (content) {
-        this._templates.set('content', this.cloneElementWithAttributes(content))
-      }
-    }
-  }
-
-  render() {
-    // Store templates on first render
-    this.storeTemplates()
-
-    spreadProps(this.rootEl, this.api.getRootProps())
-    spreadProps(this.dropzone, this.api.getDropzoneProps())
-    spreadProps(this.label, this.api.getLabelProps())
-    spreadProps(this.input, this.api.getInputProps())
-    spreadProps(this.instructions, this.api.getInstructionProps())
-
-    this.renderSrStatus(this.srStatus)
-    this.renderErrorMessage(this.errorMessage)
-    this.renderPreviewList(this.previewList)
-    this.renderPreviewTitle(this.previewTitle)
-  }
-
-  // Helper to get required elements
-  private getElement<T extends HTMLElement = HTMLElement>(part: string, required = true): T {
-    const el = this.rootEl.querySelector<T>(`[data-part="${part}"]`)
-    if (required && !el) {
-      throw new Error(`Expected ${part} to be defined`)
-    }
-    return el as T
+  private get input() {
+    const input = getPart<HTMLInputElement>(this.rootEl, parts.input)
+    if (!input)
+      throw new Error('Expected file input input to be defined')
+    return input
   }
 
   private get dropzone() {
-    return this.getElement('file-input-dropzone')
-  }
-
-  private get label() {
-    return this.getElement('file-input-label')
-  }
-
-  private get input() {
-    return this.getElement<HTMLInputElement>('file-input-input')
+    const dropzone = getPart<HTMLElement>(this.rootEl, parts.dropzone)
+    if (!dropzone)
+      throw new Error('Expected file input dropzone to be defined')
+    return dropzone
   }
 
   private get instructions() {
-    return this.getElement('file-input-instructions')
-  }
-
-  private get srStatus() {
-    return this.getElement('file-input-sr-status')
+    const instructions = getPart<HTMLElement>(this.rootEl, parts.instructions)
+    if (!instructions)
+      throw new Error('Expected file input instructions to be defined')
+    return instructions
   }
 
   private get previewList() {
-    return this.getElement('file-input-preview-list')
+    const previewList = getPart<HTMLElement>(this.rootEl, parts.previewList)
+    if (!previewList)
+      throw new Error('Expected file input preview list to be defined')
+    return previewList
   }
 
-  private get previewTitle() {
-    return this.getElement('file-input-preview-header')
+  render() {
+    this.storePreviewItem(this.previewList)
+
+    spreadProps(this.rootEl, this.api.getRootProps())
+    spreadProps(this.dropzone, this.api.getDropzoneProps())
+    spreadProps(this.input, this.api.getInputProps())
+    spreadProps(this.instructions, this.api.getInstructionsProps())
+    spreadProps(this.previewList, this.api.getPreviewListProps())
+
+    const label = getPart<HTMLLabelElement>(this.rootEl, parts.label)
+    if (label)
+      spreadProps(label, this.api.getLabelProps())
+    const box = getPart<HTMLElement>(this.rootEl, parts.box)
+    if (box)
+      spreadProps(box, this.api.getBoxProps())
+
+    this.renderCopy()
+    this.renderFeedback()
+    this.renderPreviews(this.previewList)
   }
 
-  private get errorMessage() {
-    return this.getElement('file-input-error-message', false)
+  private storePreviewItem(previewList: HTMLElement) {
+    if (this.previewItem !== null)
+      return
+
+    const item = getPart<HTMLElement>(previewList, parts.item)
+    if (!item)
+      throw new Error('Expected file input preview item to be defined')
+    this.previewItem = item
+    item.remove()
   }
 
-  private renderPreviewList(previewListEl: HTMLElement) {
-    spreadProps(previewListEl, this.api.getPreviewListProps())
-
-    const files = this.machine.context.get('files') as fileInput.FileInputSchema['context']['files']
-
-    // Clear existing items
-    previewListEl.querySelectorAll('[data-part="file-input-preview-item"]').forEach(item => item.remove())
-
-    files.forEach((file, i) => {
-      // Create elements using templates with fallbacks
-      const listItemTemplate = this._templates?.get('listItem')
-      const iconTemplate = this._templates?.get('icon')
-      const contentTemplate = this._templates?.get('content')
-
-      const listItemEl = listItemTemplate ? this.cloneElementWithAttributes(listItemTemplate) : document.createElement('div')
-      const iconEl = iconTemplate ? this.cloneElementWithAttributes(iconTemplate) : document.createElement('div')
-      const contentEl = contentTemplate ? this.cloneElementWithAttributes(contentTemplate) : document.createElement('div')
-      // Ensure data-part attributes for fallback elements
-      if (!listItemTemplate)
-        listItemEl.setAttribute('data-part', 'file-input-preview-item')
-      if (!iconTemplate)
-        iconEl.setAttribute('data-part', 'file-input-preview-item-icon')
-      if (!contentTemplate)
-        contentEl.setAttribute('data-part', 'file-input-preview-item-content')
-
-      // Apply API props and content
-      spreadProps(listItemEl, this.api.getPreviewItemProps(i))
-      spreadProps(iconEl, this.api.getPreviewItemIconProps(i))
-      spreadProps(contentEl, this.api.getPreviewItemContentProps(i))
-      contentEl.textContent = file.name
-
-      // Assemble and append
-      listItemEl.appendChild(iconEl)
-      listItemEl.appendChild(contentEl)
-      previewListEl.appendChild(listItemEl)
-    })
-  }
-
-  private renderPreviewTitle(el: HTMLElement) {
-    spreadProps(el, this.api.getPreviewTitleProps())
-    const fileCount = this.machine.context.get('files')?.length || 0
-    el.textContent = fileCount === 1 ? 'Selected file' : `${fileCount} files selected`
-  }
-
-  private renderSrStatus(el: HTMLElement) {
-    spreadProps(el, this.api.getSrStatusProps())
-    el.textContent = this.machine.context.get('srStatusText')
-  }
-
-  private renderErrorMessage(el: HTMLElement | null) {
-    if (el) {
-      spreadProps(el, this.api.getErrorMessageProps())
-      el.textContent = this.api.isInvalid ? this.machine.prop('errorMessage') : ''
+  private renderCopy() {
+    const dragText = getPart<HTMLElement>(this.rootEl, parts.dragText)
+    if (dragText) {
+      spreadProps(dragText, this.api.getDragTextProps())
+      dragText.textContent = this.api.dragText
+    }
+    const choose = getPart<HTMLElement>(this.rootEl, parts.choose)
+    if (choose) {
+      spreadProps(choose, this.api.getChooseProps())
+      choose.textContent = this.api.chooseText
+    }
+    const heading = getPart<HTMLElement>(this.rootEl, parts.previewHeading)
+    if (heading) {
+      spreadProps(heading, this.api.getPreviewHeadingProps())
+      heading.textContent = this.api.acceptedFiles.length
+        ? `${this.api.previewHeadingText} ${this.api.previewChangeText}`
+        : ''
     }
   }
 
-  // Public method to set files programmatically for testing
+  private renderFeedback() {
+    const error = getPart<HTMLElement>(this.rootEl, parts.errorText)
+    if (error) {
+      spreadProps(error, this.api.getErrorTextProps())
+      error.textContent = this.api.errorText
+    }
+    const status = getPart<HTMLElement>(this.rootEl, parts.srStatus)
+    if (status) {
+      spreadProps(status, this.api.getSrStatusProps())
+      status.textContent = this.api.srStatusText
+    }
+  }
+
+  private renderPreviews(previewList: HTMLElement) {
+    this.removeStalePreviews()
+
+    for (const file of this.api.acceptedFiles) {
+      if (!this.previews.has(file))
+        this.addPreview(file)
+    }
+
+    const items = this.api.acceptedFiles
+      .map(file => this.previews.get(file)!.item)
+      .reverse()
+    previewList.append(...items)
+  }
+
+  private removeStalePreviews() {
+    for (const [file, entry] of this.previews) {
+      if (this.api.acceptedFiles.includes(file))
+        continue
+      if (entry.reader.readyState === FileReader.LOADING)
+        entry.reader.abort()
+      entry.item.remove()
+      this.previews.delete(file)
+    }
+  }
+
+  private addPreview(file: File) {
+    const item = this.previewItem!.cloneNode(true) as HTMLElement
+    spreadProps(item, this.api.getItemProps({ file }))
+
+    const image = getPart<HTMLImageElement>(item, parts.itemPreviewImage)
+    if (!image)
+      throw new Error('Expected file input preview image to be defined')
+    spreadProps(image, this.api.getItemPreviewImageProps({ file, status: 'loading' }))
+
+    const name = item.querySelector<HTMLElement>('[data-file-name]')
+    if (!name)
+      throw new Error('Expected file input preview file name to be defined')
+    name.textContent = file.name
+
+    const entry = { item, image, reader: new FileReader() }
+    this.previews.set(file, entry)
+    entry.reader.onloadend = () => this.finishPreview(file, entry)
+    entry.reader.readAsDataURL(file)
+  }
+
+  private finishPreview(file: File, entry: PreviewEntry) {
+    if (this.previews.get(file) !== entry)
+      return
+
+    spreadProps(entry.image, this.api.getItemPreviewImageProps({
+      file,
+      url: String(entry.reader.result),
+      status: 'success',
+      onError: () => this.fallbackPreview(file, entry),
+    }))
+  }
+
+  private fallbackPreview(file: File, entry: PreviewEntry) {
+    if (this.previews.get(file) !== entry)
+      return
+
+    spreadProps(entry.image, this.api.getItemPreviewImageProps({ file, status: 'fallback' }))
+  }
+
   async setFiles(files: File[]) {
-    this.machine.service.send({
-      type: 'CHANGE',
-      files,
-    })
-    await new Promise<void>(resolve => nextTick(resolve))
-    // Force re-render to update DOM
-    this.render()
+    this.machine.service.send({ type: 'FILES.CHANGE', files })
+    await this.settle()
   }
 }
 
 export function fileInputInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="file-input-root"]').forEach((targetEl) => {
-    const id = targetEl.id || getId(targetEl, 'file-input')
-    const fileInput = new FileInput(targetEl, { id })
-    fileInput.init()
-  })
+  return FileInput.createAll(document)
 }
