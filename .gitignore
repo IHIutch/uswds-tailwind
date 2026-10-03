@@ -32,3 +32,4 @@ dist
 __screenshots__
 
 .env
+.vitest

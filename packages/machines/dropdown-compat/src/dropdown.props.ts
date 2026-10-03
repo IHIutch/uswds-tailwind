@@ -3,12 +3,13 @@ import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<DropdownProps>()([
+  'defaultOpen',
+  'getRootNode',
   'id',
   'ids',
-  'getRootNode',
-  'closeOnSelect',
+  'onItemSelect',
   'onOpenChange',
-  'onSelect',
+  'open',
 ])
 
 export const splitProps = createSplitProps<Partial<DropdownProps>>(props)
