@@ -1,6 +1,5 @@
 export { anatomy } from './file-input.anatomy'
 export { connect } from './file-input.connect'
-export { getFileIdentity } from './file-input.dom'
 export { machine } from './file-input.machine'
 export * from './file-input.props'
 export type {
@@ -14,3 +13,4 @@ export type {
   FileInputSchema as Schema,
   FileInputService as Service,
 } from './file-input.types'
+export { getFileId } from './file-input.utils'

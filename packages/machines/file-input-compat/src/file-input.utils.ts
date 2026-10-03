@@ -1,4 +1,7 @@
 import type { PreviewType } from './file-input.types'
+import { hash } from '@zag-js/utils'
+
+export const getFileId = (file: File) => hash(`${file.name}-${file.size}`)
 
 export const getItemsLabel = (multiple: boolean) => (multiple ? 'files' : 'file')
 

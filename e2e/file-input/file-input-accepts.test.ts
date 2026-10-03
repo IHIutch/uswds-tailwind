@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { FileInput } from '../../packages/compat/src/file-input.js'
+import { userEvent } from 'vitest/browser'
 import { createDisposableFileInput } from './_utils.js'
 
 const defaultErrorMessage = 'Error: This is not a valid file type.'
@@ -83,10 +83,7 @@ it('mock file should be defined with specific values', { tags: ['legacy'] }, () 
 
 it('mock file should not be allowed', { tags: ['legacy'] }, async () => {
   using component = createDisposableFileInput(rootId, template)
-  const instance = FileInput.getInstance(component.elements.getRootEl())
-
-  await instance?.setFiles([invalidFile])
-  expect(instance).toBeTruthy()
+  await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
   const dropzone = component.elements.getDropzoneEl()!
   expect(dropzone.hasAttribute('data-invalid')).toBe(true)
@@ -94,9 +91,7 @@ it('mock file should not be allowed', { tags: ['legacy'] }, async () => {
 
 it('should provide a default error message for invalid file type', { tags: ['legacy'] }, async () => {
   using component = createDisposableFileInput(rootId, template)
-  const instance = FileInput.getInstance(component.elements.getRootEl())
-
-  await instance?.setFiles([invalidFile])
+  await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
   const errorMessage = component.elements.getErrorMessageEl()!
   const dropzone = component.elements.getDropzoneEl()!
@@ -144,9 +139,7 @@ it('should allow a custom error message for invalid file type', { tags: ['legacy
 
   await using component = createDisposableFileInput(rootId, customTemplate)
 
-  const instance = FileInput.getInstance(component.elements.getRootEl())
-
-  await instance?.setFiles([invalidFile])
+  await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
   const dropzone = component.elements.getDropzoneEl()!
   const errorMessage = component.elements.getErrorMessageEl()
@@ -161,10 +154,7 @@ it('renders a native file selection in the authored preview list', { tags: ['par
   using component = createDisposableFileInput(rootId, template)
   const input = component.elements.getInputEl()!
   const selected = new File(['file contents'], 'report.pdf', { type: 'application/pdf' })
-  const transfer = new DataTransfer()
-  transfer.items.add(selected)
-  input.files = transfer.files
-  input.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }))
+  await userEvent.upload(input, selected)
 
   await vi.waitFor(() => {
     expect(component.elements.getPreviewListEl()?.querySelectorAll('[data-part="item"]')).toHaveLength(1)

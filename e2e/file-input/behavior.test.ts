@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createDisposableFileInput, file, fileInputTemplate, selectFiles } from './_utils'
+import { userEvent } from 'vitest/browser'
+import { createDisposableFileInput, file, fileInputTemplate } from './_utils'
 
 describe('file input behavior', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L191-L222 (desktop instructions and accessible name)
@@ -23,7 +24,7 @@ describe('file input behavior', () => {
     using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('first.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('first.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getPreviewItemContentEl('first.png')).toBeVisible()
       expect(elements.getPreviewHeaderEl()).toHaveTextContent('Selected file Change file')
@@ -31,7 +32,7 @@ describe('file input behavior', () => {
       expect(elements.getInputEl()).toHaveAccessibleName('Change file')
     })
 
-    selectFiles(elements.getInputEl()!, [file('second.png', 'image/png'), file('third.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('second.png', 'image/png'), file('third.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getPreviewItemEl('first.png')).toBeUndefined()
       expect(elements.getPreviewItemContentEl('second.png')).toBeVisible()
@@ -40,7 +41,7 @@ describe('file input behavior', () => {
       expect(elements.getInputEl()).toHaveAccessibleName('Change files')
     })
 
-    selectFiles(elements.getInputEl()!, [])
+    await userEvent.upload(elements.getInputEl()!, [])
     await vi.waitFor(() => {
       expect(elements.getPreviewListEl()).not.toBeVisible()
       expect(elements.getPreviewHeaderEl()).not.toBeVisible()
@@ -55,7 +56,7 @@ describe('file input behavior', () => {
     using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true, accept: '.png' }))
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('good.png', 'image/png'), file('bad.pdf', 'application/pdf')])
+    await userEvent.upload(elements.getInputEl()!, [file('good.png', 'image/png'), file('bad.pdf', 'application/pdf')])
     await vi.waitFor(() => {
       expect(elements.getErrorMessageEl()).toBeVisible()
       expect(elements.getErrorMessageEl()).toHaveTextContent('Error: This is not a valid file type.')
@@ -64,7 +65,7 @@ describe('file input behavior', () => {
       expect(elements.getPreviewListEl()).not.toBeVisible()
     })
 
-    selectFiles(elements.getInputEl()!, [file('recovered.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('recovered.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getErrorMessageEl()).not.toBeVisible()
       expect(elements.getPreviewItemContentEl('recovered.png')).toBeVisible()
@@ -77,7 +78,7 @@ describe('file input behavior', () => {
     using component = createDisposableFileInput('behavior', fileInputTemplate({ accept: 'image/*' }))
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('photo.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('photo.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getPreviewItemContentEl('photo.png')).toBeVisible()
       expect(elements.getErrorMessageEl()).not.toBeVisible()
@@ -91,14 +92,14 @@ describe('file input behavior', () => {
     using component = createDisposableFileInput('behavior', fileInputTemplate({ accept: '.png', errorText: 'Upload a PNG file' }))
     const { elements } = component
 
-    selectFiles(elements.getInputEl()!, [file('bad.pdf', 'application/pdf')])
+    await userEvent.upload(elements.getInputEl()!, [file('bad.pdf', 'application/pdf')])
     await vi.waitFor(() => {
       expect(elements.getErrorMessageEl()).toBeVisible()
       expect(elements.getErrorMessageEl()).toHaveTextContent('Upload a PNG file')
       expect(elements.getInputEl()).toHaveAccessibleName('Upload a PNG file Drag file here or choose from folder')
     })
 
-    selectFiles(elements.getInputEl()!, [file('good.png', 'image/png')])
+    await userEvent.upload(elements.getInputEl()!, [file('good.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getErrorMessageEl()).not.toBeVisible()
       expect(elements.getPreviewItemContentEl('good.png')).toBeVisible()
