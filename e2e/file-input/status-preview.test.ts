@@ -64,4 +64,27 @@ describe('file previews and live status', () => {
       expect(elements.getInstructionsEl()!.hasAttribute('hidden')).toBe(false)
     })
   })
+
+  it('shows distinct previews for files with identical metadata', async () => {
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    const { elements } = component
+    const files = [2, 3].map(width => new File([
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="2"></svg>`,
+    ], 'photo.svg', { type: 'image/svg+xml', lastModified: 1 }))
+
+    await userEvent.upload(elements.getInputEl()!, files)
+    await vi.waitFor(() => {
+      const items = Array.from(elements.getPreviewListEl()!.children)
+      const images = items.map(item => item.querySelector('img')!)
+      expect(images.map(image => image.naturalWidth).sort()).toEqual([2, 3])
+    })
+
+    await userEvent.upload(elements.getInputEl()!, [files[1]!])
+    await vi.waitFor(() => {
+      const images = elements.getPreviewListEl()!.querySelectorAll('img')
+      expect(images).toHaveLength(1)
+      expect(images[0]!.naturalWidth).toBe(3)
+    })
+  })
+
 })

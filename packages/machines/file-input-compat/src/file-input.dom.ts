@@ -10,6 +10,3 @@ export const getPreviewListId = (ctx: Scope) => ctx.ids?.previewList ?? `file-in
 export const getPreviewHeadingId = (ctx: Scope) => ctx.ids?.previewHeading ?? `file-input:${ctx.id}:preview-heading`
 export const getSrStatusId = (ctx: Scope) => ctx.ids?.srStatus ?? `file-input:${ctx.id}:sr-status`
 export const getErrorTextId = (ctx: Scope) => ctx.ids?.errorText ?? `file-input:${ctx.id}:error`
-
-export const getItemId = (ctx: Scope, id: string) => `file-input:${ctx.id}:item:${id}`
-export const getItemPreviewImageId = (ctx: Scope, id: string) => `file-input:${ctx.id}:item-image:${id}`

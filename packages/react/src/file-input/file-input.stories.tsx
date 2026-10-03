@@ -21,8 +21,8 @@ export const Default = meta.story({
                 <FileInput.PreviewTitle />
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
-              {files.map(file => (
-                <FileInput.Item key={getFileId(file)} file={file}>
+              {files.map((file, index) => (
+                <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
                   <FileInput.PreviewItem>
                     {file.type.startsWith('image/')
                       ? <FileInput.PreviewItemThumb />
@@ -57,8 +57,8 @@ export const WithFieldRoot = meta.story({
                   <FileInput.PreviewTitle />
                   <FileInput.ChangeTrigger />
                 </FileInput.PreviewHeader>
-                {files.map(file => (
-                  <FileInput.Item key={getFileId(file)} file={file}>
+                {files.map((file, index) => (
+                  <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
                     <FileInput.PreviewItem>
                       {file.type.startsWith('image/')
                         ? <FileInput.PreviewItemThumb />
@@ -92,8 +92,8 @@ export const Multiple = meta.story({
                 <FileInput.PreviewTitle />
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
-              {files.map(file => (
-                <FileInput.Item key={getFileId(file)} file={file}>
+              {files.map((file, index) => (
+                <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
                   <FileInput.PreviewItem>
                     {file.type.startsWith('image/')
                       ? <FileInput.PreviewItemThumb />

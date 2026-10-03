@@ -120,7 +120,7 @@ it('updates the preview and accessible name together when replacing or clearing 
       <FileInput.Input />
       <FileInput.Instructions />
       <FileInput.PreviewList>
-        {({ files }) => files.map(file => <span key={getFileId(file)}>{file.name}</span>)}
+        {({ files }) => files.map((file, index) => <span key={`${getFileId(file)}-${index}`}>{file.name}</span>)}
       </FileInput.PreviewList>
     </FileInput.Root>,
   )
@@ -159,4 +159,37 @@ it('uploading an invalid file type sets data-invalid on root and shows error mes
 
   // Error message is rendered
   await expect.element(screen.getByText(/not a valid file type/i)).toBeInTheDocument()
+})
+
+it('shows distinct previews for files with identical metadata', async () => {
+  await render(
+    <FileInput.Root multiple>
+      <FileInput.Input />
+      <FileInput.PreviewList>
+        {({ files }) => files.map((file, index) => (
+          <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
+            <FileInput.PreviewItem>
+              <FileInput.PreviewItemThumb />
+              <FileInput.PreviewItemContent />
+            </FileInput.PreviewItem>
+          </FileInput.Item>
+        ))}
+      </FileInput.PreviewList>
+    </FileInput.Root>,
+  )
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement
+  const files = [2, 3].map(width => new File([
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="2"></svg>`,
+  ], 'photo.svg', { type: 'image/svg+xml', lastModified: 1 }))
+
+  await userEvent.upload(input, files)
+  await expect.poll(() => {
+    const images = Array.from(document.querySelectorAll<HTMLImageElement>('[data-part="item-preview-image"]'))
+    return images.map(image => image.naturalWidth).sort()
+  }).toEqual([2, 3])
+  await userEvent.upload(input, [files[1]!])
+  await expect.poll(() => {
+    const images = Array.from(document.querySelectorAll<HTMLImageElement>('[data-part="item-preview-image"]'))
+    return images.map(image => image.naturalWidth)
+  }).toEqual([3])
 })

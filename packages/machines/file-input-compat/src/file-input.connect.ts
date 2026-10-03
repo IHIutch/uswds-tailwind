@@ -155,10 +155,9 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getItemProps({ file }) {
+    getItemProps() {
       return normalize.element({
         ...parts.item.attrs,
-        'id': dom.getItemId(scope, getFileId(file)),
         'aria-hidden': true,
       })
     },
@@ -166,7 +165,6 @@ export function connect<T extends PropTypes>(
     getItemPreviewImageProps({ file, url, status = 'loading', onLoad, onError }) {
       return normalize.img({
         ...parts.itemPreviewImage.attrs,
-        'id': dom.getItemPreviewImageId(scope, getFileId(file)),
         'alt': '',
         'src': url,
         'data-loading': dataAttr(status === 'loading'),
