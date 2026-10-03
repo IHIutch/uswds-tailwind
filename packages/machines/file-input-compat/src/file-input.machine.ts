@@ -1,19 +1,15 @@
-import type { FileInputSchema, FileRejection } from './file-input.types'
+import type { FileInputSchema } from './file-input.types'
 import { createMachine } from '@zag-js/core'
-import { raf } from '@zag-js/dom-query'
 import * as dom from './file-input.dom'
-import { validateFiles } from './file-input.utils'
-
-const DEFAULT_ERROR_MESSAGE = 'Error: This is not a valid file type.'
-
-function isFileEqual(a: File, b: File) {
-  return a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
-}
+import * as utils from './file-input.utils'
 
 export const machine = createMachine<FileInputSchema>({
   props({ props }) {
     return {
-      errorMessage: DEFAULT_ERROR_MESSAGE,
+      disabled: false,
+      ariaDisabled: false,
+      multiple: false,
+      errorText: 'Error: This is not a valid file type.',
       ...props,
     }
   },
@@ -22,123 +18,128 @@ export const machine = createMachine<FileInputSchema>({
     return 'idle'
   },
 
-  context({ bindable }) {
+  refs() {
     return {
-      acceptedFiles: bindable<File[]>(() => ({
-        defaultValue: [],
-      })),
-      rejectedFiles: bindable<FileRejection[]>(() => ({
-        defaultValue: [],
-      })),
+      statusTimers: [] as ReturnType<Window['setTimeout']>[],
     }
   },
 
-  computed: {
-    itemsLabel: ({ prop }) => (prop('multiple') ? 'files' : 'file'),
-  },
+  effects: ['cleanupTimers', 'observeNativeInput'],
 
-  on: {
-    'INPUT.CHANGE': {
-      actions: ['setFilesFromEvent'],
-    },
-    'FILES.CLEAR': {
-      actions: ['clearFiles'],
-    },
-    'FILE.DELETE': {
-      actions: ['removeFile'],
-    },
-    'OPEN': {
-      actions: ['openFilePicker'],
-    },
+  context({ prop, bindable }) {
+    // USWDS creates its status region only when initially enabled.
+    const hasStatus = !(prop('disabled') || prop('ariaDisabled'))
+    return {
+      acceptedFiles: bindable<File[]>(() => ({
+        defaultValue: [],
+        sync: true,
+        hash: files => files.map(dom.getFileIdentity).join('|'),
+      })),
+      invalid: bindable<boolean>(() => ({ defaultValue: false })),
+      errorText: bindable<string>(() => ({ defaultValue: '' })),
+      srStatusText: bindable<string>(() => ({ defaultValue: utils.getStatusMessage([], prop('multiple')) })),
+      hasStatus: bindable<boolean>(() => ({ defaultValue: hasStatus })),
+    }
   },
 
   states: {
     idle: {
       on: {
-        'INPUT.FOCUS': {
-          target: 'focused',
-        },
-        'DROPZONE.DRAG_OVER': {
-          target: 'dragging',
-        },
-      },
-    },
-    focused: {
-      on: {
-        'INPUT.BLUR': {
-          target: 'idle',
-        },
-        'DROPZONE.DRAG_OVER': {
-          target: 'dragging',
-        },
+        'DRAG.OVER': { target: 'dragging' },
       },
     },
     dragging: {
       on: {
-        'DROPZONE.DRAG_LEAVE': {
-          target: 'idle',
-        },
-        // Also processes files from dataTransfer since framework doesn't overlay
-        'DROPZONE.DROP': {
-          target: 'idle',
-          actions: ['setFilesFromEvent'],
-        },
+        'DRAG.LEAVE': { target: 'idle' },
+        'DROP': { target: 'idle' },
       },
     },
   },
 
+  on: {
+    'FILES.CHANGE': [
+      { guard: 'isValidBatch', actions: ['acceptFiles', 'scheduleStatus'] },
+      { actions: ['rejectBatch'] },
+    ],
+  },
+
   implementations: {
+    guards: {
+      // Keep validation local so one input's rejection cannot suppress a sibling change.
+      isValidBatch: ({ prop, event }) => event.type === 'FILES.CHANGE' && utils.isBatchValid(prop('accept'), event.files),
+    },
     actions: {
-      setFilesFromEvent({ context, event, prop }) {
-        const files: File[] = event.files ?? []
-        const acceptAttr = prop('accept')
-
-        if (acceptAttr) {
-          const allValid = validateFiles(files, acceptAttr)
-          if (!allValid) {
-            // All-or-nothing: if ANY file is invalid, reject ALL
-            const errorMessage = prop('errorMessage')
-            context.set('acceptedFiles', [])
-            context.set(
-              'rejectedFiles',
-              files.map(file => ({ file, errors: [errorMessage] })),
-            )
-            prop('onFileChange')?.({
-              acceptedFiles: [],
-              rejectedFiles: files.map(file => ({ file, errors: [errorMessage] })),
-            })
-            return
-          }
-        }
-
+      acceptFiles({ context, event }) {
+        if (event.type !== 'FILES.CHANGE')
+          return
+        const files = event.files
         context.set('acceptedFiles', files)
-        context.set('rejectedFiles', [])
-        prop('onFileChange')?.({ acceptedFiles: files, rejectedFiles: [] })
+        context.set('invalid', false)
+        context.set('errorText', '')
       },
-
-      // Clear all files and reset to initial state
-      clearFiles({ context, prop }) {
+      rejectBatch({ context, event, prop }) {
+        if (event.type !== 'FILES.CHANGE')
+          return
+        const errorText = prop('errorText')
         context.set('acceptedFiles', [])
-        context.set('rejectedFiles', [])
-        prop('onFileChange')?.({ acceptedFiles: [], rejectedFiles: [] })
+        context.set('invalid', true)
+        context.set('errorText', errorText)
       },
-
-      // Remove a specific file from the accepted list
-      removeFile({ context, event, prop }) {
-        const fileToRemove: File = event.file
-        const updatedFiles = context.get('acceptedFiles').filter(file => !isFileEqual(file, fileToRemove))
-        context.set('acceptedFiles', updatedFiles)
-        prop('onFileChange')?.({
-          acceptedFiles: updatedFiles,
-          rejectedFiles: context.get('rejectedFiles'),
-        })
+      scheduleStatus({ context, event, scope, refs, prop }) {
+        if (!context.get('hasStatus'))
+          return
+        if (event.type !== 'FILES.CHANGE')
+          return
+        const files = event.files
+        const message = utils.getStatusMessage(files, prop('multiple'))
+        // USWDS queues each announcement rather than debouncing selections.
+        const win = scope.getWin()
+        const timer = win.setTimeout(() => {
+          const timers = refs.get('statusTimers')
+          const index = timers.indexOf(timer)
+          if (index >= 0)
+            timers.splice(index, 1)
+          context.set('srStatusText', message)
+        }, 1000)
+        refs.get('statusTimers').push(timer)
       },
-
-      // Programmatically open the file dialog
-      openFilePicker({ scope }) {
-        raf(() => {
-          dom.getInputEl(scope)?.click()
+    },
+    effects: {
+      cleanupTimers({ scope, refs }) {
+        return () => {
+          const win = scope.getWin()
+          for (const timer of refs.get('statusTimers'))
+            win.clearTimeout(timer)
+          refs.get('statusTimers').length = 0
+        }
+      },
+      // A target listener can suppress rejected changes before parent listeners run.
+      observeNativeInput({ scope, send, prop }) {
+        let removeChangeListener = () => {}
+        const stopObserving = dom.observeInputMount(scope, (input) => {
+          removeChangeListener()
+          if (!input)
+            return
+          const onChange = (event: Event) => {
+            // MutationObserver cleanup may lag behind a replaced input.
+            if (dom.getInputEl(scope) !== input)
+              return
+            // Snapshot the selection before rejection clears the native input.
+            const files = Array.from(input.files ?? [])
+            if (!utils.isBatchValid(prop('accept'), files)) {
+              input.value = ''
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            send({ type: 'FILES.CHANGE', files })
+          }
+          input.addEventListener('change', onChange)
+          removeChangeListener = () => input.removeEventListener('change', onChange)
         })
+        return () => {
+          removeChangeListener()
+          stopObserving()
+        }
       },
     },
   },

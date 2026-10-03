@@ -1,57 +1,38 @@
-function isIncluded(file: string, value: string) {
-  const pos = file.indexOf(value)
-  return pos >= 0
+import type { PreviewType } from './file-input.types'
+
+export const getItemsLabel = (multiple: boolean) => (multiple ? 'files' : 'file')
+
+export function getStatusMessage(files: readonly File[], multiple: boolean): string {
+  if (files.length === 1)
+    return `You have selected the file: ${files[0]?.name ?? ''}`
+  if (files.length > 1)
+    return `You have selected ${files.length} files: ${files.map(file => file.name).join(', ')}`
+  return `No ${getItemsLabel(multiple)} selected.`
 }
 
-export function validateFiles(files: File[], acceptAttr: string) {
-  const acceptedTypes = acceptAttr.split(',')
+export const getDefaultAriaLabel = (itemsLabel: string) => `Drag ${itemsLabel} here or choose from folder`
 
-  let allFilesAllowed = true
-
-  for (let i = 0; i < files.length; i += 1) {
-    const file = files[i]!
-    if (allFilesAllowed) {
-      for (let j = 0; j < acceptedTypes.length; j += 1) {
-        const fileType = acceptedTypes[j]!
-        // Check 1: filename contains the type string (after position 0)
-        // Check 2: MIME type contains the type (with asterisks removed)
-        allFilesAllowed
-          = file.name.indexOf(fileType) > 0
-            || isIncluded(file.type, fileType.replace(/\*/g, ''))
-        if (allFilesAllowed) {
-          break
-        }
-      }
-    }
-    else {
-      break
-    }
-  }
-
-  return allFilesAllowed
+// USWDS matches raw, case-sensitive tokens: no trimming, filename index > 0,
+// MIME substring index >= 0, and every asterisk removed from MIME tokens.
+export function isBatchValid(accept: string | undefined, files: File[]): boolean {
+  if (!accept)
+    return true
+  const tokens = accept.split(',')
+  return files.every(file => !file || tokens.some(token =>
+    file.name.indexOf(token) > 0 || file.type.includes(token.replace(/\*/g, '')),
+  ))
 }
 
-export function getFilePreviewType(file: File): 'pdf' | 'word' | 'excel' | 'video' | 'generic' | 'image' {
-  // Check if it's an image first (can be displayed as-is)
-  if (file.type.startsWith('image/')) {
-    return 'image'
-  }
-
-  const parts = file.name.split('.')
-  const fileExtension = parts.length > 1 ? parts[parts.length - 1]!.toLowerCase() : ''
-
-  if (fileExtension === 'pdf') {
+// Preserve USWDS extension case sensitivity: report.PDF falls back to generic.
+export function getPreviewType(file: File): PreviewType {
+  const ext = file.name.split('.').pop() ?? ''
+  if (ext === 'pdf')
     return 'pdf'
-  }
-  if (fileExtension === 'doc' || fileExtension === 'docx' || fileExtension === 'pages') {
+  if (ext === 'doc' || ext === 'docx' || ext === 'pages')
     return 'word'
-  }
-  if (fileExtension === 'xls' || fileExtension === 'xlsx' || fileExtension === 'numbers') {
+  if (ext === 'xls' || ext === 'xlsx' || ext === 'numbers')
     return 'excel'
-  }
-  if (fileExtension === 'mov' || fileExtension === 'mp4') {
+  if (ext === 'mov' || ext === 'mp4')
     return 'video'
-  }
-
   return 'generic'
 }
