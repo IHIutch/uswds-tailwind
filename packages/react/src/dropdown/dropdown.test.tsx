@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
 import { Dropdown } from './dropdown'
@@ -45,6 +45,26 @@ it('clicking trigger again closes menu', async () => {
 
   await userEvent.click(trigger)
   await expect.element(screen.getByText('One')).not.toBeVisible()
+})
+
+it('reports the selected item value', async () => {
+  const onItemSelect = vi.fn()
+  const screen = await render(
+    <Dropdown.Root onItemSelect={onItemSelect}>
+      <Dropdown.Trigger>Menu</Dropdown.Trigger>
+      <Dropdown.Content>
+        <Dropdown.Item value="one">
+          <Dropdown.Link href="#one">One</Dropdown.Link>
+        </Dropdown.Item>
+      </Dropdown.Content>
+    </Dropdown.Root>,
+  )
+
+  await screen.getByRole('button', { name: 'Menu' }).click()
+  await screen.getByText('One').click()
+
+  expect(onItemSelect).toHaveBeenCalledOnce()
+  expect(onItemSelect).toHaveBeenCalledWith({ value: 'one' })
 })
 
 // TODO: Keyboard interaction tests need investigation

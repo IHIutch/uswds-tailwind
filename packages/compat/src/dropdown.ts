@@ -1,20 +1,21 @@
 import * as dropdown from '@uswds-tailwind/dropdown-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataString } from './lib/data-attr'
+import { getParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
-export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
-  static instances = new Map<string, Dropdown>()
+const parts = dropdown.anatomy.build()
+const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
 
-  static getInstance(id: string) {
-    return Dropdown.instances.get(id)
-  }
+export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
+  static override root = parts.root
 
   initMachine(props: dropdown.Props): VanillaMachine<dropdown.DropdownSchema> {
-    Dropdown.instances.set(props.id, this)
-
     return new VanillaMachine(dropdown.machine, {
       ...props,
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'dropdown'),
+      defaultOpen: props.defaultOpen ?? getDataString(this.rootEl, 'state') === 'open',
     })
   }
 
@@ -30,21 +31,27 @@ export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
   }
 
   private get trigger() {
-    const el = this.rootEl.querySelector<HTMLElement>('[data-part="dropdown-trigger"]')
+    const el = this.getOwnedPart(parts.trigger)
     if (!el)
       throw new Error('Expected trigger element to be defined')
     return el
   }
 
   private get content() {
-    const el = this.rootEl.querySelector<HTMLElement>('[data-part="dropdown-content"]')
+    const el = this.getOwnedPart(parts.content)
     if (!el)
       throw new Error('Expected content element to be defined')
     return el
   }
 
   private get items() {
-    return Array.from(this.rootEl.querySelectorAll<HTMLElement>('[data-part="dropdown-item"]'))
+    return getParts<HTMLElement>(this.rootEl, parts.item)
+      .filter(item => item.closest(rootSelector) === this.rootEl)
+  }
+
+  private getOwnedPart(part: typeof parts.trigger | typeof parts.content) {
+    return getParts<HTMLElement>(this.rootEl, part)
+      .find(element => element.closest(rootSelector) === this.rootEl)
   }
 
   private renderTrigger(el: HTMLElement) {
@@ -56,15 +63,24 @@ export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
   }
 
   private renderItem(el: HTMLElement) {
-    spreadProps(el, this.api.getItemProps())
+    const value = getDataString(el, 'value') || el.id || undefined
+    spreadProps(el, this.api.getItemProps({ value }))
+    Array.from(el.querySelectorAll<HTMLAnchorElement>('a'))
+      .filter(link => link.closest(rootSelector) === this.rootEl)
+      .forEach(link => spreadProps(link, this.api.getItemLinkProps({ value })))
+  }
+
+  async open() {
+    this.api.setOpen(true)
+    await this.settle()
+  }
+
+  async close() {
+    this.api.setOpen(false)
+    await this.settle()
   }
 }
 
 export function dropdownInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="dropdown-root"]').forEach((targetEl) => {
-    const dropdown = new Dropdown(targetEl, {
-      id: targetEl.id || getId(targetEl, 'dropdown'),
-    })
-    dropdown.init()
-  })
+  return Dropdown.createAll(document)
 }

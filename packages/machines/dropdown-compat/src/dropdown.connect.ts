@@ -1,7 +1,6 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
-import type { DropdownApi, DropdownSchema, ItemProps } from './dropdown.types'
-import { getEventKey } from '@zag-js/dom-query'
+import type { DropdownApi, DropdownSchema } from './dropdown.types'
 import { parts } from './dropdown.anatomy'
 import * as dom from './dropdown.dom'
 
@@ -24,26 +23,6 @@ export function connect<T extends PropTypes>(
         ...parts.root.attrs,
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
-
-        // USWDS uses onFocusout. However, in React onFocusout is not
-        // supported, and onBlur does not bubble. onBlur with relatedTarget
-        // is the closest equivalent.
-        onBlur(event) {
-          const rootEl = dom.getRootEl(scope)
-          if (rootEl && !rootEl.contains(event.relatedTarget as Node)) {
-            send({ type: 'FOCUS_OUTSIDE' })
-          }
-        },
-
-        onKeyDown(event) {
-          if (event.defaultPrevented)
-            return
-          const key = getEventKey(event)
-          if (key === 'Escape') {
-            send({ type: 'ESCAPE' })
-            event.preventDefault()
-          }
-        },
       })
     },
 
@@ -55,11 +34,10 @@ export function connect<T extends PropTypes>(
         'aria-expanded': open,
         'aria-controls': dom.getContentId(scope),
         'data-state': open ? 'open' : 'closed',
-
         onClick(event) {
           if (event.defaultPrevented)
             return
-          send({ type: 'TRIGGER_CLICK' })
+          send({ type: 'TRIGGER.CLICK' })
         },
       })
     },
@@ -73,14 +51,19 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getItemProps(itemProps: ItemProps) {
+    getItemProps(itemProps) {
       return normalize.element({
         ...parts.item.attrs,
         'data-value': itemProps.value,
+      })
+    },
+
+    getItemLinkProps(itemProps) {
+      return normalize.element({
         onClick(event) {
           if (event.defaultPrevented)
             return
-          send({ type: 'ITEM_CLICK', value: itemProps.value })
+          send({ type: 'ITEM.CLICK', value: itemProps.value })
         },
       })
     },
