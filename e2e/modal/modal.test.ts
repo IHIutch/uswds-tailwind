@@ -2,40 +2,11 @@ import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { Combobox, comboboxInit } from '../../packages/compat/src/combobox.js'
 import { Modal, modalInit } from '../../packages/compat/src/modal.js'
-import { createDisposableComponent } from '../_utils.js'
+import { createDisposableModals } from './_utils.js'
 
 const modal1 = 'modal-1'
 const modal2 = 'modal-2'
 const comboboxId = 'nested-combobox'
-
-function createDisposableModalSetup(template: string) {
-  return createDisposableComponent(
-    template,
-    () => [...modalInit(), ...comboboxInit()],
-    () => {
-      const getRootEl = (id: string) => document.querySelector<HTMLElement>(`[data-scope="modal"][data-part="root"][data-value="${id}"]`)
-      const getPositionerEl = (id: string) => document.getElementById(`modal:${id}:positioner`)
-      const getBackdropEl = (id: string) => document.getElementById(`modal:${id}:backdrop`)
-      const getContentEl = (id: string) => document.getElementById(`modal:${id}:content`)
-      const getTriggerEl = ({ id, index = 0}: { id: string, index?: number }) => document.getElementById(`modal:${id}:trigger:${index}`)
-      const getCloseTriggerEl = (id: string, index = 0) => document.getElementById(`modal:${id}:close:${index}`)
-
-      const getComboboxTriggerEl = () => document.getElementById(`combobox:${comboboxId}:trigger`) as HTMLButtonElement
-      const getComboboxListEl = () => document.getElementById(`combobox:${comboboxId}:list`) as HTMLUListElement
-
-      return {
-        getRootEl,
-        getTriggerEl,
-        getPositionerEl,
-        getBackdropEl,
-        getContentEl,
-        getCloseTriggerEl,
-        getComboboxTriggerEl,
-        getComboboxListEl,
-      }
-    },
-  )
-}
 
 const template = `
   <div aria-hidden="true" id="stays-hidden">
@@ -134,18 +105,18 @@ const template = `
 it('disposes every modal and nested combobox initialized by the setup', { tags: ['new'] }, async () => {
   const destroySpies = []
   {
-    await using component = createDisposableModalSetup(template)
+    await using component = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
     const comboboxRoot = document.querySelector<HTMLElement>('[data-scope="combobox"][data-part="root"]')!
     const instances = [Modal.getInstance(component.elements.getRootEl(modal1)!)!, Modal.getInstance(component.elements.getRootEl(modal2)!)!, Combobox.getInstance(comboboxRoot)!]
     destroySpies.push(...instances.map(instance => vi.spyOn(instance, 'destroy')))
-    expect(component.elements.getComboboxListEl()).not.toBeNull()
+    expect(document.getElementById(`combobox:${comboboxId}:list`)).not.toBeNull()
   }
   for (const destroy of destroySpies)
     expect(destroy).toHaveBeenCalledOnce()
 })
 
 it('creates new parent elements', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
   const content = modal.elements.getContentEl(modal1)
   const backdrop = modal.elements.getBackdropEl(modal1)
   const positioner = modal.elements.getPositionerEl(modal1)
@@ -156,20 +127,20 @@ it('creates new parent elements', { tags: ['legacy'] }, async () => {
 })
 
 it('adds role="dialog" to modal content', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
   const content = modal.elements.getContentEl(modal1)!
   expect(content.getAttribute('role')).toBe('dialog')
 })
 
 it('keeps aria-labelledby, aria-describedby on the content', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
   const content = modal.elements.getContentEl(modal1)!
   expect(content.getAttribute('aria-describedby')).toBe(`modal:${modal1}:description`)
   expect(content.getAttribute('aria-labelledby')).toBe(`modal:${modal1}:title`)
 })
 
 it('sets tabindex="-1" to the modal content', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
   const content = modal.elements.getContentEl(modal1)!
   expect(content.getAttribute('tabindex')).toBe('-1')
 })
@@ -177,27 +148,27 @@ it('sets tabindex="-1" to the modal content', { tags: ['legacy'] }, async () => 
 // TODO: Fix this test. See comment in ./packages/compat/src/modal.ts
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-modal/src/index.js#L320 (the built modal is appended to the body)
 it('moves the modal to the bottom of the DOM', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
   const root = modal.elements.getRootEl(modal2)!
   expect(document.body.lastElementChild).toBe(root)
-  expect(document.body.contains(modal.elements.getTriggerEl({ id: modal2 }))).toBe(true)
+  expect(document.body.contains(modal.elements.getTriggerEl(modal2))).toBe(true)
 })
 
 // Divergence: USWDS adds role="button" to <a> openers only. <buttons> have role="button" implicitly, so this is functionally the same
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-modal/src/index.js#L373-L376
 it('adds role="button" to any <a> opener', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger1 = modal.elements.getTriggerEl({ id: modal1 })!
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
 
   expect(trigger1.getAttribute('role')).toBe('button')
   expect(trigger2.getAttribute('role')).toBe('button')
 })
 
 it('adds aria-controls to each opener', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger1 = modal.elements.getTriggerEl({ id: modal1 })!
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
 
   const content1 = modal.elements.getContentEl(modal1)!
   const content2 = modal.elements.getContentEl(modal2)!
@@ -209,8 +180,8 @@ it('adds aria-controls to each opener', { tags: ['legacy'] }, async () => {
 })
 
 it('makes the modal visible', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger1 = modal.elements.getTriggerEl({ id: modal1 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
   const content1 = modal.elements.getContentEl(modal1)!
 
   await userEvent.click(trigger1)
@@ -221,8 +192,8 @@ it('makes the modal visible', { tags: ['legacy'] }, async () => {
 // no footer part here, so the first enabled button is the target. Modal 2 has no combobox, so that is its Continue button.
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-modal/src/index.js#L143-L146 (the initial focus fallback order)
 it('focuses the first button when opened', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
   const firstButton = modal.elements.getCloseTriggerEl(modal2)!
 
   await userEvent.click(trigger2)
@@ -231,8 +202,8 @@ it('focuses the first button when opened', { tags: ['legacy'] }, async () => {
 })
 
 it('makes all other page content invisible to screen readers', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger1 = modal.elements.getTriggerEl({ id: modal1 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
   const positioner1 = modal.elements.getPositionerEl(modal1)!
 
   await userEvent.click(trigger1)
@@ -245,10 +216,10 @@ it('makes all other page content invisible to screen readers', { tags: ['legacy'
 })
 
 it('allows event propagation and displays combobox list when toggle is clicked', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger1 = modal.elements.getTriggerEl({ id: modal1 })!
-  const comboboxTrigger = modal.elements.getComboboxTriggerEl()!
-  const comboboxList = modal.elements.getComboboxListEl()!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger1 = modal.elements.getTriggerEl(modal1)!
+  const comboboxTrigger = document.getElementById(`combobox:${comboboxId}:trigger`)!
+  const comboboxList = document.getElementById(`combobox:${comboboxId}:list`)!
 
   await userEvent.click(trigger1)
   await userEvent.click(comboboxTrigger)
@@ -257,9 +228,9 @@ it('allows event propagation and displays combobox list when toggle is clicked',
 })
 
 it('hides the modal when close button is clicked', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
 
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
   const content2 = modal.elements.getContentEl(modal2)!
 
@@ -269,8 +240,8 @@ it('hides the modal when close button is clicked', { tags: ['legacy'] }, async (
 })
 
 it('closes the modal when the overlay is clicked', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
   const content2 = modal.elements.getContentEl(modal2)!
 
   await userEvent.click(trigger2)
@@ -281,8 +252,8 @@ it('closes the modal when the overlay is clicked', { tags: ['legacy'] }, async (
 })
 
 it('sends focus to the element that opened it', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
 
   await userEvent.click(trigger2)
@@ -293,8 +264,8 @@ it('sends focus to the element that opened it', { tags: ['legacy'] }, async () =
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-modal/src/index.js#L176-L183 (restore runs whether or not the opener still exists)
 it('restores page content when the opener has left the document', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
 
   await userEvent.click(trigger2)
@@ -309,8 +280,8 @@ it('restores page content when the opener has left the document', { tags: ['lega
 })
 
 it('restores other page content screen reader visibility', { tags: ['legacy'] }, async () => {
-  await using modal = createDisposableModalSetup(template)
-  const trigger2 = modal.elements.getTriggerEl({ id: modal2 })!
+  await using modal = createDisposableModals(template, () => [...modalInit(), ...comboboxInit()])
+  const trigger2 = modal.elements.getTriggerEl(modal2)!
   const closeTrigger2 = modal.elements.getCloseTriggerEl(modal2)!
 
   await userEvent.click(trigger2)

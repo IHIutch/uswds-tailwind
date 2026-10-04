@@ -27,10 +27,10 @@ export function createDisposableModal(id: string, template: string, props?: Vani
 }
 
 // Getters take the modal's data-value, so one test can address several modals.
-export function createDisposableModals(template: string) {
+export function createDisposableModals(template: string, initializer: () => { destroy: () => void }[] = modalInit) {
   return createDisposableComponent(
     template,
-    modalInit,
+    initializer,
     () => {
       const getRootEl = (id: string) => document.querySelector<HTMLElement>(`[data-scope="modal"][data-part="root"][data-value="${id}"]`)
       const getPositionerEl = (id: string) => document.getElementById(`modal:${id}:positioner`)
