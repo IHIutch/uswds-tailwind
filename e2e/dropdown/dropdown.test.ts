@@ -23,6 +23,7 @@ const template = `
   </nav>
 `
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L49-L54
 it('shows the language dropdown when the language button is clicked', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const content = component.elements.getContentEl()!
@@ -49,6 +50,7 @@ it('keeps its state when a trigger click is cancelled', { tags: ['new'] }, async
   expect(content.hasAttribute('hidden')).toBe(false)
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L56-L63
 it('hides the visible language menu when the body is clicked', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const content = component.elements.getContentEl()!
@@ -62,6 +64,7 @@ it('hides the visible language menu when the body is clicked', { tags: ['legacy'
   await vi.waitFor(() => expect(content.hasAttribute('hidden')).toBe(true))
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L65-L69
 it('collapses dropdown when a language link is clicked', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const languageLink = component.elements.getContentEl()!.querySelector('a')!
@@ -74,6 +77,7 @@ it('collapses dropdown when a language link is clicked', { tags: ['legacy'] }, a
   expect(trigger.getAttribute('aria-expanded')).toBe('false')
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L71-L75
 it('collapses dropdown when the Escape key is hit', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const trigger = component.elements.getTriggerEl()
@@ -87,6 +91,7 @@ it('collapses dropdown when the Escape key is hit', { tags: ['legacy'] }, async 
   expect(document.activeElement).toBe(trigger)
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L107-L109
 it('contains a role of button', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const trigger = component.elements.getTriggerEl()
@@ -94,6 +99,7 @@ it('contains a role of button', { tags: ['legacy'] }, async () => {
   expect(trigger.getAttribute('role')).toBe('button')
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L111-L116
 it('contains aria-controls of language-options', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   const trigger = component.elements.getTriggerEl()
@@ -101,6 +107,7 @@ it('contains aria-controls of language-options', { tags: ['legacy'] }, async () 
   expect(trigger.getAttribute('aria-controls')).toBe(`dropdown:${rootId}:content`)
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/test/language-selector.spec.js#L118-L120
 it('contains an id of language-options', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDropdown(rootId, template)
   expect(component.elements.getContentEl()?.getAttribute('id')).toBe(`dropdown:${rootId}:content`)
