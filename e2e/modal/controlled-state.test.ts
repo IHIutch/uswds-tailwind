@@ -1,7 +1,6 @@
-import type * as modal from '../../packages/machines/modal-compat/src'
 import { expect, it, vi } from 'vitest'
 import { Modal } from '../../packages/compat/src/modal.js'
-import { createDisposableComponent } from '../_utils.js'
+import { createDisposableModal } from './_utils.js'
 
 const id = 'controlled'
 
@@ -19,58 +18,42 @@ function template({ state, forceAction = false, ariaLabel }: { state?: 'open' | 
   `
 }
 
-function createModal(markup: string, props: modal.Props) {
-  let instance: Modal
-  return createDisposableComponent(
-    markup,
-    () => {
-      const rootEl = document.querySelector<HTMLElement>('[data-scope="modal"][data-part="root"]')!
-      instance = new Modal(rootEl, props).init()
-      return [instance]
-    },
-    () => ({
-      instance,
-      content: document.getElementById(`modal:${id}:content`)!,
-      trigger: document.getElementById(`modal:${id}:trigger:0`)!,
-    }),
-  )
-}
-
 it('controlled false takes precedence and requests do not change state until accepted', async () => {
   const onOpenChange = vi.fn()
-  await using component = createModal(template(), {
+  await using component = createDisposableModal(id, template(), {
     open: false,
     defaultOpen: true,
     onOpenChange,
   })
 
-  expect(component.elements.content.hidden).toBe(true)
+  expect(component.elements.getContentEl()!.hidden).toBe(true)
 
-  await component.elements.instance.open()
+  const instance = Modal.getInstance(component.elements.getRootEl())!
+  await instance.open()
 
   await vi.waitFor(() => expect(onOpenChange).toHaveBeenCalledOnce())
   expect(onOpenChange).toHaveBeenCalledWith({ open: true })
-  expect(component.elements.content.hidden).toBe(true)
+  expect(component.elements.getContentEl()!.hidden).toBe(true)
 
-  component.elements.instance.machine.updateProps({ open: true })
-  await vi.waitFor(() => expect(component.elements.content.hidden).toBe(false))
+  instance.machine.updateProps({ open: true })
+  await vi.waitFor(() => expect(component.elements.getContentEl()!.hidden).toBe(false))
   expect(onOpenChange).toHaveBeenCalledOnce()
 })
 
 it('uses authored data-state as the uncontrolled initial state', async () => {
-  await using component = createModal(template({ state: 'open' }), {})
+  await using component = createDisposableModal(id, template({ state: 'open' }))
 
-  expect(component.elements.content.hidden).toBe(false)
+  expect(component.elements.getContentEl()!.hidden).toBe(false)
 })
 
 it('explicit props take precedence over authored modal attributes', async () => {
-  await using component = createModal(template({ state: 'open', forceAction: true, ariaLabel: 'Authored label' }), {
+  await using component = createDisposableModal(id, template({ state: 'open', forceAction: true, ariaLabel: 'Authored label' }), {
     'defaultOpen': false,
     'forceAction': false,
     'aria-label': 'Explicit label',
   })
 
-  expect(component.elements.content.hidden).toBe(true)
-  expect(component.elements.content.getAttribute('aria-label')).toBe('Explicit label')
-  expect(component.elements.instance.machine.prop('forceAction')).toBe(false)
+  expect(component.elements.getContentEl()!.hidden).toBe(true)
+  expect(component.elements.getContentEl()!.getAttribute('aria-label')).toBe('Explicit label')
+  expect(Modal.getInstance(component.elements.getRootEl())!.machine.prop('forceAction')).toBe(false)
 })
