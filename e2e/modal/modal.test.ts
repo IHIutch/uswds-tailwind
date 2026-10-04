@@ -131,7 +131,7 @@ const template = `
   </div>
 `
 
-it('disposes every modal and nested combobox initialized by the setup', async () => {
+it('disposes every modal and nested combobox initialized by the setup', { tags: ['new'] }, async () => {
   const destroySpies = []
   {
     await using component = createDisposableModalSetup(template)

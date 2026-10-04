@@ -68,7 +68,7 @@ it('controlled modal opens when the parent mounts with open={true}', async () =>
   await expect.element(screen.getByText('Initially Open')).toBeVisible()
 })
 
-it('controlled modal calls onOpenChange when the close trigger is clicked', async () => {
+it('controlled modal opens and closes when the parent accepts user requests', async () => {
   const onOpenChange = vi.fn()
 
   function Controlled() {
@@ -95,15 +95,15 @@ it('controlled modal calls onOpenChange when the close trigger is clicked', asyn
   }
 
   const screen = await render(<Controlled />)
-  // Open via trigger (this fires onOpenChange({open:true}); parent updates state).
   await screen.getByRole('button', { name: 'Open modal' }).click()
   expect(onOpenChange).toHaveBeenLastCalledWith({ open: true })
   await expect.element(screen.getByText('Controlled Title')).toBeVisible()
 
-  // Now click close — this is the bug under test.
   onOpenChange.mockClear()
   await screen.getByRole('button', { name: 'Close this window' }).click()
   expect(onOpenChange).toHaveBeenCalledWith({ open: false })
+  await expect.element(screen.getByText('Controlled Title')).not.toBeVisible()
+  await expect.element(screen.getByRole('button', { name: 'Open modal' })).toHaveFocus()
 })
 
 // TODO: Keyboard interaction tests need investigation
