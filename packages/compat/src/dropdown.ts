@@ -2,11 +2,10 @@ import * as dropdown from '@uswds-tailwind/dropdown-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataString } from './lib/data-attr'
-import { getParts } from './lib/dom'
+import { getOwnedElements, getOwnedPart, getOwnedParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = dropdown.anatomy.build()
-const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
 
 export type VanillaDropdownProps = Omit<dropdown.Props, 'open' | 'defaultOpen' | 'onOpenChange'>
 
@@ -34,27 +33,21 @@ export class Dropdown extends Component<VanillaDropdownProps, dropdown.Api> {
   }
 
   private get trigger() {
-    const el = this.getOwnedPart(parts.trigger)
+    const el = getOwnedPart<HTMLElement>(this.rootEl, parts.trigger)
     if (!el)
       throw new Error('Expected trigger element to be defined')
     return el
   }
 
   private get content() {
-    const el = this.getOwnedPart(parts.content)
+    const el = getOwnedPart<HTMLElement>(this.rootEl, parts.content)
     if (!el)
       throw new Error('Expected content element to be defined')
     return el
   }
 
   private get items() {
-    return getParts<HTMLElement>(this.rootEl, parts.item)
-      .filter(item => item.closest(rootSelector) === this.rootEl)
-  }
-
-  private getOwnedPart(part: typeof parts.trigger | typeof parts.content) {
-    return getParts<HTMLElement>(this.rootEl, part)
-      .find(element => element.closest(rootSelector) === this.rootEl)
+    return getOwnedParts<HTMLElement>(this.rootEl, parts.item)
   }
 
   private renderTrigger(el: HTMLElement) {
@@ -68,8 +61,7 @@ export class Dropdown extends Component<VanillaDropdownProps, dropdown.Api> {
   private renderItem(el: HTMLElement) {
     const value = getDataString(el, 'value') || el.id || undefined
     spreadProps(el, this.api.getItemProps({ value }))
-    Array.from(el.querySelectorAll<HTMLAnchorElement>('a'))
-      .filter(link => link.closest(rootSelector) === this.rootEl)
+    getOwnedElements<HTMLAnchorElement>(this.rootEl, el, 'a')
       .forEach(link => spreadProps(link, this.api.getItemLinkProps({ value })))
   }
 
