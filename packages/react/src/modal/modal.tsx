@@ -108,11 +108,11 @@ const ModalPositioner = React.forwardRef<HTMLDivElement, ModalPositionerProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useModalContext()
     const { positioner } = modalVariants()
+    const mergedProps = mergeProps(api.getPositionerProps(), props)
+
     return (
       <div
-        hidden={!api.open}
-        data-state={api.open ? 'open' : 'closed'}
-        {...props}
+        {...mergedProps}
         className={positioner({ className })}
         ref={forwardedRef}
       />
