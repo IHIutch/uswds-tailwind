@@ -4,7 +4,7 @@ import { createDisposableFileInput, file, fileInputTemplate } from './_utils'
 
 // Intentional difference: instruction and status defaults are scoped to each input.
 it('keeps singular instruction copy independent of a multiple-file sibling', { tags: ['new'] }, async () => {
-  using component = createDisposableFileInput('single', fileInputTemplate({ id: 'single' }) + fileInputTemplate({ id: 'multiple', multiple: true }))
+  await using component = createDisposableFileInput('single', fileInputTemplate({ id: 'single' }) + fileInputTemplate({ id: 'multiple', multiple: true }))
   const single = component.elements
   await userEvent.upload(single.getInputEl()!, [file('seed.pdf', 'application/pdf')])
   await vi.waitFor(() => expect(single.getPreviewHeaderEl()!.textContent).toBe('Selected file Change file'))
@@ -17,7 +17,7 @@ it('keeps singular instruction copy independent of a multiple-file sibling', { t
 
 // Intentional difference: validation does not share a rejection latch across inputs.
 it('keeps a rejected selection from suppressing a sibling change', { tags: ['new'] }, async () => {
-  using component = createDisposableFileInput('restricted', fileInputTemplate({ id: 'restricted', accept: '.pdf' }) + fileInputTemplate({ id: 'sibling', multiple: true }))
+  await using component = createDisposableFileInput('restricted', fileInputTemplate({ id: 'restricted', accept: '.pdf' }) + fileInputTemplate({ id: 'sibling', multiple: true }))
   const restricted = component.elements
   const sibling = document.getElementById('file-input:sibling')!
   await userEvent.upload(restricted.getInputEl()!, [file('bad.png', 'image/png')])
@@ -31,7 +31,7 @@ it('keeps a rejected selection from suppressing a sibling change', { tags: ['new
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L363-L379 (each change schedules its own delayed announcement)
 it('queues each announcement during rapid selections', { tags: ['parity'] }, async () => {
-  using component = createDisposableFileInput('status', fileInputTemplate({ id: 'status' }))
+  await using component = createDisposableFileInput('status', fileInputTemplate({ id: 'status' }))
   const { getInputEl, getSrStatusEl } = component.elements
   await userEvent.upload(getInputEl()!, [file('first.png', 'image/png')])
   await new Promise(resolve => setTimeout(resolve, 500))

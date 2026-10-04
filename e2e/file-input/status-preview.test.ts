@@ -5,7 +5,7 @@ import { createDisposableFileInput, file, fileInputTemplate } from './_utils'
 describe('file previews and live status', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L363-L379 (announce the selected filename after one second)
   it('announces one selected file after the source one-second delay', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate())
+    await using component = createDisposableFileInput('behavior', fileInputTemplate())
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('photo.png', 'image/png')])
@@ -16,7 +16,7 @@ describe('file previews and live status', () => {
 
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L363-L379 (announce filenames or the default empty status)
   it('announces multiple filenames and then an empty selection', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('a.png', 'image/png'), file('b.png', 'image/png')])
@@ -28,7 +28,7 @@ describe('file previews and live status', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L457-L499 (loading preview, file data, and extension fallback)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L417-L425 (use the fallback when the image fails)
   it('renders image previews and extension fallbacks', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
 
     const svg = file('photo.svg', 'image/svg+xml', '<svg xmlns="http://www.w3.org/2000/svg" width="3" height="2"></svg>')
@@ -52,7 +52,7 @@ describe('file previews and live status', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L319-L353 (remove old previews and restore instructions)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L439-L446 (clear previews before rendering a new selection)
   it('removes the old preview when a newer selection arrives', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate())
+    await using component = createDisposableFileInput('behavior', fileInputTemplate())
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('old.png', 'image/png')])
@@ -68,7 +68,7 @@ describe('file previews and live status', () => {
   })
 
   it('shows distinct previews for files with identical metadata', async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
     const files = [2, 3].map(width => new File([
       `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="2"></svg>`,

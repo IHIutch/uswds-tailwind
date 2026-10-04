@@ -36,7 +36,7 @@ const template = `
 `
 
 it('uses singular "file" if there is not a "multiple" attribute', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const dragText = component.elements.getInstructionsEl()
   expect(dragText?.textContent).toContain('Drag file here or')
 })

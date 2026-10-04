@@ -38,41 +38,41 @@ const TEMPLATE = `
 `
 
 it('target ui is created', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const dropZone = component.elements.getDropzoneEl()
   expect(dropZone).toBeTruthy()
   expect(dropZone?.getAttribute('data-part')).toBe('dropzone')
 })
 
 it('input element exists', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const inputEl = component.elements.getInputEl()
   expect(inputEl).toBeTruthy()
   expect(inputEl?.getAttribute('data-part')).toBe('input')
 })
 
 it('box is created', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const dropZone = component.elements.getDropzoneEl()!
   const box = dropZone.querySelector('div')!
   expect(box).toBeTruthy()
 })
 
 it('pluralizes "files" if there is a "multiple" attribute', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const dragText = component.elements.getInstructionsEl()
   expect(dragText?.textContent).toContain('Drag files here or')
 })
 
 it('creates a status message element', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const statusMessage = component.elements.getSrStatusEl()
   expect(statusMessage).toBeTruthy()
   expect(statusMessage?.getAttribute('aria-live')).toBe('polite')
 })
 
 it('adds a default status message', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const statusMessage = component.elements.getSrStatusEl()
   expect(statusMessage?.innerHTML?.trim()).toBe('No files selected.')
 })
@@ -112,7 +112,7 @@ const disabledTemplate = `
 `
 
 it('has disabled styling', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput('disabled-test', disabledTemplate)
+  await using component = createDisposableFileInput('disabled-test', disabledTemplate)
   const inputEl = component.elements.getInputEl()
 
   expect(inputEl).toBeDisabled()

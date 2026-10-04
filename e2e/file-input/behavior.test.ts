@@ -6,7 +6,7 @@ describe('file input behavior', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L191-L222 (desktop instructions and accessible name)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L268-L284 (initial live status)
   it('shows instructions and an empty selection status', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate())
+    await using component = createDisposableFileInput('behavior', fileInputTemplate())
     const { elements } = component
 
     expect(elements.getInstructionsEl()).toBeVisible()
@@ -21,7 +21,7 @@ describe('file input behavior', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L389-L410 (selection heading and accessible name)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L439-L510 (render filenames and reset an empty selection)
   it('shows selected filenames and updates them when the selection changes or is cleared', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('first.png', 'image/png')])
@@ -53,7 +53,7 @@ describe('file input behavior', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L547-L589 (reject the entire batch and expose the error)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L341-L345 (clear the previous error on a valid change)
   it('shows an error for a mixed selection and accepts a later valid selection', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true, accept: '.png' }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true, accept: '.png' }))
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('good.png', 'image/png'), file('bad.pdf', 'application/pdf')])
@@ -75,7 +75,7 @@ describe('file input behavior', () => {
 
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L559-L570 (MIME wildcard matching accepts the file)
   it('accepts an image when image uploads are allowed', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ accept: 'image/*' }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ accept: 'image/*' }))
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('photo.png', 'image/png')])
@@ -89,7 +89,7 @@ describe('file input behavior', () => {
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L575-L586 (visible error and accessible name)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L341-L345 (remove the error on recovery)
   it('shows a configured error message and clears it after a valid selection', { tags: ['parity'] }, async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate({ accept: '.png', errorText: 'Upload a PNG file' }))
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ accept: '.png', errorText: 'Upload a PNG file' }))
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('bad.pdf', 'application/pdf')])

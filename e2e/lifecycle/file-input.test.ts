@@ -5,7 +5,7 @@ import { createDisposableFileInput, file, fileInputTemplate } from '../file-inpu
 
 describe('file input resource lifecycle', () => {
   it('releases preview URLs when files are replaced, cleared, or the component is destroyed', async () => {
-    using component = createDisposableFileInput('behavior', fileInputTemplate())
+    await using component = createDisposableFileInput('behavior', fileInputTemplate())
     const { elements } = component
     const svg = (name: string) => file(name, 'image/svg+xml', '<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"></svg>')
     const upload = async (name: string) => {

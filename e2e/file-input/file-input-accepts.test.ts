@@ -52,7 +52,7 @@ const size = 1024 * 1024 * 2 // 2MB
 const invalidFile = createMockFile('pic.jpg', size, 'image/jpeg')
 
 it('target ui is created', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const dropZone = component.elements.getDropzoneEl()
 
   expect(dropZone).toBeTruthy()
@@ -60,7 +60,7 @@ it('target ui is created', { tags: ['legacy'] }, async () => {
 })
 
 it('input element exists', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const inputEl = component.elements.getInputEl()
 
   expect(inputEl).toBeTruthy()
@@ -68,7 +68,7 @@ it('input element exists', { tags: ['legacy'] }, async () => {
 })
 
 it('pluralizes "files" if there is a "multiple" attribute', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const dragText = component.elements.getInstructionsEl()
 
   expect(dragText?.textContent).toContain('Drag files here or')
@@ -82,7 +82,7 @@ it('mock file should be defined with specific values', { tags: ['legacy'] }, () 
 })
 
 it('mock file should not be allowed', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
   const dropzone = component.elements.getDropzoneEl()!
@@ -90,7 +90,7 @@ it('mock file should not be allowed', { tags: ['legacy'] }, async () => {
 })
 
 it('should provide a default error message for invalid file type', { tags: ['legacy'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
   const errorMessage = component.elements.getErrorMessageEl()!
@@ -151,7 +151,7 @@ it('should allow a custom error message for invalid file type', { tags: ['legacy
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L389-L410 (selection heading)
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L439-L499 (render selected filenames and previews)
 it('renders a native file selection in the authored preview list', { tags: ['parity'] }, async () => {
-  using component = createDisposableFileInput(rootId, template)
+  await using component = createDisposableFileInput(rootId, template)
   const input = component.elements.getInputEl()!
   const selected = new File(['file contents'], 'report.pdf', { type: 'application/pdf' })
   await userEvent.upload(input, selected)
