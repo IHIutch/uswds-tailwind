@@ -6,7 +6,6 @@ import { getOwnedElements, getOwnedParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = accordion.anatomy.build()
-const itemSelector = `[data-part="${parts.item.attrs['data-part']}"]`
 
 export class Accordion extends Component<accordion.Props, accordion.Api> {
   static override root = parts.root
@@ -48,6 +47,7 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
     if (!value)
       return
     spreadProps(itemEl, this.api.getItemProps({ value }))
+    const itemSelector = `[data-part="${parts.item.attrs['data-part']}"]`
     // Root ownership excludes nested accordions; the closest item check also
     // excludes parts inside another item belonging to this accordion.
     const trigger = getOwnedElements<HTMLElement>(this.rootEl, itemEl, `[data-part="${parts.itemTrigger.attrs['data-part']}"]`)
