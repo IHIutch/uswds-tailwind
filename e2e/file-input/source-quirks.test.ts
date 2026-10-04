@@ -24,7 +24,7 @@ it('keeps a rejected selection from suppressing a sibling change', { tags: ['new
   await vi.waitFor(() => expect(restricted.getDropzoneEl()!.hasAttribute('data-invalid')).toBe(true))
   await userEvent.upload(sibling.querySelector<HTMLInputElement>('[data-part="input"]')!, [file('first.png', 'image/png')])
   await vi.waitFor(() => {
-    expect(sibling.querySelector<HTMLElement>('[data-part="preview-list"]')!.children).toHaveLength(1)
+    expect(sibling.querySelector<HTMLElement>('[data-part="item-group"]')!.children).toHaveLength(1)
     expect(sibling.querySelector<HTMLElement>('[data-part="preview-heading"]')!.textContent).toBe('Selected file Change file')
   })
 })

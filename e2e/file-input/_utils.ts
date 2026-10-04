@@ -13,11 +13,11 @@ export function createDisposableFileInput(id: string, template: string) {
       const getInstructionsEl = () => getRootEl()?.querySelector<HTMLElement>('[data-part="instructions"]')
       const getSrStatusEl = () => getRootEl()?.querySelector<HTMLElement>('[data-part="sr-status"]')
       const getPreviewHeaderEl = () => getRootEl()?.querySelector<HTMLElement>('[data-part="preview-heading"]')
-      const getPreviewListEl = () => getRootEl()?.querySelector<HTMLElement>('[data-part="preview-list"]')
+      const getItemGroupEl = () => getRootEl()?.querySelector<HTMLElement>('[data-part="item-group"]')
 
-      const getPreviewItemEl = (value: string) => Array.from(getRootEl()?.querySelectorAll<HTMLElement>('[data-part="item"]') ?? []).find(item => item.textContent?.includes(value))
-      const getPreviewItemImageEl = (value: string) => getPreviewItemEl(value)?.querySelector<HTMLImageElement>('[data-part="item-preview-image"]')
-      const getPreviewItemContentEl = (value: string) => getPreviewItemEl(value)?.querySelector<HTMLElement>('[data-file-name]')
+      const getItemEl = (value: string) => Array.from(getRootEl()?.querySelectorAll<HTMLElement>('[data-part="item"]') ?? []).find(item => item.textContent?.includes(value))
+      const getItemPreviewImageEl = (value: string) => getItemEl(value)?.querySelector<HTMLImageElement>('[data-part="item-preview-image"]')
+      const getItemNameEl = (value: string) => getItemEl(value)?.querySelector<HTMLElement>('[data-file-name]')
 
       const getLabelEl = () => getRootEl()?.querySelector<HTMLLabelElement>('[data-part="label"]')
 
@@ -30,10 +30,10 @@ export function createDisposableFileInput(id: string, template: string) {
         getInstructionsEl,
         getSrStatusEl,
         getPreviewHeaderEl,
-        getPreviewListEl,
-        getPreviewItemEl,
-        getPreviewItemImageEl,
-        getPreviewItemContentEl,
+        getItemGroupEl,
+        getItemEl,
+        getItemPreviewImageEl,
+        getItemNameEl,
       }
     },
   )
@@ -69,7 +69,7 @@ export function fileInputTemplate(options: FileInputOptions = {}) {
         ${name === undefined ? '' : `name="${escape(name)}"`} />
       <div data-part="preview-heading"></div>
       <div data-part="error-text"></div>
-      <div data-part="preview-list"><div data-part="item"><img data-part="item-preview-image" /><span data-file-name></span></div></div>
+      <div data-part="item-group"><div data-part="item"><img data-part="item-preview-image" /><span data-file-name></span></div></div>
     </div>
   </div>`
 }

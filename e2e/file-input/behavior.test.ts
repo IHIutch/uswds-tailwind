@@ -26,7 +26,7 @@ describe('file input behavior', () => {
 
     await userEvent.upload(elements.getInputEl()!, [file('first.png', 'image/png')])
     await vi.waitFor(() => {
-      expect(elements.getPreviewItemContentEl('first.png')).toBeVisible()
+      expect(elements.getItemNameEl('first.png')).toBeVisible()
       expect(elements.getPreviewHeaderEl()).toHaveTextContent('Selected file Change file')
       expect(elements.getInstructionsEl()).not.toBeVisible()
       expect(elements.getInputEl()).toHaveAccessibleName('Change file')
@@ -34,16 +34,16 @@ describe('file input behavior', () => {
 
     await userEvent.upload(elements.getInputEl()!, [file('second.png', 'image/png'), file('third.png', 'image/png')])
     await vi.waitFor(() => {
-      expect(elements.getPreviewItemEl('first.png')).toBeUndefined()
-      expect(elements.getPreviewItemContentEl('second.png')).toBeVisible()
-      expect(elements.getPreviewItemContentEl('third.png')).toBeVisible()
+      expect(elements.getItemEl('first.png')).toBeUndefined()
+      expect(elements.getItemNameEl('second.png')).toBeVisible()
+      expect(elements.getItemNameEl('third.png')).toBeVisible()
       expect(elements.getPreviewHeaderEl()).toHaveTextContent('2 files selected Change files')
       expect(elements.getInputEl()).toHaveAccessibleName('Change files')
     })
 
     await userEvent.upload(elements.getInputEl()!, [])
     await vi.waitFor(() => {
-      expect(elements.getPreviewListEl()).not.toBeVisible()
+      expect(elements.getItemGroupEl()).not.toBeVisible()
       expect(elements.getPreviewHeaderEl()).not.toBeVisible()
       expect(elements.getInstructionsEl()).toBeVisible()
       expect(elements.getInputEl()).toHaveAccessibleName('Drag files here or choose from folder')
@@ -62,13 +62,13 @@ describe('file input behavior', () => {
       expect(elements.getErrorMessageEl()).toHaveTextContent('Error: This is not a valid file type.')
       expect(elements.getInputEl()).toHaveAccessibleName('Error: This is not a valid file type. Drag files here or choose from folder')
       expect(elements.getInputEl()!.files).toHaveLength(0)
-      expect(elements.getPreviewListEl()).not.toBeVisible()
+      expect(elements.getItemGroupEl()).not.toBeVisible()
     })
 
     await userEvent.upload(elements.getInputEl()!, [file('recovered.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getErrorMessageEl()).not.toBeVisible()
-      expect(elements.getPreviewItemContentEl('recovered.png')).toBeVisible()
+      expect(elements.getItemNameEl('recovered.png')).toBeVisible()
       expect(elements.getInputEl()).toHaveAccessibleName('Change file')
     })
   })
@@ -80,7 +80,7 @@ describe('file input behavior', () => {
 
     await userEvent.upload(elements.getInputEl()!, [file('photo.png', 'image/png')])
     await vi.waitFor(() => {
-      expect(elements.getPreviewItemContentEl('photo.png')).toBeVisible()
+      expect(elements.getItemNameEl('photo.png')).toBeVisible()
       expect(elements.getErrorMessageEl()).not.toBeVisible()
     })
   })
@@ -102,7 +102,7 @@ describe('file input behavior', () => {
     await userEvent.upload(elements.getInputEl()!, [file('good.png', 'image/png')])
     await vi.waitFor(() => {
       expect(elements.getErrorMessageEl()).not.toBeVisible()
-      expect(elements.getPreviewItemContentEl('good.png')).toBeVisible()
+      expect(elements.getItemNameEl('good.png')).toBeVisible()
       expect(elements.getInputEl()).toHaveAccessibleName('Change file')
     })
   })

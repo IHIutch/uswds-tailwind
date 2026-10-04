@@ -82,13 +82,13 @@ export function connect<T extends PropTypes>(
         'data-dragging': dataAttr(dragging),
         'data-invalid': dataAttr(invalid),
         onDragOver() {
-          send({ type: 'DRAG.OVER' })
+          send({ type: 'DROPZONE.DRAG_OVER' })
         },
         onDragLeave() {
-          send({ type: 'DRAG.LEAVE' })
+          send({ type: 'DROPZONE.DRAG_LEAVE' })
         },
         onDrop() {
-          send({ type: 'DROP' })
+          send({ type: 'DROPZONE.DROP' })
         },
       })
     },
@@ -115,7 +115,7 @@ export function connect<T extends PropTypes>(
           const files = Array.from(input.files ?? [])
           if (!isBatchValid(prop('accept'), files))
             input.value = ''
-          send({ type: 'FILES.CHANGE', files })
+          send({ type: 'FILE.SELECT', files })
         },
       })
     },
@@ -137,10 +137,10 @@ export function connect<T extends PropTypes>(
       return normalize.element({ ...parts.choose.attrs })
     },
 
-    getPreviewListProps() {
+    getItemGroupProps() {
       return normalize.element({
-        ...parts.previewList.attrs,
-        'id': dom.getPreviewListId(scope),
+        ...parts.itemGroup.attrs,
+        'id': dom.getItemGroupId(scope),
         'hidden': !hasFiles,
         'data-valid': dataAttr(hasFiles),
       })

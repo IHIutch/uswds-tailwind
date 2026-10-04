@@ -12,7 +12,7 @@ const template = `
         No file selected.
       </div>
       <div data-part="dropzone">
-        <div data-part="preview-list">
+        <div data-part="item-group">
           <div>
             <div data-part="preview-heading"></div>
           </div>

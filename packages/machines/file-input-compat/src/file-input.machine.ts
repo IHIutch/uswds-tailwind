@@ -41,25 +41,25 @@ export const machine = createMachine<FileInputSchema>({
   states: {
     idle: {
       on: {
-        'DRAG.OVER': { target: 'dragging' },
+        'DROPZONE.DRAG_OVER': { target: 'dragging' },
       },
     },
     dragging: {
       on: {
-        'DRAG.LEAVE': { target: 'idle' },
-        'DROP': { target: 'idle' },
+        'DROPZONE.DRAG_LEAVE': { target: 'idle' },
+        'DROPZONE.DROP': { target: 'idle' },
       },
     },
   },
 
   on: {
-    'FILES.CHANGE': { actions: ['setFiles'] },
+    'FILE.SELECT': { actions: ['setEventFiles'] },
   },
 
   implementations: {
     actions: {
-      setFiles({ context, event, prop, scope, refs }) {
-        if (event.type !== 'FILES.CHANGE')
+      setEventFiles({ context, event, prop, scope, refs }) {
+        if (event.type !== 'FILE.SELECT')
           return
         const files = event.files
         const invalid = !isBatchValid(prop('accept'), files)

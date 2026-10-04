@@ -132,20 +132,20 @@ function FileInputErrorMessage({ className, ...props }: FileInputErrorMessagePro
   )
 }
 
-export type FileInputPreviewListProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'> & {
-  children: ((context: { files: File[] }) => React.ReactNode) | React.ReactNode
+export type FileInputItemGroupProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'> & {
+  children: ((context: { acceptedFiles: File[] }) => React.ReactNode) | React.ReactNode
 }
 
-function FileInputPreviewList({ className, children, ...props }: FileInputPreviewListProps) {
+function FileInputItemGroup({ className, children, ...props }: FileInputItemGroupProps) {
   const { api } = useFileInputContext()
-  const mergedProps = mergeProps(api.getPreviewListProps(), props)
+  const mergedProps = mergeProps(api.getItemGroupProps(), props)
 
   return (
     <div
       {...mergedProps}
       className={cn('relative z-30 pointer-events-none bg-blue-10 group', className)}
     >
-      {typeof children === 'function' ? children({ files: api.acceptedFiles }) : children}
+      {typeof children === 'function' ? children({ acceptedFiles: api.acceptedFiles }) : children}
     </div>
   )
 }
@@ -163,50 +163,45 @@ function FileInputPreviewTitle({ className, children, ...props }: FileInputPrevi
   )
 }
 
-interface PreviewItemContextProps {
-  file: File
-}
-const PreviewItemContext = React.createContext<PreviewItemContextProps | null> (null)
+const FileInputItemPropsContext = React.createContext<fileInput.ItemProps | null>(null)
 
-function usePreviewItemPropsContext() {
-  const index = React.useContext(PreviewItemContext)
-  if (index === null) {
-    throw new Error('FileInput preview sub-components must be used within a FileInput.PreviewItem')
+function useFileInputItemPropsContext() {
+  const itemProps = React.useContext(FileInputItemPropsContext)
+  if (itemProps === null) {
+    throw new Error('FileInput preview sub-components must be used within a FileInput.Item')
   }
-  return index
+  return itemProps
 }
 
-export type FileInputItemProps = React.ComponentPropsWithoutRef<'div'> & {
-  file: File
-}
+export type FileInputItemProps = React.ComponentPropsWithoutRef<'div'> & fileInput.ItemProps
 
 function FileInputItem({ file, className, ...props }: FileInputItemProps) {
   const { api } = useFileInputContext()
   const mergedProps = mergeProps(api.getItemProps({ file }), props)
 
   return (
-    <PreviewItemContext.Provider value={{ file }}>
+    <FileInputItemPropsContext.Provider value={{ file }}>
       <div
         {...mergedProps}
         className={cn('border-t border-t-white group-data-dragging:opacity-10', className)}
       />
-    </PreviewItemContext.Provider>
+    </FileInputItemPropsContext.Provider>
   )
 }
 
-export type FileInputPreviewItemProps = React.ComponentPropsWithoutRef<'div'>
+export type FileInputItemPreviewProps = React.ComponentPropsWithoutRef<'div'>
 
-function FileInputPreviewItem({ className, ...props }: FileInputPreviewItemProps) {
+function FileInputItemPreview({ className, ...props }: FileInputItemPreviewProps) {
   return (
     <div {...props} className={cn('flex items-center gap-2 p-2', className)} />
   )
 }
 
-export type FileInputPreviewItemIconProps = React.ComponentPropsWithoutRef<'div'>
+export type FileInputItemPreviewIconProps = React.ComponentPropsWithoutRef<'div'>
 
-function FileInputPreviewItemIcon({ className, children, ...props }: FileInputPreviewItemIconProps) {
+function FileInputItemPreviewIcon({ className, children, ...props }: FileInputItemPreviewIconProps) {
   const { api } = useFileInputContext()
-  const itemProps = usePreviewItemPropsContext()
+  const itemProps = useFileInputItemPropsContext()
   const type = api.getPreviewType(itemProps.file)
 
   return (
@@ -220,11 +215,11 @@ function FileInputPreviewItemIcon({ className, children, ...props }: FileInputPr
   )
 }
 
-export type FileInputPreviewItemThumbProps = React.ComponentPropsWithoutRef<'img'>
+export type FileInputItemPreviewImageProps = React.ComponentPropsWithoutRef<'img'>
 
-function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItemThumbProps) {
+function FileInputItemPreviewImage({ className, ...props }: FileInputItemPreviewImageProps) {
   const { api } = useFileInputContext()
-  const itemProps = usePreviewItemPropsContext()
+  const itemProps = useFileInputItemPropsContext()
   const [url, setUrl] = React.useState('')
   const mergedProps = mergeProps(api.getItemPreviewImageProps({ file: itemProps.file, url }), props)
 
@@ -243,10 +238,10 @@ function FileInputPreviewItemThumb({ className, ...props }: FileInputPreviewItem
   )
 }
 
-export type FileInputPreviewItemContentProps = React.ComponentPropsWithoutRef<'div'>
+export type FileInputItemNameProps = React.ComponentPropsWithoutRef<'div'>
 
-function FileInputPreviewItemContent({ className, children, ...props }: FileInputPreviewItemContentProps) {
-  const itemProps = usePreviewItemPropsContext()
+function FileInputItemName({ className, children, ...props }: FileInputItemNameProps) {
+  const itemProps = useFileInputItemPropsContext()
 
   return (
     <div {...props} className={cn('flex items-center', className)}>
@@ -279,14 +274,14 @@ FileInputDropzone.displayName = 'FileInput.Dropzone'
 FileInputInput.displayName = 'FileInput.Input'
 FileInputInstructions.displayName = 'FileInput.Instructions'
 FileInputErrorMessage.displayName = 'FileInput.ErrorMessage'
-FileInputPreviewList.displayName = 'FileInput.PreviewList'
+FileInputItemGroup.displayName = 'FileInput.ItemGroup'
 FileInputPreviewHeader.displayName = 'FileInput.PreviewHeader'
 FileInputPreviewTitle.displayName = 'FileInput.PreviewTitle'
 FileInputItem.displayName = 'FileInput.Item'
-FileInputPreviewItem.displayName = 'FileInput.PreviewItem'
-FileInputPreviewItemIcon.displayName = 'FileInput.PreviewItemIcon'
-FileInputPreviewItemThumb.displayName = 'FileInput.PreviewItemThumb'
-FileInputPreviewItemContent.displayName = 'FileInput.PreviewItemContent'
+FileInputItemPreview.displayName = 'FileInput.ItemPreview'
+FileInputItemPreviewIcon.displayName = 'FileInput.ItemPreviewIcon'
+FileInputItemPreviewImage.displayName = 'FileInput.ItemPreviewImage'
+FileInputItemName.displayName = 'FileInput.ItemName'
 FileInputChangeTrigger.displayName = 'FileInput.ChangeTrigger'
 
 export const FileInput = {
@@ -297,13 +292,13 @@ export const FileInput = {
   Input: FileInputInput,
   Instructions: FileInputInstructions,
   ErrorMessage: FileInputErrorMessage,
-  PreviewList: FileInputPreviewList,
+  ItemGroup: FileInputItemGroup,
   PreviewHeader: FileInputPreviewHeader,
   PreviewTitle: FileInputPreviewTitle,
   Item: FileInputItem,
-  PreviewItem: FileInputPreviewItem,
-  PreviewItemIcon: FileInputPreviewItemIcon,
-  PreviewItemThumb: FileInputPreviewItemThumb,
-  PreviewItemContent: FileInputPreviewItemContent,
+  ItemPreview: FileInputItemPreview,
+  ItemPreviewIcon: FileInputItemPreviewIcon,
+  ItemPreviewImage: FileInputItemPreviewImage,
+  ItemName: FileInputItemName,
   ChangeTrigger: FileInputChangeTrigger,
 }

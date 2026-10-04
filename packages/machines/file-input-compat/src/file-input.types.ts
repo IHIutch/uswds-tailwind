@@ -7,8 +7,11 @@ export type PreviewType = 'image' | 'pdf' | 'word' | 'excel' | 'video' | 'generi
 
 export type PreviewStatus = 'loading' | 'success' | 'fallback'
 
-export interface PreviewImageProps {
+export interface ItemProps {
   file: File
+}
+
+export interface ItemPreviewImageProps extends ItemProps {
   /** The consumer creates and releases the preview URL. */
   url?: string | undefined
   status?: PreviewStatus | undefined
@@ -23,7 +26,7 @@ export type ElementIds = Partial<{
   box: string
   input: string
   instructions: string
-  previewList: string
+  itemGroup: string
   previewHeading: string
   srStatus: string
   errorText: string
@@ -60,12 +63,12 @@ export interface FileInputSchema {
     hasStatus: boolean
   }
   effect: 'cleanupTimers'
-  action: 'setFiles'
+  action: 'setEventFiles'
   event:
-    | { type: 'FILES.CHANGE', files: File[] }
-    | { type: 'DRAG.OVER' }
-    | { type: 'DRAG.LEAVE' }
-    | { type: 'DROP' }
+    | { type: 'FILE.SELECT', files: File[] }
+    | { type: 'DROPZONE.DRAG_OVER' }
+    | { type: 'DROPZONE.DRAG_LEAVE' }
+    | { type: 'DROPZONE.DROP' }
 }
 
 export type FileInputService = Service<FileInputSchema>
@@ -96,10 +99,10 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   getInstructionsProps: () => T['element']
   getDragTextProps: () => T['element']
   getChooseProps: () => T['element']
-  getPreviewListProps: () => T['element']
+  getItemGroupProps: () => T['element']
   getPreviewHeadingProps: () => T['element']
-  getItemProps: (details: { file: File }) => T['element']
-  getItemPreviewImageProps: (details: PreviewImageProps) => T['img']
+  getItemProps: (props: ItemProps) => T['element']
+  getItemPreviewImageProps: (props: ItemPreviewImageProps) => T['img']
   getErrorTextProps: () => T['element']
   getSrStatusProps: () => T['element']
   /**

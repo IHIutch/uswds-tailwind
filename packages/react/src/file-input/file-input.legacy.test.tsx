@@ -119,9 +119,9 @@ it('updates the preview and accessible name together when replacing or clearing 
     <FileInput.Root>
       <FileInput.Input />
       <FileInput.Instructions />
-      <FileInput.PreviewList>
-        {({ files }) => files.map((file, index) => <span key={`${getFileId(file)}-${index}`}>{file.name}</span>)}
-      </FileInput.PreviewList>
+      <FileInput.ItemGroup>
+        {({ acceptedFiles }) => acceptedFiles.map((file, index) => <span key={`${getFileId(file)}-${index}`}>{file.name}</span>)}
+      </FileInput.ItemGroup>
     </FileInput.Root>,
   )
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
@@ -165,16 +165,16 @@ it('shows distinct previews for files with identical metadata', async () => {
   await render(
     <FileInput.Root multiple>
       <FileInput.Input />
-      <FileInput.PreviewList>
-        {({ files }) => files.map((file, index) => (
+      <FileInput.ItemGroup>
+        {({ acceptedFiles }) => acceptedFiles.map((file, index) => (
           <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
-            <FileInput.PreviewItem>
-              <FileInput.PreviewItemThumb />
-              <FileInput.PreviewItemContent />
-            </FileInput.PreviewItem>
+            <FileInput.ItemPreview>
+              <FileInput.ItemPreviewImage />
+              <FileInput.ItemName />
+            </FileInput.ItemPreview>
           </FileInput.Item>
         ))}
-      </FileInput.PreviewList>
+      </FileInput.ItemGroup>
     </FileInput.Root>,
   )
   const input = document.querySelector('input[type="file"]') as HTMLInputElement

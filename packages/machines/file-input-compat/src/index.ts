@@ -5,8 +5,9 @@ export * from './file-input.props'
 export type {
   FileInputApi as Api,
   ElementIds,
+  ItemPreviewImageProps,
+  ItemProps,
   FileInputMachine as Machine,
-  PreviewImageProps,
   PreviewStatus,
   PreviewType,
   FileInputProps as Props,

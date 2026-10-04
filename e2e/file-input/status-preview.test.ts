@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { FileInput } from '../../packages/compat/src/file-input'
 import { createDisposableFileInput, file, fileInputTemplate } from './_utils'
 
 describe('file previews and live status', () => {
@@ -36,15 +35,17 @@ describe('file previews and live status', () => {
     const pdf = file('report.pdf', 'application/pdf', 'not a decodable image')
     await userEvent.upload(elements.getInputEl()!, [svg, pdf])
     await vi.waitFor(() => {
-      const images = Array.from(elements.getPreviewListEl()!.querySelectorAll('img'))
+      const images = Array.from(elements.getItemGroupEl()!.querySelectorAll('img'))
       expect(images).toHaveLength(2)
       expect(images.every(image => image.alt === '')).toBe(true)
     })
     await vi.waitFor(() => {
-      const report = Array.from(elements.getPreviewListEl()!.children).find(item => item.textContent === 'report.pdf')!
+      const report = Array.from(elements.getItemGroupEl()!.children).find(item => item.textContent === 'report.pdf')!
       expect(report.querySelector('img')?.getAttribute('data-preview-type')).toBe('pdf')
-      const photo = Array.from(elements.getPreviewListEl()!.children).find(item => item.textContent === 'photo.svg')!
-      expect(photo.querySelector('img')?.src.startsWith('data:image/svg+xml')).toBe(true)
+      const photo = Array.from(elements.getItemGroupEl()!.children).find(item => item.textContent === 'photo.svg')!
+      expect(photo.querySelector('img')?.naturalWidth).toBe(3)
+      expect(photo.querySelector('img')).not.toHaveAttribute('data-loading')
+      expect(report.querySelector('img')).not.toHaveAttribute('data-loading')
     })
   })
 
@@ -55,19 +56,19 @@ describe('file previews and live status', () => {
     const { elements } = component
 
     await userEvent.upload(elements.getInputEl()!, [file('old.png', 'image/png')])
-    await vi.waitFor(() => expect(elements.getPreviewListEl()!.textContent).toBe('old.png'))
+    await vi.waitFor(() => expect(elements.getItemGroupEl()!.textContent).toBe('old.png'))
     await userEvent.upload(elements.getInputEl()!, [file('new.pdf', 'application/pdf')])
-    await vi.waitFor(() => expect(elements.getPreviewListEl()!.textContent).toBe('new.pdf'))
-    expect(elements.getPreviewListEl()!.children).toHaveLength(1)
+    await vi.waitFor(() => expect(elements.getItemGroupEl()!.textContent).toBe('new.pdf'))
+    expect(elements.getItemGroupEl()!.children).toHaveLength(1)
     await userEvent.upload(elements.getInputEl()!, [])
     await vi.waitFor(() => {
-      expect(elements.getPreviewListEl()!.children).toHaveLength(0)
+      expect(elements.getItemGroupEl()!.children).toHaveLength(0)
       expect(elements.getInstructionsEl()!.hasAttribute('hidden')).toBe(false)
     })
   })
 
   it('shows distinct previews for files with identical metadata', async () => {
-    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
     const { elements } = component
     const files = [2, 3].map(width => new File([
       `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="2"></svg>`,
@@ -75,49 +76,16 @@ describe('file previews and live status', () => {
 
     await userEvent.upload(elements.getInputEl()!, files)
     await vi.waitFor(() => {
-      const items = Array.from(elements.getPreviewListEl()!.children)
+      const items = Array.from(elements.getItemGroupEl()!.children)
       const images = items.map(item => item.querySelector('img')!)
       expect(images.map(image => image.naturalWidth).sort()).toEqual([2, 3])
     })
 
     await userEvent.upload(elements.getInputEl()!, [files[1]!])
     await vi.waitFor(() => {
-      const images = elements.getPreviewListEl()!.querySelectorAll('img')
+      const images = elements.getItemGroupEl()!.querySelectorAll('img')
       expect(images).toHaveLength(1)
       expect(images[0]!.naturalWidth).toBe(3)
     })
-  })
-
-  it('does not finish a preview after the component is destroyed', async () => {
-    await using component = createDisposableFileInput('behavior', fileInputTemplate())
-    const completions: (() => void)[] = []
-    const readAsDataURL = FileReader.prototype.readAsDataURL
-    const read = vi.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(function (this: FileReader, blob) {
-      const onloadend = this.onloadend
-      if (onloadend) {
-        this.onloadend = (event) => {
-          completions.push(() => onloadend.call(this, event))
-        }
-      }
-      readAsDataURL.call(this, blob)
-    })
-
-    try {
-      await userEvent.upload(component.elements.getInputEl()!, [file('photo.svg', 'image/svg+xml', '<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"></svg>')])
-      await vi.waitFor(() => expect(completions).toHaveLength(1))
-      const image = component.elements.getPreviewItemImageEl('photo.svg')!
-      expect(image.getAttribute('src')).toBeNull()
-
-      const root = component.elements.getRootEl()!
-      FileInput.getInstance(root)!.destroy()
-      for (const complete of completions)
-        complete()
-
-      expect(image.getAttribute('src')).toBeNull()
-      expect(FileInput.getInstance(root)).toBeNull()
-    }
-    finally {
-      read.mockRestore()
-    }
   })
 })

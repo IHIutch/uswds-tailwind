@@ -9,14 +9,13 @@ const parts = fileInput.anatomy.build()
 
 interface PreviewEntry {
   item: HTMLElement
-  image: HTMLImageElement
-  reader: FileReader
+  cleanup: () => void
 }
 
 export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   static override root = parts.root
 
-  private previewItem: HTMLElement | null = null
+  private itemTemplate: HTMLElement | null = null
   private previews = new Map<File, PreviewEntry>()
 
   initMachine(props: fileInput.Props): VanillaMachine<fileInput.Schema> {
@@ -56,21 +55,21 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     return instructions
   }
 
-  private get previewList() {
-    const previewList = getPart<HTMLElement>(this.rootEl, parts.previewList)
-    if (!previewList)
+  private get itemGroup() {
+    const itemGroup = getPart<HTMLElement>(this.rootEl, parts.itemGroup)
+    if (!itemGroup)
       throw new Error('Expected file input preview list to be defined')
-    return previewList
+    return itemGroup
   }
 
   render() {
-    this.storePreviewItem(this.previewList)
+    this.storeItemTemplate(this.itemGroup)
 
     spreadProps(this.rootEl, this.api.getRootProps())
     spreadProps(this.dropzone, this.api.getDropzoneProps())
     spreadProps(this.input, this.api.getInputProps())
     spreadProps(this.instructions, this.api.getInstructionsProps())
-    spreadProps(this.previewList, this.api.getPreviewListProps())
+    spreadProps(this.itemGroup, this.api.getItemGroupProps())
 
     const label = getPart<HTMLLabelElement>(this.rootEl, parts.label)
     if (label)
@@ -81,17 +80,17 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
 
     this.renderCopy()
     this.renderFeedback()
-    this.renderPreviews(this.previewList)
+    this.renderPreviews(this.itemGroup)
   }
 
-  private storePreviewItem(previewList: HTMLElement) {
-    if (this.previewItem !== null)
+  private storeItemTemplate(itemGroup: HTMLElement) {
+    if (this.itemTemplate !== null)
       return
 
-    const item = getPart<HTMLElement>(previewList, parts.item)
+    const item = getPart<HTMLElement>(itemGroup, parts.item)
     if (!item)
       throw new Error('Expected file input preview item to be defined')
-    this.previewItem = item
+    this.itemTemplate = item
     item.remove()
   }
 
@@ -128,7 +127,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     }
   }
 
-  private renderPreviews(previewList: HTMLElement) {
+  private renderPreviews(itemGroup: HTMLElement) {
     this.removeStalePreviews()
 
     for (const file of this.api.acceptedFiles) {
@@ -139,72 +138,66 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     const items = this.api.acceptedFiles
       .map(file => this.previews.get(file)!.item)
       .reverse()
-    previewList.append(...items)
+    itemGroup.append(...items)
   }
 
   private removeStalePreviews() {
     for (const [file, entry] of this.previews) {
       if (this.api.acceptedFiles.includes(file))
         continue
-      if (entry.reader.readyState === FileReader.LOADING)
-        entry.reader.abort()
-      entry.item.remove()
       this.previews.delete(file)
+      entry.cleanup()
+      entry.item.remove()
     }
   }
 
   private addPreview(file: File) {
-    const item = this.previewItem!.cloneNode(true) as HTMLElement
+    const item = this.itemTemplate!.cloneNode(true) as HTMLElement
     spreadProps(item, this.api.getItemProps({ file }))
 
     const image = getPart<HTMLImageElement>(item, parts.itemPreviewImage)
     if (!image)
       throw new Error('Expected file input preview image to be defined')
-    spreadProps(image, this.api.getItemPreviewImageProps({ file, status: 'loading' }))
 
     const name = item.querySelector<HTMLElement>('[data-file-name]')
     if (!name)
       throw new Error('Expected file input preview file name to be defined')
     name.textContent = file.name
 
-    const entry = { item, image, reader: new FileReader() }
-    this.previews.set(file, entry)
-    entry.reader.onloadend = () => this.finishPreview(file, entry)
-    entry.reader.readAsDataURL(file)
-  }
-
-  private finishPreview(file: File, entry: PreviewEntry) {
-    if (this.previews.get(file) !== entry)
-      return
-
-    spreadProps(entry.image, this.api.getItemPreviewImageProps({
-      file,
-      url: String(entry.reader.result),
-      status: 'success',
-      onError: () => this.fallbackPreview(file, entry),
-    }))
-  }
-
-  private fallbackPreview(file: File, entry: PreviewEntry) {
-    if (this.previews.get(file) !== entry)
-      return
-
-    spreadProps(entry.image, this.api.getItemPreviewImageProps({ file, status: 'fallback' }))
+    const cleanup = this.api.createFileUrl(file, (url) => {
+      spreadProps(image, this.api.getItemPreviewImageProps({
+        file,
+        url,
+        status: 'loading',
+        onLoad: () => {
+          if (this.previews.get(file)?.item !== item)
+            return
+          image.removeAttribute('data-loading')
+        },
+        onError: () => {
+          if (this.previews.get(file)?.item !== item)
+            return
+          spreadProps(image, this.api.getItemPreviewImageProps({ file, status: 'fallback' }))
+        },
+      }))
+    })
+    this.previews.set(file, { item, cleanup })
   }
 
   override destroy() {
     const entries = Array.from(this.previews.values())
     this.previews.clear()
-    for (const entry of entries) {
-      entry.reader.onloadend = null
-      if (entry.reader.readyState === FileReader.LOADING)
-        entry.reader.abort()
+    try {
+      for (const entry of entries)
+        entry.cleanup()
     }
-    super.destroy()
+    finally {
+      super.destroy()
+    }
   }
 
   async setFiles(files: File[]) {
-    this.machine.service.send({ type: 'FILES.CHANGE', files })
+    this.machine.service.send({ type: 'FILE.SELECT', files })
     await this.settle()
   }
 }

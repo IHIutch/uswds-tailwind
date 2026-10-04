@@ -1,6 +1,6 @@
 import { createAnatomy } from '@zag-js/anatomy'
 
-// previewList is the consumer-owned wrapper around the heading and preview items.
+// itemGroup is the consumer-owned wrapper around the heading and preview items.
 export const anatomy = createAnatomy('fileInput').parts(
   'root',
   'label',
@@ -10,7 +10,7 @@ export const anatomy = createAnatomy('fileInput').parts(
   'instructions',
   'dragText',
   'choose',
-  'previewList',
+  'itemGroup',
   'previewHeading',
   'item',
   'itemPreviewImage',

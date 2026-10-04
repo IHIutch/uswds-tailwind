@@ -15,7 +15,7 @@ const template = `
       No file selected.
     </div>
     <div data-part="dropzone">
-      <div data-part="preview-list">
+      <div data-part="item-group">
         <div>
           <div data-part="preview-heading"></div>
         </div>
@@ -112,7 +112,7 @@ it('should allow a custom error message for invalid file type', { tags: ['legacy
       No file selected.
     </div>
     <div data-part="dropzone">
-      <div data-part="preview-list">
+      <div data-part="item-group">
         <div>
           <div data-part="preview-heading"></div>
         </div>
@@ -157,9 +157,9 @@ it('renders a native file selection in the authored preview list', { tags: ['par
   await userEvent.upload(input, selected)
 
   await vi.waitFor(() => {
-    expect(component.elements.getPreviewListEl()?.querySelectorAll('[data-part="item"]')).toHaveLength(1)
-    expect(component.elements.getPreviewListEl()?.hasAttribute('data-valid')).toBe(true)
-    expect(component.elements.getPreviewItemContentEl('report.pdf')?.textContent).toBe('report.pdf')
+    expect(component.elements.getItemGroupEl()?.querySelectorAll('[data-part="item"]')).toHaveLength(1)
+    expect(component.elements.getItemGroupEl()?.hasAttribute('data-valid')).toBe(true)
+    expect(component.elements.getItemNameEl('report.pdf')?.textContent).toBe('report.pdf')
     expect(component.elements.getPreviewHeaderEl()?.textContent).toBe('Selected file Change file')
   })
 })
