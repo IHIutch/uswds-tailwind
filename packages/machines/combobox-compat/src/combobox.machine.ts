@@ -204,13 +204,11 @@ export const machine = createMachine<ComboboxSchema>({
           context.set('isPristine', true)
       },
 
-      setInputValue({ context, event, flush }) {
+      setInputValue({ context, event }) {
         if (event.type !== 'INPUT.CHANGE')
           return
-        flush(() => {
-          context.set('inputValue', event.value)
-          context.set('isPristine', false)
-        })
+        context.set('inputValue', event.value)
+        context.set('isPristine', false)
       },
 
       clearValue({ context, flush }) {
