@@ -1,4 +1,5 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
+import type { AnimationFrame } from '@zag-js/dom-query'
 import type { CommonProperties, DirectionProperty, PropTypes, RequiredBy } from '@zag-js/types'
 import type { ComboboxCustomFilter, ComboboxOptionData } from './combobox.utils'
 
@@ -10,7 +11,8 @@ export interface ValueChangeDetails {
   label: string
 }
 
-export interface ComboboxOption {
+/** A rendered occurrence with its own ID, even when source option values repeat. */
+export interface ComboboxItem {
   id: string
 
   value: string
@@ -85,46 +87,37 @@ export interface ComboboxSchema {
 
     isPristine: boolean
 
-    filteredOptions: ComboboxOption[]
-
-    // Completion clears this even when the list state does not change.
-    srStatusText: string
+    items: ComboboxItem[]
 
   }
   refs: {
-    focusCleanup: VoidFunction | null
-    scrollCleanup: VoidFunction | null
+    focusFrame: AnimationFrame
+    scrollFrame: AnimationFrame
   }
-  guard: 'hasNextOption' | 'hasPrevOption'
-  effect: 'trackFocusOut' | 'bridgeInitialDefaultValue'
+  effect: 'trackFocusOut' | 'syncInitialValue'
   action:
-    | 'syncInputValue'
-    | 'openList'
-    | 'closeList'
-    | 'highlightNextOption'
-    | 'highlightPrevOption'
-    | 'highlightItem'
-    | 'scrollHighlightedIntoView'
-    | 'focusHighlightedOption'
-    | 'cancelHighlightRafs'
-    | 'focusInput'
-    | 'commitSelection'
-    | 'clearSelection'
-    | 'resetSelection'
+    | 'setInputValue'
+    | 'syncItems'
+    | 'resetList'
+    | 'setHighlightedId'
+    | 'cancelHighlightWork'
+    | 'setInitialFocus'
+    | 'selectItem'
+    | 'clearSelectedItems'
+    | 'revertInputValue'
     | 'completeSelection'
   event: EventObject & (
     | { type: 'INPUT.CLICK' }
     | { type: 'INPUT.CHANGE', value: string }
     | { type: 'TRIGGER.CLICK' }
-    | { type: 'CLEAR.CLICK' }
+    | { type: 'VALUE.CLEAR' }
     | { type: 'ITEM.SELECT', value: string, label: string }
-    | { type: 'ITEM.POINTER_MOVE', id: string }
+    | { type: 'HIGHLIGHTED_ID.SET', id: string, scroll: boolean, focusHandled?: boolean }
     | { type: 'INPUT.ARROW_DOWN', focusHandled?: boolean }
-    | { type: 'ITEM.ARROW_DOWN', id: string, focusHandled?: boolean }
-    | { type: 'ITEM.ARROW_UP', id: string }
+    | { type: 'CLOSE' }
     | { type: 'INPUT.ENTER' }
-    | { type: 'ESCAPE' }
-    | { type: 'INTERACT_OUTSIDE' }
+    | { type: 'LAYER.ESCAPE' }
+    | { type: 'LAYER.INTERACT_OUTSIDE' }
     | { type: 'VALUE.SET', value: string }
   )
 }
@@ -139,7 +132,7 @@ export interface ComboboxApi<T extends PropTypes = PropTypes> {
 
   inputValue: string
 
-  options: ComboboxOption[]
+  items: ComboboxItem[]
 
   /** Render this into the status part; the machine does not inject children. */
   srStatusText: string
@@ -153,6 +146,6 @@ export interface ComboboxApi<T extends PropTypes = PropTypes> {
   getClearTriggerProps: () => T['button']
   getTriggerProps: () => T['button']
   getListProps: () => T['element']
-  getItemProps: (details: { option: ComboboxOption }) => T['element']
+  getItemProps: (props: { item: ComboboxItem }) => T['element']
   getStatusProps: () => T['element']
 }

@@ -217,12 +217,12 @@ it('should set up the list items for accessibility', async () => {
 })
 
 it('should close the list by clicking away', async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
 
   await userEvent.click(input)
-  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  await userEvent.click(document.getElementById('outside')!)
 
   expect(list.hidden).toBe(true)
 })
@@ -265,7 +265,7 @@ it('should sort matches by options that start with the query, then options that 
 })
 
 it('should reset input values when an incomplete item is remaining on blur', async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -277,7 +277,7 @@ it('should reset input values when an incomplete item is remaining on blur', asy
 
   expect(list.hidden).toBe(false)
 
-  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  await userEvent.click(document.getElementById('outside')!)
 
   expect(list.hidden).toBe(true)
   expect(select.value).toBe('apricot')
@@ -334,7 +334,7 @@ it('should close the list and reset input value when escape is performed while t
 })
 
 it('should reset the input value when a complete selection is left on blur from the input element', async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -345,7 +345,7 @@ it('should reset the input value when a complete selection is left on blur from 
   await userEvent.fill(input, 'date')
   expect(list.hidden).toBe(false)
 
-  await userEvent.click(document.body, { position: { x: 0, y: 0 } })
+  await userEvent.click(document.getElementById('outside')!)
 
   expect(list.hidden).toBe(true)
   expect(select.value).toBe('coconut')

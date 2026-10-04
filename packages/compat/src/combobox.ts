@@ -1,4 +1,4 @@
-import type { ComboboxOption, Schema as ComboboxSchema } from '@uswds-tailwind/combobox-compat'
+import type { ComboboxItem, Schema as ComboboxSchema } from '@uswds-tailwind/combobox-compat'
 import * as combobox from '@uswds-tailwind/combobox-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
@@ -130,16 +130,16 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   }
 
   private renderItems() {
-    const filteredOptions = this.api.options
+    const items = this.api.items
     const templateItem = getPart<HTMLElement>(this.list, parts.item)
     const currentItems = Array.from(this.list.querySelectorAll<HTMLElement>('[role="option"]'))
-    const sameItems = currentItems.length === filteredOptions.length
-      && currentItems.every((item, index) => item.id === filteredOptions[index]?.id)
+    const sameItems = currentItems.length === items.length
+      && currentItems.every((item, index) => item.id === items[index]?.id)
 
-    if (!sameItems || (filteredOptions.length === 0 && !this.api.inputValue))
+    if (!sameItems || (items.length === 0 && !this.api.inputValue))
       this.list.textContent = ''
 
-    if (filteredOptions.length === 0 && this.api.inputValue.length > 0) {
+    if (items.length === 0 && this.api.inputValue.length > 0) {
       if (!this.list.firstElementChild) {
         const itemEl = document.createElement('li')
         itemEl.setAttribute('data-part', parts.item.attrs['data-part']!)
@@ -150,19 +150,19 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
       }
     }
     else {
-      filteredOptions.forEach((option: ComboboxOption, index: number) => {
+      items.forEach((item: ComboboxItem, index: number) => {
         const itemEl = sameItems ? currentItems[index]! : document.createElement('li')
         if (!sameItems) {
           itemEl.setAttribute('data-part', parts.item.attrs['data-part']!)
-          itemEl.setAttribute('data-value', option.value)
+          itemEl.setAttribute('data-value', item.value)
 
           if (templateItem)
             copyAttributes(templateItem, itemEl)
 
-          itemEl.textContent = option.label
+          itemEl.textContent = item.label
         }
 
-        const itemProps = this.api.getItemProps({ option })
+        const itemProps = this.api.getItemProps({ item })
         spreadProps(itemEl, itemProps)
 
         if (!itemEl.hasAttribute('tabindex')) {

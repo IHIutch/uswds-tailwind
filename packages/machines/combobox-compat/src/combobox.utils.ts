@@ -1,4 +1,4 @@
-import type { ComboboxOption } from './combobox.types'
+import type { ComboboxItem } from './combobox.types'
 
 export interface ComboboxOptionData {
   value: string
@@ -12,14 +12,14 @@ export interface ComboboxOptionData {
  */
 export type ComboboxCustomFilter = (inputValue: string, options: readonly ComboboxOptionData[]) => readonly ComboboxOptionData[]
 
-export function getAdjacentOption(options: readonly ComboboxOption[], id: string, direction: 1 | -1) {
-  const currentIndex = options.findIndex(option => option.id === id)
+export function getAdjacentItem(items: readonly ComboboxItem[], id: string, direction: 1 | -1) {
+  const currentIndex = items.findIndex(item => item.id === id)
   if (currentIndex < 0)
     return undefined
-  return options[currentIndex + direction]
+  return items[currentIndex + direction]
 }
 
-export interface BuildOptionsParams {
+export interface BuildItemsParams {
 
   optionData: ComboboxOptionData[]
 
@@ -36,18 +36,16 @@ export interface BuildOptionsParams {
   baseId: string
 }
 
-export interface BuildOptionsResult {
-  options: ComboboxOption[]
+export interface BuildItemsResult {
+  items: ComboboxItem[]
 
   highlightedId: string | null
 
   /** The one source `displayList` path that calls `highlightOption` while opening. */
   promotionId: string | null
-
-  srStatusText: string
 }
 
-export function buildFilteredOptions(params: BuildOptionsParams): BuildOptionsResult {
+export function buildItems(params: BuildItemsParams): BuildItemsResult {
   const { optionData, inputValueRaw, customFilter, isPristine, disableFiltering, selectValue, baseId } = params
   const inputValueLower = inputValueRaw.toLowerCase()
 
@@ -81,8 +79,7 @@ export function buildFilteredOptions(params: BuildOptionsParams): BuildOptionsRe
     ordered = [...startsWith, ...contains]
   }
 
-  const numOptions = ordered.length
-  const options: ComboboxOption[] = ordered.map((option, index) => ({
+  const items: ComboboxItem[] = ordered.map((option, index) => ({
     id: `${baseId}${index}`,
     value: option.value,
     label: option.label,
@@ -91,7 +88,7 @@ export function buildFilteredOptions(params: BuildOptionsParams): BuildOptionsRe
   // `displayList` overwrites selectedItemId for every matching source option,
   // leaving the last rendered duplicate selected (index.js L467-480).
   const selectedItemId = selectValue
-    ? ([...options].reverse().find(option => option.value === selectValue)?.id ?? null)
+    ? ([...items].reverse().find(item => item.value === selectValue)?.id ?? null)
     : null
 
   let firstFoundId: string | null = null
@@ -101,13 +98,11 @@ export function buildFilteredOptions(params: BuildOptionsParams): BuildOptionsRe
       firstFoundId = `${baseId}${firstMatchIdx}`
   }
 
-  const renderHighlightId = selectedItemId ?? (options[0]?.id ?? null)
+  const renderHighlightId = selectedItemId ?? (items[0]?.id ?? null)
 
   const itemToFocusId = isPristine && selectedItemId ? selectedItemId : disableFiltering && firstFoundId ? firstFoundId : null
 
   const highlightedId = itemToFocusId ?? renderHighlightId
 
-  const srStatusText = numOptions ? `${numOptions} result${numOptions > 1 ? 's' : ''} available.` : 'No results.'
-
-  return { options, highlightedId, promotionId: itemToFocusId, srStatusText }
+  return { items, highlightedId, promotionId: itemToFocusId }
 }

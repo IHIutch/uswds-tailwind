@@ -1,100 +1,34 @@
 import type { Params } from '@zag-js/core'
-import type { ComboboxOption, ComboboxSchema } from './combobox.types'
+import type { ComboboxItem, ComboboxSchema } from './combobox.types'
 import { setup } from '@zag-js/core'
-import { addDomEvent, contains, getEventTarget, raf } from '@zag-js/dom-query'
+import { addDomEvent, AnimationFrame, contains, getEventTarget } from '@zag-js/dom-query'
 import * as dom from './combobox.dom'
-import { buildFilteredOptions, getAdjacentOption } from './combobox.utils'
+import { buildItems } from './combobox.utils'
 
 type SelectionParams = Pick<Params<ComboboxSchema>, 'scope' | 'context' | 'prop'>
 
 const { createMachine } = setup<ComboboxSchema>()
 
-function cancelFocus({ refs }: Pick<Params<ComboboxSchema>, 'refs'>) {
-  refs.get('focusCleanup')?.()
-  refs.set('focusCleanup', null)
-}
+type DomWorkParams = Pick<Params<ComboboxSchema>, 'scope' | 'refs'>
+type DomWorkKey = keyof ComboboxSchema['refs']
 
-function cancelScroll({ refs }: Pick<Params<ComboboxSchema>, 'refs'>) {
-  refs.get('scrollCleanup')?.()
-  refs.set('scrollCleanup', null)
-}
-
-function scheduleDomWork(scope: SelectionParams['scope'], work: () => boolean) {
-  let observerCleanup: VoidFunction | null = null
-  let frameCleanup: VoidFunction | null = raf(() => {
-    frameCleanup = null
-    if (!work())
-      observerCleanup = dom.observePartMutations(scope, work)
-  })
-  return () => {
-    frameCleanup?.()
-    observerCleanup?.()
-  }
-}
-
-function scheduleFocus({ scope, refs }: Pick<Params<ComboboxSchema>, 'scope' | 'refs'>, id: string) {
-  cancelFocus({ refs })
-  refs.set('focusCleanup', scheduleDomWork(scope, () => {
-    const focused = dom.focusVisibleItem(scope, id)
-    if (focused)
-      refs.set('focusCleanup', null)
-    return focused
-  }))
-}
-
-function scheduleScroll({ scope, refs }: Pick<Params<ComboboxSchema>, 'scope' | 'refs'>, id: string | null) {
-  cancelScroll({ refs })
-  if (!id)
+// Try after rendering, then wait for lazy parts if they are still missing.
+function scheduleDomWork({ scope, refs }: DomWorkParams, key: DomWorkKey, id: string | null) {
+  const frame = refs.get(key)
+  if (!id) {
+    frame.cancel()
     return
-  refs.set('scrollCleanup', scheduleDomWork(scope, () => {
-    const scrolled = dom.scrollItemIntoView(scope, id)
-    if (scrolled)
-      refs.set('scrollCleanup', null)
-    return scrolled
-  }))
+  }
+  const work = () => key === 'focusFrame' ? dom.focusVisibleItem(scope, id) : dom.scrollItemIntoView(scope, id)
+  frame.request(() => work() ? undefined : dom.observePartMutations(scope, work))
 }
 
-function commitValue({ scope, context, prop }: SelectionParams, value: string, label: string) {
+function setValue({ scope, context, prop }: SelectionParams, value: string, label: string) {
   context.set('value', value)
   context.set('inputValue', label)
   context.set('isPristine', true)
   dom.syncNativeSelection(scope, value, label)
   prop('onValueChange')?.({ value, label })
-}
-
-function runResetSelection(p: SelectionParams) {
-  const { scope, context, prop } = p
-  const selectValue = context.get('value')
-  const inputValueLower = (context.get('inputValue') || '').toLowerCase()
-  if (selectValue) {
-    const match = prop('options').find(o => o.value === selectValue)
-    if (match) {
-      if (inputValueLower !== match.label) {
-        context.set('inputValue', match.label)
-        dom.syncNativeInput(scope, match.label)
-      }
-      context.set('isPristine', true)
-      return
-    }
-  }
-  if (inputValueLower) {
-    context.set('inputValue', '')
-    dom.syncNativeInput(scope, '')
-  }
-}
-
-function runCompleteSelection(p: SelectionParams) {
-  const { context, prop } = p
-  context.set('srStatusText', '')
-  const inputValueLower = (context.get('inputValue') || '').toLowerCase()
-  if (inputValueLower) {
-    const match = prop('options').find(o => o.label.toLowerCase() === inputValueLower)
-    if (match) {
-      commitValue(p, match.value, match.label)
-      return
-    }
-  }
-  runResetSelection(p)
 }
 
 export const machine = createMachine({
@@ -115,206 +49,155 @@ export const machine = createMachine({
 
   refs() {
     return {
-      focusCleanup: null,
-      scrollCleanup: null,
+      focusFrame: AnimationFrame.create(),
+      scrollFrame: AnimationFrame.create(),
     }
   },
 
-  exit: ['cancelHighlightRafs'],
+  exit: ['cancelHighlightWork'],
 
-  effects: ['trackFocusOut', 'bridgeInitialDefaultValue'],
+  effects: ['trackFocusOut', 'syncInitialValue'],
 
   context({ prop, bindable }) {
     const initialValue = prop('defaultValue') ?? ''
     const matchedOption = initialValue
       ? prop('options').find(o => o.value === initialValue)
       : undefined
-    const initialInputValue = matchedOption?.label ?? ''
-    const initialIsPristine = Boolean(matchedOption)
 
     return {
       value: bindable<string>(() => ({ defaultValue: initialValue })),
-      inputValue: bindable<string>(() => ({ defaultValue: initialInputValue, sync: true })),
+      inputValue: bindable<string>(() => ({ defaultValue: matchedOption?.label ?? '', sync: true })),
       highlightedId: bindable<string | null>(() => ({ defaultValue: null, sync: true })),
-      isPristine: bindable<boolean>(() => ({ defaultValue: initialIsPristine, sync: true })),
-      filteredOptions: bindable<ComboboxOption[]>(() => ({ defaultValue: [], sync: true })),
-      srStatusText: bindable<string>(() => ({ defaultValue: '' })),
+      isPristine: bindable<boolean>(() => ({ defaultValue: Boolean(matchedOption), sync: true })),
+      items: bindable<ComboboxItem[]>(() => ({ defaultValue: [], sync: true })),
     }
   },
 
   on: {
-    'VALUE.SET': {
-      actions: ['commitSelection'],
-    },
+    'INPUT.CHANGE': { target: 'open', reenter: true, actions: ['setInputValue'] },
+    'INPUT.ENTER': { target: 'closed', actions: ['completeSelection'] },
+    'LAYER.INTERACT_OUTSIDE': { target: 'closed', actions: ['revertInputValue'] },
+    'LAYER.ESCAPE': { target: 'closed', actions: ['revertInputValue', 'setInitialFocus'] },
+    'VALUE.CLEAR': { actions: ['clearSelectedItems', 'setInitialFocus'] },
+    'VALUE.SET': { actions: ['selectItem'] },
   },
 
   states: {
     closed: {
       tags: ['closed'],
+      entry: ['resetList'],
       on: {
-        'TRIGGER.CLICK': { target: 'open', actions: ['openList', 'focusInput'] },
-        'INPUT.CLICK': { target: 'open', actions: ['openList'] },
-        'INPUT.ARROW_DOWN': { target: 'open', actions: ['openList', 'scrollHighlightedIntoView', 'focusHighlightedOption'] },
-        'INPUT.CHANGE': { target: 'open', actions: ['syncInputValue', 'openList'] },
-        'INPUT.ENTER': { actions: ['completeSelection'] },
-        'INTERACT_OUTSIDE': { actions: ['resetSelection'] },
-        'ESCAPE': { actions: ['resetSelection', 'focusInput'] },
-        'CLEAR.CLICK': { actions: ['clearSelection', 'focusInput'] },
+        'TRIGGER.CLICK': { target: 'open', actions: ['setInitialFocus'] },
+        'INPUT.CLICK': { target: 'open' },
+        'INPUT.ARROW_DOWN': { target: 'open' },
       },
     },
     open: {
       tags: ['open'],
+      entry: ['syncItems'],
       on: {
-        'TRIGGER.CLICK': { target: 'closed', actions: ['closeList', 'focusInput'] },
-        'INPUT.ARROW_DOWN': { actions: ['scrollHighlightedIntoView', 'focusHighlightedOption'] },
-        'ITEM.ARROW_DOWN': {
-          guard: 'hasNextOption',
-          actions: ['highlightNextOption', 'scrollHighlightedIntoView', 'focusHighlightedOption'],
-        },
-        'ITEM.ARROW_UP': [
-          {
-            guard: 'hasPrevOption',
-            actions: ['highlightPrevOption', 'scrollHighlightedIntoView', 'focusHighlightedOption'],
-          },
-          {
-            target: 'closed',
-            actions: ['focusInput', 'closeList'],
-          },
-        ],
-        'ITEM.POINTER_MOVE': { actions: ['highlightItem', 'focusHighlightedOption'] },
-        'ITEM.SELECT': { target: 'closed', actions: ['commitSelection', 'closeList', 'focusInput'] },
-        'INPUT.CHANGE': { actions: ['syncInputValue', 'openList'] },
-        'INPUT.ENTER': { target: 'closed', actions: ['completeSelection', 'closeList'] },
-        'INTERACT_OUTSIDE': { target: 'closed', actions: ['resetSelection', 'closeList'] },
-        'ESCAPE': { target: 'closed', actions: ['closeList', 'resetSelection', 'focusInput'] },
-        'CLEAR.CLICK': { actions: ['clearSelection', 'openList', 'focusInput'] },
+        'TRIGGER.CLICK': { target: 'closed', actions: ['setInitialFocus'] },
+        'INPUT.ARROW_DOWN': { actions: ['setHighlightedId'] },
+        'HIGHLIGHTED_ID.SET': { actions: ['setHighlightedId'] },
+        'CLOSE': { target: 'closed', actions: ['setInitialFocus'] },
+        'ITEM.SELECT': { target: 'closed', actions: ['selectItem', 'setInitialFocus'] },
       },
     },
   },
 
   implementations: {
-    guards: {
-
-      hasNextOption: ({ context, event }) => {
-        if (!('id' in event))
-          return false
-        return Boolean(getAdjacentOption(context.get('filteredOptions'), event.id, 1))
-      },
-      hasPrevOption: ({ context, event }) => {
-        if (!('id' in event))
-          return false
-        return Boolean(getAdjacentOption(context.get('filteredOptions'), event.id, -1))
-      },
-    },
-
     actions: {
-      openList({ scope, context, prop, refs }) {
+      syncItems({ scope, context, prop, refs, event, action }) {
         // A list rebuild replaces positional option nodes. A queued focus for an
         // old id could otherwise land on a different occurrence after rerender.
-        cancelFocus({ refs })
-        const result = buildFilteredOptions({
+        refs.get('focusFrame').cancel()
+        const result = buildItems({
           optionData: prop('options'),
           inputValueRaw: context.get('inputValue'),
           customFilter: prop('customFilter'),
           isPristine: context.get('isPristine'),
           disableFiltering: prop('disableFiltering'),
           selectValue: context.get('value'),
-          baseId: dom.getOptionBaseId(scope),
+          baseId: dom.getItemBaseId(scope),
         })
-        context.set('filteredOptions', result.options)
+        context.set('items', result.items)
         context.set('highlightedId', result.highlightedId)
-        scheduleScroll({ scope, refs }, result.promotionId)
+        scheduleDomWork({ scope, refs }, 'scrollFrame', result.promotionId)
 
-        context.set('srStatusText', result.srStatusText)
+        if (event.type === 'INPUT.ARROW_DOWN')
+          action(['setHighlightedId'])
       },
 
-      closeList({ scope, context, refs }) {
-        cancelFocus({ refs })
-        cancelScroll({ refs })
-        context.set('srStatusText', '')
+      resetList({ scope, context, action }) {
+        action(['cancelHighlightWork'])
         context.set('highlightedId', null)
         const listEl = dom.getListEl(scope)
         if (listEl)
           listEl.scrollTop = 0
       },
 
-      focusInput({ scope }) {
+      setInitialFocus({ scope }) {
         dom.getInputEl(scope)?.focus()
       },
 
-      highlightNextOption({ context, event }) {
-        if (!('id' in event))
-          return
-        const next = getAdjacentOption(context.get('filteredOptions'), event.id, 1)
-        if (!next)
-          return
-        context.set('highlightedId', next.id)
-      },
-
-      highlightPrevOption({ context, event }) {
-        if (!('id' in event))
-          return
-        const prev = getAdjacentOption(context.get('filteredOptions'), event.id, -1)
-        if (!prev)
-          return
-        context.set('highlightedId', prev.id)
-      },
-
-      highlightItem({ context, event }) {
-        if (!('id' in event))
-          return
-        const id = event.id
-        const opt = context.get('filteredOptions').find(o => o.id === id)
-        if (!opt)
+      setHighlightedId({ context, scope, refs, event }) {
+        const id = event.type === 'HIGHLIGHTED_ID.SET' ? event.id : context.get('highlightedId')
+        if (!id || !context.get('items').some(item => item.id === id))
           return
         context.set('highlightedId', id)
+        if (event.type === 'INPUT.ARROW_DOWN' || (event.type === 'HIGHLIGHTED_ID.SET' && event.scroll))
+          scheduleDomWork({ scope, refs }, 'scrollFrame', id)
+        // A consumer can redirect the adapter's synchronous focus attempt.
+        // Cancel older requests without scheduling a second focus attempt.
+        if ('focusHandled' in event && event.focusHandled)
+          refs.get('focusFrame').cancel()
+        else
+          scheduleDomWork({ scope, refs }, 'focusFrame', id)
       },
 
-      scrollHighlightedIntoView({ scope, context, refs }) {
-        const id = context.get('highlightedId')
-        if (!id)
-          return
-        scheduleScroll({ scope, refs }, id)
+      cancelHighlightWork({ refs }) {
+        refs.get('focusFrame').cancel()
+        refs.get('scrollFrame').cancel()
       },
 
-      focusHighlightedOption({ scope, context, refs, event }) {
-        // The adapter already focused a mounted target during this keydown.
-        // Invalidate every older lazy/frame request so a later keydown listener
-        // can make a different focus choice without being overwritten.
-        if ('focusHandled' in event && event.focusHandled) {
-          cancelFocus({ refs })
-          return
-        }
-        const id = context.get('highlightedId')
-        if (!id)
-          return
-        scheduleFocus({ scope, refs }, id)
-      },
-
-      cancelHighlightRafs({ refs }) {
-        cancelFocus({ refs })
-        cancelScroll({ refs })
-      },
-
-      commitSelection({ scope, context, prop, event }) {
+      selectItem({ scope, context, prop, event }) {
         if (!('value' in event))
           return
         const { value } = event
         const label = 'label' in event ? event.label : (prop('options').find(o => o.value === value)?.label ?? '')
-        commitValue({ scope, context, prop }, value, label)
+        setValue({ scope, context, prop }, value, label)
       },
 
-      syncInputValue({ context, event }) {
+      setInputValue({ context, event }) {
         if (!('value' in event))
           return
         context.set('isPristine', false)
         context.set('inputValue', event.value)
       },
 
-      completeSelection: runCompleteSelection,
-      resetSelection: runResetSelection,
+      completeSelection(p) {
+        const { context, prop, action } = p
+        const inputValue = context.get('inputValue').toLowerCase()
+        const match = inputValue ? prop('options').find(o => o.label.toLowerCase() === inputValue) : undefined
+        if (match)
+          setValue(p, match.value, match.label)
+        else
+          action(['revertInputValue'])
+      },
 
-      clearSelection({ scope, context, prop }) {
+      revertInputValue({ scope, context, prop }) {
+        const value = context.get('value')
+        const match = value ? prop('options').find(o => o.value === value) : undefined
+        const label = match?.label ?? ''
+        if (context.get('inputValue').toLowerCase() !== label) {
+          context.set('inputValue', label)
+          dom.syncNativeInput(scope, label)
+        }
+        if (match)
+          context.set('isPristine', true)
+      },
+
+      clearSelectedItems({ scope, context, prop, state, action }) {
         const hadValue = Boolean(context.get('value'))
         if (hadValue) {
           context.set('value', '')
@@ -327,12 +210,14 @@ export const machine = createMachine({
         context.set('isPristine', false)
         if (hadValue)
           prop('onValueChange')?.({ value: '', label: '' })
+        if (state.matches('open'))
+          action(['syncItems'])
       },
     },
 
     effects: {
       // Wait for lazy native parts before emitting initial select and input changes.
-      bridgeInitialDefaultValue({ context, scope, prop }) {
+      syncInitialValue({ context, scope, prop }) {
         const defaultValue = prop('defaultValue')
         if (!defaultValue || !prop('options').some(item => item.value === defaultValue))
           return
@@ -362,7 +247,7 @@ export const machine = createMachine({
           if (!rootEl || !target || !contains(rootEl, target))
             return
           if (!contains(rootEl, event.relatedTarget))
-            send({ type: 'INTERACT_OUTSIDE' })
+            send({ type: 'LAYER.INTERACT_OUTSIDE' })
         })
       },
     },

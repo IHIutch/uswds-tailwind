@@ -9,7 +9,7 @@ export const getStatusId = (ctx: Scope) => ctx.ids?.status ?? `combobox:${ctx.id
 export const getTriggerId = (ctx: Scope) => ctx.ids?.trigger ?? `combobox:${ctx.id}:trigger`
 export const getClearTriggerId = (ctx: Scope) => ctx.ids?.clearTrigger ?? `combobox:${ctx.id}:clear`
 
-export const getOptionBaseId = (ctx: Scope) => `combobox:${ctx.id}:item:`
+export const getItemBaseId = (ctx: Scope) => `combobox:${ctx.id}:item:`
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
 export const getHiddenSelectEl = (ctx: Scope) => ctx.getById<HTMLSelectElement>(getHiddenSelectId(ctx))

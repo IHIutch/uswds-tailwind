@@ -1,10 +1,10 @@
 import type { Service } from '@zag-js/core'
 import type { JSX, NormalizeProps, PropTypes } from '@zag-js/types'
-import type { ComboboxApi, ComboboxOption, ComboboxSchema } from './combobox.types'
+import type { ComboboxApi, ComboboxItem, ComboboxSchema } from './combobox.types'
 import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
-import { getAdjacentOption } from './combobox.utils'
+import { getAdjacentItem } from './combobox.utils'
 
 // USWDS's keymap requires an exact Shift/Alt/Control/Meta combination.
 type SourceModifierEvent = Pick<KeyboardEvent, 'shiftKey' | 'altKey' | 'ctrlKey' | 'metaKey'>
@@ -24,21 +24,22 @@ export function connect<T extends PropTypes>(
   const inputValue = context.get('inputValue')
   const highlightedId = context.get('highlightedId')
   const isPristine = context.get('isPristine')
-  const options = context.get('filteredOptions')
-  const srStatusText = context.get('srStatusText')
+  const items = context.get('items')
+  const count = items.length
+  const srStatusText = open ? (count ? `${count} result${count > 1 ? 's' : ''} available.` : 'No results.') : ''
 
   // Never reference an option removed by a list rebuild.
   const activeDescendant = open
-    ? options.find(option => option.id === highlightedId)?.id
+    ? items.find(item => item.id === highlightedId)?.id
     : undefined
 
   const disabled = prop('disabled')
   const ariaDisabled = prop('ariaDisabled')
 
-  const getItemState = ({ option }: { option: ComboboxOption }) => ({
+  const getItemState = ({ item }: { item: ComboboxItem }) => ({
     // Duplicate values select the last rendered occurrence.
-    selected: Boolean(value) && option.id === [...options].reverse().find(item => item.value === value)?.id,
-    highlighted: option.id === highlightedId,
+    selected: Boolean(value) && item.id === [...items].reverse().find(item => item.value === value)?.id,
+    highlighted: item.id === highlightedId,
   })
   // Focus mounted options during keydown; lazy options use the deferred machine path.
   const focusNow = (id: string | null) => dom.focusVisibleItem(scope, id)
@@ -47,7 +48,7 @@ export function connect<T extends PropTypes>(
     open,
     value,
     inputValue,
-    options,
+    items,
     srStatusText,
 
     setValue(next) {
@@ -64,7 +65,7 @@ export function connect<T extends PropTypes>(
         'data-disabled': dataAttr(disabled || ariaDisabled),
         onKeyDown(event) {
           if (event.key === 'Escape' && sourcePlainModifierMatch(event)) {
-            send({ type: 'ESCAPE' })
+            send({ type: 'LAYER.ESCAPE' })
           }
         },
       })
@@ -138,7 +139,7 @@ export function connect<T extends PropTypes>(
           }
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
-            const destination = open && (options.find(option => option.id === highlightedId) ?? options[0])?.id
+            const destination = open && (items.find(item => item.id === highlightedId) ?? items[0])?.id
             send({ type: 'INPUT.ARROW_DOWN', focusHandled: focusNow(destination || null) })
           }
         },
@@ -160,7 +161,7 @@ export function connect<T extends PropTypes>(
             return
           if (event.defaultPrevented)
             return
-          send({ type: 'CLEAR.CLICK' })
+          send({ type: 'VALUE.CLEAR' })
         },
       })
     },
@@ -198,18 +199,18 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getItemProps({ option }: { option: ComboboxOption }) {
-      const { selected, highlighted } = getItemState({ option })
-      const index = options.findIndex(o => o.id === option.id)
-      const selectItem = () => send({ type: 'ITEM.SELECT', value: option.value, label: option.label })
+    getItemProps({ item }: { item: ComboboxItem }) {
+      const { selected, highlighted } = getItemState({ item })
+      const index = items.findIndex(candidate => candidate.id === item.id)
+      const selectItem = () => send({ type: 'ITEM.SELECT', value: item.value, label: item.label })
       return normalize.element({
         ...parts.item.attrs,
-        'id': option.id,
+        'id': item.id,
         'role': 'option',
-        'aria-setsize': options.length,
+        'aria-setsize': items.length,
         'aria-posinset': index + 1,
         'aria-selected': selected,
-        'data-value': option.value,
+        'data-value': item.value,
         'data-highlighted': dataAttr(highlighted),
         'tabIndex': highlighted ? 0 : -1,
         onClick(event) {
@@ -222,7 +223,7 @@ export function connect<T extends PropTypes>(
         onMouseOver() {
           if (highlighted)
             return
-          send({ type: 'ITEM.POINTER_MOVE', id: option.id })
+          send({ type: 'HIGHLIGHTED_ID.SET', id: item.id, scroll: false })
         },
         onKeyDown(event) {
           const key = event.key
@@ -231,12 +232,17 @@ export function connect<T extends PropTypes>(
           if (key === 'ArrowUp' || key === 'Up') {
             if (open)
               event.preventDefault()
-            send({ type: 'ITEM.ARROW_UP', id: option.id })
+            const destination = getAdjacentItem(items, item.id, -1)?.id
+            if (destination)
+              send({ type: 'HIGHLIGHTED_ID.SET', id: destination, scroll: true, focusHandled: focusNow(destination) })
+            else
+              send({ type: 'CLOSE' })
           }
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
-            const destination = getAdjacentOption(options, option.id, 1)?.id ?? null
-            send({ type: 'ITEM.ARROW_DOWN', id: option.id, focusHandled: focusNow(destination) })
+            const destination = getAdjacentItem(items, item.id, 1)?.id ?? null
+            if (destination)
+              send({ type: 'HIGHLIGHTED_ID.SET', id: destination, scroll: true, focusHandled: focusNow(destination) })
           }
           else if (key === 'Enter' || key === ' ') {
             event.preventDefault()

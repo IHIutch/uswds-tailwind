@@ -4,7 +4,7 @@ export { machine } from './combobox.machine'
 export * from './combobox.props'
 export type {
   ComboboxApi as Api,
-  ComboboxOption,
+  ComboboxItem,
   ComboboxOptionData,
   ElementIds,
   ComboboxMachine as Machine,
