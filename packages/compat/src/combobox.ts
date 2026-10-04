@@ -73,24 +73,24 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
 
-    const labelEl = this.label
-    if (labelEl)
-      spreadProps(labelEl, this.api.getLabelProps())
-    spreadProps(this.input, this.api.getInputProps())
-    spreadProps(this.select, this.api.getHiddenSelectProps())
-    spreadProps(this.list, this.api.getListProps())
+    if (this.label) {
+      this.renderLabel(this.label)
+    }
+    this.renderInput(this.input)
+    this.renderSelect(this.select)
+    this.renderList(this.list)
     this.renderItems()
     const statusEl = getPart<HTMLElement>(this.rootEl, parts.status)
     if (statusEl) {
       spreadProps(statusEl, this.api.getStatusProps())
       statusEl.textContent = this.api.srStatusText
     }
-    const clearButtonEl = this.clearButton
-    if (clearButtonEl)
-      spreadProps(clearButtonEl, this.api.getClearTriggerProps())
-    const toggleButtonEl = this.toggleButton
-    if (toggleButtonEl)
-      spreadProps(toggleButtonEl, this.api.getTriggerProps())
+    if (this.clearButton) {
+      this.renderClearButton(this.clearButton)
+    }
+    if (this.toggleButton) {
+      this.renderToggleButton(this.toggleButton)
+    }
   }
 
   private get label() {
@@ -124,6 +124,22 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
 
   private get toggleButton() {
     return getPart<HTMLButtonElement>(this.rootEl, parts.trigger)
+  }
+
+  private renderLabel(labelEl: HTMLElement) {
+    spreadProps(labelEl, this.api.getLabelProps())
+  }
+
+  private renderInput(inputEl: HTMLInputElement) {
+    spreadProps(inputEl, this.api.getInputProps())
+  }
+
+  private renderSelect(selectEl: HTMLSelectElement) {
+    spreadProps(selectEl, this.api.getHiddenSelectProps())
+  }
+
+  private renderList(listEl: HTMLElement) {
+    spreadProps(listEl, this.api.getListProps())
   }
 
   private renderItems() {
@@ -168,6 +184,14 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
           this.list.appendChild(itemEl)
       })
     }
+  }
+
+  private renderClearButton(buttonEl: HTMLButtonElement) {
+    spreadProps(buttonEl, this.api.getClearTriggerProps())
+  }
+
+  private renderToggleButton(buttonEl: HTMLButtonElement) {
+    spreadProps(buttonEl, this.api.getTriggerProps())
   }
 
   async enable() {
