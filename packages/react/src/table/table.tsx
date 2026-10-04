@@ -42,6 +42,7 @@ type TableVariant = NonNullable<VariantProps<typeof tableVariants>['variant']>
 
 interface TableContextProps {
   api: table.Api
+  columnNames?: Record<number, string>
   variant: TableVariant
   compact: boolean
   stacked: boolean
@@ -64,7 +65,8 @@ export type TableRootProps = React.ComponentPropsWithoutRef<'table'> & {
   compact?: boolean
   stacked?: boolean
   captionText?: table.Props['captionText']
-  columnNames?: Record<number, string>
+  /** Accessible column names, required for each sortable column index. */
+  columnNames?: table.Props['columnNames']
   defaultSortDescriptor?: table.Props['defaultSortDescriptor']
   sortDescriptor?: table.Props['sortDescriptor']
   onSortChange?: table.Props['onSortChange']
@@ -94,7 +96,7 @@ function TableRoot({
   const tableProps = mergeProps(api.getTableProps(), props)
 
   return (
-    <TableContext.Provider value={{ api, variant, compact, stacked }}>
+    <TableContext.Provider value={{ api, columnNames, variant, compact, stacked }}>
       <div {...api.getRootProps()} className="@container">
         <table
           {...tableProps}
@@ -190,9 +192,11 @@ export type TableColumnHeaderProps = React.ComponentPropsWithoutRef<'th'> & {
 }
 
 function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, children, ...props }: TableColumnHeaderProps) {
-  const { api, variant, compact } = useTableContext()
+  const { api, columnNames, variant, compact } = useTableContext()
   const { columnHeader } = tableVariants({ variant, compact })
-  const headerName = typeof children === 'string' ? children : String(children ?? '')
+  const headerName = columnIndex === undefined ? '' : columnNames?.[columnIndex] ?? ''
+  if (sortable && columnIndex !== undefined && !headerName.trim())
+    throw new Error('Sortable table headers require a columnNames entry on Table.Root')
   const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ columnIndex, headerName }) : {}
   return (
     <th

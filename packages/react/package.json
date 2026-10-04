@@ -240,6 +240,7 @@
     "@storybook/addon-docs": "catalog:",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/vite": "catalog:",
+    "@tanstack/react-table": "catalog:",
     "@types/react": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser": "catalog:",
