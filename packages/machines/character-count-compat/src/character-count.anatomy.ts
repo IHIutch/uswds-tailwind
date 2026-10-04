@@ -2,10 +2,10 @@ import { createAnatomy } from '@zag-js/anatomy'
 
 export const anatomy = createAnatomy('characterCount').parts(
   'root',
-  'formGroup',
+  'control',
   'input',
-  'hint',
-  'visualStatus',
+  'description',
+  'status',
   'srStatus',
 )
 

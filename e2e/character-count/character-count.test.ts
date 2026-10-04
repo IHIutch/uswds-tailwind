@@ -23,7 +23,7 @@ const TEMPLATE = `<div data-scope="character-count" data-part="root" id="${rootI
     <div>
       <span id="character-count-hint"></span>
       <span
-        data-part="visual-status"
+        data-part="status"
         aria-hidden="true"
       ></span>
       <span data-part="sr-status"></span>

@@ -9,5 +9,5 @@ const TEMPLATE = `<div data-scope="character-count" data-part="root">
 
 it('should throw an error when a character count component is created with no message element', () => {
   document.body.innerHTML = TEMPLATE
-  expect(() => characterCountInit()).toThrow('Expected visual-status element')
+  expect(() => characterCountInit()).toThrow('Expected status element')
 })

@@ -1,5 +1,6 @@
 import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
+import { CharacterCount } from '../../packages/compat/src/character-count'
 import { createDisposableCharacterCount, createDisposableCharacterCounts } from './_utils.js'
 
 const rootId = 'behavior'
@@ -10,12 +11,12 @@ function template({ id = rootId, tag = 'input', value = '', maxLength = 5 }: { i
     : `<input data-part="input" id="${id}-input" name="${id}" maxlength="${maxLength}" value="${value}" />`
   return `<form>
     <div data-scope="character-count" data-part="root" id="${id}">
-      <div data-part="form-group">
+      <div data-part="control">
         <label for="${id}-input">Message</label>
         ${field}
-        <span data-part="hint"></span>
+        <span data-part="description"></span>
       </div>
-      <div data-part="visual-status"></div>
+      <div data-part="status"></div>
       <div data-part="sr-status"></div>
     </div>
   </form>`
@@ -233,4 +234,17 @@ it('announces the most recently edited counter when two counters share a page', 
   expect(secondStatus.textContent).toBe('4 characters left')
   await vi.waitFor(() => expect(secondSrStatus.textContent).toBe('4 characters left'), { timeout: 2500 })
   expect(firstSrStatus.textContent).toBe('5 characters allowed')
+})
+
+it('removing another counter preserves the latest pending announcement', { tags: ['new'] }, async () => {
+  await using component = createDisposableCharacterCounts(template({ id: 'first' }) + template({ id: 'second' }))
+  const firstRoot = component.elements.getRootEl('first')!
+  const secondSrStatus = component.elements.getSrStatusEl('second')!
+
+  await userEvent.fill(component.elements.getInputEl('first')!, 'abc')
+  await userEvent.fill(component.elements.getInputEl('second')!, 'a')
+  CharacterCount.getInstance(firstRoot)!.destroy()
+  firstRoot.remove()
+
+  await vi.waitFor(() => expect(secondSrStatus.textContent).toBe('4 characters left'), { timeout: 1700 })
 })

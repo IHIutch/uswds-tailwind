@@ -18,7 +18,7 @@ export function useCharacterCount(props: UseCharacterCountProps) {
     id: React.useId(),
     ids: {
       input: field?.ids.control,
-      visualStatus: field?.ids.description,
+      status: field?.ids.description,
     },
     // TODO: Fix disabled inheritance from field context
     // disabled,

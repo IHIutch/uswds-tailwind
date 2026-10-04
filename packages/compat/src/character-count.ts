@@ -28,19 +28,19 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
-    const group = this.group
-    if (group)
-      spreadProps(group, this.api.getFormGroupProps())
+    const control = this.control
+    if (control)
+      spreadProps(control, this.api.getControlProps())
     this.renderInput(this.input)
-    const hint = this.hint
-    if (hint)
-      this.renderHint(hint)
+    const description = this.description
+    if (description)
+      this.renderDescription(description)
     this.renderStatus(this.status)
     this.renderSrStatus(this.srStatus)
   }
 
-  private get group() {
-    return getPart<HTMLElement>(this.rootEl, parts.formGroup)
+  private get control() {
+    return getPart<HTMLElement>(this.rootEl, parts.control)
   }
 
   private get input() {
@@ -50,14 +50,14 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
     return el
   }
 
-  private get hint() {
-    return getPart<HTMLElement>(this.rootEl, parts.hint)
+  private get description() {
+    return getPart<HTMLElement>(this.rootEl, parts.description)
   }
 
   private get status() {
-    const el = getPart<HTMLElement>(this.rootEl, parts.visualStatus)
+    const el = getPart<HTMLElement>(this.rootEl, parts.status)
     if (!el)
-      throw new Error('Expected visual-status element')
+      throw new Error('Expected status element')
     return el
   }
 
@@ -74,15 +74,15 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
     ref?.(input)
   }
 
-  private renderHint(hint: HTMLElement) {
-    const { ref, ...props } = this.api.getHintProps()
-    spreadProps(hint, props)
-    ref?.(hint)
+  private renderDescription(description: HTMLElement) {
+    const { ref, ...props } = this.api.getDescriptionProps()
+    spreadProps(description, props)
+    ref?.(description)
   }
 
-  private renderStatus(status: HTMLElement) {
-    spreadProps(status, this.api.getVisualStatusProps())
-    status.textContent = this.api.maxLength ? this.api.statusText : ''
+  private renderStatus(el: HTMLElement) {
+    spreadProps(el, this.api.getStatusProps())
+    el.textContent = this.api.maxLength ? this.api.statusText : ''
   }
 
   private renderSrStatus(status: HTMLElement) {

@@ -7,7 +7,7 @@ const rootId = 'test'
 const template = `<div data-scope="character-count" data-part="root" id="${rootId}">
   <div>
     <input data-part="input" pattern="[A-Za-z]+" maxlength="5"/>
-    <div data-part="visual-status"></div>
+    <div data-part="status"></div>
     <div data-part="sr-status"></div>
   </div>
 </div>`

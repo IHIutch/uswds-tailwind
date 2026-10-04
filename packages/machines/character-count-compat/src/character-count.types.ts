@@ -4,10 +4,10 @@ import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 /* Element IDs */
 export type ElementIds = Partial<{
   root: string
-  formGroup: string
+  control: string
   input: string
-  hint: string
-  visualStatus: string
+  description: string
+  status: string
   srStatus: string
 }>
 
@@ -18,7 +18,7 @@ export interface ValueChangeDetails {
 
 export interface CharacterCountProps extends CommonProperties {
   ids?: ElementIds | undefined
-  /** Existing descriptions stay linked when the optional hint mounts. */
+  /** Existing descriptions stay linked when the optional description mounts. */
   inputDescriptionIds?: string | undefined
   /** The allowed character count; the input has no native maxlength. */
   maxLength: number
@@ -34,7 +34,7 @@ export interface CharacterCountProps extends CommonProperties {
   statusLabel?: string | undefined
 }
 
-type PropsWithDefault = 'defaultValue' | 'errorText' | 'statusLabel'
+type PropsWithDefault = 'maxLength' | 'defaultValue' | 'errorText' | 'statusLabel'
 
 /* Machine schema */
 export interface CharacterCountSchema {
@@ -42,28 +42,22 @@ export interface CharacterCountSchema {
   state: 'idle'
   context: {
     value: string
-    srStatusText: string
-    srStatusPoliteness: 'polite' | 'assertive'
-    srLiveEnabled: boolean
-    wasOverLimit: boolean
-    isHintRendered: boolean
+    srStatus: { text: string, politeness: 'polite' | 'assertive' | undefined }
+    isDescriptionRendered: boolean
   }
   computed: {
     isOverLimit: boolean
     statusText: string
   }
   refs: {
-    srAnnouncementOwner: object
-    hintRef: (node: HTMLElement | null) => void
+    srAnnouncementCleanup: VoidFunction | undefined
+    previousOverLimit: boolean
+    descriptionRef: (node: HTMLElement | null) => void
   }
-  action: 'updateValue' | 'syncValidity' | 'scheduleSrMessage' | 'commitSrMessage' | 'enableSrLive'
+  action: 'setValue' | 'syncInputValidity' | 'announceValue'
   guard: never
-  effect: 'cleanupTimers' | 'enableSrLive'
-  event:
-    | { type: 'INPUT.CHANGE', value: string }
-    | { type: 'VALUE.SET', value: string }
-    | { type: 'SR.COMMIT' }
-    | { type: 'SR.LIVE.ENABLE' }
+  effect: 'trackSrStatus'
+  event: { type: 'VALUE.SET', value: string }
 }
 
 export type CharacterCountService = Service<CharacterCountSchema>
@@ -84,9 +78,9 @@ export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   setValue: (value: string) => void
 
   getRootProps: () => T['element']
-  getFormGroupProps: () => T['element']
+  getControlProps: () => T['element']
   getInputProps: () => T['input']
-  getHintProps: () => T['element']
-  getVisualStatusProps: () => T['element']
+  getDescriptionProps: () => T['element']
+  getStatusProps: () => T['element']
   getSrStatusProps: () => T['element']
 }

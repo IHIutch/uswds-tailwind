@@ -12,7 +12,7 @@ export function createDisposableCharacterCount(id: string, template: string, pro
       const getRootEl = () => document.getElementById(`character-count:${id}`)
       const getLabelEl = () => getRootEl()?.querySelector('label')
       const getInputEl = () => getRootEl()?.querySelector('[data-part="input"]') as HTMLInputElement | HTMLTextAreaElement
-      const getStatusEl = () => document.getElementById(`character-count:${id}:visual-status`)
+      const getStatusEl = () => document.getElementById(`character-count:${id}:status`)
       const getSrStatusEl = () => document.getElementById(`character-count:${id}:sr-status`)
       const getInstance = () => CharacterCount.getInstance(getRootEl())
 
@@ -35,7 +35,7 @@ export function createDisposableCharacterCounts(template: string) {
     () => {
       const getRootEl = (id: string) => document.getElementById(`character-count:${id}`)
       const getInputEl = (id: string) => getRootEl(id)?.querySelector<HTMLInputElement | HTMLTextAreaElement>('[data-part="input"]')
-      const getStatusEl = (id: string) => getRootEl(id)?.querySelector<HTMLElement>('[data-part="visual-status"]')
+      const getStatusEl = (id: string) => getRootEl(id)?.querySelector<HTMLElement>('[data-part="status"]')
       const getSrStatusEl = (id: string) => getRootEl(id)?.querySelector<HTMLElement>('[data-part="sr-status"]')
 
       return { getRootEl, getInputEl, getStatusEl, getSrStatusEl }

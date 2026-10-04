@@ -18,11 +18,9 @@ export function connect<T extends PropTypes>(
 
   const value = context.get('value')
   const count = value.length
-  const maxLength = prop('maxLength') ?? 0
-  const srStatusText = context.get('srStatusText')
-  const srStatusPoliteness = context.get('srStatusPoliteness')
-  const srLiveEnabled = context.get('srLiveEnabled')
-  const hintRendered = context.get('isHintRendered')
+  const maxLength = prop('maxLength')
+  const srStatus = context.get('srStatus')
+  const descriptionRendered = context.get('isDescriptionRendered')
   const invalid = computed('isOverLimit')
   const statusText = computed('statusText')
 
@@ -31,7 +29,7 @@ export function connect<T extends PropTypes>(
     maxLength,
     invalid,
     statusText,
-    srStatusText,
+    srStatusText: srStatus.text,
     value,
 
     setValue(next) {
@@ -46,28 +44,26 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getFormGroupProps() {
+    getControlProps() {
       return normalize.element({
-        ...parts.formGroup.attrs,
-        'id': dom.getFormGroupId(scope),
+        ...parts.control.attrs,
+        'id': dom.getControlId(scope),
         'data-invalid': dataAttr(invalid),
       })
     },
 
     getInputProps() {
-      const inputProps: Parameters<typeof normalize.input>[0] & {
-        ref: (node: HTMLInputElement | HTMLTextAreaElement | null) => void
-      } = {
+      const inputProps = {
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
         'aria-describedby': mergeIds(
           prop('inputDescriptionIds'),
-          hintRendered ? dom.getHintId(scope) : undefined,
+          descriptionRendered ? dom.getDescriptionId(scope) : undefined,
         ),
         'data-invalid': dataAttr(invalid),
         'value': value,
         onInput(event: { currentTarget: HTMLInputElement | HTMLTextAreaElement }) {
-          send({ type: 'INPUT.CHANGE', value: event.currentTarget.value })
+          send({ type: 'VALUE.SET', value: event.currentTarget.value })
         },
         ref(node: HTMLInputElement | HTMLTextAreaElement | null) {
           if (node) {
@@ -79,20 +75,20 @@ export function connect<T extends PropTypes>(
       return normalize.input(inputProps)
     },
 
-    getHintProps() {
+    getDescriptionProps() {
       return normalize.element({
-        ...parts.hint.attrs,
-        'id': dom.getHintId(scope),
+        ...parts.description.attrs,
+        'id': dom.getDescriptionId(scope),
         'aria-live': 'off',
         'style': visuallyHiddenStyle,
-        'ref': refs.get('hintRef'),
+        'ref': refs.get('descriptionRef'),
       })
     },
 
-    getVisualStatusProps() {
+    getStatusProps() {
       return normalize.element({
-        ...parts.visualStatus.attrs,
-        'id': dom.getVisualStatusId(scope),
+        ...parts.status.attrs,
+        'id': dom.getStatusId(scope),
         'aria-hidden': true,
         'data-invalid': dataAttr(invalid),
       })
@@ -102,7 +98,7 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.srStatus.attrs,
         'id': dom.getSrStatusId(scope),
-        'aria-live': srLiveEnabled ? srStatusPoliteness : undefined,
+        'aria-live': srStatus.politeness,
         'style': visuallyHiddenStyle,
       })
     },
