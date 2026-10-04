@@ -1,22 +1,19 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
 import type { AnimationFrame } from '@zag-js/dom-query'
-import type { CommonProperties, DirectionProperty, PropTypes, RequiredBy } from '@zag-js/types'
+import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 import type { ComboboxCustomFilter, ComboboxOptionData } from './combobox.utils'
 
 export type { ComboboxOptionData }
 
 export interface ValueChangeDetails {
   value: string
-
   label: string
 }
 
 /** A rendered occurrence with its own ID, even when source option values repeat. */
 export interface ComboboxItem {
   id: string
-
   value: string
-
   label: string
 }
 
@@ -39,54 +36,57 @@ interface ComboboxAriaProps {
   'aria-labelledby'?: string | undefined
 }
 
-export interface ComboboxProps extends DirectionProperty, CommonProperties, ComboboxAriaProps {
+export interface ComboboxProps extends CommonProperties, ComboboxAriaProps {
   ids?: ElementIds | undefined
-
   options?: ComboboxOptionData[] | undefined
-
   defaultValue?: string | undefined
-
+  /** Called when the committed value changes. */
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
-
   disableFiltering?: boolean | undefined
-
   /**
-   * A specialized consumer can select and order the nonempty source options while the
-   * combobox is actively filtering. It replaces the source filter and starts-with sort.
-   * Return references from the provided options only. The combobox ignores unknown or
-   * repeated entries and retains each accepted source option's label.
+   * Internal hook for time-picker matching and ordering. Not a public API.
+   * Public consumers should use `filter` and `filterExtras`.
+   * @internal
    */
   customFilter?: ComboboxCustomFilter | undefined
-
+  /**
+   * Regex template matched against each option label, case-insensitively.
+   * Defaults to `.*{{query}}.*`. Substitutions are escaped literal text, and
+   * the resulting pattern is anchored to the whole label.
+   * @example filter: '{{query}}.*' // Match labels starting with the input.
+   */
+  filter?: string | undefined
+  /**
+   * Maps template placeholder names to regexes that extract text from the input.
+   * Each regex must include a capture group. Its first capture replaces the
+   * matching placeholder; no match inserts an empty string.
+   * `{{query}}` always inserts the full input and needs no entry here.
+   * @example
+   * filter: 'Item {{number}}',
+   * filterExtras: { number: '(\\d+)' }
+   * // Input "number 12" matches the label "Item 12".
+   */
+  filterExtras?: Record<string, string> | undefined
   placeholder?: string | undefined
-
   name?: string | undefined
-
   disabled?: boolean | undefined
-
   /** Emits disabled attributes while leaving the control operable. */
   ariaDisabled?: boolean | undefined
-
   required?: boolean | undefined
 
 }
 
-type PropsWithDefault = 'disableFiltering' | 'disabled' | 'ariaDisabled' | 'options'
+type PropsWithDefault = 'filter' | 'disableFiltering' | 'disabled' | 'ariaDisabled' | 'options'
 
 export interface ComboboxSchema {
   props: RequiredBy<ComboboxProps, PropsWithDefault>
   state: 'closed' | 'open'
   tag: 'open' | 'closed'
   context: {
-
     value: string
-
     inputValue: string
-
-    highlightedId: string | null
-
+    highlightedIndex: number | null
     isPristine: boolean
-
     items: ComboboxItem[]
 
   }
@@ -94,16 +94,16 @@ export interface ComboboxSchema {
     focusFrame: AnimationFrame
     scrollFrame: AnimationFrame
   }
-  effect: 'trackFocusOut' | 'syncInitialValue'
+  effect: 'trackInteractOutside'
   action:
-    | 'setInputValue'
     | 'syncItems'
+    | 'setInputValue'
     | 'resetList'
-    | 'setHighlightedId'
+    | 'setHighlightedIndex'
     | 'cancelHighlightWork'
-    | 'setInitialFocus'
+    | 'focusInput'
     | 'selectItem'
-    | 'clearSelectedItems'
+    | 'clearValue'
     | 'revertInputValue'
     | 'completeSelection'
   event: EventObject & (
@@ -112,7 +112,7 @@ export interface ComboboxSchema {
     | { type: 'TRIGGER.CLICK' }
     | { type: 'VALUE.CLEAR' }
     | { type: 'ITEM.SELECT', value: string, label: string }
-    | { type: 'HIGHLIGHTED_ID.SET', id: string, scroll: boolean, focusHandled?: boolean }
+    | { type: 'HIGHLIGHTED_INDEX.SET', index: number, scroll: boolean, focusHandled?: boolean }
     | { type: 'INPUT.ARROW_DOWN', focusHandled?: boolean }
     | { type: 'CLOSE' }
     | { type: 'INPUT.ENTER' }

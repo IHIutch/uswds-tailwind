@@ -99,7 +99,8 @@ const template = `<div
       ></div> -->
   </div>`
 
-it('should display and filter the option list after a character is typed', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L449
+it('should display and filter the option list after a character is typed', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()

@@ -1,10 +1,10 @@
 import type { Service } from '@zag-js/core'
 import type { JSX, NormalizeProps, PropTypes } from '@zag-js/types'
 import type { ComboboxApi, ComboboxItem, ComboboxSchema } from './combobox.types'
-import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
+import { ariaAttr, dataAttr, isLeftClick, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
-import { getAdjacentItem } from './combobox.utils'
+import { focusVisibleItem } from './combobox.utils'
 
 // USWDS's keymap requires an exact Shift/Alt/Control/Meta combination.
 type SourceModifierEvent = Pick<KeyboardEvent, 'shiftKey' | 'altKey' | 'ctrlKey' | 'metaKey'>
@@ -22,27 +22,22 @@ export function connect<T extends PropTypes>(
 
   const value = context.get('value')
   const inputValue = context.get('inputValue')
-  const highlightedId = context.get('highlightedId')
+  const highlightedIndex = context.get('highlightedIndex')
   const isPristine = context.get('isPristine')
   const items = context.get('items')
   const count = items.length
   const srStatusText = open ? (count ? `${count} result${count > 1 ? 's' : ''} available.` : 'No results.') : ''
 
   // Never reference an option removed by a list rebuild.
-  const activeDescendant = open
-    ? items.find(item => item.id === highlightedId)?.id
+  const activeDescendant = open && highlightedIndex !== null
+    ? items[highlightedIndex]?.id
     : undefined
 
   const disabled = prop('disabled')
   const ariaDisabled = prop('ariaDisabled')
 
-  const getItemState = ({ item }: { item: ComboboxItem }) => ({
-    // Duplicate values select the last rendered occurrence.
-    selected: Boolean(value) && item.id === [...items].reverse().find(item => item.value === value)?.id,
-    highlighted: item.id === highlightedId,
-  })
-  // Focus mounted options during keydown; lazy options use the deferred machine path.
-  const focusNow = (id: string | null) => dom.focusVisibleItem(scope, id)
+  // Focus mounted options during keydown; newly rendered options use the next frame.
+  const focusNow = (index: number | null) => focusVisibleItem(scope, index)
 
   return {
     open,
@@ -58,7 +53,6 @@ export function connect<T extends PropTypes>(
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
-        'dir': prop('dir'),
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
         'data-pristine': dataAttr(isPristine),
@@ -74,7 +68,6 @@ export function connect<T extends PropTypes>(
     getLabelProps() {
       return normalize.label({
         ...parts.label.attrs,
-        dir: prop('dir'),
         id: dom.getLabelId(scope),
         htmlFor: dom.getInputId(scope),
       })
@@ -83,7 +76,6 @@ export function connect<T extends PropTypes>(
     getHiddenSelectProps() {
       return normalize.select({
         ...parts.hiddenSelect.attrs,
-        'dir': prop('dir'),
         'id': dom.getHiddenSelectId(scope),
         'name': prop('name'),
         'aria-hidden': true,
@@ -102,7 +94,6 @@ export function connect<T extends PropTypes>(
 
       return normalize.input({
         ...parts.input.attrs,
-        'dir': prop('dir'),
         'id': dom.getInputId(scope),
         'type': 'text',
         'role': 'combobox',
@@ -139,8 +130,8 @@ export function connect<T extends PropTypes>(
           }
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
-            const destination = open && (items.find(item => item.id === highlightedId) ?? items[0])?.id
-            send({ type: 'INPUT.ARROW_DOWN', focusHandled: focusNow(destination || null) })
+            const destination = open && items.length ? highlightedIndex ?? 0 : null
+            send({ type: 'INPUT.ARROW_DOWN', focusHandled: focusNow(destination) })
           }
         },
       })
@@ -149,13 +140,16 @@ export function connect<T extends PropTypes>(
     getClearTriggerProps() {
       return normalize.button({
         ...parts.clearTrigger.attrs,
-        'dir': prop('dir'),
         'id': dom.getClearTriggerId(scope),
         'type': 'button',
         'aria-label': 'Clear the select contents',
         'aria-disabled': ariaAttr(ariaDisabled),
         'hidden': disabled || ariaDisabled,
         disabled,
+        onPointerDown(event) {
+          if (isLeftClick(event))
+            event.preventDefault()
+        },
         onClick(event) {
           if (disabled)
             return
@@ -169,13 +163,16 @@ export function connect<T extends PropTypes>(
     getTriggerProps() {
       return normalize.button({
         ...parts.trigger.attrs,
-        'dir': prop('dir'),
         'id': dom.getTriggerId(scope),
         'type': 'button',
         'tabIndex': -1,
         'aria-label': 'Toggle the dropdown list',
         'aria-disabled': ariaAttr(ariaDisabled),
         disabled,
+        onPointerDown(event) {
+          if (!disabled && event.pointerType !== 'touch' && isLeftClick(event))
+            event.preventDefault()
+        },
         onClick(event) {
           if (disabled)
             return
@@ -189,7 +186,6 @@ export function connect<T extends PropTypes>(
     getListProps() {
       return normalize.element({
         ...parts.list.attrs,
-        'dir': prop('dir'),
         'id': dom.getListId(scope),
         'role': 'listbox',
         'aria-labelledby': dom.getLabelId(scope),
@@ -200,8 +196,10 @@ export function connect<T extends PropTypes>(
     },
 
     getItemProps({ item }: { item: ComboboxItem }) {
-      const { selected, highlighted } = getItemState({ item })
       const index = items.findIndex(candidate => candidate.id === item.id)
+      const highlighted = index === highlightedIndex
+      // Duplicate values select the last rendered occurrence.
+      const selected = Boolean(value) && item.id === [...items].reverse().find(item => item.value === value)?.id
       const selectItem = () => send({ type: 'ITEM.SELECT', value: item.value, label: item.label })
       return normalize.element({
         ...parts.item.attrs,
@@ -223,7 +221,7 @@ export function connect<T extends PropTypes>(
         onMouseOver() {
           if (highlighted)
             return
-          send({ type: 'HIGHLIGHTED_ID.SET', id: item.id, scroll: false })
+          send({ type: 'HIGHLIGHTED_INDEX.SET', index, scroll: false })
         },
         onKeyDown(event) {
           const key = event.key
@@ -232,17 +230,17 @@ export function connect<T extends PropTypes>(
           if (key === 'ArrowUp' || key === 'Up') {
             if (open)
               event.preventDefault()
-            const destination = getAdjacentItem(items, item.id, -1)?.id
-            if (destination)
-              send({ type: 'HIGHLIGHTED_ID.SET', id: destination, scroll: true, focusHandled: focusNow(destination) })
+            const destination = index - 1
+            if (destination >= 0)
+              send({ type: 'HIGHLIGHTED_INDEX.SET', index: destination, scroll: true, focusHandled: focusNow(destination) })
             else
               send({ type: 'CLOSE' })
           }
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
-            const destination = getAdjacentItem(items, item.id, 1)?.id ?? null
-            if (destination)
-              send({ type: 'HIGHLIGHTED_ID.SET', id: destination, scroll: true, focusHandled: focusNow(destination) })
+            const destination = index + 1
+            if (index >= 0 && destination < items.length)
+              send({ type: 'HIGHLIGHTED_INDEX.SET', index: destination, scroll: true, focusHandled: focusNow(destination) })
           }
           else if (key === 'Enter' || key === ' ') {
             event.preventDefault()
@@ -255,7 +253,6 @@ export function connect<T extends PropTypes>(
     getStatusProps() {
       return normalize.element({
         ...parts.status.attrs,
-        'dir': prop('dir'),
         'id': dom.getStatusId(scope),
         'role': 'status',
         'aria-live': 'polite',

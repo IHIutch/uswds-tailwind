@@ -126,7 +126,8 @@ const template = `<div
       ></div> -->
     </div>`
 
-it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L547
+it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -141,7 +142,8 @@ it('should display the full list and focus the selected item when the input is p
   expect(highlightedOption?.textContent).toBe('Blackberry')
 })
 
-it('should display the filtered list when the input is dirty (characters inputted)', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L449
+it('should display the filtered list when the input is dirty (characters inputted)', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -155,14 +157,16 @@ it('should display the filtered list when the input is dirty (characters inputte
   expect(list.children.length).toBe(1)
 })
 
-it('should show a clear button when the input has a selected value present', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L246-L254
+it('should show a clear button when the input has a selected value present', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
 
   const clearButton = component.elements.getClearButtonEl()
-  expect(clearButton).toBeTruthy()
+  expect(clearButton).toBeVisible()
 })
 
-it('should clear the input when the clear button is clicked', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L592-L603
+it('should clear the input when the clear button is clicked', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -171,14 +175,15 @@ it('should clear the input when the clear button is clicked', async () => {
   expect(input.value).toBe('Blackberry')
 
   const clearButton = document.querySelector('[data-part="clear-trigger"]')!
-  clearButton.click()
+  await userEvent.click(clearButton)
 
-  await expect.poll(() => select.value).toBe('')
+  expect(select.value).toBe('')
   expect(input.value).toBe('')
   expect(document.activeElement).toBe(input)
 })
 
-it('should update the filter and begin filtering once a pristine input value is changed', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L547
+it('should update the filter and begin filtering once a pristine input value is changed', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!

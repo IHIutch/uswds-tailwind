@@ -123,18 +123,22 @@ const template = `<div
 
     </div>`
 
-it('enhances a select element into a combo box component', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L160-L282
+it('enhances a select element into a combo box component', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
   const list = component.elements.getListEl()
 
-  expect(input).toBeTruthy()
-  expect(select).toBeTruthy()
-  expect(list).toBeTruthy()
+  expect(input).toBeVisible()
+  expect(input.getAttribute('role')).toBe('combobox')
+  expect(input.value).toBe('')
+  expect(select.value).toBe('')
+  expect(list.hidden).toBe(true)
 })
 
-it('should emit change events when selecting an item from the option list when clicking a list option', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L577-L585
+it('should update native values when selecting an item from the option list when clicking a list option', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -148,7 +152,8 @@ it('should emit change events when selecting an item from the option list when c
   expect(input.value).toBe('Apple')
 })
 
-it('should emit change events when resetting input values when an incomplete item is submitted through enter', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should update native values when resetting input values when an incomplete item is submitted through enter', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -168,7 +173,8 @@ it('should emit change events when resetting input values when an incomplete ite
   expect(input.value).toBe('Apple')
 })
 
-it('should emit change events when closing the list but not the clear the input value when escape is performed while the list is open', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L592-L603
+it('should update native values when closing the list but not the clear the input value when escape is performed while the list is open', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -186,7 +192,8 @@ it('should emit change events when closing the list but not the clear the input 
   expect(input.value).toBe('Apple')
 })
 
-it('should emit change events when setting the input value when a complete selection is submitted by pressing enter', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should update native values when setting the input value when a complete selection is submitted by pressing enter', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -204,7 +211,8 @@ it('should emit change events when setting the input value when a complete selec
   expect(input.value).toBe('Fig')
 })
 
-it('should emit change events when selecting the focused list item in the list when pressing enter on a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should update native values when selecting the focused list item in the list when pressing enter on a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -222,7 +230,8 @@ it('should emit change events when selecting the focused list item in the list w
   expect(input.value).toBe('Lemon')
 })
 
-it('should emit change events when pressing escape from a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
+it('should update native values when pressing escape from a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!

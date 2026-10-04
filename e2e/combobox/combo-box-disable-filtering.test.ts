@@ -118,7 +118,8 @@ const template = `<div
   </div>
 </div>`
 
-it('should display the full list and focus the first found item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L547
+it('should display the full list and focus the first found item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()

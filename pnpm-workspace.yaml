@@ -48,6 +48,7 @@ catalog:
   '@zag-js/dismissable': ^1.44.0
   '@zag-js/dom-query': ^1.44.0
   '@zag-js/focus-trap': ^1.44.0
+  '@zag-js/interact-outside': ^1.44.0
   '@zag-js/react': ^1.44.0
   '@zag-js/remove-scroll': ^1.44.0
   '@zag-js/splitter': ^1.44.0

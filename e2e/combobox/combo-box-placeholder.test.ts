@@ -128,7 +128,8 @@ const template = `
       ></div> -->
     </div>`
 
-it('enhances a select element into a combo box component', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L160-L282
+it('enhances a select element into a combo box component', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
 

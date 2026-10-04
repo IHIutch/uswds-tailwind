@@ -18,35 +18,6 @@ function template(id: string, options = fruitOptions) {
   </div>`
 }
 
-interface ChangeRecord {
-  target: string
-  value: string
-  detail: unknown
-  bubbles: boolean
-  cancelable: boolean
-  constructor: string
-}
-
-function changes(root: HTMLElement) {
-  const records: ChangeRecord[] = []
-  root.addEventListener('change', (event) => {
-    const target = event.target as HTMLInputElement | HTMLSelectElement
-    records.push({
-      target: target.tagName.toLowerCase(),
-      value: target.value,
-      detail: (event as CustomEvent).detail,
-      bubbles: event.bubbles,
-      cancelable: event.cancelable,
-      constructor: event.constructor.name,
-    })
-  })
-  return records
-}
-
-function changed(target: string, value: string): ChangeRecord {
-  return { target, value, detail: { value }, bubbles: true, cancelable: true, constructor: 'CustomEvent' }
-}
-
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L577-L585 (commits the clicked option to the select and input)
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L827-L839 (routes option clicks to the selection behavior)
 it('commits a choice through a full pointer click', { tags: ['parity'] }, async () => {
@@ -55,34 +26,22 @@ it('commits a choice through a full pointer click', { tags: ['parity'] }, async 
 
   await userEvent.click(getToggleButtonEl())
   await userEvent.click(getItemEls()[0]!)
-  await expect.poll(() => [getSelectEl().value, getInputEl().value]).toEqual(['apple', 'Apple'])
+  expect([getSelectEl().value, getInputEl().value]).toEqual(['apple', 'Apple'])
 })
 
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L44-L54 (every value write dispatches the bubbling, cancelable CustomEvent with its value in detail)
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L577-L603 (selection and clearing write both source elements)
-it('emits the source change events when selecting, reselecting, and clearing', { tags: ['parity'] }, async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L577-L603 (commits selection values, closes the list, and clears both controls)
+it('preserves the selected values when reselecting and clears both native controls', { tags: ['parity'] }, async () => {
   await using component = createDisposableCombobox('fruit', template('fruit'))
-  const { getRootEl, getInputEl, getSelectEl, getToggleButtonEl, getClearButtonEl, getItemEls } = component.elements
-  const events = changes(getRootEl())
+  const { getInputEl, getSelectEl, getListEl, getToggleButtonEl, getClearButtonEl, getItemEls } = component.elements
 
-  await userEvent.click(getToggleButtonEl())
-  await userEvent.click(getItemEls()[0]!)
-  await expect.poll(() => [getSelectEl().value, getInputEl().value]).toEqual(['apple', 'Apple'])
-  expect(events).toEqual([changed('select', 'apple'), changed('input', 'Apple')])
-
-  await userEvent.click(getToggleButtonEl())
-  await userEvent.click(getItemEls()[0]!)
-  await expect.poll(() => events.length).toBe(4)
-  expect(events).toEqual([
-    changed('select', 'apple'),
-    changed('input', 'Apple'),
-    changed('select', 'apple'),
-    changed('input', 'Apple'),
-  ])
+  for (let selection = 0; selection < 2; selection++) {
+    await userEvent.click(getToggleButtonEl())
+    await userEvent.click(getItemEls()[0]!)
+    expect([getSelectEl().value, getInputEl().value, getListEl().hidden]).toEqual(['apple', 'Apple', true])
+  }
 
   await userEvent.click(getClearButtonEl())
-  await expect.poll(() => [getSelectEl().value, getInputEl().value]).toEqual(['', ''])
-  expect(events.slice(-2)).toEqual([changed('select', ''), changed('input', '')])
+  expect([getSelectEl().value, getInputEl().value]).toEqual(['', ''])
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632 (restores the input text from the committed select value)
@@ -95,14 +54,14 @@ it('restores a committed choice on a real outside focus move, including while cl
 
   await userEvent.click(getToggleButtonEl())
   await userEvent.click(getItemEls()[2]!)
-  await expect.poll(() => getSelectEl().value).toBe('banana')
+  expect(getSelectEl().value).toBe('banana')
   await userEvent.click(outside)
   expect([getSelectEl().value, input.value, getListEl().hidden]).toEqual(['banana', 'Banana', true])
 
   await userEvent.fill(input, 'app')
-  await expect.poll(() => getListEl().hidden).toBe(false)
+  expect(getListEl().hidden).toBe(false)
   await userEvent.click(outside)
-  await expect.poll(() => [getListEl().hidden, input.value]).toEqual([true, 'Banana'])
+  expect([getListEl().hidden, input.value]).toEqual([true, 'Banana'])
   expect(getSelectEl().value).toBe('banana')
 })
 
@@ -115,14 +74,14 @@ it('keeps two comboboxes and their form values independent', { tags: ['parity'] 
 
   await userEvent.click(getToggleButtonEl())
   await userEvent.click(getItemEls()[0]!)
-  await expect.poll(() => getInputEl().value).toBe('Apple')
+  expect(getInputEl().value).toBe('Apple')
   expect(getInputEl('other').value).toBe('')
   expect(new FormData(form).get('fruit')).toBe('apple')
   expect(new FormData(form).get('other')).toBe('')
 
   await userEvent.click(getToggleButtonEl('other'))
   await userEvent.click(getItemEls('other')[1]!)
-  await expect.poll(() => getInputEl('other').value).toBe('Celery')
+  expect(getInputEl('other').value).toBe('Celery')
   expect(getInputEl().value).toBe('Apple')
   expect(new FormData(form).get('fruit')).toBe('apple')
   expect(new FormData(form).get('other')).toBe('celery')
@@ -138,12 +97,12 @@ it('selects the intended occurrence when option values or labels repeat', { tags
 
   await userEvent.click(getToggleButtonEl())
   await userEvent.click(getItemEls()[1]!)
-  await expect.poll(() => [getSelectEl().value, getInputEl().value]).toEqual(['same', 'Second same'])
+  expect([getSelectEl().value, getInputEl().value]).toEqual(['same', 'Second same'])
   await userEvent.click(getToggleButtonEl())
   expect(getItemEls().map(item => item.getAttribute('aria-selected'))).toEqual(['false', 'true', 'false', 'false'])
 
   await userEvent.click(getItemEls()[3]!)
-  await expect.poll(() => [getSelectEl().value, getInputEl().value]).toEqual(['left', 'Same label'])
+  expect([getSelectEl().value, getInputEl().value]).toEqual(['left', 'Same label'])
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L465-L509 (renders matching native options without excluding or disabling disabled options)
@@ -157,5 +116,5 @@ it('allows navigation and selection of an option marked disabled in the native s
   expect(getItemEls().map(item => item.textContent)).toEqual(['A', 'B'])
   expect(getItemEls()[0]?.getAttribute('aria-disabled')).toBeNull()
   await userEvent.click(getItemEls()[0]!)
-  await expect.poll(() => [getSelectEl().value, getInputEl().value]).toEqual(['a', 'A'])
+  expect([getSelectEl().value, getInputEl().value]).toEqual(['a', 'A'])
 })

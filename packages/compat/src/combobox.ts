@@ -39,6 +39,15 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
         label: optionEl.textContent || optionEl.value,
       }))
 
+    const filterExtras = Object.fromEntries(
+      Array.from(this.rootEl.attributes)
+        .filter(attribute => attribute.name.startsWith('data-filter-'))
+        .map(attribute => [
+          attribute.name.slice('data-filter-'.length).replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase()),
+          attribute.value,
+        ]),
+    )
+
     return new VanillaMachine(combobox.machine, {
       ...props,
       'id': props.id || this.rootEl.id || getId(this.rootEl, 'combobox'),
@@ -47,6 +56,9 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
       'aria-labelledby': props['aria-labelledby'] ?? select.getAttribute('aria-labelledby') ?? undefined,
       'options': props.options ?? options,
       'defaultValue': props.defaultValue ?? getDataString(this.rootEl, 'default-value') ?? select.value,
+      'filter': props.filter ?? getDataString(this.rootEl, 'filter'),
+      // Explicit captures override USWDS's dataset fallback; props override both.
+      'filterExtras': props.filterExtras ?? { ...this.rootEl.dataset, ...filterExtras } as Record<string, string>,
       'placeholder': props.placeholder ?? getDataString(this.rootEl, 'placeholder') ?? '',
       'disabled': props.disabled ?? (getDataBool(this.rootEl, 'disabled') || select.hasAttribute('disabled')),
       'ariaDisabled': props.ariaDisabled ?? select.hasAttribute('aria-disabled'),

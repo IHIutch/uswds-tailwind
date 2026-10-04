@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
-import { createDisposableCombobox } from './_utils.js'
+import { createDisposableCombobox, nextFrame } from './_utils.js'
 
 const template = `<div data-scope="combobox" data-part="root" id="fruit">
   <label data-part="label">Fruit</label>
@@ -22,7 +22,7 @@ it('uses the visible label as the combobox name and focuses the input from its l
   expect(document.activeElement).toBe(input)
 })
 
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L214-L239 (copies both authored accessible-name attributes from the select to the input)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L214-L245 (copies both authored accessible-name attributes from the select to the input)
 it('uses authored aria-labelledby ahead of aria-label and tracks referenced text changes', { tags: ['parity'] }, async () => {
   const namedTemplate = `<span id="season">Seasonal</span><span id="kind">fruit choices</span>${template}`
     .replace('name="fruit"', 'name="fruit" aria-label="Choose fruit" aria-labelledby="season kind"')
@@ -55,8 +55,9 @@ it('ignores modified ArrowDown combinations and opens on an unmodified ArrowDown
   }
 
   await userEvent.keyboard('{ArrowDown}')
-  await expect.poll(() => list.hidden).toBe(false)
-  await expect.poll(() => document.activeElement?.textContent).toBe('Apple')
+  await nextFrame()
+  expect(list.hidden).toBe(false)
+  expect(document.activeElement?.textContent).toBe('Apple')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L857-L861 (maps both ArrowDown and its legacy Down alias to the input handler)
@@ -67,6 +68,7 @@ it('accepts the legacy Down key alias', { tags: ['parity'] }, async () => {
 
   // Browsers do not emit this legacy key name through userEvent.keyboard.
   document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', bubbles: true, cancelable: true }))
-  await expect.poll(() => getListEl().hidden).toBe(false)
-  await expect.poll(() => document.activeElement?.textContent).toBe('Apple')
+  await nextFrame()
+  expect(getListEl().hidden).toBe(false)
+  expect(document.activeElement?.textContent).toBe('Apple')
 })

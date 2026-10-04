@@ -1,4 +1,3 @@
-import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { Combobox } from '../../packages/compat/src/combobox.js'
@@ -128,21 +127,15 @@ const TEMPLATE = `<div
       ></div> -->
     </div>`
 
-it('enhances a select element into a combo box component', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L160-L282
+it('enhances a select element into a combo box component', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
   expect(input).toBeTruthy()
-  Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
-    const elStyle = select.style[key]
-      .replace(/0px/g, '0')
-      .replace(/,\s*/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-    expect(elStyle).toBe(value)
-  })
+  expect(select).not.toBeVisible()
   expect(list).toBeTruthy()
   expect(list.hidden).toBe(true)
   expect(select.getAttribute('required')).toBe(null)
@@ -156,7 +149,8 @@ it('enhances a select element into a combo box component', async () => {
   expect(input.value).toBe('')
 })
 
-it('should show the list by clicking the input', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L797-L839
+it('should show the list by clicking the input', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -167,7 +161,8 @@ it('should show the list by clicking the input', async () => {
   expect(list.children.length).toBe(select.options.length - 1)
 })
 
-it('should show the list by clicking the toggle button', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L797-L839
+it('should show the list by clicking the toggle button', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const toggle = component.elements.getToggleButtonEl()!
   const list = component.elements.getListEl()!
@@ -176,7 +171,8 @@ it('should show the list by clicking the toggle button', async () => {
   expect(list.hidden).toBe(false)
 })
 
-it('should show the list by clicking when clicking the input twice', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L797-L839
+it('should show the list by clicking when clicking the input twice', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -185,7 +181,8 @@ it('should show the list by clicking when clicking the input twice', async () =>
   expect(list.hidden).toBe(false)
 })
 
-it('should toggle the list and close by clicking when clicking the toggle button twice', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L797-L839
+it('should toggle the list and close by clicking when clicking the toggle button twice', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const toggle = component.elements.getToggleButtonEl()!
   const list = component.elements.getListEl()!
@@ -196,7 +193,8 @@ it('should toggle the list and close by clicking when clicking the toggle button
   expect(list.hidden).toBe(true)
 })
 
-it('should set up the list items for accessibility', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L481-L534
+it('should set up the list items for accessibility', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -216,7 +214,8 @@ it('should set up the list items for accessibility', async () => {
   }
 })
 
-it('should close the list by clicking away', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632
+it('should close the list by clicking away', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -227,7 +226,8 @@ it('should close the list by clicking away', async () => {
   expect(list.hidden).toBe(true)
 })
 
-it('should select an item from the option list when clicking a list option', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L577-L585
+it('should select an item from the option list when clicking a list option', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -241,7 +241,8 @@ it('should select an item from the option list when clicking a list option', asy
   expect(list.hidden).toBe(true)
 })
 
-it('should display and filter the option list after a character is typed', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L449
+it('should display and filter the option list after a character is typed', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -252,7 +253,8 @@ it('should display and filter the option list after a character is typed', async
   expect(list.children.length).toBe(44)
 })
 
-it('should sort matches by options that start with the query, then options that contain the query', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L449
+it('should sort matches by options that start with the query, then options that contain the query', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -264,7 +266,8 @@ it('should sort matches by options that start with the query, then options that 
   expect(list.children[2].getAttribute('data-value')).toBe('rambutan')
 })
 
-it('should reset input values when an incomplete item is remaining on blur', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632
+it('should reset input values when an incomplete item is remaining on blur', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -284,7 +287,8 @@ it('should reset input values when an incomplete item is remaining on blur', asy
   expect(input.value).toBe('Apricot')
 })
 
-it('should reset input values when an incomplete item is submitted through enter', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should reset input values when an incomplete item is submitted through enter', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -293,6 +297,7 @@ it('should reset input values when an incomplete item is submitted through enter
   const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('cantaloupe')
 
+  await userEvent.hover(component.elements.getLabelEl())
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
   input.focus()
@@ -303,18 +308,27 @@ it('should reset input values when an incomplete item is submitted through enter
   expect(input.value).toBe('Cantaloupe')
 })
 
-it('should not allow enter to perform default action when the list is hidden', async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
-  const input = component.elements.getInputEl()!
-  const list = component.elements.getListEl()!
-
-  expect(list.hidden).toBe(true)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L705-L716
+it('prevents Enter in a closed combobox from submitting its form', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, `<form id="fruit-form">${TEMPLATE}<button type="submit">Submit</button></form>`)
+  const input = component.elements.getInputEl()
+  const form = document.getElementById('fruit-form')!
+  let submissions = 0
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+    submissions++
+  })
 
   input.focus()
   await userEvent.keyboard('{Enter}')
+
+  expect(submissions).toBe(0)
+  expect(component.elements.getListEl().hidden).toBe(true)
+  expect(input.value).toBe('')
 })
 
-it('should close the list and reset input value when escape is performed while the list is open', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
+it('should close the list and reset input value when escape is performed while the list is open', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -333,7 +347,8 @@ it('should close the list and reset input value when escape is performed while t
   expect(input.value).toBe('Cherry')
 })
 
-it('should reset the input value when a complete selection is left on blur from the input element', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632
+it('should reset the input value when a complete selection is left on blur from the input element', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -352,7 +367,8 @@ it('should reset the input value when a complete selection is left on blur from 
   expect(input.value).toBe('Coconut')
 })
 
-it('should set the input value when a complete selection is submitted by pressing enter', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should set the input value when a complete selection is submitted by pressing enter', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -371,7 +387,8 @@ it('should set the input value when a complete selection is submitted by pressin
   expect(input.value).toBe('Grape')
 })
 
-it('should show the no results item when a nonexistent option is typed', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L514-L534
+it('should show the no results item when a nonexistent option is typed', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -383,17 +400,20 @@ it('should show the no results item when a nonexistent option is typed', async (
   expect(list.children[0].textContent).toBe('No results found')
 })
 
-it('status should not allow innerHTML', async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
-  const input = component.elements.getInputEl()!
-  const list = component.elements.getListEl()!
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L514-L534
+it('announces no results without rendering typed markup', { tags: ['legacy'] }, async () => {
+  const markup = TEMPLATE.replace(/<!--[\s\S]*?data-part="status"[\s\S]*?-->/, '<div data-part="status" role="status"></div>')
+  await using component = createDisposableCombobox(rootId, markup)
 
-  await userEvent.fill(input, 'Ap')
+  await userEvent.fill(component.elements.getInputEl(), '<b>Apple</b>')
 
-  expect(list.hidden).toBe(false)
+  expect(component.elements.getStatusEl().textContent).toBe('No results.')
+  expect(component.elements.getStatusEl().querySelector('b')).toBeNull()
+  expect(component.elements.getListEl().textContent).toBe('No results found')
 })
 
-it('should show the list when pressing down from an empty input', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L682-L731
+it('should show the list when pressing down from an empty input', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -405,7 +425,8 @@ it('should show the list when pressing down from an empty input', async () => {
   expect(list.hidden).toBe(false)
 })
 
-it('should focus the first item in the list when pressing down from the input', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L682-L731
+it('should focus the first item in the list when pressing down from the input', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -421,13 +442,15 @@ it('should focus the first item in the list when pressing down from the input', 
   expect(focusedOption?.textContent).toBe('Grape')
 })
 
-it('should select the focused list item in the list when pressing enter on a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should select the focused list item in the list when pressing enter on a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
   const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('pineapple')
+  await userEvent.hover(component.elements.getLabelEl())
   await userEvent.fill(input, 'berry')
   await userEvent.keyboard('{ArrowDown}')
   const focusedOption = document.activeElement
@@ -439,7 +462,8 @@ it('should select the focused list item in the list when pressing enter on a foc
   expect(input.value).toBe('Blackberry')
 })
 
-it('should select the focused list item in the list when pressing space on a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L739-L752
+it('should select the focused list item in the list when pressing space on a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -447,6 +471,7 @@ it('should select the focused list item in the list when pressing space on a foc
   const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('cantaloupe')
 
+  await userEvent.hover(component.elements.getLabelEl())
   await userEvent.fill(input, 'berry')
   await userEvent.keyboard('{ArrowDown}')
   const focusedOption = document.activeElement
@@ -458,7 +483,8 @@ it('should select the focused list item in the list when pressing space on a foc
   expect(input.value).toBe('Blackberry')
 })
 
-it('should not select the focused list item in the list when blurring component from a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632
+it('should not select the focused list item in the list when blurring component from a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -474,7 +500,8 @@ it('should not select the focused list item in the list when blurring component 
   expect(input.value).toBe('')
 })
 
-it('should focus the last item in the list when pressing down many times from the input', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L682-L731
+it('should focus the last item in the list when pressing down many times from the input', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -493,7 +520,8 @@ it('should focus the last item in the list when pressing down many times from th
   expect(focusedOption?.textContent).toBe('Plantain')
 })
 
-it('should not select the focused item in the list when pressing escape from the focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
+it('should not select the focused item in the list when pressing escape from the focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -514,7 +542,8 @@ it('should not select the focused item in the list when pressing escape from the
   expect(input.value).toBe('Pineapple')
 })
 
-it('should focus the input and hide the list when pressing up from the first item in the list', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L759-L776
+it('should focus the input and hide the list when pressing up from the first item in the list', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const list = component.elements.getListEl()!
@@ -532,23 +561,27 @@ it('should focus the input and hide the list when pressing up from the first ite
   expect(document.activeElement).toBe(input)
 })
 
-it('should not allow for innerHTML of child elements ', async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
-  const input = component.elements.getInputEl()!
-  const list = component.elements.getListEl()!
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L499-L511
+it('displays and selects option labels as literal text instead of markup', { tags: ['legacy'] }, async () => {
+  const markup = TEMPLATE.replace('>Apricot</option>', '>&lt;b&gt;Apricot&lt;/b&gt;</option>')
+  await using component = createDisposableCombobox(rootId, markup)
 
-  await userEvent.fill(input, 'apricot')
-  expect(list.hidden).toBe(false)
-  Array.from(list.children).forEach((listItem) => {
-    Array.from((listItem as Element).childNodes).forEach((childNode) => {
-      expect(childNode.nodeType).toBe(Node.TEXT_NODE)
-    })
-  })
+  await userEvent.fill(component.elements.getInputEl(), 'apricot')
+  const option = component.elements.getItemEls().find(item => item.textContent === '<b>Apricot</b>')!
+  expect(option.textContent).toBe('<b>Apricot</b>')
+  expect(option.querySelector('b')).toBeNull()
+  await userEvent.click(option)
+  expect(component.elements.getInputEl().value).toBe('<b>Apricot</b>')
+  expect(component.elements.getSelectEl().value).toBe('apricot')
 })
 
-it('should have attribute type of string', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L222-L245
+it('provides a text input that accepts typed search text', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, TEMPLATE)
-  const input = component.elements.getInputEl()!
+  const input = component.elements.getInputEl()
 
-  expect(typeof (input.getAttribute('aria-label') || '')).toBe('string')
+  expect(input.type).toBe('text')
+  await userEvent.fill(input, 'banana')
+  expect(input.value).toBe('banana')
+  expect(component.elements.getItemEls().map(item => item.textContent)).toEqual(['Banana'])
 })

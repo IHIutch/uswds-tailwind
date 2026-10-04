@@ -1,108 +1,129 @@
-import type { ComboboxItem } from './combobox.types'
+import type { Scope } from '@zag-js/core'
+import * as dom from './combobox.dom'
 
 export interface ComboboxOptionData {
   value: string
-
   label: string
 }
 
 /**
- * Selects and orders the supplied source options for a specialized consumer.
+ * Internal time-picker filter. Not a public API.
  * Returned entries must be references from `options`; Combobox retains their labels.
+ * @internal
  */
 export type ComboboxCustomFilter = (inputValue: string, options: readonly ComboboxOptionData[]) => readonly ComboboxOptionData[]
 
-export function getAdjacentItem(items: readonly ComboboxItem[], id: string, direction: 1 | -1) {
-  const currentIndex = items.findIndex(item => item.id === id)
-  if (currentIndex < 0)
-    return undefined
-  return items[currentIndex + direction]
+// USWDS treats substituted query text as literal text inside the regex template.
+export function generateDynamicRegExp(filter: string, query = '', extras: Record<string, string> = {}) {
+  const escapeRegExp = (text: string) => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+  const pattern = filter.replace(/\{\{(.*?)\}\}/g, (_, name: string) => {
+    const key = name.trim()
+    const queryFilter = extras[key]
+    if (key !== 'query' && queryFilter) {
+      const matches = query.match(new RegExp(queryFilter, 'i'))
+      return matches ? escapeRegExp(matches[1]!) : ''
+    }
+    return escapeRegExp(query)
+  })
+  return new RegExp(`^(?:${pattern})$`, 'i')
 }
 
 export interface BuildItemsParams {
-
   optionData: ComboboxOptionData[]
-
   inputValueRaw: string
-
   customFilter?: ComboboxCustomFilter | undefined
-
+  filter: string
+  filterExtras?: Record<string, string> | undefined
   isPristine: boolean
-
   disableFiltering: boolean
-
   selectValue: string
-
-  baseId: string
 }
 
-export interface BuildItemsResult {
-  items: ComboboxItem[]
+function getOrderedOptions(params: BuildItemsParams, query: string, regex: RegExp) {
+  const { optionData, inputValueRaw, customFilter, isPristine, disableFiltering } = params
+  const available = optionData.filter(option => option.value)
 
-  highlightedId: string | null
+  if (disableFiltering || isPristine || !query)
+    return available
 
-  /** The one source `displayList` path that calls `highlightOption` while opening. */
-  promotionId: string | null
-}
-
-export function buildItems(params: BuildItemsParams): BuildItemsResult {
-  const { optionData, inputValueRaw, customFilter, isPristine, disableFiltering, selectValue, baseId } = params
-  const inputValueLower = inputValueRaw.toLowerCase()
-
-  const optionMatchesQuery = (label: string) => label.toLowerCase().includes(inputValueLower)
-
-  const candidates = optionData.filter(option =>
-    option.value && (disableFiltering || isPristine || !inputValueLower || optionMatchesQuery(option.label)),
-  )
-
-  let ordered: ComboboxOptionData[]
-  if (disableFiltering || isPristine) {
-    ordered = candidates
-  }
-  else if (customFilter && inputValueLower) {
-    const available = optionData.filter(option => option.value)
-    ordered = customFilter(inputValueRaw, [...available]).flatMap((option) => {
+  if (customFilter) {
+    // Consume each source occurrence once; ignore foreign or repeated entries.
+    return customFilter(inputValueRaw, [...available]).flatMap((option) => {
       const index = available.indexOf(option)
       if (index < 0)
         return []
       return available.splice(index, 1)
     })
   }
-  else {
-    const startsWith: ComboboxOptionData[] = []
-    const contains: ComboboxOptionData[] = []
-    for (const option of candidates) {
-      if (option.label.toLowerCase().startsWith(inputValueLower))
-        startsWith.push(option)
-      else contains.push(option)
-    }
-    ordered = [...startsWith, ...contains]
+
+  const startsWith: ComboboxOptionData[] = []
+  const contains: ComboboxOptionData[] = []
+  for (const option of available) {
+    if (!regex.test(option.label))
+      continue
+    if (option.label.toLowerCase().startsWith(query))
+      startsWith.push(option)
+    else contains.push(option)
   }
+  return [...startsWith, ...contains]
+}
 
-  const items: ComboboxItem[] = ordered.map((option, index) => ({
-    id: `${baseId}${index}`,
-    value: option.value,
-    label: option.label,
-  }))
+export function buildItems(params: BuildItemsParams) {
+  const { inputValueRaw, filter, filterExtras, isPristine, disableFiltering, selectValue } = params
+  const query = inputValueRaw.toLowerCase()
+  const regex = generateDynamicRegExp(filter || '.*{{query}}.*', query, filterExtras)
+  const items = getOrderedOptions(params, query, regex)
 
-  // `displayList` overwrites selectedItemId for every matching source option,
+  // `displayList` overwrites the selection for every matching source option,
   // leaving the last rendered duplicate selected (index.js L467-480).
-  const selectedItemId = selectValue
-    ? ([...items].reverse().find(item => item.value === selectValue)?.id ?? null)
-    : null
-
-  let firstFoundId: string | null = null
-  if (disableFiltering) {
-    const firstMatchIdx = ordered.findIndex(option => optionMatchesQuery(option.label))
-    if (firstMatchIdx >= 0)
-      firstFoundId = `${baseId}${firstMatchIdx}`
+  let selectedIndex: number | null = null
+  for (const [index, item] of items.entries()) {
+    if (selectValue && item.value === selectValue)
+      selectedIndex = index
   }
 
-  const renderHighlightId = selectedItemId ?? (items[0]?.id ?? null)
+  let promotionIndex = isPristine ? selectedIndex : null
+  if (promotionIndex === null && disableFiltering) {
+    const index = items.findIndex(item => regex.test(item.label))
+    if (index >= 0)
+      promotionIndex = index
+  }
 
-  const itemToFocusId = isPristine && selectedItemId ? selectedItemId : disableFiltering && firstFoundId ? firstFoundId : null
+  return {
+    items,
+    highlightedIndex: promotionIndex ?? selectedIndex ?? (items.length ? 0 : null),
+    promotionIndex,
+  }
+}
 
-  const highlightedId = itemToFocusId ?? renderHighlightId
+/**
+ * Focus an already rendered option during the native keydown turn.  The
+ * headless machine may not have committed a newly opened list yet, so callers
+ * must treat false as a request for its cancellable deferred path instead.
+ * Once an eligible item receives the focus attempt, the request is handled:
+ * consumer focus listeners may intentionally redirect the resulting focus.
+ */
+export function focusVisibleItem(scope: Scope, index: number | null): boolean {
+  if (index === null)
+    return false
+  const listEl = dom.getListEl(scope)
+  const itemEl = dom.getItemEl(scope, index)
+  if (!listEl || listEl.hidden || !itemEl || !itemEl.isConnected)
+    return false
+  itemEl.focus({ preventScroll: true })
+  return true
+}
 
-  return { items, highlightedId, promotionId: itemToFocusId }
+export function scrollItemIntoView(scope: Scope, index: number): boolean {
+  const listEl = dom.getListEl(scope)
+  const optionEl = dom.getItemEl(scope, index)
+  if (!listEl || !optionEl)
+    return false
+  const optionBottom = optionEl.offsetTop + optionEl.offsetHeight
+  const currentBottom = listEl.scrollTop + listEl.offsetHeight
+  if (optionBottom > currentBottom)
+    listEl.scrollTop = optionBottom - listEl.offsetHeight
+  if (optionEl.offsetTop < listEl.scrollTop)
+    listEl.scrollTop = optionEl.offsetTop
+  return true
 }

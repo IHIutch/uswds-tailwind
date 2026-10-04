@@ -129,7 +129,8 @@ const template = `<div
       ></div> -->
     </div>`
 
-it('enhances a select element into a combo box component', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L160-L282
+it('enhances a select element into a combo box component', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
@@ -139,7 +140,8 @@ it('enhances a select element into a combo box component', async () => {
   expect(select).toBeEnabled()
 })
 
-it('should not show the list when clicking the disabled input', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L118-L153
+it('should not show the list when clicking the disabled input', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
@@ -148,7 +150,8 @@ it('should not show the list when clicking the disabled input', async () => {
   expect(list.hidden).toBe(true)
 })
 
-it('should not show the list when clicking the disabled button', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L118-L153
+it('should not show the list when clicking the disabled button', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const root = component.elements.getRootEl()
   const toggle = root!.querySelector('[data-part="trigger"]')!
@@ -158,7 +161,8 @@ it('should not show the list when clicking the disabled button', async () => {
   expect(list.hidden).toBe(true)
 })
 
-it('should show the list when clicking the input once the component has been enabled', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L146-L153
+it('should show the list when clicking the input once the component has been enabled', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
