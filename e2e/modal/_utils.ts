@@ -1,8 +1,8 @@
-import type * as modal from '../../packages/machines/modal-compat/src'
+import type { VanillaModalProps } from '../../packages/compat/src/modal'
 import { Modal, modalInit } from '../../packages/compat/src/modal'
 import { createDisposableComponent } from '../_utils'
 
-export function createDisposableModal(id: string, template: string, props?: modal.Props) {
+export function createDisposableModal(id: string, template: string, props?: VanillaModalProps) {
   const getRootEl = () => document.querySelector<HTMLElement>(`[data-scope="modal"][data-part="root"][data-value="${id}"]`)
   return createDisposableComponent(
     template,

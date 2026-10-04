@@ -6,16 +6,17 @@ import { getDataBool, getDataString } from './lib/data-attr'
 import { getPart, getParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
-export class Modal extends Component<modal.Props, modal.Api> {
+export type VanillaModalProps = Omit<modal.Props, 'ids' | 'open' | 'onOpenChange'>
+
+export class Modal extends Component<VanillaModalProps, modal.Api> {
   static override root = modal.parts.root
 
-  initMachine(props: modal.Props): VanillaMachine<modal.Schema> {
+  initMachine(props: VanillaModalProps): VanillaMachine<modal.Schema> {
     // Move the modal to the end of the body
     this.doc.body.appendChild(this.rootEl)
     return new VanillaMachine(modal.machine, {
-      ...props,
+      'getRootNode': props.getRootNode,
       'id': props.id || getDataString(this.rootEl, 'value') || this.rootEl.id || getId(this.rootEl, 'modal'),
-      'defaultOpen': props.defaultOpen ?? getDataString(this.rootEl, 'state') === 'open',
       'forceAction': props.forceAction ?? getDataBool(this.rootEl, 'force-action'),
       'aria-label': props['aria-label'] ?? this.content.getAttribute('aria-label') ?? undefined,
     })

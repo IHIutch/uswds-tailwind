@@ -15,11 +15,8 @@ export const machine = createMachine<ModalSchema>({
     }
   },
 
-  // Controlled `open` takes precedence over `defaultOpen`. `!== undefined` (not `||`) keeps a
-  // controlled `open={false}` from falling through to `defaultOpen={true}`.
   initialState({ prop }) {
-    const open = prop('open') !== undefined ? prop('open') : prop('defaultOpen')
-    return open ? 'open' : 'closed'
+    return prop('open') ? 'open' : 'closed'
   },
 
   context({ bindable }) {

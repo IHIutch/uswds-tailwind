@@ -106,6 +106,45 @@ it('controlled modal opens and closes when the parent accepts user requests', as
   await expect.element(screen.getByRole('button', { name: 'Open modal' })).toHaveFocus()
 })
 
+it('controlled visibility changes only when the parent accepts open and close requests', async () => {
+  const onOpenChange = vi.fn()
+  const view = (open: boolean) => (
+    <Modal.Root open={open} onOpenChange={onOpenChange}>
+      <Modal.Trigger>Open modal</Modal.Trigger>
+      <Modal.Backdrop />
+      <Modal.Positioner>
+        <Modal.Content>
+          <Modal.Title>Owner controlled</Modal.Title>
+          <Modal.Description>Waiting for the parent</Modal.Description>
+          <Modal.CloseTrigger aria-label="Close this window">Close</Modal.CloseTrigger>
+        </Modal.Content>
+      </Modal.Positioner>
+    </Modal.Root>
+  )
+  const screen = await render(view(false))
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
+  const title = screen.getByText('Owner controlled')
+
+  await expect.element(title).not.toBeVisible()
+  await userEvent.click(trigger)
+  expect(onOpenChange).toHaveBeenCalledExactlyOnceWith({ open: true })
+  await expect.element(title).not.toBeVisible()
+
+  await screen.rerender(view(true))
+  await expect.element(title).toBeVisible()
+  expect(onOpenChange).toHaveBeenCalledOnce()
+
+  await screen.getByRole('button', { name: 'Close this window' }).click()
+  expect(onOpenChange).toHaveBeenLastCalledWith({ open: false })
+  expect(onOpenChange).toHaveBeenCalledTimes(2)
+  await expect.element(title).toBeVisible()
+
+  await screen.rerender(view(false))
+  await expect.element(title).not.toBeVisible()
+  await expect.element(trigger).toHaveFocus()
+  expect(onOpenChange).toHaveBeenCalledTimes(2)
+})
+
 // TODO: Keyboard interaction tests need investigation
 it.skip('pressing Escape closes modal', async () => {
   const screen = await renderModal()

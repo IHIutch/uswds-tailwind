@@ -42,12 +42,6 @@ export interface ModalProps extends CommonProperties {
    */
   'open'?: boolean | undefined
   /**
-   * The initial open state of the modal when rendered.
-   * Use when you don't need to control the open state.
-   * @default false
-   */
-  'defaultOpen'?: boolean | undefined
-  /**
    * Function called when the modal's open state changes.
    */
   'onOpenChange'?: ((details: OpenChangeDetails) => void) | undefined

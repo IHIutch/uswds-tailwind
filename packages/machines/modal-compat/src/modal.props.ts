@@ -4,7 +4,6 @@ import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<ModalProps>()([
   'aria-label',
-  'defaultOpen',
   'forceAction',
   'getRootNode',
   'id',
