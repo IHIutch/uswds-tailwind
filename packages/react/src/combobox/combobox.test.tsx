@@ -5,12 +5,12 @@ import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { Combobox } from './combobox'
 
-const options = [{ value: 'a', text: 'A' }]
+const options = [{ value: 'a', label: 'A' }]
 
 const multipleOptions = [
-  { value: 'watercraft', text: 'Watercraft' },
-  { value: 'automobiles', text: 'Automobiles' },
-  { value: 'aircraft', text: 'Aircraft' },
+  { value: 'watercraft', label: 'Watercraft' },
+  { value: 'automobiles', label: 'Automobiles' },
+  { value: 'aircraft', label: 'Aircraft' },
 ]
 
 function ComboboxComponent(props: React.ComponentProps<typeof Combobox.Root>) {
@@ -38,13 +38,12 @@ function FullComboboxComponent(props: React.ComponentProps<typeof Combobox.Root>
       <Combobox.List>
         {({ options }) => (
           <>
-            {options.map((option, index) => (
+            {options.map(option => (
               <Combobox.Item
-                key={option.value}
-                index={index}
+                key={option.id}
                 {...option}
               >
-                {option.text}
+                {option.label}
               </Combobox.Item>
             ))}
             <Combobox.EmptyItem />
@@ -217,8 +216,8 @@ it('submits value in form data', async () => {
           <Combobox.Input name="vehicle" />
         </Combobox.Control>
         <Combobox.List>
-          {({ options }) => options.map((o, i) => (
-            <Combobox.Item key={o.value} index={i} {...o}>{o.text}</Combobox.Item>
+          {({ options }) => options.map(o => (
+            <Combobox.Item key={o.id} {...o}>{o.label}</Combobox.Item>
           ))}
         </Combobox.List>
       </Combobox.Root>
@@ -239,7 +238,7 @@ it('onValueChange fires when option is selected', async () => {
 
   await screen.getByRole('combobox').fill('Air')
   await screen.getByText('Aircraft').click()
-  expect(handleChange).toHaveBeenCalledWith('aircraft')
+  expect(handleChange).toHaveBeenCalledWith({ value: 'aircraft', label: 'Aircraft' })
 })
 
 it('arrowDown moves DOM focus to the newly-highlighted option', async () => {

@@ -7,17 +7,17 @@ const rootId = 'basic-combobox'
 
 const template = `<div
   class="max-w-lg"
-  data-part="combobox-root"
+  data-scope="combobox" data-part="root"
   id="${rootId}"
     >
       <label
         class="combobox-label"
-        data-part="combobox-label"
+        data-part="label"
         class="block"
       >Select a fruit:</label>
 
       <select
-        data-part="combobox-select"
+        data-part="hidden-select"
         hidden
       >
         <option value>Select a fruit</option>
@@ -90,20 +90,20 @@ const template = `<div
       <div class="relative mt-2">
         <div class="flex w-full">
           <input
-            data-part="combobox-input"
+            data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
           >
           <div class="absolute z-10 inset-y-0 right-0 flex">
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
+              data-part="clear-trigger"
               type="button"
             >
               <div class="icon-[material-symbols--close] size-6"></div>
             </button>
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
+              data-part="trigger"
               type="button"
             >
               <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -111,30 +111,34 @@ const template = `<div
           </div>
         </div>
         <ul
-          data-part="combobox-list"
+          data-part="list"
           class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
         >
         </ul>
       </div>
       <!-- <div
         class="combobox-status"
-        data-part="combobox-status"
+        data-part="status"
         role="status"
 
     </div>`
 
-it('enhances a select element into a combo box component', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L160-L282
+it('enhances a select element into a combo box component', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
   const list = component.elements.getListEl()
 
-  expect(input).toBeTruthy()
-  expect(select).toBeTruthy()
-  expect(list).toBeTruthy()
+  expect(input).toBeVisible()
+  expect(input.getAttribute('role')).toBe('combobox')
+  expect(input.value).toBe('')
+  expect(select.value).toBe('')
+  expect(list.hidden).toBe(true)
 })
 
-it('should emit change events when selecting an item from the option list when clicking a list option', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L577-L585
+it('should update native values when selecting an item from the option list when clicking a list option', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
@@ -148,13 +152,14 @@ it('should emit change events when selecting an item from the option list when c
   expect(input.value).toBe('Apple')
 })
 
-it('should emit change events when resetting input values when an incomplete item is submitted through enter', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should update native values when resetting input values when an incomplete item is submitted through enter', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apple')
 
   await userEvent.clear(input)
@@ -168,13 +173,14 @@ it('should emit change events when resetting input values when an incomplete ite
   expect(input.value).toBe('Apple')
 })
 
-it('should emit change events when closing the list but not the clear the input value when escape is performed while the list is open', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L592-L603
+it('should update native values when closing the list but not the clear the input value when escape is performed while the list is open', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apple')
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
@@ -186,13 +192,14 @@ it('should emit change events when closing the list but not the clear the input 
   expect(input.value).toBe('Apple')
 })
 
-it('should emit change events when setting the input value when a complete selection is submitted by pressing enter', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should update native values when setting the input value when a complete selection is submitted by pressing enter', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('apple')
   await userEvent.fill(input, 'fig')
   expect(list.hidden).toBe(false)
@@ -204,12 +211,13 @@ it('should emit change events when setting the input value when a complete selec
   expect(input.value).toBe('Fig')
 })
 
-it('should emit change events when selecting the focused list item in the list when pressing enter on a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
+it('should update native values when selecting the focused list item in the list when pressing enter on a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'emo')
 
@@ -222,13 +230,14 @@ it('should emit change events when selecting the focused list item in the list w
   expect(input.value).toBe('Lemon')
 })
 
-it('should emit change events when pressing escape from a focused item', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
+it('should update native values when pressing escape from a focused item', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'dew')
   expect(!list.hidden && list.children.length).toBeTruthy()

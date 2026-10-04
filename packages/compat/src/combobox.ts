@@ -1,37 +1,28 @@
-import type { ComboboxOption, ComboboxSchema } from '@uswds-tailwind/combobox-compat'
+import type { Schema as ComboboxSchema } from '@uswds-tailwind/combobox-compat'
 import * as combobox from '@uswds-tailwind/combobox-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataBool, getDataString } from './lib/data-attr'
+import { getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
-function copyAttributes(from: HTMLElement, to: HTMLElement) {
-  const className = from.getAttribute('class')
-  const style = from.getAttribute('style')
-
-  if (className) {
-    to.setAttribute('class', className)
-  }
-
-  if (style) {
-    to.setAttribute('style', style)
-  }
-}
+const parts = combobox.anatomy.build()
 
 export class Combobox extends Component<combobox.Props, combobox.Api> {
-  static instances: Map<string, Combobox> = new Map()
+  static override root = parts.root
 
-  static getInstance(id: string) {
-    return Combobox.instances.get(id)
-  }
+  private itemStyles = (() => {
+    const template = getPart<HTMLElement>(this.list, parts.item)
+    return {
+      className: template?.className ?? '',
+      style: template?.style.cssText ?? '',
+    }
+  })()
 
-  initMachine(context: combobox.Props): VanillaMachine<ComboboxSchema> {
-    Combobox.instances.set(context.id, this)
-
-    const selectEl = this.rootEl.querySelector<HTMLSelectElement>('select')
-    if (!selectEl)
-      throw new Error('Expected selectEl to be defined')
-    const optionEls = selectEl?.querySelectorAll<HTMLOptionElement>('option')
-    if (!optionEls || optionEls.length === 0)
+  initMachine(props: combobox.Props): VanillaMachine<ComboboxSchema> {
+    const select = this.select
+    const optionEls = select.querySelectorAll<HTMLOptionElement>('option')
+    if (optionEls.length === 0)
       throw new Error('Expected options to be defined')
 
     const options = Array.from(optionEls)
@@ -41,24 +32,30 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
         label: optionEl.textContent || optionEl.value,
       }))
 
-    const defaultValue = this.rootEl.getAttribute('data-default-value')
-    const initialValue = defaultValue || selectEl.value || ''
+    const filterExtras = Object.fromEntries(
+      Array.from(this.rootEl.attributes)
+        .filter(attribute => attribute.name.startsWith('data-filter-'))
+        .map(attribute => [
+          attribute.name.slice('data-filter-'.length).replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase()),
+          attribute.value,
+        ]),
+    )
 
     return new VanillaMachine(combobox.machine, {
-      ...context,
-      options,
-      value: initialValue,
-      placeholder: this.rootEl.getAttribute('data-placeholder') || '',
-      disabled: this.rootEl.hasAttribute('data-disabled') || selectEl?.hasAttribute('disabled'),
-      disableFiltering: this.rootEl.hasAttribute('data-disable-filtering'),
-      showClearButton: this.clearButton !== null,
-      showToggleButton: this.toggleButton !== null,
-      onInputChange: (_value: string) => {
-        const inputEl = this.rootEl.querySelector<HTMLInputElement>('[data-part="combobox-input"]')
-        if (inputEl) {
-          inputEl.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-      },
+      ...props,
+      'id': props.id || this.rootEl.id || getId(this.rootEl, 'combobox'),
+      'ids': { ...props.ids, hiddenSelect: props.ids?.hiddenSelect ?? (select.id || undefined) },
+      'aria-label': props['aria-label'] ?? select.getAttribute('aria-label') ?? undefined,
+      'aria-labelledby': props['aria-labelledby'] ?? select.getAttribute('aria-labelledby') ?? undefined,
+      'options': props.options ?? options,
+      'defaultValue': props.defaultValue ?? getDataString(this.rootEl, 'default-value') ?? select.value,
+      'filter': props.filter ?? getDataString(this.rootEl, 'filter'),
+      // Explicit captures override USWDS's dataset fallback; props override both.
+      'filterExtras': props.filterExtras ?? { ...this.rootEl.dataset, ...filterExtras } as Record<string, string>,
+      'placeholder': props.placeholder ?? getDataString(this.rootEl, 'placeholder') ?? '',
+      'disabled': props.disabled ?? (getDataBool(this.rootEl, 'disabled') || select.hasAttribute('disabled')),
+      'ariaDisabled': props.ariaDisabled ?? select.hasAttribute('aria-disabled'),
+      'disableFiltering': props.disableFiltering ?? getDataBool(this.rootEl, 'disable-filtering'),
     })
   }
 
@@ -76,6 +73,11 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
     this.renderSelect(this.select)
     this.renderList(this.list)
     this.renderItems()
+    const statusEl = getPart<HTMLElement>(this.rootEl, parts.status)
+    if (statusEl) {
+      spreadProps(statusEl, this.api.getStatusProps())
+      statusEl.textContent = this.api.srStatusText
+    }
     if (this.clearButton) {
       this.renderClearButton(this.clearButton)
     }
@@ -85,36 +87,36 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   }
 
   private get label() {
-    return this.rootEl.querySelector<HTMLElement>(`[data-part="combobox-label"]`)
+    return getPart<HTMLElement>(this.rootEl, parts.label)
   }
 
   private get select() {
-    const selectEl = this.rootEl.querySelector<HTMLSelectElement>(`[data-part="combobox-select"]`)
+    const selectEl = getPart<HTMLSelectElement>(this.rootEl, parts.hiddenSelect)
     if (!selectEl)
       throw new Error('Expected selectEl to be defined')
     return selectEl
   }
 
   private get input() {
-    const inputEl = this.rootEl.querySelector<HTMLInputElement>(`[data-part="combobox-input"]`)
+    const inputEl = getPart<HTMLInputElement>(this.rootEl, parts.input)
     if (!inputEl)
       throw new Error('Expected inputEl to be defined')
     return inputEl
   }
 
   private get list() {
-    const listEl = this.rootEl.querySelector<HTMLElement>(`[data-part="combobox-list"]`)
+    const listEl = getPart<HTMLElement>(this.rootEl, parts.list)
     if (!listEl)
       throw new Error('Expected listEl to be defined')
     return listEl
   }
 
   private get clearButton() {
-    return this.rootEl.querySelector<HTMLButtonElement>(`[data-part="combobox-clear"]`)
+    return getPart<HTMLButtonElement>(this.rootEl, parts.clearTrigger)
   }
 
   private get toggleButton() {
-    return this.rootEl.querySelector<HTMLButtonElement>(`[data-part="combobox-toggle"]`)
+    return getPart<HTMLButtonElement>(this.rootEl, parts.trigger)
   }
 
   private renderLabel(labelEl: HTMLElement) {
@@ -122,19 +124,11 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   }
 
   private renderInput(inputEl: HTMLInputElement) {
-    const inputProps = this.api.getInputProps()
-    spreadProps(inputEl, inputProps)
+    spreadProps(inputEl, this.api.getInputProps())
   }
 
   private renderSelect(selectEl: HTMLSelectElement) {
-    spreadProps(selectEl, this.api.getSelectProps())
-
-    const machineValue = this.api.value || ''
-    const selectValue = selectEl.value || ''
-
-    if (machineValue && selectValue !== machineValue) {
-      selectEl.value = machineValue
-    }
+    spreadProps(selectEl, this.api.getHiddenSelectProps())
   }
 
   private renderList(listEl: HTMLElement) {
@@ -142,84 +136,70 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   }
 
   private renderItems() {
-    const filteredOptions = this.api.filteredOptions
+    const items = this.api.items
+    const list = this.list
+    const currentItems = Array.from(list.querySelectorAll<HTMLElement>('[role="option"]'))
 
-    const templateItem = this.list.querySelector<HTMLElement>('[data-part="combobox-item"]')
-    this.list.textContent = ''
-
-    if (filteredOptions.length === 0 && this.api.inputValue.length > 0) {
-      const itemEl = document.createElement('li')
-      itemEl.setAttribute('data-part', 'combobox-item')
-      if (templateItem) {
-        copyAttributes(templateItem, itemEl)
+    if (items.length === 0) {
+      list.textContent = ''
+      if (this.api.inputValue) {
+        const itemEl = this.createItem()
+        itemEl.setAttribute('data-part', parts.item.attrs['data-part']!)
+        itemEl.textContent = 'No results found'
+        list.appendChild(itemEl)
       }
-      itemEl.textContent = 'No results found'
-      this.list.appendChild(itemEl)
+      return
     }
-    else {
-      filteredOptions.forEach((option: ComboboxOption, index: number) => {
-        const itemEl = document.createElement('li')
-        itemEl.setAttribute('data-part', 'combobox-item')
-        itemEl.setAttribute('data-value', option.value)
 
-        if (templateItem) {
-          copyAttributes(templateItem, itemEl)
-        }
+    if (currentItems.length === 0)
+      list.textContent = ''
 
-        itemEl.textContent = option.label
+    items.forEach((item, index) => {
+      const itemEl = currentItems[index] ?? this.createItem()
+      this.renderItem(itemEl, item)
+      if (!currentItems[index])
+        list.appendChild(itemEl)
+    })
 
-        const itemProps = this.api.getItemProps(option, index)
-        spreadProps(itemEl, itemProps)
+    currentItems.slice(items.length).forEach(itemEl => itemEl.remove())
+  }
 
-        if (!itemEl.hasAttribute('tabindex')) {
-          itemEl.setAttribute('tabindex', itemProps.tabIndex?.toString() || '0')
-        }
+  private createItem() {
+    const itemEl = document.createElement('li')
+    if (this.itemStyles.className)
+      itemEl.className = this.itemStyles.className
+    if (this.itemStyles.style)
+      itemEl.style.cssText = this.itemStyles.style
+    return itemEl
+  }
 
-        this.list.appendChild(itemEl)
-      })
-    }
+  private renderItem(itemEl: HTMLElement, item: combobox.ComboboxItem) {
+    if (itemEl.textContent !== item.label)
+      itemEl.textContent = item.label
+    spreadProps(itemEl, this.api.getItemProps({ item }))
   }
 
   private renderClearButton(buttonEl: HTMLButtonElement) {
-    spreadProps(buttonEl, this.api.getClearButtonProps())
+    spreadProps(buttonEl, this.api.getClearTriggerProps())
   }
 
   private renderToggleButton(buttonEl: HTMLButtonElement) {
-    spreadProps(buttonEl, this.api.getToggleButtonProps())
+    spreadProps(buttonEl, this.api.getTriggerProps())
   }
 
   async enable() {
-    this.machine.ctx.set('disabled', false)
-    await new Promise<void>(resolve => queueMicrotask(resolve))
-    this.render()
+    this.machine.updateProps({ disabled: false })
+    await this.settle()
   }
 
   async disable() {
-    this.machine.ctx.set('disabled', true)
-    await new Promise<void>(resolve => queueMicrotask(resolve))
-    this.render()
+    this.machine.updateProps({ disabled: true })
+    await this.settle()
   }
 }
 
 export function comboboxInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="combobox-root"]').forEach((targetEl) => {
-    const selectEl = targetEl.querySelector<HTMLSelectElement>('[data-part="combobox-select"]')
-
-    const combobox = new Combobox(targetEl, {
-      id: targetEl.id || getId(targetEl, 'combobox'),
-      placeholder: targetEl.getAttribute('data-placeholder') || '',
-      disabled: targetEl.hasAttribute('data-disabled') || targetEl.hasAttribute('disabled')
-        || (selectEl?.hasAttribute('disabled') ?? false),
-      disableFiltering: targetEl.hasAttribute('data-disable-filtering'),
-      onInputChange: (_value: string) => {
-        const inputEl = targetEl.querySelector<HTMLInputElement>('[data-part="combobox-input"]')
-        if (inputEl) {
-          inputEl.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-      },
-    })
-    combobox.init()
-  })
+  return Combobox.createAll(document)
 }
 
 if (typeof window !== 'undefined') {

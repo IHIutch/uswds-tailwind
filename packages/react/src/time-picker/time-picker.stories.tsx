@@ -21,9 +21,9 @@ export const Default = meta.story({
           </TimePicker.IndicatorGroup>
         </TimePicker.Control>
         <TimePicker.List>
-          {({ options }) => options.map((option, index) => (
-            <TimePicker.Item key={option.value} index={index} value={option.value} text={option.text}>
-              {option.text}
+          {({ options }) => options.map(option => (
+            <TimePicker.Item key={option.id} {...option}>
+              {option.label}
             </TimePicker.Item>
           ))}
         </TimePicker.List>

@@ -88,11 +88,11 @@ export class Modal extends Component<modal.Props, modal.Api> {
 }
 
 export function modalInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="modal-trigger"]').forEach((targetEl) => {
+  return Array.from(document.querySelectorAll<HTMLElement>('[data-part="modal-trigger"]'), (targetEl) => {
     const modal = new Modal(targetEl, {
       id: targetEl.id || getId(targetEl, 'modal'),
     })
-    modal.init()
+    return modal.init()
   })
 }
 

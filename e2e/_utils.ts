@@ -13,6 +13,9 @@ export function createDisposableComponent<T>(
 
   return {
     elements: getElements(),
+    [Symbol.dispose]: () => {
+      instances.forEach(instance => instance.destroy())
+    },
     [Symbol.asyncDispose]: async () => {
       instances.forEach(instance => instance.destroy())
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
