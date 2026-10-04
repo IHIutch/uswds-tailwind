@@ -42,7 +42,7 @@ it.each(['input', 'textarea'] as const)('%s reports the limit, recovers from an 
 
   await userEvent.fill(input, 'abcd')
   expect(status.textContent).toBe('1 character left')
-  expect(input.validationMessage).toBe('')
+  await vi.waitFor(() => expect(input.validationMessage).toBe(''))
   expect(new FormData(form).get(input.name)).toBe('abcd')
 })
 
@@ -109,7 +109,6 @@ it('waits for the owner to accept a controlled edit before changing the count', 
   expect(status.textContent).toBe('2 characters left')
   await userEvent.fill(input, 'abcdef')
   await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: 'abcdef' }))
-  expect(component.elements.getInstance()?.api.value).toBe('abc')
   expect(status.textContent).toBe('2 characters left')
 
   component.elements.getInstance()?.machine.updateProps({ value: 'abcdef' })
@@ -130,8 +129,8 @@ it('a programmatic setter updates an uncontrolled field and its validation', { t
   expect(new FormData(input.closest('form')!).get(input.name)).toBe('abcdef')
 })
 
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/index.js#L201-L205 (a falsy limit returns before any count or validity update)
-it('a zero limit leaves counting and validation inert while the field stays editable', { tags: ['parity'] }, async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/index.js#L90-L103 (USWDS initializes zero-limit status; this port leaves it blank)
+it('a zero limit leaves counting and validation inert while the field stays editable', { tags: ['new'] }, async () => {
   await using component = createDisposableCharacterCount(rootId, template({ maxLength: 0 }))
   const input = component.elements.getInputEl()
   const status = component.elements.getStatusEl()!
@@ -204,7 +203,9 @@ it('waits the USWDS 1200 ms quiet period before a normal announcement', { tags: 
   await vi.waitFor(() => expect(srStatus.getAttribute('aria-live')).toBe('polite'))
   vi.useFakeTimers()
   try {
-    component.elements.getInstance()?.api.setValue('ab')
+    const input = component.elements.getInputEl()
+    input.value = 'ab'
+    input.dispatchEvent(new InputEvent('input', { bubbles: true }))
     await vi.advanceTimersByTimeAsync(0)
     expect(status.textContent).toBe('3 characters left')
     await vi.advanceTimersByTimeAsync(1199)

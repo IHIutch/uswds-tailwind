@@ -1,5 +1,5 @@
-import type * as characterCount from '@uswds-tailwind/character-count-compat'
 import type { UseCharacterCountProps } from './use-character-count'
+import * as characterCount from '@uswds-tailwind/character-count-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
@@ -25,8 +25,9 @@ function useCharacterCountContext() {
 
 const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootProps>(
   ({ className, ...props }, forwardedRef) => {
-    const api = useCharacterCount(props)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const [machineProps, rest] = characterCount.splitProps(props)
+    const api = useCharacterCount(machineProps as UseCharacterCountProps)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <CharacterCountContext.Provider value={api}>

@@ -8,21 +8,13 @@ export type UseCharacterCountProps = Omit<characterCount.Props, 'getRootNode' | 
 export function useCharacterCount(props: UseCharacterCountProps) {
   const field = useFieldContext()
 
-  const {
-    // TODO: Fix disabled inheritance from field context
-    // disabled = field?.disabled,
-    ...restProps
-  } = props
-
   const service = useMachine(characterCount.machine, {
     id: React.useId(),
     ids: {
       input: field?.ids.control,
       status: field?.ids.description,
     },
-    // TODO: Fix disabled inheritance from field context
-    // disabled,
-    ...restProps,
+    ...props,
   })
 
   return characterCount.connect(service, normalizeProps)

@@ -82,12 +82,14 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   private renderStatus(el: HTMLElement) {
     spreadProps(el, this.api.getStatusProps())
-    el.textContent = this.api.maxLength ? this.api.statusText : ''
+    el.textContent = this.api.statusText
   }
 
   private renderSrStatus(status: HTMLElement) {
     spreadProps(status, this.api.getSrStatusProps())
-    status.textContent = this.api.maxLength ? this.api.srStatusText : ''
+    const text = this.api.maxLength ? this.api.srStatusText : ''
+    if (status.textContent !== text)
+      status.textContent = text
   }
 }
 
