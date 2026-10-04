@@ -1,33 +1,50 @@
 import { expect, it } from 'vitest'
-import { createDisposableDropdown, DROPDOWN } from './_utils.js'
+import { Dropdown } from '../../packages/compat/src/dropdown.js'
+import { createDisposableDropdown } from './_utils.js'
 
 const id = 'test'
 
+function TEMPLATE() {
+  return `
+    <nav data-scope="dropdown" data-part="root" id="${id}">
+      <button data-part="trigger" type="button">Open ${id}</button>
+      <ul data-part="content" style="position: absolute">
+        <li data-part="item" data-value="${id}-item">
+          <a href="#${id}-item">${id} item</a>
+        </li>
+      </ul>
+    </nav>
+  `
+}
+
 it('open() opens the dropdown', { tags: ['new'] }, async () => {
-  await using component = createDisposableDropdown(id, DROPDOWN({ id }))
+  await using component = createDisposableDropdown(id, TEMPLATE())
+  const { getRootEl, getContentEl } = component.elements
 
-  await component.elements.getInstance()?.open()
+  await Dropdown.getInstance(getRootEl())?.open()
 
-  expect(component.elements.getContentEl()?.hidden).toBe(false)
+  expect(getContentEl()?.hidden).toBe(false)
 })
 
 it('close() closes the dropdown', { tags: ['new'] }, async () => {
-  await using component = createDisposableDropdown(id, DROPDOWN({ id }))
-  await component.elements.getInstance()?.open()
+  await using component = createDisposableDropdown(id, TEMPLATE())
+  const { getRootEl, getContentEl } = component.elements
+  await Dropdown.getInstance(getRootEl())?.open()
 
-  await component.elements.getInstance()?.close()
+  await Dropdown.getInstance(getRootEl())?.close()
 
-  expect(component.elements.getContentEl()?.hidden).toBe(true)
+  expect(getContentEl()?.hidden).toBe(true)
 })
 
 it('repeated open() and close() calls are no-ops', { tags: ['new'] }, async () => {
-  await using component = createDisposableDropdown(id, DROPDOWN({ id }))
+  await using component = createDisposableDropdown(id, TEMPLATE())
+  const { getRootEl, getContentEl } = component.elements
 
-  await component.elements.getInstance()?.open()
-  await component.elements.getInstance()?.open()
-  expect(component.elements.getContentEl()?.hidden).toBe(false)
+  await Dropdown.getInstance(getRootEl())?.open()
+  await Dropdown.getInstance(getRootEl())?.open()
+  expect(getContentEl()?.hidden).toBe(false)
 
-  await component.elements.getInstance()?.close()
-  await component.elements.getInstance()?.close()
-  expect(component.elements.getContentEl()?.hidden).toBe(true)
+  await Dropdown.getInstance(getRootEl())?.close()
+  await Dropdown.getInstance(getRootEl())?.close()
+  expect(getContentEl()?.hidden).toBe(true)
 })

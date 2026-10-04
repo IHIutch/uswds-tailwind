@@ -1,9 +1,22 @@
 import { expect, it, vi } from 'vitest'
 import { server, userEvent } from 'vitest/browser'
-import { createDisposableDropdowns, DROPDOWN } from './_utils.js'
+import { createDisposableDropdowns } from './_utils.js'
+
+function DROPDOWN(id: string, content = `
+  <li data-part="item" data-value="${id}-item">
+    <a href="#${id}-item">${id} item</a>
+  </li>
+`) {
+  return `
+    <nav data-scope="dropdown" data-part="root" id="${id}">
+      <button data-part="trigger" type="button">Open ${id}</button>
+      <ul data-part="content" style="position: absolute">${content}</ul>
+    </nav>
+  `
+}
 
 it('opening a sibling closes the active dropdown', { tags: ['parity'] }, async () => {
-  await using component = createDisposableDropdowns(`${DROPDOWN({ id: 'one' })}${DROPDOWN({ id: 'two' })}`)
+  await using component = createDisposableDropdowns(`${DROPDOWN('one')}${DROPDOWN('two')}`)
   const { getTriggerEl, getContentEl } = component.elements
 
   await userEvent.click(getTriggerEl('one'))
@@ -18,7 +31,7 @@ it('opening a sibling closes the active dropdown', { tags: ['parity'] }, async (
 })
 
 it('keyboard activation switches to the next dropdown', { tags: ['parity'] }, async () => {
-  await using component = createDisposableDropdowns(`${DROPDOWN({ id: 'one' })}${DROPDOWN({ id: 'two' })}`)
+  await using component = createDisposableDropdowns(`${DROPDOWN('one')}${DROPDOWN('two')}`)
   const { getTriggerEl, getContentEl } = component.elements
 
   await userEvent.tab()
@@ -40,7 +53,7 @@ it('keyboard activation switches to the next dropdown', { tags: ['parity'] }, as
 })
 
 it('focus leaving the root closes the dropdown', { tags: ['parity'] }, async () => {
-  await using component = createDisposableDropdowns(`<button id="outside">Outside</button>${DROPDOWN({ id: 'one' })}`)
+  await using component = createDisposableDropdowns(`<button id="outside">Outside</button>${DROPDOWN('one')}`)
   const { getTriggerEl, getContentEl } = component.elements
   const trigger = getTriggerEl('one')
 
@@ -53,11 +66,9 @@ it('focus leaving the root closes the dropdown', { tags: ['parity'] }, async () 
 })
 
 it('nested dropdowns retain their own parts and ids', { tags: ['new'] }, async () => {
-  const inner = DROPDOWN({ id: 'inner' })
-  await using component = createDisposableDropdowns(DROPDOWN({
-    id: 'outer',
-    content: `<li data-part="item" data-value="outer-item">${inner}</li>`,
-  }))
+  const inner = DROPDOWN('inner')
+  const template = DROPDOWN('outer', `<li data-part="item" data-value="outer-item">${inner}</li>`)
+  await using component = createDisposableDropdowns(template)
   const { getRootEl, getTriggerEl, getContentEl } = component.elements
 
   expect(getRootEl('outer')?.contains(getRootEl('inner'))).toBe(true)
