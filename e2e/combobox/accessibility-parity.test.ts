@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
-import { createDisposableCombobox, nextFrame } from './_utils.js'
+import { createDisposableCombobox } from './_utils.js'
 
 const template = `<div data-scope="combobox" data-part="root" id="fruit">
   <label data-part="label">Fruit</label>
@@ -55,7 +55,6 @@ it('ignores modified ArrowDown combinations and opens on an unmodified ArrowDown
   }
 
   await userEvent.keyboard('{ArrowDown}')
-  await nextFrame()
   expect(list.hidden).toBe(false)
   expect(document.activeElement?.textContent).toBe('Apple')
 })
@@ -68,7 +67,6 @@ it('accepts the legacy Down key alias', { tags: ['parity'] }, async () => {
 
   // Browsers do not emit this legacy key name through userEvent.keyboard.
   document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Down', bubbles: true, cancelable: true }))
-  await nextFrame()
   expect(getListEl().hidden).toBe(false)
   expect(document.activeElement?.textContent).toBe('Apple')
 })

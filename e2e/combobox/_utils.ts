@@ -32,8 +32,3 @@ export function createDisposableCombobox(id: string, template: string) {
     },
   )
 }
-
-export async function nextFrame() {
-  await Promise.resolve()
-  await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
-}

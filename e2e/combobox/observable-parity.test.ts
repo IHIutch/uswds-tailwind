@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { Combobox } from '../../packages/compat/src/combobox.js'
-import { createDisposableCombobox, nextFrame } from './_utils.js'
+import { createDisposableCombobox } from './_utils.js'
 
 const values = ['apple', 'apricot', 'banana', 'cherry', 'grape']
 const template = `<div data-scope="combobox" data-part="root" id="fruit">
@@ -146,19 +146,16 @@ it('moves focus and the active option together with arrows and mouse hover', { t
 
   await userEvent.tab()
   await userEvent.keyboard('{ArrowDown}')
-  await nextFrame()
   expect(document.activeElement?.textContent).toBe('Apple')
   expect(activeOption(input)?.textContent).toBe('Apple')
 
   await userEvent.keyboard('{ArrowDown}')
-  await nextFrame()
   expect(document.activeElement?.textContent).toBe('Apricot')
   expect(activeOption(input)?.textContent).toBe('Apricot')
   expect(getItemEls()[0]?.getAttribute('tabindex')).toBe('-1')
   expect(getItemEls()[1]?.getAttribute('tabindex')).toBe('0')
 
   await userEvent.hover(getItemEls()[3]!)
-  await nextFrame()
   expect(document.activeElement?.textContent).toBe('Cherry')
   expect(activeOption(input)?.textContent).toBe('Cherry')
 
@@ -175,7 +172,6 @@ it('scrolls keyboard navigation into view in a height-constrained list', { tags:
   await userEvent.hover(getLabelEl())
   await userEvent.tab()
   await userEvent.keyboard('{ArrowDown}')
-  await nextFrame()
   expect(getItemEls().length).toBe(5)
   expect(document.activeElement?.textContent).toBe('Apple')
   for (const item of getItemEls())
@@ -183,7 +179,6 @@ it('scrolls keyboard navigation into view in a height-constrained list', { tags:
 
   for (let index = 0; index < 4; index++) {
     await userEvent.keyboard('{ArrowDown}')
-    await nextFrame()
     expect(document.activeElement?.textContent).toBe(['Apricot', 'Banana', 'Cherry', 'Grape'][index])
   }
   expect(document.activeElement?.textContent).toBe('Grape')
@@ -191,7 +186,6 @@ it('scrolls keyboard navigation into view in a height-constrained list', { tags:
 
   for (let index = 0; index < 4; index++) {
     await userEvent.keyboard('{ArrowUp}')
-    await nextFrame()
     expect(document.activeElement?.textContent).toBe(['Cherry', 'Banana', 'Apricot', 'Apple'][index])
   }
   expect(document.activeElement?.textContent).toBe('Apple')
@@ -228,7 +222,6 @@ it('soft aria-disabled marks controls but still allows opening', { tags: ['parit
   await userEvent.tab()
   expect(document.activeElement).toBe(getInputEl())
   await userEvent.keyboard('{ArrowDown}')
-  await nextFrame()
   expect(getListEl().hidden).toBe(false)
 })
 
