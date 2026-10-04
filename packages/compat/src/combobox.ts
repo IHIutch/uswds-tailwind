@@ -24,6 +24,8 @@ function copyAttributes(from: HTMLElement, to: HTMLElement) {
 export class Combobox extends Component<combobox.Props, combobox.Api> {
   static override root = parts.root
 
+  private itemTemplate: HTMLElement | null = null
+
   initMachine(props: combobox.Props): VanillaMachine<ComboboxSchema> {
     const select = this.select
     const optionEls = select.querySelectorAll<HTMLOptionElement>('option')
@@ -131,10 +133,16 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
 
   private renderItems() {
     const items = this.api.items
-    const templateItem = getPart<HTMLElement>(this.list, parts.item)
+    this.itemTemplate ??= getPart<HTMLElement>(this.list, parts.item)
+    const templateItem = this.itemTemplate
     const currentItems = Array.from(this.list.querySelectorAll<HTMLElement>('[role="option"]'))
     const sameItems = currentItems.length === items.length
-      && currentItems.every((item, index) => item.id === items[index]?.id)
+      && currentItems.every((item, index) => {
+        const next = items[index]!
+        return item.id === next.id
+          && item.getAttribute('data-value') === next.value
+          && item.textContent === next.label
+      })
 
     if (!sameItems || (items.length === 0 && !this.api.inputValue))
       this.list.textContent = ''

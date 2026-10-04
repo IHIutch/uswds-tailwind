@@ -1,5 +1,6 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
+import { Combobox } from '../../packages/compat/src/combobox.js'
 import { createDisposableCombobox } from './_utils.js'
 
 const values = ['apple', 'apricot', 'banana', 'cherry', 'grape']
@@ -22,6 +23,57 @@ function activeOption(input: HTMLInputElement) {
   const id = input.getAttribute('aria-activedescendant')
   return id ? document.getElementById(id) : null
 }
+
+it('updates labels and selected values when filtering keeps the result count unchanged', async () => {
+  await using component = createDisposableCombobox('fruit', template)
+  const { getInputEl, getItemEls, getSelectEl } = component.elements
+
+  await userEvent.fill(getInputEl(), 'apple')
+  expect(getItemEls().map(item => item.textContent)).toEqual(['Apple'])
+  await userEvent.fill(getInputEl(), 'cherry')
+  expect(getItemEls().map(item => item.textContent)).toEqual(['Cherry'])
+  await userEvent.click(getItemEls()[0]!)
+  expect(getSelectEl().value).toBe('cherry')
+  expect(getInputEl().value).toBe('Cherry')
+})
+
+it('preserves authored item styling after initialization and clearing a closed list', async () => {
+  const styledTemplate = template.replace('</ul>', '<li data-part="item" class="authored-item" style="color: red"></li></ul>')
+  await using component = createDisposableCombobox('fruit', styledTemplate)
+  const { getInputEl, getItemEls, getClearButtonEl, getToggleButtonEl, getListEl } = component.elements
+
+  await userEvent.click(getToggleButtonEl())
+  expect(getItemEls()[0]!.className).toBe('authored-item')
+  expect(getItemEls()[0]!.style.color).toBe('red')
+  await userEvent.click(getItemEls()[0]!)
+  expect(getListEl().hidden).toBe(true)
+  await userEvent.click(getClearButtonEl())
+  await userEvent.click(getToggleButtonEl())
+  expect(getItemEls()[0]!.className).toBe('authored-item')
+  expect(getItemEls()[0]!.style.color).toBe('red')
+  await userEvent.fill(getInputEl(), 'no matching fruit')
+  expect(getListEl().firstElementChild?.className).toBe('authored-item')
+})
+
+it('rejects a conflicting component before creating its machine and preserves the owner', async () => {
+  await using component = createDisposableCombobox('fruit', template)
+  const root = component.elements.getRootEl()
+  const owner = Combobox.getInstance(root)
+  class OtherCombobox extends Combobox {}
+  const initMachine = vi.spyOn(OtherCombobox.prototype, 'initMachine')
+
+  try {
+    expect(() => OtherCombobox.getOrCreateInstance(root)).toThrow('refusing to also bind OtherCombobox')
+    expect(initMachine).not.toHaveBeenCalled()
+    expect(Combobox.getInstance(root)).toBe(owner)
+    expect(Combobox.getOrCreateInstance(root)).toBe(owner)
+    await userEvent.click(component.elements.getToggleButtonEl())
+    expect(component.elements.getListEl().hidden).toBe(false)
+  }
+  finally {
+    initMachine.mockRestore()
+  }
+})
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L465-L534 (renders ordered options with listbox metadata and reports the result count)
 it('opens with ordered options, listbox metadata, and a live result count', { tags: ['parity'] }, async () => {

@@ -1,7 +1,7 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { comboboxInit } from '../../packages/compat/src/combobox.js'
-import { modalInit } from '../../packages/compat/src/modal.js'
+import { Combobox, comboboxInit } from '../../packages/compat/src/combobox.js'
+import { Modal, modalInit } from '../../packages/compat/src/modal.js'
 import { createDisposableComponent } from '../_utils.js'
 
 const modal1 = 'modal-1'
@@ -11,10 +11,7 @@ const comboboxId = 'nested-combobox'
 function createDisposableModalSetup(template: string) {
   return createDisposableComponent(
     template,
-    () => {
-      modalInit()
-      comboboxInit()
-    },
+    () => [...modalInit(), ...comboboxInit()],
     () => {
       const getPositionerEl = (id: string) => document.getElementById(`modal:${id}:positioner`)
       const getBackdropEl = (id: string) => document.getElementById(`modal:${id}:backdrop`)
@@ -67,17 +64,17 @@ const template = `
           </p>
         </div>
 
-        <label for="${comboboxId}" data-part="combobox-label">Combobox label</label>
-        <div data-part="combobox-root" id="${comboboxId}">
-          <select data-part="combobox-select" name="options">
+        <div data-scope="combobox" data-part="root" id="${comboboxId}">
+          <label data-part="label">Combobox label</label>
+          <select data-part="hidden-select" name="options">
             <option value="">- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
           </select>
-          <input data-part="combobox-input" />
-          <button data-part="combobox-toggle" type="button"></button>
-          <ul data-part="combobox-list"></ul>
+          <input data-part="input" />
+          <button data-part="trigger" type="button"></button>
+          <ul data-part="list"></ul>
         </div>
 
         <div>
@@ -127,6 +124,26 @@ const template = `
     </div>
   </div>
 `
+
+it('disposes every modal and nested combobox initialized by the setup', async () => {
+  // Isolate cleanup from the legacy modal adapter's connector API mismatch.
+  const render = vi.spyOn(Modal.prototype, 'render').mockImplementation(() => {})
+  try {
+    const destroySpies = []
+    {
+      await using component = createDisposableModalSetup(template)
+      const comboboxRoot = document.querySelector<HTMLElement>('[data-scope="combobox"][data-part="root"]')!
+      const instances = [Modal.getInstance(modal1)!, Modal.getInstance(modal2)!, Combobox.getInstance(comboboxRoot)!]
+      destroySpies.push(...instances.map(instance => vi.spyOn(instance, 'destroy')))
+      expect(component.elements.getComboboxListEl()).not.toBeNull()
+    }
+    for (const destroy of destroySpies)
+      expect(destroy).toHaveBeenCalledOnce()
+  }
+  finally {
+    render.mockRestore()
+  }
+})
 
 it('creates new parent elements', async () => {
   await using modal = createDisposableModalSetup(template)
