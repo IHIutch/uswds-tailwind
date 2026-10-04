@@ -1,68 +1,79 @@
 import type { DropdownSchema } from './dropdown.types'
 import { createMachine } from '@zag-js/core'
-import { addDomEvent, raf } from '@zag-js/dom-query'
+import { trackDismissableElement } from '@zag-js/dismissable'
 import * as dom from './dropdown.dom'
 
 export const machine = createMachine<DropdownSchema>({
-  props({ props }) {
-    return {
-      closeOnSelect: true,
-      ...props,
-    }
+  initialState({ prop }) {
+    const open = prop('open') ?? prop('defaultOpen')
+    return open ? 'open' : 'closed'
   },
 
-  initialState() {
-    return 'closed'
-  },
-
-  context() {
-    return {}
+  watch({ track, prop, action }) {
+    track([() => prop('open')], () => {
+      action(['syncControlledOpen'])
+    })
   },
 
   states: {
     closed: {
       on: {
-        TRIGGER_CLICK: { target: 'open', actions: ['invokeOnOpen'] },
-        OPEN: { target: 'open', actions: ['invokeOnOpen'] },
+        'TRIGGER.CLICK': [
+          { guard: 'isOpenControlled', actions: ['invokeOnOpen'] },
+          { target: 'open', actions: ['invokeOnOpen'] },
+        ],
+        'OPEN': [
+          { guard: 'isOpenControlled', actions: ['invokeOnOpen'] },
+          { target: 'open', actions: ['invokeOnOpen'] },
+        ],
+        'CONTROLLED.OPEN': { target: 'open' },
       },
     },
     open: {
-      effects: ['trackInteractOutside'],
+      effects: ['trackDismissableElement'],
       on: {
-        TRIGGER_CLICK: { target: 'closed', actions: ['invokeOnClose'] },
-        ESCAPE: { target: 'closed', actions: ['focusTrigger', 'invokeOnClose'] },
-        FOCUS_OUTSIDE: { target: 'closed', actions: ['invokeOnClose'] },
-        CLOSE: { target: 'closed', actions: ['invokeOnClose'] },
-        // Item click — close if closeOnSelect is true, otherwise stay open
-        ITEM_CLICK: [
-          { guard: 'closeOnSelect', target: 'closed', actions: ['invokeOnSelect', 'invokeOnClose'] },
-          { actions: ['invokeOnSelect'] },
+        'TRIGGER.CLICK': [
+          { guard: 'isOpenControlled', actions: ['invokeOnClose'] },
+          { target: 'closed', actions: ['invokeOnClose'] },
         ],
+        'ESCAPE': [
+          { guard: 'isOpenControlled', actions: ['invokeOnClose', 'focusTrigger'] },
+          { target: 'closed', actions: ['invokeOnClose', 'focusTrigger'] },
+        ],
+        'ITEM.CLICK': [
+          { guard: 'isOpenControlled', actions: ['invokeOnSelect', 'invokeOnClose', 'focusTrigger'] },
+          { target: 'closed', actions: ['invokeOnSelect', 'invokeOnClose', 'focusTrigger'] },
+        ],
+        'CLOSE': [
+          { guard: 'isOpenControlled', actions: ['invokeOnClose'] },
+          { target: 'closed', actions: ['invokeOnClose'] },
+        ],
+        'CONTROLLED.CLOSE': { target: 'closed' },
       },
     },
   },
 
   implementations: {
     guards: {
-      closeOnSelect({ prop }) {
-        return !!prop('closeOnSelect')
-      },
+      isOpenControlled: ({ prop }) => prop('open') !== undefined,
     },
+
     effects: {
-      trackInteractOutside({ scope, send }) {
-        const doc = scope.getDoc()
-        return addDomEvent(doc, 'click', (event) => {
-          const rootEl = dom.getRootEl(scope)
-          if (rootEl && !rootEl.contains(event.target as Node)) {
+      trackDismissableElement({ scope, send }) {
+        return trackDismissableElement(() => dom.getContentEl(scope), {
+          exclude: [dom.getTriggerEl(scope)],
+          onEscapeKeyDown(event) {
+            event.preventDefault()
+            send({ type: 'ESCAPE' })
+          },
+          onDismiss() {
             send({ type: 'CLOSE' })
-          }
+          },
         })
       },
     },
+
     actions: {
-      focusTrigger({ scope }) {
-        raf(() => dom.focusTriggerEl(scope))
-      },
       invokeOnOpen({ prop }) {
         prop('onOpenChange')?.({ open: true })
       },
@@ -70,7 +81,18 @@ export const machine = createMachine<DropdownSchema>({
         prop('onOpenChange')?.({ open: false })
       },
       invokeOnSelect({ prop, event }) {
-        prop('onSelect')?.({ value: (event as any).value })
+        if (event.value !== undefined)
+          prop('onItemSelect')?.({ value: event.value })
+      },
+      syncControlledOpen({ prop, send }) {
+        const open = prop('open')
+        if (open !== undefined)
+          send({ type: open ? 'CONTROLLED.OPEN' : 'CONTROLLED.CLOSE' })
+      },
+      focusTrigger({ scope }) {
+        queueMicrotask(() => {
+          dom.getTriggerEl(scope)?.focus({ preventScroll: true })
+        })
       },
     },
   },

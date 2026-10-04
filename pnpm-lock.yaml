@@ -667,9 +667,6 @@ importers:
       '@zag-js/dismissable':
         specifier: 'catalog:'
         version: 1.44.0
-      '@zag-js/dom-query':
-        specifier: 'catalog:'
-        version: 1.44.0
       '@zag-js/types':
         specifier: 'catalog:'
         version: 1.44.0
