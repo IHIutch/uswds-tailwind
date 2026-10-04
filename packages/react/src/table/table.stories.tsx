@@ -1,6 +1,6 @@
 import preview from '../../.storybook/preview'
 import { Table } from './table'
-import { TanStackTableExample } from './table-tanstack.example'
+import { ControlledTableExample } from './table-controlled.example'
 
 const meta = preview.meta({
   title: 'Components/Table',
@@ -238,6 +238,6 @@ export const Stacked = meta.story({
   ),
 })
 
-export const TanStackSorting = meta.story({
-  render: () => <TanStackTableExample />,
+export const ControlledSorting = meta.story({
+  render: () => <ControlledTableExample />,
 })

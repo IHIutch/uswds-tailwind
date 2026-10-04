@@ -1,11 +1,11 @@
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
-import { TanStackTableExample } from './table-tanstack.example'
+import { ControlledTableExample } from './table-controlled.example'
 
 // Consumer integration tests, not USWDS parity tests. All actions use rendered controls.
-it('lets TanStack sort the rows and clears sorting through the consumer control', async () => {
-  const screen = await render(<TanStackTableExample />)
+it('renders consumer-sorted rows and clears sorting through the consumer control', async () => {
+  const screen = await render(<ControlledTableExample />)
   const names = () => Array.from(screen.container.querySelectorAll('tbody tr'), row => row.firstElementChild?.textContent)
   const ageButton = screen.getByRole('button', { name: 'Age', exact: true })
 
@@ -23,7 +23,7 @@ it('lets TanStack sort the rows and clears sorting through the consumer control'
 })
 
 it('keeps sorting associated with its column ID when columns are reordered or hidden', async () => {
-  const screen = await render(<TanStackTableExample />)
+  const screen = await render(<ControlledTableExample />)
   await userEvent.click(screen.getByRole('button', { name: 'Name', exact: true }))
   await userEvent.click(screen.getByRole('button', { name: 'Reverse columns' }))
 
