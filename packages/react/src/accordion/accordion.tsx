@@ -45,7 +45,7 @@ function useAccordionItemContext() {
   }
   return {
     value: context.value,
-    isOpen: api.getItemState({ value: context.value }).expanded,
+    open: api.getItemState({ value: context.value }).expanded,
   }
 }
 
