@@ -2,7 +2,7 @@ import * as fileInput from '@uswds-tailwind/file-input-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataString } from './lib/data-attr'
-import { getPart } from './lib/dom'
+import { getOwnedPart, getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = fileInput.anatomy.build()
@@ -35,28 +35,28 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   }
 
   private get input() {
-    const input = getPart<HTMLInputElement>(this.rootEl, parts.input)
+    const input = getOwnedPart<HTMLInputElement>(this.rootEl, parts.input)
     if (!input)
       throw new Error('Expected file input input to be defined')
     return input
   }
 
   private get dropzone() {
-    const dropzone = getPart<HTMLElement>(this.rootEl, parts.dropzone)
+    const dropzone = getOwnedPart<HTMLElement>(this.rootEl, parts.dropzone)
     if (!dropzone)
       throw new Error('Expected file input dropzone to be defined')
     return dropzone
   }
 
   private get instructions() {
-    const instructions = getPart<HTMLElement>(this.rootEl, parts.instructions)
+    const instructions = getOwnedPart<HTMLElement>(this.rootEl, parts.instructions)
     if (!instructions)
       throw new Error('Expected file input instructions to be defined')
     return instructions
   }
 
   private get itemGroup() {
-    const itemGroup = getPart<HTMLElement>(this.rootEl, parts.itemGroup)
+    const itemGroup = getOwnedPart<HTMLElement>(this.rootEl, parts.itemGroup)
     if (!itemGroup)
       throw new Error('Expected file input preview list to be defined')
     return itemGroup
@@ -71,10 +71,10 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     spreadProps(this.instructions, this.api.getInstructionsProps())
     spreadProps(this.itemGroup, this.api.getItemGroupProps())
 
-    const label = getPart<HTMLLabelElement>(this.rootEl, parts.label)
+    const label = getOwnedPart<HTMLLabelElement>(this.rootEl, parts.label)
     if (label)
       spreadProps(label, this.api.getLabelProps())
-    const box = getPart<HTMLElement>(this.rootEl, parts.box)
+    const box = getOwnedPart<HTMLElement>(this.rootEl, parts.box)
     if (box)
       spreadProps(box, this.api.getBoxProps())
 
@@ -95,17 +95,17 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   }
 
   private renderCopy() {
-    const dragText = getPart<HTMLElement>(this.rootEl, parts.dragText)
+    const dragText = getOwnedPart<HTMLElement>(this.rootEl, parts.dragText)
     if (dragText) {
       spreadProps(dragText, this.api.getDragTextProps())
       dragText.textContent = this.api.dragText
     }
-    const choose = getPart<HTMLElement>(this.rootEl, parts.choose)
+    const choose = getOwnedPart<HTMLElement>(this.rootEl, parts.choose)
     if (choose) {
       spreadProps(choose, this.api.getChooseProps())
       choose.textContent = this.api.chooseText
     }
-    const heading = getPart<HTMLElement>(this.rootEl, parts.previewHeading)
+    const heading = getOwnedPart<HTMLElement>(this.rootEl, parts.previewHeading)
     if (heading) {
       spreadProps(heading, this.api.getPreviewHeadingProps())
       heading.textContent = this.api.acceptedFiles.length
@@ -115,12 +115,12 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   }
 
   private renderFeedback() {
-    const error = getPart<HTMLElement>(this.rootEl, parts.errorText)
+    const error = getOwnedPart<HTMLElement>(this.rootEl, parts.errorText)
     if (error) {
       spreadProps(error, this.api.getErrorTextProps())
       error.textContent = this.api.errorText
     }
-    const status = getPart<HTMLElement>(this.rootEl, parts.srStatus)
+    const status = getOwnedPart<HTMLElement>(this.rootEl, parts.srStatus)
     if (status) {
       spreadProps(status, this.api.getSrStatusProps())
       status.textContent = this.api.srStatusText
