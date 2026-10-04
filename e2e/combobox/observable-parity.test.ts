@@ -25,14 +25,23 @@ function activeOption(input: HTMLInputElement) {
 }
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L465-L534 (rebuilds option text and metadata for each displayed result set)
-it('updates labels and selected values when filtering keeps the result count unchanged', { tags: ['parity'] }, async () => {
+it('reuses option elements while filtering updates labels and selected values', { tags: ['parity'] }, async () => {
   await using component = createDisposableCombobox('fruit', template)
-  const { getInputEl, getItemEls, getSelectEl } = component.elements
+  const { getInputEl, getItemEls, getSelectEl, getToggleButtonEl } = component.elements
 
+  await userEvent.click(getToggleButtonEl())
+  const firstItem = getItemEls()[0]!
   await userEvent.fill(getInputEl(), 'apple')
   expect(getItemEls().map(item => item.textContent)).toEqual(['Apple'])
+  expect(getItemEls()[0]).toBe(firstItem)
   await userEvent.fill(getInputEl(), 'cherry')
   expect(getItemEls().map(item => item.textContent)).toEqual(['Cherry'])
+  expect(getItemEls()[0]).toBe(firstItem)
+
+  await userEvent.fill(getInputEl(), '')
+  expect(getItemEls().map(item => item.textContent)).toEqual(['Apple', 'Apricot', 'Banana', 'Cherry', 'Grape'])
+  expect(getItemEls()[0]).toBe(firstItem)
+  await userEvent.fill(getInputEl(), 'cherry')
   await userEvent.click(getItemEls()[0]!)
   expect(getSelectEl().value).toBe('cherry')
   expect(getInputEl().value).toBe('Cherry')

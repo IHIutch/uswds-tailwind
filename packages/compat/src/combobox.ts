@@ -144,46 +144,45 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
 
   private renderItems() {
     const items = this.api.items
-    this.itemTemplate ??= getPart<HTMLElement>(this.list, parts.item)
-    const templateItem = this.itemTemplate
-    const currentItems = Array.from(this.list.querySelectorAll<HTMLElement>('[role="option"]'))
-    const sameItems = currentItems.length === items.length
-      && currentItems.every((item, index) => {
-        const next = items[index]!
-        return item.id === next.id
-          && item.getAttribute('data-value') === next.value
-          && item.textContent === next.label
-      })
+    const list = this.list
+    this.itemTemplate ??= getPart<HTMLElement>(list, parts.item)
+    const currentItems = Array.from(list.querySelectorAll<HTMLElement>('[role="option"]'))
 
-    if (!sameItems || (items.length === 0 && !this.api.inputValue))
-      this.list.textContent = ''
-
-    if (items.length === 0 && this.api.inputValue.length > 0) {
-      if (!this.list.firstElementChild) {
-        const itemEl = document.createElement('li')
+    if (items.length === 0) {
+      list.textContent = ''
+      if (this.api.inputValue) {
+        const itemEl = this.createItem()
         itemEl.setAttribute('data-part', parts.item.attrs['data-part']!)
-        if (templateItem)
-          copyAttributes(templateItem, itemEl)
         itemEl.textContent = 'No results found'
-        this.list.appendChild(itemEl)
+        list.appendChild(itemEl)
       }
+      return
     }
-    else {
-      items.forEach((item, index) => {
-        const itemEl = sameItems ? currentItems[index]! : document.createElement('li')
-        if (!sameItems) {
-          if (templateItem)
-            copyAttributes(templateItem, itemEl)
 
-          itemEl.textContent = item.label
-        }
+    if (currentItems.length === 0)
+      list.textContent = ''
 
-        spreadProps(itemEl, this.api.getItemProps({ item }))
+    items.forEach((item, index) => {
+      const itemEl = currentItems[index] ?? this.createItem()
+      this.renderItem(itemEl, item)
+      if (!currentItems[index])
+        list.appendChild(itemEl)
+    })
 
-        if (!sameItems)
-          this.list.appendChild(itemEl)
-      })
-    }
+    currentItems.slice(items.length).forEach(itemEl => itemEl.remove())
+  }
+
+  private createItem() {
+    const itemEl = document.createElement('li')
+    if (this.itemTemplate)
+      copyAttributes(this.itemTemplate, itemEl)
+    return itemEl
+  }
+
+  private renderItem(itemEl: HTMLElement, item: combobox.ComboboxItem) {
+    if (itemEl.textContent !== item.label)
+      itemEl.textContent = item.label
+    spreadProps(itemEl, this.api.getItemProps({ item }))
   }
 
   private renderClearButton(buttonEl: HTMLButtonElement) {
