@@ -37,16 +37,9 @@ export function connect<T extends PropTypes>(
   const ariaDisabled = prop('ariaDisabled')
 
   // Duplicate values select the last rendered occurrence.
-  let selectedId: string | undefined
-  if (value) {
-    for (let index = items.length - 1; index >= 0; index--) {
-      const item = items[index]!
-      if (item.value === value) {
-        selectedId = item.id
-        break
-      }
-    }
-  }
+  const selectedId = value
+    ? [...items].reverse().find(item => item.value === value)?.id
+    : undefined
 
   // Focus mounted options during keydown; newly rendered options use the next frame.
   const focusNow = (index: number | null) => focusVisibleItem(scope, index)
