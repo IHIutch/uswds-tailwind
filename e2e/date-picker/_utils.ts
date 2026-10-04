@@ -8,12 +8,12 @@ import { createDisposableComponent } from '../_utils'
 const fixtureStyles = `
   <style>
     [data-scope="date-picker"] button[data-part="trigger"],
-    [data-scope="date-picker"] button[data-part="prev-year-trigger"],
-    [data-scope="date-picker"] button[data-part="prev-month-trigger"],
-    [data-scope="date-picker"] button[data-part="next-year-trigger"],
-    [data-scope="date-picker"] button[data-part="next-month-trigger"],
-    [data-scope="date-picker"] button[data-part="prev-year-chunk-trigger"],
-    [data-scope="date-picker"] button[data-part="next-year-chunk-trigger"] {
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="year"],
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="month"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="year"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="month"],
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="chunk"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="chunk"] {
       min-width: 2rem;
       min-height: 2rem;
     }
@@ -35,13 +35,13 @@ export function createDisposableDatePicker(id: string, template: string, props?:
       const getTriggerEl = () => query<HTMLButtonElement>(getRootEl()!, '[data-part="trigger"]')!
       const getCalendarEl = () => query<HTMLElement>(getRootEl()!, '[data-part="content"]')!
       const getStatusEl = () => query<HTMLElement>(getRootEl()!, '[data-part="status"]')!
-      const getMonthSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="month-view"]')!
-      const getYearSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="year-view"]')!
+      const getMonthSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="month"]')!
+      const getYearSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="year"]')!
       const getMonthViewEl = getMonthSelectionEl
       const getYearViewEl = getYearSelectionEl
-      const getDateButtonEls = () => queryAll<HTMLElement>(getCalendarEl()!, '[data-part="day-view"] [data-part="cell-trigger"]')
-      const getMonthButtonEls = () => queryAll<HTMLElement>(getMonthSelectionEl()!, '[data-part="cell-trigger"]')
-      const getYearButtonEls = () => queryAll<HTMLElement>(getYearSelectionEl()!, '[data-part="cell-trigger"]')
+      const getDateButtonEls = () => queryAll<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="day"] [data-part="table-cell-trigger"]')
+      const getMonthButtonEls = () => queryAll<HTMLElement>(getMonthSelectionEl()!, '[data-part="table-cell-trigger"]')
+      const getYearButtonEls = () => queryAll<HTMLElement>(getYearSelectionEl()!, '[data-part="table-cell-trigger"]')
 
       return {
         getRootEl,

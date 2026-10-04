@@ -88,38 +88,38 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   }
 
   private get dayView() {
-    return getPart<HTMLElement>(this.calendar, parts.dayView)!
+    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=day]')!
   }
 
   private get monthView() {
-    return getPart<HTMLElement>(this.calendar, parts.monthView)!
+    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=month]')!
   }
 
   private get yearView() {
-    return getPart<HTMLElement>(this.calendar, parts.yearView)!
+    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=year]')!
   }
 
   private renderDayView() {
     const view = this.dayView
-    spreadProps(view, this.api.getDayViewProps())
+    spreadProps(view, this.api.getViewProps({ view: 'day' }))
     const control = getPart<HTMLElement>(view, parts.viewControl)!
     spreadProps(control, this.api.getViewControlProps())
     const nav = [
-      [parts.prevYearTrigger, this.api.getPrevYearTriggerProps()],
-      [parts.prevMonthTrigger, this.api.getPrevMonthTriggerProps()],
-      [parts.monthTrigger, this.api.getMonthTriggerProps()],
-      [parts.yearTrigger, this.api.getYearTriggerProps()],
-      [parts.nextMonthTrigger, this.api.getNextMonthTriggerProps()],
-      [parts.nextYearTrigger, this.api.getNextYearTriggerProps()],
+      [parts.prevTrigger, this.api.getPrevTriggerProps({ unit: 'year' })],
+      [parts.prevTrigger, this.api.getPrevTriggerProps({ unit: 'month' })],
+      [parts.viewTrigger, this.api.getViewTriggerProps({ view: 'month' })],
+      [parts.viewTrigger, this.api.getViewTriggerProps({ view: 'year' })],
+      [parts.nextTrigger, this.api.getNextTriggerProps({ unit: 'month' })],
+      [parts.nextTrigger, this.api.getNextTriggerProps({ unit: 'year' })],
     ] as const
     for (const [part, props] of nav) {
-      const button = getPart<HTMLButtonElement>(control, part)
+      const button = part === parts.viewTrigger
+        ? query<HTMLButtonElement>(control, `[data-part=view-trigger][data-view=${props['data-view']}]`)
+        : query<HTMLButtonElement>(control, `[data-part=${props['data-part']}][data-unit=${props['data-unit']}]`)
       if (button) {
         spreadProps(button, props)
-        if (part === parts.monthTrigger)
-          button.textContent = this.api.monthLabel
-        if (part === parts.yearTrigger)
-          button.textContent = this.api.yearLabel
+        if (part === parts.viewTrigger)
+          button.textContent = props['data-view'] === 'month' ? this.api.monthLabel : this.api.yearLabel
       }
     }
     const table = query<HTMLTableElement>(view, 'table')!
@@ -146,9 +146,9 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     const templateCell = this.dayTemplate
     if (!templateCell)
       return
-    const templateButton = getPart<HTMLButtonElement>(templateCell, parts.cellTrigger)!
+    const templateButton = getPart<HTMLButtonElement>(templateCell, parts.tableCellTrigger)!
     const dates = this.api.weeks.flat()
-    const existing = queryAll<HTMLButtonElement>(body, '[data-part="cell-trigger"]')
+    const existing = queryAll<HTMLButtonElement>(body, '[data-part="table-cell-trigger"]')
     if (existing.length === dates.length && existing.every((button, index) => button.dataset.value === datePicker.formatDate(dates[index]!))) {
       existing.forEach((button, index) => {
         const date = dates[index]!
@@ -174,10 +174,10 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   private renderMonthView() {
     const view = this.monthView
-    spreadProps(view, this.api.getMonthViewProps())
+    spreadProps(view, this.api.getViewProps({ view: 'month' }))
     const table = query<HTMLTableElement>(view, 'table')!
     const body = table.tBodies[0]!
-    spreadProps(table, this.api.getMonthTableProps())
+    spreadProps(table, this.api.getTableProps({ view: 'month' }))
     if (!this.monthTemplate)
       this.monthTemplate = query(body, 'td')?.cloneNode(true) as HTMLTableCellElement
     this.renderSelectionCells(
@@ -185,23 +185,23 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
       this.monthTemplate,
       this.api.monthRows,
       month => this.api.monthLabels[month] ?? '',
-      (button, month) => spreadProps(button, this.api.getMonthCellTriggerProps({ value: month })),
+      (button, month) => spreadProps(button, this.api.getMonthTableCellTriggerProps({ value: month })),
     )
   }
 
   private renderYearView() {
     const view = this.yearView
-    const previous = getPart<HTMLButtonElement>(view, parts.prevYearChunkTrigger)
-    const next = getPart<HTMLButtonElement>(view, parts.nextYearChunkTrigger)
+    const previous = query<HTMLButtonElement>(view, '[data-part=prev-trigger][data-unit=chunk]')
+    const next = query<HTMLButtonElement>(view, '[data-part=next-trigger][data-unit=chunk]')
     const table = query<HTMLTableElement>(view, 'table')!
     const body = table.tBodies[0]!
 
-    spreadProps(view, this.api.getYearViewProps())
+    spreadProps(view, this.api.getViewProps({ view: 'year' }))
     if (previous)
-      spreadProps(previous, this.api.getPrevYearChunkTriggerProps())
+      spreadProps(previous, this.api.getPrevTriggerProps({ unit: 'chunk' }))
     if (next)
-      spreadProps(next, this.api.getNextYearChunkTriggerProps())
-    spreadProps(table, this.api.getYearTableProps())
+      spreadProps(next, this.api.getNextTriggerProps({ unit: 'chunk' }))
+    spreadProps(table, this.api.getTableProps({ view: 'year' }))
 
     if (!this.yearTemplate)
       this.yearTemplate = query(body, 'td')?.cloneNode(true) as HTMLTableCellElement
@@ -211,7 +211,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
       this.yearTemplate,
       this.api.yearRows,
       year => String(year),
-      (button, year) => spreadProps(button, this.api.getYearCellTriggerProps({ value: year })),
+      (button, year) => spreadProps(button, this.api.getYearTableCellTriggerProps({ value: year })),
     )
   }
 
@@ -225,13 +225,13 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     if (!templateCell)
       return
     const values = rows.flat()
-    const existing = queryAll<HTMLButtonElement>(body, '[data-part="cell-trigger"]')
+    const existing = queryAll<HTMLButtonElement>(body, '[data-part="table-cell-trigger"]')
     if (existing.length === values.length && existing.every((button, index) => button.dataset.value === String(values[index]))) {
       existing.forEach((button, index) => updateButton(button, values[index]!))
       return
     }
 
-    const templateButton = getPart<HTMLButtonElement>(templateCell, parts.cellTrigger)!
+    const templateButton = getPart<HTMLButtonElement>(templateCell, parts.tableCellTrigger)!
     body.textContent = ''
     for (const valueRow of rows) {
       const row = document.createElement('tr')

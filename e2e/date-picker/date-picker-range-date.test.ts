@@ -19,14 +19,14 @@ const template = `
           <input data-part="hidden-input" type="hidden">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
-            <div data-part="day-view">
+            <div data-part="view" data-view="day">
               <div data-part="view-control">
-                <button data-part="prev-year-trigger" type="button"></button>
-                <button data-part="prev-month-trigger" type="button"></button>
-                <button data-part="month-trigger" type="button"></button>
-                <button data-part="year-trigger" type="button"></button>
-                <button data-part="next-month-trigger" type="button"></button>
-                <button data-part="next-year-trigger" type="button"></button>
+                <button data-part="prev-trigger" data-unit="year" type="button"></button>
+                <button data-part="prev-trigger" data-unit="month" type="button"></button>
+                <button data-part="view-trigger" data-view="month" type="button"></button>
+                <button data-part="view-trigger" data-view="year" type="button"></button>
+                <button data-part="next-trigger" data-unit="month" type="button"></button>
+                <button data-part="next-trigger" data-unit="year" type="button"></button>
               </div>
               <table>
                 <thead>
@@ -37,35 +37,35 @@ const template = `
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="month-view">
+            <div data-part="view" data-view="month">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="year-view">
+            <div data-part="view" data-view="year">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="prev-year-chunk-trigger"></button>
-              <button data-part="next-year-chunk-trigger"></button>
+              <button data-part="prev-trigger" data-unit="chunk"></button>
+              <button data-part="next-trigger" data-unit="chunk"></button>
             </div>
           </div>
           <div data-part="status"></div>
@@ -161,7 +161,7 @@ it('drops a hover preview when the calendar closes and reopens', { tags: ['parit
   const anchored = template.replace('data-range-date="2020-05-22"', 'data-range-date="2020-05-17" data-default-date="2020-05-17"')
   await using component = createDisposableDatePicker(rootId, anchored)
   const calendar = component.elements.getCalendarEl()!
-  const inside = () => queryAll<HTMLButtonElement>(calendar, '[data-part="cell-trigger"][data-in-range]').map(button => button.dataset.value)
+  const inside = () => queryAll<HTMLButtonElement>(calendar, '[data-part="table-cell-trigger"][data-in-range]').map(button => button.dataset.value)
   await page.getByRole('button', { name: 'Toggle calendar' }).click()
   await page.getByRole('button', { name: '12 May 2020 Tuesday' }).hover()
   expect(inside()).toEqual(['2020-05-13', '2020-05-14', '2020-05-15', '2020-05-16'])
@@ -182,7 +182,7 @@ it('previews the range with a pen hover without selecting a date', { tags: ['new
   const hoveredDay = page.getByRole('button', { name: '12 May 2020 Tuesday' }).element()
   hoveredDay.dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'pen' }))
 
-  await expect.poll(() => queryAll(calendar, '[data-part="cell-trigger"][data-in-range]').length).toBe(4)
+  await expect.poll(() => queryAll(calendar, '[data-part="table-cell-trigger"][data-in-range]').length).toBe(4)
   expect(input.value).toBe('')
   expect(calendar.hidden).toBe(false)
 })
@@ -198,7 +198,7 @@ it('does not preview a range from a touch hover event', { tags: ['new'] }, async
   touchedDay.dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'touch' }))
   await new Promise(resolve => requestAnimationFrame(resolve))
 
-  expect(queryAll(calendar, '[data-part="cell-trigger"][data-in-range]')).toHaveLength(0)
+  expect(queryAll(calendar, '[data-part="table-cell-trigger"][data-in-range]')).toHaveLength(0)
   expect(input.value).toBe('')
   expect(calendar.hidden).toBe(false)
 })
@@ -216,7 +216,7 @@ it('keeps a fixed range anchor independent of keyboard focus movement', { tags: 
   const selected = page.getByRole('button', { name: '20 May 2020 Wednesday' }).element() as HTMLButtonElement
   expect(anchor.dataset.rangeDate).toBe('')
   expect(selected.getAttribute('aria-selected')).toBe('true')
-  expect(query<HTMLButtonElement>(calendar, '[data-part="cell-trigger"][data-focus]')?.dataset.value).toBe('2020-05-21')
+  expect(query<HTMLButtonElement>(calendar, '[data-part="table-cell-trigger"][data-focus]')?.dataset.value).toBe('2020-05-21')
   expect(anchor).toBeEnabled()
   expect(selected).toBeEnabled()
 })

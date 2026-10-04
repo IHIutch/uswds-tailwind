@@ -14,14 +14,14 @@ const template = `
           <input data-part="hidden-input" type="hidden">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
-            <div data-part="day-view">
+            <div data-part="view" data-view="day">
               <div data-part="view-control">
-                <button data-part="prev-year-trigger" type="button"></button>
-                <button data-part="prev-month-trigger" type="button"></button>
-                <button data-part="month-trigger" type="button"></button>
-                <button data-part="year-trigger" type="button"></button>
-                <button data-part="next-month-trigger" type="button"></button>
-                <button data-part="next-year-trigger" type="button"></button>
+                <button data-part="prev-trigger" data-unit="year" type="button"></button>
+                <button data-part="prev-trigger" data-unit="month" type="button"></button>
+                <button data-part="view-trigger" data-view="month" type="button"></button>
+                <button data-part="view-trigger" data-view="year" type="button"></button>
+                <button data-part="next-trigger" data-unit="month" type="button"></button>
+                <button data-part="next-trigger" data-unit="year" type="button"></button>
               </div>
               <table>
                 <thead>
@@ -32,35 +32,35 @@ const template = `
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="month-view">
+            <div data-part="view" data-view="month">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="year-view">
+            <div data-part="view" data-view="year">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="prev-year-chunk-trigger"></button>
-              <button data-part="next-year-chunk-trigger"></button>
+              <button data-part="prev-trigger" data-unit="chunk"></button>
+              <button data-part="next-trigger" data-unit="chunk"></button>
             </div>
           </div>
           <div data-part="status"></div>
@@ -77,7 +77,7 @@ async function setupMonthSelectionView(component: ReturnType<typeof createDispos
   await userEvent.fill(input, '6/20/2020')
   await userEvent.click(button)
 
-  const monthTrigger = query<HTMLButtonElement>(calendar, '[data-part="month-trigger"]')!
+  const monthTrigger = query<HTMLButtonElement>(calendar, '[data-part="view-trigger"][data-view="month"]')!
   await userEvent.click(monthTrigger)
 
   return { calendar }
@@ -88,7 +88,7 @@ it('should show month of June as focused', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedMonth = query(monthView, '[data-focus]')
   expect(focusedMonth?.getAttribute('data-value')).toBe('5') // June is 0-indexed (5)
 })
@@ -98,7 +98,7 @@ it('should show month of June as selected', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const selectedMonth = query(monthView, '[data-selected]')
   expect(selectedMonth?.getAttribute('data-value')).toBe('5') // June is 0-indexed (5)
 })
@@ -108,7 +108,7 @@ it('should navigate back three months when pressing up', { tags: ['legacy'] }, a
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowUp}')
@@ -122,7 +122,7 @@ it('should navigate ahead three months when pressing down', { tags: ['legacy'] }
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowDown}')
@@ -136,7 +136,7 @@ it('should navigate back one month when pressing left', { tags: ['legacy'] }, as
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowLeft}')
@@ -150,7 +150,7 @@ it('should navigate ahead one month when pressing right', { tags: ['legacy'] }, 
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowRight}')
@@ -164,7 +164,7 @@ it('should navigate to the beginning of the month row when pressing home', { tag
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{Home}')
@@ -178,7 +178,7 @@ it('should navigate to the end of the month row when pressing end', { tags: ['le
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{End}')
@@ -192,7 +192,7 @@ it('should navigate to January when pressing page up', { tags: ['legacy'] }, asy
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{PageUp}')
@@ -206,7 +206,7 @@ it('should navigate to December when pressing page down', { tags: ['legacy'] }, 
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{PageDown}')
@@ -224,7 +224,7 @@ it('shows twelve month choices with selected, focused, disabled and status state
   await page.getByRole('button', { name: 'Toggle calendar' }).click()
   await page.getByRole('button', { name: 'June. Select month' }).click()
 
-  const months = queryAll<HTMLButtonElement>(calendar, '[data-part="month-view"] [data-part="cell-trigger"]')
+  const months = queryAll<HTMLButtonElement>(calendar, '[data-part="view"][data-view="month"] [data-part="table-cell-trigger"]')
   expect(months).toHaveLength(12)
   const june = page.getByRole('button', { name: 'June', exact: true }).element() as HTMLButtonElement
   expect(june.getAttribute('aria-selected')).toBe('true')

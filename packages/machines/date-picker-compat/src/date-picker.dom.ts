@@ -1,5 +1,5 @@
 import type { Scope } from '@zag-js/core'
-import type { DateValue, DateView } from './date-picker.types'
+import type { DateValue, DateView, NavigationUnit } from './date-picker.types'
 import { query, queryAll } from '@zag-js/dom-query'
 import { validateDateInput } from './date-picker.utils'
 
@@ -84,22 +84,22 @@ export function applyDateInputValidity(element: HTMLInputElement, text: string, 
 
 // The roving-tabindex focused day cell inside the open calendar — `toggleCalendar` focuses it on open
 // (`single-index.js:1353`, the `CALENDAR_DATE_FOCUSED` `--focused` cell → headless `[data-focus]`). The selector
-// matches the `cell-trigger` part all three views' cell getters emit.
+// matches the `table-cell-trigger` part all three views' cell getters emit.
 export function getFocusedCell(ctx: Scope, view: DateView) {
-  return queryAll<HTMLElement>(getContentEl(ctx), `[data-part=cell-trigger][data-view=${view}][data-focus]`).find(el => !el.closest('[hidden]')) ?? null
+  return queryAll<HTMLElement>(getContentEl(ctx), `[data-part=table-cell-trigger][data-view=${view}][data-focus]`).find(el => !el.closest('[hidden]')) ?? null
 }
 
 // Day-view nav: after a nav re-render, focus the SAME button, or fall back to the `CALENDAR_DATE_PICKER` container
 // (`viewControl`, tabindex=-1) when that button is now disabled at a boundary (`single-index.js:1240-1243`).
-export function getNavTriggerEl(ctx: Scope, part: string) {
-  return query<HTMLButtonElement>(getContentEl(ctx), `[data-part=${part}]`)
+export function getNavTriggerEl(ctx: Scope, direction: 'prev' | 'next', unit: NavigationUnit) {
+  return query<HTMLButtonElement>(getContentEl(ctx), `[data-part=${direction}-trigger][data-unit=${unit}]`)
 }
 export const getViewControlEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view-control]`)
 
 // The `CALENDAR_YEAR_PICKER` container (tabindex=-1) — the year-chunk nav focus-fallback (L1667).
-export const getYearViewEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=year-view]`)
+export const getYearViewEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view][data-view=year]`)
 
-// NOTE: no id helpers for the structural calendar parts (table/tableRow/cellTrigger, prev/next nav, month/year
+// NOTE: no id helpers for the structural calendar parts (table/tableRow/tableCellTrigger, prev/next nav, month/year
 // triggers, year-chunk) — nothing looks them up by id (focus targeting queries by `data-part`), so the helpers
 // would be dead code.
 

@@ -14,14 +14,14 @@ const template = `
         <input data-part="hidden-input" type="hidden">
         <button data-part="trigger" type="button"></button>
         <div data-part="content" hidden>
-          <div data-part="day-view">
+          <div data-part="view" data-view="day">
             <div data-part="view-control">
-              <button data-part="prev-year-trigger" type="button"></button>
-              <button data-part="prev-month-trigger" type="button"></button>
-              <button data-part="month-trigger" type="button"></button>
-              <button data-part="year-trigger" type="button"></button>
-              <button data-part="next-month-trigger" type="button"></button>
-              <button data-part="next-year-trigger" type="button"></button>
+              <button data-part="prev-trigger" data-unit="year" type="button"></button>
+              <button data-part="prev-trigger" data-unit="month" type="button"></button>
+              <button data-part="view-trigger" data-view="month" type="button"></button>
+              <button data-part="view-trigger" data-view="year" type="button"></button>
+              <button data-part="next-trigger" data-unit="month" type="button"></button>
+              <button data-part="next-trigger" data-unit="year" type="button"></button>
             </div>
             <table>
               <thead>
@@ -32,35 +32,35 @@ const template = `
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="cell-trigger"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="month-view">
+          <div data-part="view" data-view="month">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="cell-trigger"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="year-view">
+          <div data-part="view" data-view="year">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="cell-trigger"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button data-part="prev-year-chunk-trigger"></button>
-            <button data-part="next-year-chunk-trigger"></button>
+            <button data-part="prev-trigger" data-unit="chunk"></button>
+            <button data-part="next-trigger" data-unit="chunk"></button>
           </div>
         </div>
         <div data-part="status"></div>

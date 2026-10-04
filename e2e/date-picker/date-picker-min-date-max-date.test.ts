@@ -14,14 +14,14 @@ const template = `
         <input data-part="hidden-input" type="hidden">
         <button data-part="trigger" type="button"></button>
         <div data-part="content" hidden>
-          <div data-part="day-view">
+          <div data-part="view" data-view="day">
             <div data-part="view-control">
-              <button data-part="prev-year-trigger" type="button"></button>
-              <button data-part="prev-month-trigger" type="button"></button>
-              <button data-part="month-trigger" type="button"></button>
-              <button data-part="year-trigger" type="button"></button>
-              <button data-part="next-month-trigger" type="button"></button>
-              <button data-part="next-year-trigger" type="button"></button>
+              <button data-part="prev-trigger" data-unit="year" type="button"></button>
+              <button data-part="prev-trigger" data-unit="month" type="button"></button>
+              <button data-part="view-trigger" data-view="month" type="button"></button>
+              <button data-part="view-trigger" data-view="year" type="button"></button>
+              <button data-part="next-trigger" data-unit="month" type="button"></button>
+              <button data-part="next-trigger" data-unit="year" type="button"></button>
             </div>
             <table>
               <thead>
@@ -32,35 +32,35 @@ const template = `
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="cell-trigger"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="month-view">
+          <div data-part="view" data-view="month">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="cell-trigger"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="year-view">
+          <div data-part="view" data-view="year">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="cell-trigger"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button data-part="prev-year-chunk-trigger"></button>
-            <button data-part="next-year-chunk-trigger"></button>
+            <button data-part="prev-trigger" data-unit="chunk"></button>
+            <button data-part="next-trigger" data-unit="chunk"></button>
           </div>
         </div>
         <div data-part="status"></div>
@@ -97,8 +97,8 @@ it('should disable back buttons when displaying the minimum month', { tags: ['le
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const prevMonthBtn = query(calendar, '[data-part="prev-month-trigger"]') as HTMLButtonElement
-  const prevYearBtn = query(calendar, '[data-part="prev-year-trigger"]') as HTMLButtonElement
+  const prevMonthBtn = query(calendar, '[data-part="prev-trigger"][data-unit="month"]') as HTMLButtonElement
+  const prevYearBtn = query(calendar, '[data-part="prev-trigger"][data-unit="year"]') as HTMLButtonElement
 
   expect(prevMonthBtn).toBeDisabled()
   expect(prevYearBtn).toBeDisabled()
@@ -121,8 +121,8 @@ it('should disable forward buttons when displaying the maximum month', { tags: [
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextMonthBtn = query(calendar, '[data-part="next-month-trigger"]') as HTMLButtonElement
-  const nextYearBtn = query(calendar, '[data-part="next-year-trigger"]') as HTMLButtonElement
+  const nextMonthBtn = query(calendar, '[data-part="next-trigger"][data-unit="month"]') as HTMLButtonElement
+  const nextYearBtn = query(calendar, '[data-part="next-trigger"][data-unit="year"]') as HTMLButtonElement
 
   expect(nextMonthBtn).toBeDisabled()
   expect(nextYearBtn).toBeDisabled()
@@ -145,7 +145,7 @@ it('should allow navigation back a year to a month that is less than a year from
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const prevYearBtn = query(calendar, '[data-part="prev-year-trigger"]') as HTMLButtonElement
+  const prevYearBtn = query(calendar, '[data-part="prev-trigger"][data-unit="year"]') as HTMLButtonElement
   await userEvent.click(prevYearBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
@@ -163,7 +163,7 @@ it('should allow navigation back a month to a month that is partially disabled d
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const prevMonthBtn = query(calendar, '[data-part="prev-month-trigger"]') as HTMLButtonElement
+  const prevMonthBtn = query(calendar, '[data-part="prev-trigger"][data-unit="month"]') as HTMLButtonElement
   await userEvent.click(prevMonthBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
@@ -181,10 +181,10 @@ it('should not allow navigation back a month to a month that is fully disabled d
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const prevYearBtn = query(calendar, '[data-part="prev-year-trigger"]') as HTMLButtonElement
+  const prevYearBtn = query(calendar, '[data-part="prev-trigger"][data-unit="year"]') as HTMLButtonElement
   expect(prevYearBtn).toBeDisabled()
 
-  // const prevMonthBtn = query(calendar, '[data-part="prev-month-trigger"]') as HTMLButtonElement
+  // const prevMonthBtn = query(calendar, '[data-part="prev-trigger"][data-unit="month"]') as HTMLButtonElement
   // await userEvent.click(prevMonthBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
@@ -202,7 +202,7 @@ it('should allow navigation forward a year to a month that is partially disabled
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextYearBtn = query(calendar, '[data-part="next-year-trigger"]') as HTMLButtonElement
+  const nextYearBtn = query(calendar, '[data-part="next-trigger"][data-unit="year"]') as HTMLButtonElement
   await userEvent.click(nextYearBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
@@ -220,7 +220,7 @@ it('should allow navigation forward a year to a month that is less than a year f
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextYearBtn = query(calendar, '[data-part="next-year-trigger"]') as HTMLButtonElement
+  const nextYearBtn = query(calendar, '[data-part="next-trigger"][data-unit="year"]') as HTMLButtonElement
   await userEvent.click(nextYearBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
@@ -238,7 +238,7 @@ it('should allow navigation forward a month to a month that is partially disable
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextMonthBtn = query(calendar, '[data-part="next-month-trigger"]') as HTMLButtonElement
+  const nextMonthBtn = query(calendar, '[data-part="next-trigger"][data-unit="month"]') as HTMLButtonElement
   await userEvent.click(nextMonthBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
@@ -256,7 +256,7 @@ it('should not allow navigation forward a month to a month that is fully disable
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextMonthBtn = query(calendar, '[data-part="next-month-trigger"]') as HTMLButtonElement
+  const nextMonthBtn = query(calendar, '[data-part="next-trigger"][data-unit="month"]') as HTMLButtonElement
   expect(nextMonthBtn).toBeDisabled()
   // await userEvent.click(nextMonthBtn)
 
@@ -274,10 +274,10 @@ it('should allow selection of a month in the month selection screen that is part
   await userEvent.fill(input, '12/01/2020')
   await userEvent.click(button)
 
-  const monthTrigger = query(calendar, '[data-part="month-trigger"]') as HTMLButtonElement
+  const monthTrigger = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   await userEvent.click(monthTrigger)
 
-  expect(query(calendar, '[data-part="month-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 
   const mayButton = query(calendar, '[data-value="4"]') as HTMLButtonElement
   await userEvent.click(mayButton)
@@ -297,17 +297,17 @@ it('should not allow selection of a month in the month selection screen that is 
   await userEvent.fill(input, '10/31/2020')
   await userEvent.click(button)
 
-  const monthTrigger = query(calendar, '[data-part="month-trigger"]') as HTMLButtonElement
+  const monthTrigger = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   // expect(monthTrigger).toBeDisabled()
   await userEvent.click(monthTrigger)
 
-  expect(query(calendar, '[data-part="month-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 
   const januaryButton = query(calendar, '[data-value="0"]') as HTMLButtonElement
   expect(januaryButton).toBeDisabled()
   // await userEvent.click(januaryButton)
 
-  expect(query(calendar, '[data-part="month-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L324
@@ -320,10 +320,10 @@ it('should allow selection of a month in the month selection screen that is part
   await userEvent.fill(input, '01/30/2021')
   await userEvent.click(button)
 
-  const monthTrigger = query(calendar, '[data-part="month-trigger"]') as HTMLButtonElement
+  const monthTrigger = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   await userEvent.click(monthTrigger)
 
-  expect(query(calendar, '[data-part="month-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 
   const juneButton = query(calendar, '[data-value="5"]') as HTMLButtonElement
   await userEvent.click(juneButton)
@@ -343,16 +343,16 @@ it('should not allow selection of a month in the month selection screen that is 
   await userEvent.fill(input, '02/29/2021')
   await userEvent.click(button)
 
-  const monthTrigger = query(calendar, '[data-part="month-trigger"]') as HTMLButtonElement
+  const monthTrigger = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   await userEvent.click(monthTrigger)
 
-  expect(query(calendar, '[data-part="month-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 
   const decemberButton = query(calendar, '[data-value="11"]') as HTMLButtonElement
   expect(decemberButton).toBeDisabled()
   // await userEvent.click(decemberButton)
 
-  // expect(query(calendar, '[data-part="month-view"]')).toBeTruthy()
+  // expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L376
@@ -365,10 +365,10 @@ it('should allow selection of a year in the year selection screen that is partia
   await userEvent.fill(input, '04/01/2021')
   await userEvent.click(button)
 
-  const yearTrigger = query(calendar, '[data-part="year-trigger"]') as HTMLButtonElement
+  const yearTrigger = query(calendar, '[data-part="view-trigger"][data-view="year"]') as HTMLButtonElement
   await userEvent.click(yearTrigger)
 
-  expect(query(calendar, '[data-part="year-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 
   const year2020Button = query(calendar, '[data-value="2020"]') as HTMLButtonElement
   await userEvent.click(year2020Button)
@@ -388,10 +388,10 @@ it('should allow selection of a year in the year selection screen that is partia
   await userEvent.fill(input, '12/01/2020')
   await userEvent.click(button)
 
-  const yearTrigger = query(calendar, '[data-part="year-trigger"]') as HTMLButtonElement
+  const yearTrigger = query(calendar, '[data-part="view-trigger"][data-view="year"]') as HTMLButtonElement
   await userEvent.click(yearTrigger)
 
-  expect(query(calendar, '[data-part="year-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 
   const year2021Button = query(calendar, '[data-value="2021"]') as HTMLButtonElement
   await userEvent.click(year2021Button)
@@ -411,16 +411,16 @@ it('should not allow selection of a year in the year selection screen that is fu
   await userEvent.fill(input, '07/04/2020')
   await userEvent.click(button)
 
-  const yearTrigger = query(calendar, '[data-part="year-trigger"]') as HTMLButtonElement
+  const yearTrigger = query(calendar, '[data-part="view-trigger"][data-view="year"]') as HTMLButtonElement
   await userEvent.click(yearTrigger)
 
-  expect(query(calendar, '[data-part="year-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 
   const year2018Button = query(calendar, '[data-value="2018"]') as HTMLButtonElement
   expect(year2018Button).toBeDisabled()
   // await userEvent.click(year2018Button)
 
-  // expect(query(calendar, '[data-part="year-view"]')).toBeTruthy()
+  // expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L445
@@ -433,16 +433,16 @@ it('should not allow selection of a year in the year selection screen that is fu
   await userEvent.fill(input, '12/01/2020')
   await userEvent.click(button)
 
-  const yearTrigger = query(calendar, '[data-part="year-trigger"]') as HTMLButtonElement
+  const yearTrigger = query(calendar, '[data-part="view-trigger"][data-view="year"]') as HTMLButtonElement
   await userEvent.click(yearTrigger)
 
-  expect(query(calendar, '[data-part="year-view"]')).toBeTruthy()
+  expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 
   const year2023Button = query(calendar, '[data-value="2023"]') as HTMLButtonElement
   expect(year2023Button).toBeDisabled()
   // await userEvent.click(year2023Button)
 
-  // expect(query(calendar, '[data-part="year-view"]')).toBeTruthy()
+  // expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L464

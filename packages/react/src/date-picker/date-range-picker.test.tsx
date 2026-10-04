@@ -23,18 +23,18 @@ function renderRangePicker(
           {({ api }) => (
             <>
               <DatePicker.ViewControl>
-                <DatePicker.PrevYearTrigger aria-label="Previous year" />
-                <DatePicker.PrevMonthTrigger aria-label="Previous month" />
-                <DatePicker.MonthTrigger />
-                <DatePicker.YearTrigger />
-                <DatePicker.NextMonthTrigger aria-label="Next month" />
-                <DatePicker.NextYearTrigger aria-label="Next year" />
+                <DatePicker.PrevTrigger unit="year" aria-label="Previous year" />
+                <DatePicker.PrevTrigger unit="month" aria-label="Previous month" />
+                <DatePicker.ViewTrigger view="month" />
+                <DatePicker.ViewTrigger view="year" />
+                <DatePicker.NextTrigger unit="month" aria-label="Next month" />
+                <DatePicker.NextTrigger unit="year" aria-label="Next year" />
               </DatePicker.ViewControl>
               <DatePicker.Table>
                 <DatePicker.TableHead>
                   <DatePicker.TableRow>
-                    {api.weekDays.map(day => (
-                      <DatePicker.TableHeader key={day.long} day={day} />
+                    {api.weekDays.map((day, index) => (
+                      <DatePicker.TableHeader key={day.long} day={day} index={index} />
                     ))}
                   </DatePicker.TableRow>
                 </DatePicker.TableHead>
@@ -42,9 +42,9 @@ function renderRangePicker(
                   {api.weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
                       {week.map(cell => (
-                        <DatePicker.TableCell key={cell.dateString} cell={cell}>
-                          <DatePicker.TableCellTrigger cell={cell}>
-                            {cell.day}
+                        <DatePicker.TableCell key={cell.toISOString()} value={cell}>
+                          <DatePicker.TableCellTrigger value={cell}>
+                            {cell.getDate()}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -61,13 +61,13 @@ function renderRangePicker(
 }
 
 function getContent() {
-  return document.querySelector('[data-scope="datepicker"][data-part="calendar"]') as HTMLElement | null
+  return document.querySelector('[data-scope="date-picker"][data-part="content"]') as HTMLElement | null
 }
 
 function getDayCells() {
   return Array.from(
     document.querySelectorAll<HTMLButtonElement>(
-      '[data-scope="datepicker"][data-part="cell-trigger"]',
+      '[data-scope="date-picker"][data-part="table-cell-trigger"]',
     ),
   )
 }
@@ -177,7 +177,7 @@ it('selecting via start trigger then end trigger fills both inputs', async () =>
   expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
 })
 
-it('after selecting start, days between start and hovered cell paint data-within-range', async () => {
+it('after selecting start, days between start and hovered cell paint data-in-range', async () => {
   const screen = await renderRangePicker()
   const startInput = screen.getByRole('textbox', { name: 'Start date' })
 
@@ -191,7 +191,7 @@ it('after selecting start, days between start and hovered cell paint data-within
   await userEvent.hover(day15)
 
   const day12 = findDay('12') as HTMLButtonElement
-  expect(day12.hasAttribute('data-within-range')).toBe(true)
+  expect(day12.hasAttribute('data-in-range')).toBe(true)
 })
 
 it('selecting end input then a day before start swaps the range bounds', async () => {
@@ -248,7 +248,7 @@ it('start selection paints data-range-start; end selection paints data-range-end
   const day20 = findDay('20') as HTMLButtonElement
 
   expect(day10.hasAttribute('data-range-start')).toBe(true)
-  expect(day15.hasAttribute('data-within-range')).toBe(true)
+  expect(day15.hasAttribute('data-in-range')).toBe(true)
   expect(day20.hasAttribute('data-range-end')).toBe(true)
 })
 
@@ -303,7 +303,7 @@ it('submits both values in form data with distinct names', async () => {
 
 it('defaultValue with two dates initializes both inputs', async () => {
   const screen = await renderRangePicker({
-    defaultValue: ['2020-01-10', '2020-01-20'],
+    defaultValue: [new Date(2020, 0, 10), new Date(2020, 0, 20)],
   })
 
   const startInput = screen.getByRole('textbox', { name: 'Start date' })
@@ -405,18 +405,18 @@ it('end picker prev-year is disabled when focused on start month', async () => {
 
 it('switching from start to end picker focuses the end-bound cell, not start', async () => {
   const screen = await renderRangePicker({
-    defaultValue: ['2020-01-10', '2020-01-20'],
+    defaultValue: [new Date(2020, 0, 10), new Date(2020, 0, 20)],
   })
 
   await userEvent.click(screen.getByRole('button', { name: 'Open start calendar' }))
   let focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent.trim()).toBe('10')
 
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
   focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent?.trim()).toBe('20')
 })
@@ -440,7 +440,7 @@ it('keyboard nav in end picker cannot move focus before the start date', async (
   await userEvent.keyboard('{ArrowLeft}')
 
   const focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent?.trim()).toBe('15')
 })
@@ -463,7 +463,7 @@ it('keyboard nav in start picker cannot move focus after the end date', async ()
   await userEvent.keyboard('{ArrowRight}')
 
   const focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent?.trim()).toBe('15')
 })
@@ -472,10 +472,10 @@ it('clicking start trigger then end trigger reuses the same calendar instance', 
   const screen = await renderRangePicker()
 
   await userEvent.click(screen.getByRole('button', { name: 'Open start calendar' }))
-  const calendarsAfterStart = document.querySelectorAll('[data-scope="datepicker"][data-part="calendar"]')
+  const calendarsAfterStart = document.querySelectorAll('[data-scope="date-picker"][data-part="content"]')
   expect(calendarsAfterStart.length).toBe(1)
 
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
-  const calendarsAfterEnd = document.querySelectorAll('[data-scope="datepicker"][data-part="calendar"]')
+  const calendarsAfterEnd = document.querySelectorAll('[data-scope="date-picker"][data-part="content"]')
   expect(calendarsAfterEnd.length).toBe(1)
 })

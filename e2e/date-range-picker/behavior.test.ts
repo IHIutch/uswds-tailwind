@@ -14,6 +14,29 @@ it('keeps range roots owned by the range adapter across repeated initialization'
   expect(dateRangePickerInit()[0]).toBe(first)
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L1330-L1340 (selection closes the calendar and focuses its visible input)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/index.js#L65-L105 (peer updates change bounds, not the sibling value)
+it.each(['start', 'end'] as const)('selecting the %s date preserves the other date and restores input focus', { tags: ['parity'] }, async (endpoint) => {
+  await using component = createRangeFixture()
+  const start = component.elements.getStartInputEl()!
+  const end = component.elements.getEndInputEl()!
+  const input = endpoint === 'start' ? start : end
+  const trigger = endpoint === 'start' ? component.elements.getStartTriggerEl()! : component.elements.getEndTriggerEl()!
+  await userEvent.fill(start, '06/10/2024')
+  await userEvent.fill(end, '06/20/2024')
+  await userEvent.click(trigger)
+
+  expect(component.elements.getCalendarEl()!.hidden).toBe(false)
+  expect(day(endpoint === 'start' ? '2024-06-21' : '2024-06-09').disabled).toBe(true)
+  await userEvent.click(day('2024-06-15'))
+
+  const expected = endpoint === 'start' ? ['06/15/2024', '06/20/2024'] : ['06/10/2024', '06/15/2024']
+  expect([start.value, end.value]).toEqual(expected)
+  expect(Array.from(new FormData(document.querySelector('form')!).values())).toEqual(expected)
+  expect(component.elements.getCalendarEl()!.hidden).toBe(true)
+  await expect.poll(() => document.activeElement).toBe(input)
+})
+
 const cases: Array<{
   name: string
   endpoint: Endpoint

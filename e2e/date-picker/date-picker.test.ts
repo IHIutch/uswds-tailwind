@@ -16,14 +16,14 @@ const template = `
           <input data-part="hidden-input" type="hidden">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
-            <div data-part="day-view">
+            <div data-part="view" data-view="day">
               <div data-part="view-control">
-                <button data-part="prev-year-trigger" type="button"></button>
-                <button data-part="prev-month-trigger" type="button"></button>
-                <button data-part="month-trigger" type="button"></button>
-                <button data-part="year-trigger" type="button"></button>
-                <button data-part="next-month-trigger" type="button"></button>
-                <button data-part="next-year-trigger" type="button"></button>
+                <button data-part="prev-trigger" data-unit="year" type="button"></button>
+                <button data-part="prev-trigger" data-unit="month" type="button"></button>
+                <button data-part="view-trigger" data-view="month" type="button"></button>
+                <button data-part="view-trigger" data-view="year" type="button"></button>
+                <button data-part="next-trigger" data-unit="month" type="button"></button>
+                <button data-part="next-trigger" data-unit="year" type="button"></button>
               </div>
               <table>
                 <thead>
@@ -34,35 +34,35 @@ const template = `
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="month-view">
+            <div data-part="view" data-view="month">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="year-view">
+            <div data-part="view" data-view="year">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="cell-trigger"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="prev-year-chunk-trigger"></button>
-              <button data-part="next-year-chunk-trigger"></button>
+              <button data-part="prev-trigger" data-unit="chunk"></button>
+              <button data-part="next-trigger" data-unit="chunk"></button>
             </div>
           </div>
           <div data-part="status"></div>
@@ -70,6 +70,14 @@ const template = `
       </div>
     </div>
   `
+
+const rangeTemplate = template.replace(
+  '<input data-part="hidden-input" type="hidden">',
+  `<label for="input-dob:1">End date</label>
+     <input data-part="input" id="input-dob:1" name="end-date" type="text">
+     <input data-part="hidden-input" type="hidden">
+     <input data-part="hidden-input" type="hidden">`,
+)
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L907-L909 (enhancement clears an authored input value before applying defaults)
 it('clears an authored input value when there is no selected default', { tags: ['parity'] }, async () => {
@@ -155,13 +163,6 @@ it('keeps an active draft during accepted controlled updates, then reconciles af
 })
 
 it('reports both displayed range dates invalid when bounds change after one value transaction', { tags: ['new'] }, async () => {
-  const rangeTemplate = template.replace(
-    '<input data-part="hidden-input" type="hidden">',
-    `<label for="input-dob:1">End date</label>
-     <input data-part="input" id="input-dob:1" name="end-date" type="text">
-     <input data-part="hidden-input" type="hidden">
-     <input data-part="hidden-input" type="hidden">`,
-  )
   await using component = createDisposableDatePicker(rootId, rangeTemplate, { selectionMode: 'range' })
   const instance = component.elements.getInstance()!
 
@@ -176,6 +177,75 @@ it('reports both displayed range dates invalid when bounds change after one valu
     expect(instance.api.getInputProps({ index: 0 })['aria-invalid']).toBe('true')
     expect(instance.api.getInputProps({ index: 1 })['aria-invalid']).toBe('true')
   })
+})
+
+// Port-only controlled values, callbacks and imperative opens have no USWDS equivalent.
+it.each([0, 1] as const)('rejects a controlled range endpoint %i proposal without writing its sibling', { tags: ['new'] }, async (index) => {
+  const initial = [new Date(2024, 5, 10), new Date(2024, 5, 20)]
+  const onValueChange = vi.fn()
+  const onOpenChange = vi.fn()
+  await using component = createDisposableDatePicker(rootId, rangeTemplate, {
+    selectionMode: 'range',
+    value: initial,
+    onValueChange,
+    onOpenChange,
+  })
+  const instance = component.elements.getInstance()!
+  const root = component.elements.getRootEl()!
+  const inputs = queryAll<HTMLInputElement>(root, '[data-part="input"]')
+  const hidden = queryAll<HTMLInputElement>(root, '[data-part="hidden-input"]')
+  const changes: string[] = []
+  hidden.forEach((input, i) => input.addEventListener('change', () => changes.push(`hidden:${i}:${input.value}`)))
+  inputs.forEach((input, i) => input.addEventListener('change', () => changes.push(`visible:${i}:${input.value}`)))
+
+  instance.api.setOpen(true, index)
+  await vi.waitFor(() => expect(instance.api.open).toBe(true))
+  onOpenChange.mockClear()
+  // The shared calendar must reject a start after the end, or an end before the start.
+  instance.machine.send({ type: 'CELL.CLICK', value: new Date(2024, 5, index === 0 ? 21 : 9) })
+  expect(onValueChange).not.toHaveBeenCalled()
+  expect(instance.api.open).toBe(true)
+
+  await page.getByRole('button', { name: '15 June 2024 Saturday' }).click()
+  const expected = ['06/10/2024', '06/20/2024']
+  const expectedInternal = ['2024-06-10', '2024-06-20'][index]
+  await vi.waitFor(() => expect(inputs.map(input => input.value)).toEqual(expected))
+  await vi.waitFor(() => expect(document.activeElement).toBe(inputs[index]))
+  expect(changes).toEqual([
+    `hidden:${index}:${expectedInternal}`,
+    `visible:${index}:${expected[index]}`,
+  ])
+  expect(onValueChange).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
+    valueAsString: index === 0 ? ['2024-06-15', '2024-06-20'] : ['2024-06-10', '2024-06-15'],
+  }))
+  expect(onOpenChange).toHaveBeenCalledExactlyOnceWith({ open: false })
+})
+
+// Port-only endpoint targeting through setOpen; USWDS opens calendars through DOM triggers.
+it('programmatic range opens target one endpoint and can switch the open calendar', { tags: ['new'] }, async () => {
+  const onOpenChange = vi.fn()
+  await using component = createDisposableDatePicker(rootId, rangeTemplate, {
+    selectionMode: 'range',
+    defaultValue: [new Date(2024, 5, 10), new Date(2024, 5, 20)],
+    onOpenChange,
+  })
+  const instance = component.elements.getInstance()!
+  instance.api.setOpen(true, 1)
+  await vi.waitFor(() => expect(instance.api.focusedValue.getDate()).toBe(20))
+  expect(instance.api.open).toBe(true)
+  instance.api.setOpen(true)
+  await vi.waitFor(() => expect(instance.api.focusedValue.getDate()).toBe(10))
+  expect(instance.api.open).toBe(true)
+  expect(onOpenChange).toHaveBeenCalledExactlyOnceWith({ open: true })
+
+  await page.getByRole('button', { name: '15 June 2024 Saturday' }).click()
+  expect(instance.api.valueAsString).toEqual(['2024-06-15', '2024-06-20'])
+  expect(instance.api.open).toBe(false)
+  // Reopening the start calendar keeps editing the start; it never advances to the end implicitly.
+  instance.api.setOpen(true)
+  await vi.waitFor(() => expect(instance.api.focusedValue.getDate()).toBe(15))
+  await page.getByRole('button', { name: '16 June 2024 Sunday' }).click()
+  expect(instance.api.valueAsString).toEqual(['2024-06-16', '2024-06-20'])
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker.spec.js#L48
@@ -255,8 +325,8 @@ it('should display a calendar for the inputted date when the date picker button 
   expect(calendar.hidden).toBe(false)
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('January')
@@ -293,12 +363,12 @@ it('should allow for navigation to the preceding month by clicking the left sing
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const prevMonthButton = query(calendar, '[data-part="prev-month-trigger"]') as HTMLButtonElement
+  const prevMonthButton = query(calendar, '[data-part="prev-trigger"][data-unit="month"]') as HTMLButtonElement
   await userEvent.click(prevMonthButton)
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('December')
@@ -316,12 +386,12 @@ it('should allow for navigation to the succeeding month by clicking the right si
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextMonthButton = query(calendar, '[data-part="next-month-trigger"]') as HTMLButtonElement
+  const nextMonthButton = query(calendar, '[data-part="next-trigger"][data-unit="month"]') as HTMLButtonElement
   await userEvent.click(nextMonthButton)
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('February')
@@ -339,12 +409,12 @@ it('should allow for navigation to the preceding year by clicking the left doubl
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const prevYearButton = query(calendar, '[data-part="prev-year-trigger"]') as HTMLButtonElement
+  const prevYearButton = query(calendar, '[data-part="prev-trigger"][data-unit="year"]') as HTMLButtonElement
   await userEvent.click(prevYearButton)
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('January')
@@ -362,12 +432,12 @@ it('should allow for navigation to the succeeding year by clicking the right dou
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const nextYearButton = query(calendar, '[data-part="next-year-trigger"]') as HTMLButtonElement
+  const nextYearButton = query(calendar, '[data-part="next-trigger"][data-unit="year"]') as HTMLButtonElement
   await userEvent.click(nextYearButton)
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('January')
@@ -421,10 +491,10 @@ it('should display a month selection screen by clicking the month display within
   await userEvent.click(button)
   expect(calendar.hidden).toBe(false)
 
-  const monthSelection = query(calendar, '[data-part="month-trigger"]') as HTMLButtonElement
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   await userEvent.click(monthSelection)
 
-  const monthView = query(calendar, '[data-part="month-view"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
   const focusedMonth = document.activeElement
 
   expect(monthView).toBeTruthy()
@@ -441,13 +511,13 @@ it('should allow for the selection of a month within month selection screen', { 
   await userEvent.fill(input, '2/1/2020')
   await userEvent.click(button)
 
-  const monthSelection = query(calendar, '[data-part="month-trigger"]') as HTMLButtonElement
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   await userEvent.click(monthSelection)
 
-  const firstMonthButton = query(calendar, '[data-part="month-view"] [data-part="cell-trigger"]') as HTMLButtonElement
+  const firstMonthButton = query(calendar, '[data-part="view"][data-view="month"] [data-part="table-cell-trigger"]') as HTMLButtonElement
   await userEvent.click(firstMonthButton)
 
-  const monthDisplay = query(calendar, '[data-part="month-trigger"]')
+  const monthDisplay = query(calendar, '[data-part="view-trigger"][data-view="month"]')
   expect(monthDisplay?.textContent).toBe('January')
 })
 
@@ -459,10 +529,10 @@ it('should display a year selection screen by clicking the year display within t
 
   await userEvent.click(button)
 
-  const yearSelection = query(calendar, '[data-part="year-trigger"]') as HTMLButtonElement
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]') as HTMLButtonElement
   await userEvent.click(yearSelection)
 
-  const yearView = query(calendar, '[data-part="year-view"]')
+  const yearView = query(calendar, '[data-part="view"][data-view="year"]')
   const focusedYear = document.activeElement
 
   expect(yearView).toBeTruthy()
@@ -515,10 +585,10 @@ it('should allow for the selection of a year within year selection screen', { ta
 
   await page.getByRole('button', { name: '2016', exact: true }).click()
 
-  const yearDisplay = query(calendar, '[data-part="year-trigger"]')
+  const yearDisplay = query(calendar, '[data-part="view-trigger"][data-view="year"]')
   expect(yearDisplay?.textContent).toBe('2016')
   expect(calendar.hidden).toBe(false)
-  expect(query(calendar, '[data-part="cell-trigger"][data-focus]')?.getAttribute('data-value')).toBe('2016-02-01')
+  expect(query(calendar, '[data-part="table-cell-trigger"][data-focus]')?.getAttribute('data-value')).toBe('2016-02-01')
 })
 
 // Keyboard Navigation Tests
@@ -550,8 +620,8 @@ it('should move focus to the same day of week of the previous week when up is pr
   await userEvent.keyboard('{ArrowUp}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('3')
   expect(monthSelection?.textContent).toBe('January')
@@ -572,8 +642,8 @@ it('should move focus to the same day of week of the next week when down is pres
   await userEvent.keyboard('{ArrowDown}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('17')
   expect(monthSelection?.textContent).toBe('January')
@@ -594,8 +664,8 @@ it('should move focus to the previous day when left is pressed from the currentl
   await userEvent.keyboard('{ArrowLeft}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('9')
   expect(monthSelection?.textContent).toBe('January')
@@ -616,8 +686,8 @@ it('should move focus to the next day when right is pressed from the currently f
   await userEvent.keyboard('{ArrowRight}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('11')
   expect(monthSelection?.textContent).toBe('January')
@@ -638,8 +708,8 @@ it('should move focus to the first day (e.g. Sunday) of the current week when ho
   await userEvent.keyboard('{Home}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('29')
   expect(monthSelection?.textContent).toBe('December')
@@ -660,8 +730,8 @@ it('should move focus to the last day (e.g. Saturday) of the current week when e
   await userEvent.keyboard('{End}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('4')
   expect(monthSelection?.textContent).toBe('January')
@@ -682,8 +752,8 @@ it('should move focus to the same day of the previous month when page up is pres
   await userEvent.keyboard('{PageUp}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('December')
@@ -704,8 +774,8 @@ it('should move focus to the same day of the next month when page down is presse
   await userEvent.keyboard('{PageDown}')
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('1')
   expect(monthSelection?.textContent).toBe('February')
@@ -725,8 +795,8 @@ it('should accept a parse-able date with a two digit year and display the calend
   expect(calendar.hidden).toBe(false)
 
   const focusedDate = query(calendar, '[data-focus]')
-  const monthSelection = query(calendar, '[data-part="month-trigger"]')
-  const yearSelection = query(calendar, '[data-part="year-trigger"]')
+  const monthSelection = query(calendar, '[data-part="view-trigger"][data-view="month"]')
+  const yearSelection = query(calendar, '[data-part="view-trigger"][data-view="year"]')
 
   expect(focusedDate?.textContent).toBe('29')
   expect(monthSelection?.textContent).toBe('February')
@@ -772,7 +842,7 @@ it('should validate the input when a date is selected', { tags: ['legacy'] }, as
 
 // Additional source behavior from the date-picker migration review.
 const templateWith = (attributes: string) => template.replace(`id="${rootId}"`, `id="${rootId}" ${attributes}`)
-const focusedDay = (calendar: Element) => query<HTMLButtonElement>(calendar, '[data-part="cell-trigger"][data-focus]')!
+const focusedDay = (calendar: Element) => query<HTMLButtonElement>(calendar, '[data-part="table-cell-trigger"][data-focus]')!
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker.spec.js#L772
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker.spec.js#L840
@@ -879,7 +949,7 @@ it('opens a bounded blank picker on its clamped navigation default without selec
   expect(input.value).toBe('')
   await page.getByRole('button', { name: 'Toggle calendar' }).click()
   expect(focusedDay(calendar).dataset.value).toBe('2025-01-01')
-  expect(query(calendar, '[data-part="day-view"] [data-part="cell-trigger"][aria-selected="true"]')).toBeNull()
+  expect(query(calendar, '[data-part="view"][data-view="day"] [data-part="table-cell-trigger"][aria-selected="true"]')).toBeNull()
   expect(input.value).toBe('')
 })
 
@@ -953,7 +1023,7 @@ it('renders complete weeks with accessible day labels, button selection, and one
   await using component = createDisposableDatePicker(rootId, templateWith('data-default-value="2024-06-15" data-min-date="2024-06-01" data-max-date="2024-06-30"'))
   const calendar = component.elements.getCalendarEl()!
   await page.getByRole('button', { name: 'Toggle calendar' }).click()
-  const table = query(calendar, '[data-part="day-view"] table')!
+  const table = query(calendar, '[data-part="view"][data-view="day"] table')!
   expect(table.getAttribute('role')).toBeNull()
   const rows = queryAll(table, 'tbody tr')
   expect(rows.length).toBeGreaterThanOrEqual(4)
@@ -964,8 +1034,8 @@ it('renders complete weeks with accessible day labels, button selection, and one
   expect(chosen.getAttribute('aria-label')).toBe('15 June 2024 Saturday')
   expect(chosen.getAttribute('aria-selected')).toBe('true')
   expect(chosen.tabIndex).toBe(0)
-  expect(queryAll(calendar, '[data-part="day-view"] [data-part="cell-trigger"][tabindex="0"]')).toHaveLength(1)
-  expect(query(calendar, '[data-part="day-view"] [data-part="cell-trigger"][aria-selected="true"]')).toBe(chosen)
+  expect(queryAll(calendar, '[data-part="view"][data-view="day"] [data-part="table-cell-trigger"][tabindex="0"]')).toHaveLength(1)
+  expect(query(calendar, '[data-part="view"][data-view="day"] [data-part="table-cell-trigger"][aria-selected="true"]')).toBe(chosen)
   expect(component.elements.getStatusEl()?.textContent?.startsWith('Selected date')).toBe(true)
 })
 
@@ -1104,7 +1174,7 @@ it('renders a plain calendar as complete weeks with accessible labels and openin
   await using component = createDisposableDatePicker(rootId, template)
   const calendar = component.elements.getCalendarEl()!
   await page.getByRole('button', { name: 'Toggle calendar' }).click()
-  const table = query(calendar, '[data-part="day-view"] table')!
+  const table = query(calendar, '[data-part="view"][data-view="day"] table')!
   expect(table.getAttribute('role')).toBeNull()
   const cells = queryAll<HTMLElement>(table, 'tbody td')
   expect(cells.length).toBeGreaterThanOrEqual(28)

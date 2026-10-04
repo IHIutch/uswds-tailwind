@@ -153,19 +153,17 @@ function scheduleCalendarInputs(params: Params<DatePickerSchema>, indexes: numbe
   pending.add(cleanup)
 }
 
-type RendererFrameRef = 'focusRafCleanup'
-
 /** Renderer timing is owned by this machine's window and survives cancellation only when live. */
-function scheduleRendererFrame({ scope, refs }: Pick<Params<DatePickerSchema>, 'scope' | 'refs'>, owner: RendererFrameRef, callback: () => void): void {
-  refs.get(owner)?.()
+function scheduleFocusFrame({ scope, refs }: Pick<Params<DatePickerSchema>, 'scope' | 'refs'>, callback: () => void): void {
+  refs.get('focusRafCleanup')?.()
   const win = scope.getWin()
   let live = true
   let id = 0
   const cleanup = () => {
     live = false
     win.cancelAnimationFrame(id)
-    if (refs.get(owner) === cleanup)
-      refs.set(owner, null)
+    if (refs.get('focusRafCleanup') === cleanup)
+      refs.set('focusRafCleanup', null)
   }
   id = win.requestAnimationFrame(() => {
     if (!live)
@@ -173,28 +171,12 @@ function scheduleRendererFrame({ scope, refs }: Pick<Params<DatePickerSchema>, '
     cleanup()
     callback()
   })
-  refs.set(owner, cleanup)
-}
-
-// Day-view nav (`displayPreviousMonth` L1251 / `displayNextMonth` L1271 / `displayPreviousYear` L1231 /
-// `displayNextYear` L1291): sub/add via the ported math, then `keepDateBetweenMinAndMax` (L409). The button-disabled
-// state (`isSameMonth(focused,min|max)` L1005-1006) gates the click — see `canGoPrev`/`canGoNext`. (Year-chunk nav
-// L1647/1677 lives in the YEAR view — see `applyChunk`; the `adjustCalendar` `!isSameDay` no-op guard is the
-// KEYBOARD path L1753 — see `keyboardNav`.)
-const NAV_PART: Record<string, string> = {
-  'NAV.PREV_MONTH': 'prev-month-trigger',
-  'NAV.NEXT_MONTH': 'next-month-trigger',
-  'NAV.PREV_YEAR': 'prev-year-trigger',
-  'NAV.NEXT_YEAR': 'next-year-trigger',
-}
-const CHUNK_PART: Record<string, string> = {
-  'CHUNK.PREV': 'prev-year-chunk-trigger',
-  'CHUNK.NEXT': 'next-year-chunk-trigger',
+  refs.set('focusRafCleanup', cleanup)
 }
 
 // Keyboard grid nav (`adjustCalendar` L1745 / `adjustMonthSelectionScreen` L1879 / `adjustYearSelectionScreen`
 // L1970). Same TABLE.* event maps to a different adjustment PER VIEW.
-function dayKeyTarget(type: string, d: DateValue): DateValue {
+function dayKeyTarget(type: string, d: DateValue, larger = false): DateValue {
   switch (type) {
     case 'TABLE.ARROW_UP': return subWeeks(d, 1) // L1765
     case 'TABLE.ARROW_DOWN': return addWeeks(d, 1) // L1772
@@ -202,10 +184,8 @@ function dayKeyTarget(type: string, d: DateValue): DateValue {
     case 'TABLE.ARROW_RIGHT': return addDays(d, 1) // L1786
     case 'TABLE.HOME': return startOfWeek(d) // L1793
     case 'TABLE.END': return endOfWeek(d) // L1800
-    case 'TABLE.PAGE_UP': return subMonths(d, 1) // L1814
-    case 'TABLE.PAGE_DOWN': return addMonths(d, 1) // L1807
-    case 'TABLE.SHIFT_PAGE_UP': return subYears(d, 1) // L1828
-    case 'TABLE.SHIFT_PAGE_DOWN': return addYears(d, 1) // L1821
+    case 'TABLE.PAGE_UP': return larger ? subYears(d, 1) : subMonths(d, 1) // L1814
+    case 'TABLE.PAGE_DOWN': return larger ? addYears(d, 1) : addMonths(d, 1) // L1807
     default: return d
   }
 }
@@ -235,22 +215,11 @@ function yearKeyTarget(type: string, year: number): number {
     default: return year
   }
 }
-function navTarget(type: string, focusedValue: DateValue, min: DateValue, max: DateValue | undefined): DateValue {
-  let d = focusedValue
-  if (type === 'NAV.PREV_MONTH')
-    d = subMonths(focusedValue, 1)
-  else if (type === 'NAV.NEXT_MONTH')
-    d = addMonths(focusedValue, 1)
-  else if (type === 'NAV.PREV_YEAR')
-    d = subYears(focusedValue, 1)
-  else if (type === 'NAV.NEXT_YEAR')
-    d = addYears(focusedValue, 1)
-  return keepDateBetweenMinAndMax(d, min, max)
-}
-
 // Shared source updateCalendarIfVisible behavior for typed drafts and changed peer bounds.
 function reconcileVisibleCalendar(params: Params<DatePickerSchema>, inputValue: string, inputIndex?: number) {
-  const { context, prop, scope, refs } = params
+  const { context, prop, scope, action, state } = params
+  if (!state.matches('open'))
+    return
   const inputDate = parseDateString(inputValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
   if (!inputDate)
     return
@@ -272,7 +241,7 @@ function reconcileVisibleCalendar(params: Params<DatePickerSchema>, inputValue: 
   const contentEl = dom.getContentEl(scope)
   const active = scope.getActiveElement()
   if (contentEl && active && contentEl.contains(active)) {
-    scheduleRendererFrame({ scope, refs }, 'focusRafCleanup', () => dom.getFocusedCell(scope, context.get('view'))?.focus())
+    action(['focusActiveCell'])
   }
 }
 
@@ -306,7 +275,7 @@ export const machine = createMachine<DatePickerSchema>({
   // Calendar starts CLOSED (USWDS enhances with `hidden` L938; deliberately no `defaultOpen`/`inline` props —
   // USWDS has no such surface to port).
   initialState() {
-    return 'closed'
+    return 'idle'
   },
 
   refs() {
@@ -372,13 +341,7 @@ export const machine = createMachine<DatePickerSchema>({
         defaultValue: null,
         isEqual: isDateEqual,
       })),
-      activeIndex: bindable<number>(() => ({
-        defaultValue: 0,
-        // Current range selection stage; session trigger ownership is tracked separately.
-      })),
-      sessionTriggerIndex: bindable<number | undefined>(() => ({
-        defaultValue: undefined,
-      })),
+      activeIndex: bindable<0 | 1>(() => ({ defaultValue: 0, sync: true })),
       inputValues: bindable<string[]>(() => ({
         defaultValue: [],
         // A two-endpoint transaction can write both visible inputs in one task.
@@ -411,7 +374,7 @@ export const machine = createMachine<DatePickerSchema>({
 
   watch({ track, prop, action, send }) {
     track([() => prop('value')?.map(date => date ? formatDate(date) : '').join(',')], () => {
-      action(['syncAcceptedInputs'])
+      action(['syncInputElement'])
     })
     // range-index.js:81/105 refreshes the peer's visible calendar after reciprocal
     // bounds/anchor updates, without changing that peer's selected value.
@@ -424,12 +387,14 @@ export const machine = createMachine<DatePickerSchema>({
   // (zag `date-picker.machine.ts:278-281`).
   on: {
     'VALUE.SET': {
-      actions: ['setValueFromEvent'],
+      actions: ['setDateValue'],
     },
+    // Like Zag, typed input is handled in either state; only an open calendar re-centers.
+    'INPUT.CHANGE': { actions: ['commitInputValue', 'reconcileCalendar'] },
   },
 
   states: {
-    closed: {
+    idle: {
       on: {
         // `toggleCalendar` open path (L1346): reset to day view, center on the selected date (or today), clamped
         // to [min,max] (L1347), then raf-focus the focused cell (open-state `entry`). Guard `isInteractive` ports
@@ -437,25 +402,17 @@ export const machine = createMachine<DatePickerSchema>({
         'TRIGGER.CLICK': {
           target: 'open',
           guard: 'isInteractive',
-          actions: ['clearHoveredValue', 'setSessionTriggerIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
+          actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
         },
         'OPEN': {
           target: 'open',
           guard: 'isInteractive',
-          actions: ['clearHoveredValue', 'setSessionTriggerIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
-        },
-        // Typed-while-CLOSED commits too — the original's `input` listener calls `reconcileInputValues`
-        // UNCONDITIONALLY (open or closed, `single-index.js:2251-2253`), writing the internal input; `selectedDate`
-        // (L693) reads it and drives `--selected` on the next open. So typing a valid date while CLOSED must commit
-        // `value` here too (→ the cell is `aria-selected` on open + `onValueChange` fires). NO `reconcileCalendar`:
-        // that mirrors `updateCalendarIfVisible` (L2253), which no-ops while the calendar is hidden.
-        'INPUT.CHANGE': {
-          actions: ['commitInputValue'],
+          actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
         },
         // Escape is bound on the DATE_PICKER root unconditionally (L2232) → `handleEscapeFromCalendar` focuses the
         // EXTERNAL input even when already closed (L1731). No state change.
-        'ESCAPE': {
-          actions: ['focusExternalInput'],
+        'TABLE.ESCAPE': {
+          actions: ['focusInputElement'],
         },
       },
     },
@@ -467,7 +424,7 @@ export const machine = createMachine<DatePickerSchema>({
       // this exit and schedule their own fresh focus frame.
       exit: ['cancelFocusRaf'],
       // `toggleCalendar` focuses `CALENDAR_DATE_FOCUSED` after render (L1353) — raf-wrapped physical `.focus()`.
-      entry: ['focusFocusedCell'],
+      entry: ['focusActiveCell'],
       on: {
         // Day-cell select (`__date` CLICK L2122 → `selectDate` L1324): explicit actions own callback/native
         // transactions, close (`hideCalendar` L1311), and external-input focus (L1333).
@@ -476,43 +433,22 @@ export const machine = createMachine<DatePickerSchema>({
           // (`selectMonth` L1455 / `selectYear` L1707 → `renderCalendar`), then raf-focus the focused day cell.
           {
             guard: 'isSelectableViewCell',
-            actions: ['setFocusedFromCell', 'resetView', 'focusFocusedCell'],
+            actions: ['setFocusedValueForView', 'resetView', 'focusActiveCell'],
           },
-          // RANGE, picking the START (activeIndex 0): commit start and close this endpoint's calendar.
-          // The end trigger opens the shared calendar in a separate session, as in the source's two pickers.
+          // Day selection commits the active endpoint, closes, and restores its session input.
           {
-            target: 'closed',
-            guard: 'isRangeStartClick',
-            actions: ['setRangeStart', 'clearHoveredValue', 'focusExternalInput', 'invokeOnOpenChange'],
-          },
-          // RANGE, picking the END (activeIndex 1): commit end (≥ start via the clamp), close. → activeIndex 0.
-          {
-            target: 'closed',
-            guard: 'isRangeEndClick',
-            actions: ['setRangeEnd', 'clearHoveredValue', 'focusExternalInput', 'invokeOnOpenChange'],
-          },
-          // Single day view: select + close. `isSelectableDate` ports the disabled-cell early-return (L1325).
-          {
-            target: 'closed',
+            target: 'idle',
             guard: 'isSelectableDate',
-            actions: ['commitCalendarValue', 'focusExternalInput', 'invokeOnOpenChange'],
+            actions: ['setSelectedDate', 'focusInputElement', 'invokeOnOpenChange'],
           },
         ],
         // Range hovered-range preview (`handleMouseoverFromDate` L1841): active only while choosing the 2nd endpoint
         // (`value.length === 1` — start committed, end pending; USWDS reads the end picker's own empty value).
         // The connect getter sends this on hover-capable pointer events.
-        'CELL.POINTER_MOVE': { guard: 'isChoosingRangeEnd', actions: ['setHoveredValue'] },
+        'CELL.POINTER_MOVE': { guard: 'isChoosingRangeEnd', actions: ['setHoveredDate'] },
         // View switch (month-selection L2149 → month; year-selection L2153 → year), then focus the focused view cell.
-        'VIEW.CHANGE': { actions: ['setViewFromEvent', 'focusFocusedCell'] },
-        // External input typed (L2251). `commitInputValue` reflects the reconciled internal into `value` (so the
-        // calendar highlights the typed date — the connect skips reformatting the focused field); `reconcileCalendar`
-        // re-centers the OPEN calendar on the adjusted parse (`updateCalendarIfVisible` L1364).
-        'INPUT.CHANGE': { actions: ['commitInputValue', 'reconcileCalendar'] },
+        'VIEW.SET': { actions: ['setView', 'focusActiveCell'] },
         'BOUNDS.CHANGE': { actions: ['refreshCalendarBounds'] },
-        // Year-chunk nav in the year view (`displayPrev/NextYearChunk` L1647/1677, ±12). Guard = the chunk button's
-        // disabled state; focus the same chunk button or the year-picker container fallback (L1665-1668).
-        'CHUNK.PREV': { guard: 'canChunkPrev', actions: ['applyChunk', 'focusChunkTrigger'] },
-        'CHUNK.NEXT': { guard: 'canChunkNext', actions: ['applyChunk', 'focusChunkTrigger'] },
         // Keyboard grid nav — one action branches by view (`adjustCalendar`/`adjust*SelectionScreen`). `preventDefault`
         // is in connect (always); the boundary no-op is INSIDE `keyboardNav` (move + focus only if the clamped target
         // changed, L1753/1891/1982).
@@ -524,40 +460,38 @@ export const machine = createMachine<DatePickerSchema>({
         'TABLE.END': { actions: ['keyboardNav'] },
         'TABLE.PAGE_UP': { actions: ['keyboardNav'] },
         'TABLE.PAGE_DOWN': { actions: ['keyboardNav'] },
-        'TABLE.SHIFT_PAGE_UP': { actions: ['keyboardNav'] },
-        'TABLE.SHIFT_PAGE_DOWN': { actions: ['keyboardNav'] },
-        // Day-view nav (4 header buttons). Guard = the button's disabled state (L1005-1006). Re-center the calendar
-        // (`applyNav`), then raf-focus the same button or the container fallback (`focusNavTrigger`, L1240-1243).
-        'NAV.PREV_MONTH': { guard: 'canGoPrev', actions: ['applyNav', 'clearHoveredValue', 'focusNavTrigger'] },
-        'NAV.PREV_YEAR': { guard: 'canGoPrev', actions: ['applyNav', 'clearHoveredValue', 'focusNavTrigger'] },
-        'NAV.NEXT_MONTH': { guard: 'canGoNext', actions: ['applyNav', 'clearHoveredValue', 'focusNavTrigger'] },
-        'NAV.NEXT_YEAR': { guard: 'canGoNext', actions: ['applyNav', 'clearHoveredValue', 'focusNavTrigger'] },
+        'GOTO.PREV': { guard: 'canGoPrev', actions: ['applyNav', 'clearHoveredDate', 'focusNavTrigger'] },
+        'GOTO.NEXT': { guard: 'canGoNext', actions: ['applyNav', 'clearHoveredDate', 'focusNavTrigger'] },
         // `toggleCalendar` close path (L1355 → `hideCalendar` L1311). `data-state`/`hidden` derive from state in connect.
         'TRIGGER.CLICK': [
           {
             guard: 'isDifferentActiveIndex',
-            actions: ['clearHoveredValue', 'setSessionTriggerIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusFocusedCell'],
+            actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusActiveCell'],
           },
           {
-            target: 'closed',
+            target: 'idle',
             guard: 'isInteractive',
             actions: ['invokeOnOpenChange'],
           },
         ],
+        'OPEN': {
+          guard: 'isDifferentActiveIndex',
+          actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusActiveCell'],
+        },
         'CLOSE': {
-          target: 'closed',
+          target: 'idle',
           actions: ['invokeOnOpenChange'],
         },
         // Focusout leaving the whole component (`!contains(relatedTarget)` L2244) → `hideCalendar`. USWDS restores
         // NO focus on this path (only Escape and select restore focus) — close only.
         'INTERACT_OUTSIDE': {
-          target: 'closed',
+          target: 'idle',
           actions: ['invokeOnOpenChange'],
         },
         // Escape (L1727): `hideCalendar` + focus EXTERNAL input (L1731) + `preventDefault` (in connect).
-        'ESCAPE': {
-          target: 'closed',
-          actions: ['focusExternalInput', 'invokeOnOpenChange'],
+        'TABLE.ESCAPE': {
+          target: 'idle',
+          actions: ['focusInputElement', 'invokeOnOpenChange'],
         },
       },
     },
@@ -567,16 +501,12 @@ export const machine = createMachine<DatePickerSchema>({
     guards: {
       // `disable()` L755 + `ariaDisable()` L767 (aria-disable maps to the `readOnly` prop).
       isInteractive: ({ prop }) => !prop('disabled') && !prop('readOnly'),
-      // RANGE has two source triggers in range-index.js. Compare against the trigger that opened or last switched
-      // this session, not activeIndex: selecting the start intentionally advances activeIndex to 1 while the session
-      // remains owned by trigger 0. An omitted index remains the ordinary toggle-close path.
-      // The alternate endpoint is still an ordinary source toggle. Its branch comes before the close branch,
-      // so it must carry the same disabled/readOnly rejection rather than bypassing `isInteractive`.
+      // A second endpoint trigger switches the shared calendar without closing it.
       isDifferentActiveIndex: ({ context, prop, event }) =>
-        !prop('disabled') && !prop('readOnly') && event.type === 'TRIGGER.CLICK'
+        !prop('disabled') && !prop('readOnly') && (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN')
         && prop('selectionMode') === 'range'
         && event.index !== undefined
-        && event.index !== context.get('sessionTriggerIndex'),
+        && event.index !== context.get('activeIndex'),
       // `selectDate` early-returns on a disabled cell (L1325); a selectable date is within [min,max].
       isSelectableDate: ({ computed, event }) => {
         if (!event.value)
@@ -586,8 +516,8 @@ export const machine = createMachine<DatePickerSchema>({
       },
       // The prev/next buttons are disabled at the min/max month (`prevButtonsDisabled`/`nextButtonsDisabled`
       // L1005-1006) — nav is allowed only when the button is enabled (ports the `if(_buttonEl.disabled) return`).
-      canGoPrev: ({ computed }) => computed('navigation').canGoPrev,
-      canGoNext: ({ computed }) => computed('navigation').canGoNext,
+      canGoPrev: ({ computed, event }) => event.unit === 'chunk' ? computed('navigation').canChunkPrev : computed('navigation').canGoPrev,
+      canGoNext: ({ computed, event }) => event.unit === 'chunk' ? computed('navigation').canChunkNext : computed('navigation').canGoNext,
       // Ports `selectMonth`/`selectYear` `if (el.disabled) return` (L1456/1708) as a machine guard,
       // not just native `disabled`. `event.value` is the UNCLAMPED target month/year date.
       isSelectableViewCell: ({ context, computed, event }) => {
@@ -599,55 +529,33 @@ export const machine = createMachine<DatePickerSchema>({
           return !isDatesMonthOutsideMinOrMax(event.value, bounds.min, bounds.max)
         return !isDatesYearOutsideMinOrMax(event.value, bounds.min, bounds.max)
       },
-      // Range day-cell clicks, gated by the cross-clamped effective bounds. Start = activeIndex 0, end = 1.
-      isRangeStartClick: ({ context, prop, event }) => {
-        if (prop('selectionMode') !== 'range' || context.get('activeIndex') !== 0 || !event.value)
-          return false
-        const bounds = getEffectiveDateBounds(true, 0, context.get('value'), prop('min'), prop('max'))
-        return isDateWithinMinAndMax(
-          event.value,
-          bounds.min,
-          bounds.max,
-        )
-      },
-      isRangeEndClick: ({ context, prop, event }) => {
-        if (prop('selectionMode') !== 'range' || context.get('activeIndex') !== 1 || !event.value)
-          return false
-        const bounds = getEffectiveDateBounds(true, 1, context.get('value'), prop('min'), prop('max'))
-        return isDateWithinMinAndMax(
-          event.value,
-          bounds.min,
-          bounds.max,
-        )
-      },
       // Hovered-range preview is active while choosing the consolidated range end, and on a blank independent
       // source-range endpoint with a peer `rangeAnchor` (`handleMouseoverFromDate` L1841-1867).
       isChoosingRangeEnd: ({ context, prop }) =>
-        (prop('selectionMode') === 'range' && context.get('activeIndex') === 1 && context.get('value').length === 1)
+        (prop('selectionMode') === 'range' && context.get('activeIndex') === 1 && Boolean(context.get('value')[0]) && !context.get('value')[1])
         || (prop('selectionMode') === 'single' && Boolean(prop('rangeAnchor')) && context.get('value').length === 0),
-      // Year-chunk buttons' disabled state (`prev/nextYearChunkDisabled` L1488/1494) — chunk is around the ROVING
-      // `focusedYear`, `setYear` base is the anchor `focusedValue`.
-      canChunkPrev: ({ computed }) => computed('navigation').canChunkPrev,
-      canChunkNext: ({ computed }) => computed('navigation').canChunkNext,
     },
 
     actions: {
-      setSessionTriggerIndex({ context, event }) {
-        if (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN')
-          context.set('sessionTriggerIndex', event.index)
-      },
       // Calendar commits are source-shaped action transactions. The controlled
       // proposal is reported separately; DOM writes use the accepted read-back.
-      commitCalendarValue(params) {
+      setSelectedDate(params) {
         const { context, event } = params
         if (event.type !== 'CELL.CLICK' || !event.value)
           return
-        const next = [normalizeDate(event.value)]
+        const date = normalizeDate(event.value)
+        const activeIndex = context.get('activeIndex')
+        const isRange = params.prop('selectionMode') === 'range'
+        const index = isRange ? activeIndex : 0
+        // Selecting one range endpoint preserves the committed sibling, including end-only ranges.
+        const next = isRange ? setRangeEndpoint(context.get('value'), index, date) : [date]
         context.set('value', next)
         emitValueChange(params, next)
-        scheduleCalendarInputs(params, [0])
+        scheduleCalendarInputs(params, [index])
+        if (isRange)
+          context.set('hoveredValue', null)
       },
-      setValueFromEvent(params) {
+      setDateValue(params) {
         const { context, prop, event } = params
         if (event.type !== 'VALUE.SET')
           return
@@ -657,47 +565,15 @@ export const machine = createMachine<DatePickerSchema>({
         scheduleCalendarInputs(params, prop('selectionMode') === 'range' ? [0, 1] : [0])
       },
 
-      // RANGE start: merge into slot 0, switch to picking the end (activeIndex 1), center on the start (picking the
-      // 2nd endpoint starts focused on the first, mirroring the cross-synced `data-default-date` = start,
-      // `range-index.js:74`).
-      // A COMMITTED END IS PRESERVED: the original's `input change` cross-sync writes ONLY the sibling
-      // picker's BOUNDS datasets (range-index L72-74/L96-98), never its VALUE — so a start-click can never clear a
-      // committed end, whether the range was full `[start, end]` or end-only `[undefined, end]`. start ≤ end holds:
-      // `isRangeStartClick`'s `rangeEffectiveMax` caps the click at the end (= the original's `data-max-date` = end).
-      setRangeStart(params) {
-        const { context, event } = params
-        if (!event.value)
-          return
-        const start = normalizeDate(event.value)
-        const next = setRangeEndpoint(context.get('value'), 0, start)
-        context.set('value', next)
-        emitValueChange(params, next)
-        scheduleCalendarInputs(params, [0])
-        context.set('activeIndex', 1)
-        context.set('focusedValue', start)
-        context.set('isOpeningRender', false)
-      },
-      // RANGE end: `value = [start, end]` (end ≥ start is guaranteed by the cross-clamp), back to activeIndex 0.
-      setRangeEnd(params) {
-        const { context, event } = params
-        if (!event.value)
-          return
-        const end = normalizeDate(event.value)
-        const next = setRangeEndpoint(context.get('value'), 1, end)
-        context.set('value', next)
-        emitValueChange(params, next)
-        scheduleCalendarInputs(params, [1])
-        context.set('activeIndex', 0)
-      },
-      setHoveredValue({ context, event }) {
+      setHoveredDate({ context, event }) {
         if (event.value)
           context.set('hoveredValue', normalizeDate(event.value))
       },
-      clearHoveredValue({ context }) {
+      clearHoveredDate({ context }) {
         context.set('hoveredValue', null)
       },
 
-      syncAcceptedInputs({ context, prop, scope, refs }) {
+      syncInputElement({ context, prop, scope, refs }) {
         refs.get('acceptedSyncCleanup')?.()
         const win = scope.getWin()
         let live = true
@@ -722,18 +598,11 @@ export const machine = createMachine<DatePickerSchema>({
       // so typing garbage then opening centers on the parsed/adjusted input, not the last committed date.
       setFocusedValueOnOpen({ context, prop, scope, event }) {
         const value = context.get('value')
-        // RANGE: reopening with one endpoint resumes picking the end, focused on the start; otherwise pick
-        // the start. activeIndex is reset here so a fresh open starts at the correct endpoint. The `?? value[1]`
-        // fallback ports the cross-synced `data-default-date` (range-index L74/L98: each picker's default is the
-        // OTHER endpoint), so opening with only a typed END centers on it instead of today.
+        const index = (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN') && isEndpointIndex(event.index) ? event.index : 0
+        context.set('activeIndex', index)
         if (prop('selectionMode') === 'range') {
-          const requestedIndex = event.type === 'TRIGGER.CLICK' || event.type === 'OPEN' ? event.index : undefined
-          const explicit = isEndpointIndex(requestedIndex) ? requestedIndex : undefined
-          const idx = explicit ?? (value.length === 1 ? 1 : 0)
-          context.set('activeIndex', idx)
-          // Center on the targeted endpoint's committed value; fall back to the OTHER endpoint, else today.
-          const candidate = (explicit !== undefined ? (value[idx] ?? value[1 - idx]) : (value[0] ?? value[1])) ?? prop('defaultDate') ?? today()
-          const bounds = getEffectiveDateBounds(true, idx, value, prop('min'), prop('max'))
+          const candidate = value[index] ?? value[1 - index] ?? prop('defaultDate') ?? today()
+          const bounds = getEffectiveDateBounds(true, index, value, prop('min'), prop('max'))
           context.set('focusedValue', keepDateBetweenMinAndMax(candidate, bounds.min, bounds.max))
           return
         }
@@ -794,9 +663,7 @@ export const machine = createMachine<DatePickerSchema>({
         reconcileVisibleCalendar(params, params.event.value, params.event.index)
       },
       refreshCalendarBounds(params) {
-        const { state, scope, context } = params
-        if (!state.matches('open'))
-          return
+        const { scope, context } = params
         const index = context.get('activeIndex')
         const input = dom.getExternalInputEl(scope, index)
         // A blank/unparseable source peer is not refreshed, and a closed peer remains closed.
@@ -814,34 +681,38 @@ export const machine = createMachine<DatePickerSchema>({
         context.set('isOpeningRender', true)
       },
 
-      // Day-view nav: re-center on the clamped target month (`display*Month/Year` L1231-1304). Clear
-      // `isOpeningRender` so this while-open re-render announces "{monthLabel} {focusedYear}" (L1217), NOT the
-      // first-open nav-help block.
+      // Month/year controls move the day anchor; chunks move only the year view's roving cell.
       applyNav({ context, computed, event }) {
         const bounds = computed('activeBounds')
-        const target = navTarget(event.type, context.get('focusedValue'), bounds.min, bounds.max)
-        context.set('focusedValue', target)
+        const step = event.type === 'GOTO.PREV' ? -1 : 1
+        const anchor = context.get('focusedValue')
+        const target = event.unit === 'chunk'
+          ? setYear(anchor, Math.max(0, context.get('focusedYear') + step * YEAR_CHUNK))
+          : event.unit === 'year' ? addYears(anchor, step) : addMonths(anchor, step)
+        const capped = keepDateBetweenMinAndMax(target, bounds.min, bounds.max)
+        if (event.unit === 'chunk')
+          context.set('focusedYear', capped.getFullYear())
+        else
+          context.set('focusedValue', capped)
         context.set('isOpeningRender', false)
       },
 
-      // Focus the SAME nav button, or the `viewControl` container (tabindex=-1) when the button is now disabled at a
-      // boundary (`single-index.js:1240-1243`). raf-wrapped (physical focus after the consumer's re-render).
+      // Retain the clicked navigation button after rendering; disabled buttons fall back to the
+      // day controls or year view (`single-index.js:1240-1243/1665-1668`).
       focusNavTrigger({ scope, event, refs }) {
-        const part = NAV_PART[event.type]
-        if (!part)
-          return
-        scheduleRendererFrame({ scope, refs }, 'focusRafCleanup', () => {
-          const btn = dom.getNavTriggerEl(scope, part)
+        const direction = event.type === 'GOTO.PREV' ? 'prev' : 'next'
+        scheduleFocusFrame({ scope, refs }, () => {
+          const btn = dom.getNavTriggerEl(scope, direction, event.unit ?? 'month')
           if (btn && !btn.disabled)
             btn.focus()
-          else dom.getViewControlEl(scope)?.focus()
+          else (event.unit === 'chunk' ? dom.getYearViewEl(scope) : dom.getViewControlEl(scope))?.focus()
         })
       },
 
       // View switch (month/year-selection trigger). Clear `isOpeningRender` so the status is the view string
       // ("Select a month." / "Showing years…"), NOT the first-open nav-help. Entering the year view seeds the roving
       // `focusedYear` from the anchor (`focusedYear = selectedYear` on entry, L1482).
-      setViewFromEvent({ context, event }) {
+      setView({ context, event }) {
         if (event.view) {
           // `displayMonthSelection`/`displayYearSelection` replace the calendar node. A preview belongs only
           // to the previous day-grid DOM, never to the view history.
@@ -858,7 +729,7 @@ export const machine = createMachine<DatePickerSchema>({
 
       // Month/year cell picked (`selectMonth` L1460 / `selectYear` L1712): clamp the target (`event.value` is the
       // UNCLAMPED month/year date) into `focusedValue`. `isOpeningRender` cleared (while-open re-render).
-      setFocusedFromCell({ context, computed, event }) {
+      setFocusedValueForView({ context, computed, event }) {
         if (event.value) {
           const bounds = computed('activeBounds')
           context.set('focusedValue', keepDateBetweenMinAndMax(event.value, bounds.min, bounds.max))
@@ -869,14 +740,10 @@ export const machine = createMachine<DatePickerSchema>({
 
       // `adjustCalendar` (L1752) clamps against the active endpoint's cross-synced bounds. Boundary
       // no-ops preserve hover, announcement and focus; real moves update only the view's roving value.
-      keyboardNav({ context, computed, event, scope, refs }) {
+      keyboardNav({ context, computed, event, action }) {
         const bounds = computed('activeBounds')
         const view = context.get('view')
         const focusedValue = context.get('focusedValue')
-        const focusCell = () => {
-          scheduleRendererFrame({ scope, refs }, 'focusRafCleanup', () => dom.getFocusedCell(scope, context.get('view'))?.focus())
-        }
-
         let moved = false
         if (view === 'month') {
           const month = context.get('focusedMonth')
@@ -899,7 +766,7 @@ export const machine = createMachine<DatePickerSchema>({
           }
         }
         else {
-          const capped = keepDateBetweenMinAndMax(dayKeyTarget(event.type, focusedValue), bounds.min, bounds.max)
+          const capped = keepDateBetweenMinAndMax(dayKeyTarget(event.type, focusedValue, event.larger), bounds.min, bounds.max)
           if (!isSameDay(focusedValue, capped)) {
             context.set('focusedValue', capped)
             moved = true
@@ -908,35 +775,8 @@ export const machine = createMachine<DatePickerSchema>({
         if (moved) {
           context.set('isOpeningRender', false)
           context.set('hoveredValue', null)
-          focusCell()
+          action(['focusActiveCell'])
         }
-      },
-
-      // Year-chunk shift ±12 (`displayPrev/NextYearChunk` L1655/1685): `Math.max(0, focusedYear ± 12)` → setYear(base
-      // = the ANCHOR `focusedValue`) → clamp; move only the ROVING `focusedYear` (the anchor/`selectedYear` stays put
-      // so the highlighted "selected" year doesn't follow the chunk). Stays in the year view.
-      applyChunk({ context, computed, event }) {
-        const focusedValue = context.get('focusedValue')
-        const delta = event.type === 'CHUNK.NEXT' ? YEAR_CHUNK : -YEAR_CHUNK
-        const adjustedYear = Math.max(0, context.get('focusedYear') + delta)
-        const bounds = computed('activeBounds')
-        const capped = keepDateBetweenMinAndMax(setYear(focusedValue, adjustedYear), bounds.min, bounds.max)
-        context.set('focusedYear', capped.getFullYear())
-        context.set('isOpeningRender', false)
-        context.set('hoveredValue', null)
-      },
-
-      // Focus the SAME chunk button, or the year-picker container fallback when it's now disabled (L1665-1668).
-      focusChunkTrigger({ scope, event, refs }) {
-        const part = CHUNK_PART[event.type]
-        if (!part)
-          return
-        scheduleRendererFrame({ scope, refs }, 'focusRafCleanup', () => {
-          const btn = dom.getNavTriggerEl(scope, part)
-          if (btn && !btn.disabled)
-            btn.focus()
-          else dom.getYearViewEl(scope)?.focus()
-        })
       },
 
       // NET-NEW callback (USWDS has no open-change callback). Transition actions run AFTER the state bindable
@@ -948,16 +788,16 @@ export const machine = createMachine<DatePickerSchema>({
 
       // Physical focus stays physical + `raf()`-wrapped — deferred to after the consumer paints
       // the (re)rendered DOM. Escape/select restore focus to the EXTERNAL input (L1731/L1333).
-      focusExternalInput({ scope, refs, context, prop }) {
-        scheduleRendererFrame({ scope, refs }, 'focusRafCleanup', () => {
-          const index = prop('selectionMode') === 'range' ? context.get('sessionTriggerIndex') : 0
+      focusInputElement({ scope, refs, context, prop }) {
+        scheduleFocusFrame({ scope, refs }, () => {
+          const index = prop('selectionMode') === 'range' ? context.get('activeIndex') : 0
           dom.getExternalInputEl(scope, index)?.focus()
         })
       },
 
       // Open focuses the roving-tabindex focused day cell (L1353). No-op if no cell is rendered yet.
-      focusFocusedCell({ scope, refs, context }) {
-        scheduleRendererFrame({ scope, refs }, 'focusRafCleanup', () => {
+      focusActiveCell({ scope, refs, context }) {
+        scheduleFocusFrame({ scope, refs }, () => {
           dom.getFocusedCell(scope, context.get('view'))?.focus()
         })
       },
@@ -1001,7 +841,7 @@ export const machine = createMachine<DatePickerSchema>({
           exclude: () => dom.getRootEl(scope),
           onEscapeKeyDown(event) {
             event.preventDefault()
-            send({ type: 'ESCAPE' })
+            send({ type: 'TABLE.ESCAPE' })
           },
           onDismiss() {
             send({ type: 'INTERACT_OUTSIDE' })

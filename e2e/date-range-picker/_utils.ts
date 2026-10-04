@@ -18,7 +18,7 @@ export function createDisposableDateRangePicker(id: string, template: string) {
 
       const getDateButtonEls = () => {
         const calendar = getCalendarEl()
-        return Array.from(calendar?.querySelectorAll('[data-part="cell-trigger"][data-view="day"]') || [])
+        return Array.from(calendar?.querySelectorAll('[data-part="table-cell-trigger"][data-view="day"]') || [])
       }
 
       return {

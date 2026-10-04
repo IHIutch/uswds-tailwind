@@ -6,11 +6,12 @@ import type {
   DateValue,
   DayTableCellProps,
   InputProps,
-  MonthCellProps,
+  MonthTableCellProps,
+  NavigationUnit,
   TableHeaderProps,
   TriggerProps,
   WeekDay,
-  YearCellProps,
+  YearTableCellProps,
 } from './date-picker.types'
 import { ariaAttr, dataAttr, getEventKey, getTabbables } from '@zag-js/dom-query'
 import { chunk } from '@zag-js/utils'
@@ -54,9 +55,9 @@ function gridKeyEvent(event: Pick<KeyboardEvent, 'key' | 'altKey' | 'ctrlKey' | 
   const key = getEventKey(event)
   if (event.shiftKey) {
     if (view === 'day' && key === 'PageUp')
-      return { type: 'TABLE.SHIFT_PAGE_UP' }
+      return { type: 'TABLE.PAGE_UP', larger: true }
     if (view === 'day' && key === 'PageDown')
-      return { type: 'TABLE.SHIFT_PAGE_DOWN' }
+      return { type: 'TABLE.PAGE_DOWN', larger: true }
     return null
   }
   return GRID_KEYS[key] ?? null
@@ -127,8 +128,6 @@ export function connect<T extends PropTypes>(
   const focusedYear = focusedValue.getFullYear()
 
   // Navigation and disabled cells share the active endpoint bounds (`range-index.js` L72/L96).
-  const prevDisabled = !navigation.canGoPrev
-  const nextDisabled = !navigation.canGoNext
 
   const weeks = chunk(getVisibleDays(focusedValue), 7)
   const weekDays: WeekDay[] = weekdayNarrow.map((narrow, i) => ({ narrow, long: weekdayLabels[i] ?? '' }))
@@ -137,7 +136,7 @@ export function connect<T extends PropTypes>(
   // and send the unclamped target; the machine guards and clamps month/year selection (L1455/L1707).
   function getSelectionCellProps(view: 'month' | 'year', value: number, date: DateValue, selected: boolean, focused: boolean, cellDisabled: boolean) {
     return normalize.button({
-      ...parts.cellTrigger.attrs,
+      ...parts.tableCellTrigger.attrs,
       'dir': prop('dir'),
       'type': 'button',
       'data-view': view,
@@ -195,6 +194,23 @@ export function connect<T extends PropTypes>(
     srStatusText = statuses.join('. ')
   }
 
+  function getNavigationProps(direction: 'prev' | 'next', unit: NavigationUnit = 'month') {
+    const allowed = unit === 'chunk'
+      ? direction === 'prev' ? navigation.canChunkPrev : navigation.canChunkNext
+      : direction === 'prev' ? navigation.canGoPrev : navigation.canGoNext
+    return normalize.button({
+      ...parts[direction === 'prev' ? 'prevTrigger' : 'nextTrigger'].attrs,
+      'data-unit': unit,
+      'dir': prop('dir'),
+      'type': 'button',
+      'aria-label': `Navigate ${direction === 'prev' ? 'back' : 'forward'} ${unit === 'chunk' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
+      'disabled': !allowed,
+      onClick() {
+        send({ type: direction === 'prev' ? 'GOTO.PREV' : 'GOTO.NEXT', unit })
+      },
+    })
+  }
+
   return {
     open,
     view,
@@ -217,12 +233,12 @@ export function connect<T extends PropTypes>(
     clearValue() {
       send({ type: 'VALUE.SET', value: [] })
     },
-    setOpen(nextOpen) {
+    setOpen(nextOpen, index = 0) {
       // `open` is the renderer snapshot. Two imperative calls in one task must
       // reach the machine in order; otherwise `setOpen(true); setOpen(false)`
       // compares both calls against the old closed snapshot and drops the close.
       // The state chart naturally ignores a same-state OPEN/CLOSE event.
-      send({ type: nextOpen ? 'OPEN' : 'CLOSE' })
+      send(nextOpen ? { type: 'OPEN', index } : { type: 'CLOSE' })
     },
 
     // Escape closes an open calendar and restores focus to the visible input.
@@ -237,7 +253,7 @@ export function connect<T extends PropTypes>(
         onKeyDown(event) {
           if (!event.defaultPrevented && getEventKey(event) === 'Escape') {
             event.preventDefault()
-            send({ type: 'ESCAPE' })
+            send({ type: 'TABLE.ESCAPE' })
           }
         },
       })
@@ -398,11 +414,14 @@ export function connect<T extends PropTypes>(
     // ── Calendar day view (renderCalendar L977) ──
 
     // The day wrapper owns visibility, leaving the navigation header free to serve as a focus fallback.
-    getDayViewProps() {
+    getViewProps(props = {}) {
+      const cellView = props.view ?? 'day'
       return normalize.element({
-        ...parts.dayView.attrs,
-        dir: prop('dir'),
-        hidden: view !== 'day',
+        ...parts.view.attrs,
+        'dir': prop('dir'),
+        'data-view': cellView,
+        'hidden': view !== cellView,
+        'tabIndex': cellView === 'day' ? undefined : -1,
       })
     },
     // The `CALENDAR_DATE_PICKER` navigation header (L1125) receives fallback focus when a bound disables a nav button (L1241).
@@ -418,84 +437,33 @@ export function connect<T extends PropTypes>(
     // Nav buttons (L1128-1167). prev year/month share `prevButtonsDisabled` (L1005); next share `nextButtonsDisabled`
     // (L1006). aria-labels verbatim. `onClick` → `display*` (L2131-2141); native `disabled` blocks clicking a
     // boundary button, and the machine's `canGoPrev`/`canGoNext` guard mirrors it.
-    getPrevYearTriggerProps() {
-      return normalize.button({
-        ...parts.prevYearTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': 'Navigate back one year',
-        'disabled': prevDisabled,
-        onClick() {
-          send({ type: 'NAV.PREV_YEAR' })
-        },
-      })
+    getPrevTriggerProps(props = {}) {
+      return getNavigationProps('prev', props.unit)
     },
-    getPrevMonthTriggerProps() {
-      return normalize.button({
-        ...parts.prevMonthTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': 'Navigate back one month',
-        'disabled': prevDisabled,
-        onClick() {
-          send({ type: 'NAV.PREV_MONTH' })
-        },
-      })
+    getNextTriggerProps(props = {}) {
+      return getNavigationProps('next', props.unit)
     },
-    // Month-selection trigger (L2149) → month picker view; year-selection (L2153) → year picker view.
-    getMonthTriggerProps() {
+    getViewTriggerProps(props) {
+      const targetView = props.view
       return normalize.button({
-        ...parts.monthTrigger.attrs,
+        ...parts.viewTrigger.attrs,
         'dir': prop('dir'),
         'type': 'button',
-        'aria-label': `${focusedMonthName}. Select month`,
+        'data-view': targetView,
+        'aria-label': targetView === 'month' ? `${focusedMonthName}. Select month` : `${focusedYear}. Select year`,
         onClick() {
-          send({ type: 'VIEW.CHANGE', view: 'month' })
-        },
-      })
-    },
-    getYearTriggerProps() {
-      return normalize.button({
-        ...parts.yearTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': `${focusedYear}. Select year`,
-        onClick() {
-          send({ type: 'VIEW.CHANGE', view: 'year' })
-        },
-      })
-    },
-    getNextMonthTriggerProps() {
-      return normalize.button({
-        ...parts.nextMonthTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': 'Navigate forward one month',
-        'disabled': nextDisabled,
-        onClick() {
-          send({ type: 'NAV.NEXT_MONTH' })
-        },
-      })
-    },
-    getNextYearTriggerProps() {
-      return normalize.button({
-        ...parts.nextYearTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': 'Navigate forward one year',
-        'disabled': nextDisabled,
-        onClick() {
-          send({ type: 'NAV.NEXT_YEAR' })
+          send({ type: 'VIEW.SET', view: targetView })
         },
       })
     },
 
     // Table `.usa-date-picker__calendar__table` (L1174) + head/body/rows.
-    getTableProps() {
+    getTableProps(props = {}) {
       return normalize.element({
         ...parts.table.attrs,
-        // eslint-disable-next-line style/quote-props
         'dir': prop('dir'),
+        'data-view': props.view ?? 'day',
+        'role': props.view && props.view !== 'day' ? 'presentation' : undefined,
       })
     },
     getTableHeadProps() {
@@ -560,7 +528,7 @@ export function connect<T extends PropTypes>(
         && isDateWithinMinAndMax(value, withinBounds.withinRangeStartDate, withinBounds.withinRangeEndDate)
       )
       return normalize.button({
-        ...parts.cellTrigger.attrs,
+        ...parts.tableCellTrigger.attrs,
         'dir': prop('dir'),
         'type': 'button',
         'data-view': 'day',
@@ -582,7 +550,7 @@ export function connect<T extends PropTypes>(
         'data-range-end': dataAttr(rangeEnd),
         'data-in-range': dataAttr(inRange),
         // `__date` CLICK → `selectDate` (L2122). A disabled cell can't fire click (native `disabled`); the machine's
-        // `isSelectableDate`/`isRange*Click` guards port the L1325 early-return.
+        // `isSelectableDate` guards the L1325 early-return.
         onClick() {
           send({ type: 'CELL.CLICK', value })
         },
@@ -610,32 +578,10 @@ export function connect<T extends PropTypes>(
     // ── Month picker view (displayMonthSelection L1383) ──
 
     // `CALENDAR_MONTH_PICKER` container (tabindex=-1, L1429).
-    getMonthViewProps() {
-      return normalize.element({
-        ...parts.monthView.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
-        hidden: view !== 'month',
-        tabIndex: -1,
-      })
-    },
-
-    // Month-picker table (`displayMonthSelection` L1434): `role="presentation"` — the 12-button grid is LAYOUT,
-    // not tabular data, so AT must not announce it as a table. The DAY table stays a real data table (weekday
-    // column headers) and carries NO role (`renderCalendar` L1173-1174 sets none). ARIA is never a vestige.
-    getMonthTableProps() {
-      return normalize.element({
-        ...parts.table.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
-        role: 'presentation',
-      })
-    },
-
     // One month cell (L1390-1425). `data-value` 0-11, `data-label` = month name, `aria-selected`, roving tabindex,
     // `disabled` = `isDatesMonthOutsideMinOrMax` (L1393/440). On entry `focusedMonth == selectedMonth ==
     // focusedValue.getMonth()`. Shares the `cellTrigger` part so the open-view focus finds it.
-    getMonthCellTriggerProps(props: MonthCellProps) {
+    getMonthTableCellTriggerProps(props: MonthTableCellProps) {
       const value = props.value
       const monthDate = setMonth(focusedValue, value)
       const disabled = isDatesMonthOutsideMinOrMax(monthDate, effMin, effMax)
@@ -647,30 +593,9 @@ export function connect<T extends PropTypes>(
     // ── Year picker view (displayYearSelection L1477) ──
 
     // `CALENDAR_YEAR_PICKER` container (tabindex=-1, L1542) — the year-chunk focus-fallback target (L1667).
-    getYearViewProps() {
-      return normalize.element({
-        ...parts.yearView.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
-        hidden: view !== 'year',
-        tabIndex: -1,
-      })
-    },
-
-    // Year-picker table (`displayYearSelection` L1582): `role="presentation"` — layout grid, twin of the
-    // month-picker table above (the day table alone stays a roleless real data table).
-    getYearTableProps() {
-      return normalize.element({
-        ...parts.table.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
-        role: 'presentation',
-      })
-    },
-
     // One year cell (L1500-1534). `data-value` = year, `aria-selected`, roving tabindex, `disabled` =
     // `isDatesYearOutsideMinOrMax` (L1503/451). On entry `focusedYear == selectedYear == focusedValue.getFullYear()`.
-    getYearCellTriggerProps(props: YearCellProps) {
+    getYearTableCellTriggerProps(props: YearTableCellProps) {
       const value = props.value
       const yearDate = setYear(focusedValue, value)
       const disabled = isDatesYearOutsideMinOrMax(yearDate, effMin, effMax)
@@ -679,31 +604,5 @@ export function connect<T extends PropTypes>(
       return getSelectionCellProps('year', value, yearDate, selected, focused, disabled)
     },
 
-    // Year-chunk nav (`displayPreviousYearChunk` L1647 / `displayNextYearChunk` L1677, ±12). Disabled =
-    // `isDatesYearOutsideMinOrMax` of the chunk edge (L1488/1494). aria-labels verbatim (L1559/1572).
-    getPrevYearChunkTriggerProps() {
-      return normalize.button({
-        ...parts.prevYearChunkTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': `Navigate back ${YEAR_CHUNK} years`,
-        'disabled': !navigation.canChunkPrev,
-        onClick() {
-          send({ type: 'CHUNK.PREV' })
-        },
-      })
-    },
-    getNextYearChunkTriggerProps() {
-      return normalize.button({
-        ...parts.nextYearChunkTrigger.attrs,
-        'dir': prop('dir'),
-        'type': 'button',
-        'aria-label': `Navigate forward ${YEAR_CHUNK} years`,
-        'disabled': !navigation.canChunkNext,
-        onClick() {
-          send({ type: 'CHUNK.NEXT' })
-        },
-      })
-    },
   }
 }

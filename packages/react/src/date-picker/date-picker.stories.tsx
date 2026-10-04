@@ -23,20 +23,20 @@ export const Basic = meta.story({
           {({ api }) => (
             <>
               <DatePicker.ViewControl>
-                <DatePicker.PrevYearTrigger />
-                <DatePicker.PrevMonthTrigger />
+                <DatePicker.PrevTrigger unit="year" />
+                <DatePicker.PrevTrigger unit="month" />
                 <div className="flex grow justify-center">
-                  <DatePicker.MonthTrigger />
-                  <DatePicker.YearTrigger />
+                  <DatePicker.ViewTrigger view="month" />
+                  <DatePicker.ViewTrigger view="year" />
                 </div>
-                <DatePicker.NextMonthTrigger />
-                <DatePicker.NextYearTrigger />
+                <DatePicker.NextTrigger unit="month" />
+                <DatePicker.NextTrigger unit="year" />
               </DatePicker.ViewControl>
               <DatePicker.Table>
                 <DatePicker.TableHead>
                   <DatePicker.TableRow>
-                    {api.weekDays.map(day => (
-                      <DatePicker.TableHeader key={day.long} day={day} />
+                    {api.weekDays.map((day, index) => (
+                      <DatePicker.TableHeader key={day.long} day={day} index={index} />
                     ))}
                   </DatePicker.TableRow>
                 </DatePicker.TableHead>
@@ -44,9 +44,9 @@ export const Basic = meta.story({
                   {api.weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
                       {week.map(cell => (
-                        <DatePicker.TableCell key={cell.dateString} cell={cell}>
-                          <DatePicker.TableCellTrigger cell={cell}>
-                            {cell.day}
+                        <DatePicker.TableCell key={cell.toISOString()} value={cell}>
+                          <DatePicker.TableCellTrigger value={cell}>
+                            {cell.getDate()}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -64,9 +64,9 @@ export const Basic = meta.story({
                 {chunk(api.months, 3).map((row, rowIdx) => (
                   <DatePicker.TableRow key={rowIdx}>
                     {row.map(month => (
-                      <DatePicker.TableCell key={month.month}>
-                        <DatePicker.TableCellTrigger cell={month}>
-                          {month.label}
+                      <DatePicker.TableCell key={month}>
+                        <DatePicker.TableCellTrigger value={month}>
+                          {api.monthLabels[month]}
                         </DatePicker.TableCellTrigger>
                       </DatePicker.TableCell>
                     ))}
@@ -79,15 +79,15 @@ export const Basic = meta.story({
         <DatePicker.View view="year">
           {({ api }) => (
             <>
-              <DatePicker.PrevDecadeTrigger />
+              <DatePicker.PrevTrigger unit="chunk" />
               <DatePicker.Table>
                 <DatePicker.TableBody>
                   {chunk(api.years, 3).map((row, rowIdx) => (
                     <DatePicker.TableRow key={rowIdx}>
                       {row.map(year => (
-                        <DatePicker.TableCell key={year.year}>
-                          <DatePicker.TableCellTrigger cell={year}>
-                            {year.year}
+                        <DatePicker.TableCell key={year}>
+                          <DatePicker.TableCellTrigger value={year}>
+                            {year}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -95,7 +95,7 @@ export const Basic = meta.story({
                   ))}
                 </DatePicker.TableBody>
               </DatePicker.Table>
-              <DatePicker.NextDecadeTrigger />
+              <DatePicker.NextTrigger unit="chunk" />
             </>
           )}
         </DatePicker.View>

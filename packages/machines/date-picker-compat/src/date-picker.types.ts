@@ -29,6 +29,22 @@ export type EndpointIndex = 0 | 1
 // real state pair; the view is data.
 export type DateView = 'day' | 'month' | 'year'
 
+export interface ViewProps {
+  view?: DateView
+}
+
+export interface ViewTriggerProps {
+  view: Exclude<DateView, 'day'>
+}
+
+export interface TableProps extends ViewProps {}
+
+export type NavigationUnit = 'month' | 'year' | 'chunk'
+
+export interface NavigationTriggerProps {
+  unit?: NavigationUnit
+}
+
 /* -----------------------------------------------------------------------------
  * Callback details (net-new Zag-idiom surface — USWDS has no callbacks; each is anchored to a USWDS observable)
  * ----------------------------------------------------------------------------- */
@@ -150,31 +166,24 @@ export interface DatePickerProps extends DirectionProperty, CommonProperties {
 type PropsWithDefault = 'selectionMode' | 'min'
 
 // The event vocabulary (semantic; USWDS binding → event, `datePickerEvents` L2117-2256). Payloads are the minimal
-// documented shape. Names follow the Zag idiom; NAV.* keeps USWDS's 6-button cardinality (day view has ±month AND
-// ±year, richer than Zag's ±page).
+// documented shape. GOTO events follow Zag, with a unit for USWDS month/year/chunk controls.
 export type DatePickerEvent
   = | { type: 'TRIGGER.CLICK', index?: EndpointIndex } // toggle button CLICK → `toggleCalendar` L2119; `index` is NET-NEW range endpoint targeting (the original IS two triggers, one per picker — range-index.js)
     | { type: 'OPEN', index?: EndpointIndex }
     | { type: 'BOUNDS.CHANGE' } // accepted reciprocal props refresh the visible calendar
     | { type: 'CLOSE' } // programmatic close
     | { type: 'CELL.CLICK', value?: DateValue } // `.__date`/`.__month`/`.__year` L2122-2128; the machine reads the current view from context
-    | { type: 'VIEW.CHANGE', view: DateView } // `.__month-selection`/`.__year-selection` L2149/2153
-    | { type: 'NAV.PREV_MONTH' } // `displayPreviousMonth` L2131
-    | { type: 'NAV.NEXT_MONTH' } // L2134
-    | { type: 'NAV.PREV_YEAR' } // L2137
-    | { type: 'NAV.NEXT_YEAR' } // L2140
-    | { type: 'CHUNK.PREV' } // year-chunk nav (year view) `displayPreviousYearChunk` L2143 (12-year chunk)
-    | { type: 'CHUNK.NEXT' } // L2146
+    | { type: 'VIEW.SET', view: DateView } // `.__month-selection`/`.__year-selection` L2149/2153
+    | { type: 'GOTO.PREV' | 'GOTO.NEXT', unit: NavigationUnit }
     | { type: 'INPUT.CHANGE', value: string, index?: EndpointIndex } // external `input` → reconcile L2251; `index` = the typed FIELD (0=start/single, 1=range end) so the commit merges into that pair slot (each range field commits independently, as in `range-index.js`)
     // (No INPUT.ENTER/INPUT.BLUR events: Enter/focusout validation L2167/L2241 is a pure DOM side-effect wired
     // directly in connect's getInputProps — it never reaches the machine.)
     | { type: 'INTERACT_OUTSIDE' } // outside pointer or focus interaction → close
-    | { type: 'ESCAPE' } // keydown Escape → `handleEscapeFromCalendar` L2232 (focuses the EXTERNAL input, L1731)
+    | { type: 'TABLE.ESCAPE' } // keydown Escape → `handleEscapeFromCalendar` L2232 (focuses the EXTERNAL input, L1731)
     | { type: 'CELL.POINTER_MOVE', value: DateValue } // hover-capable pointer previews the range while choosing its end
     | { type: 'TABLE.ARROW_LEFT' | 'TABLE.ARROW_RIGHT' | 'TABLE.ARROW_UP' | 'TABLE.ARROW_DOWN' } // grid nav L2172
     | { type: 'TABLE.HOME' | 'TABLE.END' } // startOfWeek/endOfWeek L2181-2182
-    | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN' } // ±1 month L2183-2184
-    | { type: 'TABLE.SHIFT_PAGE_UP' | 'TABLE.SHIFT_PAGE_DOWN' } // ±1 year L2185-2186
+    | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN', larger?: boolean } // page navigation; Shift uses a larger year step in day view
     | { type: 'VALUE.SET', value: (DateValue | undefined)[] } // NET-NEW programmatic setter (no USWDS binding)
 
 export interface DatePickerSchema {
@@ -185,7 +194,7 @@ export interface DatePickerSchema {
   }
   // Two states only — Zag's separate `focused` closed state is dropped; USWDS just `hideCalendar` + physical `.focus()`.
   // Open ⇔ `calendarEl.hidden === false` + `--active` (L1123/1201); closed ⇔ `hideCalendar` L1311.
-  state: 'closed' | 'open'
+  state: 'idle' | 'open'
   // Explicit context (USWDS re-derives all of this from the DOM every event via `getDatePickerContext` L670; the
   // headless port holds it as bindable state). `view` is context, not a nested state.
   context: {
@@ -203,10 +212,8 @@ export interface DatePickerSchema {
     view: DateView
     /** range hover-preview date for the current calendar DOM — `handleMouseoverFromDate` L1841. */
     hoveredValue: DateValue | null
-    /** which range endpoint is being chosen (0=start, 1=end); single always 0. */
-    activeIndex: number
-    /** trigger index that opened/last switched the current open session; unlike activeIndex, selection does not change it. */
-    sessionTriggerIndex: number | undefined
+    /** Input owning the current calendar, 0=start/single or 1=end. */
+    activeIndex: EndpointIndex
     /**
      * true on the render right after open → status announces the nav-help block; nav flips it (`calendarWasHidden`
      * L993/L1209). Set by the open transition; cleared by any subsequent while-open re-render (nav/view/typing).
@@ -239,36 +246,27 @@ export interface DatePickerSchema {
     | 'canGoPrev'
     | 'canGoNext'
     | 'isSelectableViewCell'
-    | 'isRangeStartClick'
-    | 'isRangeEndClick'
     | 'isChoosingRangeEnd'
-    | 'canChunkPrev'
-    | 'canChunkNext'
   action:
-    | 'commitCalendarValue'
-    | 'setValueFromEvent'
-    | 'setRangeStart'
-    | 'setRangeEnd'
-    | 'setHoveredValue'
-    | 'clearHoveredValue'
+    | 'setSelectedDate'
+    | 'setDateValue'
+    | 'setHoveredDate'
+    | 'clearHoveredDate'
     | 'setFocusedValueOnOpen'
-    | 'setSessionTriggerIndex'
     | 'commitInputValue'
-    | 'syncAcceptedInputs'
+    | 'syncInputElement'
     | 'reconcileCalendar'
     | 'refreshCalendarBounds'
     | 'resetView'
     | 'markOpeningRender'
     | 'applyNav'
     | 'focusNavTrigger'
-    | 'setViewFromEvent'
-    | 'setFocusedFromCell'
+    | 'setView'
+    | 'setFocusedValueForView'
     | 'keyboardNav'
-    | 'applyChunk'
-    | 'focusChunkTrigger'
     | 'invokeOnOpenChange'
-    | 'focusExternalInput'
-    | 'focusFocusedCell'
+    | 'focusInputElement'
+    | 'focusActiveCell'
     | 'cancelFocusRaf'
     | 'cancelNativeSyncRaf'
   effect: 'trackDismissableElement' | 'bridgeMountedInputs'
@@ -304,12 +302,12 @@ export interface TableHeaderProps {
 }
 
 /** One month cell (`displayMonthSelection` L1390). `value` is the 0-based month index. */
-export interface MonthCellProps {
+export interface MonthTableCellProps {
   value: number
 }
 
 /** One year cell (`displayYearSelection` L1500). `value` is the full year. */
-export interface YearCellProps {
+export interface YearTableCellProps {
   value: number
 }
 
@@ -326,8 +324,8 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   view: DateView
   /** The calendar's focused/center date (roving). */
   focusedValue: DateValue
-  /** Programmatically open/close the calendar. No-op if already in that state. */
-  setOpen: (open: boolean) => void
+  /** Open a specific input's calendar, defaulting to index 0, or close it. Opening another endpoint switches the existing calendar. */
+  setOpen: (open: boolean, index?: EndpointIndex) => void
   /** The committed selection — single mode uses index 0; range slots may be `undefined`. */
   value: (DateValue | undefined)[]
   /** `value` formatted as ISO `YYYY-MM-DD` per slot; `''` for an absent endpoint or sparse-array hole (mirrors `onValueChange`). The visible native input remains `MM/DD/YYYY`. */
@@ -374,16 +372,14 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   getContentProps: () => T['element']
   getStatusProps: () => T['element']
 
-  // — calendar day view —
-  getDayViewProps: () => T['element']
+  // — shared calendar structure —
+  getViewProps: (props?: ViewProps) => T['element']
+  getViewTriggerProps: (props: ViewTriggerProps) => T['button']
   getViewControlProps: () => T['element']
-  getPrevYearTriggerProps: () => T['button']
-  getPrevMonthTriggerProps: () => T['button']
-  getMonthTriggerProps: () => T['button']
-  getYearTriggerProps: () => T['button']
-  getNextMonthTriggerProps: () => T['button']
-  getNextYearTriggerProps: () => T['button']
-  getTableProps: () => T['element']
+  getPrevTriggerProps: (props?: NavigationTriggerProps) => T['button']
+  getNextTriggerProps: (props?: NavigationTriggerProps) => T['button']
+  /** Month/year tables use role="presentation"; the day table has no role. */
+  getTableProps: (props?: TableProps) => T['element']
   getTableHeadProps: () => T['element']
   getTableHeaderProps: (props: TableHeaderProps) => T['element']
   getTableBodyProps: () => T['element']
@@ -393,16 +389,8 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   getDayTableCellTriggerProps: (props: DayTableCellProps) => T['button']
 
   // — month picker view —
-  getMonthViewProps: () => T['element']
-  /** Month-picker grid table — `role="presentation"` (`displayMonthSelection` L1434); the DAY table has no role. */
-  getMonthTableProps: () => T['element']
-  getMonthCellTriggerProps: (props: MonthCellProps) => T['button']
+  getMonthTableCellTriggerProps: (props: MonthTableCellProps) => T['button']
 
   // — year picker view —
-  getYearViewProps: () => T['element']
-  /** Year-picker grid table — `role="presentation"` (`displayYearSelection` L1582); the DAY table has no role. */
-  getYearTableProps: () => T['element']
-  getYearCellTriggerProps: (props: YearCellProps) => T['button']
-  getPrevYearChunkTriggerProps: () => T['button']
-  getNextYearChunkTriggerProps: () => T['button']
+  getYearTableCellTriggerProps: (props: YearTableCellProps) => T['button']
 }
