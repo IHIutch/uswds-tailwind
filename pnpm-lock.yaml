@@ -254,6 +254,9 @@ importers:
       '@zag-js/dom-query':
         specifier: 'catalog:'
         version: 1.44.0
+      '@zag-js/vanilla':
+        specifier: 'catalog:'
+        version: 1.44.0
       eslint:
         specifier: 'catalog:'
         version: 9.39.5(jiti@2.6.1)
