@@ -8,23 +8,16 @@ import { getId } from './lib/id-generator'
 
 const parts = combobox.anatomy.build()
 
-function copyAttributes(from: HTMLElement, to: HTMLElement) {
-  const className = from.getAttribute('class')
-  const style = from.getAttribute('style')
-
-  if (className) {
-    to.setAttribute('class', className)
-  }
-
-  if (style) {
-    to.setAttribute('style', style)
-  }
-}
-
 export class Combobox extends Component<combobox.Props, combobox.Api> {
   static override root = parts.root
 
-  private itemTemplate: HTMLElement | null = null
+  private itemStyles = (() => {
+    const template = getPart<HTMLElement>(this.list, parts.item)
+    return {
+      className: template?.className ?? '',
+      style: template?.style.cssText ?? '',
+    }
+  })()
 
   initMachine(props: combobox.Props): VanillaMachine<ComboboxSchema> {
     const select = this.select
@@ -145,7 +138,6 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   private renderItems() {
     const items = this.api.items
     const list = this.list
-    this.itemTemplate ??= getPart<HTMLElement>(list, parts.item)
     const currentItems = Array.from(list.querySelectorAll<HTMLElement>('[role="option"]'))
 
     if (items.length === 0) {
@@ -174,8 +166,10 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
 
   private createItem() {
     const itemEl = document.createElement('li')
-    if (this.itemTemplate)
-      copyAttributes(this.itemTemplate, itemEl)
+    if (this.itemStyles.className)
+      itemEl.className = this.itemStyles.className
+    if (this.itemStyles.style)
+      itemEl.style.cssText = this.itemStyles.style
     return itemEl
   }
 
