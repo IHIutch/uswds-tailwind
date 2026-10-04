@@ -2,11 +2,10 @@ import * as collapse from '@uswds-tailwind/collapse-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataString } from './lib/data-attr'
-import { getParts } from './lib/dom'
+import { getOwnedPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = collapse.anatomy.build()
-const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
 
 export class Collapse extends Component<collapse.Props, collapse.Api> {
   static override root = parts.root
@@ -30,26 +29,20 @@ export class Collapse extends Component<collapse.Props, collapse.Api> {
       this.renderTrigger(this.trigger)
     }
     this.renderContent(this.content)
-    const indicator = getParts<HTMLElement>(this.rootEl, parts.indicator)
-      .find(element => element.closest(rootSelector) === this.rootEl)
+    const indicator = getOwnedPart<HTMLElement>(this.rootEl, parts.indicator)
     if (indicator)
       spreadProps(indicator, this.api.getIndicatorProps())
   }
 
   private get trigger() {
-    return this.getOwnedPart(parts.trigger)
+    return getOwnedPart<HTMLElement>(this.rootEl, parts.trigger)
   }
 
   private get content() {
-    const contentEl = this.getOwnedPart(parts.content)
+    const contentEl = getOwnedPart<HTMLElement>(this.rootEl, parts.content)
     if (!contentEl)
       throw new Error('Expected contentEl to be defined')
     return contentEl
-  }
-
-  private getOwnedPart(part: typeof parts.trigger | typeof parts.content) {
-    return getParts<HTMLElement>(this.rootEl, part)
-      .find(element => element.closest(rootSelector) === this.rootEl)
   }
 
   private renderTrigger(triggerEl: HTMLElement) {
