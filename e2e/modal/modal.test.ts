@@ -20,7 +20,7 @@ function createDisposableModalSetup(template: string) {
       const getTriggerEl = ({ id, index = 0}: { id: string, index?: number }) => document.getElementById(`modal:${id}:trigger:${index}`)
       const getCloseTriggerEl = (id: string, index = 0) => document.getElementById(`modal:${id}:close:${index}`)
 
-      const getComboboxTriggerEl = () => document.getElementById(`combobox:${comboboxId}:toggle-button`) as HTMLButtonElement
+      const getComboboxTriggerEl = () => document.getElementById(`combobox:${comboboxId}:trigger`) as HTMLButtonElement
       const getComboboxListEl = () => document.getElementById(`combobox:${comboboxId}:list`) as HTMLUListElement
 
       return {

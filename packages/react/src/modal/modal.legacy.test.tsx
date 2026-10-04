@@ -40,28 +40,28 @@ it('content references Title via aria-labelledby and Description via aria-descri
 
 it('trigger has aria-controls pointing to the content id', async () => {
   const screen = await renderModal()
-  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
   await expect.element(trigger).toHaveAttribute('aria-controls')
 })
 
-it('trigger aria-expanded toggles with open state', async () => {
+it('trigger data-state toggles with open state', async () => {
   const screen = await renderModal()
-  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
 
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
+  await expect.element(trigger).toHaveAttribute('data-state', 'closed')
   await userEvent.click(trigger)
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'true')
+  await expect.element(trigger).toHaveAttribute('data-state', 'open')
 })
 
 it('clicking close trigger closes modal', async () => {
   const screen = await renderModal()
-  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
 
   await userEvent.click(trigger)
   await expect.element(screen.getByRole('dialog')).toBeInTheDocument()
 
   await userEvent.click(screen.getByRole('button', { name: 'Close this window' }))
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
+  await expect.element(trigger).toHaveAttribute('data-state', 'closed')
 })
 
 // Mirrors USWDS CLOSERS selector `.usa-modal-overlay:not([data-force-action])`.
@@ -70,35 +70,35 @@ it('clicking close trigger closes modal', async () => {
 // still work normally.
 it('clicking backdrop closes modal', async () => {
   const screen = await renderModal()
-  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
 
   await userEvent.click(trigger)
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'true')
+  await expect.element(trigger).toHaveAttribute('data-state', 'open')
 
   // Click in the top-left corner of the backdrop, outside the centered
   // modal content. Use position (5,5) rather than (0,0) — Playwright treats
   // (0,0) as an edge case that doesn't dispatch the click.
   await userEvent.click(screen.getByTestId('backdrop'), { force: true, position: { x: 5, y: 5 } })
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
+  await expect.element(trigger).toHaveAttribute('data-state', 'closed')
 })
 
 it('pressing Escape closes modal', async () => {
   const screen = await renderModal()
-  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
 
   await userEvent.click(trigger)
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'true')
+  await expect.element(trigger).toHaveAttribute('data-state', 'open')
 
   await userEvent.keyboard('{Escape}')
-  await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
+  await expect.element(trigger).toHaveAttribute('data-state', 'closed')
 })
 
 it('closing the modal returns focus to the opening trigger', async () => {
   const screen = await renderModal()
-  const trigger = screen.getByRole('button', { name: 'Open modal' })
+  const trigger = screen.getByRole('button', { name: 'Open modal' }).element()
 
   await userEvent.click(trigger)
   await userEvent.click(screen.getByRole('button', { name: 'Close this window' }))
 
-  expect(document.activeElement).toBe(trigger.element())
+  expect(document.activeElement).toBe(trigger)
 })
