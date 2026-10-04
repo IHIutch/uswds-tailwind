@@ -20,8 +20,9 @@ function TEMPLATE() {
 it('open() opens the dropdown', { tags: ['new'] }, async () => {
   await using component = createDisposableDropdown(id, TEMPLATE())
   const { getRootEl, getContentEl } = component.elements
+  const instance = Dropdown.getInstance(getRootEl())!
 
-  await Dropdown.getInstance(getRootEl())?.open()
+  await instance.open()
 
   expect(getContentEl()?.hidden).toBe(false)
 })
@@ -29,9 +30,10 @@ it('open() opens the dropdown', { tags: ['new'] }, async () => {
 it('close() closes the dropdown', { tags: ['new'] }, async () => {
   await using component = createDisposableDropdown(id, TEMPLATE())
   const { getRootEl, getContentEl } = component.elements
-  await Dropdown.getInstance(getRootEl())?.open()
+  const instance = Dropdown.getInstance(getRootEl())!
+  await instance.open()
 
-  await Dropdown.getInstance(getRootEl())?.close()
+  await instance.close()
 
   expect(getContentEl()?.hidden).toBe(true)
 })
@@ -39,12 +41,13 @@ it('close() closes the dropdown', { tags: ['new'] }, async () => {
 it('repeated open() and close() calls are no-ops', { tags: ['new'] }, async () => {
   await using component = createDisposableDropdown(id, TEMPLATE())
   const { getRootEl, getContentEl } = component.elements
+  const instance = Dropdown.getInstance(getRootEl())!
 
-  await Dropdown.getInstance(getRootEl())?.open()
-  await Dropdown.getInstance(getRootEl())?.open()
+  await instance.open()
+  await instance.open()
   expect(getContentEl()?.hidden).toBe(false)
 
-  await Dropdown.getInstance(getRootEl())?.close()
-  await Dropdown.getInstance(getRootEl())?.close()
+  await instance.close()
+  await instance.close()
   expect(getContentEl()?.hidden).toBe(true)
 })
