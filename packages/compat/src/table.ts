@@ -19,8 +19,8 @@ function sortRows(tbody: HTMLTableSectionElement, columnIndex: number, direction
     value: getCellValue(tr.cells[columnIndex]),
   }))
   rows.sort((a, b) => {
-    const first = direction === 'asc' ? a.value : b.value
-    const second = direction === 'asc' ? b.value : a.value
+    const first = direction === 'ascending' ? a.value : b.value
+    const second = direction === 'ascending' ? b.value : a.value
     if (first && second && !Number.isNaN(Number(first)) && !Number.isNaN(Number(second)))
       return Number(first) - Number(second)
     return first.localeCompare(second, navigator.language, { numeric: true, ignorePunctuation: true })
@@ -41,7 +41,9 @@ export class Table extends Component<table.Props, table.Api> {
     const headerSortColumn = initialHeader
       ? Array.from(initialHeader.parentElement!.children).indexOf(initialHeader)
       : undefined
-    const headerSortDirection = initialHeader?.getAttribute('aria-sort') === 'ascending' ? 'asc' : initialHeader ? 'desc' : undefined
+    const headerSortDirection = initialHeader?.getAttribute('aria-sort') === 'ascending' ? 'ascending' : initialHeader ? 'descending' : undefined
+    const columnIndex = rootSortColumn ?? headerSortColumn
+    const direction = getDataEnum(this.rootEl, 'sort-direction', ['ascending', 'descending']) ?? headerSortDirection ?? 'ascending'
     const columnNames: Record<number, string> = {}
     for (const header of this.headers) {
       const index = Array.from(header.parentElement!.children).indexOf(header)
@@ -51,8 +53,7 @@ export class Table extends Component<table.Props, table.Api> {
     return new VanillaMachine(table.machine, {
       ...props,
       id: props.id || this.rootEl.id || getId(this.rootEl, 'table'),
-      defaultSortColumn: props.defaultSortColumn ?? rootSortColumn ?? headerSortColumn,
-      defaultSortDirection: props.defaultSortDirection ?? getDataEnum(this.rootEl, 'sort-direction', ['asc', 'desc']) ?? headerSortDirection,
+      defaultSortDescriptor: props.defaultSortDescriptor !== undefined ? props.defaultSortDescriptor : columnIndex === undefined ? null : { column: columnIndex, direction },
       // eslint-disable-next-line unicorn/prefer-dom-node-text-content -- USWDS uses layout-aware innerText.
       captionText: props.captionText ?? query<HTMLElement>(this.table, 'caption')?.innerText,
       columnNames: props.columnNames ?? columnNames,
@@ -71,8 +72,8 @@ export class Table extends Component<table.Props, table.Api> {
 
     Array.from(this.tbody.rows).forEach(row => this.renderRow(row))
 
-    if (this.api.sortColumn != null && this.api.sortDirection != null) {
-      sortRows(this.tbody, this.api.sortColumn, this.api.sortDirection)
+    if (this.api.sortDescriptor) {
+      sortRows(this.tbody, this.api.sortDescriptor.column, this.api.sortDescriptor.direction)
     }
   }
 
@@ -114,7 +115,7 @@ export class Table extends Component<table.Props, table.Api> {
     spreadProps(header, this.api.getHeaderProps(details))
     const button = query<HTMLButtonElement>(header, 'button')
     if (button)
-      spreadProps(button, this.api.getSortButtonProps(details))
+      spreadProps(button, this.api.getSortTriggerProps(details))
   }
 
   private renderRow(row: HTMLTableRowElement) {

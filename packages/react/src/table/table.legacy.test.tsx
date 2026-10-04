@@ -1,3 +1,4 @@
+import type { TableRootProps } from './table'
 import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
@@ -39,8 +40,8 @@ function renderTable() {
 
 it('sortable column header has data-sortable and aria-label', async () => {
   const screen = await renderTable()
-  const sortButton = screen.getByRole('button', { name: /Alphabetical/ })
-  const header = sortButton.element().closest('th')!
+  const sortTrigger = screen.getByRole('button', { name: /Alphabetical/ })
+  const header = sortTrigger.element().closest('th')!
 
   expect(header.hasAttribute('data-sortable')).toBe(true)
   expect(header.getAttribute('aria-label')).toMatch(/sortable column/)
@@ -57,35 +58,35 @@ it('non-sortable column header has no sort button', async () => {
 
 it('clicking sort button toggles aria-sort on header', async () => {
   const screen = await renderTable()
-  const sortButton = screen.getByRole('button', { name: /Alphabetical/ })
-  const header = sortButton.element().closest('th')!
+  const sortTrigger = screen.getByRole('button', { name: /Alphabetical/ })
+  const header = sortTrigger.element().closest('th')!
 
   expect(header.hasAttribute('aria-sort')).toBe(false)
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
   expect(header.getAttribute('aria-sort')).toBe('ascending')
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
   expect(header.getAttribute('aria-sort')).toBe('descending')
 })
 
 it('sort button title describes the NEXT sort direction', async () => {
   const screen = await renderTable()
-  const sortButton = screen.getByRole('button', { name: /Alphabetical/ })
+  const sortTrigger = screen.getByRole('button', { name: /Alphabetical/ })
 
   // Before any sort: next click will sort ascending.
-  expect(sortButton.element().getAttribute('title')).toMatch(/ascending/)
+  expect(sortTrigger.element().getAttribute('title')).toMatch(/ascending/)
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
   // Now sorted ascending; next click will sort descending.
-  expect(sortButton.element().getAttribute('title')).toMatch(/descending/)
+  expect(sortTrigger.element().getAttribute('title')).toMatch(/descending/)
 })
 
 it('cells in the sorted column get data-sort-active', async () => {
   const screen = await renderTable()
-  const sortButton = screen.getByRole('button', { name: /Alphabetical/ })
+  const sortTrigger = screen.getByRole('button', { name: /Alphabetical/ })
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
 
   // SUGGESTION (review): `[data-scope="table"][data-part="cell"]` pins to
   // our Zag anatomy; a native `screen.getByRole('cell')` (or a `tbody td`
@@ -135,9 +136,9 @@ it('keeps the announcement region unchanged when unrelated content rerenders', a
 
 it('announcement region fills with text after sorting', async () => {
   const screen = await renderTable()
-  const sortButton = screen.getByRole('button', { name: /Alphabetical/ })
+  const sortTrigger = screen.getByRole('button', { name: /Alphabetical/ })
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
 
   const region = screen.getByRole('status')
   // After sort, announcement is non-empty
@@ -146,23 +147,23 @@ it('announcement region fills with text after sorting', async () => {
 
 it('sort direction cycles ascending → descending → ascending on repeated clicks', async () => {
   const screen = await renderTable()
-  const sortButton = screen.getByRole('button', { name: /Alphabetical/ })
-  const header = sortButton.element().closest('th')!
+  const sortTrigger = screen.getByRole('button', { name: /Alphabetical/ })
+  const header = sortTrigger.element().closest('th')!
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
   expect(header.getAttribute('aria-sort')).toBe('ascending')
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
   expect(header.getAttribute('aria-sort')).toBe('descending')
 
-  await userEvent.click(sortButton)
+  await userEvent.click(sortTrigger)
   expect(header.getAttribute('aria-sort')).toBe('ascending')
 })
 
 it('reports a controlled sort request without reordering rows', async () => {
   const onSortChange = vi.fn()
   const screen = await render(
-    <Table.Root captionText="People" columnNames={{ 0: 'Name' }} sortColumn={0} sortDirection="asc" onSortChange={onSortChange}>
+    <Table.Root captionText="People" columnNames={{ 0: 'Name' }} sortDescriptor={{ column: 0, direction: 'ascending' }} onSortChange={onSortChange}>
       <Table.Caption>People</Table.Caption>
       <Table.Header><Table.Row><Table.ColumnHeader columnIndex={0} sortable>Name</Table.ColumnHeader></Table.Row></Table.Header>
       <Table.Body>
@@ -173,7 +174,45 @@ it('reports a controlled sort request without reordering rows', async () => {
   )
 
   await userEvent.click(screen.getByRole('button', { name: 'Name' }))
-  expect(onSortChange).toHaveBeenCalledWith({ columnIndex: 0, direction: 'desc' })
+  expect(onSortChange).toHaveBeenCalledWith({ sortDescriptor: { column: 0, direction: 'descending' } })
   expect(screen.getByRole('status').element().textContent).toBe('The table named "People" is now sorted by Name in ascending order.')
   expect(Array.from(screen.container.querySelectorAll('tbody td'), cell => cell.textContent)).toEqual(['Zoe', 'Alice'])
+})
+
+// Controlled sort props are additions to this library.
+it('renders controlled sort changes and lets null override the default sort', async () => {
+  const onSortChange = vi.fn()
+  const view = (sortDescriptor: TableRootProps['sortDescriptor']) => (
+    <Table.Root captionText="People" columnNames={{ 0: 'Name' }} defaultSortDescriptor={{ column: 0, direction: 'descending' }} sortDescriptor={sortDescriptor} onSortChange={onSortChange}>
+      <Table.Header><Table.Row><Table.ColumnHeader columnIndex={0} sortable>Name</Table.ColumnHeader></Table.Row></Table.Header>
+      <Table.Body><Table.Row><Table.Cell columnIndex={0}>Alice</Table.Cell></Table.Row></Table.Body>
+    </Table.Root>
+  )
+  const screen = await render(view(null))
+  const button = screen.getByRole('button', { name: 'Name' })
+  const header = button.element().closest('th')!
+  const cell = screen.getByRole('cell')
+  const status = screen.getByRole('status')
+
+  expect(header.hasAttribute('aria-sort')).toBe(false)
+  await expect.element(status).toBeEmptyDOMElement()
+  await userEvent.click(button)
+  expect(onSortChange).toHaveBeenLastCalledWith({ sortDescriptor: { column: 0, direction: 'ascending' } })
+  expect(header.hasAttribute('aria-sort')).toBe(false)
+
+  await screen.rerender(view({ column: 0, direction: 'ascending' }))
+  await expect.element(cell).toHaveAttribute('data-sort-active', 'true')
+  expect(header.getAttribute('aria-sort')).toBe('ascending')
+  await expect.element(status).toHaveTextContent('The table named "People" is now sorted by Name in ascending order.')
+
+  await userEvent.click(button)
+  expect(onSortChange).toHaveBeenLastCalledWith({ sortDescriptor: { column: 0, direction: 'descending' } })
+  await screen.rerender(view({ column: 0, direction: 'descending' }))
+  expect(header.getAttribute('aria-sort')).toBe('descending')
+  await expect.element(status).toHaveTextContent('The table named "People" is now sorted by Name in descending order.')
+
+  await screen.rerender(view(null))
+  expect(header.hasAttribute('aria-sort')).toBe(false)
+  await expect.element(cell).not.toHaveAttribute('data-sort-active')
+  await expect.element(status).toBeEmptyDOMElement()
 })

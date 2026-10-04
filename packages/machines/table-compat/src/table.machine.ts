@@ -1,4 +1,4 @@
-import type { SortDirection, TableSchema } from './table.types'
+import type { SortDescriptor, TableSchema } from './table.types'
 import { createMachine } from '@zag-js/core'
 
 export const machine = createMachine<TableSchema>({
@@ -8,38 +8,32 @@ export const machine = createMachine<TableSchema>({
 
   context({ bindable, prop }) {
     return {
-      sortColumn: bindable<number | null>(() => ({
-        defaultValue: prop('defaultSortColumn') ?? null,
-        value: prop('sortColumn'),
-        sync: true,
-      })),
-      sortDirection: bindable<SortDirection | null>(() => ({
-        defaultValue: prop('defaultSortDirection') ?? null,
-        value: prop('sortDirection'),
-        sync: true,
+      sortDescriptor: bindable<SortDescriptor | null>(() => ({
+        defaultValue: prop('defaultSortDescriptor') ?? null,
+        value: prop('sortDescriptor'),
+        onChange(sortDescriptor) {
+          prop('onSortChange')?.({ sortDescriptor })
+        },
       })),
     }
   },
 
   computed: {
     announcement({ context, prop }) {
-      const columnIndex = context.get('sortColumn')
-      const direction = context.get('sortDirection')
-      if (columnIndex == null || direction == null)
+      const sortDescriptor = context.get('sortDescriptor')
+      if (!sortDescriptor)
         return ''
 
-      const headerName = prop('columnNames')?.[columnIndex]
+      const headerName = prop('columnNames')?.[sortDescriptor.column]
       if (!headerName)
         return ''
       const caption = prop('captionText') ?? ''
-      const order = direction === 'asc' ? 'ascending' : 'descending'
-      return `The table named "${caption}" is now sorted by ${headerName} in ${order} order.`
+      return `The table named "${caption}" is now sorted by ${headerName} in ${sortDescriptor.direction} order.`
     },
   },
 
   on: {
-    'SORT.TOGGLE': { actions: ['toggleSort'] },
-    'SORT.SET': { actions: ['setSort'] },
+    SORT: { actions: ['setSortDescriptor'] },
   },
 
   states: {
@@ -48,19 +42,15 @@ export const machine = createMachine<TableSchema>({
 
   implementations: {
     actions: {
-      toggleSort({ context, event, prop }) {
-        const columnIndex = event.columnIndex
-        const direction = context.get('sortColumn') === columnIndex && context.get('sortDirection') === 'asc' ? 'desc' : 'asc'
-        context.set('sortColumn', columnIndex)
-        context.set('sortDirection', direction)
-        prop('onSortChange')?.({ columnIndex, direction })
-      },
-      setSort({ context, event, prop }) {
+      setSortDescriptor({ context, event }) {
         const { columnIndex } = event
-        const direction = columnIndex === null ? null : event.direction
-        context.set('sortColumn', columnIndex)
-        context.set('sortDirection', direction)
-        prop('onSortChange')?.({ columnIndex, direction })
+        const sortDescriptor = context.get('sortDescriptor')
+        context.set('sortDescriptor', columnIndex === null
+          ? null
+          : {
+              column: columnIndex,
+              direction: event.direction ?? (sortDescriptor?.column === columnIndex && sortDescriptor.direction === 'ascending' ? 'descending' : 'ascending'),
+            })
       },
     },
   },

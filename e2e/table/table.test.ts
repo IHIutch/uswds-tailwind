@@ -14,7 +14,7 @@ const TEMPLATE = `
     <thead>
       <tr>
         <th data-part="table-header-cell" data-sortable>
-          <button data-part="table-sort-button">
+          <button data-part="sort-trigger">
             Alphabetical
             <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
               <use class="ascending" xlink:href="#sort-ascending" style="fill: transparent;"></use>
@@ -24,7 +24,7 @@ const TEMPLATE = `
           </button>
         </th>
         <th data-part="table-header-cell" data-sortable>
-          <button data-part="table-sort-button">
+          <button data-part="sort-trigger">
             Numeric
             <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
               <use class="ascending" xlink:href="#sort-ascending" style="fill: transparent;"></use>
@@ -34,7 +34,7 @@ const TEMPLATE = `
           </button>
         </th>
         <th data-part="table-header-cell" data-sortable>
-          <button data-part="table-sort-button">
+          <button data-part="sort-trigger">
             Data Value
             <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
               <use class="ascending" xlink:href="#sort-ascending" style="fill: transparent;"></use>
@@ -192,7 +192,7 @@ it('has sort button with a title that describes what the sort direction will be 
 })
 
 it('marks cells in the sorted column as active', async () => {
-  using component = createDisposableTable(rootId, TEMPLATE)
+  await using component = createDisposableTable(rootId, TEMPLATE)
   const root = component.elements.getRootEl()!
   const sortableHeaders = root.querySelectorAll('th[data-sortable]')
   const alphabeticalSortButton = sortableHeaders[0].querySelector('button')!

@@ -11,7 +11,7 @@ export type {
   TableProps as Props,
   TableSchema as Schema,
   TableService as Service,
-  SetSortDetails,
   SortChangeDetails,
+  SortDescriptor,
   SortDirection,
 } from './table.types'

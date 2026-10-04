@@ -3,16 +3,14 @@ import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<TableProps>()([
-  'defaultSortColumn',
-  'defaultSortDirection',
+  'defaultSortDescriptor',
   'getRootNode',
   'id',
   'ids',
   'captionText',
   'columnNames',
   'onSortChange',
-  'sortColumn',
-  'sortDirection',
+  'sortDescriptor',
 ])
 
 export const splitProps = createSplitProps<Partial<TableProps>>(props)

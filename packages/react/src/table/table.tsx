@@ -65,10 +65,8 @@ export type TableRootProps = React.ComponentPropsWithoutRef<'table'> & {
   stacked?: boolean
   captionText?: table.Props['captionText']
   columnNames?: Record<number, string>
-  defaultSortedColumnIndex?: number
-  defaultSortDirection?: table.Props['defaultSortDirection']
-  sortColumn?: table.Props['sortColumn']
-  sortDirection?: table.Props['sortDirection']
+  defaultSortDescriptor?: table.Props['defaultSortDescriptor']
+  sortDescriptor?: table.Props['sortDescriptor']
   onSortChange?: table.Props['onSortChange']
 }
 
@@ -78,10 +76,8 @@ function TableRoot({
   stacked = false,
   captionText,
   columnNames,
-  defaultSortedColumnIndex,
-  defaultSortDirection,
-  sortColumn,
-  sortDirection,
+  defaultSortDescriptor,
+  sortDescriptor,
   onSortChange,
   className,
   ...props
@@ -90,10 +86,8 @@ function TableRoot({
     id: React.useId(),
     captionText,
     columnNames,
-    defaultSortColumn: defaultSortedColumnIndex,
-    defaultSortDirection,
-    sortColumn,
-    sortDirection,
+    defaultSortDescriptor,
+    sortDescriptor,
     onSortChange,
   })
   const api = table.connect(service, normalizeProps)
@@ -208,22 +202,22 @@ function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, ch
       className={columnHeader({ className })}
     >
       {sortable && columnIndex !== undefined
-        ? <TableSortButton columnIndex={columnIndex} headerName={headerName}>{children}</TableSortButton>
+        ? <TableSortTrigger columnIndex={columnIndex} headerName={headerName}>{children}</TableSortTrigger>
         : children}
     </th>
   )
 }
 
-// SortButton (internal)
+// SortTrigger (internal)
 
-type TableSortButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+type TableSortTriggerProps = React.ComponentPropsWithoutRef<'button'> & {
   columnIndex: number
   headerName: string
 }
 
-function TableSortButton({ columnIndex, headerName, className, ...props }: TableSortButtonProps) {
+function TableSortTrigger({ columnIndex, headerName, className, ...props }: TableSortTriggerProps) {
   const { api } = useTableContext()
-  const mergedProps = mergeProps(api.getSortButtonProps({ columnIndex, headerName }), props)
+  const mergedProps = mergeProps(api.getSortTriggerProps({ columnIndex, headerName }), props)
   return (
     <button
       {...mergedProps}
