@@ -1,4 +1,4 @@
-import type { ComboboxItem, Schema as ComboboxSchema } from '@uswds-tailwind/combobox-compat'
+import type { Schema as ComboboxSchema } from '@uswds-tailwind/combobox-compat'
 import * as combobox from '@uswds-tailwind/combobox-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
@@ -73,24 +73,24 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
 
-    if (this.label) {
-      this.renderLabel(this.label)
-    }
-    this.renderInput(this.input)
-    this.renderSelect(this.select)
-    this.renderList(this.list)
+    const labelEl = this.label
+    if (labelEl)
+      spreadProps(labelEl, this.api.getLabelProps())
+    spreadProps(this.input, this.api.getInputProps())
+    spreadProps(this.select, this.api.getHiddenSelectProps())
+    spreadProps(this.list, this.api.getListProps())
     this.renderItems()
     const statusEl = getPart<HTMLElement>(this.rootEl, parts.status)
     if (statusEl) {
       spreadProps(statusEl, this.api.getStatusProps())
       statusEl.textContent = this.api.srStatusText
     }
-    if (this.clearButton) {
-      this.renderClearButton(this.clearButton)
-    }
-    if (this.toggleButton) {
-      this.renderToggleButton(this.toggleButton)
-    }
+    const clearButtonEl = this.clearButton
+    if (clearButtonEl)
+      spreadProps(clearButtonEl, this.api.getClearTriggerProps())
+    const toggleButtonEl = this.toggleButton
+    if (toggleButtonEl)
+      spreadProps(toggleButtonEl, this.api.getTriggerProps())
   }
 
   private get label() {
@@ -126,23 +126,6 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
     return getPart<HTMLButtonElement>(this.rootEl, parts.trigger)
   }
 
-  private renderLabel(labelEl: HTMLElement) {
-    spreadProps(labelEl, this.api.getLabelProps())
-  }
-
-  private renderInput(inputEl: HTMLInputElement) {
-    const inputProps = this.api.getInputProps()
-    spreadProps(inputEl, inputProps)
-  }
-
-  private renderSelect(selectEl: HTMLSelectElement) {
-    spreadProps(selectEl, this.api.getHiddenSelectProps())
-  }
-
-  private renderList(listEl: HTMLElement) {
-    spreadProps(listEl, this.api.getListProps())
-  }
-
   private renderItems() {
     const items = this.api.items
     this.itemTemplate ??= getPart<HTMLElement>(this.list, parts.item)
@@ -170,37 +153,21 @@ export class Combobox extends Component<combobox.Props, combobox.Api> {
       }
     }
     else {
-      items.forEach((item: ComboboxItem, index: number) => {
+      items.forEach((item, index) => {
         const itemEl = sameItems ? currentItems[index]! : document.createElement('li')
         if (!sameItems) {
-          itemEl.setAttribute('data-part', parts.item.attrs['data-part']!)
-          itemEl.setAttribute('data-value', item.value)
-
           if (templateItem)
             copyAttributes(templateItem, itemEl)
 
           itemEl.textContent = item.label
         }
 
-        const itemProps = this.api.getItemProps({ item })
-        spreadProps(itemEl, itemProps)
-
-        if (!itemEl.hasAttribute('tabindex')) {
-          itemEl.setAttribute('tabindex', itemProps.tabIndex?.toString() || '0')
-        }
+        spreadProps(itemEl, this.api.getItemProps({ item }))
 
         if (!sameItems)
           this.list.appendChild(itemEl)
       })
     }
-  }
-
-  private renderClearButton(buttonEl: HTMLButtonElement) {
-    spreadProps(buttonEl, this.api.getClearTriggerProps())
-  }
-
-  private renderToggleButton(buttonEl: HTMLButtonElement) {
-    spreadProps(buttonEl, this.api.getTriggerProps())
   }
 
   async enable() {

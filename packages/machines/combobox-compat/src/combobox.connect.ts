@@ -36,6 +36,18 @@ export function connect<T extends PropTypes>(
   const disabled = prop('disabled')
   const ariaDisabled = prop('ariaDisabled')
 
+  // Duplicate values select the last rendered occurrence.
+  let selectedId: string | undefined
+  if (value) {
+    for (let index = items.length - 1; index >= 0; index--) {
+      const item = items[index]!
+      if (item.value === value) {
+        selectedId = item.id
+        break
+      }
+    }
+  }
+
   // Focus mounted options during keydown; newly rendered options use the next frame.
   const focusNow = (index: number | null) => focusVisibleItem(scope, index)
 
@@ -198,8 +210,7 @@ export function connect<T extends PropTypes>(
     getItemProps({ item }: { item: ComboboxItem }) {
       const index = items.findIndex(candidate => candidate.id === item.id)
       const highlighted = index === highlightedIndex
-      // Duplicate values select the last rendered occurrence.
-      const selected = Boolean(value) && item.id === [...items].reverse().find(item => item.value === value)?.id
+      const selected = item.id === selectedId
       const selectItem = () => send({ type: 'ITEM.SELECT', value: item.value, label: item.label })
       return normalize.element({
         ...parts.item.attrs,
