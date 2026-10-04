@@ -313,9 +313,16 @@ description: "A table shows information in columns and rows."
 
 ### Sortable
 
-<ComponentPreview title="Table Sortable" mark={[/data-part="[^\"]*"/g, /data-sortable/g, /data-value="[^\"]*"/g]} code={`
+For React, provide a `columnNames` entry for each sortable header's `columnIndex`,
+including headers rendered as JSX. These names supply accessible labels and sort
+announcements. The consumer owns row ordering: pass its accepted `sortDescriptor`
+and handle sort requests through `onSortChange`.
+
+<ComponentPreview title="Table Sortable" mark={[/data-part="[^\"]*"/g, /data-sortable/g, /data-sort-value="[^\"]*"/g]} code={`
+<div data-scope="table" data-part="root">
   <table
-    data-part="table-root"
+    data-scope="table"
+    data-part="table"
     class="border-separate border-spacing-0"
   >
     <caption class="mb-3 text-left font-bold">
@@ -326,49 +333,58 @@ description: "A table shows information in columns and rows."
         class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2 *:aria-[sort]:bg-blue-cool-20v"
       >
         <th
-          data-part="table-header-cell"
+          data-scope="table"
+          data-part="header"
+          class="group"
           data-sortable
         >
           <div class="flex items-center gap-2">
             Agency
             <button
-              data-part="table-sort-button"
-              class="cursor-pointer group size-6 focus:outline-4 focus:outline-blue-40v"
+              data-scope="table"
+              data-part="sort-trigger"
+              class="cursor-pointer size-6 focus:outline-4 focus:outline-blue-40v"
             >
               <span
-                class="icon-[material-symbols--height] group-data-[sort='asc']:icon-[material-symbols--arrow-upward-alt] group-data-[sort='desc']:icon-[material-symbols--arrow-downward-alt] size-full"
+                class="icon-[material-symbols--height] group-aria-[sort=ascending]:icon-[material-symbols--arrow-upward-alt] group-aria-[sort=descending]:icon-[material-symbols--arrow-downward-alt] size-full"
               ></span>
             </button>
           </div>
         </th>
         <th
-          data-part="table-header-cell"
+          data-scope="table"
+          data-part="header"
+          class="group"
           data-sortable
         >
           <div class="flex items-center gap-2">
             Employees
             <button
-              data-part="table-sort-button"
-              class="cursor-pointer group size-6 focus:outline-4 focus:outline-blue-40v"
+              data-scope="table"
+              data-part="sort-trigger"
+              class="cursor-pointer size-6 focus:outline-4 focus:outline-blue-40v"
             >
               <span
-                class="icon-[material-symbols--height] group-data-[sort='asc']:icon-[material-symbols--arrow-upward-alt] group-data-[sort='desc']:icon-[material-symbols--arrow-downward-alt] size-full"
+                class="icon-[material-symbols--height] group-aria-[sort=ascending]:icon-[material-symbols--arrow-upward-alt] group-aria-[sort=descending]:icon-[material-symbols--arrow-downward-alt] size-full"
               ></span>
             </button>
           </div>
         </th>
         <th
-          data-part="table-header-cell"
+          data-scope="table"
+          data-part="header"
+          class="group"
           data-sortable
         >
           <div class="flex items-center gap-2">
             Founded
             <button
-              data-part="table-sort-button"
-              class="cursor-pointer group size-6 focus:outline-4 focus:outline-blue-40v"
+              data-scope="table"
+              data-part="sort-trigger"
+              class="cursor-pointer size-6 focus:outline-4 focus:outline-blue-40v"
             >
               <span
-                class="icon-[material-symbols--height] group-data-[sort='asc']:icon-[material-symbols--arrow-upward-alt] group-data-[sort='desc']:icon-[material-symbols--arrow-downward-alt] size-full"
+                class="icon-[material-symbols--height] group-aria-[sort=ascending]:icon-[material-symbols--arrow-upward-alt] group-aria-[sort=descending]:icon-[material-symbols--arrow-downward-alt] size-full"
               ></span>
             </button>
           </div>
@@ -384,87 +400,77 @@ description: "A table shows information in columns and rows."
       <tr
         class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
       >
-        <td data-part="table-body-cell">Department of Defense</td>
+        <td>Department of Defense</td>
         <td
-          data-part="table-body-cell"
-          data-value="732000"
+          data-sort-value="732000"
         >732,000</td>
         <td
-          data-part="table-body-cell"
-          data-value="1947-09-18"
+          data-sort-value="1947-09-18"
         >1947-09-18</td>
-        <td data-part="table-body-cell">Executive</td>
+        <td>Executive</td>
       </tr>
       <tr
         class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
       >
-        <td data-part="table-body-cell">Department of Veterans Affairs</td>
+        <td>Department of Veterans Affairs</td>
         <td
-          data-part="table-body-cell"
-          data-value="380000"
+          data-sort-value="380000"
         >380,000</td>
         <td
-          data-part="table-body-cell"
-          data-value="1989-03-15"
+          data-sort-value="1989-03-15"
         >1989-03-15</td>
-        <td data-part="table-body-cell">Executive</td>
+        <td>Executive</td>
       </tr>
       <tr
         class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
       >
-        <td data-part="table-body-cell">Department of Homeland Security</td>
+        <td>Department of Homeland Security</td>
         <td
-          data-part="table-body-cell"
-          data-value="240000"
+          data-sort-value="240000"
         >240,000</td>
         <td
-          data-part="table-body-cell"
-          data-value="2002-11-25"
+          data-sort-value="2002-11-25"
         >2002-11-25</td>
-        <td data-part="table-body-cell">Executive</td>
+        <td>Executive</td>
       </tr>
       <tr
         class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
       >
-        <td data-part="table-body-cell">Department of Treasury</td>
+        <td>Department of Treasury</td>
         <td
-          data-part="table-body-cell"
-          data-value="87000"
+          data-sort-value="87000"
         >87,000</td>
         <td
-          data-part="table-body-cell"
-          data-value="1789-09-02"
+          data-sort-value="1789-09-02"
         >1789-09-02</td>
-        <td data-part="table-body-cell">Executive</td>
+        <td>Executive</td>
       </tr>
       <tr
         class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
       >
-        <td data-part="table-body-cell">Department of Justice</td>
+        <td>Department of Justice</td>
         <td
-          data-part="table-body-cell"
-          data-value="115000"
+          data-sort-value="115000"
         >115,000</td>
         <td
-          data-part="table-body-cell"
-          data-value="1870-07-01"
+          data-sort-value="1870-07-01"
         >1870-07-01</td>
-        <td data-part="table-body-cell">Executive</td>
+        <td>Executive</td>
       </tr>
       <tr
         class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
       >
-        <td data-part="table-body-cell">Department of Agriculture</td>
+        <td>Department of Agriculture</td>
         <td
-          data-part="table-body-cell"
-          data-value="95000"
+          data-sort-value="95000"
         >95,000</td>
         <td
-          data-part="table-body-cell"
-          data-value="1862-05-15"
+          data-sort-value="1862-05-15"
         >1862-05-15</td>
-        <td data-part="table-body-cell">Executive</td>
+        <td>Executive</td>
       </tr>
     </tbody>
   </table>
+  <div data-scope="table" data-part="sr-status" class="sr-only" aria-live="polite"></div>
+</div>
 `} />
