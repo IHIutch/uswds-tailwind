@@ -3,7 +3,7 @@ import { queryAll } from '@zag-js/dom-query'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataBool, getDataString } from './lib/data-attr'
-import { getPart, getParts } from './lib/dom'
+import { getOwnedElements, getOwnedPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 export type VanillaModalProps = Omit<modal.Props, 'ids' | 'open' | 'onOpenChange'>
@@ -38,11 +38,11 @@ export class Modal extends Component<VanillaModalProps, modal.Api> {
       this.renderCloseTrigger(closeTriggerEl, index)
     })
 
-    const titleEl = getPart<HTMLElement>(this.content, modal.parts.title)
+    const titleEl = getOwnedElements<HTMLElement>(this.rootEl, this.content, `[data-part="${modal.parts.title.attrs['data-part']}"]`)[0]
     if (titleEl)
       spreadProps(titleEl, this.api.getTitleProps())
 
-    const descriptionEl = getPart<HTMLElement>(this.content, modal.parts.description)
+    const descriptionEl = getOwnedElements<HTMLElement>(this.rootEl, this.content, `[data-part="${modal.parts.description.attrs['data-part']}"]`)[0]
     if (descriptionEl)
       spreadProps(descriptionEl, this.api.getDescriptionProps())
   }
@@ -54,28 +54,29 @@ export class Modal extends Component<VanillaModalProps, modal.Api> {
   }
 
   private get backdrop() {
-    const backdropEl = getPart<HTMLElement>(this.rootEl, modal.parts.backdrop)
+    const backdropEl = getOwnedPart<HTMLElement>(this.rootEl, modal.parts.backdrop)
     if (!backdropEl)
       throw new Error('Expected backdropEl to be defined')
     return backdropEl
   }
 
   private get positioner() {
-    const positionerEl = getPart<HTMLElement>(this.rootEl, modal.parts.positioner)
+    const positionerEl = getOwnedPart<HTMLElement>(this.rootEl, modal.parts.positioner)
     if (!positionerEl)
       throw new Error('Expected positionerEl to be defined')
     return positionerEl
   }
 
   private get content() {
-    const contentEl = getPart<HTMLElement>(this.rootEl, modal.parts.content)
+    const contentEl = getOwnedPart<HTMLElement>(this.rootEl, modal.parts.content)
     if (!contentEl)
       throw new Error('Expected contentEl to be defined')
     return contentEl
   }
 
   private get closeTriggers() {
-    return getParts<HTMLButtonElement>(this.content, modal.parts.closeTrigger)
+    return getOwnedElements<HTMLButtonElement>(this.rootEl, this.content, `[data-part="${modal.parts.closeTrigger.attrs['data-part']}"]`)
+      // Close controls inside other component roots also belong to that component.
       .filter(element => element.closest('[data-scope][data-part="root"]') === this.rootEl)
   }
 

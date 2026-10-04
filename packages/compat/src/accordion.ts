@@ -2,11 +2,10 @@ import * as accordion from '@uswds-tailwind/accordion-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataBool, getDataString } from './lib/data-attr'
-import { getParts } from './lib/dom'
+import { getOwnedElements, getOwnedParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = accordion.anatomy.build()
-const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
 const itemSelector = `[data-part="${parts.item.attrs['data-part']}"]`
 
 export class Accordion extends Component<accordion.Props, accordion.Api> {
@@ -37,9 +36,7 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
   }
 
   private get items() {
-    return getParts<HTMLElement>(this.rootEl, parts.item)
-      // Prevent nested accordions from being assigned to the parent
-      .filter(item => item.closest(rootSelector) === this.rootEl)
+    return getOwnedParts<HTMLElement>(this.rootEl, parts.item)
   }
 
   private getItemValue(itemEl: HTMLElement) {
@@ -51,9 +48,11 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
     if (!value)
       return
     spreadProps(itemEl, this.api.getItemProps({ value }))
-    const trigger = getParts<HTMLElement>(itemEl, parts.itemTrigger)
+    // Root ownership excludes nested accordions; the closest item check also
+    // excludes parts inside another item belonging to this accordion.
+    const trigger = getOwnedElements<HTMLElement>(this.rootEl, itemEl, `[data-part="${parts.itemTrigger.attrs['data-part']}"]`)
       .find(element => element.closest(itemSelector) === itemEl)
-    const content = getParts<HTMLElement>(itemEl, parts.itemContent)
+    const content = getOwnedElements<HTMLElement>(this.rootEl, itemEl, `[data-part="${parts.itemContent.attrs['data-part']}"]`)
       .find(element => element.closest(itemSelector) === itemEl)
     if (trigger)
       spreadProps(trigger, this.api.getItemTriggerProps({ value }))
