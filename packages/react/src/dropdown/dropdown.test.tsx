@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
@@ -77,5 +78,52 @@ it.skip('pressing Escape closes menu', async () => {
   await expect.element(screen.getByText('One')).toBeVisible()
 
   await userEvent.keyboard('{Escape}')
+  await expect.element(screen.getByText('One')).not.toBeVisible()
+})
+
+it('controlled closed state takes precedence over defaultOpen', async () => {
+  const onOpenChange = vi.fn()
+  const screen = await render(
+    <Dropdown.Root open={false} defaultOpen={true} onOpenChange={onOpenChange}>
+      <Dropdown.Trigger>Menu</Dropdown.Trigger>
+      <Dropdown.Content>
+        <Dropdown.Item value="one"><Dropdown.Link href="#one">One</Dropdown.Link></Dropdown.Item>
+      </Dropdown.Content>
+    </Dropdown.Root>,
+  )
+
+  await expect.element(screen.getByText('One')).not.toBeVisible()
+  await screen.getByRole('button', { name: 'Menu' }).click()
+
+  expect(onOpenChange).toHaveBeenCalledOnce()
+  expect(onOpenChange).toHaveBeenCalledWith({ open: true })
+  await expect.element(screen.getByText('One')).not.toBeVisible()
+})
+
+it('a controlled owner can decline a close request and then accept it', async () => {
+  const onOpenChange = vi.fn()
+  function ControlledDropdown() {
+    const [open, setOpen] = React.useState(true)
+    return (
+      <>
+        <button type="button" onClick={() => setOpen(false)}>Accept close</button>
+        <Dropdown.Root open={open} onOpenChange={onOpenChange}>
+          <Dropdown.Trigger>Menu</Dropdown.Trigger>
+          <Dropdown.Content>
+            <Dropdown.Item value="one"><Dropdown.Link href="#one">One</Dropdown.Link></Dropdown.Item>
+          </Dropdown.Content>
+        </Dropdown.Root>
+      </>
+    )
+  }
+  const screen = await render(<ControlledDropdown />)
+
+  await expect.element(screen.getByText('One')).toBeVisible()
+  await screen.getByRole('button', { name: 'Menu' }).click()
+
+  expect(onOpenChange).toHaveBeenCalledWith({ open: false })
+  await expect.element(screen.getByText('One')).toBeVisible()
+
+  await screen.getByRole('button', { name: 'Accept close' }).click()
   await expect.element(screen.getByText('One')).not.toBeVisible()
 })

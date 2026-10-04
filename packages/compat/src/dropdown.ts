@@ -8,14 +8,17 @@ import { getId } from './lib/id-generator'
 const parts = dropdown.anatomy.build()
 const rootSelector = `[data-scope="${parts.root.attrs['data-scope']}"][data-part="${parts.root.attrs['data-part']}"]`
 
-export class Dropdown extends Component<dropdown.Props, dropdown.Api> {
+export type VanillaDropdownProps = Omit<dropdown.Props, 'open' | 'defaultOpen' | 'onOpenChange'>
+
+export class Dropdown extends Component<VanillaDropdownProps, dropdown.Api> {
   static override root = parts.root
 
-  initMachine(props: dropdown.Props): VanillaMachine<dropdown.DropdownSchema> {
+  initMachine(props: VanillaDropdownProps): VanillaMachine<dropdown.DropdownSchema> {
     return new VanillaMachine(dropdown.machine, {
-      ...props,
       id: props.id || this.rootEl.id || getId(this.rootEl, 'dropdown'),
-      defaultOpen: props.defaultOpen ?? getDataString(this.rootEl, 'state') === 'open',
+      ids: props.ids,
+      getRootNode: props.getRootNode,
+      onItemSelect: props.onItemSelect,
     })
   }
 
