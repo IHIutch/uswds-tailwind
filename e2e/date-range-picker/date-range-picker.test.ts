@@ -90,8 +90,8 @@ const template = `
   </div>
 `
 
-it('should enhance the date picker and identify the start and end date pickers', () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+it('should enhance the date picker and identify the start and end date pickers', async () => {
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 
@@ -102,7 +102,7 @@ it('should enhance the date picker and identify the start and end date pickers',
 })
 
 it('should reset the range end date picker properties when the range start date picker has an empty value', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 
@@ -113,7 +113,7 @@ it('should reset the range end date picker properties when the range start date 
 })
 
 it('should update the range end date picker properties to have a min date and range date when the range start date picker has an updated valid value', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
   await userEvent.fill(startInput, '12/12/2020')
@@ -122,7 +122,7 @@ it('should update the range end date picker properties to have a min date and ra
 })
 
 it('should validate the range start date picker on change', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
 
   await userEvent.fill(startInput, '13/1/2020')
@@ -132,7 +132,7 @@ it('should validate the range start date picker on change', async () => {
 })
 
 it('should reset the range end date picker properties when the range start date picker has an updated invalid value', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
   await userEvent.fill(startInput, 'ab/dc/efg')
@@ -142,7 +142,7 @@ it('should reset the range end date picker properties when the range start date 
 })
 
 it('should reset the range start date picker properties when the range end date picker has an empty value', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 
@@ -154,7 +154,7 @@ it('should reset the range start date picker properties when the range end date 
 })
 
 it('should update the range start date picker properties to have a max date and range date when the range end date picker has an updated valid value', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 
@@ -165,7 +165,7 @@ it('should update the range start date picker properties to have a max date and 
 })
 
 it('should reset the range start date picker properties when the range end date picker has an updated invalid value', async () => {
-  using component = createDisposableDateRangePicker(rootId, template)
+  await using component = createDisposableDateRangePicker(rootId, template)
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 

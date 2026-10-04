@@ -16,8 +16,8 @@ const TEMPLATE = `
   </section>
 `
 
-it('initializes closed', () => {
-  using component = createDisposableCollapse(rootId, TEMPLATE)
+it('initializes closed', async () => {
+  await using component = createDisposableCollapse(rootId, TEMPLATE)
 
   expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('closed')
   expect(component.elements.getTriggerEl()?.getAttribute('aria-expanded')).toBe('false')
@@ -25,7 +25,7 @@ it('initializes closed', () => {
 })
 
 it('opens when you click the button', async () => {
-  using component = createDisposableCollapse(rootId, TEMPLATE)
+  await using component = createDisposableCollapse(rootId, TEMPLATE)
   await userEvent.click(component.elements.getTriggerEl()!)
 
   expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('open')
@@ -34,7 +34,7 @@ it('opens when you click the button', async () => {
 })
 
 it('closes when you click the button again', async () => {
-  using component = createDisposableCollapse(rootId, TEMPLATE)
+  await using component = createDisposableCollapse(rootId, TEMPLATE)
   await userEvent.click(component.elements.getTriggerEl()!)
   await userEvent.click(component.elements.getTriggerEl()!)
 

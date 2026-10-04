@@ -65,14 +65,14 @@ const template = `
   </div>
 `
 
-it('should set the input date of the calendar', () => {
-  using component = createDisposableDatePicker(rootId, template)
+it('should set the input date of the calendar', async () => {
+  await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   expect(input.value).toBe('05/22/2020')
 })
 
 it('should display the selected date when the calendar is opened', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()
   const calendar = component.elements.getCalendarEl()!
 

@@ -37,42 +37,42 @@ const TEMPLATE = `
 </div>
 `
 
-it('target ui is created', () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+it('target ui is created', async () => {
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const dropZone = component.elements.getDropzoneEl()
   expect(dropZone).toBeTruthy()
   expect(dropZone?.getAttribute('data-part')).toBe('file-input-dropzone')
 })
 
-it('input element exists', () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+it('input element exists', async () => {
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const inputEl = component.elements.getInputEl()
   expect(inputEl).toBeTruthy()
   expect(inputEl?.getAttribute('data-part')).toBe('file-input-input')
 })
 
-it('box is created', () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+it('box is created', async () => {
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const dropZone = component.elements.getDropzoneEl()!
   const box = dropZone.querySelector('div')!
   expect(box).toBeTruthy()
 })
 
-it('pluralizes "files" if there is a "multiple" attribute', () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+it('pluralizes "files" if there is a "multiple" attribute', async () => {
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const dragText = component.elements.getInstructionsEl()
   expect(dragText?.textContent).toContain('Drag files here or')
 })
 
-it('creates a status message element', () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+it('creates a status message element', async () => {
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const statusMessage = component.elements.getSrStatusEl()
   expect(statusMessage).toBeTruthy()
   expect(statusMessage?.getAttribute('aria-live')).toBe('polite')
 })
 
-it('adds a default status message', () => {
-  using component = createDisposableFileInput(rootId, TEMPLATE)
+it('adds a default status message', async () => {
+  await using component = createDisposableFileInput(rootId, TEMPLATE)
   const statusMessage = component.elements.getSrStatusEl()
   expect(statusMessage?.innerHTML?.trim()).toBe('No file selected.')
 })
@@ -111,8 +111,8 @@ const disabledTemplate = `
 </div>
 `
 
-it('has disabled styling', () => {
-  using component = createDisposableFileInput('disabled-test', disabledTemplate)
+it('has disabled styling', async () => {
+  await using component = createDisposableFileInput('disabled-test', disabledTemplate)
   const inputEl = component.elements.getInputEl()
 
   expect(inputEl).toBeDisabled()

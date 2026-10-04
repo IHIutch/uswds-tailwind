@@ -100,7 +100,7 @@ const template = `<div
   </div>`
 
 it('should display and filter the option list after a character is typed', async () => {
-  using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
 
