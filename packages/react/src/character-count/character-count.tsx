@@ -56,7 +56,7 @@ function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps
   const api = useCharacterCountContext()
   const field = useFieldContext()
 
-  const mergedProps = mergeProps(api.getStatusProps(), field?.getDescriptionProps(), props)
+  const mergedProps = mergeProps(field?.getDescriptionProps(), api.getStatusProps(), props)
 
   return (
     <div

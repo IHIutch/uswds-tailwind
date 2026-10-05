@@ -280,3 +280,23 @@ it('preserves another validator when the owner changes errorText', async () => {
   await userEvent.fill(input, 'abcd')
   expect(input.validationMessage).toBe('Please correct this field.')
 })
+
+it('honors ids.status inside Field and keeps the counter accessible while typing', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Message</Field.Label>
+      <p id="counter-help">Keep it brief.</p>
+      <CharacterCount.Root ids={{ status: 'exact-status' }} inputDescriptionIds="counter-help" maxLength={5}>
+        <CharacterCount.Input />
+        <CharacterCount.Status />
+      </CharacterCount.Root>
+    </Field.Root>,
+  )
+  const input = screen.getByRole('textbox', { name: 'Message' })
+  await expect.element(screen.getByText('5 characters allowed')).toHaveAttribute('id', 'exact-status')
+  await expect.element(input).toHaveAccessibleDescription('Keep it brief. 5 characters allowed')
+  await input.fill('abcdef')
+  await expect.element(screen.getByText('1 character over limit')).toHaveAttribute('id', 'exact-status')
+  await expect.element(input).toHaveAccessibleDescription('Keep it brief. 1 character over limit')
+  expect((input.element() as HTMLInputElement).validationMessage).toBe('The content is too long.')
+})

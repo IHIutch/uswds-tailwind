@@ -8,7 +8,7 @@ export type UseCharacterCountProps = Omit<characterCount.Props, 'getRootNode' | 
 export function useCharacterCount(props: UseCharacterCountProps) {
   const field = useFieldContext()
   const generatedId = React.useId()
-  const { id, ids, ...rest } = props
+  const { id, ids, inputDescriptionIds, ...rest } = props
 
   const service = useMachine(characterCount.machine, {
     id: id ?? generatedId,
@@ -17,6 +17,7 @@ export function useCharacterCount(props: UseCharacterCountProps) {
       status: field?.ids.description,
       ...ids,
     },
+    inputDescriptionIds: [inputDescriptionIds, field && ids?.status].filter(Boolean).join(' ') || undefined,
     ...rest,
   })
 
