@@ -92,7 +92,7 @@ export const machine = createMachine<TooltipSchema>({
       },
       trackEscapeKey({ scope, send }) {
         return addDomEvent(scope.getDoc(), 'keydown', (event) => {
-          if (event.key === 'Escape' && !event.shiftKey && !event.altKey && !event.metaKey)
+          if (event.key === 'Escape' && !event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey)
             send({ type: 'hide' })
         })
       },

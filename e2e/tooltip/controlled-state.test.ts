@@ -1,4 +1,5 @@
 import { expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableTooltip, TOOLTIP } from './_utils.js'
 
 it('controlled false takes precedence over defaultOpen and waits for the owner', { tags: ['new'] }, async () => {
@@ -10,17 +11,17 @@ it('controlled false takes precedence over defaultOpen and waits for the owner',
   })
   const { getTriggerEl, getContentEl, getInstance } = fixture.elements
 
-  expect(getContentEl().getAttribute('data-state')).toBe('closed')
-  getTriggerEl().dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+  expect(getContentEl().getAttribute('aria-hidden')).toBe('true')
+  await userEvent.hover(getTriggerEl())
   await vi.waitFor(() => expect(onOpenChange).toHaveBeenCalledWith({ open: true }))
-  expect(getContentEl().getAttribute('data-state')).toBe('closed')
+  expect(getContentEl().getAttribute('aria-hidden')).toBe('true')
 
-  getInstance()?.machine.updateProps({ open: true })
-  await vi.waitFor(() => expect(getContentEl().getAttribute('data-state')).toBe('open'))
+  getInstance()!.machine.updateProps({ open: true })
+  await vi.waitFor(() => expect(getContentEl().getAttribute('aria-hidden')).toBe('false'))
   expect(onOpenChange).toHaveBeenCalledOnce()
 
-  getInstance()?.machine.updateProps({ open: undefined })
-  await vi.waitFor(() => expect(getContentEl().getAttribute('data-state')).toBe('open'))
+  getInstance()!.machine.updateProps({ open: undefined })
+  await vi.waitFor(() => expect(getContentEl().getAttribute('aria-hidden')).toBe('false'))
   expect(onOpenChange).toHaveBeenCalledOnce()
 })
 
@@ -30,13 +31,14 @@ it('a controlled owner can decline and then accept a close request', { tags: ['n
     open: true,
     onOpenChange,
   })
-  const { getRootEl, getContentEl, getInstance } = fixture.elements
+  const { getTriggerEl, getContentEl, getInstance } = fixture.elements
 
-  getRootEl().dispatchEvent(new MouseEvent('mouseleave'))
+  await userEvent.hover(getTriggerEl())
+  await userEvent.unhover(getTriggerEl())
   await vi.waitFor(() => expect(onOpenChange).toHaveBeenCalledWith({ open: false }))
-  expect(getContentEl().getAttribute('data-state')).toBe('open')
+  expect(getContentEl().getAttribute('aria-hidden')).toBe('false')
 
-  getInstance()?.machine.updateProps({ open: false })
-  await vi.waitFor(() => expect(getContentEl().getAttribute('data-state')).toBe('closed'))
+  getInstance()!.machine.updateProps({ open: false })
+  await vi.waitFor(() => expect(getContentEl().getAttribute('aria-hidden')).toBe('true'))
   expect(onOpenChange).toHaveBeenCalledOnce()
 })
