@@ -127,3 +127,20 @@ it('a controlled owner can decline a close request and then accept it', async ()
   await screen.getByRole('button', { name: 'Accept close' }).click()
   await expect.element(screen.getByText('One')).not.toBeVisible()
 })
+
+it.each([undefined, 'exact-dropdown'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+  const screen = await render(
+    <Dropdown.Root id="menu" ids={{ root: rootId, content: 'exact-menu' }}>
+      <Dropdown.Trigger>Menu</Dropdown.Trigger>
+      <Dropdown.Content>
+        <Dropdown.Item value="one"><Dropdown.Link href="#one">One</Dropdown.Link></Dropdown.Item>
+      </Dropdown.Content>
+    </Dropdown.Root>,
+  )
+  const trigger = screen.getByRole('button', { name: 'Menu' })
+  expect(document.getElementById(rootId ?? 'dropdown:menu')).toContainElement(trigger.element())
+  expect(trigger.element().id).toBe('dropdown:menu:trigger')
+  expect(trigger.element().getAttribute('aria-controls')).toBe('exact-menu')
+  await trigger.click()
+  await expect.element(screen.getByText('One')).toBeVisible()
+})

@@ -60,7 +60,8 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttribut
   ({ className, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
     const field = useFieldContext()
-    const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
+    const inputProps = api.getInputProps()
+    const mergedProps = mergeProps(inputProps, field?.getInputProps(), { id: inputProps.id }, props)
 
     return <input {...mergedProps} className={cn('pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4', className)} ref={forwardedRef} />
   },

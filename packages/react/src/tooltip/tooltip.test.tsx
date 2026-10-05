@@ -92,3 +92,17 @@ for (const margin of [0, 30]) {
     })
   }
 }
+
+it.each([undefined, 'exact-tooltip'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+  const screen = await render(
+    <Tooltip id="hint" ids={{ root: rootId }} content="Help text">
+      <Button>Help</Button>
+    </Tooltip>,
+  )
+  const trigger = screen.getByRole('button', { name: 'Help' })
+  expect(document.getElementById(rootId ?? 'tooltip:hint')).toContainElement(trigger.element())
+  expect(trigger.element().id).toBe('tooltip:hint:trigger')
+  await userEvent.hover(trigger.element())
+  await expect.element(screen.getByRole('tooltip')).toHaveAttribute('data-visible')
+  expect(trigger.element().getAttribute('aria-describedby')).toBe('tooltip:hint:content')
+})

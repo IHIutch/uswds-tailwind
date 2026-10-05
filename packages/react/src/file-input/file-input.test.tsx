@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { FileInput } from './file-input'
 
@@ -151,4 +152,39 @@ it('file input has name attribute for form submission', async () => {
   )
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
   expect(input.name).toBe('upload')
+})
+
+it.each([undefined, 'exact-file-input'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+  const screen = await render(
+    <FileInput.Root id="upload" ids={{ root: rootId }}>
+      <FileInput.Label>Upload</FileInput.Label>
+      <FileInput.Input />
+    </FileInput.Root>,
+  )
+  const input = screen.container.querySelector<HTMLInputElement>('input[type="file"]')!
+  expect(document.getElementById(rootId ?? 'file-input:upload')).toContainElement(input)
+  expect(input.id).toBe('file-input:upload:input')
+  expect(screen.getByText('Upload').element().getAttribute('for')).toBe(input.id)
+})
+
+it('honors ids.input inside Field while retaining its description and validation', async () => {
+  const screen = await render(
+    <Field.Root invalid required>
+      <Field.Description>Select a document</Field.Description>
+      <Field.ErrorMessage>Required</Field.ErrorMessage>
+      <FileInput.Root ids={{ input: 'exact-upload' }}>
+        <FileInput.Label>Upload</FileInput.Label>
+        <FileInput.SrStatus />
+        <FileInput.Input />
+      </FileInput.Root>
+    </Field.Root>,
+  )
+  const input = screen.container.querySelector<HTMLInputElement>('input[type="file"]')!
+  expect(input.id).toBe('exact-upload')
+  expect(screen.getByText('Upload').element().getAttribute('for')).toBe(input.id)
+  await expect.element(input).toHaveAccessibleDescription('Required Select a document')
+  await expect.element(input).toHaveAttribute('aria-invalid', 'true')
+  await expect.element(input).toBeRequired()
+  await userEvent.upload(input, new File(['document'], 'report.txt', { type: 'text/plain' }))
+  await expect.element(screen.getByRole('status'), { timeout: 2000 }).toHaveTextContent('You have selected the file: report.txt')
 })

@@ -24,8 +24,8 @@ function useInputMaskContext() {
 export type InputMaskRootProps = UseInputMaskProps & React.ComponentPropsWithoutRef<'div'>
 
 const InputMaskRoot = React.forwardRef<HTMLDivElement, InputMaskRootProps>(
-  ({ className, children, charset, placeholder, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
-    const { api } = useInputMask({ charset, placeholder, value, defaultValue, onValueChange })
+  ({ className, children, id, ids, charset, placeholder, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
+    const { api } = useInputMask({ id, ids, charset, placeholder, value, defaultValue, onValueChange })
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (

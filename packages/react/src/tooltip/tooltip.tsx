@@ -38,9 +38,11 @@ function useTooltipContext() {
 // ============================================================================
 
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
-  ({ className, content, position, open, defaultOpen, onOpenChange, ...props }, forwardedRef) => {
+  ({ className, id, ids, content, position, open, defaultOpen, onOpenChange, ...props }, forwardedRef) => {
+    const generatedId = React.useId()
     const service = useMachine(tooltip.machine, {
-      id: React.useId(),
+      id: id ?? generatedId,
+      ids,
       placement: position,
       open,
       defaultOpen,
@@ -102,11 +104,7 @@ TooltipRoot.displayName = 'Tooltip.Root'
 TooltipTrigger.displayName = 'Tooltip.Trigger'
 TooltipContent.displayName = 'Tooltip.Content'
 
-export interface TooltipProps {
-  position?: tooltip.Placement
-  content: string
-  children?: React.ReactNode
-}
+export type TooltipProps = TooltipRootProps
 
 export function Tooltip({ content, position, children, ...props }: TooltipProps) {
   return (

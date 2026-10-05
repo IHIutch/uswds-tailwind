@@ -22,8 +22,8 @@ function useFileInputContext() {
 
 export type FileInputRootProps = React.ComponentPropsWithoutRef<'div'> & UseFileInputProps
 
-function FileInputRoot({ className, children, ...props }: FileInputRootProps) {
-  const { api } = useFileInput(props)
+function FileInputRoot({ className, children, id, ids, ...props }: FileInputRootProps) {
+  const { api } = useFileInput({ ...props, id, ids })
   const mergedProps = mergeProps(api.getRootProps(), props)
 
   return (
@@ -76,7 +76,8 @@ const FileInputInput = React.forwardRef<HTMLInputElement, FileInputInputProps>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useFileInputContext()
     const field = useFieldContext()
-    const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
+    const inputProps = api.getInputProps()
+    const mergedProps = mergeProps(inputProps, field?.getInputProps(), { id: inputProps.id }, props)
 
     return (
       <input
