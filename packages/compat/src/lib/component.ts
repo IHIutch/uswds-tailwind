@@ -64,7 +64,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   abstract initMachine(props: Props): VanillaMachine<any>
   abstract initApi(): Api
 
-  init = () => {
+  init() {
     this.render()
     this.machine.subscribe(() => {
       this.api = this.initApi()
@@ -74,10 +74,14 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
     return this
   }
 
-  destroy = () => {
-    this.machine.stop()
-    if (instances.get(this.rootEl) === this)
-      instances.delete(this.rootEl)
+  destroy() {
+    try {
+      this.machine.stop()
+    }
+    finally {
+      if (instances.get(this.rootEl) === this)
+        instances.delete(this.rootEl)
+    }
   }
 
   abstract render(): void
