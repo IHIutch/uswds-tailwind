@@ -5,17 +5,12 @@
     {
       "name": "Root",
       "element": "div",
-      "description": "Provides disabled and validation state.",
+      "description": "Provides disabled state. For validation state, wrap the slider in Field.Root with invalid.",
       "props": [
         {
           "name": "disabled",
           "type": "boolean",
           "description": "Disables the slider."
-        },
-        {
-          "name": "invalid",
-          "type": "boolean",
-          "description": "Marks its value invalid."
         },
         {
           "name": "name",

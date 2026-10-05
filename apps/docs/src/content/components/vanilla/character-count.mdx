@@ -14,10 +14,9 @@ The Vanilla examples use these JavaScript initializers:
 <ComponentPreview title="Character Count" mark={[/data-part="[^\"]*"/g]} code={`
   <div
     class="max-w-xs"
-    data-part="character-count-root"
+    data-scope="character-count" data-part="root"
   >
     <label
-      data-part="character-count-label"
       for="input-limit"
       class="block"
     >Text input</label>
@@ -27,9 +26,9 @@ The Vanilla examples use these JavaScript initializers:
         class="text-gray-50"
       >This is an input with a character counter.</span>
     </div>
-    <div class="mt-2 relative">
+    <div data-scope="character-count" data-part="control" class="mt-2 relative">
       <input
-        data-part="character-count-input"
+        data-scope="character-count" data-part="input"
         id="input-limit"
         aria-describedby="input-hint character-count-hint"
         class="p-2 w-full max-w-lg h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
@@ -38,15 +37,16 @@ The Vanilla examples use these JavaScript initializers:
     </div>
     <div class="pt-2">
       <span
+        data-scope="character-count" data-part="description"
         id="character-count-hint"
         class="sr-only"
       >You can enter up to 20 characters</span>
       <span
-        data-part="character-count-status"
+        data-scope="character-count" data-part="status"
         aria-hidden="true"
         class="text-gray-50 data-[invalid]:text-red-60v data-[invalid]:font-bold"
       >20 characters allowed</span>
-      <span data-part="character-count-sr-status"></span>
+      <span data-scope="character-count" data-part="sr-status"></span>
     </div>
   </div>
 `} />
@@ -65,65 +65,45 @@ Initialize after the markup exists. `CharacterCount` is the corresponding instan
 
 ### Anatomy
 
-Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+Use `data-scope="character-count" data-part="root"` on the wrapper. Required descendants are `input`, `status`, and `sr-status`. An ordinary `<label>` links to the input's ID; there is no label part.
 
-Use `data-part="character-count-root"` with these descendants:
+The optional `control` receives generated `data-invalid`. The optional `description` is a static, visually hidden limit hint. The runtime adds it to the input's `aria-describedby` while preserving existing description IDs.
 
-#### `character-count-label`
+<ApiTable label="character-count attributes">
 
-Optional label for the input.
-
-<ApiTable label="character-count-label attributes">
-
-| Attribute | Type | Description |
+| Part | Attribute | Description |
 | --- | --- | --- |
-| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
+| `root` | `data-maxlength` | Authored fallback limit when the input has no `maxlength`. Generated from the effective limit after initialization. |
+| `input` | `maxlength` | Authored initial limit. The runtime reads it and removes the native limit so users can enter excess characters. The `maxLength` option takes precedence over both markup limits. |
+| `input`, `control`, `status` | `data-invalid` | Generated when the value exceeds a positive limit. |
+| `status` | `aria-hidden="true"` | Generated. Hides the visual count from assistive technology. |
+| `sr-status` | `aria-live` | Generated. Starts unset, then becomes `polite`; over-limit announcements use `assertive`. |
 
 </ApiTable>
 
-#### `character-count-input`
+### Configuration
 
-Required input or textarea.
+<ApiTable label="character-count options">
 
-<ApiTable label="character-count-input attributes">
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `maxlength` | `integer` | **Authored.** Maximum length. Converted with `Number()` at construction; overrides the `maxLength` option, even when missing or empty. Missing or empty means no limit. Also constrains native browser entry. |
-| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
-
-</ApiTable>
-
-#### `character-count-status`
-
-Required visual count message.
-
-<ApiTable label="character-count-status attributes">
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `data-invalid` | `presence attribute` | **Generated.** Present when over the limit. |
-| `aria-hidden` | `"true" \| "false"` | **Generated.** Hides the visual count from assistive technology. |
+| Option | Description |
+| --- | --- |
+| `maxLength` | Allowed character count; defaults to the input's `maxlength`, then root `data-maxlength`, then `0` for no limit. |
+| `defaultValue` | Initial text; defaults to the input value. |
+| `value` | Controlled text; your application accepts edits by updating this option. |
+| `errorText` | Custom validity message; defaults to `The content is too long.` |
+| `statusLabel` | Initial count suffix; defaults to `characters allowed`. |
+| `ids` | Override root, control, input, description, status, or srStatus IDs. Existing input and description IDs are preserved by default. |
+| `inputDescriptionIds` | Existing hint IDs; defaults to the input's `aria-describedby`. |
+| `onValueChange` | Receives `{ value: string }` when the value changes or a controlled edit is requested. This is a JavaScript callback. |
 
 </ApiTable>
 
-#### `character-count-sr-status`
+### Methods and cleanup
 
-Required screen-reader count message.
+`api.setValue(value)` requests a text update. `api.value`, `api.count`, `api.maxLength`, `api.invalid`, `api.statusText`, and `api.srStatusText` expose the current state.
 
-<ApiTable label="character-count-sr-status attributes">
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `aria-live` | `"polite"` | **Generated.** `"polite"`; announces count updates. |
-
-</ApiTable>
+`characterCountInit()` returns the initialized instances. Use `CharacterCount.getOrCreateInstance(root, options)` to configure an instance, and call `destroy()` before removing its markup. See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
 
 ### Accessibility
 
-- Provide a visible label and a static limit hint linked with `aria-describedby`.
-- Keep both status elements: the visual status uses `aria-hidden`; the separate announcement region uses `aria-live="polite"`.
-
-### Lifecycle
-
-Retain explicitly constructed instances and call `destroy()` before removing their markup; the legacy initializer does not return an instance array.
+Provide a visible label and a static limit hint. Keep both status elements. Count announcements follow a trailing debounce; over-limit text also sets native custom validity on the input.

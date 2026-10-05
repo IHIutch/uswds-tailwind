@@ -622,3 +622,15 @@ description: "Help visitors find useful links at the bottom of a page with foote
     </div>
   </footer>
 `} />
+
+## Component API
+
+The Default example uses Accordion for its mobile navigation. Initialize it after the markup exists:
+
+```js
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
+
+accordionInit()
+```
+
+There is no separate Footer initializer. The Medium and Slim examples use ordinary links and forms. See the [Accordion API](/docs/vanilla/components/accordion#component-api) for configuration, methods, and cleanup.

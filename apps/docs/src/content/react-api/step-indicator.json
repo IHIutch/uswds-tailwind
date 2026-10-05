@@ -10,7 +10,8 @@
         {
           "name": "steps",
           "type": "{ label: string }[]",
-          "description": "Ordered step labels."
+          "description": "Ordered step labels.",
+          "defaultValue": "[]"
         },
         {
           "name": "currentStep",
@@ -20,12 +21,14 @@
         {
           "name": "variant",
           "type": "default | centered | noLabels",
-          "description": "Controls label alignment and visibility."
+          "description": "Controls label alignment and visibility.",
+          "defaultValue": "default"
         },
         {
           "name": "counters",
           "type": "unset | sm | lg",
-          "description": "Controls numbered circle styling."
+          "description": "Controls numbered circle styling.",
+          "defaultValue": "unset"
         }
       ]
     },
@@ -49,7 +52,8 @@
         {
           "name": "status",
           "type": "complete | current | incomplete",
-          "description": "Selects step styling."
+          "description": "Selects step styling.",
+          "defaultValue": "incomplete"
         }
       ]
     },
@@ -83,7 +87,7 @@
         {
           "name": "children",
           "type": "ReactNode | (context) => ReactNode",
-          "description": "Replaces the default counter content."
+          "description": "A render function replaces the default counter content."
         }
       ]
     },

@@ -10,12 +10,12 @@
         {
           "name": "disabled",
           "type": "boolean",
-          "description": "Disables the fields."
+          "description": "Sets data-disabled on Root. Pass native disabled to Month, Day, and Year to disable their controls."
         },
         {
           "name": "invalid",
           "type": "boolean",
-          "description": "Marks the group invalid."
+          "description": "Sets data-invalid on Root. Does not validate the date or update the child controls."
         }
       ],
       "data": [

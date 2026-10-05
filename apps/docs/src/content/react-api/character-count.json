@@ -1,6 +1,6 @@
 {
   "name": "CharacterCount",
-  "intro": "Use Root with Label, Input, and visible Status. SrStatus announces count changes to assistive technology.",
+  "intro": "Use Root with Input, visible Status, and SrStatus. Use Field.Label inside an enclosing Field.Root to label the input.",
   "parts": [
     {
       "name": "Root",
@@ -9,13 +9,14 @@
       "props": [
         {
           "name": "maxLength",
-          "type": "number",
-          "description": "Sets the permitted character count."
+          "type": "number (required)",
+          "description": "Sets the character limit. Input permits extra characters and becomes invalid when the count exceeds it."
         },
         {
           "name": "defaultValue",
           "type": "string",
-          "description": "Initial uncontrolled value."
+          "description": "Initial uncontrolled value.",
+          "defaultValue": "\"\""
         },
         {
           "name": "value",
@@ -28,26 +29,21 @@
           "description": "Receives value changes."
         },
         {
-          "name": "validationMessage",
+          "name": "errorText",
           "type": "string",
-          "description": "Message shown when the count exceeds the limit."
+          "description": "Native validity message when over the limit. Defaults to \"The content is too long.\"",
+          "defaultValue": "\"The content is too long.\""
         },
         {
-          "name": "getStatusText",
-          "type": "({ count, max, isOverLimit }) => string",
-          "description": "Formats the visible and announced count message."
-        }
-      ]
-    },
-    {
-      "name": "Label",
-      "element": "label",
-      "description": "Labels the input.",
-      "data": [
+          "name": "statusLabel",
+          "type": "string",
+          "description": "Text in the initial count message. Defaults to \"characters allowed\".",
+          "defaultValue": "\"characters allowed\""
+        },
         {
-          "attribute": "data-invalid",
-          "value": "Present when invalid",
-          "purpose": "Style the error state."
+          "name": "ids",
+          "type": "{ root?: string; control?: string; input?: string; description?: string; status?: string; srStatus?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ]
     },
@@ -78,7 +74,7 @@
     {
       "name": "SrStatus",
       "element": "div",
-      "description": "Announces count changes without duplicating visible text."
+      "description": "Renders a div containing the initial limit description and a visually hidden span that announces debounced count changes."
     }
   ]
 }

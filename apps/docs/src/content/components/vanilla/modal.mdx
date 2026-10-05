@@ -222,7 +222,7 @@ modalInit()
 
 Run after the markup exists. To retain an instance, use `Modal.getOrCreateInstance(root, options)`.
 
-**The instance belongs to the root, not the trigger.** Initialization moves the root to the end of the document body.
+The instance belongs to the root. Initialization moves the root to the end of the document body.
 
 ### Anatomy
 
@@ -239,7 +239,6 @@ Required modal container. Initialization moves it to the document body.
 | `data-scope` | `"modal"` | **Authored.** Identifies the component scope. |
 | `data-part` | `"root"` | **Authored.** Identifies this part. |
 | `data-value` | `string` | **Authored.** Unique value used by external triggers to target this modal. |
-| `data-state` | `"open" \| "closed"` | **Authored.** Use `"open"` to open initially; `defaultOpen` takes precedence. |
 | `data-force-action` | `boolean-like attribute` | **Authored.** Suppresses Escape and outside dismissal. Bare attribute is true; omission or `"false"` is false. The `forceAction` option takes precedence. |
 
 </ApiTable>
@@ -254,7 +253,7 @@ Button outside the root for user activation. Several triggers may share a target
 | --- | --- | --- |
 | `data-scope` | `"modal"` | **Authored.** Identifies the component scope. |
 | `data-part` | `"trigger"` | **Authored.** Identifies this part. |
-| `data-target` | `string` | **Authored.** Matches the root’s `data-value`. |
+| `data-target` | `string` | **Authored.** Matches the root's `data-value`. |
 | `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
 
 </ApiTable>
@@ -348,10 +347,8 @@ Pass these JavaScript options to the instance constructor or factory. Authored c
 
 | Option | Description |
 | --- | --- |
-| `defaultOpen` | Initial uncontrolled open state; overrides the authored initial state. |
-| `open` | Controlled open state. Your application must supply the updated value after a change callback. |
-| `id, ids` | Customize the instance identifier and generated element IDs. |
-| `forceAction` | `boolean`. Overrides the root’s `data-force-action`; defaults to the attribute value. |
+| `id` | Instance identifier; defaults to root `data-value`, then its ID, then a generated value. |
+| `forceAction` | `boolean`. Overrides the root's `data-force-action`; defaults to the attribute value. |
 | `aria-label` | `string`. Overrides the label authored on the content. |
 
 </ApiTable>
@@ -378,23 +375,11 @@ const modal = Modal.getOrCreateInstance(
 await modal.open()
 ```
 
-Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
+Promises settle the queued update, not CSS transitions. The vanilla wrapper starts closed and manages its own state. It does not support `open`, `defaultOpen`, `ids`, or `onOpenChange` options.
 
-**Cleanup:** retain and remove the root during teardown. `destroy()` does not restore its original parent or HTML.
+Retain and remove the root during teardown. `destroy()` does not restore its original parent or HTML.
 
 See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
-
-### Callbacks
-
-<ApiTable label="Modal callbacks">
-
-| Callback | Payload | When it runs |
-| --- | --- | --- |
-| `onOpenChange` | `{ open: boolean }` | An open-state change is requested. |
-
-</ApiTable>
-
-Supply the callback in instance options; it is not a DOM event.
 
 ### Accessibility
 

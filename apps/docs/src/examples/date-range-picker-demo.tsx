@@ -1,8 +1,8 @@
 import { DatePicker } from '@uswds-tailwind/react'
 
-const minDate = new Date(2026, 8, 1)
-const maxDate = new Date(2026, 9, 31)
-const initialRange = [new Date(2026, 8, 15), new Date(2026, 8, 20)]
+const minDate = '2026-09-01'
+const maxDate = '2026-10-31'
+const initialRange = ['2026-09-15', '2026-09-20']
 
 function rowsOfThree<T>(items: T[]): T[][] {
   const rows: T[][] = []
@@ -16,6 +16,7 @@ export default function DateRangePickerDemo() {
   return (
     <DatePicker.Root
       selectionMode="range"
+      ids={{ input: ['event-start', 'event-end'] }}
       min={minDate}
       max={maxDate}
       defaultValue={initialRange}

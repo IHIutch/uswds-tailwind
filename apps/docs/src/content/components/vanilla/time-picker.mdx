@@ -3,7 +3,8 @@ title: "Time picker"
 description: "Help people enter or select a time from a list with a time picker and keyboard controls."
 ---
 
-This component requires the following JavaScript plugin:
+The time picker uses the Combobox JavaScript initializer:
+
   - [Combobox](/docs/vanilla/javascript#combobox)
 
 ## Example
@@ -11,16 +12,15 @@ This component requires the following JavaScript plugin:
 <ComponentPreview title="Time Picker" resize={false} code={`
   <div
     class="max-w-lg"
-    data-part="combobox-root"
+    data-scope="combobox" data-part="root"
   >
     <label
-      data-part="combobox-label"
+      data-scope="combobox" data-part="label"
       class="block"
     >Appointment time</label>
 
     <select
-      data-part="combobox-select"
-      hidden
+      data-scope="combobox" data-part="hidden-select"
     >
       <option value></option>
       <option value="00:00">12:00am</option>
@@ -76,21 +76,20 @@ This component requires the following JavaScript plugin:
     <div class="relative mt-2 max-w-40">
       <div class="flex w-full">
         <input
-          data-part="combobox-input"
+          data-scope="combobox" data-part="input"
           class="pr-10 p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4"
-          required
         >
         <div class="absolute z-10 inset-y-0 right-0 flex">
           <button
             class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-            data-part="combobox-clear"
+            data-scope="combobox" data-part="clear-trigger"
             type="button"
           >
             <div class="icon-[material-symbols--close] size-6"></div>
           </button>
           <button
             class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-            data-part="combobox-toggle"
+            data-scope="combobox" data-part="trigger"
             type="button"
           >
             <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -98,47 +97,43 @@ This component requires the following JavaScript plugin:
         </div>
       </div>
       <ul
-        data-part="combobox-list"
+        data-scope="combobox" data-part="list"
         class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
       >
         <li
-          data-part="combobox-item"
-          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+          data-scope="combobox" data-part="item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[highlighted]:outline-4 data-[highlighted]:outline-blue-40v data-[highlighted]:-outline-offset-4"
         ></li>
       </ul>
     </div>
+    <div data-scope="combobox" data-part="status" class="sr-only"></div>
   </div>
 `} />
 
-## Keyboard Interactions
+## Component API
 
-<ContentList>
-  - <kbd>Down Arrow</kbd>
-  
-    When focus is on an **Combobox Input**, opens the **Combobox List** and moves focus on the currently selected that **Combobox Item**. Otherwise, moves focus to the first **Combobox Item**.
+Run the initializer after the markup exists:
 
-    When focus is on an **Combobox Item**, moves focus to the previous focusable element.
+```js
+import { comboboxInit } from '@uswds-tailwind/compat/combobox'
 
-    When focus is on the first **Combobox Item** in a **Combobox List**, moves focus to the **Combobox Input**.
+comboboxInit()
+```
 
-  - <kbd>Up Arrow</kbd>
-  
-    When focus is on an **Combobox Input**, opens the **Combobox List** and moves focus on the currently selected that **Combobox Item**. Otherwise, moves to the last **Combobox Item**.
+There is no separate TimePicker initializer. The native select supplies the available times and their option values. The visible input displays each option's label. The runtime generates the list items from the select options and copies the item template's class and style.
 
-    When focus is on an **Combobox Item**, moves focus to the next focusable element.
+Use the [Combobox API](/docs/vanilla/components/combo-box#component-api) for configuration, methods, callbacks, and cleanup. Vanilla TimePicker does not generate time intervals; author the options you need in the select.
 
-    When focus is on the last **Combobox Item** in a **Combobox List**, focus moves to the **Combobox Input**.
+## Keyboard interactions
 
-  - <kbd>Enter</kbd>
-  
-    When focus is on an **Combobox Item**, selects the current value and sets the cursor at the end of the selected value in the **Combobox Input**.
+- Down Arrow in the input opens the list and focuses the highlighted option, or the first option when none is selected.
+- Down Arrow on an option moves to the next option. It stays on the last option at the end of the list.
+- Up Arrow on an option moves to the previous option. From the first option, it closes the list and returns focus to the input.
+- Enter or Space on an option selects its value. Enter in the input selects an option whose label exactly matches the typed text, ignoring case. If none matches, it restores the previous selection.
+- Escape closes the list and returns focus to the input.
 
-  - <kbd>Escape</kbd>
-  
-    When the **Combobox List** is open, closes the **Combobox List** and moves focus to the **Combobox Input**.
-</ContentList>
+These shortcuts require no Shift, Alt, Control, or Meta modifier. Up Arrow in the input has no custom action.
 
-## Progressive Enhancement
-Because this component heavily relies on Javascript, in environments where Javascript isn't present or hasn't yet loaded, this component falls back to the native `<select>` element. When Javascript is loaded, the `<select>` element will be hidden and all options will be passed to the **Combobox** component.
+## Progressive enhancement
 
-This ensures that users will always be able to interact with a functional component regardless of their connectivity or browser settings.
+Initialization visually hides the native select. For a no-JavaScript fallback, leave the select visible in the authored markup and hide the enhanced input, buttons, and list until your application initializes the component. This example does not implement that visibility switch.

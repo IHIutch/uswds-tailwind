@@ -10,7 +10,7 @@
         {
           "name": "open",
           "type": "boolean",
-          "description": "Controlled open state."
+          "description": "Sets the drawer open state. Root does not forward onOpenChange; omit open for an interactive uncontrolled drawer."
         },
         {
           "name": "forceAction",
@@ -93,14 +93,24 @@
       "description": "Owns a nested menu.",
       "props": [
         {
-          "name": "closeOnSelect",
-          "type": "boolean",
-          "description": "Closes the nested menu after selection."
-        },
-        {
           "name": "onOpenChange",
           "type": "({ open: boolean }) => void",
           "description": "Receives nested menu state changes."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Controlled nested menu visibility."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "description": "Initial uncontrolled nested menu visibility."
+        },
+        {
+          "name": "onItemSelect",
+          "type": "({ value: string }) => void",
+          "description": "Receives an activated nested menu value."
         }
       ]
     },

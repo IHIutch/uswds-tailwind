@@ -14,28 +14,33 @@
         },
         {
           "name": "defaultValue",
-          "type": "(Date | undefined)[]",
-          "description": "Initial start and end dates."
+          "type": "string[]",
+          "description": "Initial start and end dates. Use ISO YYYY-MM-DD strings."
         },
         {
           "name": "value",
-          "type": "(Date | undefined)[]",
-          "description": "Controlled start and end dates."
+          "type": "Date[]",
+          "description": "Controlled selected dates."
         },
         {
           "name": "min",
-          "type": "Date",
-          "description": "Earliest selectable date."
+          "type": "string",
+          "description": "Earliest selectable date. Use ISO YYYY-MM-DD."
         },
         {
           "name": "max",
-          "type": "Date",
-          "description": "Latest selectable date."
+          "type": "string",
+          "description": "Latest selectable date. Use ISO YYYY-MM-DD."
         },
         {
           "name": "onValueChange",
-          "type": "({ value, valueAsString, view }) => void",
-          "description": "Receives both endpoint slots as Dates and ISO strings; an unset endpoint stays undefined with an empty ISO string."
+          "type": "({ value: Date[]; valueAsString: string[] }) => void",
+          "description": "Receives only the selected Date values and their ISO YYYY-MM-DD strings. Unset range endpoints are omitted."
+        },
+        {
+          "name": "ids",
+          "type": "Datepicker ElementIds",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ]
     },

@@ -47,12 +47,13 @@ export default function TableSortedDemo() {
     <Table.Root
       captionText="Federal agency employees"
       columnNames={{ 0: 'Agency', 1: 'Employees', 2: 'Last updated' }}
-      sortColumn={sortColumn}
-      sortDirection={sorting ? (sorting.desc ? 'desc' : 'asc') : null}
-      onSortChange={({ columnIndex, direction }) => {
-        dataTable.setSorting(columnIndex === null || direction === null
+      sortDescriptor={sorting && sortColumn !== null
+        ? { column: sortColumn, direction: sorting.desc ? 'descending' : 'ascending' }
+        : null}
+      onSortChange={({ sortDescriptor }) => {
+        dataTable.setSorting(sortDescriptor === null
           ? []
-          : [{ id: columnIndex === 0 ? 'name' : columnIndex === 1 ? 'employees' : 'lastUpdated', desc: direction === 'desc' }])
+          : [{ id: sortDescriptor.column === 0 ? 'name' : sortDescriptor.column === 1 ? 'employees' : 'lastUpdated', desc: sortDescriptor.direction === 'descending' }])
       }}
     >
       <Table.Caption>Federal agency employees</Table.Caption>

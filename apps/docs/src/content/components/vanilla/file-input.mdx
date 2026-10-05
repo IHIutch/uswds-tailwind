@@ -15,54 +15,50 @@ This component requires the following JavaScript plugin:
 
 <ComponentPreview title="File Input" mark={[/data-part="[^\"]*"/g]} code={`
   <div
-    data-part="file-input-root"
+    data-scope="file-input" data-part="root"
     class="relative z-0 max-w-lg"
   >
     <label
-      data-part="file-input-label"
+      data-scope="file-input" data-part="label"
       class="block"
     >Input accepts a single file</label>
     <div>
-      <div data-part="file-input-sr-status"></div>
+      <div data-scope="file-input" data-part="sr-status"></div>
         <div
-          data-part="file-input-dropzone"
+          data-scope="file-input" data-part="dropzone"
           class="border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-orange-30v mt-2 relative w-full bg-white data-[dragging]:bg-blue-10"
         >
           <div
-            data-part="file-input-preview-list"
+            data-scope="file-input" data-part="item-group"
             class="relative z-30 pointer-events-none hidden data-[valid]:block data-[valid]:bg-blue-10 group"
           >
             <div class="flex justify-between items-center p-2">
               <div
-                data-part="file-input-preview-header"
+                data-scope="file-input" data-part="preview-heading"
                 class="font-bold"
               ></div>
-              <span class="text-blue-60v underline">Change File</span>
             </div>
             <div
-              data-part="file-input-preview-item"
+              data-scope="file-input" data-part="item"
               class="flex gap-2 p-2 border-t border-t-white group-data-[dragging]:opacity-10"
             >
-              <div
-                data-part="file-input-preview-item-icon"
-                class="size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=doc]:icon-[fa-solid--file-word] data-[type=sheet]:icon-[fa-solid--file-excel] data-[type=vid]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]"
-              ></div>
-              <div data-part="file-input-preview-item-content" class="flex items-center"></div>
+              <img data-scope="file-input" data-part="item-preview-image" alt="" class="size-8 object-contain" />
+              <div data-file-name class="flex items-center"></div>
             </div>
           </div>
           <div
-            data-part="file-input-instructions"
+            data-scope="file-input" data-part="instructions"
             class="py-8 px-4 pointer-events-none z-30 relative text-center data-[valid]:hidden"
           >
-            <span>Drag file here or</span>
-            <span class="text-blue-60v underline">choose from folder</span>
+            <span data-scope="file-input" data-part="drag-text">Drag file here or</span>
+            <span data-scope="file-input" data-part="choose" class="text-blue-60v underline">choose from folder</span>
           </div>
           <div
-            data-part="file-input-error-message"
+            data-scope="file-input" data-part="error-text"
             class="hidden text-red-60v font-bold data-[invalid]:block -mt-6 mb-6 text-center"
           ></div>
         <input
-          data-part="file-input-input"
+          data-scope="file-input" data-part="input"
           id="file-input-single"
           class="cursor-pointer absolute inset-0 z-10 p-2 focus:outline-4 focus:outline-blue-40v [&::-webkit-file-upload-button]:hidden data-[dragging]:bg-blue-10 text-transparent"
           type="file"
@@ -77,55 +73,51 @@ This component requires the following JavaScript plugin:
 
 <ComponentPreview title="File Input Specific Type" code={`
   <div
-    data-part="file-input-root"
+    data-scope="file-input" data-part="root"
     class="relative z-0 max-w-lg"
   >
     <label
-      data-part="file-input-label"
+      data-scope="file-input" data-part="label"
       class="block"
     >Input accepts only specific file types</label>
     <span class="text-gray-50" id="file-input-specific-hint">Select PDF or TXT files</span>
     <div>
-      <div data-part="file-input-sr-status"></div>
+      <div data-scope="file-input" data-part="sr-status"></div>
       <div
-        data-part="file-input-dropzone"
+        data-scope="file-input" data-part="dropzone"
         class="border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-orange-30v mt-2 relative w-full bg-white data-[dragging]:bg-blue-10"
       >
         <div
-          data-part="file-input-preview-list"
+          data-scope="file-input" data-part="item-group"
           class="relative z-30 pointer-events-none hidden data-[valid]:block data-[valid]:bg-blue-10 group"
         >
           <div class="flex justify-between items-center p-2">
             <div
-              data-part="file-input-preview-header"
+              data-scope="file-input" data-part="preview-heading"
               class="font-bold"
             ></div>
-            <span class="text-blue-60v underline">Change File</span>
           </div>
           <div
-            data-part="file-input-preview-item"
+            data-scope="file-input" data-part="item"
             class="flex gap-2 p-2 border-t border-t-white group-data-[dragging]:opacity-10"
           >
-            <div
-              data-part="file-input-preview-item-icon"
-              class="size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=doc]:icon-[fa-solid--file-word] data-[type=sheet]:icon-[fa-solid--file-excel] data-[type=vid]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]"
-            ></div>
-            <div data-part="file-input-preview-item-content" class="flex items-center"></div>
+            <img data-scope="file-input" data-part="item-preview-image" alt="" class="size-8 object-contain" />
+            <div data-file-name class="flex items-center"></div>
           </div>
         </div>
         <div
-          data-part="file-input-instructions"
+          data-scope="file-input" data-part="instructions"
           class="py-8 px-4 pointer-events-none z-30 relative text-center data-[valid]:hidden"
         >
-          <span>Drag file here or</span>
-          <span class="text-blue-60v underline">choose from folder</span>
+          <span data-scope="file-input" data-part="drag-text">Drag file here or</span>
+          <span data-scope="file-input" data-part="choose" class="text-blue-60v underline">choose from folder</span>
         </div>
         <div
-          data-part="file-input-error-message"
+          data-scope="file-input" data-part="error-text"
           class="hidden text-red-60v font-bold data-[invalid]:block -mt-6 mb-6 text-center"
         ></div>
         <input
-          data-part="file-input-input"
+          data-scope="file-input" data-part="input"
           id="file-input-specific"
           class="cursor-pointer absolute inset-0 z-10 p-2 focus:outline-4 focus:outline-blue-40v [&::-webkit-file-upload-button]:hidden data-[dragging]:bg-blue-10 text-transparent"
           type="file"
@@ -142,55 +134,51 @@ This component requires the following JavaScript plugin:
 
 <ComponentPreview title="File Input Accept Multiple" ins={["multiple"]} code={`
 <div
-    data-part="file-input-root"
+    data-scope="file-input" data-part="root"
     class="relative z-0 max-w-lg"
   >
     <label
-      data-part="file-input-label"
+      data-scope="file-input" data-part="label"
       class="block"
     >Input accepts multiple files</label>
     <span class="text-gray-50" id="file-input-many-hint">Select one or more files</span>
     <div>
-      <div data-part="file-input-sr-status"></div>
+      <div data-scope="file-input" data-part="sr-status"></div>
       <div
-        data-part="file-input-dropzone"
+        data-scope="file-input" data-part="dropzone"
         class="border border-dashed border-gray-30 hover:border-gray-50 group data-[invalid]:border-orange-30v mt-2 relative w-full bg-white data-[dragging]:bg-blue-10"
       >
         <div
-          data-part="file-input-preview-list"
+          data-scope="file-input" data-part="item-group"
           class="relative z-30 pointer-events-none hidden data-[valid]:block data-[valid]:bg-blue-10 group"
         >
           <div class="flex justify-between items-center p-2">
             <div
-              data-part="file-input-preview-header"
+              data-scope="file-input" data-part="preview-heading"
               class="font-bold"
             ></div>
-            <span class="text-blue-60v underline">Change File</span>
           </div>
           <div
-            data-part="file-input-preview-item"
+            data-scope="file-input" data-part="item"
             class="flex gap-2 p-2 border-t border-t-white group-data-[dragging]:opacity-10"
           >
-            <div
-              data-part="file-input-preview-item-icon"
-              class="size-8! text-blue-60v data-[type=pdf]:icon-[fa-solid--file-pdf] data-[type=doc]:icon-[fa-solid--file-word] data-[type=sheet]:icon-[fa-solid--file-excel] data-[type=vid]:icon-[fa-solid--file-video] data-[type=generic]:icon-[fa-solid--file]"
-            ></div>
-            <div data-part="file-input-preview-item-content" class="flex items-center"></div>
+            <img data-scope="file-input" data-part="item-preview-image" alt="" class="size-8 object-contain" />
+            <div data-file-name class="flex items-center"></div>
           </div>
         </div>
         <div
-          data-part="file-input-instructions"
+          data-scope="file-input" data-part="instructions"
           class="py-8 px-4 pointer-events-none z-30 relative text-center data-[valid]:hidden"
         >
-          <span>Drag file here or</span>
-          <span class="text-blue-60v underline">choose from folder</span>
+          <span data-scope="file-input" data-part="drag-text">Drag file here or</span>
+          <span data-scope="file-input" data-part="choose" class="text-blue-60v underline">choose from folder</span>
         </div>
         <div
-          data-part="file-input-error-message"
+          data-scope="file-input" data-part="error-text"
           class="hidden text-red-60v font-bold data-[invalid]:block -mt-6 mb-6 text-center"
         ></div>
         <input
-          data-part="file-input-input"
+          data-scope="file-input" data-part="input"
           id="file-input-many"
           class="cursor-pointer absolute inset-0 z-10 p-2 focus:outline-4 focus:outline-blue-40v [&::-webkit-file-upload-button]:hidden data-[dragging]:bg-blue-10 text-transparent"
           type="file"
@@ -217,77 +205,37 @@ fileInputInit()
 
 ### Anatomy
 
-Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+Use `data-scope="file-input" data-part="root"` on the wrapper. Required descendants are `input`, `dropzone`, `instructions`, and `item-group`. The `item-group` must contain an initial `item` template with an `item-preview-image` image and an element with `data-file-name` for the filename. Initialization removes this template and clones it for selected files.
 
-Use `data-part="file-input-root"` with these descendants:
+Optional parts are `label`, `box`, `drag-text`, `choose`, `preview-heading`, `error-text`, and `sr-status`. Include a visible label, error text, and status region in accessible examples. The runtime writes selection copy and announcement text into these parts.
 
-#### `file-input-label`
+<ApiTable label="file-input input attributes">
 
-Required label.
-
-#### `file-input-dropzone`
-
-Required drop target.
-
-#### `file-input-input`
-
-Required native file input.
-
-<ApiTable label="file-input-input attributes">
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `accept` | `comma-separated string` | **Authored.** Accepted file types. |
-| `disabled` | `boolean attribute` | **Authored.** Disables selection. |
-| `multiple` | `boolean attribute` | **Authored.** Allows the native input to select multiple files. |
-| `data-errormessage` | `string` | **Authored.** Message displayed for an invalid file type. |
+| Attribute | Description |
+| --- | --- |
+| `accept` | Comma-separated file types; the `accept` option takes precedence. A rejected file rejects the entire batch and clears the accepted selection. |
+| `disabled` | Disables the native picker; the `disabled` option takes precedence. |
+| `multiple` | Allows multiple files in the native picker; the `multiple` option takes precedence. |
+| `aria-disabled` | Presence, including `false`, supplies the fallback for `ariaDisabled`. This option marks the control without blocking interaction. |
+| `data-errormessage` | Invalid-type message; the `errorText` option takes precedence. Defaults to `Error: This is not a valid file type.` |
+| `name` | Native form submission name. |
 
 </ApiTable>
 
-#### `file-input-instructions`
+The runtime generates `data-dragging` on the dropzone, `data-invalid` on the dropzone and error text, and `data-valid` on the item group. It hides instructions when files are selected and hides the item group when no files are selected.
 
-Required visible selection instructions.
+Preview images use object URLs. Failed image loads receive `data-preview-type` with `pdf`, `word`, `excel`, `video`, or `generic` for fallback styling.
 
-#### `file-input-sr-status`
+### Configuration and methods
 
-Required announcement region.
+Use `FileInput.getOrCreateInstance(root, options)` to pass `accept`, `multiple`, `disabled`, `ariaDisabled`, `errorText`, `id`, or `ids`. Options take precedence over markup fallbacks.
 
-#### `file-input-preview-header`
+`setFiles(files)` accepts a `File[]` and returns `Promise<void>` after the queued selection update. It applies client-side type validation and updates previews; it does not populate the native file input's `files`. Use the native picker for normal form submission. `api.acceptedFiles`, `api.invalid`, and `api.errorText` expose selection state. This component has no selection-change callback.
 
-Required preview heading.
+`accept` is a file-picker hint and client-side constraint. The component does not upload files. Your application owns submission and server validation.
 
-#### `file-input-preview-list`
+### Cleanup and accessibility
 
-Required preview container.
+`fileInputInit()` returns initialized instances. Call `destroy()` before removing markup to release preview URLs and stop the machine. Removed previews also release their URLs. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
 
-#### `file-input-preview-item`
-
-Required initial template inside the preview list.
-
-#### `file-input-preview-item-icon`
-
-Optional preview icon template.
-
-#### `file-input-preview-item-content`
-
-Optional filename template.
-
-#### `file-input-error-message`
-
-Optional visual error message.
-
-The wrapper owns the generated preview children. Keep the file input in the form with a meaningful label and `name`.
-
-### Configuration
-
-The wrapper reads `accept`, `disabled`, and `data-errormessage` during construction; these DOM-derived values override their corresponding constructor options, including when an attribute is absent.
-
-`accept` is a file-picker hint and client-side type constraint, not a server validation rule. The component manages selection and previews; it does not upload files. The application owns submission and server validation.
-
-### Lifecycle
-
-Retain explicitly constructed instances and call `destroy()` before removing the markup. The legacy convenience initializer returns no instance array.
-
-See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
-
-Keep status and error elements separate from generated preview children.
+The separate status region uses `role="status"` and `aria-live="polite"`. Selection announcements follow a one-second delay. An initially disabled component hides this region. Keep hints linked to the input and retain visible focus styles.

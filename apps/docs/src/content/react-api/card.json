@@ -15,7 +15,8 @@
         {
           "name": "layout",
           "type": "vertical | ltr | rtl",
-          "description": "Places media above, left of, or right of the content."
+          "description": "Places media above, left of, or right of the content.",
+          "defaultValue": "vertical"
         }
       ]
     },
@@ -27,7 +28,8 @@
         {
           "name": "variant",
           "type": "indent | flush | exdent",
-          "description": "Controls how the media meets the card edge."
+          "description": "Controls how the media meets the card edge.",
+          "defaultValue": "indent"
         }
       ]
     },

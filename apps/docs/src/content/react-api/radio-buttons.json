@@ -20,7 +20,7 @@
         {
           "name": "readOnly",
           "type": "boolean",
-          "description": "Prevents changes."
+          "description": "Sets aria-readonly on the group. Native radio inputs remain operable."
         },
         {
           "name": "invalid",
@@ -48,23 +48,13 @@
           "name": "value",
           "type": "string (required)",
           "description": "Value for this choice."
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "Disables this choice."
-        },
-        {
-          "name": "invalid",
-          "type": "boolean",
-          "description": "Marks this choice invalid."
         }
       ]
     },
     {
       "name": "ItemInput",
       "element": "input",
-      "description": "Native radio control."
+      "description": "Native radio control. Pass disabled for an individual choice and defaultChecked for an initial selection."
     },
     {
       "name": "ItemControl",

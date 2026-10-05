@@ -1,10 +1,10 @@
 import { Combobox } from '@uswds-tailwind/react'
 
 const options = [
-  { value: 'apple', text: 'Apple' },
-  { value: 'apricot', text: 'Apricot' },
-  { value: 'avocado', text: 'Avocado' },
-  { value: 'banana', text: 'Banana' },
+  { value: 'apple', label: 'Apple' },
+  { value: 'apricot', label: 'Apricot' },
+  { value: 'avocado', label: 'Avocado' },
+  { value: 'banana', label: 'Banana' },
 ]
 
 export default function ComboBoxDemo() {
@@ -22,9 +22,9 @@ export default function ComboBoxDemo() {
         <Combobox.List>
           {({ options }) => (
             <>
-              {options.map((option, index) => (
-                <Combobox.Item key={option.value} index={index} {...option}>
-                  {option.text}
+              {options.map(option => (
+                <Combobox.Item key={option.id} {...option}>
+                  {option.label}
                 </Combobox.Item>
               ))}
               <Combobox.EmptyItem />

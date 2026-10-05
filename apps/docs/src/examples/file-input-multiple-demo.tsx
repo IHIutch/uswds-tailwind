@@ -6,26 +6,26 @@ export default function FileInputMultipleDemo() {
       <FileInput.Label>Input accepts multiple files</FileInput.Label>
       <FileInput.SrStatus />
       <FileInput.Dropzone>
-        <FileInput.PreviewList>
-          {({ files }) => (
+        <FileInput.ItemGroup>
+          {({ acceptedFiles }) => (
             <>
               <FileInput.PreviewHeader>
                 <FileInput.PreviewTitle />
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
-              {files.map(file => (
+              {acceptedFiles.map(file => (
                 <FileInput.Item key={file.name} file={file}>
-                  <FileInput.PreviewItem>
+                  <FileInput.ItemPreview>
                     {file.type.startsWith('image/')
-                      ? <FileInput.PreviewItemThumb />
-                      : <FileInput.PreviewItemIcon />}
-                    <FileInput.PreviewItemContent />
-                  </FileInput.PreviewItem>
+                      ? <FileInput.ItemPreviewImage />
+                      : <FileInput.ItemPreviewIcon />}
+                    <FileInput.ItemName />
+                  </FileInput.ItemPreview>
                 </FileInput.Item>
               ))}
             </>
           )}
-        </FileInput.PreviewList>
+        </FileInput.ItemGroup>
         <FileInput.Instructions />
         <FileInput.ErrorMessage>This is not a valid file type.</FileInput.ErrorMessage>
         <FileInput.Input />

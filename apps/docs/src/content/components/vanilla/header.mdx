@@ -4,6 +4,8 @@ description: "Identify your site and connect visitors to its main sections with 
 ---
 
 The Vanilla examples use these JavaScript initializers:
+
+  - [Accordion](/docs/vanilla/javascript#accordion)
   - [Dropdown](/docs/vanilla/javascript#dropdown)
   - [Modal](/docs/vanilla/javascript#modal)
 
@@ -568,3 +570,21 @@ The Vanilla examples use these JavaScript initializers:
     </div>
   </header>
 `} />
+
+## Component API
+
+Initialize the dropdowns, mobile modal, and mobile accordions after the complete markup exists:
+
+```js
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
+import { dropdownInit } from '@uswds-tailwind/compat/dropdown'
+import { modalInit } from '@uswds-tailwind/compat/modal'
+
+accordionInit()
+dropdownInit()
+modalInit()
+```
+
+There is no separate Header initializer. Match each modal trigger's `data-target` to its root's `data-value`. Give each accordion item a unique `data-value` within its root.
+
+Use the [Accordion](/docs/vanilla/components/accordion#component-api), [Dropdown](/docs/vanilla/components/dropdown#component-api), and [Modal](/docs/vanilla/components/modal#component-api) APIs for configuration and cleanup. The layout uses CSS breakpoints to switch between desktop and mobile navigation.

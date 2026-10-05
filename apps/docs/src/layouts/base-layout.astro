@@ -88,7 +88,7 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
       import { destroyAllComponents, initAll } from "@uswds-tailwind/compat";
 
       document.addEventListener("astro:page-load", () => {
-        // React and compat share data-part names, including accordion-root.
+        // React and compat share scoped roots and part names.
         // Only vanilla pages contain compat-owned demos.
         if (document.documentElement.dataset.library === "vanilla")
           initAll();

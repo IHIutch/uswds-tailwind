@@ -14,22 +14,22 @@
         },
         {
           "name": "min",
-          "type": "Date",
-          "description": "Earliest selectable date."
+          "type": "string",
+          "description": "Earliest selectable date. Use ISO YYYY-MM-DD."
         },
         {
           "name": "max",
-          "type": "Date",
-          "description": "Latest selectable date."
+          "type": "string",
+          "description": "Latest selectable date. Use ISO YYYY-MM-DD."
         },
         {
           "name": "defaultValue",
-          "type": "(Date | undefined)[]",
-          "description": "Initial date values."
+          "type": "string[]",
+          "description": "Initial date values. Use ISO YYYY-MM-DD strings."
         },
         {
           "name": "value",
-          "type": "(Date | undefined)[]",
+          "type": "Date[]",
           "description": "Controlled selected dates."
         },
         {
@@ -44,13 +44,18 @@
         },
         {
           "name": "onValueChange",
-          "type": "({ value, valueAsString, view }) => void",
-          "description": "Receives selected Date values and ISO strings; an empty range endpoint is undefined with an empty string in valueAsString."
+          "type": "({ value: Date[]; valueAsString: string[] }) => void",
+          "description": "Receives only the selected Date values and their ISO YYYY-MM-DD strings. Unset range endpoints are omitted."
         },
         {
           "name": "onOpenChange",
           "type": "({ open }) => void",
           "description": "Receives calendar visibility changes."
+        },
+        {
+          "name": "ids",
+          "type": "Datepicker ElementIds",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ],
       "data": [
@@ -250,7 +255,7 @@
     {
       "name": "Status",
       "element": "div",
-      "description": "Displays calendar status text."
+      "description": "Announces calendar status text in a visually hidden region."
     }
   ],
   "accessibility": "Provide a visible label and format hint. A typed date must be a real calendar date within Root's min and max; an empty optional input remains valid."

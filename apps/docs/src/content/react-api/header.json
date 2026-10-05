@@ -10,7 +10,8 @@
         {
           "name": "variant",
           "type": "default | extended",
-          "description": "Selects the header layout."
+          "description": "Selects the header layout.",
+          "defaultValue": "default"
         }
       ]
     },
@@ -27,7 +28,8 @@
         {
           "name": "size",
           "type": "md | lg",
-          "description": "Sets the branding text size."
+          "description": "Sets the branding text size.",
+          "defaultValue": "md"
         }
       ]
     },

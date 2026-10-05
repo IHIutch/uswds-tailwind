@@ -16,15 +16,15 @@ The Vanilla examples use these JavaScript initializers:
 <ComponentPreview title="Combo Box" resize={false} mark={[/data-part="[^\"]*"/g]} code={`
   <div
     class="max-w-lg"
-    data-part="combobox-root"
+    data-scope="combobox" data-part="root"
   >
     <label
-      data-part="combobox-label"
+      data-scope="combobox" data-part="label"
       class="combobox-label block"
     >Select a fruit:</label>
 
     <select
-      data-part="combobox-select"
+      data-scope="combobox" data-part="hidden-select"
       hidden
     >
       <option value>Select a fruit</option>
@@ -37,28 +37,27 @@ The Vanilla examples use these JavaScript initializers:
       <option value="blueberry">Blueberry</option>
       <option value="boysenberry">Boysenberry</option>
       <option value="breadfruit">Breadfruit</option>
-      <option value="breadfruit">Breadfruit</option>
       <option value="buddhas hand citron">Buddha's hand citron</option>
     </select>
 
+    <div data-scope="combobox" data-part="status" class="sr-only"></div>
     <div class="relative mt-2">
       <div class="flex w-full">
         <input
-          required
-          data-part="combobox-input"
+          data-scope="combobox" data-part="input"
           class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
         >
         <div class="absolute z-10 inset-y-0 right-0 flex">
           <button
             class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-            data-part="combobox-clear"
+            data-scope="combobox" data-part="clear-trigger"
             type="button"
           >
             <div class="icon-[material-symbols--close] size-6"></div>
           </button>
           <button
             class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-            data-part="combobox-toggle"
+            data-scope="combobox" data-part="trigger"
             type="button"
           >
             <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -66,12 +65,12 @@ The Vanilla examples use these JavaScript initializers:
         </div>
       </div>
       <ul
-        data-part="combobox-list"
+        data-scope="combobox" data-part="list"
         class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
       >
         <li
-          data-part="combobox-item"
-          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+          data-scope="combobox" data-part="item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[highlighted]:outline-4 data-[highlighted]:outline-blue-40v data-[highlighted]:-outline-offset-4"
         ></li>
       </ul>
     </div>
@@ -83,16 +82,16 @@ The Vanilla examples use these JavaScript initializers:
 <ComponentPreview title="Combo Box Default Value" resize={false} ins={[/data-default-value="[^\"]*"/g]} code={`
   <div
     class="max-w-lg"
-    data-part="combobox-root"
+    data-scope="combobox" data-part="root"
     data-default-value="banana"
   >
     <label
-      data-part="combobox-label"
+      data-scope="combobox" data-part="label"
       class="combobox-label block"
     >Select a fruit:</label>
 
     <select
-      data-part="combobox-select"
+      data-scope="combobox" data-part="hidden-select"
       hidden
     >
       <option value>Select a fruit</option>
@@ -105,28 +104,27 @@ The Vanilla examples use these JavaScript initializers:
       <option value="blueberry">Blueberry</option>
       <option value="boysenberry">Boysenberry</option>
       <option value="breadfruit">Breadfruit</option>
-      <option value="breadfruit">Breadfruit</option>
       <option value="buddhas hand citron">Buddha's hand citron</option>
     </select>
 
+    <div data-scope="combobox" data-part="status" class="sr-only"></div>
     <div class="relative mt-2">
       <div class="flex w-full">
         <input
-          required
-          data-part="combobox-input"
+          data-scope="combobox" data-part="input"
           class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
         >
         <div class="absolute z-10 inset-y-0 right-0 flex">
           <button
             class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-            data-part="combobox-clear"
+            data-scope="combobox" data-part="clear-trigger"
             type="button"
           >
             <div class="icon-[material-symbols--close] size-6"></div>
           </button>
           <button
             class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-            data-part="combobox-toggle"
+            data-scope="combobox" data-part="trigger"
             type="button"
           >
             <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -134,12 +132,12 @@ The Vanilla examples use these JavaScript initializers:
         </div>
       </div>
       <ul
-        data-part="combobox-list"
+        data-scope="combobox" data-part="list"
         class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
       >
         <li
-          data-part="combobox-item"
-          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
+          data-scope="combobox" data-part="item"
+          class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[highlighted]:outline-4 data-[highlighted]:outline-blue-40v data-[highlighted]:-outline-offset-4"
         ></li>
       </ul>
     </div>
@@ -160,77 +158,51 @@ comboboxInit()
 
 ### Anatomy
 
-Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+Use `data-scope="combobox" data-part="root"` on the wrapper. Required descendants are `hidden-select`, `input`, and `list`. The select must contain options even when passing an `options` configuration. Empty-value options are excluded from the suggestion list.
 
-#### `combobox-root`
+Optional parts are `label`, `trigger`, `clear-trigger`, and `status`. Include `status` with an `sr-only` class for result announcements. The initializer generates its `role="status"` and `aria-live="polite"`.
 
-Component wrapper.
+Place an `item` template inside `list` to style generated options. The wrapper copies its class and inline style, replaces list children, and writes option text. Generated items use `data-highlighted` for focus styling and `aria-selected` for selection styling.
 
-<ApiTable label="combobox-root attributes">
+<ApiTable label="combobox root attributes">
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `data-default-value` | `string` | **Authored.** Nonempty value overrides the select’s initial value. |
-| `data-placeholder` | `string` | **Authored.** Initial placeholder; overrides constructor configuration. |
-| `data-disabled` | `presence attribute` | **Authored.** Presence disables the component, including `"false"`. A disabled select also contributes disabled state. |
-| `data-disable-filtering` | `presence attribute` | **Authored.** Presence disables filtering, including `"false"`. |
-
-</ApiTable>
-
-#### `combobox-select`
-
-Native select supplying options and the form field name.
-
-<ApiTable label="combobox-select attributes">
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `name` | `string` | **Authored.** Name used for form submission. |
-| `required` | `boolean attribute` | **Authored.** Native required-field configuration. |
-| `disabled` | `boolean attribute` | **Authored.** Contributes disabled state. |
+| Attribute | Description |
+| --- | --- |
+| `data-default-value` | Initial selected value; falls back to the native select value. `defaultValue` takes precedence, including an empty string. |
+| `data-placeholder` | Input placeholder; the `placeholder` option takes precedence. |
+| `data-disabled` | Bare attribute or any value except `false` disables interaction. The native select's disabled attribute also contributes. `disabled` takes precedence. |
+| `data-disable-filtering` | Bare attribute or any value except `false` disables filtering. `disableFiltering` takes precedence. |
+| `data-filter` | Regex template; the `filter` option takes precedence. Defaults to `.*{{query}}.*`. |
+| `data-filter-*` | Capture regexes for named filter placeholders. For example, `data-filter-number` supplies `{{number}}`. `filterExtras` takes precedence. |
 
 </ApiTable>
 
-#### `combobox-input`
+### Configuration
 
-Text entry control.
+Pass options to `Combobox.getOrCreateInstance(root, options)` before calling the convenience initializer.
 
-#### `combobox-list`
+<ApiTable label="combobox options">
 
-Container for generated options.
+| Option | Description |
+| --- | --- |
+| `options` | Array of `{ value, label }` options; overrides options read from the select. |
+| `defaultValue` | Initial selection. This component does not accept a controlled `value` option. |
+| `placeholder`, `disabled`, `disableFiltering`, `filter`, `filterExtras` | Override the corresponding markup configuration. |
+| `ariaDisabled` | Emits disabled accessibility attributes while leaving the input operable. Defaults to presence of `aria-disabled` on the select, including `aria-disabled="false"`. |
+| `name` | Name generated on the hidden select for form submission. Pass this option explicitly. |
+| `required` | Generates native required validation on the text input. Pass this option explicitly. |
+| `aria-label`, `aria-labelledby` | Accessible input name; defaults to the corresponding select attributes. `aria-labelledby` takes precedence over `aria-label`. |
+| `id`, `ids` | Instance identifier and part IDs. Existing select IDs are preserved unless `ids.hiddenSelect` overrides them. |
+| `onValueChange` | Receives `{ value: string, label: string }` for committed selection changes. This is a JavaScript callback. |
 
-#### `combobox-item`
+</ApiTable>
 
-Option template; the wrapper owns generated list items.
+### Methods and cleanup
 
-#### `combobox-label`
+`enable()` and `disable()` return `Promise<void>` after the queued update. `api.setValue(value)` requests a selection update and returns `void`. `api.value`, `api.inputValue`, `api.items`, and `api.open` expose the current state.
 
-Optional label.
+The initializer returns instances. Call `destroy()` before removing markup. Configuration attributes are read during construction; later attribute changes do not update the machine. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
 
-#### `combobox-toggle`
+### Accessibility
 
-Optional button that opens the list.
-
-#### `combobox-clear`
-
-Optional button that clears selection.
-
-Use each name as its `data-part` value.
-
-Supply nonempty option values and meaningful option text; the empty-value option is excluded from the suggestion list.
-
-Do not store application content or listeners in generated list children, which may be replaced during rendering.
-
-### Lifecycle
-
-The constructor reads configuration from the markup once. Changing data attributes afterward does not update the component. Markup can override constructor options; check the precedence rules in the attribute table.
-
-Retain explicit instances for cleanup and call `destroy()` before removing the component. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
-
-### Changes and accessibility
-
-Do not infer a named DOM event from a machine or React callback.
-
-Use the native form controls for submission and preserve labels, hints, and visible focus styles.
-
-The list, options, and expanded/highlighted state are owned by the component; configuration attributes are distinct from generated ARIA and state output.
+Use a visible `label` part or supply an accessible name. Preserve hint relationships and visible focus styles. The component generates the input's combobox role, listbox relationships, expanded state, and active descendant.

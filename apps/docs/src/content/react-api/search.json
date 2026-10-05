@@ -10,7 +10,8 @@
         {
           "name": "size",
           "type": "default | sm | lg",
-          "description": "Changes the input and button size."
+          "description": "Changes the input and button size.",
+          "defaultValue": "default"
         },
         {
           "name": "name",

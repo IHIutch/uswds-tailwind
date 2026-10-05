@@ -10,28 +10,21 @@
           "name": "size",
           "type": "\"default\" | \"lg\"",
           "description": "Changes content width and body/title spacing.",
-          "defaultValue": "\"default\"",
+          "defaultValue": "default",
           "anchor": "modal-size"
-        },
-        {
-          "name": "defaultOpen",
-          "type": "boolean",
-          "description": "Initial open state for uncontrolled use.",
-          "defaultValue": "false",
-          "anchor": "modal-default-open"
         },
         {
           "name": "open",
           "type": "boolean",
           "description": "Controlled open state; update it after a change callback.",
-          "defaultValue": "—",
+          "defaultValue": "\u2014",
           "anchor": "modal-open"
         },
         {
           "name": "onOpenChange",
           "type": "({ open: boolean }) => void",
           "description": "Called when an open-state change is requested.",
-          "defaultValue": "—",
+          "defaultValue": "\u2014",
           "anchor": "modal-on-open-change"
         },
         {
@@ -45,6 +38,11 @@
           "name": "aria-label",
           "type": "string",
           "description": "Names the dialog directly and takes precedence over the Title relationship."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; trigger?: string; backdrop?: string; positioner?: string; content?: string; closeTrigger?: string; title?: string; description?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ],
       "note": "The dialog traps focus, prevents background scrolling, and restores focus after closing. These behaviors are managed automatically; the dialog role is fixed to dialog."
@@ -52,7 +50,7 @@
     {
       "name": "Trigger",
       "element": "button",
-      "description": "Opens the dialog and accepts Button styling props.",
+      "description": "Opens the dialog and uses the default Button styling. Accepts native button props.",
       "data": [
         {
           "attribute": "data-scope, data-part",
@@ -150,7 +148,7 @@
       "name": "CloseTrigger",
       "element": "button",
       "slug": "closetrigger",
-      "description": "Closes the dialog. The default icon button is named \"Close this window.\"",
+      "description": "Closes the dialog. Supply aria-label when using the default icon-only button.",
       "props": [
         {
           "name": "aria-label",
