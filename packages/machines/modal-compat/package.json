@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/modal-compat",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.0.0-beta.0",
   "description": "Headless state machine for the USWDS modal component (zag-js).",
   "author": "Jonathan Hutchison",
   "license": "MIT",

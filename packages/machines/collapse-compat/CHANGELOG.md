@@ -1,5 +1,11 @@
 # @uswds-tailwind/collapse-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 2017168: Update collapse state handling and nested part ownership. Use shared vanilla instance management and wait for updates in the public open and close methods; add parity coverage.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

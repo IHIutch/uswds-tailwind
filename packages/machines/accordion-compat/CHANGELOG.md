@@ -1,5 +1,11 @@
 # @uswds-tailwind/accordion-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- d3586ec: Update accordion state handling, authored initial values, nested item ownership, and vanilla instance methods. Align the machine and React adapter with the v2 accordion API and add parity coverage.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

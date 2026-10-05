@@ -1,5 +1,44 @@
 # @uswds-tailwind/compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- d3586ec: Update accordion state handling, authored initial values, nested item ownership, and vanilla instance methods. Align the machine and React adapter with the v2 accordion API and add parity coverage.
+- e84fdaa: Simplify character count state and value handling across the machine, vanilla, and React adapters. Update the status, control, and description APIs while preserving validation and debounced screen reader announcements.
+- 2017168: Update collapse state handling and nested part ownership. Use shared vanilla instance management and wait for updates in the public open and close methods; add parity coverage.
+- d0d5197: Simplify combobox state and item handling across the machine, vanilla, and React adapters. Preserve native select synchronization, filtering, clear behavior, and duplicate-value handling while adding interaction, accessibility, and observable behavior coverage.
+- effbba5: Update dropdown state and item-link handling across the machine, vanilla, and React adapters. Align the v2 dropdown API and add controlled-state and interaction coverage.
+- ad34c7d: Simplify input mask state and value handling across the machine, vanilla, and React adapters. Update the v2 public API and add initial-value, controlled-state, and value-change coverage.
+- c2dd8e6: Update modal state, focus handling, scroll locking, and vanilla instance behavior. Align the React adapter with the v2 modal API, add parity coverage, and remove the deprecated modal machine package.
+- 50bb7b5: Introduce shared component instance management, DOM part lookup, data attribute parsing, and update settling for the v2 vanilla adapters. Update the shared runtime dependencies and browser test setup.
+- 170a7d6: Simplify table sorting to a nullable sort descriptor with Zag-style naming. Keep row sorting in the vanilla adapter, expose controlled sort state for React, and preserve accessible sort labels and announcements.
+- 910dfb6: Simplify tooltip state and interaction handling across the machine, vanilla, and React adapters. Update the v2 tooltip API and add behavior and controlled-state coverage.
+
+### Patch Changes
+
+- Updated dependencies [d3586ec]
+- Updated dependencies [e84fdaa]
+- Updated dependencies [2017168]
+- Updated dependencies [d0d5197]
+- Updated dependencies [effbba5]
+- Updated dependencies [ad34c7d]
+- Updated dependencies [b10075e]
+- Updated dependencies [c2dd8e6]
+- Updated dependencies [170a7d6]
+- Updated dependencies [910dfb6]
+  - @uswds-tailwind/accordion-compat@2.0.0-beta.0
+  - @uswds-tailwind/character-count-compat@2.0.0-beta.0
+  - @uswds-tailwind/collapse-compat@2.0.0-beta.0
+  - @uswds-tailwind/combobox-compat@2.0.0-beta.0
+  - @uswds-tailwind/dropdown-compat@2.0.0-beta.0
+  - @uswds-tailwind/input-mask-compat@2.0.0-beta.0
+  - @uswds-tailwind/modal-compat@2.0.0-beta.0
+  - @uswds-tailwind/table-compat@2.0.0-beta.0
+  - @uswds-tailwind/tooltip-compat@2.0.0-beta.0
+  - @uswds-tailwind/date-picker-compat@2.0.0-beta.0
+  - @uswds-tailwind/file-input-compat@2.0.0-beta.0
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes
