@@ -15,6 +15,21 @@ it('characterCount works standalone', async () => {
   await expect.element(screen.getByRole('textbox')).toBeVisible()
 })
 
+it('preserves the authored root id for links and external references', async () => {
+  const screen = await render(
+    <CharacterCount.Root id="counter" maxLength={5}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
+  )
+  const root = screen.container.querySelector('[data-part="root"]')!
+  expect(root.id).toBe('counter')
+  expect(document.getElementById('counter')).toBe(root)
+  await screen.getByRole('textbox').fill('abcdef')
+  await expect.element(screen.getByText('1 character over limit')).toBeVisible()
+  expect(root.id).toBe('counter')
+})
+
 it('prefilled over-limit input has native validity on mount', async () => {
   const screen = await render(
     <CharacterCount.Root maxLength={5} defaultValue="abcdef">
