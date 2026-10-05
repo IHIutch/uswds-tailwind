@@ -375,7 +375,7 @@ const modal = Modal.getOrCreateInstance(
 await modal.open()
 ```
 
-Promises settle the queued update, not CSS transitions. The vanilla wrapper starts closed and manages its own state. It does not support `open`, `defaultOpen`, `ids`, or `onOpenChange` options.
+Promises settle the queued update, not CSS transitions. The component starts closed and manages its own state. It does not support `open`, `defaultOpen`, `ids`, or `onOpenChange` options.
 
 Retain and remove the root during teardown. `destroy()` does not restore its original parent or HTML.
 

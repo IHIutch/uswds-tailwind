@@ -30,7 +30,7 @@ Run `dropdownInit()` from `@uswds-tailwind/compat/dropdown` after the markup exi
 
 Each item may have a nonempty `data-value`, with its `id` as a fallback. The initializer attaches activation handlers to links inside items. `onItemSelect` receives `{ value: string }` when a link with an item value activates. It is a JavaScript callback, not a DOM event.
 
-The vanilla wrapper starts closed and does not accept `open`, `defaultOpen`, or `onOpenChange`. `open()` and `close()` return `Promise<void>` after the queued update. `api.open` exposes current state. Call `destroy()` before removing markup. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
+The component starts closed and does not accept `open`, `defaultOpen`, or `onOpenChange`. `open()` and `close()` return `Promise<void>` after the queued update. `api.open` exposes current state. Call `destroy()` before removing markup. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
 
 ### Accessibility
 
