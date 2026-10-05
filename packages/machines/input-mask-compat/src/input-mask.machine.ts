@@ -1,64 +1,7 @@
 import type { InputMaskSchema } from './input-mask.types'
 import { createMachine } from '@zag-js/core'
-
-const maskedNumber = '_#dDmMyY9'
-const maskedLetter = 'A'
-
-function strippedValue(isCharsetPresent: boolean, value: string) {
-  return isCharsetPresent ? value.replace(/\W/g, '') : value.replace(/\D/g, '')
-}
-
-function isInteger(value: string | undefined) {
-  return value !== undefined && !Number.isNaN(Number.parseInt(value, 10))
-}
-
-function isLetter(value: string | undefined) {
-  return value ? !!value.match(/[A-Z]/i) : false
-}
-
-export function applyMask(value: string, placeholder: string, charset: string | undefined) {
-  const isCharsetPresent = !!charset
-  const template = charset || placeholder
-  const len = template.length
-  let newValue = ''
-  let charIndex = 0
-
-  const strippedVal = strippedValue(isCharsetPresent, value)
-
-  for (let i = 0; i < len; i += 1) {
-    const isInt = isInteger(strippedVal[charIndex])
-    const isLet = isLetter(strippedVal[charIndex])
-    const matchesNumber = maskedNumber.includes(template[i]!)
-    const matchesLetter = maskedLetter.includes(template[i]!)
-
-    if (
-      (matchesNumber && isInt)
-      || (isCharsetPresent && matchesLetter && isLet)
-    ) {
-      newValue += strippedVal[charIndex]!
-      charIndex += 1
-    }
-    else if (
-      (!isCharsetPresent && !isInt && matchesNumber)
-      || (isCharsetPresent
-        && ((matchesLetter && !isLet) || (matchesNumber && !isInt)))
-    ) {
-      return newValue
-    }
-    else {
-      newValue += template[i]!
-    }
-    if (strippedVal[charIndex] === undefined) {
-      break
-    }
-  }
-
-  return newValue
-}
-
-/* -----------------------------------------------------------------------------
- * Machine
- * ----------------------------------------------------------------------------- */
+import * as dom from './input-mask.dom'
+import { maskValue } from './input-mask.utils'
 
 export const machine = createMachine<InputMaskSchema>({
   props({ props }) {
@@ -72,57 +15,44 @@ export const machine = createMachine<InputMaskSchema>({
     return 'idle'
   },
 
-  context({ prop, bindable }) {
+  context({ bindable, prop }) {
+    const mask = prop('mask') ?? ''
+    const initialValue = maskValue(prop('value') ?? prop('defaultValue'), mask, prop('charset'))
     return {
-      value: bindable<string>(() => ({
-        defaultValue: prop('defaultValue'),
-        value: prop('value'),
-      })),
+      value: bindable<string>(() => {
+        const controlledValue = prop('value')
+        return {
+          defaultValue: initialValue,
+          value: controlledValue === undefined
+            ? undefined
+            : maskValue(controlledValue, prop('mask') ?? '', prop('charset')),
+        }
+      }),
     }
   },
 
-  computed: {
-    enteredText: ({ context }) => context.get('value'),
-    // `!` safe: placeholder is a required prop
-    remainingPlaceholder: ({ context, prop }) =>
-      prop('placeholder')!.substring(context.get('value').length),
-    // `!` safe: placeholder is a required prop
-    maxLength: ({ prop }) => prop('placeholder')!.length,
+  watch({ track, action, prop }) {
+    track([() => prop('value')], () => action(['syncInput']))
   },
 
   states: {
     idle: {
       on: {
-        'VALUE_CHANGE': {
-          actions: ['setValue'],
-        },
-        'INPUT.FOCUS': {
-          target: 'focused',
-        },
-      },
-    },
-    focused: {
-      on: {
-        'VALUE_CHANGE': {
-          actions: ['setValue'],
-        },
-        'INPUT.BLUR': {
-          target: 'idle',
-        },
+        'VALUE.SET': { actions: ['updateValue'] },
       },
     },
   },
 
   implementations: {
     actions: {
-      //   inputEl.value = handleCurrentValue(inputEl)
-      // Validates raw input against mask, stores validated result, fires callback.
-      setValue({ context, prop, event }) {
-        const rawValue = event.value as string
-        const validated = applyMask(rawValue, prop('placeholder')!, prop('charset'))
-        context.set('value', validated)
-        // Fire callback manually after set (per gotcha: consistent snapshot)
-        prop('onValueChange')?.({ value: validated })
+      updateValue({ event, prop, context, scope }) {
+        const masked = maskValue(event.value, prop('mask') ?? '', prop('charset'))
+        context.set('value', masked)
+        dom.setInputValue(scope, prop('value') === undefined ? masked : context.get('value'))
+        prop('onValueChange')?.({ value: masked })
+      },
+      syncInput({ context, scope }) {
+        dom.setInputValue(scope, context.get('value'))
       },
     },
   },
