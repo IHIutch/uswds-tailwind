@@ -1,16 +1,14 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { CharacterCount } from '../../packages/compat/src/character-count.js'
 import { createDisposableCharacterCount } from './_utils.js'
 
 const rootId = 'test'
 
-const template = `<div data-part="character-count-root" id="${rootId}">
+const template = `<div data-scope="character-count" data-part="root" id="${rootId}">
   <div>
-    <label data-part="character-count-label"></label>
-    <input data-part="character-count-input" pattern="[A-Za-z]+" maxlength="5"/>
-    <div data-part="character-count-status"></div>
-    <div data-part="character-count-sr-status"></div>
+    <input data-part="input" pattern="[A-Za-z]+" maxlength="5"/>
+    <div data-part="status"></div>
+    <div data-part="sr-status"></div>
   </div>
 </div>`
 
@@ -20,15 +18,15 @@ it('assert that input constraint validation adds a validation message', async ()
 
   await userEvent.fill(input, 'abcd5')
 
-  expect(input.validationMessage).toBe('Please match the requested format.')
+  expect(input.validity.patternMismatch).toBe(true)
+  expect(input.validity.customError).toBe(false)
 })
 
 it('assert that input constraint validation does not overwrite a custom message', async () => {
   await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
-  const instance = CharacterCount.getInstance(rootId)
-  instance?.api.setCustomValidity('There is an error')
+  input.setCustomValidity('There is an error')
   await userEvent.fill(input, 'abcd56')
 
   expect(input.validationMessage).toBe('There is an error')
@@ -38,8 +36,7 @@ it('should not affect the validation message when a custom error message is alre
   await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
 
-  const instance = CharacterCount.getInstance(rootId)
-  instance?.api.setCustomValidity('There is an error')
+  input.setCustomValidity('There is an error')
   await userEvent.fill(input, 'abcdef')
 
   expect(input.validationMessage).toBe('There is an error')
@@ -51,7 +48,8 @@ it('should not affect the validation message when the input is already invalid',
 
   await userEvent.fill(input, 'abcde5')
 
-  expect(input.validationMessage).toBe('Please match the requested format.')
+  expect(input.validity.patternMismatch).toBe(true)
+  expect(input.validity.customError).toBe(false)
 })
 
 it('should clear the validation message when input is only invalid by character count validation', async () => {
@@ -65,5 +63,5 @@ it('should clear the validation message when input is only invalid by character 
   await userEvent.clear(input)
   await userEvent.fill(input, 'abcde')
 
-  expect(input.validationMessage).toBe('')
+  await vi.waitFor(() => expect(input.validationMessage).toBe(''))
 })

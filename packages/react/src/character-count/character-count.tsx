@@ -1,40 +1,36 @@
-import type * as characterCount from '@uswds-tailwind/character-count-compat'
 import type { UseCharacterCountProps } from './use-character-count'
+import * as characterCount from '@uswds-tailwind/character-count-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
 import { Input } from '../input/input'
 import { cn } from '../tv.config'
+import { composeRefs } from '../utils/compose-refs'
 import { useCharacterCount } from './use-character-count'
 
 export type CharacterCountRootProps = UseCharacterCountProps & React.ComponentPropsWithoutRef<'div'>
-export type CharacterCountLabelProps = React.ComponentPropsWithoutRef<'label'>
 export type CharacterCountInputProps = React.ComponentPropsWithoutRef<'input'>
 export type CharacterCountStatusProps = React.ComponentPropsWithoutRef<'div'>
 export type CharacterCountSrStatusProps = React.ComponentPropsWithoutRef<'div'>
 
-export interface CharacterCountContextProps {
-  api: characterCount.Api
-  maxLength: number | undefined
-}
-
-const CharacterCountContext = React.createContext<CharacterCountContextProps | null>(null)
+const CharacterCountContext = React.createContext<characterCount.Api | null>(null)
 
 function useCharacterCountContext() {
-  const context = React.useContext(CharacterCountContext)
-  if (!context) {
+  const api = React.useContext(CharacterCountContext)
+  if (!api) {
     throw new Error('CharacterCount components must be used within a CharacterCount.Root')
   }
-  return context
+  return api
 }
 
 const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootProps>(
   ({ className, ...props }, forwardedRef) => {
-    const { api, maxLength } = useCharacterCount(props)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const [machineProps, rest] = characterCount.splitProps(props)
+    const api = useCharacterCount(machineProps as UseCharacterCountProps)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
-      <CharacterCountContext.Provider value={{ api, maxLength }}>
+      <CharacterCountContext.Provider value={api}>
         <div {...mergedProps} className={className} ref={forwardedRef} />
       </CharacterCountContext.Provider>
     )
@@ -43,24 +39,24 @@ const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootPr
 
 const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInputProps>(
   (props, forwardedRef) => {
-    const { api } = useCharacterCountContext()
+    const api = useCharacterCountContext()
 
     const mergedProps = mergeProps(api.getInputProps(), props)
 
     return (
       <Input
         {...mergedProps}
-        ref={forwardedRef}
+        ref={composeRefs(mergedProps.ref, forwardedRef)}
       />
     )
   },
 )
 
 function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps) {
-  const { api } = useCharacterCountContext()
+  const api = useCharacterCountContext()
   const field = useFieldContext()
 
-  const mergedProps = mergeProps(api.getStatusProps(), field?.getDescriptionProps(), props)
+  const mergedProps = mergeProps(field?.getDescriptionProps(), api.getStatusProps(), props)
 
   return (
     <div
@@ -76,7 +72,7 @@ function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps
 }
 
 function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
-  const { api, maxLength } = useCharacterCountContext()
+  const api = useCharacterCountContext()
 
   const mergedProps = mergeProps(api.getSrStatusProps(), props)
 
@@ -85,7 +81,7 @@ function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
       <span className="sr-only">
         You can enter up to
         {' '}
-        {maxLength}
+        {api.maxLength}
         {' '}
         characters
       </span>
@@ -94,29 +90,14 @@ function CharacterCountSrStatus(props: CharacterCountSrStatusProps) {
   )
 }
 
-function CharacterCountLabel({ className, ...props }: CharacterCountLabelProps) {
-  const { api } = useCharacterCountContext()
-
-  const mergedProps = mergeProps(api.getLabelProps(), props)
-
-  return (
-    <label
-      {...mergedProps}
-      className={cn('block', className)}
-    />
-  )
-}
-
 CharacterCountRoot.displayName = 'CharacterCount.Root'
 CharacterCountInput.displayName = 'CharacterCount.Input'
 CharacterCountStatus.displayName = 'CharacterCount.Status'
 CharacterCountSrStatus.displayName = 'CharacterCount.SrStatus'
-CharacterCountLabel.displayName = 'CharacterCount.Label'
 
 export const CharacterCount = {
   Root: CharacterCountRoot,
   Input: CharacterCountInput,
   Status: CharacterCountStatus,
   SrStatus: CharacterCountSrStatus,
-  Label: CharacterCountLabel,
 }
