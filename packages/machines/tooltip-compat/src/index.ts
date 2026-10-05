@@ -1,14 +1,14 @@
-export { anatomy, parts } from './tooltip.anatomy'
+export { anatomy } from './tooltip.anatomy'
 export { connect } from './tooltip.connect'
 export { machine } from './tooltip.machine'
-export { props, splitProps } from './tooltip.props'
+export * from './tooltip.props'
 export type {
   TooltipApi as Api,
   ElementIds,
   TooltipMachine as Machine,
   OpenChangeDetails,
-  Position,
+  Placement,
   TooltipProps as Props,
+  TooltipSchema as Schema,
   TooltipService as Service,
-  TooltipSchema,
 } from './tooltip.types'

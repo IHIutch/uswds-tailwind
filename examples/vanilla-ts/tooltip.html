@@ -23,74 +23,86 @@
 
   <div class="p-32 space-y-12">
     <div
-      data-part="tooltip-root"
+      data-scope="tooltip"
+      data-part="root"
       data-placement="top"
-      class="relative"
+      class="relative isolate w-fit"
     >
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip"
+        data-part="trigger"
         type="button"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
       >
         Show on top
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip"
+        data-part="content"
+        class="invisible data-visible:visible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute top-(--tooltip-y) left-(--tooltip-x) transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:transform-(--arrow-transform) after:translate-x-(--arrow-offset) after:translate-y-(--arrow-offset) after:left-(--arrow-x) after:top-(--arrow-y)"
       >Top</div>
     </div>
 
     <div
-      data-part="tooltip-root"
+      data-scope="tooltip"
+      data-part="root"
       data-placement="right"
-      class="relative"
+      class="relative isolate w-fit"
     >
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip"
+        data-part="trigger"
         type="button"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
       >
         Show on right
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip"
+        data-part="content"
+        class="invisible data-visible:visible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute top-(--tooltip-y) left-(--tooltip-x) transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:transform-(--arrow-transform) after:translate-x-(--arrow-offset) after:translate-y-(--arrow-offset) after:left-(--arrow-x) after:top-(--arrow-y)"
       >Right</div>
     </div>
 
     <div
-      data-part="tooltip-root"
+      data-scope="tooltip"
+      data-part="root"
       data-placement="bottom"
-      class="relative"
+      class="relative isolate w-fit"
     >
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip"
+        data-part="trigger"
         type="button"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
       >
         Show on bottom
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip"
+        data-part="content"
+        class="invisible data-visible:visible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute top-(--tooltip-y) left-(--tooltip-x) transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:transform-(--arrow-transform) after:translate-x-(--arrow-offset) after:translate-y-(--arrow-offset) after:left-(--arrow-x) after:top-(--arrow-y)"
       >Bottom</div>
     </div>
 
     <div
-      data-part="tooltip-root"
+      data-scope="tooltip"
+      data-part="root"
       data-placement="left"
-      class="relative"
+      class="relative isolate w-fit"
     >
       <button
-        data-part="tooltip-trigger"
+        data-scope="tooltip"
+        data-part="trigger"
         type="button"
         class="rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v cursor-pointer"
       >
         Show on left
       </button>
       <div
-        data-part="tooltip-content"
-        class="bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:rotate-45 after:translate-(--caret-translate) after:left-(--caret-left) after:top-(--caret-top)"
+        data-scope="tooltip"
+        data-part="content"
+        class="invisible data-visible:visible bg-gray-90 rounded-sm text-gray-5 p-2 whitespace-pre z-50 w-auto data-[state=open]:opacity-100 opacity-0 absolute top-(--tooltip-y) left-(--tooltip-x) transition-opacity duration-100 ease-in-out after:block after:absolute after:h-2 after:w-2 after:bg-inherit after:transform-(--arrow-transform) after:translate-x-(--arrow-offset) after:translate-y-(--arrow-offset) after:left-(--arrow-x) after:top-(--arrow-y)"
       >Left</div>
     </div>
   </div>
