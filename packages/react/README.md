@@ -7,7 +7,7 @@
 USWDS components for React, styled with [Tailwind CSS](https://tailwindcss.com/) and powered by [zag-js](https://zagjs.com/) state machines.
 
 > [!NOTE]
-> This package is in **V2 beta**. APIs may change between releases.
+> This package is in **v2 beta**. APIs may change between releases.
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-xm6mmahl)
 
