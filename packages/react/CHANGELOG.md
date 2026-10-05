@@ -1,5 +1,50 @@
 # @uswds-tailwind/react
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- d3586ec: Update accordion state handling, authored initial values, nested item ownership, and vanilla instance methods. Align the machine and React adapter with the v2 accordion API and add parity coverage.
+- e84fdaa: Simplify character count state and value handling across the machine, vanilla, and React adapters. Update the status, control, and description APIs while preserving validation and debounced screen reader announcements.
+- d0d5197: Simplify combobox state and item handling across the machine, vanilla, and React adapters. Preserve native select synchronization, filtering, clear behavior, and duplicate-value handling while adding interaction, accessibility, and observable behavior coverage.
+- effbba5: Update dropdown state and item-link handling across the machine, vanilla, and React adapters. Align the v2 dropdown API and add controlled-state and interaction coverage.
+- ad34c7d: Simplify input mask state and value handling across the machine, vanilla, and React adapters. Update the v2 public API and add initial-value, controlled-state, and value-change coverage.
+- c2dd8e6: Update modal state, focus handling, scroll locking, and vanilla instance behavior. Align the React adapter with the v2 modal API, add parity coverage, and remove the deprecated modal machine package.
+- 82e171a: Follow Ark UI's ID convention across the v2 React adapters: id sets the machine namespace, and ids overrides exact DOM part IDs. Forward part overrides and preserve Field label associations.
+- 170a7d6: Simplify table sorting to a nullable sort descriptor with Zag-style naming. Keep row sorting in the vanilla adapter, expose controlled sort state for React, and preserve accessible sort labels and announcements.
+- 910dfb6: Simplify tooltip state and interaction handling across the machine, vanilla, and React adapters. Update the v2 tooltip API and add behavior and controlled-state coverage.
+- d1405bd: Begin the V2 beta release series.
+
+### Patch Changes
+
+- f2b7180: Replace CVA with tailwind-variants
+- b10075e: Update modal anatomy, trigger aria attributes
+- 6dbb325: Connect React navigation dropdown links to their item value and dropdown machine so link interactions use the same behavior as dropdown items.
+- b3180ad: Rename radio to radio group to match component naming
+- 6834323: Update radio item control type from input to div
+- Updated dependencies [d3586ec]
+- Updated dependencies [e84fdaa]
+- Updated dependencies [2017168]
+- Updated dependencies [d0d5197]
+- Updated dependencies [effbba5]
+- Updated dependencies [ad34c7d]
+- Updated dependencies [b10075e]
+- Updated dependencies [c2dd8e6]
+- Updated dependencies [170a7d6]
+- Updated dependencies [910dfb6]
+  - @uswds-tailwind/accordion-compat@2.0.0-beta.0
+  - @uswds-tailwind/character-count-compat@2.0.0-beta.0
+  - @uswds-tailwind/collapse-compat@2.0.0-beta.0
+  - @uswds-tailwind/combobox-compat@2.0.0-beta.0
+  - @uswds-tailwind/dropdown-compat@2.0.0-beta.0
+  - @uswds-tailwind/input-mask-compat@2.0.0-beta.0
+  - @uswds-tailwind/modal-compat@2.0.0-beta.0
+  - @uswds-tailwind/table-compat@2.0.0-beta.0
+  - @uswds-tailwind/tooltip-compat@2.0.0-beta.0
+  - @uswds-tailwind/date-picker-compat@2.0.0-beta.0
+  - @uswds-tailwind/file-input-compat@2.0.0-beta.0
+  - @uswds-tailwind/theme@2.0.0-beta.0
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes
