@@ -1,6 +1,6 @@
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { FileInputApi, FileInputService } from './file-input.types'
-import { ariaAttr, dataAttr } from '@zag-js/dom-query'
+import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
 import { getDefaultAriaLabel, getFileId, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
@@ -191,6 +191,7 @@ export function connect<T extends PropTypes>(
         'role': 'status',
         'aria-live': 'polite',
         'hidden': !refs.get('hasStatus'),
+        'style': visuallyHiddenStyle,
       })
     },
 

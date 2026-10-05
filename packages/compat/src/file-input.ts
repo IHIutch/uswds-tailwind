@@ -2,7 +2,7 @@ import * as fileInput from '@uswds-tailwind/file-input-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataString } from './lib/data-attr'
-import { getOwnedPart, getPart } from './lib/dom'
+import { getOwnedElements, getOwnedPart, getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = fileInput.anatomy.build()
@@ -87,7 +87,7 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
     if (this.itemTemplate !== null)
       return
 
-    const item = getPart<HTMLElement>(itemGroup, parts.item)
+    const item = getOwnedElements<HTMLElement>(this.rootEl, itemGroup, `[data-part="${parts.item.attrs['data-part']}"]`)[0]
     if (!item)
       throw new Error('Expected file input preview item to be defined')
     this.itemTemplate = item
