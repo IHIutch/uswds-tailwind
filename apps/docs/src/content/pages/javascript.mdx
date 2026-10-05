@@ -68,7 +68,7 @@ Copy the complete component example, including required parts, labels, and Tailw
 
 | Markup | Purpose |
 | --- | --- |
-| `data-scope="accordion" data-part="root"` | V2 wrappers use scoped roots and short descendant parts. Follow each component’s anatomy. |
+| `data-scope="accordion" data-part="root"` | v2 wrappers use scoped roots and short descendant parts. Follow each component’s anatomy. |
 | `data-part="date-picker-root"` or `data-part="date-range-picker-root"` | Date Picker and Date Range Picker retain prefixed parts. |
 | Configuration attributes and constructor options | Inputs read during construction; later attribute changes are not automatically observed. |
 | Generated IDs, `aria-*`, `hidden`, and state attributes | Output used for accessibility and styling. Treat only documented configuration as writable input. |
@@ -77,7 +77,7 @@ Copy the complete component example, including required parts, labels, and Tailw
 
 ### Boolean attributes
 
-- V2 data booleans such as Accordion `data-multiple`, Combobox `data-disabled`, and Modal `data-force-action` treat the exact string `"false"` as false.
+- v2 data booleans such as Accordion `data-multiple`, Combobox `data-disabled`, and Modal `data-force-action` treat the exact string `"false"` as false.
 - Native `disabled` and `multiple` attributes follow HTML presence rules.
 - Constructor precedence varies by component; check its configuration table.
 
