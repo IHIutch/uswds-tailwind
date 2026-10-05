@@ -68,8 +68,8 @@ Copy the complete component example, including required parts, labels, and Tailw
 
 | Markup | Purpose |
 | --- | --- |
-| `data-scope="accordion" data-part="root"` | Scoped roots and short descendant parts are used by Accordion, Collapse, Dropdown, Input Mask, Modal, and Tooltip. |
-| `data-part="combobox-root"` | The remaining wrappers use prefixed parts. Follow each component’s anatomy. |
+| `data-scope="accordion" data-part="root"` | V2 wrappers use scoped roots and short descendant parts. Follow each component’s anatomy. |
+| `data-part="date-picker-root"` or `data-part="date-range-picker-root"` | Date Picker and Date Range Picker retain prefixed parts. |
 | Configuration attributes and constructor options | Inputs read during construction; later attribute changes are not automatically observed. |
 | Generated IDs, `aria-*`, `hidden`, and state attributes | Output used for accessibility and styling. Treat only documented configuration as writable input. |
 
@@ -77,19 +77,19 @@ Copy the complete component example, including required parts, labels, and Tailw
 
 ### Boolean attributes
 
-- Accordion `data-multiple` and Modal `data-force-action` treat the exact string `"false"` as false.
-- Presence checks such as Combobox `data-disabled` treat any present value as true.
+- V2 data booleans such as Accordion `data-multiple`, Combobox `data-disabled`, and Modal `data-force-action` treat the exact string `"false"` as false.
+- Native `disabled` and `multiple` attributes follow HTML presence rules.
 - Constructor precedence varies by component; check its configuration table.
 
 ## Instance lifecycle
 
-Accordion, Collapse, Dropdown, Input Mask, Modal, and Tooltip support these shared methods:
+Accordion, Character Count, Collapse, Combobox, Dropdown, File Input, Input Mask, Modal, Table, and Tooltip support these shared methods:
 
 <ApiTable label="Instance lifecycle methods">
 
 | Method | Result and behavior |
 | --- | --- |
-| `new Component(elementOrSelector, options)` | Constructs an instance without starting it. Throws if the root is missing. |
+| `new Component(elementOrSelector, options)` | Constructs an instance without starting it. Throws if the root is missing or already bound to a component. |
 | `instance.init()` | Starts rendering and the machine; returns the instance. Call once. |
 | `Component.getInstance(elementOrSelector)` | Returns the instance for that element and type, or `null`. Use an element or CSS selector, not a bare ID string. |
 | `Component.getOrCreateInstance(elementOrSelector, options)` | Returns the existing instance or constructs and initializes one. Options do not reconfigure an existing instance. |
@@ -98,7 +98,7 @@ Accordion, Collapse, Dropdown, Input Mask, Modal, and Tooltip support these shar
 
 </ApiTable>
 
-The six corresponding convenience initializers return instance arrays. Character Count, Combobox, Date Picker, File Input, and Table still expose legacy ID-based lookup maps; Date Range Picker does not expose that legacy lookup. Their initializers return `void`. Do not assume the newer factory contract works on those wrappers.
+The ten corresponding convenience initializers return instance arrays and reuse existing instances. Date Picker and Date Range Picker retain older initializers that return `void` and try to create an instance on every scan. Scanning an already bound root throws. Date Picker also retains `DatePicker.getInstance(id)` with a bare instance ID; it does not use the element lookup described above. Use explicit constructors for those two wrappers and destroy each instance before removing its markup.
 
 For dynamic content, retain an explicit instance and destroy it before removing the owned DOM:
 
@@ -132,20 +132,23 @@ root.remove()
 
 ## Changes and callbacks
 
-Pass callbacks through explicit constructor or factory options. These are JavaScript callbacks, not automatically emitted custom DOM events.
+Pass callbacks through explicit constructor or factory options. These are JavaScript callbacks, not automatically emitted custom DOM events. File Input exposes accepted files and validation state through `instance.api`; it does not provide change callbacks.
 
 <ApiTable label="Change callbacks">
 
 | Component | Callback | Payload |
 | --- | --- | --- |
 | Accordion | `onValueChange` | `{ value: string[] }` |
-| Collapse, Dropdown, Modal, Tooltip | `onOpenChange` | `{ open: boolean }` |
+| Collapse, Tooltip | `onOpenChange` | `{ open: boolean }` |
+| Character Count | `onValueChange` | `{ value: string }` |
+| Combobox | `onValueChange` | `{ value: string, label: string }` |
+| Table | `onSortChange` | `{ sortDescriptor: { column: number, direction: "ascending" \| "descending" } \| null }` |
 | Dropdown | `onItemSelect` | `{ value }` |
 | Input Mask | `onValueChange` | `{ value: string }` (formatted) |
 
 </ApiTable>
 
-When you supply `value` or `open`, your application controls that state. Change callbacks request a new value; your application must supply the updated state. For ordinary Vanilla initialization, use `defaultValue` or `defaultOpen` so the component manages subsequent changes.
+Accordion, Character Count, and Input Mask support controlled `value`; Collapse and Tooltip support controlled `open`. Table supports controlled `sortDescriptor`. Vanilla Dropdown and Modal manage open state internally and do not accept `open` or `onOpenChange`. When you supply a supported controlled prop, your application controls that state. Change callbacks request a new value; your application must supply the updated state. Use the component’s documented initial-state options for uncontrolled state.
 
 Wrapper `open()`/`close()` methods on Accordion, Collapse, Dropdown, and Modal return promises that settle the queued update; they do not wait for CSS transitions or update state controlled by your application. Direct connect API requests such as Input Mask's `instance.api.setValue()` return no promise.
 
@@ -172,4 +175,4 @@ All subpaths below are relative to `@uswds-tailwind/compat/`. Each initializer b
 
 </ApiTable>
 
-Banner uses Collapse; Header and Language Selector use Dropdown. Time Picker uses Combobox. Ordinary styled tables need no JavaScript.
+Banner uses Collapse; Header and Language Selector use Dropdown. Time Picker uses Combobox. Ordinary styled tables need no JavaScript. Header and expandable Footer examples also use Accordion.

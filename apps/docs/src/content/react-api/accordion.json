@@ -25,15 +25,20 @@
           "name": "value",
           "type": "string[]",
           "description": "Controlled expanded values; update this prop after a change callback.",
-          "defaultValue": "—",
+          "defaultValue": "\u2014",
           "anchor": "accordion-value"
         },
         {
           "name": "onValueChange",
           "type": "({ value: string[] }) => void",
           "description": "Called when the expanded values change or a controlled change is requested.",
-          "defaultValue": "—",
+          "defaultValue": "\u2014",
           "anchor": "accordion-on-value-change"
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; itemContent?: (value: string) => string; itemTrigger?: (value: string) => string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ],
       "data": [
@@ -43,7 +48,7 @@
           "purpose": "Select the root."
         },
         {
-          "attribute": "data-allow-multiple",
+          "attribute": "data-multiple",
           "value": "Present when multiple is true",
           "purpose": "Style multiple-item mode."
         }
@@ -118,7 +123,7 @@
       "props": [
         {
           "name": "children",
-          "type": "ReactNode | (({ value, isOpen }) => ReactNode)",
+          "type": "ReactNode | (({ value, open }) => ReactNode)",
           "description": "Replaces the default icon with content or a render function based on the item state.",
           "anchor": "accordion-indicator-children"
         }

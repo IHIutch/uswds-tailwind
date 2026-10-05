@@ -10,7 +10,8 @@
         {
           "name": "variant",
           "type": "default | slim | big",
-          "description": "Selects the footer layout."
+          "description": "Selects the footer layout.",
+          "defaultValue": "default"
         }
       ]
     },

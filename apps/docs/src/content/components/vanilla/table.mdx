@@ -340,10 +340,7 @@ import ApiTable from "#components/api-table.astro"
 
 ### Sortable
 
-For React, provide a `columnNames` entry for each sortable header's `columnIndex`,
-including headers rendered as JSX. These names supply accessible labels and sort
-announcements. The consumer owns row ordering: pass its accepted `sortDescriptor`
-and handle sort requests through `onSortChange`.
+The vanilla wrapper reads header names and reorders rows in the first `<tbody>` when sorting changes.
 
 <ComponentPreview title="Table Sortable" mark={[/data-part="[^\"]*"/g, /data-sortable/g, /data-sort-value="[^\"]*"/g]} code={`
 <div data-scope="table" data-part="root">
@@ -512,49 +509,44 @@ Preserve captions, column headers, row-header scopes, and keyboard access to scr
 
 ### Sorting markup
 
-Import `tableInit` from `@uswds-tailwind/compat/table` for a sortable table. `Table` is the corresponding instance class.
+Run `tableInit()` from `@uswds-tailwind/compat/table` after the markup exists. It returns initialized `Table` instances.
 
-Use each part name as its `data-part` value.
+Use `data-scope="table" data-part="root"` on a wrapper containing a `table` part and a separate `sr-status` part. Both are required. The table must have a `<tbody>`; the wrapper sorts its first body. Author the status region with `class="sr-only"`; the runtime supplies `aria-live="polite"` and announcement text.
 
-#### `table-root`
+Mark sortable `<thead>` headers with `data-sortable` and place a native button inside each header. Presence of `data-sortable`, including `false`, enables sorting. The wrapper generates `header` and `sort-trigger` parts on these elements.
 
-The sortable table.
+Rows and cells are native markup, not anatomy parts. The wrapper generates `data-sort-active="true"` on cells in the sorted column.
 
-#### `table-header-cell`
+<ApiTable label="table sorting attributes">
 
-Column header.
-
-<ApiTable label="table-header-cell attributes">
-
-| Attribute | Type | Description |
+| Element | Attribute | Description |
 | --- | --- | --- |
-| `data-sortable` | `presence attribute` | **Authored.** Presence enables sorting, including the string `"false"`. |
-| `aria-sort` | `"ascending" \| "descending"` | **Generated.** Current sort direction. |
+| Root | `data-sort-column` | Authored nonnegative integer column index for initial sorting. |
+| Root | `data-sort-direction` | Authored `ascending` or `descending`; defaults to an initially sorted header's direction, then `ascending`. |
+| Sortable header | `aria-sort` | May author `ascending` or `descending` for initial sorting when no valid root column is supplied. Generated after initialization and removed from unsorted headers. |
+| Cell | `data-sort-value` | Authored comparison value. Nonempty values take precedence over `data-sort`, rendered text, then text content. |
 
 </ApiTable>
 
-#### `table-sort-button`
+Numeric values compare as numbers when both cells contain nonempty numeric strings. Other values use locale comparison with numeric ordering and ignored punctuation.
 
-Native button inside a sortable header. Give it an accessible name identifying the column.
+### Configuration
 
-#### `table-body-cell`
+<ApiTable label="table options">
 
-Data cell.
-
-<ApiTable label="table-body-cell attributes">
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `data-sort-value` | `string` | **Authored.** Comparison value when it differs from displayed text, such as a formatted number. Defaults to cell text. |
+| Option | Description |
+| --- | --- |
+| `defaultSortDescriptor` | Initial `{ column: number, direction: 'ascending' \| 'descending' }`, or `null`. Takes precedence over authored sorting attributes, including an explicit `null`. |
+| `sortDescriptor` | Controlled descriptor, or `null` for unsorted. Your application must update it after requests. |
+| `captionText` | Announcement caption; defaults to rendered caption text. |
+| `columnNames` | Record of column indices to announcement names; defaults to rendered sortable header text. |
+| `id`, `ids` | Instance identifier and generated root, header, sortTrigger, and srStatus IDs. |
+| `onSortChange` | Receives `{ sortDescriptor }` for sort changes or controlled requests. This is a JavaScript callback. |
 
 </ApiTable>
 
-### Lifecycle and state
+### Methods and cleanup
 
-The wrapper creates a sort-announcement element after the table during construction.
+Use `Table.getOrCreateInstance(root, options)` to configure an instance. `api.setSortDescriptor(descriptor)` requests a sort update and returns `void`. `api.sortDescriptor` and `api.announcement` expose current state.
 
-Avoid repeated initialization; retain the instance and account for generated sibling markup when removing the table. `aria-sort` and active-sort styling are generated state rather than configuration inputs.
-
-See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
-
-React Table provides styling primitives; the application or a table library supplies sorting behavior.
+Clearing the descriptor removes sort state but does not restore the original row order. Initialization requires an authored announcement element; it does not create a sibling region. Call `destroy()` before removing markup. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).

@@ -10,7 +10,8 @@
         {
           "name": "segmented",
           "type": "boolean",
-          "description": "Joins the buttons into one visual segment."
+          "description": "Joins the buttons into one visual segment.",
+          "defaultValue": "false"
         },
         {
           "name": "variant",

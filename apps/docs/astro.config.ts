@@ -14,8 +14,10 @@ export default defineConfig({
   integrations: [
     favicons({
       name: 'USWDS + Tailwind',
+      short_name: 'USWDS + Tailwind',
       themes: ['#112f4e'],
       manifest: {
+        start_url: '/',
         display: 'browser',
         display_override: [],
       },

@@ -10,12 +10,14 @@
         {
           "name": "variant",
           "type": "default | vivid-orange | light-gray",
-          "description": "Selects the color treatment."
+          "description": "Selects the color treatment.",
+          "defaultValue": "default"
         },
         {
           "name": "size",
           "type": "md | lg",
-          "description": "Selects the text size."
+          "description": "Selects the text size.",
+          "defaultValue": "md"
         }
       ]
     }

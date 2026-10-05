@@ -8,19 +8,30 @@
       "description": "Owns menu visibility and selection behavior.",
       "props": [
         {
-          "name": "closeOnSelect",
-          "type": "boolean",
-          "description": "Closes the menu after selecting an item."
-        },
-        {
           "name": "onOpenChange",
           "type": "({ open: boolean }) => void",
           "description": "Receives open-state changes."
         },
         {
-          "name": "onSelect",
+          "name": "onItemSelect",
           "type": "({ value: string }) => void",
           "description": "Receives an item selection."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Controlled menu visibility. Update after onOpenChange to accept a request."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "description": "Initial uncontrolled menu visibility.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; trigger?: string; content?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ],
       "data": [

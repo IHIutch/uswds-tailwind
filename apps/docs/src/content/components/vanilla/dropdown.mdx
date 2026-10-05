@@ -8,8 +8,8 @@ description: "Reveal a short menu of related destinations or actions with a drop
 <ComponentPreview title="Dropdown" code={`<div data-scope="dropdown" data-part="root" class="relative inline-block">
   <button data-scope="dropdown" data-part="trigger" type="button" class="rounded-sm bg-blue-60v px-5 py-3 font-bold text-white focus:outline-4 focus:outline-blue-40v">Services</button>
   <ul data-scope="dropdown" data-part="content" class="absolute z-30 w-60 bg-blue-warm-80v text-white">
-    <li data-scope="dropdown" data-part="item"><a href="#benefits" class="block p-2 hover:underline">Benefits</a></li>
-    <li data-scope="dropdown" data-part="item"><a href="#records" class="block p-2 hover:underline">Records</a></li>
+    <li data-scope="dropdown" data-part="item" data-value="benefits"><a href="#benefits" class="block p-2 hover:underline">Benefits</a></li>
+    <li data-scope="dropdown" data-part="item" data-value="records"><a href="#records" class="block p-2 hover:underline">Records</a></li>
   </ul>
 </div>`} />
 
@@ -21,4 +21,17 @@ Run `dropdownInit()` from `@uswds-tailwind/compat/dropdown` after the markup exi
 
 ### Parts
 
-`root` contains `trigger` and `content`. Each `item` belongs inside `content`. The initializer manages open state, focus, and keyboard interaction.
+`root` contains `trigger` and `content`. Each `item` belongs inside `content`. The initializer manages expanded state, hides closed content, and returns focus to the trigger after Escape or link activation. Native buttons and links provide keyboard activation and Tab navigation. It does not implement menu roles or arrow-key navigation.
+
+
+### Configuration and methods
+
+`dropdownInit()` returns initialized instances. Use `Dropdown.getOrCreateInstance(root, options)` before convenience initialization to pass `id`, `ids`, or `onItemSelect`.
+
+Each item may have a nonempty `data-value`, with its `id` as a fallback. The initializer attaches activation handlers to links inside items. `onItemSelect` receives `{ value: string }` when a link with an item value activates. It is a JavaScript callback, not a DOM event.
+
+The vanilla wrapper starts closed and does not accept `open`, `defaultOpen`, or `onOpenChange`. `open()` and `close()` return `Promise<void>` after the queued update. `api.open` exposes current state. Call `destroy()` before removing markup. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).
+
+### Accessibility
+
+Provide a meaningful button label and descriptive link text. The runtime generates the trigger's `aria-expanded` and `aria-controls`, and hides closed content. Escape or outside interaction dismisses an open dropdown.

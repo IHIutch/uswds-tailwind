@@ -10,7 +10,8 @@
         {
           "name": "currentPage",
           "type": "number",
-          "description": "Initial page or controlled page when onPageChange is supplied."
+          "description": "Initial page or controlled page when onPageChange is supplied.",
+          "defaultValue": "1"
         },
         {
           "name": "pageCount",

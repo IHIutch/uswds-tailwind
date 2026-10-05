@@ -31,13 +31,18 @@
           "name": "onValueChange",
           "type": "({ value: string }) => void",
           "description": "Receives value changes."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; content?: string; input?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ]
     },
     {
       "name": "Label",
       "element": "label",
-      "description": "Names the masked input."
+      "description": "Native label. Set htmlFor to the input ID explicitly, or use Field.Label with an enclosing Field.Root."
     },
     {
       "name": "Control",
@@ -52,7 +57,7 @@
     {
       "name": "Input",
       "element": "input",
-      "description": "Receives the typed value.",
+      "description": "Receives the typed value. Field.Root can supply validation state; the mask itself does not validate completeness.",
       "data": [
         {
           "attribute": "data-invalid",

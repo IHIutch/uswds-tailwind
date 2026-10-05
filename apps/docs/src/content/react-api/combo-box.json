@@ -1,6 +1,6 @@
 {
   "name": "Combobox",
-  "intro": "Root owns options and selection. Place Label, Control, Input, List, and option Item parts inside it.",
+  "intro": "Root owns options and selection. Place Label, Control, Input, List, and option Item parts inside it. List supplies generated item IDs through its render callback.",
   "parts": [
     {
       "name": "Root",
@@ -9,13 +9,9 @@
       "props": [
         {
           "name": "options",
-          "type": "{ value: string; text: string; disabled?: boolean }[]",
-          "description": "Options available for selection."
-        },
-        {
-          "name": "value",
-          "type": "string",
-          "description": "Controlled selected value."
+          "type": "{ value: string; label: string }[]",
+          "description": "Options available for selection.",
+          "defaultValue": "[]"
         },
         {
           "name": "defaultValue",
@@ -23,44 +19,21 @@
           "description": "Initial selected value."
         },
         {
-          "name": "inputValue",
-          "type": "string",
-          "description": "Controlled query text."
-        },
-        {
-          "name": "defaultInputValue",
-          "type": "string",
-          "description": "Initial query text."
-        },
-        {
           "name": "onValueChange",
-          "type": "(value: string) => void",
+          "type": "({ value: string; label: string }) => void",
           "description": "Receives selection changes."
-        },
-        {
-          "name": "onInputValueChange",
-          "type": "({ inputValue: string }) => void",
-          "description": "Receives query changes."
-        },
-        {
-          "name": "onOpenChange",
-          "type": "({ open: boolean }) => void",
-          "description": "Receives list visibility changes."
-        },
-        {
-          "name": "customFilter",
-          "type": "(query, options) => options",
-          "description": "Overrides option filtering."
         },
         {
           "name": "disableFiltering",
           "type": "boolean",
-          "description": "Shows supplied options without built-in filtering."
+          "description": "Shows supplied options without built-in filtering.",
+          "defaultValue": "false"
         },
         {
           "name": "disabled",
           "type": "boolean",
-          "description": "Disables selection."
+          "description": "Disables selection.",
+          "defaultValue": "false"
         },
         {
           "name": "required",
@@ -70,12 +43,41 @@
         {
           "name": "showClearButton",
           "type": "boolean",
-          "description": "Renders the clear button when true."
+          "description": "Renders the clear button when true.",
+          "defaultValue": "true"
         },
         {
           "name": "showToggleButton",
           "type": "boolean",
-          "description": "Renders the toggle button when true."
+          "description": "Renders the toggle button when true.",
+          "defaultValue": "true"
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "description": "Regex template matched against each option label. Defaults to .*{{query}}.*; query substitutions are escaped literal text.",
+          "defaultValue": ".*{{query}}.*"
+        },
+        {
+          "name": "filterExtras",
+          "type": "Record<string, string>",
+          "description": "Capture-group regexes for additional placeholders in filter. The first capture replaces its placeholder."
+        },
+        {
+          "name": "ariaDisabled",
+          "type": "boolean",
+          "description": "Marks the control disabled for assistive technology while keeping it operable.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Machine form-bridge name. The React parts do not render a hidden select; use your own form bridge for the committed value."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; label?: string; input?: string; list?: string; trigger?: string; clearTrigger?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ],
       "data": [
@@ -94,14 +96,7 @@
     {
       "name": "Label",
       "element": "label",
-      "description": "Names the combobox.",
-      "data": [
-        {
-          "attribute": "data-disabled",
-          "value": "Present when disabled",
-          "purpose": "Style the disabled state."
-        }
-      ]
+      "description": "Names the combobox."
     },
     {
       "name": "Control",
@@ -111,14 +106,7 @@
     {
       "name": "Input",
       "element": "input",
-      "description": "Receives filter text.",
-      "data": [
-        {
-          "attribute": "data-state",
-          "value": "open | closed",
-          "purpose": "Style the open and closed states."
-        }
-      ]
+      "description": "Receives filter text."
     },
     {
       "name": "List",
@@ -142,33 +130,28 @@
     {
       "name": "Item",
       "element": "li",
-      "description": "Use its value, text, and index to match an option in the filtered list.",
+      "description": "Spread an option from List's render callback onto Item so its generated id, value, and label stay together.",
       "props": [
+        {
+          "name": "id",
+          "type": "string (required)",
+          "description": "Generated ID from the rendered option."
+        },
         {
           "name": "value",
           "type": "string (required)",
           "description": "Option value."
         },
         {
-          "name": "text",
+          "name": "label",
           "type": "string (required)",
           "description": "Option label."
-        },
-        {
-          "name": "index",
-          "type": "number (required)",
-          "description": "Index in the rendered option list."
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "Disables this option."
         }
       ],
       "data": [
         {
-          "attribute": "data-selected",
-          "value": "Present when selected",
+          "attribute": "aria-selected",
+          "value": "true | false",
           "purpose": "Styles the selected option."
         },
         {
@@ -177,9 +160,9 @@
           "purpose": "Styles the highlighted option."
         },
         {
-          "attribute": "data-disabled",
-          "value": "Present when disabled",
-          "purpose": "Style the disabled state."
+          "attribute": "data-value",
+          "value": "Option value",
+          "purpose": "Identifies the option."
         }
       ]
     },

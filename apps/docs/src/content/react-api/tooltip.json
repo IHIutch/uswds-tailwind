@@ -15,7 +15,8 @@
         {
           "name": "position",
           "type": "Tooltip position",
-          "description": "Preferred placement."
+          "description": "Preferred placement.",
+          "defaultValue": "top"
         },
         {
           "name": "defaultOpen",
@@ -31,20 +32,18 @@
           "name": "onOpenChange",
           "type": "({ open: boolean }) => void",
           "description": "Receives requested open-state changes."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; trigger?: string; content?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
         }
       ],
       "note": "Escape dismisses an open tooltip. In controlled mode, update open after onOpenChange requests dismissal."
     },
     {
       "name": "Trigger",
-      "description": "Clones its single child element and adds tooltip trigger behavior.",
-      "data": [
-        {
-          "attribute": "data-state",
-          "value": "open | closed",
-          "purpose": "Style the open and closed states."
-        }
-      ]
+      "description": "Clones its single child element and adds tooltip trigger behavior."
     },
     {
       "name": "Content",
@@ -80,7 +79,8 @@
         {
           "name": "position",
           "type": "Tooltip position",
-          "description": "Preferred placement."
+          "description": "Preferred placement.",
+          "defaultValue": "top"
         }
       ]
     }

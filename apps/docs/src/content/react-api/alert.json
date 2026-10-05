@@ -10,17 +10,20 @@
         {
           "name": "variant",
           "type": "info | warning | success | error | emergency",
-          "description": "Selects the visual treatment."
+          "description": "Selects the visual treatment.",
+          "defaultValue": "info"
         },
         {
           "name": "slim",
           "type": "boolean",
-          "description": "Uses compact spacing."
+          "description": "Uses compact spacing.",
+          "defaultValue": "false"
         },
         {
           "name": "noIcon",
           "type": "boolean",
-          "description": "Hides the indicator icon and reduces leading spacing."
+          "description": "Hides the indicator icon and reduces leading spacing.",
+          "defaultValue": "false"
         }
       ]
     },

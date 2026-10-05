@@ -5,22 +5,25 @@
     {
       "name": "Root",
       "element": "table",
-      "description": "Provides visual variants and sorting state.",
+      "description": "Renders a div around the native table and an automatic sort status region. Native table props apply to the inner table.",
       "props": [
         {
           "name": "variant",
           "type": "bordered | striped | borderless",
-          "description": "Selects border and row styling."
+          "description": "Selects border and row styling.",
+          "defaultValue": "bordered"
         },
         {
           "name": "compact",
           "type": "boolean",
-          "description": "Reduces cell padding."
+          "description": "Reduces cell padding.",
+          "defaultValue": "false"
         },
         {
           "name": "stacked",
           "type": "boolean",
-          "description": "Stacks cells on narrow screens."
+          "description": "Stacks cells on narrow screens.",
+          "defaultValue": "false"
         },
         {
           "name": "captionText",
@@ -30,32 +33,22 @@
         {
           "name": "columnNames",
           "type": "Record<number, string>",
-          "description": "Column names for sorting announcements."
+          "description": "Accessible names for column indices. Every sortable ColumnHeader requires a nonempty matching entry."
         },
         {
-          "name": "defaultSortedColumnIndex",
-          "type": "number",
-          "description": "Initially sorted column."
+          "name": "defaultSortDescriptor",
+          "type": "{ column: number; direction: 'ascending' | 'descending' } | null",
+          "description": "Initial uncontrolled sort state."
         },
         {
-          "name": "defaultSortDirection",
-          "type": "asc | desc",
-          "description": "Initial sort direction."
-        },
-        {
-          "name": "sortColumn",
-          "type": "number | null",
-          "description": "Controlled sorted column index. Supply with sortDirection when an external data source owns row order."
-        },
-        {
-          "name": "sortDirection",
-          "type": "asc | desc | null",
-          "description": "Controlled sort direction. Supply with sortColumn."
+          "name": "sortDescriptor",
+          "type": "{ column: number; direction: 'ascending' | 'descending' } | null",
+          "description": "Controlled sort state. Use null for an unsorted table and reorder your rows to match."
         },
         {
           "name": "onSortChange",
-          "type": "({ columnIndex: number | null, direction: 'asc' | 'desc' | null }) => void",
-          "description": "Receives sorting requests; reorder rows in the data source to match."
+          "type": "({ sortDescriptor: SortDescriptor | null }) => void",
+          "description": "Receives sorting requests. Update sortDescriptor and the row order together."
         }
       ]
     },
@@ -142,7 +135,7 @@
     {
       "name": "SrStatus",
       "element": "div",
-      "description": "Announces sort changes to assistive technology."
+      "description": "Announces sort changes. Root renders this part automatically; do not add a second status region."
     }
   ],
   "accessibility": "Provide a caption and column headings. Handle onSortChange in the data source so sorted rows match the announced sort state."

@@ -45,7 +45,7 @@
         {
           "name": "readOnly",
           "type": "boolean",
-          "description": "Prevents changes."
+          "description": "Passes readOnly to the select. Native select elements do not enforce read-only behavior; use disabled to prevent interaction."
         }
       ],
       "data": [

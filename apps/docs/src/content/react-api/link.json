@@ -10,12 +10,14 @@
         {
           "name": "variant",
           "type": "blue | light",
-          "description": "Selects the link color for the surrounding surface."
+          "description": "Selects the link color for the surrounding surface.",
+          "defaultValue": "blue"
         },
         {
           "name": "isExternal",
           "type": "boolean",
-          "description": "Adds an external-link icon."
+          "description": "Adds an external-link icon.",
+          "defaultValue": "false"
         }
       ]
     }

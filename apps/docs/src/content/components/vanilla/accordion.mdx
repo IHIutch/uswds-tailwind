@@ -381,7 +381,7 @@ Pass these JavaScript options to the instance constructor or factory. Authored c
 | `defaultValue` | `string[]`. Initial expanded item values; overrides item state markers. |
 | `value` | `string[]`. Controlled expanded values; takes precedence over `defaultValue`. |
 | `id` | Instance identifier; defaults to the root ID or a generated value. |
-| `ids` | Override root, item-trigger, and item-content IDs for composition. |
+| `ids` | Override the `root` ID, or pass `itemTrigger(value)` and `itemContent(value)` functions to generate item IDs. |
 
 </ApiTable>
 
@@ -408,7 +408,7 @@ const accordion = Accordion.getOrCreateInstance(
 await accordion.open('one')
 ```
 
-Pass the item’s `data-value` (or fallback `id`) as the `value` argument. Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
+Pass the item's `data-value` (or fallback `id`) as the `value` argument. Promises settle the queued update, not CSS transitions. When using controlled state, your application must supply the updated value.
 
 See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
 

@@ -10,7 +10,8 @@
         {
           "name": "defaultValue",
           "type": "string[]",
-          "description": "Initially selected values."
+          "description": "Initial values used to accumulate onValueChange results. Set defaultChecked on each Input to match these values.",
+          "defaultValue": "[]"
         },
         {
           "name": "onValueChange",

@@ -7,14 +7,14 @@
 USWDS components for React, styled with [Tailwind CSS](https://tailwindcss.com/) and powered by [zag-js](https://zagjs.com/) state machines.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases.
+> This package is in **V2 beta**. APIs may change between releases.
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-xm6mmahl)
 
 ## Install
 
 ```bash
-npm install @uswds-tailwind/react@alpha react@^19 react-dom@^19 tailwindcss
+npm install @uswds-tailwind/react@latest react@^19 react-dom@^19 tailwindcss
 ```
 
 ## Setup

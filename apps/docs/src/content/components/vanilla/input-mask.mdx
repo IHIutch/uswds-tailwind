@@ -167,6 +167,10 @@ See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
 
 Pass callbacks in instance options. These are JavaScript functions, not emitted DOM events.
 
+### Behavior
+
+Uncontrolled typing formats on `keyup`. Controlled typing proposes formatted changes on `input`. The mask does not infer invalid state from partial input; native `pattern` and form attributes determine validity.
+
 ### Accessibility
 
 - Link the label to the generated input ID, or supply `ids.input`.

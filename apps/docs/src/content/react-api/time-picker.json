@@ -23,11 +23,6 @@
           "description": "Receives the selected time value and its visible label."
         },
         {
-          "name": "customFilter",
-          "type": "(query, options) => options",
-          "description": "Overrides time-aware option filtering."
-        },
-        {
           "name": "disableFiltering",
           "type": "boolean",
           "description": "Shows supplied options without filtering."
@@ -35,7 +30,8 @@
         {
           "name": "disabled",
           "type": "boolean",
-          "description": "Disables selection."
+          "description": "Disables selection.",
+          "defaultValue": "false"
         },
         {
           "name": "required",
@@ -45,12 +41,14 @@
         {
           "name": "showClearButton",
           "type": "boolean",
-          "description": "Renders the clear button when true."
+          "description": "Renders the clear button when true.",
+          "defaultValue": "true"
         },
         {
           "name": "showToggleButton",
           "type": "boolean",
-          "description": "Renders the toggle button when true."
+          "description": "Renders the toggle button when true.",
+          "defaultValue": "true"
         }
       ],
       "data": [
@@ -69,14 +67,7 @@
     {
       "name": "Label",
       "element": "label",
-      "description": "Names the time field.",
-      "data": [
-        {
-          "attribute": "data-disabled",
-          "value": "Present when disabled",
-          "purpose": "Style the disabled state."
-        }
-      ]
+      "description": "Names the time field."
     },
     {
       "name": "Control",
@@ -86,14 +77,7 @@
     {
       "name": "Input",
       "element": "input",
-      "description": "Receives a typed time query.",
-      "data": [
-        {
-          "attribute": "data-state",
-          "value": "open | closed",
-          "purpose": "Style the open and closed states."
-        }
-      ]
+      "description": "Receives a typed time query."
     },
     {
       "name": "List",
@@ -117,44 +101,34 @@
     {
       "name": "Item",
       "element": "li",
-      "description": "Match value, text, and index to an option in the filtered list.",
+      "description": "Spread a rendered option onto Item, including its generated id, value, and label.",
       "props": [
+        {
+          "name": "id",
+          "type": "string (required)",
+          "description": "Generated ID from the rendered option."
+        },
         {
           "name": "value",
           "type": "string (required)",
           "description": "Option value."
         },
         {
-          "name": "text",
+          "name": "label",
           "type": "string (required)",
           "description": "Option label."
-        },
-        {
-          "name": "index",
-          "type": "number (required)",
-          "description": "Index in the rendered option list."
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "Disables this option."
         }
       ],
       "data": [
         {
-          "attribute": "data-selected",
-          "value": "Present when selected",
+          "attribute": "aria-selected",
+          "value": "true | false",
           "purpose": "Styles the selected option."
         },
         {
           "attribute": "data-highlighted",
           "value": "Present when highlighted",
           "purpose": "Styles the highlighted option."
-        },
-        {
-          "attribute": "data-disabled",
-          "value": "Present when disabled",
-          "purpose": "Style the disabled state."
         }
       ]
     },

@@ -14,18 +14,9 @@
         },
         {
           "name": "wrap",
-          "type": "boolean",
-          "description": "Allows the trail to wrap instead of truncating earlier items."
-        },
-        {
-          "name": "separator",
-          "type": "ReactNode",
-          "description": "Replaces the default separator."
-        },
-        {
-          "name": "previous",
-          "type": "ReactNode",
-          "description": "Sets the compact previous-page content."
+          "type": "boolean (required by the current type)",
+          "description": "Allows the trail to wrap instead of truncating earlier items. Runtime default is false.",
+          "defaultValue": "false"
         }
       ]
     },

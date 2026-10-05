@@ -1,8 +1,8 @@
 import { DatePicker } from '@uswds-tailwind/react'
 
-const minDate = new Date(2026, 8, 1)
-const maxDate = new Date(2026, 9, 31)
-const initialDate = [new Date(2026, 8, 28)]
+const minDate = '2026-09-01'
+const maxDate = '2026-10-31'
+const initialDate = ['2026-09-28']
 
 function rowsOfThree<T>(items: T[]): T[][] {
   const rows: T[][] = []
@@ -20,6 +20,7 @@ export default function DatePickerDemo() {
         MM/DD/YYYY, September 1 through October 31, 2026. Try an unavailable or impossible date.
       </div>
       <DatePicker.Root
+        ids={{ input: 'appointment-date' }}
         min={minDate}
         max={maxDate}
         defaultValue={initialDate}

@@ -11,14 +11,14 @@
           "name": "variant",
           "type": "\"blue\" | \"red\" | \"cyan\" | \"orange\" | \"gray\" | \"outline\" | \"inverse\"",
           "description": "Visual color treatment. Use inverse on a dark surface.",
-          "defaultValue": "\"blue\"",
+          "defaultValue": "blue",
           "anchor": "button-variant"
         },
         {
           "name": "size",
           "type": "\"md\" | \"lg\" | \"unset\"",
           "description": "Padding and text size. unset leaves sizing to custom classes.",
-          "defaultValue": "\"md\"",
+          "defaultValue": "md",
           "anchor": "button-size"
         },
         {

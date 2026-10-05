@@ -18,4 +18,4 @@ React uses one `DatePicker.Root` with `selectionMode="range"`. Put a `DatePicker
 
 Give each endpoint its own visible label, format hint, and form name. The start cannot be after the end, and the end cannot be before the start. Root bounds further limit both fields and the shared calendar.
 
-`onValueChange` receives the two endpoint slots as `Date` values or `undefined`. Its `valueAsString` array contains ISO `YYYY-MM-DD` strings, with an empty string for a missing endpoint; the visible fields still use `MM/DD/YYYY`.
+`min`, `max`, and `defaultValue` use ISO `YYYY-MM-DD` strings. `onValueChange` receives the selected `Date` values and their ISO strings in `valueAsString`. It omits unset endpoints. The visible fields use `MM/DD/YYYY`.
