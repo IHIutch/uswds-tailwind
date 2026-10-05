@@ -11,14 +11,19 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   initMachine(props: characterCount.Props): VanillaMachine<characterCount.Schema> {
     const input = this.input
-    const maxLength = input.getAttribute('maxlength')
+    const maxLength = input.getAttribute('maxlength') ?? this.rootEl.getAttribute('data-maxlength')
 
     return new VanillaMachine(characterCount.machine, {
       ...props,
       id: props.id || this.rootEl.id || getId(this.rootEl, 'character-count'),
-      ids: { ...props.ids, input: props.ids?.input ?? (input.id || undefined) },
+      ids: {
+        ...props.ids,
+        input: props.ids?.input ?? (input.id || undefined),
+        description: props.ids?.description ?? (this.description?.id || undefined),
+      },
       maxLength: props.maxLength ?? (maxLength === null ? 0 : Number(maxLength)),
       defaultValue: props.defaultValue ?? input.value,
+      inputDescriptionIds: props.inputDescriptionIds ?? input.getAttribute('aria-describedby') ?? undefined,
     })
   }
 

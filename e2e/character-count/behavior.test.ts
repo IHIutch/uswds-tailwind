@@ -1,5 +1,6 @@
 import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
+import exampleHtml from '../../examples/vanilla-ts/character-count.html?raw'
 import { CharacterCount } from '../../packages/compat/src/character-count'
 import { createDisposableCharacterCount, createDisposableCharacterCounts } from './_utils.js'
 
@@ -58,17 +59,15 @@ it('keeps an existing field validation error while counting characters', { tags:
   expect(input.validationMessage).toBe('Please correct this field.')
 })
 
-it('updates its own validation message when errorText changes', { tags: ['new'] }, async () => {
+it('uses the configured validation message and clears it after editing under the limit', { tags: ['new'] }, async () => {
   await using component = createDisposableCharacterCount(rootId, template({ value: 'abcdef' }), {
     maxLength: 5,
     errorText: 'Too many characters.',
   })
   const input = component.elements.getInputEl()
   expect(input.validationMessage).toBe('Too many characters.')
-  component.elements.getInstance()?.machine.updateProps({ errorText: 'Please shorten this text.' })
-  await vi.waitFor(() => expect(input.validationMessage).toBe('Please shorten this text.'))
   await userEvent.fill(input, 'abcd')
-  expect(input.validationMessage).toBe('')
+  await vi.waitFor(() => expect(input.validationMessage).toBe(''))
 })
 
 it('does not replace a different validator after its own error is overridden', { tags: ['new'] }, async () => {
@@ -79,7 +78,6 @@ it('does not replace a different validator after its own error is overridden', {
   const input = component.elements.getInputEl()
   expect(input.validationMessage).toBe('Too many characters.')
   input.setCustomValidity('Please correct this field.')
-  component.elements.getInstance()?.machine.updateProps({ errorText: 'Please shorten this text.' })
   await userEvent.fill(input, 'abcdefg')
   expect(input.validationMessage).toBe('Please correct this field.')
   await userEvent.fill(input, 'abcd')
@@ -97,7 +95,7 @@ it('shows the count and validity for a prefilled field on first render', { tags:
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/index.js#L270-L281 (USWDS handles native input; controlled value ownership is a port addition)
-it('waits for the owner to accept a controlled edit before changing the count', { tags: ['new'] }, async () => {
+it('keeps the accepted controlled value in the input and form after a rejected edit', { tags: ['new'] }, async () => {
   const onValueChange = vi.fn()
   await using component = createDisposableCharacterCount(rootId, template({ value: 'abc' }), {
     maxLength: 5,
@@ -110,10 +108,10 @@ it('waits for the owner to accept a controlled edit before changing the count', 
   await userEvent.fill(input, 'abcdef')
   await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: 'abcdef' }))
   expect(status.textContent).toBe('2 characters left')
+  expect(input.value).toBe('abc')
+  expect(new FormData(input.closest('form')!).get(input.name)).toBe('abc')
+  expect(input.validationMessage).toBe('')
 
-  component.elements.getInstance()?.machine.updateProps({ value: 'abcdef' })
-  await vi.waitFor(() => expect(status.textContent).toBe('1 character over limit'))
-  expect(input.validationMessage).toBe('The content is too long.')
   expect(onValueChange).toHaveBeenCalledTimes(1)
 })
 
@@ -248,4 +246,101 @@ it('removing another counter preserves the latest pending announcement', { tags:
   firstRoot.remove()
 
   await vi.waitFor(() => expect(secondSrStatus.textContent).toBe('4 characters left'), { timeout: 1700 })
+})
+
+it('preserves authored descriptions when the optional description mounts', { tags: ['new'] }, async () => {
+  const markup = template()
+    .replace('name="behavior"', 'name="behavior" aria-describedby="authored-hint counter-hint"')
+    .replace('<span data-part="description"></span>', '<span id="authored-hint">Enter a message.</span><span data-part="description" id="counter-hint">You can enter up to 5 characters.</span>')
+  await using component = createDisposableCharacterCount(rootId, markup)
+  const input = component.elements.getInputEl()
+  await vi.waitFor(() => expect(input.getAttribute('aria-describedby')).toBe('authored-hint counter-hint'))
+  expect(document.getElementById('counter-hint')?.textContent).toBe('You can enter up to 5 characters.')
+  await userEvent.fill(input, 'abc')
+  expect(input.getAttribute('aria-describedby')).toBe('authored-hint counter-hint')
+})
+
+it('initializes the shipped vanilla example with the new anatomy', { tags: ['new'] }, async () => {
+  const body = new DOMParser().parseFromString(exampleHtml, 'text/html').body
+  body.querySelector('script')?.remove()
+  body.querySelector('[data-part="root"]')!.id = rootId
+  await using component = createDisposableCharacterCount(rootId, body.innerHTML)
+  const input = component.elements.getInputEl()
+  expect(input.hasAttribute('maxlength')).toBe(false)
+  expect(input.getAttribute('aria-describedby')).toBe('input-hint character-count-hint')
+  await userEvent.fill(input, 'abc')
+  expect(component.elements.getStatusEl()?.textContent).toBe('17 characters left')
+})
+
+it('reads an existing root data-maxlength when native maxlength is absent', { tags: ['parity'] }, async () => {
+  const markup = template().replace('maxlength="5"', '').replace('id="behavior"', 'id="behavior" data-maxlength="5"')
+  await using component = createDisposableCharacterCount(rootId, markup)
+  await userEvent.fill(component.elements.getInputEl(), 'abcdef')
+  expect(component.elements.getStatusEl()?.textContent).toBe('1 character over limit')
+})
+
+// USWDS scheduleValiditySync defers recovery by AT_DEFER_MS for Safari VoiceOver.
+it('defers validity recovery by 100 ms and cancels it when the limit is exceeded again', { tags: ['parity'] }, async () => {
+  await using component = createDisposableCharacterCount(rootId, template({ value: 'abcdef' }))
+  const input = component.elements.getInputEl()
+  const edit = async (value: string) => {
+    input.value = value
+    input.dispatchEvent(new InputEvent('input', { bubbles: true }))
+    await vi.advanceTimersByTimeAsync(0)
+  }
+  vi.useFakeTimers()
+  try {
+    await edit('abcd')
+    expect(component.elements.getStatusEl()?.textContent).toBe('1 character left')
+    await vi.advanceTimersByTimeAsync(50)
+    await edit('abc')
+    await vi.advanceTimersByTimeAsync(99)
+    expect(input.validationMessage).toBe('The content is too long.')
+    await vi.advanceTimersByTimeAsync(1)
+    expect(input.validationMessage).toBe('')
+
+    await edit('abcdef')
+    await edit('abcd')
+    await vi.advanceTimersByTimeAsync(50)
+    await edit('abcdef')
+    await vi.advanceTimersByTimeAsync(100)
+    expect(input.validationMessage).toBe('The content is too long.')
+  }
+  finally {
+    vi.useRealTimers()
+  }
+})
+
+it('preserves external validity errors introduced during deferred recovery', { tags: ['new'] }, async () => {
+  await using component = createDisposableCharacterCount(rootId, template({ value: 'abcdef' }))
+  const input = component.elements.getInputEl()
+  vi.useFakeTimers()
+  try {
+    input.value = 'abcd'
+    input.dispatchEvent(new InputEvent('input', { bubbles: true }))
+    await vi.advanceTimersByTimeAsync(0)
+    input.setCustomValidity('Another validator owns this error.')
+    await vi.advanceTimersByTimeAsync(100)
+    expect(input.validationMessage).toBe('Another validator owns this error.')
+  }
+  finally {
+    vi.useRealTimers()
+  }
+})
+
+it('cancels deferred validity recovery when the component is destroyed', { tags: ['new'] }, async () => {
+  await using component = createDisposableCharacterCount(rootId, template({ value: 'abcdef' }))
+  const input = component.elements.getInputEl()
+  vi.useFakeTimers()
+  try {
+    input.value = 'abcd'
+    input.dispatchEvent(new InputEvent('input', { bubbles: true }))
+    await vi.advanceTimersByTimeAsync(0)
+    component.elements.getInstance()!.destroy()
+    await vi.advanceTimersByTimeAsync(100)
+    expect(input.validationMessage).toBe('The content is too long.')
+  }
+  finally {
+    vi.useRealTimers()
+  }
 })

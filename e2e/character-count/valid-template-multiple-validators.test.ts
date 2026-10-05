@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { createDisposableCharacterCount } from './_utils.js'
 
@@ -63,5 +63,5 @@ it('should clear the validation message when input is only invalid by character 
   await userEvent.clear(input)
   await userEvent.fill(input, 'abcde')
 
-  expect(input.validationMessage).toBe('')
+  await vi.waitFor(() => expect(input.validationMessage).toBe(''))
 })

@@ -93,13 +93,16 @@ export const machine = createMachine<CharacterCountSchema>({
 
   implementations: {
     actions: {
-      setValue({ context, event }) {
+      setValue({ context, event, scope }) {
         context.set('value', event.value)
+        dom.setInputValue(scope, context.get('value'))
       },
       syncInputValidity({ computed, prop, scope }) {
         const input = dom.getInputEl(scope)
-        if (input)
+        if (input) {
+          dom.cancelValiditySync(input)
           dom.applyOwnedValidity(input, computed('isOverLimit'), prop('errorText'))
+        }
       },
       announceValue({ context, computed, prop, scope, refs }) {
         if (!prop('maxLength'))
@@ -130,6 +133,9 @@ export const machine = createMachine<CharacterCountSchema>({
         return () => {
           win.clearTimeout(timer)
           refs.get('srAnnouncementCleanup')?.()
+          const input = dom.getInputEl(scope)
+          if (input)
+            dom.cancelValiditySync(input)
         }
       },
     },

@@ -91,7 +91,7 @@ it('input is valid under the limit (no data-invalid, no validationMessage)', asy
   await input.fill('1')
 
   const inputEl = input.element() as HTMLInputElement
-  expect(inputEl.validationMessage).toBe('')
+  await vi.waitFor(() => expect(inputEl.validationMessage).toBe(''))
   expect(inputEl.hasAttribute('data-invalid')).toBe(false)
 })
 
@@ -112,7 +112,7 @@ it('clears validity when the user dips back under the limit', async () => {
   await input.fill('12345')
 
   const inputEl = input.element() as HTMLInputElement
-  expect(inputEl.validationMessage).toBe('')
+  await vi.waitFor(() => expect(inputEl.validationMessage).toBe(''))
   expect(inputEl.hasAttribute('data-invalid')).toBe(false)
 })
 

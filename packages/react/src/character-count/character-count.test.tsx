@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
@@ -206,4 +206,61 @@ it('submits value in form data', async () => {
   await screen.getByRole('textbox').fill('hello')
   await screen.getByRole('button', { name: 'Submit' }).click()
   expect(formData.get('message')).toBe('hello')
+})
+
+it('submits only the accepted controlled value after a rejected edit', async () => {
+  const onValueChange = vi.fn()
+  const view = (value: string) => (
+    <form>
+      <CharacterCount.Root maxLength={5} value={value} onValueChange={onValueChange}>
+        <CharacterCount.Input name="message" />
+        <CharacterCount.Status />
+      </CharacterCount.Root>
+    </form>
+  )
+  const screen = await render(view('abc'))
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  await userEvent.fill(input, 'abcdef')
+  await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: 'abcdef' }))
+  expect(input.value).toBe('abc')
+  expect(new FormData(input.form!).get('message')).toBe('abc')
+  expect(input.validationMessage).toBe('')
+  await screen.rerender(view('abcdef'))
+  await expect.element(screen.getByText('1 character over limit')).toBeVisible()
+  expect(input.value).toBe('abcdef')
+  expect(input.validationMessage).toBe('The content is too long.')
+})
+
+it('updates its validation message when the owner changes errorText', async () => {
+  const view = (errorText: string) => (
+    <CharacterCount.Root maxLength={5} defaultValue="abcdef" errorText={errorText}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>
+  )
+  const screen = await render(view('Too many characters.'))
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(input.validationMessage).toBe('Too many characters.')
+  await screen.rerender(view('Please shorten this text.'))
+  await vi.waitFor(() => expect(input.validationMessage).toBe('Please shorten this text.'))
+  await userEvent.fill(input, 'abcd')
+  await vi.waitFor(() => expect(input.validationMessage).toBe(''))
+})
+
+it('preserves another validator when the owner changes errorText', async () => {
+  const view = (errorText: string) => (
+    <CharacterCount.Root maxLength={5} defaultValue="abcdef" errorText={errorText}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>
+  )
+  const screen = await render(view('Too many characters.'))
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(input.validationMessage).toBe('Too many characters.')
+  input.setCustomValidity('Please correct this field.')
+  await screen.rerender(view('Please shorten this text.'))
+  await userEvent.fill(input, 'abcdefg')
+  expect(input.validationMessage).toBe('Please correct this field.')
+  await userEvent.fill(input, 'abcd')
+  expect(input.validationMessage).toBe('Please correct this field.')
 })
