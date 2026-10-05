@@ -281,3 +281,35 @@ it('keeps Field label associations when overriding the root part id', async () =
   expect(document.getElementById('exact-combobox')).toContainElement(input)
   expect(screen.getByText('Pick').element().getAttribute('for')).toBe(input.id)
 })
+
+it('honors ids.input inside Field while retaining its description and validation', async () => {
+  const screen = await render(
+    <Field.Root invalid required>
+      <Field.Description>Choose a vehicle</Field.Description>
+      <Field.ErrorMessage>Required</Field.ErrorMessage>
+      <Combobox.Root ids={{ input: 'exact-picker' }} options={multipleOptions}>
+        <Combobox.Label>Vehicle</Combobox.Label>
+        <Combobox.Control>
+          <Combobox.Input />
+          <Combobox.ToggleButton />
+        </Combobox.Control>
+        <Combobox.List>
+          {({ options }) => options.map(option => (
+            <Combobox.Item key={option.id} {...option}>{option.label}</Combobox.Item>
+          ))}
+        </Combobox.List>
+      </Combobox.Root>
+    </Field.Root>,
+  )
+  const input = screen.getByRole('combobox')
+  await expect.element(input).toHaveAttribute('id', 'exact-picker')
+  expect(screen.getByText('Vehicle').element().getAttribute('for')).toBe('exact-picker')
+  await expect.element(input).toHaveAccessibleDescription('Required Choose a vehicle')
+  await expect.element(input).toHaveAttribute('aria-invalid', 'true')
+  await expect.element(input).toBeRequired()
+  await screen.getByText('Vehicle').click()
+  await expect.element(input).toHaveFocus()
+  await input.fill('Water')
+  await screen.getByRole('option', { name: 'Watercraft' }).click()
+  await expect.element(input).toHaveValue('Watercraft')
+})
