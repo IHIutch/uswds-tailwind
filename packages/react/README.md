@@ -41,9 +41,9 @@ Each component is also accessible from a subpath import (e.g. `@uswds-tailwind/r
 
 ## Element IDs
 
-For `Accordion.Root`, `Combobox.Root`, and `Dropdown.Root`, `id` is the exact HTML root ID. Internal machine identities are generated separately, so changing the root ID does not rename generated child IDs.
+Machine-backed roots such as Accordion, Combobox, Dropdown, InputMask, FileInput, and Tooltip follow Ark UI's ID convention. `id` is the machine identifier used to generate part IDs. If omitted, React generates an identifier.
 
-Use `ids` to override individual part IDs. An explicit HTML `id` takes precedence over `ids.root`; without either, the root ID is generated automatically.
+Use `ids` to override exact DOM IDs. For example, `<Accordion.Root id="faq" ids={{ root: 'faq-root' }}>` renders a root with ID `faq-root`, while generated child IDs use the `faq` namespace. Without `ids.root`, its root ID is `accordion:faq`.
 
 ## Documentation
 

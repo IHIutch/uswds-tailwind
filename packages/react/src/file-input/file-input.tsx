@@ -22,8 +22,8 @@ function useFileInputContext() {
 
 export type FileInputRootProps = React.ComponentPropsWithoutRef<'div'> & UseFileInputProps
 
-function FileInputRoot({ className, children, ...props }: FileInputRootProps) {
-  const { api } = useFileInput(props)
+function FileInputRoot({ className, children, id, ids, ...props }: FileInputRootProps) {
+  const { api } = useFileInput({ ...props, id, ids })
   const mergedProps = mergeProps(api.getRootProps(), props)
 
   return (

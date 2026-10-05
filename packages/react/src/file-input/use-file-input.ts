@@ -3,20 +3,22 @@ import { normalizeProps, useMachine } from '@zag-js/react'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
 
-export type UseFileInputProps = Omit<fileInput.Props, 'getRootNode' | 'id'>
+export type UseFileInputProps = Omit<fileInput.Props, 'getRootNode' | 'id'> & { id?: string }
 
 export type UseFileInputReturn = ReturnType<typeof useFileInput>
 
 export function useFileInput(props: UseFileInputProps = {}) {
   const field = useFieldContext()
 
-  const { disabled = field?.disabled, ...restProps } = props
+  const generatedId = React.useId()
+  const { id, ids, disabled = field?.disabled, ...restProps } = props
 
   const service = useMachine(fileInput.machine, {
-    id: React.useId(),
+    id: id ?? generatedId,
     ids: {
       input: field?.ids.control,
       label: field?.ids.label,
+      ...ids,
     },
     disabled,
     ...restProps,

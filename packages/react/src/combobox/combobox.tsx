@@ -36,12 +36,9 @@ export type ComboboxRootProps = React.ComponentPropsWithoutRef<'div'> & UseCombo
 }
 
 const ComboboxRoot = React.forwardRef<HTMLDivElement, ComboboxRootProps>(
-  ({ className, id, showClearButton = true, showToggleButton = true, ...props }, forwardedRef) => {
+  ({ className, showClearButton = true, showToggleButton = true, ...props }, forwardedRef) => {
     const [machineProps, rest] = combobox.splitProps(props)
-    const { api } = useCombobox({
-      ...machineProps,
-      ids: { ...machineProps.ids, root: id ?? machineProps.ids?.root },
-    } as UseComboboxProps)
+    const { api } = useCombobox(machineProps as UseComboboxProps)
     const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (

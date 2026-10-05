@@ -2,4 +2,4 @@
 "@uswds-tailwind/react": major
 ---
 
-Preserve authored HTML root IDs in Accordion, Combobox, and Dropdown while generating machine identities independently. Keep explicit part ID overrides and Field label associations intact.
+Follow Ark UI's ID convention across the v2 React adapters: id sets the machine namespace, and ids overrides exact DOM part IDs. Forward part overrides and preserve Field label associations.

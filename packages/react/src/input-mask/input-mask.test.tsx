@@ -197,3 +197,16 @@ it('reports a controlled edit and keeps the accepted value until rerender', asyn
   )
   expect(input.value).toBe('12-3')
 })
+
+it.each([undefined, 'exact-mask'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+  const screen = await render(
+    <InputMask.Root id="phone" ids={{ root: rootId }} placeholder="__-__">
+      <InputMask.Input />
+    </InputMask.Root>,
+  )
+  const input = screen.getByRole('textbox')
+  expect(document.getElementById(rootId ?? 'input-mask:phone')).toContainElement(input.element())
+  expect(input.element().id).toBe('input-mask:phone:input')
+  await userEvent.type(input.element(), '1234')
+  await expect.element(input).toHaveValue('12-34')
+})

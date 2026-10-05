@@ -152,3 +152,16 @@ it('file input has name attribute for form submission', async () => {
   const input = document.querySelector('input[type="file"]') as HTMLInputElement
   expect(input.name).toBe('upload')
 })
+
+it.each([undefined, 'exact-file-input'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+  const screen = await render(
+    <FileInput.Root id="upload" ids={{ root: rootId }}>
+      <FileInput.Label>Upload</FileInput.Label>
+      <FileInput.Input />
+    </FileInput.Root>,
+  )
+  const input = screen.container.querySelector<HTMLInputElement>('input[type="file"]')!
+  expect(document.getElementById(rootId ?? 'file-input:upload')).toContainElement(input)
+  expect(input.id).toBe('file-input:upload:input')
+  expect(screen.getByText('Upload').element().getAttribute('for')).toBe(input.id)
+})

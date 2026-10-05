@@ -254,42 +254,30 @@ it('arrowDown moves DOM focus to the newly-highlighted option', async () => {
   await expect.element(screen.getByRole('option', { name: 'Automobiles' })).toHaveFocus()
 })
 
-it('preserves root ids and Field labels while keeping generated input ids stable', async () => {
-  const view = (id: string) => (
+it.each([undefined, 'exact-combobox'])('uses the machine namespace and honors ids.root for outside clicks (%s)', async (rootId) => {
+  const screen = await render(
     <div>
-      <Field.Root>
-        <Field.Label>Pick</Field.Label>
-        <ComboboxComponent id={id} options={multipleOptions} />
-      </Field.Root>
+      <ComboboxComponent id="picker" ids={{ root: rootId }} options={multipleOptions} />
       <button>Outside</button>
-    </div>
+    </div>,
   )
-  const screen = await render(view('combobox-root'))
   const input = screen.getByRole('combobox')
-  const inputId = input.element().id
-  expect(document.getElementById('combobox-root')).toContainElement(input.element())
-  expect(screen.getByText('Pick').element().getAttribute('for')).toBe(inputId)
-  await input.fill('Water')
-  await expect.element(input).toHaveAttribute('aria-expanded', 'true')
-  await screen.getByRole('button', { name: 'Outside' }).click()
-  await expect.element(input).toHaveAttribute('aria-expanded', 'false')
-  await screen.rerender(view('renamed-combobox'))
-  expect(document.getElementById('renamed-combobox')).toContainElement(input.element())
-  expect(input.element().id).toBe(inputId)
-  expect(screen.getByText('Pick').element().getAttribute('for')).toBe(inputId)
+  expect(document.getElementById(rootId ?? 'combobox:picker')).toContainElement(input.element())
+  expect(input.element().id).toBe('combobox:picker:input')
   await input.fill('Water')
   await expect.element(input).toHaveAttribute('aria-expanded', 'true')
   await screen.getByRole('button', { name: 'Outside' }).click()
   await expect.element(input).toHaveAttribute('aria-expanded', 'false')
 })
 
-it('uses explicit part ids and gives the HTML id precedence over ids.root', async () => {
+it('keeps Field label associations when overriding the root part id', async () => {
   const screen = await render(
-    <ComboboxComponent id="authored-combobox" options={options} ids={{ root: 'fallback-root', input: 'custom-input' }} />,
+    <Field.Root>
+      <Field.Label>Pick</Field.Label>
+      <ComboboxComponent id="picker" ids={{ root: 'exact-combobox' }} options={options} />
+    </Field.Root>,
   )
   const input = screen.getByRole('combobox').element()
-  expect(input.id).toBe('custom-input')
-  expect(document.getElementById('authored-combobox')).toContainElement(input)
-  await screen.rerender(<ComboboxComponent options={options} ids={{ root: 'fallback-root', input: 'custom-input' }} />)
-  expect(document.getElementById('fallback-root')).toContainElement(input)
+  expect(document.getElementById('exact-combobox')).toContainElement(input)
+  expect(screen.getByText('Pick').element().getAttribute('for')).toBe(input.id)
 })
