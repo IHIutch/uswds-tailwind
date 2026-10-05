@@ -1,6 +1,5 @@
 import type { Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
-import type { PositionStyles } from './tooltip.utils'
 
 export type Placement = 'top' | 'bottom' | 'right' | 'left'
 
@@ -32,24 +31,22 @@ export interface OpenChangeDetails {
 
 type PropsWithDefault = 'placement'
 
-interface TooltipEvent { type: 'SHOW' | 'HIDE' | 'CONTROLLED.OPEN' | 'CONTROLLED.CLOSE' }
+interface TooltipEvent { type: 'show' | 'hide' | 'controlled.open' | 'controlled.close' }
 
 export interface TooltipSchema {
   props: RequiredBy<TooltipProps, PropsWithDefault>
   state: 'closed' | 'open'
   context: {
-    resolvedPlacement: Placement | null
+    currentPlacement: Placement | null
     revealed: boolean
-    wrap: boolean
-    styles: PositionStyles | null
   }
   event: TooltipEvent
   action:
     | 'invokeOnOpen'
     | 'invokeOnClose'
-    | 'syncControlledOpen'
+    | 'toggleVisibility'
     | 'clearVisibility'
-  effect: 'reposition' | 'trackEscape' | 'waitForReveal'
+  effect: 'trackPositioning' | 'trackEscapeKey' | 'waitForReveal'
   guard: 'isOpenControlled'
 }
 

@@ -1,161 +1,89 @@
 import type { Placement } from './tooltip.types'
 import { isInView } from '@zag-js/dom-query'
 
-const TRIANGLE_SIZE = 5
+const TOOLTIP_OFFSET = 'var(--tooltip-offset, 5px)'
+const PLACEMENTS: Placement[] = ['top', 'bottom', 'right', 'left']
 
-export interface PositionStyles {
-  top: string | null
-  bottom: string | null
-  left: string | null
-  right: string | null
-  margin: string | null
+function setVar(content: HTMLElement, name: string, value?: string): void {
+  if (value === undefined)
+    content.style.removeProperty(name)
+  else content.style.setProperty(name, value)
 }
 
-export interface PositioningResult {
-  placement: Placement
-  styles: PositionStyles
-  wrap: boolean
+function marginOffset(trigger: HTMLElement, side: 'top' | 'left', size: number, win: Window): number {
+  const margin = Number.parseInt(win.getComputedStyle(trigger).getPropertyValue(`margin-${side}`), 10)
+  return margin > 0 ? size - margin : size
 }
 
-function isPlacement(value: unknown): value is Placement {
-  return value === 'top' || value === 'bottom' || value === 'right' || value === 'left'
-}
+function applyPlacement(content: HTMLElement, trigger: HTMLElement, placement: Placement, win: Window): void {
+  // Clear the previous candidate before measuring the next one.
+  setVar(content, '--tooltip-y')
+  setVar(content, '--tooltip-x')
 
-const CLEARED: PositionStyles = { top: null, bottom: null, left: null, right: null, margin: null }
+  let y: string
+  let x: string
+  let arrowY = '50%'
+  let arrowX = '50%'
 
-function publish(body: HTMLElement, styles: PositionStyles): void {
-  setVar(body, '--tooltip-top', styles.top)
-  setVar(body, '--tooltip-bottom', styles.bottom)
-  setVar(body, '--tooltip-left', styles.left)
-  setVar(body, '--tooltip-right', styles.right)
-  setVar(body, '--tooltip-margin', styles.margin)
-}
-
-function setVar(body: HTMLElement, name: string, value: string | null): void {
-  if (value === null)
-    body.style.removeProperty(name)
-  else body.style.setProperty(name, value)
-}
-
-function offsetMargin(target: HTMLElement, propertyValue: string, win: Window): number {
-  return Number.parseInt(win.getComputedStyle(target).getPropertyValue(propertyValue), 10)
-}
-
-function calculateMarginOffset(
-  marginPosition: string,
-  tooltipBodyOffset: number,
-  trigger: HTMLElement,
-  win: Window,
-): number {
-  const margin = offsetMargin(trigger, `margin-${marginPosition}`, win)
-  return margin > 0 ? tooltipBodyOffset - margin : tooltipBodyOffset
-}
-
-function positionTop(body: HTMLElement, trigger: HTMLElement, win: Window): PositionStyles {
-  publish(body, CLEARED)
-  const topMargin = calculateMarginOffset('top', body.offsetHeight, trigger, win)
-  const leftMargin = calculateMarginOffset('left', body.offsetWidth, trigger, win)
-  const styles: PositionStyles = {
-    ...CLEARED,
-    left: `50%`,
-    top: `-${TRIANGLE_SIZE}px`,
-    margin: `-${topMargin}px 0 0 -${leftMargin / 2}px`,
-  }
-  publish(body, styles)
-  return styles
-}
-
-function positionBottom(body: HTMLElement, trigger: HTMLElement, win: Window): PositionStyles {
-  publish(body, CLEARED)
-  const leftMargin = calculateMarginOffset('left', body.offsetWidth, trigger, win)
-  const styles: PositionStyles = {
-    ...CLEARED,
-    left: `50%`,
-    margin: `${TRIANGLE_SIZE}px 0 0 -${leftMargin / 2}px`,
-  }
-  publish(body, styles)
-  return styles
-}
-
-function positionRight(body: HTMLElement, trigger: HTMLElement, win: Window): PositionStyles {
-  publish(body, CLEARED)
-  const topMargin = calculateMarginOffset('top', body.offsetHeight, trigger, win)
-  const styles: PositionStyles = {
-    ...CLEARED,
-    top: `50%`,
-    left: `${trigger.offsetLeft + trigger.offsetWidth + TRIANGLE_SIZE}px`,
-    margin: `-${topMargin / 2}px 0 0 0`,
-  }
-  publish(body, styles)
-  return styles
-}
-
-function positionLeft(body: HTMLElement, trigger: HTMLElement, win: Window): PositionStyles {
-  publish(body, CLEARED)
-  const topMargin = calculateMarginOffset('top', body.offsetHeight, trigger, win)
-  const leftMargin = calculateMarginOffset(
-    'left',
-    trigger.offsetLeft > body.offsetWidth ? trigger.offsetLeft - body.offsetWidth : body.offsetWidth,
-    trigger,
-    win,
-  )
-  const styles: PositionStyles = {
-    ...CLEARED,
-    top: `50%`,
-    left: `-${TRIANGLE_SIZE}px`,
-    margin: `-${topMargin / 2}px 0 0 ${trigger.offsetLeft > body.offsetWidth ? leftMargin : -leftMargin}px`,
-  }
-  publish(body, styles)
-  return styles
-}
-
-const POSITION_FNS: Record<Placement, (b: HTMLElement, t: HTMLElement, win: Window) => PositionStyles> = {
-  top: positionTop,
-  bottom: positionBottom,
-  right: positionRight,
-  left: positionLeft,
-}
-const ORDER: Placement[] = ['top', 'bottom', 'right', 'left']
-
-function findBestPosition(body: HTMLElement, trigger: HTMLElement, win: Window): { placement: Placement, styles: PositionStyles } {
-  let landed!: { placement: Placement, styles: PositionStyles }
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    for (const placement of ORDER) {
-      landed = { placement, styles: POSITION_FNS[placement](body, trigger, win) }
-      if (isInView(body, win))
-        return landed
+  switch (placement) {
+    case 'top': {
+      const height = marginOffset(trigger, 'top', content.offsetHeight, win)
+      const width = marginOffset(trigger, 'left', content.offsetWidth, win)
+      y = `calc(${-height}px - ${TOOLTIP_OFFSET})`
+      x = `calc(50% - ${width / 2}px)`
+      arrowY = '100%'
+      break
     }
-    body.setAttribute('data-wrap', '')
+    case 'bottom': {
+      const width = marginOffset(trigger, 'left', content.offsetWidth, win)
+      y = `calc(${content.offsetTop}px + ${TOOLTIP_OFFSET})`
+      x = `calc(50% - ${width / 2}px)`
+      arrowY = '0'
+      break
+    }
+    case 'right': {
+      const height = marginOffset(trigger, 'top', content.offsetHeight, win)
+      y = `calc(50% - ${height / 2}px)`
+      x = `calc(${trigger.offsetLeft + trigger.offsetWidth}px + ${TOOLTIP_OFFSET})`
+      arrowX = '0'
+      break
+    }
+    case 'left': {
+      const height = marginOffset(trigger, 'top', content.offsetHeight, win)
+      const offset = trigger.offsetLeft > content.offsetWidth ? trigger.offsetLeft - content.offsetWidth : content.offsetWidth
+      const width = marginOffset(trigger, 'left', offset, win)
+      y = `calc(50% - ${height / 2}px)`
+      x = `calc(${trigger.offsetLeft > content.offsetWidth ? width : -width}px - ${TOOLTIP_OFFSET})`
+      arrowX = '100%'
+      break
+    }
   }
 
-  return landed
+  setVar(content, '--tooltip-y', y)
+  setVar(content, '--tooltip-x', x)
+  setVar(content, '--arrow-y', arrowY)
+  setVar(content, '--arrow-x', arrowX)
 }
 
-export function computePosition(
-  body: HTMLElement,
-  trigger: HTMLElement,
-  intended: Placement,
-  win: Window,
-): PositioningResult
-export function computePosition(
-  body: HTMLElement,
-  trigger: HTMLElement,
-  intended: unknown,
-  win: Window,
-): PositioningResult | null
-export function computePosition(
-  body: HTMLElement,
-  trigger: HTMLElement,
-  intended: unknown,
-  win: Window,
-): PositioningResult | null {
-  if (!isPlacement(intended))
+/** Applies USWDS placement probes synchronously so each viewport check sees the candidate's layout. */
+export function positionTooltip(content: HTMLElement, trigger: HTMLElement, preferred: Placement, win: Window): Placement | null {
+  if (!PLACEMENTS.includes(preferred))
     return null
-  const intendedStyles = POSITION_FNS[intended](body, trigger, win)
-  if (isInView(body, win)) {
-    return { placement: intended, styles: intendedStyles, wrap: body.hasAttribute('data-wrap') }
+
+  applyPlacement(content, trigger, preferred, win)
+  if (isInView(content, win))
+    return preferred
+
+  let placement = preferred
+  for (let attempt = 0; attempt < 3; attempt++) {
+    for (const candidate of PLACEMENTS) {
+      placement = candidate
+      applyPlacement(content, trigger, placement, win)
+      if (isInView(content, win))
+        return placement
+    }
+    content.setAttribute('data-wrap', '')
   }
-  const best = findBestPosition(body, trigger, win)
-  return { placement: best.placement, styles: best.styles, wrap: body.hasAttribute('data-wrap') }
+
+  return placement
 }

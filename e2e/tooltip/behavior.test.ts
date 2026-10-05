@@ -82,16 +82,16 @@ it('repositions on another mouseover and keeps the last position after closing',
   const trigger = fixture.elements.getTriggerEl('repeat')
   const content = fixture.elements.getContentEl('repeat')
   await show(trigger)
-  const firstMargin = content.style.getPropertyValue('--tooltip-margin')
-  expect(firstMargin).not.toBe('')
+  await expect.poll(() => content.style.getPropertyValue('--tooltip-y')).not.toBe('')
+  const firstY = content.style.getPropertyValue('--tooltip-y')
   trigger.style.margin = '30px'
   await show(trigger)
-  const secondMargin = content.style.getPropertyValue('--tooltip-margin')
-  expect(secondMargin).not.toBe(firstMargin)
+  await expect.poll(() => content.style.getPropertyValue('--tooltip-y')).not.toBe(firstY)
+  const secondY = content.style.getPropertyValue('--tooltip-y')
   const placement = content.getAttribute('data-placement')
   await hide(root)
   expect(content.getAttribute('data-placement')).toBe(placement)
-  expect(content.style.getPropertyValue('--tooltip-margin')).toBe(secondMargin)
+  expect(content.style.getPropertyValue('--tooltip-y')).toBe(secondY)
 })
 
 it('drops the wrap marker on close after every placement is clipped', { tags: ['parity'] }, async () => {
@@ -105,7 +105,7 @@ it('drops the wrap marker on close after every placement is clipped', { tags: ['
     return DOMRect.fromRect({ x: -9999, y: -9999, width: 0, height: 0 })
   }
   await show(trigger)
-  expect(probes).toBe(13)
+  await expect.poll(() => probes).toBe(13)
   expect(content.hasAttribute('data-wrap')).toBe(true)
   expect(content.getAttribute('data-placement')).toBe('left')
   await hide(root)

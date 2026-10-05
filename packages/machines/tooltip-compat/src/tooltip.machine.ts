@@ -1,38 +1,22 @@
 import type { Params } from '@zag-js/core'
 import type { Placement, TooltipSchema } from './tooltip.types'
-import type { PositionStyles } from './tooltip.utils'
 import { createMachine } from '@zag-js/core'
 import { addDomEvent, raf } from '@zag-js/dom-query'
 import * as dom from './tooltip.dom'
-import { computePosition } from './tooltip.utils'
+import { positionTooltip } from './tooltip.utils'
 
-function reposition({ scope, context, prop }: Params<TooltipSchema>): (() => void) | undefined {
+function trackPositioning({ scope, context, prop }: Params<TooltipSchema>): () => void {
   const measure = (): (() => void) | undefined => {
-    const body = dom.getContentEl(scope)
+    const content = dom.getContentEl(scope)
     const trigger = dom.getTriggerEl(scope)
-    if (!body || !trigger)
+    if (!content || !trigger)
       return raf(measure)
 
-    const result = computePosition(body, trigger, prop('placement'), scope.getWin())
-    if (result) {
-      context.set('resolvedPlacement', result.placement)
-      context.set('styles', result.styles)
-      context.set('wrap', result.wrap)
-    }
+    context.set('currentPlacement', positionTooltip(content, trigger, prop('placement'), scope.getWin()))
     return undefined
   }
 
-  if (!dom.getContentEl(scope) || !dom.getTriggerEl(scope))
-    return raf(measure)
-
-  let cancelled = false
-  queueMicrotask(() => {
-    if (!cancelled)
-      measure()
-  })
-  return () => {
-    cancelled = true
-  }
+  return raf(measure)
 }
 
 export const machine = createMachine<TooltipSchema>({
@@ -45,15 +29,13 @@ export const machine = createMachine<TooltipSchema>({
   },
 
   watch({ track, prop, action }) {
-    track([() => prop('open')], () => action(['syncControlledOpen']))
+    track([() => prop('open')], () => action(['toggleVisibility']))
   },
 
   context({ bindable }) {
     return {
-      resolvedPlacement: bindable<Placement | null>(() => ({ defaultValue: null })),
+      currentPlacement: bindable<Placement | null>(() => ({ defaultValue: null })),
       revealed: bindable(() => ({ defaultValue: false })),
-      wrap: bindable(() => ({ defaultValue: false })),
-      styles: bindable<PositionStyles | null>(() => ({ defaultValue: null })),
     }
   },
 
@@ -61,22 +43,22 @@ export const machine = createMachine<TooltipSchema>({
     closed: {
       entry: ['clearVisibility'],
       on: {
-        'SHOW': [
+        'show': [
           { guard: 'isOpenControlled', actions: ['invokeOnOpen'] },
           { target: 'open', actions: ['invokeOnOpen'] },
         ],
-        'CONTROLLED.OPEN': { target: 'open' },
+        'controlled.open': { target: 'open' },
       },
     },
     open: {
-      effects: ['reposition', 'trackEscape', 'waitForReveal'],
+      effects: ['trackPositioning', 'trackEscapeKey', 'waitForReveal'],
       on: {
-        'SHOW': { target: 'open', reenter: true },
-        'HIDE': [
+        'show': { target: 'open', reenter: true },
+        'hide': [
           { guard: 'isOpenControlled', actions: ['invokeOnClose'] },
           { target: 'closed', actions: ['invokeOnClose'] },
         ],
-        'CONTROLLED.CLOSE': { target: 'closed' },
+        'controlled.close': { target: 'closed' },
       },
     },
   },
@@ -92,26 +74,26 @@ export const machine = createMachine<TooltipSchema>({
       invokeOnClose({ prop }) {
         prop('onOpenChange')?.({ open: false })
       },
-      syncControlledOpen({ prop, send }) {
+      toggleVisibility({ prop, send }) {
         const open = prop('open')
         if (open !== undefined)
-          send({ type: open ? 'CONTROLLED.OPEN' : 'CONTROLLED.CLOSE' })
+          send({ type: open ? 'controlled.open' : 'controlled.close' })
       },
-      clearVisibility({ context }) {
-        context.set('wrap', false)
+      clearVisibility({ context, scope }) {
+        dom.getContentEl(scope)?.removeAttribute('data-wrap')
         context.set('revealed', false)
       },
     },
     effects: {
-      reposition,
+      trackPositioning,
       waitForReveal({ context, scope }) {
         const id = scope.getWin().setTimeout(() => context.set('revealed', true), 20)
         return () => scope.getWin().clearTimeout(id)
       },
-      trackEscape({ scope, send }) {
+      trackEscapeKey({ scope, send }) {
         return addDomEvent(scope.getDoc(), 'keydown', (event) => {
           if (event.key === 'Escape' && !event.shiftKey && !event.altKey && !event.metaKey)
-            send({ type: 'HIDE' })
+            send({ type: 'hide' })
         })
       },
     },

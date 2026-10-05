@@ -5,12 +5,19 @@ import { dataAttr } from '@zag-js/dom-query'
 import { parts } from './tooltip.anatomy'
 import * as dom from './tooltip.dom'
 
+const ARROW_FLOATING_STYLE = {
+  bottom: 'rotate(45deg)',
+  left: 'rotate(135deg)',
+  top: 'rotate(225deg)',
+  right: 'rotate(315deg)',
+} as const
+
 export function connect<T extends PropTypes>(service: Service<TooltipSchema>, normalize: NormalizeProps<T>): TooltipApi<T> {
   const { context, prop, scope, send, state } = service
 
   const open = state.matches('open')
   const visible = context.get('revealed')
-  const resolvedPlacement = context.get('resolvedPlacement')
+  const currentPlacement = context.get('currentPlacement')
 
   const triggerId = dom.getTriggerId(scope)
   const contentId = dom.getContentId(scope)
@@ -18,9 +25,9 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
   return {
     open,
     visible,
-    placement: resolvedPlacement,
+    placement: currentPlacement,
     setOpen(nextOpen) {
-      send({ type: nextOpen ? 'SHOW' : 'HIDE' })
+      send({ type: nextOpen ? 'show' : 'hide' })
     },
 
     getRootProps() {
@@ -28,7 +35,7 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
         ...parts.root.attrs,
         id: dom.getRootId(scope),
         onMouseLeave() {
-          send({ type: 'HIDE' })
+          send({ type: 'hide' })
         },
       })
     },
@@ -43,17 +50,17 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
         onMouseOver(event) {
           if (!dom.isOwnTriggerEvent(event))
             return
-          send({ type: 'SHOW' })
+          send({ type: 'show' })
         },
         onFocus(event) {
           if (!dom.isOwnTriggerEvent(event))
             return
-          send({ type: 'SHOW' })
+          send({ type: 'show' })
         },
         onBlur(event) {
           if (!dom.isOwnTriggerEvent(event))
             return
-          send({ type: 'HIDE' })
+          send({ type: 'hide' })
         },
       })
     },
@@ -66,14 +73,10 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
         'aria-hidden': open ? 'false' : 'true',
         'data-state': open ? 'open' : 'closed',
         'data-visible': dataAttr(visible),
-        'data-placement': resolvedPlacement ?? undefined,
-        'data-wrap': dataAttr(context.get('wrap')),
+        'data-placement': currentPlacement ?? undefined,
         'style': {
-          '--tooltip-top': context.get('styles')?.top ?? undefined,
-          '--tooltip-bottom': context.get('styles')?.bottom ?? undefined,
-          '--tooltip-left': context.get('styles')?.left ?? undefined,
-          '--tooltip-right': context.get('styles')?.right ?? undefined,
-          '--tooltip-margin': context.get('styles')?.margin ?? undefined,
+          '--arrow-offset': '-50%',
+          '--arrow-transform': currentPlacement ? ARROW_FLOATING_STYLE[currentPlacement] : undefined,
         },
       })
     },
