@@ -1,144 +1,151 @@
 import type { EventObject, Machine, Service } from '@zag-js/core'
+import type { AnimationFrame } from '@zag-js/dom-query'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
+import type { ComboboxCustomFilter, ComboboxOptionData } from './combobox.utils'
 
-export interface ComboboxOption {
+export type { ComboboxOptionData }
+
+export interface ValueChangeDetails {
   value: string
-  text: string
-  disabled?: boolean | undefined
+  label: string
 }
 
-/* -----------------------------------------------------------------------------
- * Callback details
- * ----------------------------------------------------------------------------- */
-
-export interface InputValueChangeDetails {
-  inputValue: string
+/** A rendered occurrence with its own ID, even when source option values repeat. */
+export interface ComboboxItem {
+  id: string
+  value: string
+  label: string
 }
-
-export interface OpenChangeDetails {
-  open: boolean
-}
-
-/* -----------------------------------------------------------------------------
- * Element IDs
- * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   root: string
   label: string
-  control: string
+  hiddenSelect: string
   input: string
-  listbox: string
+  list: string
+  status: string
   trigger: string
   clearTrigger: string
-  option: (value: string, index: number) => string
-  status: string
 }>
 
-/* -----------------------------------------------------------------------------
- * Machine props
- * ----------------------------------------------------------------------------- */
+interface ComboboxAriaProps {
+  /** Accessible name for the focusable input. */
+  'aria-label'?: string | undefined
 
-export interface ComboboxProps extends CommonProperties {
-  options?: ComboboxOption[] | undefined
-  ids?: ElementIds | undefined
-  disabled?: boolean | undefined
-  defaultValue?: string | undefined
-  value?: string | undefined
-  defaultInputValue?: string | undefined
-  inputValue?: string | undefined
-  placeholder?: string | undefined
-  required?: boolean | undefined
-  ariaLabel?: string | undefined
-  ariaLabelledby?: string | undefined
-  filter?: string | undefined
-  filterExtras?: Record<string, string> | undefined
-  disableFiltering?: boolean | undefined
-  customFilter?: ((inputValue: string, options: ComboboxOption[]) => ComboboxOption[]) | undefined
-  onValueChange?: ((value: string) => void) | undefined
-  onInputValueChange?: ((details: InputValueChangeDetails) => void) | undefined
-  onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
+  /** Takes precedence over `aria-label` when supplied. */
+  'aria-labelledby'?: string | undefined
 }
 
-type PropsWithDefault
-  = | 'options'
-    | 'filter'
-    | 'disableFiltering'
-    | 'defaultValue'
-    | 'defaultInputValue'
+export interface ComboboxProps extends CommonProperties, ComboboxAriaProps {
+  ids?: ElementIds | undefined
+  options?: ComboboxOptionData[] | undefined
+  defaultValue?: string | undefined
+  /** Called when the committed value changes. */
+  onValueChange?: ((details: ValueChangeDetails) => void) | undefined
+  disableFiltering?: boolean | undefined
+  /**
+   * Internal hook for time-picker matching and ordering. Not a public API.
+   * Public consumers should use `filter` and `filterExtras`.
+   * @internal
+   */
+  customFilter?: ComboboxCustomFilter | undefined
+  /**
+   * Regex template matched against each option label, case-insensitively.
+   * Defaults to `.*{{query}}.*`. Substitutions are escaped literal text, and
+   * the resulting pattern is anchored to the whole label.
+   * @example filter: '{{query}}.*' // Match labels starting with the input.
+   */
+  filter?: string | undefined
+  /**
+   * Maps template placeholder names to regexes that extract text from the input.
+   * Each regex must include a capture group. Its first capture replaces the
+   * matching placeholder; no match inserts an empty string.
+   * `{{query}}` always inserts the full input and needs no entry here.
+   * @example
+   * filter: 'Item {{number}}',
+   * filterExtras: { number: '(\\d+)' }
+   * // Input "number 12" matches the label "Item 12".
+   */
+  filterExtras?: Record<string, string> | undefined
+  placeholder?: string | undefined
+  name?: string | undefined
+  disabled?: boolean | undefined
+  /** Emits disabled attributes while leaving the control operable. */
+  ariaDisabled?: boolean | undefined
+  required?: boolean | undefined
 
-/* -----------------------------------------------------------------------------
- * Machine schema
- * ----------------------------------------------------------------------------- */
+}
+
+type PropsWithDefault = 'filter' | 'disableFiltering' | 'disabled' | 'ariaDisabled' | 'options'
 
 export interface ComboboxSchema {
   props: RequiredBy<ComboboxProps, PropsWithDefault>
-  state: 'idle' | 'focused' | 'open'
+  state: 'closed' | 'open'
+  tag: 'open' | 'closed'
   context: {
     value: string
     inputValue: string
-    highlightedValue: string | null
+    highlightedIndex: number | null
     isPristine: boolean
+    items: ComboboxItem[]
+
   }
-  computed: {
-    isInteractive: boolean
-    hasValue: boolean
-    filteredOptions: ComboboxOption[]
+  refs: {
+    focusFrame: AnimationFrame
+    scrollFrame: AnimationFrame
   }
-  event: EventObject
-  action: string
-  effect: string
-  guard: string
+  effect: 'trackInteractOutside'
+  action:
+    | 'syncItems'
+    | 'setInputValue'
+    | 'resetList'
+    | 'setHighlightedIndex'
+    | 'cancelHighlightWork'
+    | 'focusInput'
+    | 'selectItem'
+    | 'clearValue'
+    | 'revertInputValue'
+    | 'completeSelection'
+  event: EventObject & (
+    | { type: 'INPUT.CLICK' }
+    | { type: 'INPUT.CHANGE', value: string }
+    | { type: 'TRIGGER.CLICK' }
+    | { type: 'VALUE.CLEAR' }
+    | { type: 'ITEM.SELECT', value: string, label: string }
+    | { type: 'HIGHLIGHTED_INDEX.SET', index: number, scroll: boolean, focusHandled?: boolean }
+    | { type: 'INPUT.ARROW_DOWN', focusHandled?: boolean }
+    | { type: 'CLOSE' }
+    | { type: 'INPUT.ENTER' }
+    | { type: 'LAYER.ESCAPE' }
+    | { type: 'LAYER.INTERACT_OUTSIDE' }
+    | { type: 'VALUE.SET', value: string }
+  )
 }
 
 export type ComboboxService = Service<ComboboxSchema>
 export type ComboboxMachine = Machine<ComboboxSchema>
 
-/* -----------------------------------------------------------------------------
- * Option props for connect
- * ----------------------------------------------------------------------------- */
-
-export interface OptionProps {
-  option: ComboboxOption
-  index: number
-}
-
-export interface OptionState {
-  value: string
-  disabled: boolean
-  selected: boolean
-  highlighted: boolean
-}
-
-/* -----------------------------------------------------------------------------
- * Component API
- * ----------------------------------------------------------------------------- */
-
 export interface ComboboxApi<T extends PropTypes = PropTypes> {
   open: boolean
-  focused: boolean
+
   value: string
+
   inputValue: string
-  highlightedValue: string | null
-  isPristine: boolean
-  filteredOptions: ComboboxOption[]
-  hasValue: boolean
-  disabled: boolean
-  statusMessage: string
+
+  items: ComboboxItem[]
+
+  /** Render this into the status part; the machine does not inject children. */
+  srStatusText: string
 
   setValue: (value: string) => void
-  setInputValue: (value: string) => void
-  clearValue: () => void
-  setOpen: (open: boolean) => void
-  getOptionState: (props: OptionProps) => OptionState
 
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
-  getControlProps: () => T['element']
+  getHiddenSelectProps: () => T['select']
   getInputProps: () => T['input']
-  getTriggerProps: () => T['button']
   getClearTriggerProps: () => T['button']
-  getListboxProps: () => T['element']
-  getOptionProps: (props: OptionProps) => T['element']
+  getTriggerProps: () => T['button']
+  getListProps: () => T['element']
+  getItemProps: (props: { item: ComboboxItem }) => T['element']
   getStatusProps: () => T['element']
 }

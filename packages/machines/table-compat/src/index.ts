@@ -1,4 +1,4 @@
-export { anatomy, parts } from './table.anatomy'
+export { anatomy } from './table.anatomy'
 export { connect } from './table.connect'
 export { machine } from './table.machine'
 export { cellProps, headerProps, props, splitCellProps, splitHeaderProps, splitProps } from './table.props'
@@ -9,8 +9,9 @@ export type {
   HeaderProps,
   TableMachine as Machine,
   TableProps as Props,
+  TableSchema as Schema,
   TableService as Service,
   SortChangeDetails,
+  SortDescriptor,
   SortDirection,
-  TableSchema,
 } from './table.types'

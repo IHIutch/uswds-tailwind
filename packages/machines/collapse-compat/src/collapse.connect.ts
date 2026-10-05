@@ -8,58 +8,54 @@ export function connect<T extends PropTypes>(
   service: Service<CollapseSchema>,
   normalize: NormalizeProps<T>,
 ): CollapseApi<T> {
-  const { state, send, prop, scope } = service
+  const { state, send, scope } = service
   const open = state.matches('open')
 
   return {
     open,
 
-    // Programmatic control — mirrors toggle(button, expanded) call pattern
     setOpen(nextOpen) {
       if (open === nextOpen)
         return
-      send({ type: 'TOGGLE' })
+      send(open ? { type: 'CLOSE' } : { type: 'OPEN' })
     },
 
-    // Mirrors index.js L21: header.classList.toggle(EXPANDED_CLASS)
-    // data-state replaces the usa-banner__header--expanded CSS class
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
         'id': dom.getRootId(scope),
-        'dir': prop('dir'),
         'data-state': open ? 'open' : 'closed',
       })
     },
 
-    // Mirrors toggle.js L12-24 + index.js L17-18
     getTriggerProps() {
-      return normalize.element({
+      return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope),
-        'dir': prop('dir'),
         'type': 'button',
-        // Mirrors toggle.js L12: button.setAttribute(EXPANDED, safeExpanded)
         'aria-expanded': open,
-        // Mirrors toggle.js L14: button.getAttribute(CONTROLS)
         'aria-controls': dom.getContentId(scope),
         'data-state': open ? 'open' : 'closed',
-        // Mirrors index.js L17: event.preventDefault()
-        onClick(event: { preventDefault: () => void }) {
+        onClick(event) {
           event.preventDefault()
-          send({ type: 'TOGGLE' })
+          send(open ? { type: 'CLOSE' } : { type: 'OPEN' })
         },
       })
     },
 
-    // Mirrors toggle.js L20-24: set/remove hidden on content
     getContentProps() {
       return normalize.element({
         ...parts.content.attrs,
         'id': dom.getContentId(scope),
-        'dir': prop('dir'),
-        // Mirrors toggle.js L22-24: controls.setAttribute(HIDDEN, "") / removeAttribute(HIDDEN)
         'hidden': !open,
+        'data-state': open ? 'open' : 'closed',
+      })
+    },
+
+    getIndicatorProps() {
+      return normalize.element({
+        ...parts.indicator.attrs,
+        'id': dom.getIndicatorId(scope),
         'data-state': open ? 'open' : 'closed',
       })
     },

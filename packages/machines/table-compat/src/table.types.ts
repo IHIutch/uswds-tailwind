@@ -1,103 +1,83 @@
-import type { EventObject, Machine, Service } from '@zag-js/core'
-import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
-
-/* -----------------------------------------------------------------------------
- * Sort direction
- * ----------------------------------------------------------------------------- */
+import type { Machine, Service } from '@zag-js/core'
+import type {
+  CommonProperties,
+  PropTypes,
+} from '@zag-js/types'
 
 export type SortDirection = 'ascending' | 'descending'
 
-/* -----------------------------------------------------------------------------
- * Callback details
- * ----------------------------------------------------------------------------- */
-
-export interface SortChangeDetails {
-  columnIndex: number
-  direction: SortDirection
-}
-
-/* -----------------------------------------------------------------------------
- * Element IDs
- * ----------------------------------------------------------------------------- */
-
-export type ElementIds = Partial<{
-  root: string
-  header: (index: number) => string
-  sortButton: (index: number) => string
-  srStatus: string
-}>
-
-/* -----------------------------------------------------------------------------
- * Machine props
- * ----------------------------------------------------------------------------- */
-
-export interface TableProps extends CommonProperties {
-  ids?: ElementIds | undefined
-  captionText?: string | undefined
-  columnNames?: Record<number, string> | undefined
-  defaultSortedColumnIndex?: number | undefined
-  defaultSortDirection?: SortDirection | undefined
-  onSortChange?: ((details: SortChangeDetails) => void) | undefined
-}
-
-type PropsWithDefault = 'defaultSortDirection'
-
-/* -----------------------------------------------------------------------------
- * Machine schema
- * ----------------------------------------------------------------------------- */
-
-export interface TableSchema {
-  props: RequiredBy<TableProps, PropsWithDefault>
-  state: 'idle' | 'focused'
-  context: {
-    sortedColumnIndex: number | null
-    sortDirection: SortDirection | null
-  }
-  computed: {
-    isSorted: boolean
-    announcement: string
-  }
-  event: EventObject
-  action: string
-  effect: string
-  guard: string
-}
-
-export type TableService = Service<TableSchema>
-export type TableMachine = Machine<TableSchema>
-
-/* -----------------------------------------------------------------------------
- * Header props for connect
- * ----------------------------------------------------------------------------- */
-
 export interface HeaderProps {
-  index: number
+  /** Index in the header row, including row headers. */
+  columnIndex: number
+  /** Match the text rendered in the header. */
+  headerName: string
+  /** Distinguishes headers sharing a column index in a multirow head. */
+  headerId?: string
 }
-
-/* -----------------------------------------------------------------------------
- * Cell props for connect
- * ----------------------------------------------------------------------------- */
 
 export interface CellProps {
   columnIndex: number
 }
 
-/* -----------------------------------------------------------------------------
- * Component API
- * ----------------------------------------------------------------------------- */
+export interface SortDescriptor {
+  column: number
+  direction: SortDirection
+}
+
+export interface SortChangeDetails {
+  sortDescriptor: SortDescriptor | null
+}
+
+export type ElementIds = Partial<{
+  root: string
+  header: (headerId: string | number) => string
+  sortTrigger: (headerId: string | number) => string
+  srStatus: string
+}>
+
+export interface TableProps extends CommonProperties {
+  ids?: ElementIds | undefined
+  onSortChange?: ((details: SortChangeDetails) => void) | undefined
+  /** Controlled sort state. Use null for an unsorted table. */
+  sortDescriptor?: SortDescriptor | null | undefined
+  defaultSortDescriptor?: SortDescriptor | null | undefined
+  captionText?: string | undefined
+  columnNames?: Record<number, string> | undefined
+}
+
+export interface TableSchema {
+  props: TableProps
+  state: 'idle'
+  context: {
+    sortDescriptor: SortDescriptor | null
+  }
+  computed: {
+    announcement: string
+  }
+  guard: never
+  effect: never
+  action: 'setSortDescriptor'
+  event: {
+    type: 'SORT'
+    columnIndex: number | null
+    direction?: SortDirection | undefined
+  }
+}
+
+export type TableService = Service<TableSchema>
+export type TableMachine = Machine<TableSchema>
 
 export interface TableApi<T extends PropTypes = PropTypes> {
-  focused: boolean
-  isSorted: boolean
-  sortedColumnIndex: number | null
-  sortDirection: SortDirection | null
+  sortDescriptor: SortDescriptor | null
+  /** Render this text in the element returned by getSrStatusProps. */
   announcement: string
 
-  sort: (columnIndex: number, direction?: SortDirection) => void
+  setSortDescriptor: (sortDescriptor: SortDescriptor | null) => void
 
   getRootProps: () => T['element']
+  getTableProps: () => T['element']
   getHeaderProps: (props: HeaderProps) => T['element']
-  getSortButtonProps: (props: HeaderProps) => T['button']
-  getCellProps: (props: CellProps) => T['element']
+  getSortTriggerProps: (props: HeaderProps) => T['button']
   getSrStatusProps: () => T['element']
+  getCellProps: (props: CellProps) => T['element']
 }

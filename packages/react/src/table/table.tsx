@@ -42,6 +42,7 @@ type TableVariant = NonNullable<VariantProps<typeof tableVariants>['variant']>
 
 interface TableContextProps {
   api: table.Api
+  columnNames?: Record<number, string>
   variant: TableVariant
   compact: boolean
   stacked: boolean
@@ -64,9 +65,10 @@ export type TableRootProps = React.ComponentPropsWithoutRef<'table'> & {
   compact?: boolean
   stacked?: boolean
   captionText?: table.Props['captionText']
+  /** Accessible column names, required for each sortable column index. */
   columnNames?: table.Props['columnNames']
-  defaultSortedColumnIndex?: table.Props['defaultSortedColumnIndex']
-  defaultSortDirection?: table.Props['defaultSortDirection']
+  defaultSortDescriptor?: table.Props['defaultSortDescriptor']
+  sortDescriptor?: table.Props['sortDescriptor']
   onSortChange?: table.Props['onSortChange']
 }
 
@@ -76,8 +78,8 @@ function TableRoot({
   stacked = false,
   captionText,
   columnNames,
-  defaultSortedColumnIndex,
-  defaultSortDirection,
+  defaultSortDescriptor,
+  sortDescriptor,
   onSortChange,
   className,
   ...props
@@ -86,18 +88,18 @@ function TableRoot({
     id: React.useId(),
     captionText,
     columnNames,
-    defaultSortedColumnIndex,
-    defaultSortDirection,
+    defaultSortDescriptor,
+    sortDescriptor,
     onSortChange,
   })
   const api = table.connect(service, normalizeProps)
-  const rootProps = mergeProps(api.getRootProps(), props)
+  const tableProps = mergeProps(api.getTableProps(), props)
 
   return (
-    <TableContext.Provider value={{ api, variant, compact, stacked }}>
-      <div className="@container">
+    <TableContext.Provider value={{ api, columnNames, variant, compact, stacked }}>
+      <div {...api.getRootProps()} className="@container">
         <table
-          {...rootProps}
+          {...tableProps}
           className={cn('border-spacing-0 border-t border-l', className)}
         />
         <TableSrStatus />
@@ -190,9 +192,12 @@ export type TableColumnHeaderProps = React.ComponentPropsWithoutRef<'th'> & {
 }
 
 function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, children, ...props }: TableColumnHeaderProps) {
-  const { api, variant, compact } = useTableContext()
+  const { api, columnNames, variant, compact } = useTableContext()
   const { columnHeader } = tableVariants({ variant, compact })
-  const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ index: columnIndex }) : {}
+  const headerName = columnIndex === undefined ? '' : columnNames?.[columnIndex] ?? ''
+  if (sortable && columnIndex !== undefined && !headerName.trim())
+    throw new Error('Sortable table headers require a columnNames entry on Table.Root')
+  const headerProps = sortable && columnIndex !== undefined ? api.getHeaderProps({ columnIndex, headerName }) : {}
   return (
     <th
       scope={scope}
@@ -201,21 +206,22 @@ function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, ch
       className={columnHeader({ className })}
     >
       {sortable && columnIndex !== undefined
-        ? <TableSortButton columnIndex={columnIndex}>{children}</TableSortButton>
+        ? <TableSortTrigger columnIndex={columnIndex} headerName={headerName}>{children}</TableSortTrigger>
         : children}
     </th>
   )
 }
 
-// SortButton (internal)
+// SortTrigger (internal)
 
-type TableSortButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+type TableSortTriggerProps = React.ComponentPropsWithoutRef<'button'> & {
   columnIndex: number
+  headerName: string
 }
 
-function TableSortButton({ columnIndex, className, ...props }: TableSortButtonProps) {
+function TableSortTrigger({ columnIndex, headerName, className, ...props }: TableSortTriggerProps) {
   const { api } = useTableContext()
-  const mergedProps = mergeProps(api.getSortButtonProps({ index: columnIndex }), props)
+  const mergedProps = mergeProps(api.getSortTriggerProps({ columnIndex, headerName }), props)
   return (
     <button
       {...mergedProps}
@@ -267,6 +273,7 @@ function TableSrStatus({ className, ...props }: TableSrStatusProps) {
   return (
     <div
       {...mergedProps}
+      role="status"
       className={cn(className)}
     >
       {api.announcement}

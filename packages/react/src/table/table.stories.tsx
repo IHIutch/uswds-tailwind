@@ -1,5 +1,6 @@
 import preview from '../../.storybook/preview'
 import { Table } from './table'
+import { ControlledTableExample } from './table-controlled.example'
 
 const meta = preview.meta({
   title: 'Components/Table',
@@ -235,4 +236,8 @@ export const Stacked = meta.story({
       </Table.Body>
     </Table.Root>
   ),
+})
+
+export const ControlledSorting = meta.story({
+  render: () => <ControlledTableExample />,
 })

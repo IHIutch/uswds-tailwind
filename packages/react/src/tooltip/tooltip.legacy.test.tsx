@@ -35,6 +35,8 @@ it('content element has role="tooltip"', async () => {
 
 it('tooltip is closed by default', async () => {
   const screen = await renderTooltip()
+  // The browser pointer can remain over the trigger from a previous test.
+  await userEvent.unhover(screen.getByRole('button', { name: 'Button' }))
   const content = screen.getByText('This is a tooltip')
   await expect.element(content).toHaveAttribute('data-state', 'closed')
 })

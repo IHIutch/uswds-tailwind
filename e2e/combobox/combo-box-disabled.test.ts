@@ -7,18 +7,18 @@ const rootId = 'basic-combobox'
 
 const template = `<div
   class="max-w-lg"
-  data-part="combobox-root"
+  data-scope="combobox" data-part="root"
   id="${rootId}"
   data-disabled
     >
       <label
         class="combobox-label"
-        data-part="combobox-label"
+        data-part="label"
         class="block"
       >Select a fruit:</label>
 
       <select
-        data-part="combobox-select"
+        data-part="hidden-select"
         hidden
       >
         <option value>Select a fruit</option>
@@ -91,20 +91,20 @@ const template = `<div
       <div class="relative mt-2">
         <div class="flex w-full">
           <input
-            data-part="combobox-input"
+            data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
           >
           <div class="absolute z-10 inset-y-0 right-0 flex">
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
+              data-part="clear-trigger"
               type="button"
             >
               <div class="icon-[material-symbols--close] size-6"></div>
             </button>
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
+              data-part="trigger"
               type="button"
             >
               <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -112,24 +112,25 @@ const template = `<div
           </div>
         </div>
         <ul
-          data-part="combobox-list"
+          data-part="list"
           class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
         >
           <li
-            data-part="combobox-item"
+            data-part="item"
             class="p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white data-[active]:outline-4 data-[active]:outline-blue-40v data-[active]:-outline-offset-4"
           ></li>
         </ul>
       </div>
       <!-- <div
         class="combobox-status"
-        data-part="combobox-status"
+        data-part="status"
         role="status"
 
       ></div> -->
     </div>`
 
-it('enhances a select element into a combo box component', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L160-L282
+it('enhances a select element into a combo box component', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const select = component.elements.getSelectEl()
@@ -139,7 +140,8 @@ it('enhances a select element into a combo box component', async () => {
   expect(select).toBeEnabled()
 })
 
-it('should not show the list when clicking the disabled input', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L118-L153
+it('should not show the list when clicking the disabled input', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
@@ -148,22 +150,24 @@ it('should not show the list when clicking the disabled input', async () => {
   expect(list.hidden).toBe(true)
 })
 
-it('should not show the list when clicking the disabled button', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L118-L153
+it('should not show the list when clicking the disabled button', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const root = component.elements.getRootEl()
-  const toggle = root!.querySelector('[data-part="combobox-toggle"]')!
+  const toggle = root!.querySelector('[data-part="trigger"]')!
   const list = component.elements.getListEl()
 
   await userEvent.click(toggle, { force: true })
   expect(list.hidden).toBe(true)
 })
 
-it('should show the list when clicking the input once the component has been enabled', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L146-L153
+it('should show the list when clicking the input once the component has been enabled', { tags: ['legacy'] }, async () => {
   await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
 
-  const instance = Combobox.getInstance(rootId)
+  const instance = Combobox.getInstance(component.elements.getRootEl())
   await instance?.enable()
 
   await userEvent.click(input)

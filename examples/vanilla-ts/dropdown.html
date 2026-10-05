@@ -20,88 +20,73 @@
 </head>
 
 <body class="font-source-sans p-4">
-
   <div class="space-y-8">
 
-    <section>
-      <div data-part="dropdown-root">
-        <button
-          data-part="dropdown-trigger"
-          class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-        >
-          Languages
-        </button>
-        <div
-          data-part="dropdown-content"
-          class="outline-hidden bg-blue-warm-80v w-60 divide-y divide-gray-cool-10 z-30"
-        >
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="ar">
-              <strong>العربية</strong>
-              (Arabic) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="zh">
-              <strong>简体字</strong>
-              (Chinese - Simplified) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="en">
-              <strong>English</strong>
-            </span>
-          </a>
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="es">
-              <strong>Español</strong>
-              (Spanish) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="fr">
-              <strong>Français</strong>
-              (French) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="it">
-              <strong>Italiano</strong>
-              (Italian) </span>
-          </a>
-          <a
-            data-part="dropdown-item"
-            href="#"
-            class="block text-white p-2 hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
-          >
-            <span lang="ru">
-              <strong>Pусский</strong>
-              (Russian) </span>
-          </a>
-        </div>
-      </div>
-    </section>
+    <div
+      data-scope="dropdown"
+      data-part="root"
+      class="relative inline-block"
+    >
+      <button
+        data-part="trigger"
+        type="button"
+        class="group flex cursor-pointer items-center gap-2 rounded-sm bg-blue-60v px-5 py-3 font-bold leading-none text-white hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      >
+        Languages
+        <span
+          aria-hidden="true"
+          class="icon-[material-symbols--expand-more] size-5 transition-transform group-data-[state=open]:rotate-180"
+        ></span>
+      </button>
 
+      <ul
+        data-part="content"
+        class="absolute right-0 z-30 mt-2 w-60 divide-y divide-gray-cool-10 bg-blue-warm-80v outline-hidden not-[[data-state=open]]:hidden"
+      >
+        <li data-part="item" data-value="ar">
+          <a
+            href="#ar"
+            class="block p-2 text-white hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+            lang="ar"
+          >
+            <strong>العربية</strong> (Arabic)
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div
+      data-scope="dropdown"
+      data-part="root"
+      class="relative inline-block"
+    >
+      <button
+        data-part="trigger"
+        type="button"
+        class="group flex cursor-pointer items-center gap-2 rounded-sm bg-blue-60v px-5 py-3 font-bold leading-none text-white hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      >
+        Languages
+        <span
+          aria-hidden="true"
+          class="icon-[material-symbols--expand-more] size-5 transition-transform group-data-[state=open]:rotate-180"
+        ></span>
+      </button>
+
+      <ul
+        data-part="content"
+        class="absolute right-0 z-30 mt-2 w-60 divide-y divide-gray-cool-10 bg-blue-warm-80v outline-hidden not-[[data-state=open]]:hidden"
+      >
+        <li data-part="item" data-value="ar">
+          <a
+            href="#ar"
+            class="block p-2 text-white hover:underline focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v"
+            lang="ar"
+          >
+            <strong>العربية</strong> (Arabic)
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <script

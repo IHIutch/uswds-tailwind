@@ -6,14 +6,14 @@ import { Combobox } from './combobox'
 // Behavioral parity tests mirroring e2e/combobox/combo-box.test.ts.
 
 const options = [
-  { value: 'apple', text: 'Apple' },
-  { value: 'apricot', text: 'Apricot' },
-  { value: 'avocado', text: 'Avocado' },
-  { value: 'banana', text: 'Banana' },
-  { value: 'blackberry', text: 'Blackberry' },
-  { value: 'cherry', text: 'Cherry' },
-  { value: 'grape', text: 'Grape' },
-  { value: 'plantain', text: 'Plantain' },
+  { value: 'apple', label: 'Apple' },
+  { value: 'apricot', label: 'Apricot' },
+  { value: 'avocado', label: 'Avocado' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'blackberry', label: 'Blackberry' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'grape', label: 'Grape' },
+  { value: 'plantain', label: 'Plantain' },
 ]
 
 function renderCombobox() {
@@ -28,9 +28,9 @@ function renderCombobox() {
         </Combobox.IndicatorGroup>
       </Combobox.Control>
       <Combobox.List>
-        {({ options: items }) => items.map((opt, index) => (
-          <Combobox.Item key={opt.value} index={index} value={opt.value} text={opt.text}>
-            {opt.text}
+        {({ options: items }) => items.map(opt => (
+          <Combobox.Item key={opt.id} {...opt}>
+            {opt.label}
           </Combobox.Item>
         ))}
       </Combobox.List>
@@ -163,9 +163,9 @@ it('blurring the input (focus moves elsewhere) closes the list', async () => {
           </Combobox.IndicatorGroup>
         </Combobox.Control>
         <Combobox.List>
-          {({ options: items }) => items.map((opt, index) => (
-            <Combobox.Item key={opt.value} index={index} value={opt.value} text={opt.text}>
-              {opt.text}
+          {({ options: items }) => items.map(opt => (
+            <Combobox.Item key={opt.id} {...opt}>
+              {opt.label}
             </Combobox.Item>
           ))}
         </Combobox.List>

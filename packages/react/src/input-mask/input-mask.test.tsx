@@ -1,5 +1,6 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { InputMask } from './input-mask'
 
@@ -169,4 +170,30 @@ it('submits value in form data', async () => {
   await screen.getByRole('textbox').fill('1234567')
   await screen.getByRole('button', { name: 'Submit' }).click()
   expect(formData.get('phone')).toBeTruthy()
+})
+
+it('reports a controlled edit and keeps the accepted value until rerender', async () => {
+  const onValueChange = vi.fn()
+  const screen = await render(
+    <InputMask.Root placeholder="__-__" value="12" onValueChange={onValueChange}>
+      <InputMask.Control>
+        <InputMask.Placeholder />
+        <InputMask.Input />
+      </InputMask.Control>
+    </InputMask.Root>,
+  )
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  await userEvent.type(input, '3')
+  await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: '12-3' }))
+  expect(input.value).toBe('12')
+
+  await screen.rerender(
+    <InputMask.Root placeholder="__-__" value="123" onValueChange={onValueChange}>
+      <InputMask.Control>
+        <InputMask.Placeholder />
+        <InputMask.Input />
+      </InputMask.Control>
+    </InputMask.Root>,
+  )
+  expect(input.value).toBe('12-3')
 })
