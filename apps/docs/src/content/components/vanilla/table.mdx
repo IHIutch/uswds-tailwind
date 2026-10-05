@@ -340,7 +340,7 @@ import ApiTable from "#components/api-table.astro"
 
 ### Sortable
 
-The vanilla wrapper reads header names and reorders rows in the first `<tbody>` when sorting changes.
+The component reads header names and reorders rows in the first `<tbody>` when sorting changes.
 
 <ComponentPreview title="Table Sortable" mark={[/data-part="[^\"]*"/g, /data-sortable/g, /data-sort-value="[^\"]*"/g]} code={`
 <div data-scope="table" data-part="root">
@@ -501,7 +501,7 @@ The vanilla wrapper reads header names and reorders rows in the first `<tbody>` 
 
 ## Component API
 
-### Vanilla styling
+### Styling
 
 Default, striped, borderless, compact, scrollable, and sticky tables use native table markup and Tailwind classes. They do not need `tableInit()`.
 

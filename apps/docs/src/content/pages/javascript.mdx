@@ -1,11 +1,11 @@
 ---
 title: "JavaScript"
-description: "Initialize Vanilla components, configure their authored markup, and manage instance lifecycles with @uswds-tailwind/compat."
+description: "Initialize components, configure their authored markup, and manage instance lifecycles with @uswds-tailwind/compat."
 ---
 
 import ApiTable from "#components/api-table.astro"
 
-The Vanilla package binds Zag state machines to HTML. Import its initializers from `@uswds-tailwind/compat`; no framework plugin is required. For package installation and Tailwind setup, start with the [Vanilla getting-started guide](/docs/vanilla/getting-started). React components own their own behavior; do not run Vanilla initializers on React-rendered markup.
+The package binds Zag state machines to HTML. Import its initializers from `@uswds-tailwind/compat`; no framework plugin is required. For package installation and Tailwind setup, start with the [getting-started guide](/docs/vanilla/getting-started). React components own their own behavior; do not run these initializers on React-rendered markup.
 
 ## Choose an initialization strategy
 
@@ -148,7 +148,7 @@ Pass callbacks through explicit constructor or factory options. These are JavaSc
 
 </ApiTable>
 
-Accordion, Character Count, and Input Mask support controlled `value`; Collapse and Tooltip support controlled `open`. Table supports controlled `sortDescriptor`. Vanilla Dropdown and Modal manage open state internally and do not accept `open` or `onOpenChange`. When you supply a supported controlled prop, your application controls that state. Change callbacks request a new value; your application must supply the updated state. Use the component’s documented initial-state options for uncontrolled state.
+Accordion, Character Count, and Input Mask support controlled `value`; Collapse and Tooltip support controlled `open`. Table supports controlled `sortDescriptor`. Dropdown and Modal manage open state internally and do not accept `open` or `onOpenChange`. When you supply a supported controlled prop, your application controls that state. Change callbacks request a new value; your application must supply the updated state. Use the component’s documented initial-state options for uncontrolled state.
 
 Wrapper `open()`/`close()` methods on Accordion, Collapse, Dropdown, and Modal return promises that settle the queued update; they do not wait for CSS transitions or update state controlled by your application. Direct connect API requests such as Input Mask's `instance.api.setValue()` return no promise.
 
