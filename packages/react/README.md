@@ -39,12 +39,6 @@ export default function App() {
 
 Each component is also accessible from a subpath import (e.g. `@uswds-tailwind/react/accordion`) so bundlers can tree-shake unused components.
 
-## Element IDs
-
-Machine-backed roots such as Accordion, Combobox, Dropdown, InputMask, FileInput, and Tooltip follow Ark UI's ID convention. `id` is the machine identifier used to generate part IDs. If omitted, React generates an identifier.
-
-Use `ids` to override exact DOM IDs. For example, `<Accordion.Root id="faq" ids={{ root: 'faq-root' }}>` renders a root with ID `faq-root`, while generated child IDs use the `faq` namespace. Without `ids.root`, its root ID is `accordion:faq`.
-
 ## Documentation
 
 Component API, props, and Storybook examples: [uswds-tailwind.com](https://uswds-tailwind.com)
