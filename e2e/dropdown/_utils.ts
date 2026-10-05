@@ -9,7 +9,7 @@ export function createDisposableDropdown(id: string, template: string) {
       const getRootEl = () => document.getElementById(`dropdown:${id}`)
       const getTriggerEl = () => document.getElementById(`dropdown:${id}:trigger`) as HTMLButtonElement
       const getContentEl = () => document.getElementById(`dropdown:${id}:content`)
-      const getItemEls = () => Array.from(getContentEl()?.querySelectorAll<HTMLElement>('[data-part="dropdown-item"]') ?? [])
+      const getItemEls = () => Array.from(getContentEl()?.querySelectorAll<HTMLElement>('[data-part="item"]') ?? [])
 
       return {
         getRootEl,
@@ -18,5 +18,17 @@ export function createDisposableDropdown(id: string, template: string) {
         getItemEls,
       }
     },
+  )
+}
+
+export function createDisposableDropdowns(template: string) {
+  return createDisposableComponent(
+    template,
+    dropdownInit,
+    () => ({
+      getRootEl: (id: string) => document.getElementById(`dropdown:${id}`),
+      getTriggerEl: (id: string) => document.getElementById(`dropdown:${id}:trigger`) as HTMLButtonElement,
+      getContentEl: (id: string) => document.getElementById(`dropdown:${id}:content`),
+    }),
   )
 }

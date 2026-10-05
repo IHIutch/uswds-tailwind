@@ -6,18 +6,18 @@ const rootId = 'basic-combobox'
 
 const template = `<div
   class="max-w-lg"
-  data-part="combobox-root"
+  data-scope="combobox" data-part="root"
   id="${rootId}"
   data-disable-filtering
 >
   <label
     class="combobox-label"
-    data-part="combobox-label"
+    data-part="label"
     class="block"
   >Select a fruit:</label>
 
   <select
-    data-part="combobox-select"
+    data-part="hidden-select"
     hidden
   >
     <option value>Select a fruit</option>
@@ -90,20 +90,20 @@ const template = `<div
   <div class="relative mt-2">
     <div class="flex w-full">
       <input
-        data-part="combobox-input"
+        data-part="input"
         class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
       >
       <div class="absolute z-10 inset-y-0 right-0 flex">
         <button
           class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-          data-part="combobox-clear"
+          data-part="clear-trigger"
           type="button"
         >
           <div class="icon-[material-symbols--close] size-6"></div>
         </button>
         <button
           class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-          data-part="combobox-toggle"
+          data-part="trigger"
           type="button"
         >
           <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -111,22 +111,23 @@ const template = `<div
       </div>
     </div>
     <ul
-      data-part="combobox-list"
+      data-part="list"
       class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
     >
     </ul>
   </div>
 </div>`
 
-it('should display the full list and focus the first found item', async () => {
-  using component = createDisposableCombobox(rootId, template)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L547
+it('should display the full list and focus the first found item', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()
   const list = component.elements.getListEl()
   const select = component.elements.getSelectEl()
 
   await userEvent.fill(input, 'oo')
 
-  const focusedOption = list.querySelector('[data-active]')
+  const focusedOption = list.querySelector('[data-highlighted]')
   expect(list.hidden).toBe(false)
   expect(list.children.length).toBe(select.options.length - 1)
   expect(focusedOption?.textContent).toBe('Blood orange')

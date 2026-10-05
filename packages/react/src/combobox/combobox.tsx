@@ -60,22 +60,23 @@ const ComboboxInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttribut
   ({ className, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
     const field = useFieldContext()
-    const mergedProps = mergeProps(api.getInputProps(), field?.getInputProps(), props)
+    const inputProps = api.getInputProps()
+    const mergedProps = mergeProps(inputProps, field?.getInputProps(), { id: inputProps.id }, props)
 
     return <input {...mergedProps} className={cn('pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4', className)} ref={forwardedRef} />
   },
 )
 
 export interface ComboboxListProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'children'> {
-  children?: React.ReactNode | (({ options }: { options: ComboboxContextProps['api']['filteredOptions'] }) => React.ReactNode)
+  children?: React.ReactNode | (({ options }: { options: ComboboxContextProps['api']['items'] }) => React.ReactNode)
 }
 
 const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
   ({ className, children, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getListboxProps(), props)
+    const mergedProps = mergeProps(api.getListProps(), props)
 
-    const content = typeof children === 'function' ? children({ options: api.filteredOptions }) : children
+    const content = typeof children === 'function' ? children({ options: api.items }) : children
 
     return (
       <ul {...mergedProps} className={cn('absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10', className)} ref={forwardedRef}>
@@ -86,13 +87,12 @@ const ComboboxList = React.forwardRef<HTMLUListElement, ComboboxListProps>(
 )
 
 export type ComboboxItemProps = React.ComponentPropsWithoutRef<'li'>
-  & combobox.ComboboxOption
-  & { index: number }
+  & combobox.ComboboxItem
 
 const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
-  ({ value, text, disabled, index, children, ...props }, forwardedRef) => {
+  ({ id, value, label, children, ...props }, forwardedRef) => {
     const { api } = useComboboxContext()
-    const mergedProps = mergeProps(api.getOptionProps({ option: { value, text, disabled }, index }), props)
+    const mergedProps = mergeProps(api.getItemProps({ item: { id, value, label } }), props)
 
     return (
       <li {...mergedProps} className={cn('p-2 cursor-pointer aria-selected:bg-blue-60v aria-selected:text-white not-focus:data-active:-outline-offset-2 not-focus:data-active:outline-2 not-focus:data-active:outline-black focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', props.className)} ref={forwardedRef}>
@@ -105,7 +105,7 @@ const ComboboxItem = React.forwardRef<HTMLLIElement, ComboboxItemProps>(
 function ComboboxEmptyItem({ children, className, ...props }: React.HTMLAttributes<HTMLLIElement>) {
   const { api } = useComboboxContext()
 
-  if (api.filteredOptions.length > 0)
+  if (api.items.length > 0)
     return null
 
   return (

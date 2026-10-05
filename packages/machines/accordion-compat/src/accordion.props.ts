@@ -11,6 +11,7 @@ export const props = createProps<AccordionProps>()([
   'onValueChange',
   'value',
 ])
+
 export const splitProps = createSplitProps<Partial<AccordionProps>>(props)
 
 export const itemProps = createProps<ItemProps>()(['value'])

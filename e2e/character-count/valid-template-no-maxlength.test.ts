@@ -4,23 +4,22 @@ import { createDisposableCharacterCount } from './_utils.js'
 
 const rootId = 'test'
 
-const template = `<div data-part="character-count-root" id="${rootId}">
+const template = `<div data-scope="character-count" data-part="root" id="${rootId}">
   <div>
-    <label data-part="character-count-label"></label>
-    <input data-part="character-count-input" />
-    <div data-part="character-count-status"></div>
-    <div data-part="character-count-sr-status"></div>
+    <input data-part="input" />
+    <div data-part="status"></div>
+    <div data-part="sr-status"></div>
   </div>
 </div>`
 
-it('should not update an initial message for the character count component', () => {
-  using component = createDisposableCharacterCount(rootId, template)
+it('should not update an initial message for the character count component', async () => {
+  await using component = createDisposableCharacterCount(rootId, template)
   const visibleStatus = component.elements.getStatusEl()!
   expect(visibleStatus.textContent).toBe('')
 })
 
 it('should not inform the user of remaining characters when typing', async () => {
-  using component = createDisposableCharacterCount(rootId, template)
+  await using component = createDisposableCharacterCount(rootId, template)
   const input = component.elements.getInputEl()
   const visibleStatus = component.elements.getStatusEl()!
 

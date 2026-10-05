@@ -1,7 +1,7 @@
 {
   "name": "@uswds-tailwind/compat",
   "type": "module",
-  "version": "0.3.0-alpha.7",
+  "version": "1.0.0",
   "description": "USWDS components as drop-in vanilla JavaScript modules. Auto-initializes elements with USWDS data attributes — no framework required.",
   "author": "Jonathan Hutchison",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "zag-js"
   ],
   "publishConfig": {
-    "tag": "alpha"
+    "tag": "beta"
   },
   "sideEffects": [
     "./dist/init-auto.mjs"
@@ -109,7 +109,9 @@
     "@uswds-tailwind/modal-compat": "workspace:*",
     "@uswds-tailwind/table-compat": "workspace:*",
     "@uswds-tailwind/tooltip-compat": "workspace:*",
+    "@zag-js/anatomy": "catalog:",
     "@zag-js/core": "catalog:",
+    "@zag-js/dom-query": "catalog:",
     "@zag-js/store": "catalog:",
     "@zag-js/types": "catalog:",
     "@zag-js/utils": "catalog:",

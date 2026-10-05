@@ -6,18 +6,18 @@ export function createDisposableTable(id: string, template: string) {
     template,
     tableInit,
     () => {
-      const getRootEl = () => document.getElementById(`table:${id}`) as HTMLTableElement
-      const getTheadEl = () => document.getElementById(`table:${id}:thead`) as HTMLTableSectionElement
+      const getRootEl = () => document.getElementById(`table:${id}`) as HTMLElement
       const getTbodyEl = () => document.getElementById(`table:${id}:tbody`) as HTMLTableSectionElement
-      const getTfootEl = () => document.getElementById(`table:${id}:tfoot`) as HTMLTableSectionElement
       const getSrStatusEl = () => document.getElementById(`table:${id}:sr-status`) as HTMLElement
+      const getHeaderEl = (index: number) => getRootEl().querySelectorAll<HTMLTableCellElement>('thead th')[index]!
+      const getSortButtonEl = (index: number) => getHeaderEl(index)?.querySelector<HTMLButtonElement>('button')
 
       return {
         getRootEl,
-        getTheadEl,
         getTbodyEl,
-        getTfootEl,
         getSrStatusEl,
+        getHeaderEl,
+        getSortButtonEl,
       }
     },
   )

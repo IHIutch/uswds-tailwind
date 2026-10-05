@@ -7,7 +7,7 @@ import { cn } from '../tv.config'
 const DEFAULT_TIME_OPTIONS = generateTimeOptions()
 
 export type TimePickerRootProps = React.ComponentProps<typeof Combobox.Root> & {
-  options?: combobox.ComboboxOption[]
+  options?: combobox.ComboboxOptionData[]
 }
 
 function TimePickerRoot({ options = DEFAULT_TIME_OPTIONS, className, ...props }: TimePickerRootProps) {
@@ -36,8 +36,8 @@ export const TimePicker = {
   ToggleButton: Combobox.ToggleButton,
 }
 
-export function generateTimeOptions(interval = 30): combobox.ComboboxOption[] {
-  const options: combobox.ComboboxOption[] = []
+export function generateTimeOptions(interval = 30): combobox.ComboboxOptionData[] {
+  const options: combobox.ComboboxOptionData[] = []
   for (let h = 0; h < 24; h++) {
     for (let m = 0; m < 60; m += interval) {
       const hour24 = h.toString().padStart(2, '0')
@@ -45,7 +45,7 @@ export function generateTimeOptions(interval = 30): combobox.ComboboxOption[] {
       const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h
       const period = h < 12 ? 'am' : 'pm'
       options.push({
-        text: `${hour12}:${min}${period}`,
+        label: `${hour12}:${min}${period}`,
         value: `${hour24}:${min}`,
       })
     }
@@ -53,7 +53,7 @@ export function generateTimeOptions(interval = 30): combobox.ComboboxOption[] {
   return options
 }
 
-function filterTimeOptions(inputValue: string, options: combobox.ComboboxOption[]): combobox.ComboboxOption[] {
+function filterTimeOptions(inputValue: string, options: readonly combobox.ComboboxOptionData[]): readonly combobox.ComboboxOptionData[] {
   if (!inputValue)
     return options
 
@@ -69,6 +69,6 @@ function filterTimeOptions(inputValue: string, options: combobox.ComboboxOption[
 
   const regex = new RegExp(`^${hourPattern}:${minPattern}${periodPattern}$`, 'i')
 
-  const matches = options.filter(o => regex.test(o.text))
+  const matches = options.filter(o => regex.test(o.label))
   return matches.length > 0 ? matches : options
 }

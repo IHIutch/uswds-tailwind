@@ -5,92 +5,100 @@ import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './character-count.anatomy'
 import * as dom from './character-count.dom'
 
+function mergeIds(...values: Array<string | undefined>) {
+  const ids = values.flatMap(value => value?.trim().split(/\s+/) ?? [])
+  return [...new Set(ids)].join(' ') || undefined
+}
+
 export function connect<T extends PropTypes>(
   service: Service<CharacterCountSchema>,
   normalize: NormalizeProps<T>,
 ): CharacterCountApi<T> {
-  const { state, context, send, scope, computed } = service
+  const { send, prop, context, computed, scope, refs } = service
 
-  const focused = state.matches('focused')
-  const isOverLimit = computed('isOverLimit')
+  const value = context.get('value')
+  const count = value.length
+  const maxLength = prop('maxLength')
+  const srStatus = context.get('srStatus')
+  const descriptionRendered = context.get('isDescriptionRendered')
+  const invalid = computed('isOverLimit')
   const statusText = computed('statusText')
 
   return {
-    /* ----- State properties ----- */
-    focused,
-    isOverLimit,
+    count,
+    maxLength,
+    invalid,
     statusText,
-    srStatusText: context.get('srStatusText'),
-    currentLength: computed('currentLength'),
-    value: context.get('value'),
+    srStatusText: srStatus.text,
+    value,
 
-    /* ----- Root props ----- */
+    setValue(next) {
+      send({ type: 'VALUE.SET', value: next })
+    },
+
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
-        id: dom.getRootId(scope),
+        'id': dom.getRootId(scope),
+        'data-maxlength': prop('maxLength'),
       })
     },
 
-    /* ----- Form group props ----- */
-    //   formGroupEl.classList.toggle(FORM_GROUP_ERROR_CLASS, isOverLimit)
-    getFormGroupProps() {
+    getControlProps() {
       return normalize.element({
-        ...parts.formGroup.attrs,
-        'id': dom.getFormGroupId(scope),
-        'data-invalid': dataAttr(isOverLimit),
+        ...parts.control.attrs,
+        'id': dom.getControlId(scope),
+        'data-invalid': dataAttr(invalid),
       })
     },
 
-    /* ----- Label props ----- */
-    //   labelEl.classList.toggle(LABEL_ERROR_CLASS, isOverLimit)
-    getLabelProps() {
-      return normalize.label({
-        ...parts.label.attrs,
-        'id': dom.getLabelId(scope),
-        'htmlFor': dom.getInputId(scope),
-        'data-invalid': dataAttr(isOverLimit),
-      })
-    },
-
-    /* ----- Input props ----- */
     getInputProps() {
-      return normalize.input({
+      const inputProps = {
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
-        'defaultValue': context.get('value'),
-        'data-invalid': dataAttr(isOverLimit),
-        //   [INPUT]() { updateCountMessage(this); }
-        // Uses onInput (not onChange) per Zag convention for <input> elements.
-        onInput(event) {
-          const target = event.currentTarget as HTMLInputElement | HTMLTextAreaElement
-          send({ type: 'VALUE_CHANGE', value: target.value })
+        'aria-describedby': mergeIds(
+          prop('inputDescriptionIds'),
+          descriptionRendered ? dom.getDescriptionId(scope) : undefined,
+        ),
+        'data-invalid': dataAttr(invalid),
+        'value': value,
+        onInput(event: { currentTarget: HTMLInputElement | HTMLTextAreaElement }) {
+          send({ type: 'VALUE.SET', value: event.currentTarget.value })
         },
-        onFocus() {
-          send({ type: 'INPUT.FOCUS' })
+        ref(node: HTMLInputElement | HTMLTextAreaElement | null) {
+          if (node) {
+            node.removeAttribute('maxlength')
+            dom.applyOwnedValidity(node, invalid, prop('errorText'))
+          }
         },
-        onBlur() {
-          send({ type: 'INPUT.BLUR' })
-        },
+      }
+      return normalize.input(inputProps)
+    },
+
+    getDescriptionProps() {
+      return normalize.element({
+        ...parts.description.attrs,
+        'id': dom.getDescriptionId(scope),
+        'aria-live': 'off',
+        'style': visuallyHiddenStyle,
+        'ref': refs.get('descriptionRef'),
       })
     },
 
-    /* ----- Visual status props ----- */
     getStatusProps() {
       return normalize.element({
         ...parts.status.attrs,
         'id': dom.getStatusId(scope),
         'aria-hidden': true,
-        'data-invalid': dataAttr(isOverLimit),
+        'data-invalid': dataAttr(invalid),
       })
     },
 
-    /* ----- Screen reader status props ----- */
     getSrStatusProps() {
       return normalize.element({
         ...parts.srStatus.attrs,
         'id': dom.getSrStatusId(scope),
-        'aria-live': 'polite',
+        'aria-live': srStatus.politeness,
         'style': visuallyHiddenStyle,
       })
     },

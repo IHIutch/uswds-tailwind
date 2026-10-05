@@ -4,29 +4,29 @@ import { createDisposableFileInput } from './_utils.js'
 const rootId = 'single-file-test'
 
 const template = `
-  <div data-part="file-input-root" id="${rootId}">
-    <label data-part="file-input-label">Single file input</label>
-    <div data-part="file-input-error-message"></div>
+  <div data-scope="file-input" data-part="root" id="${rootId}">
+    <label data-part="label">Single file input</label>
+    <div data-part="error-text"></div>
     <div>
-      <div data-part="file-input-sr-status" aria-live="polite">
+      <div data-part="sr-status" aria-live="polite">
         No file selected.
       </div>
-      <div data-part="file-input-dropzone">
-        <div data-part="file-input-preview-list">
+      <div data-part="dropzone">
+        <div data-part="item-group">
           <div>
-            <div data-part="file-input-preview-header"></div>
+            <div data-part="preview-heading"></div>
           </div>
-          <div data-part="file-input-preview-item">
-            <div data-part="file-input-preview-item-icon"></div>
-            <div data-part="file-input-preview-item-content"></div>
+          <div data-part="item">
+            <img data-part="item-preview-image" />
+            <div data-file-name></div>
           </div>
         </div>
-        <div data-part="file-input-instructions">
-          <span>Drag file here or</span>
-          <span>choose from folder</span>
+        <div data-part="instructions">
+          <span data-part="drag-text">Drag file here or</span>
+          <span data-part="choose">choose from folder</span>
         </div>
         <input
-          data-part="file-input-input"
+          data-part="input"
           type="file"
           accept=".pdf,.txt"
         />
@@ -35,8 +35,8 @@ const template = `
   </div>
 `
 
-it('uses singular "file" if there is not a "multiple" attribute', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('uses singular "file" if there is not a "multiple" attribute', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const dragText = component.elements.getInstructionsEl()
   expect(dragText?.textContent).toContain('Drag file here or')
 })

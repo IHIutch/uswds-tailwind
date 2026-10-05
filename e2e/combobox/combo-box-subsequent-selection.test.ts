@@ -6,19 +6,19 @@ const rootId = 'basic-combobox'
 
 const template = `<div
   class="max-w-lg"
-  data-part="combobox-root"
+  data-scope="combobox" data-part="root"
   id="${rootId}"
   data-default-value="blackberry"
     >
       <label
         class="combobox-label"
-        data-part="combobox-label"
+        data-part="label"
         class="block"
       >Select a fruit:</label>
 
       <select
         name="fruit"
-        data-part="combobox-select"
+        data-part="hidden-select"
         hidden
       >
         <option value>Select a fruit</option>
@@ -92,20 +92,20 @@ const template = `<div
         <div class="flex w-full">
           <input
             required
-            data-part="combobox-input"
+            data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
           >
           <div class="absolute z-10 inset-y-0 right-0 flex">
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-clear"
+              data-part="clear-trigger"
               type="button"
             >
               <div class="icon-[material-symbols--close] size-6"></div>
             </button>
             <button
               class="h-full px-1 flex items-center focus:-outline-offset-4 focus:outline-4 focus:outline-blue-40v/60 bg-transparent text-gray-50"
-              data-part="combobox-toggle"
+              data-part="trigger"
               type="button"
             >
               <div class="icon-[material-symbols--expand-more] size-8"></div>
@@ -113,21 +113,22 @@ const template = `<div
           </div>
         </div>
         <ul
-          data-part="combobox-list"
+          data-part="list"
           class="absolute border border-t-0 border-gray-60 bg-white max-h-52 overflow-y-scroll w-full z-10"
         >
         </ul>
       </div>
       <!-- <div
         class="combobox-status"
-        data-part="combobox-status"
+        data-part="status"
         role="status"
 
       ></div> -->
     </div>`
 
-it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', async () => {
-  using component = createDisposableCombobox(rootId, template)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L547
+it('should display the full list and focus the selected item when the input is pristine (after fresh selection)', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -136,13 +137,14 @@ it('should display the full list and focus the selected item when the input is p
 
   expect(list.hidden).toBe(false)
   expect(list.children.length).toBe(select.options.length - 1)
-  const highlightedOption = list.querySelector('[data-active]')
+  const highlightedOption = list.querySelector('[data-highlighted]')
   expect(highlightedOption).toBeTruthy()
   expect(highlightedOption?.textContent).toBe('Blackberry')
 })
 
-it('should display the filtered list when the input is dirty (characters inputted)', async () => {
-  using component = createDisposableCombobox(rootId, template)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L449
+it('should display the filtered list when the input is dirty (characters inputted)', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
@@ -155,22 +157,24 @@ it('should display the filtered list when the input is dirty (characters inputte
   expect(list.children.length).toBe(1)
 })
 
-it('should show a clear button when the input has a selected value present', () => {
-  using component = createDisposableCombobox(rootId, template)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L246-L254
+it('should show a clear button when the input has a selected value present', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, template)
 
   const clearButton = component.elements.getClearButtonEl()
-  expect(clearButton).toBeTruthy()
+  expect(clearButton).toBeVisible()
 })
 
-it('should clear the input when the clear button is clicked', async () => {
-  using component = createDisposableCombobox(rootId, template)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L592-L603
+it('should clear the input when the clear button is clicked', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
 
   expect(select.value).toBe('blackberry')
   expect(input.value).toBe('Blackberry')
 
-  const clearButton = document.querySelector('[data-part="combobox-clear"]')!
+  const clearButton = document.querySelector('[data-part="clear-trigger"]')!
   await userEvent.click(clearButton)
 
   expect(select.value).toBe('')
@@ -178,8 +182,9 @@ it('should clear the input when the clear button is clicked', async () => {
   expect(document.activeElement).toBe(input)
 })
 
-it('should update the filter and begin filtering once a pristine input value is changed', async () => {
-  using component = createDisposableCombobox(rootId, template)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L403-L547
+it('should update the filter and begin filtering once a pristine input value is changed', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableCombobox(rootId, template)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!

@@ -3,7 +3,7 @@ import { createMachine } from '@zag-js/core'
 
 export const machine = createMachine<CollapseSchema>({
   initialState({ prop }) {
-    const open = prop('open') || prop('defaultOpen')
+    const open = prop('open') ?? prop('defaultOpen')
     return open ? 'open' : 'closed'
   },
 
@@ -13,43 +13,39 @@ export const machine = createMachine<CollapseSchema>({
 
   watch({ track, prop, action }) {
     track([() => prop('open')], () => {
-      action(['toggleVisibility'])
+      action(['syncControlledOpen'])
     })
   },
 
   states: {
     closed: {
       on: {
-        'TOGGLE': [
+        'OPEN': [
           {
             guard: 'isOpenControlled',
-            actions: ['invokeOnOpenChange'],
+            actions: ['invokeOnOpen'],
           },
           {
             target: 'open',
-            actions: ['invokeOnOpenChange'],
+            actions: ['invokeOnOpen'],
           },
         ],
-        'controlled.open': {
-          target: 'open',
-        },
+        'CONTROLLED.OPEN': { target: 'open' },
       },
     },
     open: {
       on: {
-        'TOGGLE': [
+        'CLOSE': [
           {
             guard: 'isOpenControlled',
-            actions: ['invokeOnOpenChange'],
+            actions: ['invokeOnClose'],
           },
           {
             target: 'closed',
-            actions: ['invokeOnOpenChange'],
+            actions: ['invokeOnClose'],
           },
         ],
-        'controlled.close': {
-          target: 'closed',
-        },
+        'CONTROLLED.CLOSE': { target: 'closed' },
       },
     },
   },
@@ -60,13 +56,16 @@ export const machine = createMachine<CollapseSchema>({
     },
 
     actions: {
-      invokeOnOpenChange: ({ prop, state }) => {
-        const nextOpen = !state.matches('open')
-        prop('onOpenChange')?.({ open: nextOpen })
+      invokeOnOpen({ prop }) {
+        prop('onOpenChange')?.({ open: true })
       },
-      // Controlled mode: sync machine state to match open prop
-      toggleVisibility: ({ prop, send }) => {
-        send({ type: prop('open') ? 'controlled.open' : 'controlled.close' })
+      invokeOnClose({ prop }) {
+        prop('onOpenChange')?.({ open: false })
+      },
+      syncControlledOpen({ prop, send }) {
+        const open = prop('open')
+        if (open !== undefined)
+          send({ type: open ? 'CONTROLLED.OPEN' : 'CONTROLLED.CLOSE' })
       },
     },
   },

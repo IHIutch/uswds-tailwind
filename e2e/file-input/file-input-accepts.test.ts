@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest'
-import { FileInput } from '../../packages/compat/src/file-input.js'
+import { expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableFileInput } from './_utils.js'
 
 const defaultErrorMessage = 'Error: This is not a valid file type.'
@@ -7,29 +7,29 @@ const customErrorMessage = 'Please upload a valid file'
 const rootId = 'test'
 
 const template = `
-<div data-part="file-input-root" id="${rootId}">
-  <label data-part="file-input-label">Input accepts only specific file types</label>
-  <div data-part="file-input-error-message"></div>
+<div data-scope="file-input" data-part="root" id="${rootId}">
+  <label data-part="label">Input accepts only specific file types</label>
+  <div data-part="error-text"></div>
   <div>
-    <div data-part="file-input-sr-status" aria-live="polite">
+    <div data-part="sr-status" aria-live="polite">
       No file selected.
     </div>
-    <div data-part="file-input-dropzone">
-      <div data-part="file-input-preview-list">
+    <div data-part="dropzone">
+      <div data-part="item-group">
         <div>
-          <div data-part="file-input-preview-header"></div>
+          <div data-part="preview-heading"></div>
         </div>
-        <div data-part="file-input-preview-item">
-          <div data-part="file-input-preview-item-icon"></div>
-          <div data-part="file-input-preview-item-content"></div>
+        <div data-part="item">
+          <img data-part="item-preview-image" />
+          <div data-file-name></div>
         </div>
       </div>
-      <div data-part="file-input-instructions">
-        <span>Drag files here or</span>
-        <span>choose from folder</span>
+      <div data-part="instructions">
+        <span data-part="drag-text">Drag files here or</span>
+        <span data-part="choose">choose from folder</span>
       </div>
       <input
-        data-part="file-input-input"
+        data-part="input"
         type="file"
         accept=".pdf,.txt"
         multiple
@@ -51,86 +51,82 @@ function createMockFile(name: string, size: number, mimeType: string): File {
 const size = 1024 * 1024 * 2 // 2MB
 const invalidFile = createMockFile('pic.jpg', size, 'image/jpeg')
 
-it('target ui is created', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('target ui is created', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const dropZone = component.elements.getDropzoneEl()
 
   expect(dropZone).toBeTruthy()
-  expect(dropZone?.getAttribute('data-part')).toBe('file-input-dropzone')
+  expect(dropZone?.getAttribute('data-part')).toBe('dropzone')
 })
 
-it('input element exists', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('input element exists', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const inputEl = component.elements.getInputEl()
 
   expect(inputEl).toBeTruthy()
-  expect(inputEl?.getAttribute('data-part')).toBe('file-input-input')
+  expect(inputEl?.getAttribute('data-part')).toBe('input')
 })
 
-it('pluralizes "files" if there is a "multiple" attribute', () => {
-  using component = createDisposableFileInput(rootId, template)
+it('pluralizes "files" if there is a "multiple" attribute', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
   const dragText = component.elements.getInstructionsEl()
 
   expect(dragText?.textContent).toContain('Drag files here or')
 })
 
-it('mock file should be defined with specific values', () => {
+it('mock file should be defined with specific values', { tags: ['legacy'] }, () => {
   expect(invalidFile).toBeTruthy()
   expect(invalidFile.name).toBe('pic.jpg')
   expect(invalidFile.size).toBe(size)
   expect(invalidFile.type).toBe('image/jpeg')
 })
 
-it('mock file should not be allowed', async () => {
-  using component = createDisposableFileInput(rootId, template)
-  const instance = FileInput.getInstance(rootId)
+it('mock file should not be allowed', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
+  await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
-  await instance?.setFiles([invalidFile])
-  expect(instance).toBeTruthy()
-
-  const rootEl = component.elements.getRootEl()!
-  expect(rootEl.getAttribute('data-invalid')).toBeDefined()
+  const dropzone = component.elements.getDropzoneEl()!
+  expect(dropzone.hasAttribute('data-invalid')).toBe(true)
 })
 
-it('should provide a default error message for invalid file type', async () => {
-  using component = createDisposableFileInput(rootId, template)
-  const instance = FileInput.getInstance(rootId)
-
-  await instance?.setFiles([invalidFile])
+it('should provide a default error message for invalid file type', { tags: ['legacy'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
+  await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
   const errorMessage = component.elements.getErrorMessageEl()!
-  const rootEl = component.elements.getRootEl()!
+  const dropzone = component.elements.getDropzoneEl()!
 
   expect(errorMessage?.textContent).toBe(defaultErrorMessage)
-  expect(rootEl.getAttribute('data-invalid')).toBeDefined()
+  expect(dropzone.hasAttribute('data-invalid')).toBe(true)
+  expect(errorMessage?.hasAttribute('data-invalid')).toBe(true)
 })
 
-it('should allow a custom error message for invalid file type', async () => {
+it('should allow a custom error message for invalid file type', { tags: ['legacy'] }, async () => {
   // Create template with custom error message
   const customTemplate = `
-<div data-part="file-input-root" id="${rootId}">
-  <label data-part="file-input-label">Input accepts only specific file types</label>
-  <div data-part="file-input-error-message"></div>
+<div data-scope="file-input" data-part="root" id="${rootId}">
+  <label data-part="label">Input accepts only specific file types</label>
+  <div data-part="error-text"></div>
   <div>
-    <div data-part="file-input-sr-status" aria-live="polite">
+    <div data-part="sr-status" aria-live="polite">
       No file selected.
     </div>
-    <div data-part="file-input-dropzone">
-      <div data-part="file-input-preview-list">
+    <div data-part="dropzone">
+      <div data-part="item-group">
         <div>
-          <div data-part="file-input-preview-header"></div>
+          <div data-part="preview-heading"></div>
         </div>
-        <div data-part="file-input-preview-item">
-          <div data-part="file-input-preview-item-icon"></div>
-          <div data-part="file-input-preview-item-content"></div>
+        <div data-part="item">
+          <img data-part="item-preview-image" />
+          <div data-file-name></div>
         </div>
       </div>
-      <div data-part="file-input-instructions">
-        <span>Drag files here or</span>
-        <span>choose from folder</span>
+      <div data-part="instructions">
+        <span data-part="drag-text">Drag files here or</span>
+        <span data-part="choose">choose from folder</span>
       </div>
       <input
-        data-part="file-input-input"
+        data-part="input"
         type="file"
         accept=".pdf,.txt"
         multiple
@@ -141,15 +137,29 @@ it('should allow a custom error message for invalid file type', async () => {
 </div>
 `
 
-  using component = createDisposableFileInput(rootId, customTemplate)
+  await using component = createDisposableFileInput(rootId, customTemplate)
 
-  const instance = FileInput.getInstance(rootId)
+  await userEvent.upload(component.elements.getInputEl()!, invalidFile)
 
-  await instance?.setFiles([invalidFile])
-
-  const rootEl = component.elements.getRootEl()!
+  const dropzone = component.elements.getDropzoneEl()!
   const errorMessage = component.elements.getErrorMessageEl()
 
   expect(errorMessage?.textContent).toBe(customErrorMessage)
-  expect(rootEl.getAttribute('data-invalid')).toBeDefined()
+  expect(dropzone.hasAttribute('data-invalid')).toBe(true)
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L389-L410 (selection heading)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L439-L499 (render selected filenames and previews)
+it('renders a native file selection in the authored preview list', { tags: ['parity'] }, async () => {
+  await using component = createDisposableFileInput(rootId, template)
+  const input = component.elements.getInputEl()!
+  const selected = new File(['file contents'], 'report.pdf', { type: 'application/pdf' })
+  await userEvent.upload(input, selected)
+
+  await vi.waitFor(() => {
+    expect(component.elements.getItemGroupEl()?.querySelectorAll('[data-part="item"]')).toHaveLength(1)
+    expect(component.elements.getItemGroupEl()?.hasAttribute('data-valid')).toBe(true)
+    expect(component.elements.getItemNameEl('report.pdf')?.textContent).toBe('report.pdf')
+    expect(component.elements.getPreviewHeaderEl()?.textContent).toBe('Selected file Change file')
+  })
 })

@@ -1,91 +1,86 @@
 import type { Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 
-/* -----------------------------------------------------------------------------
- * Callback details
- * ----------------------------------------------------------------------------- */
-
-export interface ValueChangeDetails {
-  value: string
-  length: number
-  isOverLimit: boolean
-}
-
-/* -----------------------------------------------------------------------------
- * Element IDs
- * ----------------------------------------------------------------------------- */
-
+/* Element IDs */
 export type ElementIds = Partial<{
   root: string
-  formGroup: string
-  label: string
+  control: string
   input: string
+  description: string
   status: string
   srStatus: string
 }>
 
-/* -----------------------------------------------------------------------------
- * Machine props
- * ----------------------------------------------------------------------------- */
+/* Props */
+export interface ValueChangeDetails {
+  value: string
+}
 
 export interface CharacterCountProps extends CommonProperties {
   ids?: ElementIds | undefined
-  maxLength?: number | undefined
-  value?: string | undefined
+  /** Existing descriptions stay linked when the optional description mounts. */
+  inputDescriptionIds?: string | undefined
+  /** The allowed character count; the input has no native maxlength. */
+  maxLength: number
+  /** Initial uncontrolled value. */
   defaultValue?: string | undefined
-  validationMessage?: string | undefined
+  /** The owner must update this value to accept an edit. */
+  value?: string | undefined
+  /** Called when typing or setValue proposes a value. */
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
-  // Customize the status message for both the visible and SR text. Useful
-  // for i18n or alternative formats ("N of M", "N words remaining").
-  getStatusText?: ((details: { count: number, max: number, isOverLimit: boolean }) => string) | undefined
+  /** @default "The content is too long." */
+  errorText?: string | undefined
+  /** @default "characters allowed" */
+  statusLabel?: string | undefined
 }
 
-type PropsWithDefault = 'defaultValue' | 'validationMessage'
+type PropsWithDefault = 'maxLength' | 'defaultValue' | 'errorText' | 'statusLabel'
 
-/* -----------------------------------------------------------------------------
- * Machine schema
- * ----------------------------------------------------------------------------- */
-
+/* Machine schema */
 export interface CharacterCountSchema {
   props: RequiredBy<CharacterCountProps, PropsWithDefault>
-  state: 'idle' | 'focused'
+  state: 'idle'
   context: {
     value: string
-    srStatusText: string
+    srStatus: { text: string, politeness: 'polite' | 'assertive' | undefined }
+    isDescriptionRendered: boolean
   }
   computed: {
-    currentLength: number
     isOverLimit: boolean
     statusText: string
   }
-  event:
-    | { type: 'VALUE_CHANGE', value: string }
-    | { type: 'INPUT.FOCUS' }
-    | { type: 'INPUT.BLUR' }
-  action: string
-  effect: string
-  guard: string
+  refs: {
+    srAnnouncementCleanup: VoidFunction | undefined
+    previousOverLimit: boolean
+    descriptionRef: (node: HTMLElement | null) => void
+  }
+  action: 'setValue' | 'syncInputValidity' | 'announceValue'
+  guard: never
+  effect: 'trackSrStatus'
+  event: { type: 'VALUE.SET', value: string }
 }
 
 export type CharacterCountService = Service<CharacterCountSchema>
+
 export type CharacterCountMachine = Machine<CharacterCountSchema>
 
-/* -----------------------------------------------------------------------------
- * Component API
- * ----------------------------------------------------------------------------- */
-
+/* Consumer API */
 export interface CharacterCountApi<T extends PropTypes = PropTypes> {
-  focused: boolean
-  isOverLimit: boolean
+  count: number
+  maxLength: number
+  invalid: boolean
   statusText: string
+  /** The screen-reader text follows the trailing debounce. */
   srStatusText: string
-  currentLength: number
+
+  /** Effective text, including the accepted controlled value. */
   value: string
+  setValue: (value: string) => void
 
   getRootProps: () => T['element']
-  getFormGroupProps: () => T['element']
-  getLabelProps: () => T['label']
+  getControlProps: () => T['element']
   getInputProps: () => T['input']
+  getDescriptionProps: () => T['element']
   getStatusProps: () => T['element']
   getSrStatusProps: () => T['element']
 }

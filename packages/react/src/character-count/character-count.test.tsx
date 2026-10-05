@@ -1,5 +1,6 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { CharacterCount } from './character-count'
 
@@ -12,6 +13,35 @@ it('characterCount works standalone', async () => {
   )
 
   await expect.element(screen.getByRole('textbox')).toBeVisible()
+})
+
+it.each([undefined, 'exact-counter'])('uses id as the machine namespace and ids.root as the DOM override (%s)', async (rootId) => {
+  const screen = await render(
+    <CharacterCount.Root id="counter" ids={rootId ? { root: rootId } : undefined} maxLength={5}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
+  )
+  const expectedRootId = rootId ?? 'character-count:counter'
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(document.getElementById(expectedRootId)).toContainElement(input)
+  expect(input.id).toBe('character-count:counter:input')
+  await screen.getByRole('textbox').fill('abcdef')
+  await expect.element(screen.getByText('1 character over limit')).toBeVisible()
+  expect(input.validationMessage).toBe('The content is too long.')
+})
+
+it('prefilled over-limit input has native validity on mount', async () => {
+  const screen = await render(
+    <CharacterCount.Root maxLength={5} defaultValue="abcdef">
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
+  )
+
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(input.value).toBe('abcdef')
+  expect(input.validationMessage).toBe('The content is too long.')
 })
 
 it('field.Label htmlFor matches CharacterCount.Input id', async () => {
@@ -130,6 +160,23 @@ it('status text shows character count', async () => {
   await expect.element(screen.getByText(/20 characters allowed/)).toBeVisible()
 })
 
+it('keeps the screen reader status unchanged when unrelated content rerenders', async () => {
+  const view = (label: string) => (
+    <Field.Root>
+      <Field.Label>{label}</Field.Label>
+      <CharacterCount.Root maxLength={20}>
+        <CharacterCount.Input />
+        <CharacterCount.SrStatus />
+      </CharacterCount.Root>
+    </Field.Root>
+  )
+  const screen = await render(view('Before'))
+  await screen.rerender(view('After'))
+
+  await expect.element(screen.getByText('After')).toBeVisible()
+  expect(screen.container.querySelector('[data-part="sr-status"]')?.textContent).toBe('20 characters allowed')
+})
+
 it('character count updates as user types', async () => {
   const screen = await render(
     <CharacterCount.Root maxLength={20}>
@@ -140,6 +187,21 @@ it('character count updates as user types', async () => {
   const input = screen.getByRole('textbox')
   await input.fill('hello')
   await expect.element(screen.getByText(/15 characters left/)).toBeVisible()
+})
+
+it('allows typing past an input maxlength and reports the over-limit count', async () => {
+  const screen = await render(
+    <CharacterCount.Root maxLength={5}>
+      <CharacterCount.Input maxLength={5} />
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
+  )
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+
+  await userEvent.type(input, 'abcdef')
+
+  expect(input.value).toBe('abcdef')
+  await expect.element(screen.getByText('1 character over limit')).toBeVisible()
 })
 
 it('submits value in form data', async () => {
@@ -160,4 +222,81 @@ it('submits value in form data', async () => {
   await screen.getByRole('textbox').fill('hello')
   await screen.getByRole('button', { name: 'Submit' }).click()
   expect(formData.get('message')).toBe('hello')
+})
+
+it('submits only the accepted controlled value after a rejected edit', async () => {
+  const onValueChange = vi.fn()
+  const view = (value: string) => (
+    <form>
+      <CharacterCount.Root maxLength={5} value={value} onValueChange={onValueChange}>
+        <CharacterCount.Input name="message" />
+        <CharacterCount.Status />
+      </CharacterCount.Root>
+    </form>
+  )
+  const screen = await render(view('abc'))
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  await userEvent.fill(input, 'abcdef')
+  await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: 'abcdef' }))
+  expect(input.value).toBe('abc')
+  expect(new FormData(input.form!).get('message')).toBe('abc')
+  expect(input.validationMessage).toBe('')
+  await screen.rerender(view('abcdef'))
+  await expect.element(screen.getByText('1 character over limit')).toBeVisible()
+  expect(input.value).toBe('abcdef')
+  expect(input.validationMessage).toBe('The content is too long.')
+})
+
+it('updates its validation message when the owner changes errorText', async () => {
+  const view = (errorText: string) => (
+    <CharacterCount.Root maxLength={5} defaultValue="abcdef" errorText={errorText}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>
+  )
+  const screen = await render(view('Too many characters.'))
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(input.validationMessage).toBe('Too many characters.')
+  await screen.rerender(view('Please shorten this text.'))
+  await vi.waitFor(() => expect(input.validationMessage).toBe('Please shorten this text.'))
+  await userEvent.fill(input, 'abcd')
+  await vi.waitFor(() => expect(input.validationMessage).toBe(''))
+})
+
+it('preserves another validator when the owner changes errorText', async () => {
+  const view = (errorText: string) => (
+    <CharacterCount.Root maxLength={5} defaultValue="abcdef" errorText={errorText}>
+      <CharacterCount.Input />
+      <CharacterCount.Status />
+    </CharacterCount.Root>
+  )
+  const screen = await render(view('Too many characters.'))
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(input.validationMessage).toBe('Too many characters.')
+  input.setCustomValidity('Please correct this field.')
+  await screen.rerender(view('Please shorten this text.'))
+  await userEvent.fill(input, 'abcdefg')
+  expect(input.validationMessage).toBe('Please correct this field.')
+  await userEvent.fill(input, 'abcd')
+  expect(input.validationMessage).toBe('Please correct this field.')
+})
+
+it('honors ids.status inside Field and keeps the counter accessible while typing', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Message</Field.Label>
+      <p id="counter-help">Keep it brief.</p>
+      <CharacterCount.Root ids={{ status: 'exact-status' }} inputDescriptionIds="counter-help" maxLength={5}>
+        <CharacterCount.Input />
+        <CharacterCount.Status />
+      </CharacterCount.Root>
+    </Field.Root>,
+  )
+  const input = screen.getByRole('textbox', { name: 'Message' })
+  await expect.element(screen.getByText('5 characters allowed')).toHaveAttribute('id', 'exact-status')
+  await expect.element(input).toHaveAccessibleDescription('Keep it brief. 5 characters allowed')
+  await input.fill('abcdef')
+  await expect.element(screen.getByText('1 character over limit')).toHaveAttribute('id', 'exact-status')
+  await expect.element(input).toHaveAccessibleDescription('Keep it brief. 1 character over limit')
+  expect((input.element() as HTMLInputElement).validationMessage).toBe('The content is too long.')
 })

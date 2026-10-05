@@ -5,12 +5,12 @@ import { userEvent } from 'vitest/browser'
 import { Field } from '../field/field'
 import { Combobox } from './combobox'
 
-const options = [{ value: 'a', text: 'A' }]
+const options = [{ value: 'a', label: 'A' }]
 
 const multipleOptions = [
-  { value: 'watercraft', text: 'Watercraft' },
-  { value: 'automobiles', text: 'Automobiles' },
-  { value: 'aircraft', text: 'Aircraft' },
+  { value: 'watercraft', label: 'Watercraft' },
+  { value: 'automobiles', label: 'Automobiles' },
+  { value: 'aircraft', label: 'Aircraft' },
 ]
 
 function ComboboxComponent(props: React.ComponentProps<typeof Combobox.Root>) {
@@ -38,13 +38,12 @@ function FullComboboxComponent(props: React.ComponentProps<typeof Combobox.Root>
       <Combobox.List>
         {({ options }) => (
           <>
-            {options.map((option, index) => (
+            {options.map(option => (
               <Combobox.Item
-                key={option.value}
-                index={index}
+                key={option.id}
                 {...option}
               >
-                {option.text}
+                {option.label}
               </Combobox.Item>
             ))}
             <Combobox.EmptyItem />
@@ -217,8 +216,8 @@ it('submits value in form data', async () => {
           <Combobox.Input name="vehicle" />
         </Combobox.Control>
         <Combobox.List>
-          {({ options }) => options.map((o, i) => (
-            <Combobox.Item key={o.value} index={i} {...o}>{o.text}</Combobox.Item>
+          {({ options }) => options.map(o => (
+            <Combobox.Item key={o.id} {...o}>{o.label}</Combobox.Item>
           ))}
         </Combobox.List>
       </Combobox.Root>
@@ -239,7 +238,7 @@ it('onValueChange fires when option is selected', async () => {
 
   await screen.getByRole('combobox').fill('Air')
   await screen.getByText('Aircraft').click()
-  expect(handleChange).toHaveBeenCalledWith('aircraft')
+  expect(handleChange).toHaveBeenCalledWith({ value: 'aircraft', label: 'Aircraft' })
 })
 
 it('arrowDown moves DOM focus to the newly-highlighted option', async () => {
@@ -253,4 +252,64 @@ it('arrowDown moves DOM focus to the newly-highlighted option', async () => {
   await userEvent.keyboard('{ArrowDown}') // move to Automobiles
 
   await expect.element(screen.getByRole('option', { name: 'Automobiles' })).toHaveFocus()
+})
+
+it.each([undefined, 'exact-combobox'])('uses the machine namespace and honors ids.root for outside clicks (%s)', async (rootId) => {
+  const screen = await render(
+    <div>
+      <ComboboxComponent id="picker" ids={{ root: rootId }} options={multipleOptions} />
+      <button>Outside</button>
+    </div>,
+  )
+  const input = screen.getByRole('combobox')
+  expect(document.getElementById(rootId ?? 'combobox:picker')).toContainElement(input.element())
+  expect(input.element().id).toBe('combobox:picker:input')
+  await input.fill('Water')
+  await expect.element(input).toHaveAttribute('aria-expanded', 'true')
+  await screen.getByRole('button', { name: 'Outside' }).click()
+  await expect.element(input).toHaveAttribute('aria-expanded', 'false')
+})
+
+it('keeps Field label associations when overriding the root part id', async () => {
+  const screen = await render(
+    <Field.Root>
+      <Field.Label>Pick</Field.Label>
+      <ComboboxComponent id="picker" ids={{ root: 'exact-combobox' }} options={options} />
+    </Field.Root>,
+  )
+  const input = screen.getByRole('combobox').element()
+  expect(document.getElementById('exact-combobox')).toContainElement(input)
+  expect(screen.getByText('Pick').element().getAttribute('for')).toBe(input.id)
+})
+
+it('honors ids.input inside Field while retaining its description and validation', async () => {
+  const screen = await render(
+    <Field.Root invalid required>
+      <Field.Description>Choose a vehicle</Field.Description>
+      <Field.ErrorMessage>Required</Field.ErrorMessage>
+      <Combobox.Root ids={{ input: 'exact-picker' }} options={multipleOptions}>
+        <Combobox.Label>Vehicle</Combobox.Label>
+        <Combobox.Control>
+          <Combobox.Input />
+          <Combobox.ToggleButton />
+        </Combobox.Control>
+        <Combobox.List>
+          {({ options }) => options.map(option => (
+            <Combobox.Item key={option.id} {...option}>{option.label}</Combobox.Item>
+          ))}
+        </Combobox.List>
+      </Combobox.Root>
+    </Field.Root>,
+  )
+  const input = screen.getByRole('combobox')
+  await expect.element(input).toHaveAttribute('id', 'exact-picker')
+  expect(screen.getByText('Vehicle').element().getAttribute('for')).toBe('exact-picker')
+  await expect.element(input).toHaveAccessibleDescription('Required Choose a vehicle')
+  await expect.element(input).toHaveAttribute('aria-invalid', 'true')
+  await expect.element(input).toBeRequired()
+  await screen.getByText('Vehicle').click()
+  await expect.element(input).toHaveFocus()
+  await input.fill('Water')
+  await screen.getByRole('option', { name: 'Watercraft' }).click()
+  await expect.element(input).toHaveValue('Watercraft')
 })

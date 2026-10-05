@@ -1,20 +1,20 @@
 import * as collapse from '@uswds-tailwind/collapse-compat'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataString } from './lib/data-attr'
+import { getOwnedPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
-export class Collapse extends Component<collapse.Props, collapse.Api> {
-  static instances = new Map<string, Collapse>()
+const parts = collapse.anatomy.build()
 
-  static getInstance(id: string) {
-    return Collapse.instances.get(id)
-  }
+export class Collapse extends Component<collapse.Props, collapse.Api> {
+  static override root = parts.root
 
   initMachine(props: collapse.Props): VanillaMachine<collapse.CollapseSchema> {
-    Collapse.instances.set(props.id, this)
-
     return new VanillaMachine(collapse.machine, {
       ...props,
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'collapse'),
+      defaultOpen: props.defaultOpen ?? getDataString(this.rootEl, 'state') === 'open',
     })
   }
 
@@ -29,14 +29,17 @@ export class Collapse extends Component<collapse.Props, collapse.Api> {
       this.renderTrigger(this.trigger)
     }
     this.renderContent(this.content)
+    const indicator = getOwnedPart<HTMLElement>(this.rootEl, parts.indicator)
+    if (indicator)
+      spreadProps(indicator, this.api.getIndicatorProps())
   }
 
   private get trigger() {
-    return this.rootEl.querySelector<HTMLElement>(`[data-part="collapse-trigger"]`)
+    return getOwnedPart<HTMLElement>(this.rootEl, parts.trigger)
   }
 
   private get content() {
-    const contentEl = this.rootEl.querySelector<HTMLElement>(`[data-part="collapse-content"]`)
+    const contentEl = getOwnedPart<HTMLElement>(this.rootEl, parts.content)
     if (!contentEl)
       throw new Error('Expected contentEl to be defined')
     return contentEl
@@ -49,13 +52,18 @@ export class Collapse extends Component<collapse.Props, collapse.Api> {
   private renderContent(contentEl: HTMLElement) {
     spreadProps(contentEl, this.api.getContentProps())
   }
+
+  async open() {
+    this.api.setOpen(true)
+    await this.settle()
+  }
+
+  async close() {
+    this.api.setOpen(false)
+    await this.settle()
+  }
 }
 
 export function collapseInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="collapse-root"]').forEach((targetEl) => {
-    const collapse = new Collapse(targetEl, {
-      id: targetEl.id || getId(targetEl, 'collapse'),
-    })
-    collapse.init()
-  })
+  return Collapse.createAll(document)
 }

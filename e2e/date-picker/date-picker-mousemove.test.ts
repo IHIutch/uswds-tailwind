@@ -66,7 +66,7 @@ const template = `
   `
 
 it('should ignore mouse move events over disabled days', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!
@@ -95,7 +95,7 @@ it('should ignore mouse move events over disabled days', async () => {
 })
 
 it('should handle mouse event on the same day efficiently', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const root = component.elements.getRootEl()!
   const input = component.elements.getInputEl()!
   const button = component.elements.getTriggerEl()!

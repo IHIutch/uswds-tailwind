@@ -4,11 +4,11 @@ import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { Input } from '../input'
 import { cn } from '../tv.config'
+import { composeRefs } from '../utils/compose-refs'
 import { useInputMask } from './use-input-mask'
 
 export interface InputMaskContextProps {
   api: inputMask.Api
-  placeholder: inputMask.Props['placeholder']
 }
 
 const InputMaskContext = React.createContext<InputMaskContextProps | null>(null)
@@ -24,12 +24,12 @@ function useInputMaskContext() {
 export type InputMaskRootProps = UseInputMaskProps & React.ComponentPropsWithoutRef<'div'>
 
 const InputMaskRoot = React.forwardRef<HTMLDivElement, InputMaskRootProps>(
-  ({ className, children, charset, placeholder, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
-    const { api } = useInputMask({ charset, placeholder, value, defaultValue, onValueChange })
+  ({ className, children, id, ids, charset, placeholder, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
+    const { api } = useInputMask({ id, ids, charset, placeholder, value, defaultValue, onValueChange })
     const mergedProps = mergeProps(api.getRootProps(), props)
 
     return (
-      <InputMaskContext.Provider value={{ api, placeholder }}>
+      <InputMaskContext.Provider value={{ api }}>
         <div
           {...mergedProps}
           className={className}
@@ -67,16 +67,16 @@ function InputMaskControl({ className, ...props }: InputMaskControlProps) {
 export type InputMaskPlaceholderProps = React.ComponentPropsWithoutRef<'span'>
 
 function InputMaskPlaceholder({ className, ...props }: InputMaskPlaceholderProps) {
-  const { api, placeholder } = useInputMaskContext()
-  const maskProps = api.getMaskProps()
+  const { api } = useInputMaskContext()
+  const contentProps = api.getContentProps()
 
-  return placeholder
+  return api.mask
     ? (
         <div
-          {...maskProps}
+          {...contentProps}
           className="absolute inset-0 p-2 pointer-events-none border inline-flex whitespace-pre"
         >
-          <span className="invisible">{api.enteredText}</span>
+          <i className="invisible">{api.overlayValue}</i>
           <span {...props} className={cn('text-gray-50', className)}>
             {api.remainingPlaceholder}
           </span>
@@ -96,7 +96,7 @@ const InputMaskInput = React.forwardRef<HTMLInputElement, InputMaskInputProps>(
       <Input
         {...mergedProps}
         className={cn('placeholder:invisible', className)}
-        ref={forwardedRef}
+        ref={composeRefs(mergedProps.ref, forwardedRef)}
       />
     )
   },

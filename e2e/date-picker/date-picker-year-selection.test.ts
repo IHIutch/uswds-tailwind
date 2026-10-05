@@ -80,7 +80,7 @@ async function setupYearSelectionView(component: ReturnType<typeof createDisposa
 }
 
 it('should show year of 2020 as focused', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -89,7 +89,7 @@ it('should show year of 2020 as focused', async () => {
 })
 
 it('should show year of 2020 as selected', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -98,7 +98,7 @@ it('should show year of 2020 as selected', async () => {
 })
 
 it('should navigate back three years when pressing up', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -111,7 +111,7 @@ it('should navigate back three years when pressing up', async () => {
 })
 
 it('should navigate ahead three years when pressing down', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -124,7 +124,7 @@ it('should navigate ahead three years when pressing down', async () => {
 })
 
 it('should navigate back one year when pressing left', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -137,7 +137,7 @@ it('should navigate back one year when pressing left', async () => {
 })
 
 it('should navigate ahead one year when pressing right', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -150,7 +150,7 @@ it('should navigate ahead one year when pressing right', async () => {
 })
 
 it('should navigate to the beginning of the year row when pressing home', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -163,7 +163,7 @@ it('should navigate to the beginning of the year row when pressing home', async 
 })
 
 it('should navigate to the end of the year row when pressing end', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -176,7 +176,7 @@ it('should navigate to the end of the year row when pressing end', async () => {
 })
 
 it('should navigate back 12 years when pressing page up', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!
@@ -189,7 +189,7 @@ it('should navigate back 12 years when pressing page up', async () => {
 })
 
 it('should navigate forward 12 years when pressing page down', async () => {
-  using component = createDisposableDatePicker(rootId, template)
+  await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupYearSelectionView(component)
 
   const yearView = calendar.querySelector('[data-part="date-picker-year"]')!

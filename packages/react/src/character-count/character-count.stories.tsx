@@ -23,12 +23,14 @@ export const Basic = meta.story({
     maxLength: 20,
   },
   render: ({ maxLength }) => (
-    <CharacterCount.Root maxLength={maxLength}>
-      <CharacterCount.Label>Character Count</CharacterCount.Label>
-      <CharacterCount.Input />
-      <CharacterCount.Status />
-      <CharacterCount.SrStatus />
-    </CharacterCount.Root>
+    <Field.Root>
+      <Field.Label>Character Count</Field.Label>
+      <CharacterCount.Root maxLength={maxLength}>
+        <CharacterCount.Input />
+        <CharacterCount.Status />
+        <CharacterCount.SrStatus />
+      </CharacterCount.Root>
+    </Field.Root>
   ),
 })
 

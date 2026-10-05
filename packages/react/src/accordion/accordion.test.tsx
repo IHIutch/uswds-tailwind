@@ -111,3 +111,20 @@ it.skip('keyboard: Space toggles panel', async () => {
   await userEvent.keyboard(' ')
   await expect.element(content).toBeVisible()
 })
+
+it.each([undefined, 'exact-accordion'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+  const screen = await render(
+    <Accordion.Root id="faq" ids={{ root: rootId, itemContent: () => 'exact-panel' }}>
+      <Accordion.Item value="first">
+        <Accordion.ItemTrigger>First</Accordion.ItemTrigger>
+        <Accordion.ItemContent>First content</Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>,
+  )
+  const trigger = screen.getByRole('button', { name: 'First' })
+  expect(document.getElementById(rootId ?? 'accordion:faq')).toContainElement(trigger.element())
+  expect(trigger.element().id).toBe('accordion:faq:trigger:first')
+  expect(trigger.element().getAttribute('aria-controls')).toBe('exact-panel')
+  await trigger.click()
+  await expect.element(screen.getByText('First content')).toBeVisible()
+})

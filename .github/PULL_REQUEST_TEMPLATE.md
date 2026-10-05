@@ -19,7 +19,7 @@
 Before opening this PR, please make sure you have:
 
 - Searched existing PRs/issues for duplicates
-- Used a Conventional Commits prefix in the PR title (e.g. `feat:`, `fix:`, `docs(react):`, `chore(deps):`).
+- Used a brief, descriptive PR title.
 - Added a changeset if this affects a published package
 - Updated documentation if behavior or APIs changed
 - Added or updated tests where relevant

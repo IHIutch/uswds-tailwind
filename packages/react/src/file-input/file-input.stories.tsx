@@ -1,3 +1,4 @@
+import { getFileId } from '@uswds-tailwind/file-input-compat'
 import preview from '../../.storybook/preview'
 import { Field } from '../field/field'
 import { FileInput } from './file-input'
@@ -13,27 +14,27 @@ export const Default = meta.story({
       <FileInput.Label>Input accepts a single file</FileInput.Label>
       <FileInput.SrStatus />
       <FileInput.Dropzone>
-        <FileInput.PreviewList>
-          {({ files }) => (
+        <FileInput.ItemGroup>
+          {({ acceptedFiles }) => (
             <>
               <FileInput.PreviewHeader>
                 <FileInput.PreviewTitle />
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
-              {files.map(file => (
-                <FileInput.Item key={file.name} file={file}>
-                  <FileInput.PreviewItem>
+              {acceptedFiles.map((file, index) => (
+                <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
+                  <FileInput.ItemPreview>
                     {file.type.startsWith('image/')
-                      ? <FileInput.PreviewItemThumb />
-                      : <FileInput.PreviewItemIcon />}
-                    <FileInput.PreviewItemContent />
-                  </FileInput.PreviewItem>
+                      ? <FileInput.ItemPreviewImage />
+                      : <FileInput.ItemPreviewIcon />}
+                    <FileInput.ItemName />
+                  </FileInput.ItemPreview>
 
                 </FileInput.Item>
               ))}
             </>
           )}
-        </FileInput.PreviewList>
+        </FileInput.ItemGroup>
         <FileInput.Instructions />
         <FileInput.ErrorMessage>This is not a valid file type.</FileInput.ErrorMessage>
         <FileInput.Input />
@@ -49,26 +50,26 @@ export const WithFieldRoot = meta.story({
       <FileInput.Root>
         <FileInput.SrStatus />
         <FileInput.Dropzone>
-          <FileInput.PreviewList>
-            {({ files }) => (
+          <FileInput.ItemGroup>
+            {({ acceptedFiles }) => (
               <>
                 <FileInput.PreviewHeader>
                   <FileInput.PreviewTitle />
                   <FileInput.ChangeTrigger />
                 </FileInput.PreviewHeader>
-                {files.map(file => (
-                  <FileInput.Item key={file.name} file={file}>
-                    <FileInput.PreviewItem>
+                {acceptedFiles.map((file, index) => (
+                  <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
+                    <FileInput.ItemPreview>
                       {file.type.startsWith('image/')
-                        ? <FileInput.PreviewItemThumb />
-                        : <FileInput.PreviewItemIcon />}
-                      <FileInput.PreviewItemContent />
-                    </FileInput.PreviewItem>
+                        ? <FileInput.ItemPreviewImage />
+                        : <FileInput.ItemPreviewIcon />}
+                      <FileInput.ItemName />
+                    </FileInput.ItemPreview>
                   </FileInput.Item>
                 ))}
               </>
             )}
-          </FileInput.PreviewList>
+          </FileInput.ItemGroup>
           <FileInput.Instructions />
           <FileInput.ErrorMessage>This is not a valid file type.</FileInput.ErrorMessage>
           <FileInput.Input />
@@ -84,27 +85,27 @@ export const Multiple = meta.story({
       <FileInput.Label>Input accepts multiple files</FileInput.Label>
       <FileInput.SrStatus />
       <FileInput.Dropzone>
-        <FileInput.PreviewList>
-          {({ files }) => (
+        <FileInput.ItemGroup>
+          {({ acceptedFiles }) => (
             <>
               <FileInput.PreviewHeader>
                 <FileInput.PreviewTitle />
                 <FileInput.ChangeTrigger />
               </FileInput.PreviewHeader>
-              {files.map(file => (
-                <FileInput.Item key={file.name} file={file}>
-                  <FileInput.PreviewItem>
+              {acceptedFiles.map((file, index) => (
+                <FileInput.Item key={`${getFileId(file)}-${index}`} file={file}>
+                  <FileInput.ItemPreview>
                     {file.type.startsWith('image/')
-                      ? <FileInput.PreviewItemThumb />
-                      : <FileInput.PreviewItemIcon />}
-                    <FileInput.PreviewItemContent />
-                  </FileInput.PreviewItem>
+                      ? <FileInput.ItemPreviewImage />
+                      : <FileInput.ItemPreviewIcon />}
+                    <FileInput.ItemName />
+                  </FileInput.ItemPreview>
 
                 </FileInput.Item>
               ))}
             </>
           )}
-        </FileInput.PreviewList>
+        </FileInput.ItemGroup>
         <FileInput.Instructions />
         <FileInput.ErrorMessage>This is not a valid file type.</FileInput.ErrorMessage>
         <FileInput.Input />

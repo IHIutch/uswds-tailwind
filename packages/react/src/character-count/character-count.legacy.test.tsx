@@ -1,6 +1,7 @@
 import { visuallyHiddenStyle } from '@zag-js/dom-query'
 import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { Field } from '../field/field'
 import { CharacterCount } from './character-count'
 
 // Behavioral parity tests mirroring e2e/character-count/character-count.test.ts.
@@ -13,12 +14,14 @@ function renderCharacterCount({
   withSrStatus = false,
 }: { maxLength?: number, withSrStatus?: boolean } = {}) {
   return render(
-    <CharacterCount.Root maxLength={maxLength}>
-      <CharacterCount.Label>Text input</CharacterCount.Label>
-      <CharacterCount.Input />
-      <CharacterCount.Status />
-      {withSrStatus && <CharacterCount.SrStatus />}
-    </CharacterCount.Root>,
+    <Field.Root>
+      <Field.Label>Text input</Field.Label>
+      <CharacterCount.Root maxLength={maxLength}>
+        <CharacterCount.Input />
+        <CharacterCount.Status />
+        {withSrStatus && <CharacterCount.SrStatus />}
+      </CharacterCount.Root>
+    </Field.Root>,
   )
 }
 
@@ -58,21 +61,24 @@ it('shows "N characters over limit" when multiple over', async () => {
 
   await input.fill('1234567890123456789012345')
 
-  const status = screen.container.querySelector('[data-part="status"]') as HTMLElement
+  const status = screen.getByText('5 characters over limit').element() as HTMLElement
   const srStatus = screen.container.querySelector('[data-part="sr-status"]') as HTMLElement
 
   // Visible status updates synchronously
   expect(status.textContent).toBe('5 characters over limit')
   await expect.element(status).toBeVisible()
 
-  // SR status is debounced (1000ms). Poll until it catches up.
+  // SR status uses USWDS's 1200 ms debounce and assertive over-limit warning.
   await vi.waitFor(
-    () => expect(srStatus.textContent).toBe('5 characters over limit'),
-    { timeout: 1500, interval: 100 },
+    () => {
+      expect(srStatus.textContent).toBe('Character limit exceeded. 5 characters over limit')
+      expect(srStatus.getAttribute('aria-live')).toBe('assertive')
+    },
+    { timeout: 1900, interval: 100 },
   )
 
   expect(srStatus).toHaveStyle(visuallyHiddenStyle)
-}, 2000)
+}, 2400)
 
 // SUGGESTION (review): `data-invalid` on the next three tests is our Zag
 // convention (via `dataAttr()`); `validationMessage` is the native HTML
@@ -85,7 +91,7 @@ it('input is valid under the limit (no data-invalid, no validationMessage)', asy
   await input.fill('1')
 
   const inputEl = input.element() as HTMLInputElement
-  expect(inputEl.validationMessage).toBe('')
+  await vi.waitFor(() => expect(inputEl.validationMessage).toBe(''))
   expect(inputEl.hasAttribute('data-invalid')).toBe(false)
 })
 
@@ -106,7 +112,7 @@ it('clears validity when the user dips back under the limit', async () => {
   await input.fill('12345')
 
   const inputEl = input.element() as HTMLInputElement
-  expect(inputEl.validationMessage).toBe('')
+  await vi.waitFor(() => expect(inputEl.validationMessage).toBe(''))
   expect(inputEl.hasAttribute('data-invalid')).toBe(false)
 })
 

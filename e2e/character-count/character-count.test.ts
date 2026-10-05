@@ -5,9 +5,8 @@ import { createDisposableCharacterCount } from './_utils.js'
 
 const rootId = 'test'
 
-const TEMPLATE = `<div data-part="character-count-root" id="${rootId}">
+const TEMPLATE = `<div data-scope="character-count" data-part="root" id="${rootId}">
     <label
-      data-part="character-count-label"
       for="input-limit"
     >Text input</label>
     <div>
@@ -15,7 +14,7 @@ const TEMPLATE = `<div data-part="character-count-root" id="${rootId}">
     </div>
     <div>
       <input
-        data-part="character-count-input"
+        data-part="input"
         id="input-limit"
         aria-describedby="input-hint character-count-hint"
         maxlength="20"
@@ -24,14 +23,23 @@ const TEMPLATE = `<div data-part="character-count-root" id="${rootId}">
     <div>
       <span id="character-count-hint"></span>
       <span
-        data-part="character-count-status"
+        data-part="status"
         aria-hidden="true"
       ></span>
-      <span data-part="character-count-sr-status"></span>
+      <span data-part="sr-status"></span>
     </div>`
 
-it('hides the requirements hint for screen readers', () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+it('keeps an authored label associated with the input', async () => {
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const label = component.elements.getLabelEl() as HTMLLabelElement
+  const input = component.elements.getInputEl()
+
+  expect(input.id).toBe('input-limit')
+  expect(label.control).toBe(input)
+})
+
+it('hides the requirements hint for screen readers', async () => {
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const statusMessageSR = component.elements.getSrStatusEl()!
 
   Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
@@ -44,26 +52,26 @@ it('hides the requirements hint for screen readers', () => {
   })
 })
 
-it('creates a visual status message on init', () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+it('creates a visual status message on init', async () => {
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const visibleStatus = component.elements.getStatusEl()!
   expect(visibleStatus).toBeInTheDocument()
 })
 
-it('creates a screen reader status message on init', () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+it('creates a screen reader status message on init', async () => {
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const srStatus = component.elements.getSrStatusEl()
   expect(srStatus).toBeInTheDocument()
 })
 
-it('adds initial status message for the character count component', () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+it('adds initial status message for the character count component', async () => {
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const visibleStatus = component.elements.getStatusEl()!
   expect(visibleStatus.textContent).toBe('20 characters allowed')
 })
 
 it('informs the user how many more characters they are allowed', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const visibleStatus = component.elements.getStatusEl()!
 
@@ -71,8 +79,18 @@ it('informs the user how many more characters they are allowed', async () => {
   expect(visibleStatus.textContent).toBe('19 characters left')
 })
 
+it('allows typing past the authored maxlength so the over-limit status can appear', async () => {
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  const input = component.elements.getInputEl()!
+
+  await userEvent.type(input, '123456789012345678901')
+
+  expect(input.value).toBe('123456789012345678901')
+  expect(component.elements.getStatusEl()!.textContent).toBe('1 character over limit')
+})
+
 it('informs the user they are allowed a single character', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const visibleStatus = component.elements.getStatusEl()!
 
@@ -82,7 +100,7 @@ it('informs the user they are allowed a single character', async () => {
 })
 
 it('informs the user they are over the limit by a single character', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const visibleStatus = component.elements.getStatusEl()!
 
@@ -91,7 +109,7 @@ it('informs the user they are over the limit by a single character', async () =>
 })
 
 it('informs the user how many characters they will need to remove', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const visibleStatus = component.elements.getStatusEl()!
 
@@ -100,7 +118,7 @@ it('informs the user how many characters they will need to remove', async () => 
 })
 
 it('should show the component and input as valid when the input is under the limit', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const visibleStatus = component.elements.getStatusEl()!
   await userEvent.fill(input, '1')
@@ -110,21 +128,19 @@ it('should show the component and input as valid when the input is under the lim
 })
 
 it('should show the component and input as invalid when the input is over the limit', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const input = component.elements.getInputEl()!
   const visibleStatus = component.elements.getStatusEl()!
-  const label = component.elements.getLabelEl()!
 
   await userEvent.fill(input, '123456789012345678901')
 
   expect(input.validationMessage).toBe('The content is too long.')
-  expect(label.getAttribute('data-invalid')).toBeTruthy()
-  expect(input.getAttribute('data-invalid')).toBeTruthy()
-  expect(visibleStatus.getAttribute('data-invalid')).toBeTruthy()
+  expect(input.hasAttribute('data-invalid')).toBe(true)
+  expect(visibleStatus.hasAttribute('data-invalid')).toBe(true)
 })
 
 it('should not allow for innerHTML of child elements', async () => {
-  using component = createDisposableCharacterCount(rootId, TEMPLATE)
+  await using component = createDisposableCharacterCount(rootId, TEMPLATE)
   const visibleStatus = component.elements.getStatusEl()!
 
   Array.from(visibleStatus.childNodes).forEach((childNode) => {

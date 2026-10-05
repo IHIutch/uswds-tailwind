@@ -1,110 +1,113 @@
-import type { EventObject, Machine, Service } from '@zag-js/core'
-import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
+import type { Machine, Service } from '@zag-js/core'
+import type { CommonProperties, DirectionProperty, PropTypes, RequiredBy } from '@zag-js/types'
+/** Extension fallback category; `image` represents a preview without a fallback. */
 
-/* -----------------------------------------------------------------------------
- * Callback details
- * ----------------------------------------------------------------------------- */
+export type PreviewType = 'image' | 'pdf' | 'word' | 'excel' | 'video' | 'generic'
+/** Consumers manage image loading and apply the fallback only after an image error. */
 
-export interface FileRejection {
+export type PreviewStatus = 'loading' | 'success' | 'fallback'
+
+export interface ItemProps {
   file: File
-  errors: string[]
 }
 
-export interface FileChangeDetails {
-  acceptedFiles: File[]
-  rejectedFiles: FileRejection[]
+export interface ItemPreviewImageProps extends ItemProps {
+  /** The consumer creates and releases the preview URL. */
+  url?: string | undefined
+  status?: PreviewStatus | undefined
+  onLoad?: (() => void) | undefined
+  onError?: (() => void) | undefined
 }
-
-/* -----------------------------------------------------------------------------
- * Machine context
- * ----------------------------------------------------------------------------- */
 
 export type ElementIds = Partial<{
   root: string
-  dropzone: string
-  input: string
   label: string
-  item: (id: string) => string
+  dropzone: string
+  box: string
+  input: string
+  instructions: string
+  itemGroup: string
+  previewHeading: string
+  srStatus: string
+  errorText: string
 }>
 
-export interface FileInputProps extends CommonProperties {
+export interface FileInputProps extends DirectionProperty, CommonProperties {
   ids?: ElementIds | undefined
-  name?: string | undefined
+  /** Raw accept tokens; a nonmatching file rejects the entire selection. */
   accept?: string | undefined
-  disabled?: boolean | undefined
+  /** @default false */
   multiple?: boolean | undefined
-  required?: boolean | undefined
-  errorMessage?: string | undefined
-  // Override the screen-reader-only status message (i18n hook).
-  srStatusText?: string | undefined
-  onFileChange?: ((details: FileChangeDetails) => void) | undefined
+  /** Disables the native picker; scripted input events still run. @default false */
+  disabled?: boolean | undefined
+  /** Marks the input disabled without blocking interaction. @default false */
+  ariaDisabled?: boolean | undefined
+  /** @default "Error: This is not a valid file type." */
+  errorText?: string | undefined
 }
 
-type PropsWithDefault = 'errorMessage'
-
-interface Context {
-  acceptedFiles: File[]
-  rejectedFiles: FileRejection[]
-}
-
-interface Computed {
-  itemsLabel: string
-}
+type PropsWithDefault = 'disabled' | 'ariaDisabled' | 'multiple' | 'errorText'
 
 export interface FileInputSchema {
-  state: 'idle' | 'focused' | 'dragging'
   props: RequiredBy<FileInputProps, PropsWithDefault>
-  context: Context
-  computed: Computed
-  event: EventObject
-  action: string
-  effect: string
-  guard: string
+  state: 'idle' | 'dragging'
+  context: {
+    acceptedFiles: File[]
+    invalid: boolean
+    errorText: string
+    srStatusText: string
+  }
+  refs: {
+    statusTimers: Set<ReturnType<Window['setTimeout']>>
+    /** Fixed at initialization: initially disabled inputs never gain a status region. */
+    hasStatus: boolean
+  }
+  effect: 'cleanupTimers'
+  action: 'setEventFiles'
+  event:
+    | { type: 'FILE.SELECT', files: File[] }
+    | { type: 'DROPZONE.DRAG_OVER' }
+    | { type: 'DROPZONE.DRAG_LEAVE' }
+    | { type: 'DROPZONE.DROP' }
 }
 
 export type FileInputService = Service<FileInputSchema>
 
 export type FileInputMachine = Machine<FileInputSchema>
 
-/* -----------------------------------------------------------------------------
- * Component API
- * ----------------------------------------------------------------------------- */
-
-export interface ItemProps {
-  file: File
-}
-
 export interface FileInputApi<T extends PropTypes = PropTypes> {
-  focused: boolean
-  dragging: boolean
-  disabled: boolean
-  hasFiles: boolean
-  hasInvalidFiles: boolean
+  /** The current accepted selection; cleared when a batch is rejected. */
   acceptedFiles: File[]
-  rejectedFiles: FileRejection[]
-  errorMessageText: string
+  invalid: boolean
+  errorText: string
+  /** Live-region text, updated after each selection's one-second delay. */
   srStatusText: string
+  /** Leading heading text, excluding the change action. */
   previewHeadingText: string
-  changeItemText: string
+  previewChangeText: string
   dragText: string
   chooseText: string
-  openFilePicker: VoidFunction
-  clearFiles: VoidFunction
-  deleteFile: (file: File) => void
-  createFileUrl: (file: File, cb: (url: string) => void) => VoidFunction
-  getFilePreviewType: (file: File) => 'pdf' | 'word' | 'excel' | 'video' | 'generic' | 'image'
-
+  disabled: boolean
+  /** Stable ID derived from the file name and size. */
+  getFileId: (file: File) => string
+  getPreviewType: (file: File) => PreviewType
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
   getDropzoneProps: () => T['element']
+  getBoxProps: () => T['element']
   getInputProps: () => T['input']
   getInstructionsProps: () => T['element']
-  getSrStatusProps: () => T['element']
-  getErrorMessageProps: () => T['element']
-  getPreviewHeadingProps: () => T['element']
+  getDragTextProps: () => T['element']
+  getChooseProps: () => T['element']
   getItemGroupProps: () => T['element']
+  getPreviewHeadingProps: () => T['element']
   getItemProps: (props: ItemProps) => T['element']
-  getItemPreviewProps: (props: ItemProps) => T['img']
-  getItemNameProps: (props: ItemProps) => T['element']
-  getItemDeleteTriggerProps: (props: ItemProps) => T['button']
+  getItemPreviewImageProps: (props: ItemPreviewImageProps) => T['img']
+  getErrorTextProps: () => T['element']
+  getSrStatusProps: () => T['element']
+  /**
+   * Creates a preview URL and returns an idempotent cleanup.
+   * Revokes the URL before rethrowing if the callback throws.
+   */
+  createFileUrl: (file: File, cb: (url: string) => void) => () => void
 }
