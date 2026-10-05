@@ -7,7 +7,7 @@
 USWDS components as drop-in vanilla JavaScript modules. Auto-initializes elements with USWDS data attributes. No framework required.
 
 > [!NOTE]
-> This package is in **V2 beta**. APIs may change between releases.
+> This package is in **v2 beta**. APIs may change between releases.
 
 ## Install
 
@@ -25,7 +25,7 @@ Import the auto entry once. It scans the document on `DOMContentLoaded`, or imme
 import '@uswds-tailwind/compat/auto'
 ```
 
-For manual control, import `initAll` from `@uswds-tailwind/compat` and call it after the markup exists. Do not combine auto and manual initialization on the same elements. These scans do not observe later DOM insertions, and the Date Picker and Date Range Picker wrappers do not deduplicate repeated initialization.
+For manual control, import `initAll` from `@uswds-tailwind/compat` and call it after the markup exists. Do not combine auto and manual initialization on the same elements. These scans do not observe later DOM insertions.
 
 ### Initialize specific components
 
@@ -52,7 +52,7 @@ await accordion.open('eligibility')
 accordion.destroy()
 ```
 
-Retain the element reference because rendering can change its ID. `getInstance` accepts an element or CSS selector, `getOrCreateInstance` reuses an existing instance without reapplying options, and `destroy` stops it without restoring the original HTML. Accordion, Character Count, Collapse, Combobox, Dropdown, File Input, Input Mask, Modal, Table, and Tooltip share this factory API. Date Picker and Date Range Picker retain older initialization contracts. See the [JavaScript reference](https://v2.uswds-tailwind.com/docs/vanilla/javascript#instance-lifecycle).
+Retain the element reference because rendering can change its ID. `getInstance` accepts an element or CSS selector, `getOrCreateInstance` reuses an existing instance without reapplying options, and `destroy` stops it without restoring the original HTML. Accordion, Character Count, Collapse, Combobox, Dropdown, File Input, Input Mask, Modal, Table, and Tooltip share this factory API. See the [JavaScript reference](https://v2.uswds-tailwind.com/docs/vanilla/javascript#instance-lifecycle).
 
 ## Components
 

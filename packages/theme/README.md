@@ -6,7 +6,7 @@
 A [Tailwind CSS v4](https://tailwindcss.com/) theme that exposes USWDS design tokens (colors, spacing, typography, breakpoints) as `@theme` variables.
 
 > [!NOTE]
-> This package is in **V2 beta**. APIs may change between releases.
+> This package is in **v2 beta**. APIs may change between releases.
 
 ## Install
 
