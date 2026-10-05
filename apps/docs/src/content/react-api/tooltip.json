@@ -1,0 +1,89 @@
+{
+  "name": "Tooltip",
+  "intro": "Use Root with Trigger and Content, or the Tooltip convenience component for a single trigger.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the tooltip state and text.",
+      "props": [
+        {
+          "name": "content",
+          "type": "string (required)",
+          "description": "Text shown in the tooltip."
+        },
+        {
+          "name": "position",
+          "type": "Tooltip position",
+          "description": "Preferred placement.",
+          "defaultValue": "top"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "description": "Initially open state."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Controlled open state."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "({ open: boolean }) => void",
+          "description": "Receives requested open-state changes."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; trigger?: string; content?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ],
+      "note": "Escape dismisses an open tooltip. In controlled mode, update open after onOpenChange requests dismissal."
+    },
+    {
+      "name": "Trigger",
+      "description": "Clones its single child element and adds tooltip trigger behavior."
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Displays the tooltip text.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        },
+        {
+          "attribute": "data-placement",
+          "value": "top | bottom | left | right",
+          "purpose": "Positions the tooltip."
+        },
+        {
+          "attribute": "data-visible",
+          "value": "Present after opening transition",
+          "purpose": "Styles the visible state."
+        }
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "description": "Convenience wrapper around Root, Trigger, and Content.",
+      "props": [
+        {
+          "name": "content",
+          "type": "string (required)",
+          "description": "Tooltip text."
+        },
+        {
+          "name": "position",
+          "type": "Tooltip position",
+          "description": "Preferred placement.",
+          "defaultValue": "top"
+        }
+      ]
+    }
+  ],
+  "accessibility": "Make the trigger keyboard reachable and name the trigger independently of the tooltip content."
+}

@@ -1,0 +1,75 @@
+{
+  "name": "RadioGroup",
+  "intro": "Put Item parts inside Root, with ItemInput, ItemControl, ItemLabel, and optional ItemDescription inside each item.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the selected radio value.",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Form field name."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables the group."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "description": "Sets aria-readonly on the group. Native radio inputs remain operable."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "description": "Marks the group invalid."
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "description": "Receives the selected value."
+        },
+        {
+          "name": "tile",
+          "type": "boolean",
+          "description": "Uses the tiled item treatment."
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "element": "label",
+      "description": "Connects ItemInput, ItemControl, and ItemLabel for one choice.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string (required)",
+          "description": "Value for this choice."
+        }
+      ]
+    },
+    {
+      "name": "ItemInput",
+      "element": "input",
+      "description": "Native radio control. Pass disabled for an individual choice and defaultChecked for an initial selection."
+    },
+    {
+      "name": "ItemControl",
+      "element": "div",
+      "description": "Displays the custom selection mark."
+    },
+    {
+      "name": "ItemLabel",
+      "element": "div",
+      "description": "Displays the option text."
+    },
+    {
+      "name": "ItemDescription",
+      "element": "div",
+      "description": "Displays optional help text."
+    }
+  ]
+}

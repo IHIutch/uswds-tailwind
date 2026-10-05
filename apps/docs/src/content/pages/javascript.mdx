@@ -1,114 +1,178 @@
 ---
 title: "JavaScript"
-description: "USWDS + Tailwind relies on Alpine.js plugins to power components' functionality. You can install each them independently, as you need them."
+description: "Initialize components, configure their authored markup, and manage instance lifecycles with @uswds-tailwind/compat."
 ---
 
-## Install and import
-You can initialize your components like so:
+import ApiTable from "#components/api-table.astro"
 
-```js title="src/assets/js/main.js"
-// Option 1: Auto-initialize all components
-import '@uswds-tailwind/compat/auto'
+The package binds Zag state machines to HTML. Import its initializers from `@uswds-tailwind/compat`; no framework plugin is required. For package installation and Tailwind setup, start with the [getting-started guide](/docs/vanilla/getting-started). React components own their own behavior; do not run these initializers on React-rendered markup.
 
-// Option 2: Manual initialization with only the components you need
-import { modalInit, accordionInit } from '@uswds-tailwind/compat'
+## Choose an initialization strategy
 
-document.addEventListener('DOMContentLoaded', () => {
-  modalInit()
+<ApiTable label="Initialization strategies">
+
+| Approach | Use when |
+| --- | --- |
+| [Selective initialization](#selective-initialization) | You know which components the page uses. |
+| [Initialize all components](#initialize-all-components) | A static page needs all available behaviors. |
+| [Owned instances](#instance-lifecycle) | Your application adds and removes component markup. |
+
+</ApiTable>
+
+## Selective initialization
+
+Import only the initializers you need. Each scans the document synchronously when called; it does not wait for the DOM, observe future additions, or return a promise.
+
+```js title="src/main.js"
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
+import { collapseInit } from '@uswds-tailwind/compat/collapse'
+
+function initialize() {
   accordionInit()
-})
-```
-
-## JavaScript Components
-
-Install the custom plugins by copying and pasting the following code. Not all of the plugins are required and you can install or omit them as necessary for your project.
-
-### Accordion
-
-```js
-import { accordionInit } from '@uswds-tailwind/compat'
-
-document.addEventListener('DOMContentLoaded', () => {
-  accordionInit()
-})
-```
-
-### Character Count
-
-```js
-import { characterCountInit } from '@uswds-tailwind/compat'
-
-document.addEventListener('DOMContentLoaded', () => {
-  characterCountInit()
-})
-```
-
-### Collapse 
-
-```js
-import { collapseInit } from '@uswds-tailwind/compat'
-
-document.addEventListener('DOMContentLoaded', () => {
   collapseInit()
-})
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initialize, { once: true })
+} else {
+  initialize()
+}
 ```
 
-### Combobox
+Root imports such as `import { accordionInit } from '@uswds-tailwind/compat'` expose the same functions.
+
+## Initialize all components
+
+Choose one initialization strategy per element. The auto entry point runs `initAll()` immediately when the document is ready, or on `DOMContentLoaded` if it is still loading:
 
 ```js
-import { comboboxInit } from '@uswds-tailwind/compat'
-
-document.addEventListener('DOMContentLoaded', () => {
-  comboboxInit()
-})
+import '@uswds-tailwind/compat/auto'
 ```
 
-### Dropdown
+To control when the scan happens, import the function instead and call it after inserting the markup:
 
 ```js
-import { dropdownInit } from '@uswds-tailwind/compat'
+import { initAll } from '@uswds-tailwind/compat'
 
-document.addEventListener('DOMContentLoaded', () => {
-  dropdownInit()
-})
+// After all component markup is in the document:
+initAll()
 ```
 
-### File Input
+These are alternative entry points, not imports to combine. `initAll()` returns `void`. Do not repeatedly call it to handle dynamic content: the legacy wrappers do not all deduplicate initialization.
+
+## Authored markup and generated state
+
+Copy the complete component example, including required parts, labels, and Tailwind classes. Each reference separates authored configuration from generated state.
+
+<ApiTable label="Markup conventions">
+
+| Markup | Purpose |
+| --- | --- |
+| `data-scope="accordion" data-part="root"` | v2 wrappers use scoped roots and short descendant parts. Follow each component’s anatomy. |
+| `data-part="date-picker-root"` or `data-part="date-range-picker-root"` | Date Picker and Date Range Picker retain prefixed parts. |
+| Configuration attributes and constructor options | Inputs read during construction; later attribute changes are not automatically observed. |
+| Generated IDs, `aria-*`, `hidden`, and state attributes | Output used for accessibility and styling. Treat only documented configuration as writable input. |
+
+</ApiTable>
+
+### Boolean attributes
+
+- v2 data booleans such as Accordion `data-multiple`, Combobox `data-disabled`, and Modal `data-force-action` treat the exact string `"false"` as false.
+- Native `disabled` and `multiple` attributes follow HTML presence rules.
+- Constructor precedence varies by component; check its configuration table.
+
+## Instance lifecycle
+
+Accordion, Character Count, Collapse, Combobox, Dropdown, File Input, Input Mask, Modal, Table, and Tooltip support these shared methods:
+
+<ApiTable label="Instance lifecycle methods">
+
+| Method | Result and behavior |
+| --- | --- |
+| `new Component(elementOrSelector, options)` | Constructs an instance without starting it. Throws if the root is missing or already bound to a component. |
+| `instance.init()` | Starts rendering and the machine; returns the instance. Call once. |
+| `Component.getInstance(elementOrSelector)` | Returns the instance for that element and type, or `null`. Use an element or CSS selector, not a bare ID string. |
+| `Component.getOrCreateInstance(elementOrSelector, options)` | Returns the existing instance or constructs and initializes one. Options do not reconfigure an existing instance. |
+| `Component.createAll(container)` | Finds matching descendant roots and returns an array of initialized instances. Defaults to `document`; the container itself is not included in the scan. |
+| `instance.destroy()` | Stops the machine and removes the element lookup. Returns `void`; it does not restore authored HTML or remove the root. |
+
+</ApiTable>
+
+The ten corresponding convenience initializers return instance arrays and reuse existing instances. Date Picker and Date Range Picker retain older initializers that return `void` and try to create an instance on every scan. Scanning an already bound root throws. Date Picker also retains `DatePicker.getInstance(id)` with a bare instance ID; it does not use the element lookup described above. Use explicit constructors for those two wrappers and destroy each instance before removing its markup.
+
+For dynamic content, retain an explicit instance and destroy it before removing the owned DOM:
 
 ```js
-import { fileInputInit } from '@uswds-tailwind/compat'
+import { Collapse } from '@uswds-tailwind/compat/collapse'
 
-document.addEventListener('DOMContentLoaded', () => {
-  fileInputInit()
+// <section id="details" data-scope="collapse" data-part="root">
+//   <button type="button" data-part="trigger">Details</button>
+//   <div data-part="content">More information</div>
+// </section>
+const root = document.querySelector('#details')
+const details = Collapse.getOrCreateInstance(root, {
+  id: 'details',
+  onOpenChange({ open }) {
+    console.log('Requested open state:', open)
+  },
 })
+
+await details.open()
+
+// When the application removes this section:
+details.destroy()
+root.remove()
 ```
 
-### Input Mask
+### Cleanup
 
-```js
-import { inputMaskInit } from '@uswds-tailwind/compat'
+- Retain the root element reference: initialization can replace its ID.
+- Destroy the instance before removing its DOM. Modal moves its root to the document body, so remove that root too.
+- Start a fresh mount with fresh authored markup; `destroy()` does not restore the original HTML.
 
-document.addEventListener('DOMContentLoaded', () => {
-  inputMaskInit()
-})
-```
+## Changes and callbacks
 
-### Modal
+Pass callbacks through explicit constructor or factory options. These are JavaScript callbacks, not automatically emitted custom DOM events. File Input exposes accepted files and validation state through `instance.api`; it does not provide change callbacks.
 
-```js
-import { modalInit } from '@uswds-tailwind/compat'
+<ApiTable label="Change callbacks">
 
-document.addEventListener('DOMContentLoaded', () => {
-  modalInit()
-})
-```
+| Component | Callback | Payload |
+| --- | --- | --- |
+| Accordion | `onValueChange` | `{ value: string[] }` |
+| Collapse, Tooltip | `onOpenChange` | `{ open: boolean }` |
+| Character Count | `onValueChange` | `{ value: string }` |
+| Combobox | `onValueChange` | `{ value: string, label: string }` |
+| Table | `onSortChange` | `{ sortDescriptor: { column: number, direction: "ascending" \| "descending" } \| null }` |
+| Dropdown | `onItemSelect` | `{ value }` |
+| Input Mask | `onValueChange` | `{ value: string }` (formatted) |
 
-### Tooltip
+</ApiTable>
 
-```js
-import { tooltipInit } from '@uswds-tailwind/compat'
+Accordion, Character Count, and Input Mask support controlled `value`; Collapse and Tooltip support controlled `open`. Table supports controlled `sortDescriptor`. Dropdown and Modal manage open state internally and do not accept `open` or `onOpenChange`. When you supply a supported controlled prop, your application controls that state. Change callbacks request a new value; your application must supply the updated state. Use the component’s documented initial-state options for uncontrolled state.
 
-document.addEventListener('DOMContentLoaded', () => {
-  tooltipInit()
-})
-```
+Wrapper `open()`/`close()` methods on Accordion, Collapse, Dropdown, and Modal return promises that settle the queued update; they do not wait for CSS transitions or update state controlled by your application. Direct connect API requests such as Input Mask's `instance.api.setValue()` return no promise.
+
+## JavaScript components
+
+All subpaths below are relative to `@uswds-tailwind/compat/`. Each initializer binds the corresponding authored markup; presentation-only components need no initializer.
+
+<ApiTable label="JavaScript component imports">
+
+| Component reference | Import subpath | Initializer |
+| --- | --- | --- |
+| <span id="accordion"></span>[Accordion](/docs/vanilla/components/accordion#component-api) | `accordion` | `accordionInit()` |
+| <span id="character-count"></span>[Character Count](/docs/vanilla/components/character-count#component-api) | `character-count` | `characterCountInit()` |
+| <span id="collapse"></span>[Collapse](/docs/vanilla/components/banner#component-api) | `collapse` | `collapseInit()` |
+| <span id="combobox"></span>[Combobox](/docs/vanilla/components/combo-box#component-api) | `combobox` | `comboboxInit()` |
+| <span id="date-picker"></span>[Date Picker](/docs/vanilla/components/date-picker#component-api) | `date-picker` | `datePickerInit()` |
+| <span id="date-range-picker"></span>[Date Range Picker](/docs/vanilla/components/date-range-picker#component-api) | `date-range-picker` | `dateRangePickerInit()` |
+| <span id="dropdown"></span>[Dropdown](/docs/vanilla/components/language-selector#component-api) | `dropdown` | `dropdownInit()` |
+| <span id="file-input"></span>[File Input](/docs/vanilla/components/file-input#component-api) | `file-input` | `fileInputInit()` |
+| <span id="input-mask"></span>[Input Mask](/docs/vanilla/components/input-mask#component-api) | `input-mask` | `inputMaskInit()` |
+| <span id="modal"></span>[Modal](/docs/vanilla/components/modal#component-api) | `modal` | `modalInit()` |
+| <span id="table"></span>[Table](/docs/vanilla/components/table#component-api) | `table` | `tableInit()` |
+| <span id="tooltip"></span>[Tooltip](/docs/vanilla/components/tooltip#component-api) | `tooltip` | `tooltipInit()` |
+
+</ApiTable>
+
+Banner uses Collapse; Header and Language Selector use Dropdown. Time Picker uses Combobox. Ordinary styled tables need no JavaScript. Header and expandable Footer examples also use Accordion.

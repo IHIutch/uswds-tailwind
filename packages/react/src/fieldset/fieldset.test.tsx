@@ -13,6 +13,33 @@ it('renders fieldset with legend text visible', async () => {
   await expect.element(screen.getByText('Contact Info')).toBeVisible()
 })
 
+it('associates the fieldset with its legend', async () => {
+  await render(
+    <Fieldset.Root>
+      <Fieldset.Legend>Contact Info</Fieldset.Legend>
+    </Fieldset.Root>,
+  )
+
+  const fieldset = document.querySelector('fieldset')
+  const legend = fieldset?.querySelector('legend')
+  expect(legend?.id).toBeTruthy()
+  expect(fieldset?.getAttribute('aria-labelledby')).toBe(legend?.id)
+})
+
+it('associates the fieldset with its description', async () => {
+  await render(
+    <Fieldset.Root>
+      <Fieldset.Legend>Contact Info</Fieldset.Legend>
+      <Fieldset.Description>Enter your contact details.</Fieldset.Description>
+    </Fieldset.Root>,
+  )
+
+  const fieldset = document.querySelector('fieldset')
+  const description = fieldset?.querySelector('[data-part="description"]')
+  expect(description?.id).toBeTruthy()
+  expect(fieldset?.getAttribute('aria-describedby')).toBe(description?.id)
+})
+
 it('fieldset renders as role="group"', async () => {
   const screen = await render(
     <Fieldset.Root>

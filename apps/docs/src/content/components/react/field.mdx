@@ -1,0 +1,49 @@
+---
+title: "Field"
+description: "Pair a form control with its label, hint, and validation message using the field pattern."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import FieldErrorDemo from '../../../examples/field-error-demo'
+import FieldFieldsetDemo from '../../../examples/field-fieldset-demo'
+import FieldInputDemo from '../../../examples/field-input-demo'
+import FieldSelectDemo from '../../../examples/field-select-demo'
+import FieldTextareaDemo from '../../../examples/field-textarea-demo'
+
+## Examples
+
+Use `Field.Root` when you want a form control to share a label, hint, and validation state. Wrap one control per field. `Field.Label` and `Field.Description` provide the control’s label and accessible description; `Input`, `Textarea`, and `Select.Field` read that context.
+
+### Input and hint
+
+<ReactPreview title="Input and hint" example="field-input-demo">
+  <FieldInputDemo client:load />
+</ReactPreview>
+
+### Error message
+
+Set `invalid` on `Field.Root` after validation. `Field.ErrorMessage` then appears, and the control receives `aria-invalid` and a description that includes the error. `required` and `disabled` on the root also reach the control.
+
+<ReactPreview title="Error message" example="field-error-demo">
+  <FieldErrorDemo client:load />
+</ReactPreview>
+
+### Select
+
+<ReactPreview title="Select" example="field-select-demo">
+  <FieldSelectDemo client:load />
+</ReactPreview>
+
+### Textarea
+
+<ReactPreview title="Textarea" example="field-textarea-demo">
+  <FieldTextareaDemo client:load />
+</ReactPreview>
+
+### Fieldset
+
+Use `Fieldset.Root` to group related controls and `Fieldset.Legend` to name the group. Each nested `Field.Root` keeps its own label and control association.
+
+<ReactPreview title="Fieldset" example="field-fieldset-demo">
+  <FieldFieldsetDemo client:load />
+</ReactPreview>

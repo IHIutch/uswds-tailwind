@@ -1,0 +1,52 @@
+{
+  "name": "Alert",
+  "intro": "Compose an alert from Root, Content, and the optional title, description, and indicator parts.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Sets the alert color and layout for its children.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "info | warning | success | error | emergency",
+          "description": "Selects the visual treatment.",
+          "defaultValue": "info"
+        },
+        {
+          "name": "slim",
+          "type": "boolean",
+          "description": "Uses compact spacing.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "noIcon",
+          "type": "boolean",
+          "description": "Hides the indicator icon and reduces leading spacing.",
+          "defaultValue": "false"
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Groups the alert message."
+    },
+    {
+      "name": "Title",
+      "element": "div",
+      "description": "Put a heading element inside when the alert introduces a section."
+    },
+    {
+      "name": "Description",
+      "element": "div",
+      "description": "Add supporting detail below Title."
+    },
+    {
+      "name": "Indicator",
+      "element": "div",
+      "description": "Displays the variant icon by default; children replace the icon."
+    }
+  ],
+  "accessibility": "Give the alert meaningful text. Choose a live region or alert role when the message is added dynamically and needs announcement."
+}

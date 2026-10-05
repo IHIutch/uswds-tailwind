@@ -16,6 +16,12 @@ interface ComponentInterface<Api> {
 // collected automatically with their element even without an explicit
 // `destroy()` call.
 const instances = new WeakMap<Element, Component<any, any>>()
+const activeComponents = new Set<Component<any, any>>()
+
+export function destroyAllComponents() {
+  for (const component of [...activeComponents])
+    component.destroy()
+}
 
 function resolve(target: Element | string | null): HTMLElement | null {
   const el = typeof target === 'string' ? document.querySelector(target) : target
@@ -65,6 +71,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   abstract initApi(): Api
 
   init() {
+    activeComponents.add(this)
     this.render()
     this.machine.subscribe(() => {
       this.api = this.initApi()
@@ -79,6 +86,11 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
       this.machine.stop()
     }
     finally {
+      activeComponents.delete(this)
+      const legacyInstances = (this.constructor as { instances?: Map<string, Component<Props, Api>> }).instances
+      const id = this.machine.service.scope.id
+      if (id && legacyInstances?.get(id) === this)
+        legacyInstances.delete(id)
       if (instances.get(this.rootEl) === this)
         instances.delete(this.rootEl)
     }

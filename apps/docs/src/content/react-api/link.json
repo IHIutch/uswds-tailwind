@@ -1,0 +1,26 @@
+{
+  "name": "Link",
+  "intro": "Link is a styled native anchor. Supply an href and meaningful link text.",
+  "parts": [
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Accepts native anchor props and forwards its ref.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "blue | light",
+          "description": "Selects the link color for the surrounding surface.",
+          "defaultValue": "blue"
+        },
+        {
+          "name": "isExternal",
+          "type": "boolean",
+          "description": "Adds an external-link icon.",
+          "defaultValue": "false"
+        }
+      ]
+    }
+  ],
+  "accessibility": "The external icon does not replace link text. Name the destination in the link content."
+}

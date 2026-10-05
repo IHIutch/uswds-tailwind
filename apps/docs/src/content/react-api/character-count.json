@@ -1,0 +1,80 @@
+{
+  "name": "CharacterCount",
+  "intro": "Use Root with Input, visible Status, and SrStatus. Use Field.Label inside an enclosing Field.Root to label the input.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the input value and character limit.",
+      "props": [
+        {
+          "name": "maxLength",
+          "type": "number (required)",
+          "description": "Sets the character limit. Input permits extra characters and becomes invalid when the count exceeds it."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "description": "Initial uncontrolled value.",
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Controlled value."
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: string }) => void",
+          "description": "Receives value changes."
+        },
+        {
+          "name": "errorText",
+          "type": "string",
+          "description": "Native validity message when over the limit. Defaults to \"The content is too long.\"",
+          "defaultValue": "\"The content is too long.\""
+        },
+        {
+          "name": "statusLabel",
+          "type": "string",
+          "description": "Text in the initial count message. Defaults to \"characters allowed\".",
+          "defaultValue": "\"characters allowed\""
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; control?: string; input?: string; description?: string; status?: string; srStatus?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives text and exposes over-limit state.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Status",
+      "element": "div",
+      "description": "Displays the remaining-character message.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "SrStatus",
+      "element": "div",
+      "description": "Renders a div containing the initial limit description and a visually hidden span that announces debounced count changes."
+    }
+  ]
+}

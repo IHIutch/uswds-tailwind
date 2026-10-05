@@ -1,0 +1,70 @@
+{
+  "name": "InputMask",
+  "intro": "Put Label, Control, Placeholder, and Input inside Root to guide entry in a fixed format.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the mask and input value.",
+      "props": [
+        {
+          "name": "placeholder",
+          "type": "string (required)",
+          "description": "Defines the mask format."
+        },
+        {
+          "name": "charset",
+          "type": "string",
+          "description": "Defines accepted characters for placeholder positions."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "description": "Initial uncontrolled value."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Controlled value."
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: string }) => void",
+          "description": "Receives value changes."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; content?: string; input?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Native label. Set htmlFor to the input ID explicitly, or use Field.Label with an enclosing Field.Root."
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Aligns the placeholder guide and input."
+    },
+    {
+      "name": "Placeholder",
+      "element": "span",
+      "description": "Displays the unentered mask characters."
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives the typed value. Field.Root can supply validation state; the mask itself does not validate completeness.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    }
+  ]
+}

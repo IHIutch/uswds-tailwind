@@ -1,0 +1,117 @@
+{
+  "name": "DatePicker range",
+  "intro": "The React range picker uses DatePicker with selectionMode=\"range\". Render one Control with bound=\"start\" and another with bound=\"end\" inside the same Root. The visible fields use MM/DD/YYYY; callback valueAsString uses ISO YYYY-MM-DD.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns the start and end dates.",
+      "props": [
+        {
+          "name": "selectionMode",
+          "type": "range (required for this pattern)",
+          "description": "Enables range selection."
+        },
+        {
+          "name": "defaultValue",
+          "type": "string[]",
+          "description": "Initial start and end dates. Use ISO YYYY-MM-DD strings."
+        },
+        {
+          "name": "value",
+          "type": "Date[]",
+          "description": "Controlled selected dates."
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "description": "Earliest selectable date. Use ISO YYYY-MM-DD."
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "description": "Latest selectable date. Use ISO YYYY-MM-DD."
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: Date[]; valueAsString: string[] }) => void",
+          "description": "Receives only the selected Date values and their ISO YYYY-MM-DD strings. Unset range endpoints are omitted."
+        },
+        {
+          "name": "ids",
+          "type": "Datepicker ElementIds",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ]
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Groups each date input and calendar trigger.",
+      "props": [
+        {
+          "name": "bound",
+          "type": "start | end (required for this pattern)",
+          "description": "Identifies which range endpoint this control edits."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives a typed MM/DD/YYYY start or end date. Each field sets aria-invalid for malformed text or a date outside its effective bounds."
+    },
+    {
+      "name": "Trigger",
+      "element": "button",
+      "description": "Opens the calendar for its Control."
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Place one calendar here for both range inputs."
+    },
+    {
+      "name": "View",
+      "element": "div",
+      "description": "Shows day, month, or year selection.",
+      "props": [
+        {
+          "name": "view",
+          "type": "day | month | year (required)",
+          "description": "Active calendar view."
+        }
+      ]
+    },
+    {
+      "name": "TableCellTrigger",
+      "element": "button",
+      "description": "Selects a date in the range.",
+      "props": [
+        {
+          "name": "cell",
+          "type": "DayCell | MonthCell | YearCell (required)",
+          "description": "Cell from the active view."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-range-start",
+          "value": "Present at the range start",
+          "purpose": "Styles the range start."
+        },
+        {
+          "attribute": "data-range-end",
+          "value": "Present at the range end",
+          "purpose": "Styles the range end."
+        },
+        {
+          "attribute": "data-within-range",
+          "value": "Present inside the range",
+          "purpose": "Styles days in the range."
+        }
+      ]
+    }
+  ],
+  "accessibility": "Give the start and end fields distinct visible labels, names, and format hints. An end date cannot precede the start; a start date cannot follow the end. Root min and max further limit both endpoints."
+}

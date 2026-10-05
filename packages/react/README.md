@@ -7,14 +7,14 @@
 USWDS components for React, styled with [Tailwind CSS](https://tailwindcss.com/) and powered by [zag-js](https://zagjs.com/) state machines.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases.
+> This package is in **v2 beta**. APIs may change between releases.
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/vitejs-vite-xm6mmahl)
 
 ## Install
 
 ```bash
-npm install @uswds-tailwind/react@alpha tailwindcss
+npm install @uswds-tailwind/react@latest react@^19 react-dom@^19 tailwindcss
 ```
 
 ## Setup
@@ -37,11 +37,13 @@ export default function App() {
 }
 ```
 
-Each component is also accessible from a subpath import (e.g. `@uswds-tailwind/react/accordion`) so bundlers can tree-shake unused components.
+Use a public component subpath, such as `@uswds-tailwind/react/accordion`, for component imports. The React stylesheet imports the theme and its fonts; there is no separate theme CSS import.
+
+For setup in an existing React app, follow the [React getting-started guide](https://v2.uswds-tailwind.com/docs/react/getting-started).
 
 ## Documentation
 
-Component API, props, and Storybook examples: [uswds-tailwind.com](https://uswds-tailwind.com)
+Component API, props, and Storybook examples: [v2.uswds-tailwind.com](https://v2.uswds-tailwind.com)
 
 ## License
 

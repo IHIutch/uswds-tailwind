@@ -1,0 +1,112 @@
+{
+  "name": "Field",
+  "intro": "Wrap one form control in Root. Label, Description, and ErrorMessage share the control's validation state.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Supplies field state to nested controls.",
+      "props": [
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Requires a value."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables the control."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "description": "Shows an error state."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "description": "Makes the control read-only."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Names the control.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Description",
+      "element": "div",
+      "description": "Provides hint text associated with the control."
+    },
+    {
+      "name": "ErrorMessage",
+      "element": "div",
+      "description": "Provides error text when invalid.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Fieldset.Root",
+      "element": "fieldset",
+      "description": "Groups related fields under one legend.",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables controls in the group."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "description": "Marks the group invalid."
+        }
+      ]
+    },
+    {
+      "name": "Fieldset.Legend",
+      "element": "legend",
+      "description": "Names the group of controls."
+    },
+    {
+      "name": "Fieldset.Description",
+      "element": "div",
+      "description": "Provides supporting text for the group."
+    },
+    {
+      "name": "Fieldset.ErrorMessage",
+      "element": "div",
+      "description": "Displays group-level validation text."
+    }
+  ],
+  "accessibility": "Put one Input, Textarea, Select.Field, or other supported control inside each Field.Root. The field connects its label, hint, and error text to that control."
+}

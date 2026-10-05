@@ -1,0 +1,84 @@
+{
+  "name": "Pagination",
+  "intro": "Place List inside Root. Use PrevTrigger, NextTrigger, Item, Ellipsis, or the Pages shortcut to build page navigation.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "nav",
+      "description": "Owns the current page.",
+      "props": [
+        {
+          "name": "currentPage",
+          "type": "number",
+          "description": "Initial page or controlled page when onPageChange is supplied.",
+          "defaultValue": "1"
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "description": "Total page count."
+        },
+        {
+          "name": "onPageChange",
+          "type": "(page: number) => void",
+          "description": "Receives page changes; supply currentPage to control the state."
+        }
+      ]
+    },
+    {
+      "name": "List",
+      "element": "ul",
+      "description": "Contains navigation items.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | ({ pages: PageSlot[] }) => ReactNode",
+          "description": "Renders items directly or from computed page slots."
+        }
+      ]
+    },
+    {
+      "name": "PrevTrigger",
+      "element": "button",
+      "description": "Moves to the previous page."
+    },
+    {
+      "name": "NextTrigger",
+      "element": "button",
+      "description": "Moves to the next page."
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Wraps a button by default. Button props and page-state attributes apply to that inner button; render can replace it with a custom control.",
+      "props": [
+        {
+          "name": "value",
+          "type": "number (required)",
+          "description": "Page number."
+        },
+        {
+          "name": "render",
+          "type": "(props: PaginationItemRenderProps) => ReactNode",
+          "description": "Renders a custom page control."
+        }
+      ]
+    },
+    {
+      "name": "Ellipsis",
+      "element": "li",
+      "description": "Marks a gap in the visible page sequence."
+    },
+    {
+      "name": "Pages",
+      "description": "Renders Item and Ellipsis parts from the computed page sequence.",
+      "props": [
+        {
+          "name": "render",
+          "type": "PaginationItemProps[\"render\"]",
+          "description": "Customizes the page controls."
+        }
+      ]
+    }
+  ]
+}

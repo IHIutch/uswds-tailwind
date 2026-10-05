@@ -1,164 +1,144 @@
 ---
 title: "Getting Started"
-description: "Getting started with USWDS + Tailwind is fast and easy. By copying and pasting the following snippets, you'll be up and running in minutes."
+description: "Set up the component library with Tailwind CSS, HTML, JavaScript, and Vite."
 ---
 
 <ProcessList>
-{/* Step 1 */}
 <ProcessStep class="*:first:mt-0 before:top-0">
 ## Setup
 
-### Initialize your project
+You'll need Node.js and npm installed, plus some familiarity with the terminal.
+
+### Create a project folder
 
 ```bash
 mkdir my-project && cd my-project
 npm init -y
 ```
 
-
 ### Install dependencies
 
-This project requires installing a few dependencies to get started:
-
-#### USWDS + Tailwind
+Install Vite, Tailwind CSS, and Tailwind's Vite plugin as development dependencies. Then install the USWDS + Tailwind packages.
 
 ```bash
-npm i @uswds-tailwind/compat @uswds-tailwind/theme
+npm install -D vite tailwindcss @tailwindcss/vite
+npm install @uswds-tailwind/compat@latest @uswds-tailwind/theme@latest
 ```
 
-#### Tailwind and plugins
-
-```bash
-npm i tailwindcss @tailwindcss/vite @iconify-json/fa-solid @iconify-json/fa6-brands @iconify-json/material-symbols
-```
-
-#### Install fonts
-
-```bash
-npm i @fontsource-variable/open-sans @fontsource-variable/public-sans @fontsource-variable/roboto-mono @fontsource-variable/source-sans-3 @fontsource-variable/merriweather
-```
+Now that the dependencies are installed, we can create the project files.
 </ProcessStep>
 
-{/* Step 2 */}
 <ProcessStep class="*:first:mt-0 before:top-0">
 ## Project structure
 
-Now that we've installed our necessary dependencies, let's build out our project structure and finish setting up our various configurations.
+Create the HTML, CSS, and JavaScript files. Keep `index.html` in the project root, where Vite looks for it by default. Run this from `my-project`, or create the files manually.
 
 ```bash
-mkdir {src,src/assets,src/assets/js,src/assets/css}
-touch src/index.html src/assets/js/main.js src/assets/css/styles.css .gitignore
+mkdir src
+touch index.html src/main.js src/styles.css vite.config.js .gitignore
 ```
 
-Your project structure should look like this:
+Your project should look like this:
 
-```graphql
+```text
 my-project/
-├── node_modules/
 ├── src/
-│   ├── assets/
-│   │   ├── js/
-|   |   │   └── main.js
-│   │   └── css/
-|   |       └── styles.css
-|   └── index.html
+│   ├── main.js
+│   └── styles.css
+├── .gitignore
+├── index.html
 ├── package-lock.json
-└── package.json
+├── package.json
+└── vite.config.js
 ```
 </ProcessStep>
-{/* Step 3 */}
-<ProcessStep class="*:first:mt-0 before:top-0">
 
+<ProcessStep class="*:first:mt-0 before:top-0">
 ## Configure project
+
+### Vite
+
+Vite will serve `index.html` and build the site into `dist` by default. In `vite.config.js`, we only need to enable Tailwind CSS:
+
+```js title="vite.config.js"
+import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [tailwindcss()],
+})
+```
+
+Add scripts to `package.json` to run the development server and build the site:
+
+```json title="package.json"
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
+```
 
 ### CSS
 
-Then, import your fonts, Tailwind, and the `@uswds-tailwind/theme` directives into your `src/assets/css/styles.css` file.
+Import Tailwind CSS and the USWDS theme in `src/styles.css`:
 
-```css title="src/assets/css/styles.css"
-/* Only import the fonts you need! */
-@import "@fontsource-variable/open-sans";
-@import "@fontsource-variable/public-sans";
-@import "@fontsource-variable/roboto-mono";
-@import "@fontsource-variable/source-sans-3";
-@import "@fontsource-variable/merriweather";
-
-@import "tailwindcss";
-@import "@uswds-tailwind/theme";
+```css title="src/styles.css"
+@import 'tailwindcss';
+@import '@uswds-tailwind/theme';
 ```
 
 ### JavaScript
 
-Now, update your `src/assets/js/main.js` file to initialize your JavaScript components.
+Then import the stylesheet and component JavaScript in `src/main.js`:
 
-<Alert>More information about component specific plugins can be found on the [JavaScript](/javascript) page.</Alert>
-
-```js title="src/assets/js/main.js"
-// Option 1: Auto-initialize all components
+```js title="src/main.js"
+import './styles.css'
 import '@uswds-tailwind/compat/auto'
-
-// Option 2: Manual initialization with only the components you need
-import { modalInit, accordionInit } from '@uswds-tailwind/compat'
-document.addEventListener('DOMContentLoaded', () => {
-  modalInit()
-  accordionInit()
-})
 ```
 
+The JavaScript import automatically initializes interactive components you add later. See the [component examples](/docs/vanilla/components/accordion) for their HTML markup.
 
-Finally, update your `src/index.html` with the following:
+### HTML
 
-```html title="src/index.html"
+Finally, fill in `index.html`. The module script loads `src/main.js`, which imports the stylesheet and component JavaScript.
+
+```html title="index.html"
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>USWDS + Tailwind</title>
-    <link rel="stylesheet" href="../build/css/styles.css" />
+    <script type="module" src="./src/main.js"></script>
   </head>
   <body class="font-source-sans">
-    <div class="py-4 px-3 mx-auto max-w-screen-desktop">
-      <h1 class="text-4xl font-bold max-w-prose mb-4">
-        Welcome to USWDS + Tailwind!
-      </h1>
-      <button
-        type="button"
-        class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
-      >
-        Default
+    <main class="mx-auto max-w-prose p-6">
+      <h1 class="mb-6 text-3xl font-bold">Hello, USWDS + Tailwind!</h1>
+      <button type="button" class="rounded-sm bg-blue-60v px-5 py-3 font-bold text-white hover:bg-blue-warm-70v focus:outline-4 focus:outline-blue-40v">
+        Button
       </button>
-    </div>
-
-    <script type="module" src="../assets/js/main.js"></script>
+    </main>
   </body>
 </html>
 ```
 
 ### .gitignore
 
-Before we push any code to our repository, we'll want to add a `.gitignore` file. This way, we dont push unnecessary or redundant code to our remote repository.
+Add generated files to `.gitignore`:
 
-Our `.gitignore` should include the following:
-
-```shell title=.gitignore
-node_modules
-
-.parcel-cache
-
-build 
+```text title=".gitignore"
+node_modules/
+dist/
 ```
-
-<Alert type="warning">
-  If you're manually compiling your CSS and JavaScript assets locally before a deployment, don't add the `build` directory to your `.gitignore`.
-</Alert>
-
 </ProcessStep>
-{/* Step 4 */}
+
 <ProcessStep class="*:first:mt-0 before:top-0">
 ## Complete!
-Awesome, now everything is set up! You can run `npm run dev` and open the `index.html` file to see your project in action!
 
-If you're using any of the interactive components that require JavaScript, head to the [JavaScript](/javascript) page to see how to implement the various plugins.
+The button lets you see that the styles are loading. Run `npm run dev` from `my-project` and open the local URL Vite prints.
+
+When you're ready to deploy, run `npm run build` and publish the generated `dist` directory.
 </ProcessStep>
 </ProcessList>

@@ -1,16 +1,28 @@
 import { glob } from 'astro/loaders'
-import { defineCollection, z } from 'astro:content'
+import { z } from 'astro/zod'
+import { defineCollection } from 'astro:content'
+import { reactApiSchema } from './reference/react/schema'
 
-const componentsCollection = defineCollection({
+const vanillaComponentsCollection = defineCollection({
   loader: glob({
-    base: './src/content/components',
+    base: './src/content/components/vanilla',
     pattern: '**\/[^_]*.(md|mdx)',
   }),
 
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    isPublished: z.boolean().optional(),
+  }),
+})
+
+const reactComponentsCollection = defineCollection({
+  loader: glob({
+    base: './src/content/components/react',
+    pattern: '**\/[^_]*.(md|mdx)',
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
   }),
 })
 
@@ -25,21 +37,17 @@ const contentCollection = defineCollection({
   }),
 })
 
-const demosCollection = defineCollection({
+const reactApiCollection = defineCollection({
   loader: glob({
-    base: './src/content/demos',
+    base: './src/content/react-api',
     pattern: '**/*.json',
   }),
-  schema: z.object({
-    component: z.string(),
-    variant: z.string(),
-    propsPath: z.string(),
-    componentPath: z.string(),
-  }),
+  schema: reactApiSchema,
 })
 
 export const collections = {
-  components: componentsCollection,
-  demos: demosCollection,
-  pages: contentCollection,
+  'vanilla-components': vanillaComponentsCollection,
+  'react-components': reactComponentsCollection,
+  'pages': contentCollection,
+  'react-api': reactApiCollection,
 }

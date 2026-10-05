@@ -1,0 +1,88 @@
+---
+title: 'Breadcrumb'
+description: "Use breadcrumbs to show a visitor's location in a website hierarchy and provide links back to higher-level pages."
+---
+
+## Usage
+
+Breadcrumbs show the current page’s place in the site structure and let users navigate to its parent pages.
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Breadcrumb Default" code={`
+  <nav aria-label="Breadcrumb" class="@container flex p-1 -mx-1">
+    <span aria-hidden="true" class="@mobile-lg:hidden">
+      <span class="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>
+    </span>
+    <ol aria-label="Breadcrumb" class="list-none block @mobile-lg:truncate">
+      <li class="inline-flex @mobile-lg:inline @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <a href="#" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline">Home</a>
+        <span aria-hidden="true" class="hidden @mobile-lg:inline">
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex @mobile-lg:inline @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <a href="#" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline">Federal Contracting</a>
+        <span aria-hidden="true" class="hidden @mobile-lg:inline">
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex @mobile-lg:inline @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <a href="#" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline">Contracting assistance programs</a>
+        <span aria-hidden="true" class="hidden @mobile-lg:inline">
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-flex @mobile-lg:inline @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <span aria-current="page">Economically disadvantaged women-owned small business federal contracting program</span>
+      </li>
+    </ol>
+  </nav>
+`} />
+
+### Wrapping
+
+<ComponentPreview title="Breadcrumb Wrapping" code={`
+  <nav aria-label="Wrapping Breadcrumb" class="@container flex p-1 -mx-1">
+    <span aria-hidden="true" class="@mobile-lg:hidden">
+      <span class="icon-[material-symbols--arrow-back] align-middle text-gray-50 size-4"></span>
+    </span>
+    <ol aria-label="Breadcrumb" class="list-none block">
+      <li class="inline-block @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <a href="#" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline">Home</a>
+        <span aria-hidden="true" class="hidden @mobile-lg:inline">
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-block @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <a href="#" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline">Federal Contracting</a>
+        <span aria-hidden="true" class="hidden @mobile-lg:inline">
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-block @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <a href="#" class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline">Contracting assistance programs</a>
+        <span aria-hidden="true" class="hidden @mobile-lg:inline">
+          <span class="icon-[material-symbols--chevron-right] align-middle text-gray-50 size-4"></span>
+        </span>
+      </li>
+      <li class="inline-block @mobile-lg:whitespace-nowrap @max-mobile-lg:not-nth-last-[2]:sr-only">
+        <span aria-current="page">Economically disadvantaged women-owned small business federal contracting program</span>
+      </li>
+    </ol>
+  </nav>
+`} />
+
+## Component API
+
+- Use a `<nav>` with an `aria-label` to identify the breadcrumb navigation.
+- Use an ordered list for the path. Parent items are links; the current page is a `<span aria-current="page">` without a link.
+- Hide the separator and mobile back arrow from assistive technology with `aria-hidden="true"`.
+- Add the `@mobile-lg:truncate` class to the list for the default single-line display. Omit it to allow wrapping.
+
+## Accessibility
+
+- Keep the current page in the breadcrumb trail even though it is not a link.
+- Ensure separator icons have sufficient contrast against the background.

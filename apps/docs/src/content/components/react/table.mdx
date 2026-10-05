@@ -1,0 +1,75 @@
+---
+title: "Table"
+description: "Present data in rows and columns with tables. Compare striped, compact, scrollable, and sticky layouts."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import TableBorderlessDemo from '../../../examples/table-borderless-demo'
+import TableCompactDemo from '../../../examples/table-compact-demo'
+import TableDemo from '../../../examples/table-demo'
+import TableScrollableDemo from '../../../examples/table-scrollable-demo'
+import TableSortedDemo from '../../../examples/table-sorted-demo'
+import TableStackedDemo from '../../../examples/table-stacked-demo'
+import TableStickyColumnDemo from '../../../examples/table-sticky-column-demo'
+import TableStickyHeaderDemo from '../../../examples/table-sticky-header-demo'
+import TableStripedDemo from '../../../examples/table-striped-demo'
+
+## Examples
+
+### Default
+
+<ReactPreview title="Default" example="table-demo">
+  <TableDemo client:load />
+</ReactPreview>
+
+### Striped
+
+<ReactPreview title="Striped" example="table-striped-demo">
+  <TableStripedDemo client:load />
+</ReactPreview>
+
+### Borderless
+
+<ReactPreview title="Borderless" example="table-borderless-demo">
+  <TableBorderlessDemo client:load />
+</ReactPreview>
+
+### Compact
+
+<ReactPreview title="Compact" example="table-compact-demo">
+  <TableCompactDemo client:load />
+</ReactPreview>
+
+### Scrollable
+
+<ReactPreview title="Scrollable" example="table-scrollable-demo">
+  <TableScrollableDemo client:load />
+</ReactPreview>
+
+### Sticky Header
+
+<ReactPreview title="Sticky Header" example="table-sticky-header-demo">
+  <TableStickyHeaderDemo client:load />
+</ReactPreview>
+
+### Sticky Column
+
+<ReactPreview title="Sticky Column" example="table-sticky-column-demo">
+  <TableStickyColumnDemo client:load />
+</ReactPreview>
+
+### Stacked
+
+<ReactPreview title="Stacked" example="table-stacked-demo">
+  <TableStackedDemo client:load />
+</ReactPreview>
+
+On narrow screens, `stacked` hides the visual header row and places each cell on its own line. Keep the native caption and column headers, and add a `data-label` that matches its column heading to every body cell.
+
+### Sortable
+
+<ReactPreview title="Sortable" example="table-sorted-demo" playgroundDependencies={{ '@tanstack/react-table': '9.2.4' }}>
+  <TableSortedDemo client:load />
+</ReactPreview>
+
+Install `@tanstack/react-table` to sort the data. `Table.Root` supplies sort buttons, `aria-sort`, and a status announcement; `onSortChange` forwards the requested column and direction to TanStack Table, whose row model supplies the reordered rows. Keep the Table sort state and row order in sync so the announcement describes the visible data.

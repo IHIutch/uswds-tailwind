@@ -1,0 +1,60 @@
+{
+  "name": "MemorableDate",
+  "intro": "Use the fieldset Root with a Legend and the Month, Day, and Year controls.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "fieldset",
+      "description": "Groups the date fields.",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Sets data-disabled on Root. Pass native disabled to Month, Day, and Year to disable their controls."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "description": "Sets data-invalid on Root. Does not validate the date or update the child controls."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Legend",
+      "element": "legend",
+      "description": "Names the date group."
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Arranges the three date fields."
+    },
+    {
+      "name": "Month",
+      "element": "select",
+      "description": "Selects the month."
+    },
+    {
+      "name": "Day",
+      "element": "input",
+      "description": "Receives the day number."
+    },
+    {
+      "name": "Year",
+      "element": "input",
+      "description": "Receives the year number."
+    }
+  ]
+}

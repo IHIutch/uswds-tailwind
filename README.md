@@ -5,11 +5,11 @@ USWDS components for Tailwind CSS, available as React components or vanilla JS m
 ![USWDS + Tailwind Logo](https://repository-images.githubusercontent.com/674037448/e36daf0e-292a-4143-8d9c-e54dd8935fe4)
 
 > [!NOTE]
-> This project is currently in **alpha**. APIs may change between releases.
+> This project is currently in **v2 beta**. APIs may change between releases.
 
 ## Documentation
 
-Full guides, component API, and examples live at [uswds-tailwind.com](https://uswds-tailwind.com).
+Full guides, component API, and examples live at [v2.uswds-tailwind.com](https://v2.uswds-tailwind.com).
 
 ## Packages
 
@@ -22,7 +22,7 @@ Full guides, component API, and examples live at [uswds-tailwind.com](https://us
 
 ## Repository structure
 
-- `apps/docs/`: Astro documentation site at [uswds-tailwind.com](https://uswds-tailwind.com)
+- `apps/docs/`: Astro documentation site at [v2.uswds-tailwind.com](https://v2.uswds-tailwind.com)
 - `packages/react/`: React component library + Storybook
 - `packages/compat/`: vanilla JS bundle
 - `packages/theme/`: Tailwind v4 theme

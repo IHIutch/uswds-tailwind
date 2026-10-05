@@ -5,7 +5,7 @@ type AnchorHref = `#${string}`
 
 export function useScrollspy({ hrefs, options = {}, onIntersect }: {
   hrefs: AnchorHref[]
-  options?: IntersectionObserverInit
+  options?: Omit<IntersectionObserverInit, 'root'> & { root?: React.RefObject<Element | null> }
   onIntersect?: (href: AnchorHref) => void
 }) {
   const { threshold = 1, root = null, rootMargin = '0px 0px 0px 0px' } = options
@@ -31,7 +31,7 @@ export function useScrollspy({ hrefs, options = {}, onIntersect }: {
           onIntersect?.(`#${entry.target.id}`)
         }
       }
-    }, { threshold, root, rootMargin })
+    }, { threshold, root: root?.current ?? null, rootMargin })
 
     for (const { el } of elements) {
       observer.observe(el)

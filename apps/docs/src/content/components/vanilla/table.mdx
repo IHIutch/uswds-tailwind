@@ -1,0 +1,552 @@
+---
+title: "Table"
+description: "Present data in rows and columns with tables. Compare striped, compact, scrollable, and sticky layouts."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Table Default" code={`
+  <table class="border-separate border-spacing-0">
+    <caption class="mb-3 text-left font-bold">Bordered table</caption>
+    <thead>
+      <tr class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2">
+        <th scope="col">Document title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+        <th scope="row" class="font-normal">Declaration of Independence</th>
+        <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+        <td>1776</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+        <th scope="row" class="font-normal">Bill of Rights</th>
+        <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+        <td>1791</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+        <th scope="row" class="font-normal">Declaration of Sentiments</th>
+        <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+        <td>1848</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+        <th scope="row" class="font-normal">Emancipation Proclamation</th>
+        <td>An executive order granting freedom to slaves in designated southern states.</td>
+        <td>1863</td>
+      </tr>
+    </tbody>
+  </table>
+`} />
+
+### Striped
+
+<ComponentPreview title="Table Striped" code={`
+  <table class="border-separate border-spacing-0">
+    <caption class="mb-3 text-left font-bold">Bordered table with horizontal stripes</caption>
+    <thead>
+      <tr class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2">
+        <th scope="col">Document title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="*:even:bg-white *:odd:bg-gray-5 *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Declaration of Independence</th>
+        <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+        <td>1776</td>
+      </tr>
+      <tr class="*:even:bg-white *:odd:bg-gray-5 *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Bill of Rights</th>
+        <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+        <td>1791</td>
+      </tr>
+      <tr class="*:even:bg-white *:odd:bg-gray-5 *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Declaration of Sentiments</th>
+        <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+        <td>1848</td>
+      </tr>
+      <tr class="*:even:bg-white *:odd:bg-gray-5 *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Emancipation Proclamation</th>
+        <td>An executive order granting freedom to slaves in designated southern states.</td>
+        <td>1863</td>
+      </tr>
+    </tbody>
+  </table>
+`} />
+
+### Borderless
+
+<ComponentPreview title="Table Borderless" code={`
+  <table class="border-separate border-spacing-0">
+    <caption class="mb-3 text-left font-bold">Borderless table: A borderless table can be useful when you want the information to feel more a part of the text it accompanies and extends.</caption>
+    <thead>
+      <tr class="*:bg-gray-10 *:text-left *:border-b *:border-black *:px-4 *:py-2">
+        <th scope="col">Document title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="*:bg-white *:text-left *:border-y *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Declaration of Independence</th>
+        <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+        <td>1776</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border-y *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Bill of Rights</th>
+        <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+        <td>1791</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border-y *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Declaration of Sentiments</th>
+        <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+        <td>1848</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border-y *:border-black *:border-t-0 *:px-4 *:py-2">
+        <th scope="row" class="font-normal">Emancipation Proclamation</th>
+        <td>An executive order granting freedom to slaves in designated southern states.</td>
+        <td>1863</td>
+      </tr>
+
+    </tbody>
+  </table>
+`} />
+
+### Compact
+
+<ComponentPreview title="Table Compact" code={`
+  <table class="border-separate border-spacing-0">
+    <caption class="mb-3 text-left font-bold">Bordered table</caption>
+    <thead>
+      <tr class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2">
+        <th scope="col">Document title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-3 *:py-1">
+        <th scope="row" class="font-normal">Declaration of Independence</th>
+        <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+        <td>1776</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-3 *:py-1">
+        <th scope="row" class="font-normal">Bill of Rights</th>
+        <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+        <td>1791</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-3 *:py-1">
+        <th scope="row" class="font-normal">Declaration of Sentiments</th>
+        <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+        <td>1848</td>
+      </tr>
+      <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-3 *:py-1">
+        <th scope="row" class="font-normal">Emancipation Proclamation</th>
+        <td>An executive order granting freedom to slaves in designated southern states.</td>
+        <td>1863</td>
+      </tr>
+    </tbody>
+  </table>
+`} />
+
+### Scrollable
+
+<ComponentPreview title="Table Scrollable" ins={['tabindex="0"']} code={`
+  <div class="overflow-y-hidden w-full" tabindex="0">
+    <table class="border-separate border-spacing-0">
+      <caption class="mb-3 text-left font-bold">Bordered table</caption>
+      <thead>
+        <tr class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2">
+          <th scope="col">Document title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Independence</th>
+          <td class="whitespace-nowrap">Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+          <td class="whitespace-nowrap">1776</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Bill of Rights</th>
+          <td class="whitespace-nowrap">The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+          <td class="whitespace-nowrap">1791</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Sentiments</th>
+          <td class="whitespace-nowrap">A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+          <td class="whitespace-nowrap">1848</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Emancipation Proclamation</th>
+          <td class="whitespace-nowrap">An executive order granting freedom to slaves in designated southern states.</td>
+          <td class="whitespace-nowrap">1863</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+`} />
+
+### Sticky Header
+
+<ComponentPreview title="Table Sticky Header" maxHeight="384px" code={`
+  <div class="h-96 overflow-y-auto"> 
+    <table class="border-separate table-auto w-full border-spacing-0">
+      <caption class="mb-3 text-left font-bold">Sticky header table</caption>
+      <thead class="sticky top-0">
+        <tr class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2">
+          <th scope="col">Document title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Independence</th>
+          <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+          <td>1776</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Bill of Rights</th>
+          <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+          <td>1791</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Sentiments</th>
+          <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+          <td>1848</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Emancipation Proclamation</th>
+          <td>An executive order granting freedom to slaves in designated southern states.</td>
+          <td>1863</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Independence</th>
+          <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+          <td>1776</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Bill of Rights</th>
+          <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+          <td>1791</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Sentiments</th>
+          <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+          <td>1848</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Emancipation Proclamation</th>
+          <td>An executive order granting freedom to slaves in designated southern states.</td>
+          <td>1863</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Independence</th>
+          <td>Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+          <td>1776</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Bill of Rights</th>
+          <td>The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+          <td>1791</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Declaration of Sentiments</th>
+          <td>A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+          <td>1848</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal">Emancipation Proclamation</th>
+          <td>An executive order granting freedom to slaves in designated southern states.</td>
+          <td>1863</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+`} />
+
+### Sticky Column
+
+<ComponentPreview title="Table Sticky Column" ins={['tabindex="0"']} code={`
+  <div class="overflow-y-hidden w-full" tabindex="0">
+    <table class="border-separate border-spacing-0">
+      <caption class="mb-3 text-left font-bold">Bordered table</caption>
+      <thead>
+        <tr class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2">
+          <th scope="col" class="sticky left-0">Document title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal sticky left-0">Declaration of Independence</th>
+          <td class="whitespace-nowrap">Statement adopted by the Continental Congress declaring independence from the British Empire.</td>
+          <td class="whitespace-nowrap">1776</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal sticky left-0">Bill of Rights</th>
+          <td class="whitespace-nowrap">The first ten amendments of the U.S. Constitution guaranteeing rights and freedoms.</td>
+          <td class="whitespace-nowrap">1791</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal sticky left-0">Declaration of Sentiments</th>
+          <td class="whitespace-nowrap">A document written during the Seneca Falls Convention outlining the rights that American women should be entitled to as citizens.</td>
+          <td class="whitespace-nowrap">1848</td>
+        </tr>
+        <tr class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v">
+          <th scope="row" class="font-normal sticky left-0">Emancipation Proclamation</th>
+          <td class="whitespace-nowrap">An executive order granting freedom to slaves in designated southern states.</td>
+          <td class="whitespace-nowrap">1863</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+`} />
+
+### Stacked
+
+<ComponentPreview title="Table Stacked" code={`
+  <div class="@container">
+    <table class="w-full border-spacing-0">
+      <caption class="mb-3 text-left font-bold">Historic documents</caption>
+      <thead class="@max-tablet:hidden">
+        <tr class="*:border-b *:border-black *:px-4 *:py-2 *:text-left">
+          <th scope="col">Document title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Year</th>
+        </tr>
+      </thead>
+      <tbody class="[&>tr]:@max-tablet:block [&>tr]:@max-tablet:border-b [&>tr]:@max-tablet:py-2">
+        <tr>
+          <th scope="row" class="px-4 py-2 text-left font-normal" data-label="Document title">Declaration of Independence</th>
+          <td class="px-4 py-2 @max-tablet:block @max-tablet:before:block @max-tablet:before:font-bold @max-tablet:before:content-[attr(data-label)]" data-label="Description">Statement declaring independence from the British Empire.</td>
+          <td class="px-4 py-2 @max-tablet:block @max-tablet:before:block @max-tablet:before:font-bold @max-tablet:before:content-[attr(data-label)]" data-label="Year">1776</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+`} />
+
+### Sortable
+
+The component reads header names and reorders rows in the first `<tbody>` when sorting changes.
+
+<ComponentPreview title="Table Sortable" mark={[/data-part="[^\"]*"/g, /data-sortable/g, /data-sort-value="[^\"]*"/g]} code={`
+<div data-scope="table" data-part="root">
+  <table
+    data-scope="table"
+    data-part="table"
+    class="border-separate border-spacing-0"
+  >
+    <caption class="mb-3 text-left font-bold">
+      Federal Agencies and Employee Count
+    </caption>
+    <thead>
+      <tr
+        class="*:bg-gray-10 *:text-left *:border *:not-first:border-l-0 *:border-black *:px-4 *:py-2 *:aria-[sort]:bg-blue-cool-20v"
+      >
+        <th
+          data-scope="table"
+          data-part="header"
+          class="group"
+          data-sortable
+        >
+          <div class="flex items-center gap-2">
+            Agency
+            <button
+              data-scope="table"
+              data-part="sort-trigger"
+              class="cursor-pointer size-6 focus:outline-4 focus:outline-blue-40v"
+            >
+              <span
+                class="icon-[material-symbols--height] group-aria-[sort=ascending]:icon-[material-symbols--arrow-upward-alt] group-aria-[sort=descending]:icon-[material-symbols--arrow-downward-alt] size-full"
+              ></span>
+            </button>
+          </div>
+        </th>
+        <th
+          data-scope="table"
+          data-part="header"
+          class="group"
+          data-sortable
+        >
+          <div class="flex items-center gap-2">
+            Employees
+            <button
+              data-scope="table"
+              data-part="sort-trigger"
+              class="cursor-pointer size-6 focus:outline-4 focus:outline-blue-40v"
+            >
+              <span
+                class="icon-[material-symbols--height] group-aria-[sort=ascending]:icon-[material-symbols--arrow-upward-alt] group-aria-[sort=descending]:icon-[material-symbols--arrow-downward-alt] size-full"
+              ></span>
+            </button>
+          </div>
+        </th>
+        <th
+          data-scope="table"
+          data-part="header"
+          class="group"
+          data-sortable
+        >
+          <div class="flex items-center gap-2">
+            Founded
+            <button
+              data-scope="table"
+              data-part="sort-trigger"
+              class="cursor-pointer size-6 focus:outline-4 focus:outline-blue-40v"
+            >
+              <span
+                class="icon-[material-symbols--height] group-aria-[sort=ascending]:icon-[material-symbols--arrow-upward-alt] group-aria-[sort=descending]:icon-[material-symbols--arrow-downward-alt] size-full"
+              ></span>
+            </button>
+          </div>
+        </th>
+        <th>
+          <div class="flex items-center gap-2">
+            Type
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
+      >
+        <td>Department of Defense</td>
+        <td
+          data-sort-value="732000"
+        >732,000</td>
+        <td
+          data-sort-value="1947-09-18"
+        >1947-09-18</td>
+        <td>Executive</td>
+      </tr>
+      <tr
+        class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
+      >
+        <td>Department of Veterans Affairs</td>
+        <td
+          data-sort-value="380000"
+        >380,000</td>
+        <td
+          data-sort-value="1989-03-15"
+        >1989-03-15</td>
+        <td>Executive</td>
+      </tr>
+      <tr
+        class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
+      >
+        <td>Department of Homeland Security</td>
+        <td
+          data-sort-value="240000"
+        >240,000</td>
+        <td
+          data-sort-value="2002-11-25"
+        >2002-11-25</td>
+        <td>Executive</td>
+      </tr>
+      <tr
+        class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
+      >
+        <td>Department of Treasury</td>
+        <td
+          data-sort-value="87000"
+        >87,000</td>
+        <td
+          data-sort-value="1789-09-02"
+        >1789-09-02</td>
+        <td>Executive</td>
+      </tr>
+      <tr
+        class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
+      >
+        <td>Department of Justice</td>
+        <td
+          data-sort-value="115000"
+        >115,000</td>
+        <td
+          data-sort-value="1870-07-01"
+        >1870-07-01</td>
+        <td>Executive</td>
+      </tr>
+      <tr
+        class="*:bg-white *:text-left *:border *:not-first:border-l-0 *:border-black *:border-t-0 *:px-4 *:py-2 *:data-[sort-active=true]:bg-blue-cool-5v"
+      >
+        <td>Department of Agriculture</td>
+        <td
+          data-sort-value="95000"
+        >95,000</td>
+        <td
+          data-sort-value="1862-05-15"
+        >1862-05-15</td>
+        <td>Executive</td>
+      </tr>
+    </tbody>
+  </table>
+  <div data-scope="table" data-part="sr-status" class="sr-only" aria-live="polite"></div>
+</div>
+`} />
+
+## Component API
+
+### Styling
+
+Default, striped, borderless, compact, scrollable, and sticky tables use native table markup and Tailwind classes. They do not need `tableInit()`.
+
+Preserve captions, column headers, row-header scopes, and keyboard access to scroll containers.
+
+### Sorting markup
+
+Run `tableInit()` from `@uswds-tailwind/compat/table` after the markup exists. It returns initialized `Table` instances.
+
+Use `data-scope="table" data-part="root"` on a wrapper containing a `table` part and a separate `sr-status` part. Both are required. The table must have a `<tbody>`; the wrapper sorts its first body. Author the status region with `class="sr-only"`; the runtime supplies `aria-live="polite"` and announcement text.
+
+Mark sortable `<thead>` headers with `data-sortable` and place a native button inside each header. Presence of `data-sortable`, including `false`, enables sorting. The wrapper generates `header` and `sort-trigger` parts on these elements.
+
+Rows and cells are native markup, not anatomy parts. The wrapper generates `data-sort-active="true"` on cells in the sorted column.
+
+<ApiTable label="table sorting attributes">
+
+| Element | Attribute | Description |
+| --- | --- | --- |
+| Root | `data-sort-column` | Authored nonnegative integer column index for initial sorting. |
+| Root | `data-sort-direction` | Authored `ascending` or `descending`; defaults to an initially sorted header's direction, then `ascending`. |
+| Sortable header | `aria-sort` | May author `ascending` or `descending` for initial sorting when no valid root column is supplied. Generated after initialization and removed from unsorted headers. |
+| Cell | `data-sort-value` | Authored comparison value. Nonempty values take precedence over `data-sort`, rendered text, then text content. |
+
+</ApiTable>
+
+Numeric values compare as numbers when both cells contain nonempty numeric strings. Other values use locale comparison with numeric ordering and ignored punctuation.
+
+### Configuration
+
+<ApiTable label="table options">
+
+| Option | Description |
+| --- | --- |
+| `defaultSortDescriptor` | Initial `{ column: number, direction: 'ascending' \| 'descending' }`, or `null`. Takes precedence over authored sorting attributes, including an explicit `null`. |
+| `sortDescriptor` | Controlled descriptor, or `null` for unsorted. Your application must update it after requests. |
+| `captionText` | Announcement caption; defaults to rendered caption text. |
+| `columnNames` | Record of column indices to announcement names; defaults to rendered sortable header text. |
+| `id`, `ids` | Instance identifier and generated root, header, sortTrigger, and srStatus IDs. |
+| `onSortChange` | Receives `{ sortDescriptor }` for sort changes or controlled requests. This is a JavaScript callback. |
+
+</ApiTable>
+
+### Methods and cleanup
+
+Use `Table.getOrCreateInstance(root, options)` to configure an instance. `api.setSortDescriptor(descriptor)` requests a sort update and returns `void`. `api.sortDescriptor` and `api.announcement` expose current state.
+
+Clearing the descriptor removes sort state but does not restore the original row order. Initialization requires an authored announcement element; it does not create a sibling region. Call `destroy()` before removing markup. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).

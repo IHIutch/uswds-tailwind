@@ -1,0 +1,389 @@
+---
+title: "Modal"
+description: "Focus attention on one task or message with a modal. Compare default, large, and required-action dialogs."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+This component requires the following JavaScript plugin:
+  - [Modal](/docs/vanilla/javascript#modal)
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Modal Default" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g, /data-target="[^\"]*"/g]} code={`
+  <div>
+    <button
+      data-scope="modal" data-part="trigger"
+      data-target="modal-default"
+      class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Open default modal
+    </button>
+    <div data-scope="modal" data-part="root" data-value="modal-default">
+    <div
+      data-scope="modal" data-part="backdrop"
+      data-value="modal-default"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-scope="modal" data-part="positioner"
+      data-value="modal-default"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-scope="modal" data-part="content"
+        class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="p-8 pt-10">
+          <h2
+            data-scope="modal" data-part="title"
+            class="text-xl font-bold font-merriweather"
+          >Are you sure you want to continue?</h2>
+          <p
+            data-scope="modal" data-part="description"
+            class="mt-2"
+          >You have unsaved changes that will be lost.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-scope="modal" data-part="close-trigger"
+                type="button"
+                class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Continue without saving</button>
+              <button
+                data-scope="modal" data-part="close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Go back</button>
+            </div>
+          </div>
+          <button
+            data-scope="modal" data-part="close-trigger"
+            type="button"
+            class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded-sm hover:text-gray-90 active:text-gray-90 focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+            aria-label="Close this window"
+          >
+            <div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+`} />
+
+### Large
+
+<ComponentPreview title="Modal Large" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g, /data-target="[^\"]*"/g]} code={`
+  <div>
+    <button
+      data-scope="modal" data-part="trigger"
+      data-target="modal-large"
+      class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Open large modal
+    </button>
+    <div data-scope="modal" data-part="root" data-value="modal-large">
+    <div
+      data-scope="modal" data-part="backdrop"
+      data-value="modal-large"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-scope="modal" data-part="positioner"
+      data-value="modal-large"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-scope="modal" data-part="content"
+        class="@container relative w-full max-w-4xl rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="px-8 pb-16 pt-14 w-full max-w-2xl mx-auto">
+          <h2
+            data-scope="modal" data-part="title"
+            class="text-3xl font-bold font-merriweather"
+          >Are you sure you want to continue?</h2>
+          <p
+            data-scope="modal" data-part="description"
+            class="mt-4"
+          >You have unsaved changes that will be lost.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-scope="modal" data-part="close-trigger"
+                type="button"
+                class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Continue without saving</button>
+              <button
+                data-scope="modal" data-part="close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Go back</button>
+            </div>
+          </div>
+          <button
+            data-scope="modal" data-part="close-trigger"
+            type="button"
+            class="absolute top-0 right-0 p-1 text-gray-50 bg-transparent rounded-sm hover:text-gray-90 active:text-gray-90 focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+            aria-label="Close this window"
+          >
+            <div class="icon-[material-symbols--close] size-8 mt-0.5 mr-0.5 align-middle"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+`} />
+
+### Forced Action
+
+<ComponentPreview title="Modal Forced Action" mark={[/data-part="[^\"]*"/g, /data-value="[^\"]*"/g, /data-target="[^\"]*"/g]} code={`
+  <div>
+    <button
+      data-scope="modal" data-part="trigger"
+      data-target="modal-forced-action"
+      class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+      type="button"
+    >
+      Open modal with forced action
+    </button>
+    <div data-scope="modal" data-part="root" data-value="modal-forced-action" data-force-action>
+    <div
+      data-scope="modal" data-part="backdrop"
+      data-value="modal-forced-action"
+      class="hidden data-[state=open]:block fixed z-40 inset-0 bg-black/70 animate-in ease-in-out duration-150 fade-in"
+    >
+    </div>
+    <div
+      data-scope="modal" data-part="positioner"
+      data-value="modal-forced-action"
+      class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4 z-50 animate-in ease-in-out duration-150 fade-in"
+    >
+      <div
+        data-scope="modal" data-part="content"
+        class="@container relative w-full max-w-lg rounded-lg bg-white shadow-lg hidden data-[state=open]:block"
+      >
+        <div class="p-8 pt-10">
+          <h2
+            data-scope="modal" data-part="title"
+            class="text-xl font-bold font-merriweather"
+          >Your session will end soon.</h2>
+          <p
+            data-scope="modal" data-part="description"
+            class="mt-2"
+          >You've been inactive for too long. Please choose to stay signed in or sign out. Otherwise, you'll be signed out automatically in 5 minutes.</p>
+          <div class="mt-6">
+            <div
+              class="flex flex-col @mobile-lg:flex-row gap-2"
+              role="group"
+            >
+              <button
+                data-scope="modal" data-part="close-trigger"
+                type="button"
+                class="rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Yes, stay signed in</button>
+              <button
+                data-scope="modal" data-part="close-trigger"
+                type="button"
+                class="p-3 underline leading-none text-blue-60v bg-transparent hover:text-blue-warm-70v active:text-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+              >Sign out</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+`} />
+
+## Component API
+
+### Initialization
+
+```js
+import { modalInit } from '@uswds-tailwind/compat/modal'
+
+modalInit()
+```
+
+Run after the markup exists. To retain an instance, use `Modal.getOrCreateInstance(root, options)`.
+
+The instance belongs to the root. Initialization moves the root to the end of the document body.
+
+### Anatomy
+
+Set authored attributes in your HTML. The component manages generated attributes. Types describe HTML attribute values.
+
+#### `root`
+
+Required modal container. Initialization moves it to the document body.
+
+<ApiTable label="modal root attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"modal"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"root"` | **Authored.** Identifies this part. |
+| `data-value` | `string` | **Authored.** Unique value used by external triggers to target this modal. |
+| `data-force-action` | `boolean-like attribute` | **Authored.** Suppresses Escape and outside dismissal. Bare attribute is true; omission or `"false"` is false. The `forceAction` option takes precedence. |
+
+</ApiTable>
+
+#### `trigger`
+
+Button outside the root for user activation. Several triggers may share a target.
+
+<ApiTable label="modal trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-scope` | `"modal"` | **Authored.** Identifies the component scope. |
+| `data-part` | `"trigger"` | **Authored.** Identifies this part. |
+| `data-target` | `string` | **Authored.** Matches the root's `data-value`. |
+| `aria-controls` | `ID reference` | **Generated.** ID of the associated content. |
+
+</ApiTable>
+
+#### `backdrop`
+
+Required background overlay inside the root.
+
+<ApiTable label="modal backdrop attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"backdrop"` | **Authored.** Identifies this part. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
+
+</ApiTable>
+
+#### `positioner`
+
+Required wrapper around the dialog content.
+
+<ApiTable label="modal positioner attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"positioner"` | **Authored.** Identifies this part. |
+
+</ApiTable>
+
+#### `content`
+
+Required dialog content.
+
+<ApiTable label="modal content attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"content"` | **Authored.** Identifies this part. |
+| `aria-label` | `string` | **Authored.** Explicit accessible name; takes precedence over the title relationship. The `aria-label` option overrides this attribute. |
+| `data-state` | `"open" \| "closed"` | **Generated.** `"open"` or `"closed"`; use for styling. |
+| `hidden` | `boolean attribute` | **Generated.** Present when closed. |
+| `role` | `"dialog"` | **Generated.** Accessibility role. |
+| `tabindex` | `integer` | **Generated.** `"-1"` for programmatic focus. |
+| `aria-labelledby` | `ID references` | **Generated.** Title relationship when no explicit label is supplied. |
+| `aria-describedby` | `ID references` | **Generated.** Description relationship, when present. |
+
+</ApiTable>
+
+#### `title`
+
+Visible heading used to name the dialog. Required unless an explicit accessible label is supplied.
+
+<ApiTable label="modal title attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"title"` | **Authored.** Identifies this part. |
+
+</ApiTable>
+
+#### `description`
+
+Optional explanatory text associated with the dialog.
+
+<ApiTable label="modal description attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"description"` | **Authored.** Identifies this part. |
+
+</ApiTable>
+
+#### `close-trigger`
+
+Button inside the content for an explicit action. Keep an action available in forced-action dialogs.
+
+<ApiTable label="modal close-trigger attributes">
+
+| Attribute | Type | Description |
+| --- | --- | --- |
+| `data-part` | `"close-trigger"` | **Authored.** Identifies this part. |
+
+</ApiTable>
+
+### Configuration
+
+Pass these JavaScript options to the instance constructor or factory. Authored configuration attributes are read during construction.
+
+<ApiTable label="modal JavaScript options">
+
+| Option | Description |
+| --- | --- |
+| `id` | Instance identifier; defaults to root `data-value`, then its ID, then a generated value. |
+| `forceAction` | `boolean`. Overrides the root's `data-force-action`; defaults to the attribute value. |
+| `aria-label` | `string`. Overrides the label authored on the content. |
+
+</ApiTable>
+
+### Methods
+
+<ApiTable label="Modal instance methods">
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `open()` | `Promise<void>` | Requests opening. |
+| `close()` | `Promise<void>` | Requests closing. |
+| `destroy()` | `void` | Stops effects and clears the instance lookup. |
+
+</ApiTable>
+
+```js
+import { Modal } from '@uswds-tailwind/compat/modal'
+
+const modal = Modal.getOrCreateInstance(
+  '[data-scope="modal"][data-part="root"]',
+)
+
+await modal.open()
+```
+
+Promises settle the queued update, not CSS transitions. The component starts closed and manages its own state. It does not support `open`, `defaultOpen`, `ids`, or `onOpenChange` options.
+
+Retain and remove the root during teardown. `destroy()` does not restore its original parent or HTML.
+
+See [initialization and cleanup](/docs/vanilla/javascript#instance-lifecycle).
+
+### Accessibility
+
+- Supply a meaningful accessible name and sensible actions.
+- The runtime manages focus trapping, focus return, background accessibility, and scroll locking.
+- Escape and outside interaction dismiss ordinary dialogs. Forced-action dialogs require an explicit action.
+- `aria-modal` is not generated by this implementation.
