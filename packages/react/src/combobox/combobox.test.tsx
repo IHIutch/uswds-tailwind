@@ -253,3 +253,43 @@ it('arrowDown moves DOM focus to the newly-highlighted option', async () => {
 
   await expect.element(screen.getByRole('option', { name: 'Automobiles' })).toHaveFocus()
 })
+
+it('preserves root ids and Field labels while keeping generated input ids stable', async () => {
+  const view = (id: string) => (
+    <div>
+      <Field.Root>
+        <Field.Label>Pick</Field.Label>
+        <ComboboxComponent id={id} options={multipleOptions} />
+      </Field.Root>
+      <button>Outside</button>
+    </div>
+  )
+  const screen = await render(view('combobox-root'))
+  const input = screen.getByRole('combobox')
+  const inputId = input.element().id
+  expect(document.getElementById('combobox-root')).toContainElement(input.element())
+  expect(screen.getByText('Pick').element().getAttribute('for')).toBe(inputId)
+  await input.fill('Water')
+  await expect.element(input).toHaveAttribute('aria-expanded', 'true')
+  await screen.getByRole('button', { name: 'Outside' }).click()
+  await expect.element(input).toHaveAttribute('aria-expanded', 'false')
+  await screen.rerender(view('renamed-combobox'))
+  expect(document.getElementById('renamed-combobox')).toContainElement(input.element())
+  expect(input.element().id).toBe(inputId)
+  expect(screen.getByText('Pick').element().getAttribute('for')).toBe(inputId)
+  await input.fill('Water')
+  await expect.element(input).toHaveAttribute('aria-expanded', 'true')
+  await screen.getByRole('button', { name: 'Outside' }).click()
+  await expect.element(input).toHaveAttribute('aria-expanded', 'false')
+})
+
+it('uses explicit part ids and gives the HTML id precedence over ids.root', async () => {
+  const screen = await render(
+    <ComboboxComponent id="authored-combobox" options={options} ids={{ root: 'fallback-root', input: 'custom-input' }} />,
+  )
+  const input = screen.getByRole('combobox').element()
+  expect(input.id).toBe('custom-input')
+  expect(document.getElementById('authored-combobox')).toContainElement(input)
+  await screen.rerender(<ComboboxComponent options={options} ids={{ root: 'fallback-root', input: 'custom-input' }} />)
+  expect(document.getElementById('fallback-root')).toContainElement(input)
+})

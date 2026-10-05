@@ -111,3 +111,30 @@ it.skip('keyboard: Space toggles panel', async () => {
   await userEvent.keyboard(' ')
   await expect.element(content).toBeVisible()
 })
+
+it('preserves HTML root ids without changing panel ids when the root id changes', async () => {
+  const view = (id: string) => (
+    <Accordion.Root id={id} ids={{ root: 'fallback-root', itemContent: () => 'panel-content' }}>
+      <Accordion.Item value="first">
+        <Accordion.ItemTrigger>First</Accordion.ItemTrigger>
+        <Accordion.ItemContent>First content</Accordion.ItemContent>
+      </Accordion.Item>
+    </Accordion.Root>
+  )
+  const screen = await render(view('accordion-root'))
+  const trigger = screen.getByRole('button', { name: 'First' })
+  const triggerId = trigger.element().id
+  expect(document.getElementById('accordion-root')).toContainElement(trigger.element())
+  expect(trigger.element().getAttribute('aria-controls')).toBe('panel-content')
+  await screen.rerender(view('renamed-accordion'))
+  expect(document.getElementById('renamed-accordion')).toContainElement(trigger.element())
+  expect(document.getElementById('accordion-root')).toBeNull()
+  expect(trigger.element().id).toBe(triggerId)
+  await trigger.click()
+  await expect.element(screen.getByText('First content')).toBeVisible()
+})
+
+it('uses the root part override when no HTML id is supplied', async () => {
+  const screen = await render(<Accordion.Root ids={{ root: 'accordion-part-root' }}>Content</Accordion.Root>)
+  expect(document.getElementById('accordion-part-root')).toContainElement(screen.getByText('Content').element())
+})

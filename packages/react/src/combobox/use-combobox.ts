@@ -10,13 +10,14 @@ export type UseComboboxReturn = ReturnType<typeof useCombobox>
 export function useCombobox(props: UseComboboxProps = {}) {
   const field = useFieldContext()
 
-  const { disabled = field?.disabled, ...restProps } = props
+  const { disabled = field?.disabled, ids, ...restProps } = props
 
   const service = useMachine(combobox.machine, {
     id: React.useId(),
     ids: {
       label: field?.ids.label,
       input: field?.ids.control,
+      ...ids,
     },
     disabled,
     ...restProps,

@@ -39,6 +39,12 @@ export default function App() {
 
 Each component is also accessible from a subpath import (e.g. `@uswds-tailwind/react/accordion`) so bundlers can tree-shake unused components.
 
+## Element IDs
+
+For `Accordion.Root`, `Combobox.Root`, and `Dropdown.Root`, `id` is the exact HTML root ID. Internal machine identities are generated separately, so changing the root ID does not rename generated child IDs.
+
+Use `ids` to override individual part IDs. An explicit HTML `id` takes precedence over `ids.root`; without either, the root ID is generated automatically.
+
 ## Documentation
 
 Component API, props, and Storybook examples: [uswds-tailwind.com](https://uswds-tailwind.com)

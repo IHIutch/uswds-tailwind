@@ -36,9 +36,10 @@ function useDropdownItemValue() {
 }
 
 const DropdownRoot = React.forwardRef<HTMLDivElement, DropdownRootProps>(
-  ({ className, ...props }, forwardedRef) => {
+  ({ className, id, ids, ...props }, forwardedRef) => {
     const service = useMachine(dropdown.machine, {
       id: React.useId(),
+      ids: { ...ids, root: id ?? ids?.root },
       ...props,
     })
 

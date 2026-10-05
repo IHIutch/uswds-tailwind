@@ -127,3 +127,31 @@ it('a controlled owner can decline a close request and then accept it', async ()
   await screen.getByRole('button', { name: 'Accept close' }).click()
   await expect.element(screen.getByText('One')).not.toBeVisible()
 })
+
+it('preserves HTML root ids without changing generated trigger ids', async () => {
+  const view = (id: string) => (
+    <Dropdown.Root id={id} ids={{ root: 'fallback-root', content: 'custom-menu' }}>
+      <Dropdown.Trigger>Menu</Dropdown.Trigger>
+      <Dropdown.Content>
+        <Dropdown.Item value="one"><Dropdown.Link href="#one">One</Dropdown.Link></Dropdown.Item>
+      </Dropdown.Content>
+    </Dropdown.Root>
+  )
+  const screen = await render(view('dropdown-root'))
+  const trigger = screen.getByRole('button', { name: 'Menu' })
+  const triggerId = trigger.element().id
+  expect(document.getElementById('dropdown-root')).toContainElement(trigger.element())
+  expect(trigger.element().getAttribute('aria-controls')).toBe('custom-menu')
+  await screen.rerender(view('renamed-dropdown'))
+  expect(document.getElementById('renamed-dropdown')).toContainElement(trigger.element())
+  expect(trigger.element().id).toBe(triggerId)
+  await trigger.click()
+  await expect.element(screen.getByText('One')).toBeVisible()
+})
+
+it('uses the root part override when no HTML id is supplied', async () => {
+  const screen = await render(
+    <Dropdown.Root ids={{ root: 'dropdown-part-root' }}><Dropdown.Trigger>Menu</Dropdown.Trigger></Dropdown.Root>,
+  )
+  expect(document.getElementById('dropdown-part-root')).toContainElement(screen.getByRole('button', { name: 'Menu' }).element())
+})
