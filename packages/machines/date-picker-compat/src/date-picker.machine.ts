@@ -600,19 +600,14 @@ export const machine = createMachine<DatePickerSchema>({
         const value = context.get('value')
         const index = (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN') && isEndpointIndex(event.index) ? event.index : 0
         context.set('activeIndex', index)
-        if (prop('selectionMode') === 'range') {
-          const candidate = value[index] ?? value[1 - index] ?? prop('defaultDate') ?? today()
-          const bounds = getEffectiveDateBounds(true, index, value, prop('min'), prop('max'))
-          context.set('focusedValue', keepDateBetweenMinAndMax(candidate, bounds.min, bounds.max))
-          return
-        }
-        // SINGLE (unchanged): center on the adjusted external parse, else value[0], else today (L1347-1348).
-        const externalEl = dom.getExternalInputEl(scope)
+        const externalEl = dom.getExternalInputEl(scope, index)
         const inputDate = externalEl
           ? parseDateString(externalEl.value, DEFAULT_EXTERNAL_DATE_FORMAT, true)
           : undefined
-        const candidate = inputDate ?? (externalEl ? undefined : value[0]) ?? prop('defaultDate') ?? today()
-        const bounds = getEffectiveDateBounds(false, 0, value, prop('min'), prop('max'))
+        const isRange = prop('selectionMode') === 'range'
+        const fallback = isRange ? value[index] ?? value[1 - index] : externalEl ? undefined : value[index]
+        const candidate = inputDate ?? fallback ?? prop('defaultDate') ?? today()
+        const bounds = getEffectiveDateBounds(isRange, index, value, prop('min'), prop('max'))
         context.set('focusedValue', keepDateBetweenMinAndMax(candidate, bounds.min, bounds.max))
       },
 

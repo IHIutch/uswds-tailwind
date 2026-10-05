@@ -59,9 +59,16 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
       spreadProps(this.status, this.api.getStatusProps())
       this.status.textContent = this.api.srStatusText
     }
-    this.renderDayView()
-    this.renderMonthView()
-    this.renderYearView()
+    for (const view of ['day', 'month', 'year'] as const)
+      spreadProps(query<HTMLElement>(this.calendar, `[data-part=view][data-view=${view}]`)!, this.api.getViewProps({ view }))
+    if (!this.api.open)
+      return
+    if (this.api.view === 'day')
+      this.renderDayView()
+    else if (this.api.view === 'month')
+      this.renderMonthView()
+    else
+      this.renderYearView()
   }
 
   private get input() {
@@ -101,7 +108,6 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   private renderDayView() {
     const view = this.dayView
-    spreadProps(view, this.api.getViewProps({ view: 'day' }))
     const control = getPart<HTMLElement>(view, parts.viewControl)!
     spreadProps(control, this.api.getViewControlProps())
     const nav = [
@@ -132,13 +138,12 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     if (header) {
       const row = header.parentElement!
       spreadProps(row, this.api.getTableRowProps())
-      const template = header.cloneNode(false) as HTMLTableCellElement
-      row.textContent = ''
+      if (row.children.length !== this.api.weekDays.length)
+        row.replaceChildren(...this.api.weekDays.map(() => header.cloneNode(false)))
       this.api.weekDays.forEach((day, index) => {
-        const cell = template.cloneNode(false) as HTMLTableCellElement
+        const cell = row.children[index] as HTMLTableCellElement
         cell.textContent = day.narrow
         spreadProps(cell, this.api.getTableHeaderProps({ index }))
-        row.append(cell)
       })
     }
     if (!this.dayTemplate)
@@ -174,7 +179,6 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   private renderMonthView() {
     const view = this.monthView
-    spreadProps(view, this.api.getViewProps({ view: 'month' }))
     const table = query<HTMLTableElement>(view, 'table')!
     const body = table.tBodies[0]!
     spreadProps(table, this.api.getTableProps({ view: 'month' }))
@@ -196,7 +200,6 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     const table = query<HTMLTableElement>(view, 'table')!
     const body = table.tBodies[0]!
 
-    spreadProps(view, this.api.getViewProps({ view: 'year' }))
     if (previous)
       spreadProps(previous, this.api.getPrevTriggerProps({ unit: 'chunk' }))
     if (next)

@@ -1,25 +1,9 @@
 import type { DateValue, EndpointIndex } from './date-picker.types'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PORTED USWDS date math + validation chain — `single-index.js` "Date Manipulation Functions" (L129-584) +
-// the validation region (L791-869), ported EXACTLY (validation semantics preserved verbatim). We
-// QUIRK-DATE-MATH: REJECT `@internationalized/date`: USWDS's math carries load-bearing quirks the ISO-strict lib does not
-// reproduce — `setDate` `new Date(0)`+`setFullYear` (genuine year-0..9999, NOT the `new Date(year)` 1900-map);
-// 12-year `YEAR_CHUNK`; `keepDateWithinMonth` month-preservation on add/set; `isDateInputInvalid` exactly-4-char
-// year + overflow round-trip; `setRangeDates` strictly-interior; 2-digit-year expansion only when `adjustDate`.
-//
-// The `DateValue` (= plain `Date`) representation is kept thin so a future engine swap stays confined here.
-//
-// ── HEADLESS BOUNDARY (this module never touches the DOM; the state layer never writes rendered parts) ──
-// The validation chain is ported as PURE functions over plain values, decoupled from USWDS's `getDatePickerContext`
-// DOM reads (L670) and its native side-effects. The DOM orchestration lives in connect:
-//   • `validateDateInput` returns the NEXT custom-validity string to apply (connect calls `el.setCustomValidity`).
-//   • `reconcileInputValues` returns the internal ISO value to mirror (connect writes-if-changed + dispatches change).
-// USWDS's `el.value` comparisons + `changeElementValue` (L634) event dispatch are connect concerns, not this port.
-//
-// TS NOTE: USWDS compares Dates with `<`/`>`/`>=`/`<=` (valueOf→getTime coercion). This port spells those as
-// explicit `.getTime()` comparisons — IDENTICAL runtime semantics, no relational-operator ambiguity under strict TS.
-// ─────────────────────────────────────────────────────────────────────────────
+// Date math follows USWDS, including adjusted input parsing, years below 100,
+// month-preserving arithmetic, and 12-year navigation chunks.
+// Validation helpers return values; the machine applies native input updates.
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L129-L584
 
 /** USWDS constants (`single-index.js`). */
 export const DEFAULT_EXTERNAL_DATE_FORMAT = 'MM/DD/YYYY' // L101
@@ -512,40 +496,8 @@ export function getWeekdayNarrow(locale: string): string[] {
  * Range cross-clamp — the intra-machine replacement for `range-index.js`'s dataset sync
  * ----------------------------------------------------------------------------- */
 
-// Picking the END (activeIndex/field-index 1) → effective min = the START value (`handleRangeStartUpdate` sets
-// end's `data-min-date` = start, range-index L72). So the end can't precede the start. Applies both to calendar
-// clicks (activeIndex) and typed entry (the field's index) — one clamp, two entry paths, same dataset in USWDS.
-function rangeEffectiveMin(
-  activeIndex: number,
-  value: (DateValue | undefined)[],
-  propMin: DateValue,
-): DateValue {
-  const start = value[0]
-  return activeIndex === 1 && start ? max(start, propMin) : propMin
-}
-
-// Picking the START (activeIndex/field-index 0) with an END set → effective max = the END value
-// (`handleRangeEndUpdate` sets start's `data-max-date` = end, range-index L96). So the start can't follow the end.
-function rangeEffectiveMax(
-  activeIndex: number,
-  value: (DateValue | undefined)[],
-  propMax: DateValue | undefined,
-): DateValue | undefined {
-  const end = value[1]
-  if (activeIndex === 0 && end)
-    return propMax === undefined ? end : min(end, propMax)
-  return propMax
-}
-
-/**
- * The bounds belonging to the endpoint currently being operated on.
- *
- * Consolidated ranges derive their reciprocal source datasets here. Independent
- * range-picker services receive those datasets as their physical `min`/`max`
- * props from the coordinator, and therefore deliberately take the single path.
- * Keeping the result as one pair prevents day, month, year, and navigation code
- * from accidentally observing different endpoint limits.
- */
+// Each endpoint is bounded by its peer and the global limits.
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/index.js#L65-L105
 export interface EffectiveDateBounds {
   min: DateValue
   max: DateValue | undefined
@@ -560,9 +512,10 @@ export function getEffectiveDateBounds(
 ): EffectiveDateBounds {
   if (!isRange)
     return { min: propMin, max: propMax }
+  const peer = value[1 - activeIndex]
   return {
-    min: rangeEffectiveMin(activeIndex, value, propMin),
-    max: rangeEffectiveMax(activeIndex, value, propMax),
+    min: activeIndex === 1 && peer ? max(peer, propMin) : propMin,
+    max: activeIndex === 0 && peer ? propMax === undefined ? peer : min(peer, propMax) : propMax,
   }
 }
 

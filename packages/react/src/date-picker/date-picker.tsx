@@ -130,7 +130,9 @@ const DatePickerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 )
 
 function DatePickerViewControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={cn('flex w-full justify-between', className)} />
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getViewControlProps(), props)
+  return <div {...mergedProps} className={cn('flex w-full justify-between', className)} />
 }
 
 export type DatePickerNavigationTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & datepicker.NavigationTriggerProps

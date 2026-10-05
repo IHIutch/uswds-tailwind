@@ -37,6 +37,26 @@ it.each(['start', 'end'] as const)('selecting the %s date preserves the other da
   await expect.poll(() => document.activeElement).toBe(input)
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L1347-L1359
+it.each([
+  { endpoint: 'start', draft: '13/45/2024', focused: '2024-12-20', month: 'December 2024' },
+  { endpoint: 'end', draft: '13/45/2024', focused: '2024-12-20', month: 'December 2024' },
+  { endpoint: 'start', draft: '2/5/24', focused: '2024-02-10', month: 'February 2024' },
+  { endpoint: 'end', draft: '2/5/24', focused: '2024-02-10', month: 'February 2024' },
+] as const)('opens the $endpoint calendar from adjusted draft $draft within its bounds', { tags: ['parity'] }, async ({ endpoint, draft, focused, month }) => {
+  await using component = createRangeFixture({ min: '2024-02-10', max: '2024-12-20' })
+  const input = endpoint === 'start' ? component.elements.getStartInputEl()! : component.elements.getEndInputEl()!
+  const trigger = endpoint === 'start' ? component.elements.getStartTriggerEl()! : component.elements.getEndTriggerEl()!
+  await userEvent.fill(input, draft)
+  await userEvent.click(trigger)
+
+  expect(component.elements.getCalendarEl()!.hidden).toBe(false)
+  expect(document.querySelector('[data-part="view-trigger"][data-view="month"]')?.textContent).toBe(month.split(' ')[0])
+  expect(document.querySelector('[data-part="view-trigger"][data-view="year"]')?.textContent).toBe('2024')
+  await expect.poll(() => document.activeElement).toBe(day(focused))
+  expect(input.value).toBe(draft)
+})
+
 const cases: Array<{
   name: string
   endpoint: Endpoint

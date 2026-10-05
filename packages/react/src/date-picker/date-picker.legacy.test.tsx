@@ -1,3 +1,4 @@
+import type { DatePickerRootProps } from './date-picker'
 import { chunk } from '@zag-js/utils'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
@@ -6,9 +7,9 @@ import { DatePicker } from './date-picker'
 
 // Behavioral parity tests mirroring e2e/date-picker/date-picker.test.ts.
 
-function renderDatePicker() {
+function renderDatePicker(props: DatePickerRootProps = {}) {
   return render(
-    <DatePicker.Root>
+    <DatePicker.Root {...props}>
       <DatePicker.Control>
         <DatePicker.Input />
         <DatePicker.Trigger aria-label="Open calendar" />
@@ -352,4 +353,17 @@ it('clicking a day cell selects that date and closes the calendar', async () => 
 
   expect((input.element() as HTMLInputElement).value).toBe('01/10/2020')
   expect(getContent()?.hasAttribute('hidden')).toBe(true)
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L1238-L1251
+it('focuses the navigation header when the previous-year button becomes disabled at the minimum month', async () => {
+  const screen = await renderDatePicker({ defaultValue: [new Date(2024, 5, 15)], min: new Date(2024, 2, 1), max: new Date(2024, 8, 30) })
+  await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Previous year' }))
+
+  await expect.element(screen.getByRole('button', { name: 'March. Select month' })).toBeVisible()
+  await expect.element(screen.getByRole('button', { name: 'Previous year' })).toBeDisabled()
+  const header = document.querySelector('[data-part="view-control"]')
+  expect(header).not.toBeNull()
+  await expect.poll(() => document.activeElement).toBe(header)
 })
