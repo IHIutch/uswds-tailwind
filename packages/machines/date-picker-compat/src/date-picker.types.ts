@@ -43,7 +43,7 @@ export type NavigationUnit = 'month' | 'year'
 
 export type NavigationTriggerProps
   = | { view?: 'day', unit?: NavigationUnit }
-  | { view: 'year', unit?: never }
+    | { view: 'year', unit?: never }
 
 /* -----------------------------------------------------------------------------
  * Callback details (net-new Zag-idiom surface — USWDS has no callbacks; each is anchored to a USWDS observable)
