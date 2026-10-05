@@ -1,3 +1,4 @@
+import { query } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
@@ -8,70 +9,75 @@ const template = `
   <div>
     <div>
       <label for="input-dates-of-use">Dates of use</label>
-      <div data-part="date-picker-root" id="${rootId}" data-default-value="2020-05-22">
-        <input data-part="date-picker-input" id="input-dates-of-use" name="input-dates-of-use" type="text">
-        <button data-part="date-picker-trigger" type="button"></button>
-        <div data-part="date-picker-content" hidden>
-          <div data-part="date-picker-day">
-            <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-            <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-            <button data-part="date-view-trigger" data-value="month" type="button"></button>
-            <button data-part="date-view-trigger" data-value="year" type="button"></button>
-            <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-            <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+      <div data-scope="date-picker" data-part="root" id="${rootId}" data-default-value="2020-05-22">
+        <input data-part="input" id="input-dates-of-use" name="input-dates-of-use" type="text">
+        <input data-part="hidden-input" type="hidden">
+        <button data-part="trigger" type="button"></button>
+        <div data-part="content" hidden>
+          <div data-part="view" data-view="day">
+            <div data-part="view-control">
+              <button data-part="prev-trigger" data-unit="year" type="button"></button>
+              <button data-part="prev-trigger" data-unit="month" type="button"></button>
+              <button data-part="view-trigger" data-view="month" type="button"></button>
+              <button data-part="view-trigger" data-view="year" type="button"></button>
+              <button data-part="next-trigger" data-unit="month" type="button"></button>
+              <button data-part="next-trigger" data-unit="year" type="button"></button>
+            </div>
             <table>
               <thead>
                 <tr>
-                  <th data-part="date-picker-day-header"></th>
+                  <th data-part="table-header"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-date-button"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="date-picker-month">
+          <div data-part="view" data-view="month">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-month-button"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="date-picker-year">
+          <div data-part="view" data-view="year">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-year-button"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-            <button data-part="date-picker-nav-next" data-unit="decade"></button>
+            <button data-part="prev-trigger" data-view="year"></button>
+            <button data-part="next-trigger" data-view="year"></button>
           </div>
         </div>
-        <div data-part="date-picker-status"></div>
+        <div data-part="status"></div>
       </div>
     </div>
   </div>
 `
 
-it('should set the input date of the calendar', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-default-value.spec.js#L43
+it('should set the input date of the calendar', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const input = component.elements.getInputEl()
   expect(input.value).toBe('05/22/2020')
 })
 
-it('should display the selected date when the calendar is opened', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-default-value.spec.js#L51
+it('should display the selected date when the calendar is opened', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()
   const calendar = component.elements.getCalendarEl()!
@@ -80,6 +86,6 @@ it('should display the selected date when the calendar is opened', async () => {
 
   expect(calendar.hidden).toBe(false)
 
-  const focusedDate = calendar.querySelector('[data-focus="true"]')
+  const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-22')
 })

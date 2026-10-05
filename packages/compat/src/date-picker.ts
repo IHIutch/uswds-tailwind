@@ -1,44 +1,43 @@
+import type { Schema } from '@uswds-tailwind/date-picker-compat'
 import * as datePicker from '@uswds-tailwind/date-picker-compat'
+import { query, queryAll } from '@zag-js/dom-query'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
+import { getDataString } from './lib/data-attr'
+import { getPart } from './lib/dom'
 import { getId } from './lib/id-generator'
 
-function copyAttributes(from: HTMLElement, to: HTMLElement) {
-  // Only copy class and style attributes
-  const className = from.getAttribute('class')
-  const style = from.getAttribute('style')
+const parts = datePicker.anatomy.build()
 
-  if (className) {
-    to.setAttribute('class', className)
-  }
-
-  if (style) {
-    to.setAttribute('style', style)
-  }
+function cloneCell(template: HTMLTableCellElement, button: HTMLButtonElement) {
+  const cell = template.cloneNode(false) as HTMLTableCellElement
+  const clone = button.cloneNode(false) as HTMLButtonElement
+  cell.append(clone)
+  return { cell, button: clone }
 }
 
 export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
-  static instances = new Map<string, DatePicker>()
+  static override root = parts.root
+  private dayTemplate?: HTMLTableCellElement
+  private monthTemplate?: HTMLTableCellElement
+  private yearTemplate?: HTMLTableCellElement
 
-  static getInstance(id: string) {
-    return DatePicker.instances.get(id)
-  }
-
-  initMachine(props: datePicker.Props): VanillaMachine<datePicker.DatePickerSchema> {
-    DatePicker.instances.set(props.id, this)
-
-    const defaultValue = this.rootEl.getAttribute('data-default-value') || this.rootEl.getAttribute('data-default-date')
-    const inputValue = this.input?.value
-    const initialValue = inputValue || defaultValue || undefined
-
+  initMachine(props: datePicker.Props): VanillaMachine<Schema> {
+    const input = this.input
+    const defaultValue = datePicker.parseDateString(getDataString(this.rootEl, 'default-value'))
     return new VanillaMachine(datePicker.machine, {
       ...props,
-      disabled: this.rootEl.hasAttribute('disabled') || this.input.hasAttribute('disabled'),
-      readonly: this.rootEl.hasAttribute('readonly') || this.input.hasAttribute('readonly'),
-      minDate: this.rootEl.getAttribute('data-min-date') || undefined,
-      maxDate: this.rootEl.getAttribute('data-max-date') || undefined,
-      rangeDate: this.rootEl.getAttribute('data-range-date') || undefined,
-      defaultStartValue: initialValue,
+      id: props.id || this.rootEl.id || getId(this.rootEl, 'date-picker'),
+      ids: { ...props.ids, input: props.ids?.input || input.id || undefined },
+      name: props.name ?? input.name,
+      required: props.required ?? input.required,
+      disabled: props.disabled ?? (this.rootEl.hasAttribute('disabled') || input.disabled),
+      readOnly: props.readOnly ?? (this.rootEl.hasAttribute('readonly') || input.readOnly || input.hasAttribute('aria-disabled')),
+      min: props.min ?? datePicker.parseDateString(getDataString(this.rootEl, 'min-date') || input.getAttribute('min')),
+      max: props.max ?? datePicker.parseDateString(getDataString(this.rootEl, 'max-date') || input.getAttribute('max')),
+      rangeAnchor: props.rangeAnchor ?? datePicker.parseDateString(getDataString(this.rootEl, 'range-date')),
+      defaultDate: props.defaultDate ?? datePicker.parseDateString(getDataString(this.rootEl, 'default-date')),
+      defaultValue: props.defaultValue ?? (defaultValue ? [defaultValue] : []),
     })
   }
 
@@ -48,470 +47,218 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
+    spreadProps(this.input, this.api.getInputProps())
+    spreadProps(this.hiddenInput, this.api.getHiddenInputProps())
+    spreadProps(this.trigger, this.api.getTriggerProps())
+    this.renderCalendar()
+  }
 
-    this.renderInput(this.input)
-    this.renderTrigger(this.trigger)
-
-    if (this.calendar) {
-      this.renderCalendar(this.calendar)
-      this.renderDateGrid()
-      this.renderMonthSelection()
-      this.renderYearSelection()
-    }
-
+  protected renderCalendar() {
+    spreadProps(this.calendar, this.api.getContentProps())
     if (this.status) {
-      this.renderStatus(this.status)
+      spreadProps(this.status, this.api.getStatusProps())
+      this.status.textContent = this.api.srStatusText
     }
+    for (const view of ['day', 'month', 'year'] as const)
+      spreadProps(query<HTMLElement>(this.calendar, `[data-part=view][data-view=${view}]`)!, this.api.getViewProps({ view }))
+    if (!this.api.open)
+      return
+    if (this.api.view === 'day')
+      this.renderDayView()
+    else if (this.api.view === 'month')
+      this.renderMonthView()
+    else
+      this.renderYearView()
   }
 
   private get input() {
-    const inputEl = this.rootEl.querySelector<HTMLInputElement>('[data-part="date-picker-input"]')
-    if (!inputEl) {
+    const el = getPart<HTMLInputElement>(this.rootEl, parts.input)
+    if (!el)
       throw new Error('Expected input element to be defined')
-    }
-    return inputEl
+    return el
+  }
+
+  private get hiddenInput() {
+    return getPart<HTMLInputElement>(this.rootEl, parts.hiddenInput)!
   }
 
   private get trigger() {
-    const triggerEl = this.rootEl.querySelector<HTMLButtonElement>('[data-part="date-picker-trigger"]')
-    if (!triggerEl) {
-      throw new Error('Expected trigger element to be defined')
-    }
-    return triggerEl
+    return getPart<HTMLButtonElement>(this.rootEl, parts.trigger)!
   }
 
   private get calendar() {
-    const calendarEl = this.rootEl.querySelector<HTMLElement>('[data-part="date-picker-content"]')
-    if (!calendarEl) {
-      throw new Error('Expected calendar element to be defined')
-    }
-    return calendarEl
+    return getPart<HTMLElement>(this.rootEl, parts.content)!
   }
 
   private get status() {
-    return this.rootEl.querySelector<HTMLElement>('[data-part="date-picker-status"]')
+    return getPart<HTMLElement>(this.rootEl, parts.status)
   }
 
-  private get dateGrid() {
-    const dateGridEl = this.calendar?.querySelector<HTMLElement>('[data-part="date-picker-day"]')
-    if (!dateGridEl) {
-      throw new Error('Expected date grid element to be defined')
-    }
-    return dateGridEl
+  private get dayView() {
+    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=day]')!
   }
 
-  private get monthSelection() {
-    const monthSelectionEl = this.calendar?.querySelector<HTMLElement>('[data-part="date-picker-month"]')
-    if (!monthSelectionEl) {
-      throw new Error('Expected month selection element to be defined')
-    }
-    return monthSelectionEl
+  private get monthView() {
+    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=month]')!
   }
 
-  private get yearSelection() {
-    const yearSelectionEl = this.calendar?.querySelector<HTMLElement>('[data-part="date-picker-year"]')
-    if (!yearSelectionEl) {
-      throw new Error('Expected year selection element to be defined')
-    }
-    return yearSelectionEl
+  private get yearView() {
+    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=year]')!
   }
 
-  private renderInput(el: HTMLInputElement) {
-    spreadProps(el, this.api.getInputProps())
-
-    // Explicitly set value from machine context to ensure it's applied
-    const startInputValue = this.machine.service.context.get('startInputValue')
-    if (startInputValue && el.value !== startInputValue) {
-      el.value = startInputValue
-    }
-
-    // Set HTML5 validation message
-    const validationMessage = this.machine.service.context.get('validationMessage')
-    const startValidationMessage = this.machine.service.context.get('startValidationMessage')
-    const message = validationMessage || startValidationMessage
-
-    if (message) {
-      el.setCustomValidity(message)
-    }
-    else {
-      el.setCustomValidity('')
-    }
-  }
-
-  private renderTrigger(el: HTMLButtonElement) {
-    spreadProps(el, this.api.getTriggerProps())
-  }
-
-  private renderCalendar(el: HTMLElement) {
-    spreadProps(el, this.api.getContentProps())
-  }
-
-  private renderStatus(el: HTMLElement) {
-    spreadProps(el, this.api.getStatusProps())
-
-    const validationMessage = this.machine.service.context.get('validationMessage')
-    if (validationMessage) {
-      el.textContent = validationMessage
-    }
-  }
-
-  private renderDateGrid() {
-    if (!this.dateGrid)
-      return
-
-    spreadProps(this.dateGrid, this.api.getTableProps())
-
-    this.cloneDayHeaders()
-
-    this.cloneDateButtons()
-
-    const prevButtons = this.calendar.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-nav-prev"]')
-    prevButtons.forEach((button) => {
-      const unit = button.getAttribute('data-unit') as 'month' | 'year' | 'decade'
-      if (unit === 'decade') {
-        spreadProps(button, this.api.getDecadeNavigationProps('prev'))
+  private renderDayView() {
+    const view = this.dayView
+    const control = getPart<HTMLElement>(view, parts.viewControl)!
+    spreadProps(control, this.api.getViewControlProps())
+    const nav = [
+      [parts.prevTrigger, this.api.getPrevTriggerProps({ unit: 'year' })],
+      [parts.prevTrigger, this.api.getPrevTriggerProps({ unit: 'month' })],
+      [parts.viewTrigger, this.api.getViewTriggerProps({ view: 'month' })],
+      [parts.viewTrigger, this.api.getViewTriggerProps({ view: 'year' })],
+      [parts.nextTrigger, this.api.getNextTriggerProps({ unit: 'month' })],
+      [parts.nextTrigger, this.api.getNextTriggerProps({ unit: 'year' })],
+    ] as const
+    for (const [part, props] of nav) {
+      const button = part === parts.viewTrigger
+        ? query<HTMLButtonElement>(control, `[data-part=view-trigger][data-view=${props['data-view']}]`)
+        : query<HTMLButtonElement>(control, `[data-part=${props['data-part']}][data-unit=${props['data-unit']}]`)
+      if (button) {
+        spreadProps(button, props)
+        if (part === parts.viewTrigger)
+          button.textContent = props['data-view'] === 'month' ? this.api.monthLabel : this.api.yearLabel
       }
-      else if (unit) {
-        spreadProps(button, this.api.getNavigationProps('prev', unit))
-      }
-    })
-
-    const nextButtons = this.calendar.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-nav-next"]')
-    nextButtons.forEach((button) => {
-      const unit = button.getAttribute('data-unit') as 'month' | 'year' | 'decade'
-      if (unit === 'decade') {
-        spreadProps(button, this.api.getDecadeNavigationProps('next'))
-      }
-      else if (unit) {
-        spreadProps(button, this.api.getNavigationProps('next', unit))
-      }
-    })
-
-    const monthTrigger = this.dateGrid.querySelector<HTMLButtonElement>('[data-part="date-view-trigger"][data-value="month"]')
-    if (monthTrigger) {
-      const calendarDate = this.machine.context.get('calendarDate')
-      const monthLabels = this.machine.context.get('monthLabels')
-      monthTrigger.textContent = monthLabels[calendarDate.getMonth()]
-      spreadProps(monthTrigger, this.api.getMonthYearSelectionProps('month'))
     }
-
-    const yearTrigger = this.dateGrid.querySelector<HTMLButtonElement>('[data-part="date-view-trigger"][data-value="year"]')
-    if (yearTrigger) {
-      const calendarDate = this.machine.context.get('calendarDate')
-      yearTrigger.textContent = calendarDate.getFullYear().toString()
-      spreadProps(yearTrigger, this.api.getMonthYearSelectionProps('year'))
+    const table = query<HTMLTableElement>(view, 'table')!
+    const head = table.tHead!
+    const body = table.tBodies[0]!
+    spreadProps(table, this.api.getTableProps())
+    spreadProps(head, this.api.getTableHeadProps())
+    spreadProps(body, this.api.getTableBodyProps())
+    const header = getPart<HTMLTableCellElement>(head, parts.tableHeader)
+    if (header) {
+      const row = header.parentElement!
+      spreadProps(row, this.api.getTableRowProps())
+      if (row.children.length !== this.api.weekDays.length)
+        row.replaceChildren(...this.api.weekDays.map(() => header.cloneNode(false)))
+      this.api.weekDays.forEach((day, index) => {
+        const cell = row.children[index] as HTMLTableCellElement
+        cell.textContent = day.narrow
+        spreadProps(cell, this.api.getTableHeaderProps({ index }))
+      })
     }
-  }
-
-  private renderMonthSelection() {
-    if (!this.monthSelection)
+    if (!this.dayTemplate)
+      this.dayTemplate = query(body, 'td')?.cloneNode(true) as HTMLTableCellElement
+    const templateCell = this.dayTemplate
+    if (!templateCell)
       return
-
-    spreadProps(this.monthSelection, this.api.getMonthViewProps())
-    this.cloneMonthButtons()
-  }
-
-  private renderYearSelection() {
-    if (!this.yearSelection)
-      return
-
-    spreadProps(this.yearSelection, this.api.getYearViewProps())
-
-    this.cloneYearButtons()
-  }
-
-  private cloneDayHeaders() {
-    const templates = this.rootEl.querySelectorAll<HTMLElement>('[data-part="date-picker-day-header"]')
-    if (templates.length === 0)
-      return
-
-    const weekDays = this.api.getWeekDays()
-
-    if (templates.length === weekDays.length) {
-      templates.forEach((header, idx) => {
-        if (weekDays[idx]) {
-          header.textContent = weekDays[idx].label.charAt(0)
-          const headerProps = this.api.getTableHeaderProps(weekDays[idx].index)
-          spreadProps(header, headerProps)
-        }
+    const templateButton = getPart<HTMLButtonElement>(templateCell, parts.tableCellTrigger)!
+    const dates = this.api.weeks.flat()
+    const existing = queryAll<HTMLButtonElement>(body, '[data-part="table-cell-trigger"]')
+    if (existing.length === dates.length && existing.every((button, index) => button.dataset.value === datePicker.formatDate(dates[index]!))) {
+      existing.forEach((button, index) => {
+        const date = dates[index]!
+        spreadProps(button.parentElement!, this.api.getDayTableCellProps({ value: date }))
+        spreadProps(button, this.api.getDayTableCellTriggerProps({ value: date }))
       })
       return
     }
-
-    if (templates.length === 1) {
-      const template = templates[0]
-      if (!template)
-        return
-      const parent = template.parentElement
-      if (!parent)
-        return
-
-      template.remove()
-
-      weekDays.forEach(({ label, index }) => {
-        const header = document.createElement(template.tagName.toLowerCase())
-        const headerProps = this.api.getTableHeaderProps(index)
-        copyAttributes(template, header)
-        header.setAttribute('data-part', 'date-picker-day-header')
-        header.textContent = label
-        spreadProps(header, headerProps)
-        parent.appendChild(header)
-      })
-    }
-  }
-
-  private cloneDateButtons() {
-    const templates = this.rootEl.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-date-button"]')
-    if (templates.length === 0)
-      return
-
-    const calendarDates = this.api.getCalendarDates()
-
-    let tbody: HTMLTableSectionElement | null = null
-    let templateTd: HTMLTableCellElement | null = null
-
-    for (const template of templates) {
-      const parentTd = template.parentElement
-      if (parentTd && parentTd.tagName === 'TD') {
-        const parentTr = parentTd.parentElement
-        if (parentTr && parentTr.tagName === 'TR') {
-          const parentTbody = parentTr.parentElement
-          if (parentTbody && parentTbody.tagName === 'TBODY') {
-            tbody = parentTbody as HTMLTableSectionElement
-            templateTd = parentTd as HTMLTableCellElement
-            break
-          }
-        }
-      }
-    }
-
-    if (!tbody || !templateTd)
-      return
-
-    tbody.textContent = ''
-
-    const calendarDate = this.machine.service.context.get('calendarDate') as Date
-    const weeks = this.api.getWeeksInMonth(calendarDate)
-
-    weeks.forEach((week) => {
+    body.textContent = ''
+    for (const week of this.api.weeks) {
       const row = document.createElement('tr')
-      week.forEach((date) => {
-        if (date) {
-          const dateData = calendarDates.find(d => d.date.getTime() === date.getTime())
-          if (dateData) {
-            const td = document.createElement('td')
-            copyAttributes(templateTd!, td)
-            const templateButton = templateTd!.querySelector('[data-part="date-picker-date-button"]') as HTMLButtonElement
-            if (templateButton) {
-              const button = document.createElement('button')
-              copyAttributes(templateButton, button)
-              button.setAttribute('data-part', 'date-picker-date-button')
-              button.textContent = String(date.getDate())
-              spreadProps(button, this.api.getDayButtonProps(date))
-              td.appendChild(button)
-            }
-            row.appendChild(td)
-          }
-          else {
-            const td = document.createElement('td')
-            copyAttributes(templateTd!, td)
-            const templateButton = templateTd!.querySelector('[data-part="date-picker-date-button"]') as HTMLButtonElement
-            if (templateButton) {
-              const button = document.createElement('button')
-              copyAttributes(templateButton, button)
-              button.setAttribute('data-part', 'date-picker-date-button')
-              button.textContent = String(date.getDate())
-              spreadProps(button, this.api.getDayButtonProps(date))
-              td.appendChild(button)
-            }
-            row.appendChild(td)
-          }
-        }
-        else {
-          const emptyTd = document.createElement('td')
-          emptyTd.style.cssText = templateTd!.style.cssText
-          emptyTd.innerHTML = '&nbsp;'
-          row.appendChild(emptyTd)
-        }
-      })
-      tbody.appendChild(row)
-    })
-  }
-
-  private cloneMonthButtons() {
-    const templates = this.rootEl.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-month-button"]')
-    if (templates.length === 0)
-      return
-
-    const monthsGrid = this.api.getMonthsGrid()
-
-    if (templates.length === monthsGrid.length) {
-      templates.forEach((button, index) => {
-        if (monthsGrid[index]) {
-          button.textContent = monthsGrid[index].label
-          spreadProps(button, monthsGrid[index].props)
-        }
-      })
-      return
-    }
-
-    if (templates.length >= 1) {
-      let tbody: HTMLTableSectionElement | null = null
-      let templateTd: HTMLTableCellElement | null = null
-
-      for (const template of templates) {
-        const parentTd = template.parentElement
-        if (parentTd && parentTd.tagName === 'TD') {
-          const parentTr = parentTd.parentElement
-          if (parentTr && parentTr.tagName === 'TR') {
-            const parentTbody = parentTr.parentElement
-            if (parentTbody && parentTbody.tagName === 'TBODY') {
-              tbody = parentTbody as HTMLTableSectionElement
-              templateTd = parentTd as HTMLTableCellElement
-              break
-            }
-          }
-        }
+      spreadProps(row, this.api.getTableRowProps())
+      for (const date of week) {
+        const { cell, button } = cloneCell(templateCell, templateButton)
+        spreadProps(cell, this.api.getDayTableCellProps({ value: date }))
+        button.textContent = String(date.getDate())
+        spreadProps(button, this.api.getDayTableCellTriggerProps({ value: date }))
+        row.append(cell)
       }
-
-      if (!tbody || !templateTd)
-        return
-
-      tbody.textContent = ''
-
-      const monthsPerRow = 3
-      const totalRows = Math.ceil(monthsGrid.length / monthsPerRow)
-
-      for (let row = 0; row < totalRows; row++) {
-        const tr = document.createElement('tr')
-        for (let col = 0; col < monthsPerRow; col++) {
-          const monthIndex = row * monthsPerRow + col
-          if (monthIndex < monthsGrid.length) {
-            const monthData = monthsGrid[monthIndex]
-            if (monthData) {
-              const td = document.createElement('td')
-              copyAttributes(templateTd, td)
-              const templateButton = templateTd.querySelector('[data-part="date-picker-month-button"]') as HTMLButtonElement
-              if (templateButton) {
-                const button = document.createElement('button')
-                copyAttributes(templateButton, button)
-                button.setAttribute('data-part', 'date-picker-month-button')
-                button.textContent = monthData.label
-                spreadProps(button, monthData.props)
-                td.appendChild(button)
-              }
-              tr.appendChild(td)
-            }
-          }
-        }
-        tbody.appendChild(tr)
-      }
+      body.append(row)
     }
   }
 
-  private cloneYearButtons() {
-    const templates = this.rootEl.querySelectorAll<HTMLButtonElement>('[data-part="date-picker-year-button"]')
-    if (templates.length === 0)
+  private renderMonthView() {
+    const view = this.monthView
+    const table = query<HTMLTableElement>(view, 'table')!
+    const body = table.tBodies[0]!
+    spreadProps(table, this.api.getTableProps({ view: 'month' }))
+    if (!this.monthTemplate)
+      this.monthTemplate = query(body, 'td')?.cloneNode(true) as HTMLTableCellElement
+    this.renderSelectionCells(
+      body,
+      this.monthTemplate,
+      this.api.monthRows,
+      month => this.api.monthLabels[month] ?? '',
+      (button, month) => spreadProps(button, this.api.getMonthTableCellTriggerProps({ value: month })),
+    )
+  }
+
+  private renderYearView() {
+    const view = this.yearView
+    const previous = query<HTMLButtonElement>(view, '[data-part=prev-trigger][data-view=year]')
+    const next = query<HTMLButtonElement>(view, '[data-part=next-trigger][data-view=year]')
+    const table = query<HTMLTableElement>(view, 'table')!
+    const body = table.tBodies[0]!
+
+    if (previous)
+      spreadProps(previous, this.api.getPrevTriggerProps({ view: 'year' }))
+    if (next)
+      spreadProps(next, this.api.getNextTriggerProps({ view: 'year' }))
+    spreadProps(table, this.api.getTableProps({ view: 'year' }))
+
+    if (!this.yearTemplate)
+      this.yearTemplate = query(body, 'td')?.cloneNode(true) as HTMLTableCellElement
+
+    this.renderSelectionCells(
+      body,
+      this.yearTemplate,
+      this.api.yearRows,
+      year => String(year),
+      (button, year) => spreadProps(button, this.api.getYearTableCellTriggerProps({ value: year })),
+    )
+  }
+
+  private renderSelectionCells(
+    body: HTMLTableSectionElement,
+    templateCell: HTMLTableCellElement | undefined,
+    rows: number[][],
+    getLabel: (value: number) => string,
+    updateButton: (button: HTMLButtonElement, value: number) => void,
+  ) {
+    if (!templateCell)
       return
-
-    const yearsGrid = this.api.getYearsGrid()
-
-    if (templates.length >= yearsGrid.length) {
-      templates.forEach((button, index) => {
-        if (yearsGrid[index]) {
-          button.textContent = String(yearsGrid[index].year)
-          spreadProps(button, yearsGrid[index].props)
-          button.style.display = ''
-
-          const parentTd = button.parentElement
-          if (parentTd && parentTd.tagName === 'TD') {
-            parentTd.style.display = ''
-          }
-        }
-        else {
-          button.style.display = 'none'
-
-          const parentTd = button.parentElement
-          if (parentTd && parentTd.tagName === 'TD') {
-            parentTd.style.display = 'none'
-          }
-        }
-      })
+    const values = rows.flat()
+    const existing = queryAll<HTMLButtonElement>(body, '[data-part="table-cell-trigger"]')
+    if (existing.length === values.length && existing.every((button, index) => button.dataset.value === String(values[index]))) {
+      existing.forEach((button, index) => updateButton(button, values[index]!))
       return
     }
 
-    if (templates.length >= 1) {
-      let tbody: HTMLTableSectionElement | null = null
-      let templateTd: HTMLTableCellElement | null = null
-
-      for (const template of templates) {
-        const parentTd = template.parentElement
-        if (parentTd && parentTd.tagName === 'TD') {
-          const parentTr = parentTd.parentElement
-          if (parentTr && parentTr.tagName === 'TR') {
-            const parentTbody = parentTr.parentElement
-            if (parentTbody && parentTbody.tagName === 'TBODY') {
-              tbody = parentTbody as HTMLTableSectionElement
-              templateTd = parentTd as HTMLTableCellElement
-              break
-            }
-          }
-        }
+    const templateButton = getPart<HTMLButtonElement>(templateCell, parts.tableCellTrigger)!
+    body.textContent = ''
+    for (const valueRow of rows) {
+      const row = document.createElement('tr')
+      for (const value of valueRow) {
+        const { cell, button } = cloneCell(templateCell, templateButton)
+        button.textContent = getLabel(value)
+        updateButton(button, value)
+        row.append(cell)
       }
-
-      if (!tbody || !templateTd)
-        return
-
-      tbody.textContent = ''
-
-      const yearsPerRow = 3
-      const totalRows = Math.ceil(yearsGrid.length / yearsPerRow)
-
-      for (let row = 0; row < totalRows; row++) {
-        const tr = document.createElement('tr')
-        for (let col = 0; col < yearsPerRow; col++) {
-          const yearIndex = row * yearsPerRow + col
-          if (yearIndex < yearsGrid.length) {
-            const yearData = yearsGrid[yearIndex]
-            if (yearData) {
-              const td = document.createElement('td')
-              copyAttributes(templateTd, td)
-              const templateButton = templateTd.querySelector('[data-part="date-picker-year-button"]') as HTMLButtonElement
-              if (templateButton) {
-                const button = document.createElement('button')
-                copyAttributes(templateButton, button)
-                button.setAttribute('data-part', 'date-picker-year-button')
-                button.textContent = String(yearData.year)
-                spreadProps(button, yearData.props)
-                td.appendChild(button)
-              }
-              tr.appendChild(td)
-            }
-          }
-        }
-        tbody.appendChild(tr)
-      }
+      body.append(row)
     }
   }
 
   async enable() {
-    this.machine.ctx.set('disabled', false)
-    await new Promise<void>(resolve => queueMicrotask(resolve))
-    this.render()
+    this.machine.updateProps({ disabled: false })
+    await this.settle()
   }
 
   async disable() {
-    this.machine.ctx.set('disabled', true)
-    await new Promise<void>(resolve => queueMicrotask(resolve))
-    this.render()
+    this.machine.updateProps({ disabled: true })
+    await this.settle()
   }
 }
 
 export function datePickerInit() {
-  document.querySelectorAll<HTMLElement>('[data-part="date-picker-root"]').forEach((targetEl) => {
-    const datePicker = new DatePicker(targetEl, {
-      id: targetEl.id || getId(targetEl, 'date-picker'),
-    })
-    datePicker.init()
-  })
+  return DatePicker.createAll(document)
 }

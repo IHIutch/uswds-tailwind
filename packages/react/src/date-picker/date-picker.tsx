@@ -1,5 +1,6 @@
 import type * as datepicker from '@uswds-tailwind/date-picker-compat'
 import type { UseDatePickerProps } from './use-date-picker'
+import { splitProps } from '@uswds-tailwind/date-picker-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
@@ -21,12 +22,13 @@ function useDatePickerContext(): DatePickerContextProps {
   return context
 }
 
-export type DatePickerRootProps = UseDatePickerProps & React.ComponentPropsWithoutRef<'div'>
+export type DatePickerRootProps = UseDatePickerProps & Omit<React.ComponentPropsWithoutRef<'div'>, keyof UseDatePickerProps>
 
 const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
   ({ className, ...props }, forwardedRef) => {
-    const { api } = useDatePicker(props)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const [machineProps, elementProps] = splitProps(props)
+    const { api } = useDatePicker(machineProps)
+    const mergedProps = mergeProps(api.getRootProps(), elementProps)
 
     return (
       <DatePickerContext.Provider value={{ api }}>
@@ -38,12 +40,8 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
 
 type RangeBound = 'start' | 'end'
 
-function boundToIndex(bound: RangeBound | undefined, index: number | undefined): number {
-  if (bound === 'start')
-    return 0
-  if (bound === 'end')
-    return 1
-  return index ?? 0
+function boundToIndex(bound: RangeBound | undefined): datepicker.EndpointIndex {
+  return bound === 'end' ? 1 : 0
 }
 
 const DatePickerControlContext = React.createContext<{ bound?: RangeBound } | null>(null)
@@ -58,7 +56,7 @@ const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttrib
     const field = useFieldContext()
     const controlBound = useControlBound()
 
-    const resolvedIndex = boundToIndex(controlBound, undefined)
+    const resolvedIndex = boundToIndex(controlBound)
     const apiProps = api.getInputProps({ index: resolvedIndex })
 
     const fieldProps = resolvedIndex === 0 ? field?.getInputProps() : undefined
@@ -69,7 +67,12 @@ const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttrib
 
     const mergedProps = mergeProps(apiProps, fieldProps, props, { 'aria-describedby': describedBy })
 
-    return <Input {...mergedProps} className={className} ref={forwardedRef} />
+    return (
+      <>
+        <Input {...mergedProps} className={className} ref={forwardedRef} />
+        <input {...api.getHiddenInputProps()} />
+      </>
+    )
   },
 )
 
@@ -77,7 +80,7 @@ const DatePickerTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAt
   ({ className, children, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
     const controlBound = useControlBound()
-    const resolvedIndex = boundToIndex(controlBound, undefined)
+    const resolvedIndex = boundToIndex(controlBound)
 
     const defaultLabel
       = controlBound === 'start'
@@ -120,97 +123,55 @@ function DatePickerControl({ className, bound, ...props }: DatePickerControlProp
 const DatePickerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getCalendarProps(), props)
+    const mergedProps = mergeProps(api.getContentProps(), props)
 
     return <div {...mergedProps} className={cn('not-data-[state=open]:hidden', className)} ref={forwardedRef} />
   },
 )
 
 function DatePickerViewControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={cn('flex w-full justify-between', className)} />
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getViewControlProps(), props)
+  return <div {...mergedProps} className={cn('flex w-full justify-between', className)} />
 }
 
-const DatePickerNextMonthTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
+export type DatePickerNavigationTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & datepicker.NavigationTriggerProps
+
+function createNavigationTrigger(direction: 'prev' | 'next') {
+  return React.forwardRef<HTMLButtonElement, DatePickerNavigationTriggerProps>(
+    ({ className, children, view = 'day', unit = 'month', ...props }, forwardedRef) => {
+      const { api } = useDatePickerContext()
+      const navigationProps: datepicker.NavigationTriggerProps = view === 'year' ? { view } : { view, unit }
+      const triggerProps = direction === 'prev' ? api.getPrevTriggerProps(navigationProps) : api.getNextTriggerProps(navigationProps)
+      const mergedProps = mergeProps(triggerProps, props)
+      const icon = view === 'day' && unit === 'year'
+        ? direction === 'prev' ? 'icon-[material-symbols--keyboard-double-arrow-left]' : 'icon-[material-symbols--keyboard-double-arrow-right]'
+        : direction === 'prev' ? 'icon-[material-symbols--keyboard-arrow-left]' : 'icon-[material-symbols--keyboard-arrow-right]'
+      return (
+        <button
+          {...mergedProps}
+          className={cn('flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', view === 'year' ? 'h-26 w-16 shrink-0' : 'size-10', className)}
+          ref={forwardedRef}
+        >
+          {children || <span className={cn(icon, view === 'year' ? 'size-8' : 'size-6')} />}
+        </button>
+      )
+    },
+  )
+}
+
+const DatePickerPrevTrigger = createNavigationTrigger('prev')
+const DatePickerNextTrigger = createNavigationTrigger('next')
+
+export type DatePickerViewTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & datepicker.ViewTriggerProps
+
+const DatePickerViewTrigger = React.forwardRef<HTMLButtonElement, DatePickerViewTriggerProps>(
+  ({ className, children, view, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getNextMonthTriggerProps(), props)
-
-    return (
-      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
-        {children || (
-          <div className="icon-[material-symbols--keyboard-arrow-right] size-6"></div>
-        )}
-      </button>
-    )
-  },
-)
-
-const DatePickerPrevMonthTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getPrevMonthTriggerProps(), props)
-
-    return (
-      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
-        {children || (
-          <div className="icon-[material-symbols--keyboard-arrow-left] size-6"></div>
-        )}
-      </button>
-    )
-  },
-)
-
-const DatePickerNextYearTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getNextYearTriggerProps(), props)
-
-    return (
-      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
-        {children || (
-          <div className="icon-[material-symbols--keyboard-double-arrow-right] size-6"></div>
-        )}
-      </button>
-    )
-  },
-)
-
-const DatePickerPrevYearTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getPrevYearTriggerProps(), props)
-
-    return (
-      <button {...mergedProps} className={cn('size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)} ref={forwardedRef}>
-        {children || (
-          <div className="icon-[material-symbols--keyboard-double-arrow-left] size-6"></div>
-        )}
-      </button>
-    )
-  },
-)
-
-const DatePickerMonthTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getMonthSelectionProps(), props)
-
+    const mergedProps = mergeProps(api.getViewTriggerProps({ view }), props)
     return (
       <button {...mergedProps} className={cn('h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', className)} ref={forwardedRef}>
-        {children || api.monthLabel}
-      </button>
-    )
-  },
-)
-
-const DatePickerYearTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
-    const { api } = useDatePickerContext()
-    const mergedProps = mergeProps(api.getYearSelectionProps(), props)
-
-    return (
-      <button {...mergedProps} className={cn('h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4', className)} ref={forwardedRef}>
-        {children || api.yearLabel}
+        {children || (view === 'month' ? api.monthLabel : api.yearLabel)}
       </button>
     )
   },
@@ -235,11 +196,7 @@ const DatePickerView = React.forwardRef<HTMLDivElement, Omit<React.HTMLAttribute
   ({ className, view, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
 
-    const viewProps = {
-      day: api.getDayPickerProps(),
-      month: api.getMonthPickerProps(),
-      year: api.getYearPickerProps(),
-    }[view]
+    const viewProps = api.getViewProps({ view })
 
     const content = typeof props.children === 'function'
       ? props.children({ api })
@@ -270,7 +227,9 @@ const DatePickerView = React.forwardRef<HTMLDivElement, Omit<React.HTMLAttribute
 
 function DatePickerTable({ className, ...props }: React.TableHTMLAttributes<HTMLTableElement>) {
   const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getGridProps(), props)
+  const { view } = useDatePickerViewContext()
+  const tableProps = api.getTableProps({ view })
+  const mergedProps = mergeProps(tableProps, props)
 
   return <table {...mergedProps} className={cn('w-full', className)} />
 }
@@ -279,7 +238,7 @@ function DatePickerTableHead({ children, ...props }: Omit<React.HTMLAttributes<H
   children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode
 }) {
   const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getHeaderProps(), props)
+  const mergedProps = mergeProps(api.getTableHeadProps(), props)
   const content = typeof children === 'function'
     ? children({ api })
     : children
@@ -289,16 +248,17 @@ function DatePickerTableHead({ children, ...props }: Omit<React.HTMLAttributes<H
 
 function DatePickerTableRow(props: React.HTMLAttributes<HTMLTableRowElement>) {
   const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getRowProps(), props)
+  const mergedProps = mergeProps(api.getTableRowProps(), props)
   return <tr {...mergedProps} />
 }
 
-function DatePickerTableHeader({ className, day, ...props }: Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'children'> & {
+function DatePickerTableHeader({ className, day, index, ...props }: Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'children'> & {
   day: datepicker.WeekDay
+  index: number
   children?: React.ReactNode
 }) {
   const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getHeaderCellProps({ day }), props)
+  const mergedProps = mergeProps(api.getTableHeaderProps({ index }), props)
   return (
     <th {...mergedProps} className={cn('text-center py-1.5 font-normal', className)}>
       {props.children ?? day.narrow}
@@ -310,7 +270,7 @@ function DatePickerTableBody({ children, ...props }: Omit<React.HTMLAttributes<H
   children?: ((props: DatePickerContextProps) => React.ReactNode) | React.ReactNode
 }) {
   const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getBodyProps(), props)
+  const mergedProps = mergeProps(api.getTableBodyProps(), props)
   const content = typeof children === 'function'
     ? children({ api })
     : children
@@ -318,28 +278,28 @@ function DatePickerTableBody({ children, ...props }: Omit<React.HTMLAttributes<H
 }
 
 type DatePickerTableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
-  cell?: datepicker.DayCell
+  value?: datepicker.DateValue
 }
 
-function DatePickerTableCell({ cell, ...props }: DatePickerTableCellProps) {
+function DatePickerTableCell({ value, ...props }: DatePickerTableCellProps) {
   const { api } = useDatePickerContext()
-  const cellProps = cell ? api.getCellProps({ cell }) : {}
+  const cellProps = value ? api.getDayTableCellProps({ value }) : {}
   return <td {...cellProps} {...props} />
 }
 
-type DatePickerTableCellTriggerProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
-  cell: datepicker.DayCell | datepicker.MonthCell | datepicker.YearCell
+type DatePickerTableCellTriggerProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'value'> & {
+  value: datepicker.DateValue | number
   children?: React.ReactNode
 }
 
-function DatePickerTableCellTrigger({ className, cell, children, ...props }: DatePickerTableCellTriggerProps) {
+function DatePickerTableCellTrigger({ className, value, children, ...props }: DatePickerTableCellTriggerProps) {
   const { api } = useDatePickerContext()
   const { view } = useDatePickerViewContext()
 
   const viewTriggerProps = {
-    day: () => api.getDayCellTriggerProps({ cell: cell as datepicker.DayCell }),
-    month: () => api.getMonthCellTriggerProps({ cell: cell as datepicker.MonthCell }),
-    year: () => api.getYearCellTriggerProps({ cell: cell as datepicker.YearCell }),
+    day: () => api.getDayTableCellTriggerProps({ value: value as datepicker.DateValue }),
+    month: () => api.getMonthTableCellTriggerProps({ value: value as number }),
+    year: () => api.getYearTableCellTriggerProps({ value: value as number }),
   }[view]()
 
   const mergedProps = mergeProps(viewTriggerProps, props)
@@ -353,36 +313,10 @@ function DatePickerTableCellTrigger({ className, cell, children, ...props }: Dat
   )
 }
 
-function DatePickerPrevDecadeTrigger({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getPrevYearChunkTriggerProps(), props)
-
-  return (
-    <button {...mergedProps} className={cn('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
-      {children || (
-        <div className="icon-[material-symbols--keyboard-arrow-left] size-8"></div>
-      )}
-    </button>
-  )
-}
-
-function DatePickerNextDecadeTrigger({ className, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const { api } = useDatePickerContext()
-  const mergedProps = mergeProps(api.getNextYearChunkTriggerProps(), props)
-
-  return (
-    <button {...mergedProps} className={cn('hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', className)}>
-      {children || (
-        <div className="icon-[material-symbols--keyboard-arrow-right] size-8"></div>
-      )}
-    </button>
-  )
-}
-
 function DatePickerStatus({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const { api } = useDatePickerContext()
   const mergedProps = mergeProps(api.getStatusProps(), props)
-  return <div {...mergedProps} className={cn('sr-only', className)}>{api.statusMessage}</div>
+  return <div {...mergedProps} className={cn('sr-only', className)}>{api.srStatusText}</div>
 }
 
 DatePickerRoot.displayName = 'DatePicker.Root'
@@ -392,12 +326,9 @@ DatePickerControl.displayName = 'DatePicker.Control'
 DatePickerView.displayName = 'DatePicker.View'
 DatePickerContent.displayName = 'DatePicker.Content'
 DatePickerViewControl.displayName = 'DatePicker.ViewControl'
-DatePickerNextMonthTrigger.displayName = 'DatePicker.NextMonthTrigger'
-DatePickerPrevMonthTrigger.displayName = 'DatePicker.PrevMonthTrigger'
-DatePickerNextYearTrigger.displayName = 'DatePicker.NextYearTrigger'
-DatePickerPrevYearTrigger.displayName = 'DatePicker.PrevYearTrigger'
-DatePickerMonthTrigger.displayName = 'DatePicker.MonthTrigger'
-DatePickerYearTrigger.displayName = 'DatePicker.YearTrigger'
+DatePickerPrevTrigger.displayName = 'DatePicker.PrevTrigger'
+DatePickerNextTrigger.displayName = 'DatePicker.NextTrigger'
+DatePickerViewTrigger.displayName = 'DatePicker.ViewTrigger'
 DatePickerTable.displayName = 'DatePicker.Table'
 DatePickerTableHead.displayName = 'DatePicker.TableHead'
 DatePickerTableRow.displayName = 'DatePicker.TableRow'
@@ -405,8 +336,6 @@ DatePickerTableHeader.displayName = 'DatePicker.TableHeader'
 DatePickerTableBody.displayName = 'DatePicker.TableBody'
 DatePickerTableCell.displayName = 'DatePicker.TableCell'
 DatePickerTableCellTrigger.displayName = 'DatePicker.TableCellTrigger'
-DatePickerPrevDecadeTrigger.displayName = 'DatePicker.PrevDecadeTrigger'
-DatePickerNextDecadeTrigger.displayName = 'DatePicker.NextDecadeTrigger'
 DatePickerStatus.displayName = 'DatePicker.Status'
 
 export const DatePicker = {
@@ -417,12 +346,9 @@ export const DatePicker = {
   View: DatePickerView,
   Content: DatePickerContent,
   ViewControl: DatePickerViewControl,
-  NextMonthTrigger: DatePickerNextMonthTrigger,
-  PrevMonthTrigger: DatePickerPrevMonthTrigger,
-  NextYearTrigger: DatePickerNextYearTrigger,
-  PrevYearTrigger: DatePickerPrevYearTrigger,
-  MonthTrigger: DatePickerMonthTrigger,
-  YearTrigger: DatePickerYearTrigger,
+  PrevTrigger: DatePickerPrevTrigger,
+  NextTrigger: DatePickerNextTrigger,
+  ViewTrigger: DatePickerViewTrigger,
   Table: DatePickerTable,
   TableHead: DatePickerTableHead,
   TableRow: DatePickerTableRow,
@@ -430,7 +356,5 @@ export const DatePicker = {
   TableBody: DatePickerTableBody,
   TableCell: DatePickerTableCell,
   TableCellTrigger: DatePickerTableCellTrigger,
-  PrevDecadeTrigger: DatePickerPrevDecadeTrigger,
-  NextDecadeTrigger: DatePickerNextDecadeTrigger,
   Status: DatePickerStatus,
 }

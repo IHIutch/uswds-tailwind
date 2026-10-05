@@ -1,5 +1,6 @@
+import { query, queryAll } from '@zag-js/dom-query'
 import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
 
 const rootId = 'test'
@@ -8,58 +9,61 @@ const template = `
     <div>
       <div>
         <label for="input-dob">Date of birth</label>
-        <div data-part="date-picker-root" id="${rootId}">
-          <input data-part="date-picker-input" id="input-dob" name="input-dob" type="text">
-          <button data-part="date-picker-trigger" type="button"></button>
-          <div data-part="date-picker-content" hidden>
-            <div data-part="date-picker-day">
-              <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-              <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="year" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+        <div data-scope="date-picker" data-part="root" id="${rootId}">
+          <input data-part="input" id="input-dob" name="input-dob" type="text">
+          <input data-part="hidden-input" type="hidden">
+          <button data-part="trigger" type="button"></button>
+          <div data-part="content" hidden>
+            <div data-part="view" data-view="day">
+              <div data-part="view-control">
+                <button data-part="prev-trigger" data-unit="year" type="button"></button>
+                <button data-part="prev-trigger" data-unit="month" type="button"></button>
+                <button data-part="view-trigger" data-view="month" type="button"></button>
+                <button data-part="view-trigger" data-view="year" type="button"></button>
+                <button data-part="next-trigger" data-unit="month" type="button"></button>
+                <button data-part="next-trigger" data-unit="year" type="button"></button>
+              </div>
               <table>
                 <thead>
                   <tr>
-                    <th data-part="date-picker-day-header"></th>
+                    <th data-part="table-header"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-date-button"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-month">
+            <div data-part="view" data-view="month">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-month-button"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-year">
+            <div data-part="view" data-view="year">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-year-button"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-              <button data-part="date-picker-nav-next" data-unit="decade"></button>
+              <button data-part="prev-trigger" data-view="year"></button>
+              <button data-part="next-trigger" data-view="year"></button>
             </div>
           </div>
-          <div data-part="date-picker-status"></div>
+          <div data-part="status"></div>
         </div>
       </div>
     </div>
@@ -73,130 +77,167 @@ async function setupMonthSelectionView(component: ReturnType<typeof createDispos
   await userEvent.fill(input, '6/20/2020')
   await userEvent.click(button)
 
-  const monthTrigger = calendar.querySelector<HTMLButtonElement>('[data-part="date-view-trigger"][data-value="month"]')!
+  const monthTrigger = query<HTMLButtonElement>(calendar, '[data-part="view-trigger"][data-view="month"]')!
   await userEvent.click(monthTrigger)
 
   return { calendar }
 }
 
-it('should show month of June as focused', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L51
+it('should show month of June as focused', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedMonth = monthView?.querySelector('[data-focus="true"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedMonth = query(monthView, '[data-focus]')
   expect(focusedMonth?.getAttribute('data-value')).toBe('5') // June is 0-indexed (5)
 })
 
-it('should show month of June as selected', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L60
+it('should show month of June as selected', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const selectedMonth = monthView?.querySelector('[data-selected="true"]')
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const selectedMonth = query(monthView, '[data-selected]')
   expect(selectedMonth?.getAttribute('data-value')).toBe('5') // June is 0-indexed (5)
 })
 
-it('should navigate back three months when pressing up', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L69
+it('should navigate back three months when pressing up', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowUp}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('2') // March is 0-indexed (2)
 })
 
-it('should navigate ahead three months when pressing down', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L80
+it('should navigate ahead three months when pressing down', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowDown}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('8') // September is 0-indexed (8)
 })
 
-it('should navigate back one month when pressing left', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L91
+it('should navigate back one month when pressing left', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowLeft}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('4') // May is 0-indexed (4)
 })
 
-it('should navigate ahead one month when pressing right', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L102
+it('should navigate ahead one month when pressing right', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{ArrowRight}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('6') // July is 0-indexed (6)
 })
 
-it('should navigate to the beginning of the month row when pressing home', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L113
+it('should navigate to the beginning of the month row when pressing home', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{Home}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('3') // April is 0-indexed (3)
 })
 
-it('should navigate to the end of the month row when pressing end', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L124
+it('should navigate to the end of the month row when pressing end', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{End}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('5') // June is 0-indexed (5) - already at end of row
 })
 
-it('should navigate to January when pressing page up', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L135
+it('should navigate to January when pressing page up', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{PageUp}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('0') // January is 0-indexed (0)
 })
 
-it('should navigate to December when pressing page down', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-month-selection.spec.js#L146
+it('should navigate to December when pressing page down', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const { calendar } = await setupMonthSelectionView(component)
 
-  const monthView = calendar.querySelector('[data-part="date-picker-month"]')
-  const focusedElement = monthView?.querySelector('[data-focus="true"]') as HTMLElement
+  const monthView = query(calendar, '[data-part="view"][data-view="month"]')
+  const focusedElement = query(monthView, '[data-focus]') as HTMLElement
   focusedElement?.focus()
   await userEvent.keyboard('{PageDown}')
 
-  const newFocused = monthView?.querySelector('[data-focus="true"]')
+  const newFocused = query(monthView, '[data-focus]')
   expect(newFocused?.getAttribute('data-value')).toBe('11') // December is 0-indexed (11)
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L1393-L1469 (month cells, status, bounds and selection back to the day grid)
+it('shows twelve month choices with selected, focused, disabled and status states, then returns to the day grid', { tags: ['parity'] }, async () => {
+  const bounded = template.replace(`id="${rootId}"`, `id="${rootId}" data-min-date="2024-03-01" data-max-date="2024-09-30"`)
+  await using component = createDisposableDatePicker(rootId, bounded)
+  const calendar = component.elements.getCalendarEl()!
+  await page.getByRole('textbox', { name: 'Date of birth' }).fill('06/15/2024')
+  await page.getByRole('button', { name: 'Toggle calendar' }).click()
+  await page.getByRole('button', { name: 'June. Select month' }).click()
+
+  const months = queryAll<HTMLButtonElement>(calendar, '[data-part="view"][data-view="month"] [data-part="table-cell-trigger"]')
+  expect(months).toHaveLength(12)
+  const june = page.getByRole('button', { name: 'June', exact: true }).element() as HTMLButtonElement
+  expect(june.getAttribute('aria-selected')).toBe('true')
+  expect(june.tabIndex).toBe(0)
+  expect(document.activeElement).toBe(june)
+  expect(page.getByRole('button', { name: 'February', exact: true }).element()).toBeDisabled()
+  expect(page.getByRole('button', { name: 'October', exact: true }).element()).toBeDisabled()
+  expect(page.getByRole('button', { name: 'August', exact: true }).element()).toBeEnabled()
+  expect(component.elements.getStatusEl()?.textContent).toBe('Select a month.')
+
+  await page.getByRole('button', { name: 'August', exact: true }).click()
+  expect(calendar.hidden).toBe(false)
+  const focusedDay = page.getByRole('button', { name: '15 August 2024 Thursday' }).element() as HTMLButtonElement
+  expect(focusedDay.dataset.value).toBe('2024-08-15')
+  expect(document.activeElement).toBe(focusedDay)
 })

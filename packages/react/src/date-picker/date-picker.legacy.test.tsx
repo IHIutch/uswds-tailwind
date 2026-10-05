@@ -1,3 +1,4 @@
+import type { DatePickerRootProps } from './date-picker'
 import { chunk } from '@zag-js/utils'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
@@ -6,9 +7,9 @@ import { DatePicker } from './date-picker'
 
 // Behavioral parity tests mirroring e2e/date-picker/date-picker.test.ts.
 
-function renderDatePicker() {
+function renderDatePicker(props: DatePickerRootProps = {}) {
   return render(
-    <DatePicker.Root>
+    <DatePicker.Root {...props}>
       <DatePicker.Control>
         <DatePicker.Input />
         <DatePicker.Trigger aria-label="Open calendar" />
@@ -18,18 +19,18 @@ function renderDatePicker() {
           {({ api }) => (
             <>
               <DatePicker.ViewControl>
-                <DatePicker.PrevYearTrigger aria-label="Previous year" />
-                <DatePicker.PrevMonthTrigger aria-label="Previous month" />
-                <DatePicker.MonthTrigger />
-                <DatePicker.YearTrigger />
-                <DatePicker.NextMonthTrigger aria-label="Next month" />
-                <DatePicker.NextYearTrigger aria-label="Next year" />
+                <DatePicker.PrevTrigger unit="year" aria-label="Previous year" />
+                <DatePicker.PrevTrigger unit="month" aria-label="Previous month" />
+                <DatePicker.ViewTrigger view="month" />
+                <DatePicker.ViewTrigger view="year" />
+                <DatePicker.NextTrigger unit="month" aria-label="Next month" />
+                <DatePicker.NextTrigger unit="year" aria-label="Next year" />
               </DatePicker.ViewControl>
               <DatePicker.Table>
                 <DatePicker.TableHead>
                   <DatePicker.TableRow>
-                    {api.weekDays.map(day => (
-                      <DatePicker.TableHeader key={day.long} day={day} />
+                    {api.weekDays.map((day, index) => (
+                      <DatePicker.TableHeader key={day.long} day={day} index={index} />
                     ))}
                   </DatePicker.TableRow>
                 </DatePicker.TableHead>
@@ -37,9 +38,9 @@ function renderDatePicker() {
                   {api.weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
                       {week.map(cell => (
-                        <DatePicker.TableCell key={cell.dateString} cell={cell}>
-                          <DatePicker.TableCellTrigger cell={cell}>
-                            {cell.day}
+                        <DatePicker.TableCell key={cell.toISOString()} value={cell}>
+                          <DatePicker.TableCellTrigger value={cell}>
+                            {cell.getDate()}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -57,9 +58,9 @@ function renderDatePicker() {
                 {chunk(api.months, 3).map((row, rowIdx) => (
                   <DatePicker.TableRow key={rowIdx}>
                     {row.map(month => (
-                      <DatePicker.TableCell key={month.month}>
-                        <DatePicker.TableCellTrigger cell={month}>
-                          {month.label}
+                      <DatePicker.TableCell key={month}>
+                        <DatePicker.TableCellTrigger value={month}>
+                          {api.monthLabels[month]}
                         </DatePicker.TableCellTrigger>
                       </DatePicker.TableCell>
                     ))}
@@ -72,15 +73,15 @@ function renderDatePicker() {
         <DatePicker.View view="year">
           {({ api }) => (
             <>
-              <DatePicker.PrevDecadeTrigger aria-label="Previous decade" />
+              <DatePicker.PrevTrigger view="year" aria-label="Previous decade" />
               <DatePicker.Table>
                 <DatePicker.TableBody>
                   {chunk(api.years, 3).map((row, rowIdx) => (
                     <DatePicker.TableRow key={rowIdx}>
                       {row.map(year => (
-                        <DatePicker.TableCell key={year.year}>
-                          <DatePicker.TableCellTrigger cell={year}>
-                            {year.year}
+                        <DatePicker.TableCell key={year}>
+                          <DatePicker.TableCellTrigger value={year}>
+                            {year}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -88,7 +89,7 @@ function renderDatePicker() {
                   ))}
                 </DatePicker.TableBody>
               </DatePicker.Table>
-              <DatePicker.NextDecadeTrigger aria-label="Next decade" />
+              <DatePicker.NextTrigger view="year" aria-label="Next decade" />
             </>
           )}
         </DatePicker.View>
@@ -97,16 +98,8 @@ function renderDatePicker() {
   )
 }
 
-// SUGGESTION (review): every test in this file reaches into the DOM with
-// `[data-scope="datepicker"][data-part="..."]` selectors. Those are our Zag
-// anatomy — they'd break on any rename even when the calendar behavior is
-// unchanged. Most of these could be replaced with `getByRole('button',
-// { name: /January/i })` (month-selection), `getByRole('grid')` (table),
-// `getByRole('dialog')` (calendar content) — at the cost of a bit more
-// verbosity, but much more robust. Leaving the pattern here as-is; worth
-// revisiting as a batch.
 function getContent() {
-  return document.querySelector('[data-scope="datepicker"][data-part="calendar"]') as HTMLElement | null
+  return document.querySelector('[data-scope="date-picker"][data-part="content"]') as HTMLElement | null
 }
 
 it('renders input and trigger button', async () => {
@@ -154,8 +147,8 @@ it('filling the input with a date shows that month when opening calendar', async
   await userEvent.fill(input, '01/15/2020')
   await userEvent.click(trigger)
 
-  const monthTrigger = document.querySelector('[data-scope="datepicker"][data-part="month-selection"]')
-  const yearTrigger = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]')
+  const monthTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]')
+  const yearTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]')
   expect(monthTrigger?.textContent).toBe('January')
   expect(yearTrigger?.textContent).toBe('2020')
 })
@@ -170,8 +163,8 @@ it('clicking the next month trigger advances to the next month', async () => {
 
   await userEvent.click(screen.getByRole('button', { name: 'Next month' }))
 
-  const monthTrigger = document.querySelector('[data-scope="datepicker"][data-part="month-selection"]')
-  const yearTrigger = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]')
+  const monthTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]')
+  const yearTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]')
   expect(monthTrigger?.textContent).toBe('February')
   expect(yearTrigger?.textContent).toBe('2020')
 })
@@ -186,8 +179,8 @@ it('clicking the previous month trigger retreats to the previous month', async (
 
   await userEvent.click(screen.getByRole('button', { name: 'Previous month' }))
 
-  const monthTrigger = document.querySelector('[data-scope="datepicker"][data-part="month-selection"]')
-  const yearTrigger = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]')
+  const monthTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]')
+  const yearTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]')
   expect(monthTrigger?.textContent).toBe('December')
   expect(yearTrigger?.textContent).toBe('2019')
 })
@@ -202,7 +195,7 @@ it('clicking the next year trigger advances to the next year', async () => {
 
   await userEvent.click(screen.getByRole('button', { name: 'Next year' }))
 
-  const yearTrigger = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]')
+  const yearTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]')
   expect(yearTrigger?.textContent).toBe('2021')
 })
 
@@ -216,13 +209,13 @@ it('clicking the previous year trigger retreats to the previous year', async () 
 
   await userEvent.click(screen.getByRole('button', { name: 'Previous year' }))
 
-  const yearTrigger = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]')
+  const yearTrigger = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]')
   expect(yearTrigger?.textContent).toBe('2019')
 })
 
 it('`min` prop disables earlier dates in the calendar', async () => {
   const screen = await render(
-    <DatePicker.Root min="2020-01-10" defaultValue={['2020-01-15']}>
+    <DatePicker.Root min={new Date(2020, 0, 10)} defaultValue={[new Date(2020, 0, 15)]}>
       <DatePicker.Control>
         <DatePicker.Input />
         <DatePicker.Trigger aria-label="Open calendar" />
@@ -235,9 +228,9 @@ it('`min` prop disables earlier dates in the calendar', async () => {
                 {api.weeks.map((week, row) => (
                   <DatePicker.TableRow key={row}>
                     {week.map(cell => (
-                      <DatePicker.TableCell key={cell.dateString} cell={cell}>
-                        <DatePicker.TableCellTrigger cell={cell}>
-                          {cell.day}
+                      <DatePicker.TableCell key={cell.toISOString()} value={cell}>
+                        <DatePicker.TableCellTrigger value={cell}>
+                          {cell.getDate()}
                         </DatePicker.TableCellTrigger>
                       </DatePicker.TableCell>
                     ))}
@@ -254,7 +247,7 @@ it('`min` prop disables earlier dates in the calendar', async () => {
 
   const cells = Array.from(
     document.querySelectorAll<HTMLButtonElement>(
-      '[data-scope="datepicker"][data-part="cell-trigger"]',
+      '[data-scope="date-picker"][data-part="table-cell-trigger"]',
     ),
   )
   const jan5 = cells.find(c => (c.getAttribute('aria-label') || '').startsWith('5 January 2020'))
@@ -270,10 +263,10 @@ it('clicking the month selection opens the month picker view', async () => {
 
   await userEvent.click(trigger)
 
-  const monthSelection = document.querySelector('[data-scope="datepicker"][data-part="month-selection"]') as HTMLButtonElement
+  const monthSelection = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
   await userEvent.click(monthSelection)
 
-  const monthPicker = document.querySelector('[data-scope="datepicker"][data-part="month-picker"]')
+  const monthPicker = document.querySelector('[data-scope="date-picker"][data-part="view"][data-view="month"]')
   expect(monthPicker).toBeTruthy()
   expect(monthPicker?.hasAttribute('hidden')).toBe(false)
 })
@@ -284,10 +277,10 @@ it('clicking the year selection opens the year picker view', async () => {
 
   await userEvent.click(trigger)
 
-  const yearSelection = document.querySelector('[data-scope="datepicker"][data-part="year-selection"]') as HTMLButtonElement
+  const yearSelection = document.querySelector('[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]') as HTMLButtonElement
   await userEvent.click(yearSelection)
 
-  const yearPicker = document.querySelector('[data-scope="datepicker"][data-part="year-picker"]')
+  const yearPicker = document.querySelector('[data-scope="date-picker"][data-part="view"][data-view="year"]')
   expect(yearPicker).toBeTruthy()
   expect(yearPicker?.hasAttribute('hidden')).toBe(false)
 })
@@ -299,14 +292,14 @@ it('selecting a month from the month picker returns to day view on that month', 
   await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
 
   const monthSelection = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="month-selection"]',
+    '[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]',
   )!
   await userEvent.click(monthSelection)
 
   // Click "June" in the month grid — find by visible text.
   const monthCells = Array.from(
     document.querySelectorAll<HTMLButtonElement>(
-      '[data-scope="datepicker"][data-part="month-picker"] [data-part="cell-trigger"]',
+      '[data-scope="date-picker"][data-part="view"][data-view="month"] [data-part="table-cell-trigger"]',
     ),
   )
   const june = monthCells.find(b => /^Jun/i.test(b.textContent || ''))!
@@ -314,7 +307,7 @@ it('selecting a month from the month picker returns to day view on that month', 
 
   // Back in day view: month header now reads "June".
   const monthAfter = document.querySelector(
-    '[data-scope="datepicker"][data-part="month-selection"]',
+    '[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]',
   )
   expect(monthAfter?.textContent).toBe('June')
 })
@@ -326,14 +319,14 @@ it('selecting a year from the year picker returns to day view with that year', a
   await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
 
   const yearSelection = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="year-selection"]',
+    '[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]',
   )!
   await userEvent.click(yearSelection)
 
   // Grab the first rendered year cell, click it, then confirm header reflects it.
   const yearCells = Array.from(
     document.querySelectorAll<HTMLButtonElement>(
-      '[data-scope="datepicker"][data-part="year-picker"] [data-part="cell-trigger"]',
+      '[data-scope="date-picker"][data-part="view"][data-view="year"] [data-part="table-cell-trigger"]',
     ),
   )
   const firstYear = yearCells[0]!
@@ -341,7 +334,7 @@ it('selecting a year from the year picker returns to day view with that year', a
   await userEvent.click(firstYear)
 
   const yearAfter = document.querySelector(
-    '[data-scope="datepicker"][data-part="year-selection"]',
+    '[data-scope="date-picker"][data-part="view-trigger"][data-view="year"]',
   )
   expect(yearAfter?.textContent?.trim()).toBe(targetYear)
 })
@@ -354,10 +347,23 @@ it('clicking a day cell selects that date and closes the calendar', async () => 
   await userEvent.fill(input, '01/01/2020')
   await userEvent.click(trigger)
 
-  const dayButtons = document.querySelectorAll('[data-scope="datepicker"][data-part="cell-trigger"]')
+  const dayButtons = document.querySelectorAll('[data-scope="date-picker"][data-part="table-cell-trigger"]')
   const day10 = Array.from(dayButtons).find(b => b.textContent?.trim() === '10') as HTMLButtonElement
   await userEvent.click(day10)
 
   expect((input.element() as HTMLInputElement).value).toBe('01/10/2020')
   expect(getContent()?.hasAttribute('hidden')).toBe(true)
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L1238-L1251
+it('focuses the navigation header when the previous-year button becomes disabled at the minimum month', async () => {
+  const screen = await renderDatePicker({ defaultValue: [new Date(2024, 5, 15)], min: new Date(2024, 2, 1), max: new Date(2024, 8, 30) })
+  await userEvent.click(screen.getByRole('button', { name: 'Open calendar' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Previous year' }))
+
+  await expect.element(screen.getByRole('button', { name: 'March. Select month' })).toBeVisible()
+  await expect.element(screen.getByRole('button', { name: 'Previous year' })).toBeDisabled()
+  const header = document.querySelector('[data-part="view-control"]')
+  expect(header).not.toBeNull()
+  await expect.poll(() => document.activeElement).toBe(header)
 })

@@ -9,64 +9,68 @@ const template = `
   <div>
     <div>
       <label for="input-dates-of-use">Dates of use</label>
-      <div data-part="date-picker-root" id="${rootId}" data-range-date="2020-05-22">
-        <input data-part="date-picker-input" disabled id="input-dates-of-use" name="input-dates-of-use" type="text">
-        <button data-part="date-picker-trigger" type="button"></button>
-        <div data-part="date-picker-content" hidden>
-          <div data-part="date-picker-day">
-            <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-            <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-            <button data-part="date-view-trigger" data-value="month" type="button"></button>
-            <button data-part="date-view-trigger" data-value="year" type="button"></button>
-            <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-            <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+      <div data-scope="date-picker" data-part="root" id="${rootId}" data-range-date="2020-05-22">
+        <input data-part="input" disabled id="input-dates-of-use" name="input-dates-of-use" type="text">
+        <input data-part="hidden-input" type="hidden">
+        <button data-part="trigger" type="button"></button>
+        <div data-part="content" hidden>
+          <div data-part="view" data-view="day">
+            <div data-part="view-control">
+              <button data-part="prev-trigger" data-unit="year" type="button"></button>
+              <button data-part="prev-trigger" data-unit="month" type="button"></button>
+              <button data-part="view-trigger" data-view="month" type="button"></button>
+              <button data-part="view-trigger" data-view="year" type="button"></button>
+              <button data-part="next-trigger" data-unit="month" type="button"></button>
+              <button data-part="next-trigger" data-unit="year" type="button"></button>
+            </div>
             <table>
               <thead>
                 <tr>
-                  <th data-part="date-picker-day-header"></th>
+                  <th data-part="table-header"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-date-button"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="date-picker-month">
+          <div data-part="view" data-view="month">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-month-button"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div data-part="date-picker-year">
+          <div data-part="view" data-view="year">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <button data-part="date-picker-year-button"></button>
+                    <button data-part="table-cell-trigger"></button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-            <button data-part="date-picker-nav-next" data-unit="decade"></button>
+            <button data-part="prev-trigger" data-view="year"></button>
+            <button data-part="next-trigger" data-view="year"></button>
           </div>
         </div>
-        <div data-part="date-picker-status"></div>
+        <div data-part="status"></div>
       </div>
     </div>
   </div>
 `
 
-it('should not display the calendar when the button is clicked as it is disabled', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-disabled.spec.js#L41
+it('should not display the calendar when the button is clicked as it is disabled', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
@@ -77,14 +81,16 @@ it('should not display the calendar when the button is clicked as it is disabled
   expect(calendar.hidden).toBe(true)
 })
 
-it('should display the calendar when the button is clicked once the component is enabled', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-disabled.spec.js#L51
+it('should display the calendar when the button is clicked once the component is enabled', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
-  const instance = DatePicker.getInstance(rootId)
+  const instance = DatePicker.getInstance(component.elements.getRootEl())
 
-  await instance?.enable()
+  expect(instance).not.toBeNull()
+  await instance!.enable()
 
   await userEvent.click(button)
 

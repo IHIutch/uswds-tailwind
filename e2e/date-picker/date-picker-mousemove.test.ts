@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { page } from 'vitest/browser'
 import { createDisposableDatePicker } from './_utils.js'
 
 const rootId = 'test'
@@ -8,122 +8,99 @@ const template = `
     <div>
       <div>
         <label for="input-dob">Date of birth</label>
-        <div data-part="date-picker-root" id="${rootId}">
-          <input data-part="date-picker-input" id="input-dob" name="input-dob" type="text">
-          <button data-part="date-picker-trigger" type="button"></button>
-          <div data-part="date-picker-content" hidden>
-            <div data-part="date-picker-day">
-              <button data-part="date-picker-nav-prev" data-unit="year" type="button"></button>
-              <button data-part="date-picker-nav-prev" data-unit="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="month" type="button"></button>
-              <button data-part="date-view-trigger" data-value="year" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="month" type="button"></button>
-              <button data-part="date-picker-nav-next" data-unit="year" type="button"></button>
+        <div data-scope="date-picker" data-part="root" id="${rootId}">
+          <input data-part="input" id="input-dob" name="input-dob" type="text">
+          <input data-part="hidden-input" type="hidden">
+          <button data-part="trigger" type="button"></button>
+          <div data-part="content" hidden>
+            <div data-part="view" data-view="day">
+              <div data-part="view-control">
+                <button data-part="prev-trigger" data-unit="year" type="button"></button>
+                <button data-part="prev-trigger" data-unit="month" type="button"></button>
+                <button data-part="view-trigger" data-view="month" type="button"></button>
+                <button data-part="view-trigger" data-view="year" type="button"></button>
+                <button data-part="next-trigger" data-unit="month" type="button"></button>
+                <button data-part="next-trigger" data-unit="year" type="button"></button>
+              </div>
               <table>
                 <thead>
                   <tr>
-                    <th data-part="date-picker-day-header"></th>
+                    <th data-part="table-header"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-date-button"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-month">
+            <div data-part="view" data-view="month">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-month-button"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div data-part="date-picker-year">
+            <div data-part="view" data-view="year">
               <table>
                 <tbody>
                   <tr>
                     <td>
-                      <button data-part="date-picker-year-button"></button>
+                      <button data-part="table-cell-trigger"></button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <button data-part="date-picker-nav-prev" data-unit="decade"></button>
-              <button data-part="date-picker-nav-next" data-unit="decade"></button>
+              <button data-part="prev-trigger" data-view="year"></button>
+              <button data-part="next-trigger" data-view="year"></button>
             </div>
           </div>
-          <div data-part="date-picker-status"></div>
+          <div data-part="status"></div>
         </div>
       </div>
     </div>
   `
 
-it('should ignore mouse move events over disabled days', async () => {
-  await using component = createDisposableDatePicker(rootId, template)
-  const root = component.elements.getRootEl()!
-  const input = component.elements.getInputEl()!
-  const button = component.elements.getTriggerEl()!
-  const getCalendarEl = () => root.querySelector('[data-part="date-picker-content"]') as HTMLElement
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-mousemove.spec.js#L41
+it('should ignore mouse move events over disabled days', { tags: ['legacy'] }, async () => {
+  const boundedTemplate = template.replace(`id="${rootId}"`, `id="${rootId}" data-min-date="2020-06-01" data-max-date="2020-06-24"`)
+  await using component = createDisposableDatePicker(rootId, boundedTemplate)
+  const calendar = component.elements.getCalendarEl()!
 
-  // Set min/max date constraints to disable certain days
-  root.setAttribute('data-min-date', '2020-06-01')
-  root.setAttribute('data-max-date', '2020-06-24')
+  await page.getByRole('textbox', { name: 'Date of birth' }).fill('06/20/2020')
+  await page.getByRole('button', { name: 'Toggle calendar' }).click()
 
-  await userEvent.fill(input, '6/20/2020')
-  await userEvent.click(button)
+  const focusedDay = page.getByRole('button', { name: '20 June 2020 Saturday' }).element() as HTMLButtonElement
+  const disabledDay = page.getByRole('button', { name: '26 June 2020 Friday' }).element() as HTMLButtonElement
+  expect(disabledDay).toBeDisabled()
+  expect(document.activeElement).toBe(focusedDay)
 
-  // Verify initial focus on June 20
-  const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-  expect(focusedDate?.getAttribute('data-value')).toBe('2020-06-20')
-
-  // Try to hover over a disabled date (day 26 should be disabled due to max date)
-  const disabledDate = getCalendarEl().querySelector('[data-value="2020-06-26"]')
-  if (disabledDate) {
-    await userEvent.hover(disabledDate as HTMLElement)
-  }
-
-  // Focus should remain on June 20 since disabled days should be ignored
-  const stillFocusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-  expect(stillFocusedDate?.getAttribute('data-value')).toBe('2020-06-20')
+  await page.getByRole('button', { name: '26 June 2020 Friday' }).hover()
+  expect(document.activeElement).toBe(focusedDay)
+  expect(calendar.hidden).toBe(false)
 })
 
-it('should handle mouse event on the same day efficiently', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-mousemove.spec.js#L67
+it('keeps the selected date and focus when hovering the same day', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
-  const root = component.elements.getRootEl()!
-  const input = component.elements.getInputEl()!
-  const button = component.elements.getTriggerEl()!
-  const getCalendarEl = () => root.querySelector('[data-part="date-picker-content"]') as HTMLElement
+  const calendar = component.elements.getCalendarEl()!
+  const input = component.elements.getInputEl()
 
-  root.setAttribute('data-min-date', '2020-06-01')
-  root.setAttribute('data-max-date', '2020-06-24')
+  await page.getByRole('textbox', { name: 'Date of birth' }).fill('06/20/2020')
+  await page.getByRole('button', { name: 'Toggle calendar' }).click()
 
-  await userEvent.fill(input, '6/20/2020')
-  await userEvent.click(button)
+  const focusedDay = page.getByRole('button', { name: '20 June 2020 Saturday' }).element() as HTMLButtonElement
+  expect(document.activeElement).toBe(focusedDay)
+  await page.getByRole('button', { name: '20 June 2020 Saturday' }).hover()
 
-  // Mark calendar for re-render test
-  getCalendarEl().setAttribute('data-test-render', 'true')
-
-  // Verify initial focus on June 20
-  const focusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-  expect(focusedDate?.getAttribute('data-value')).toBe('2020-06-20')
-
-  // Hover over the same date (should not cause unnecessary re-render)
-  const sameDate = getCalendarEl().querySelector('[data-value="2020-06-20"]')
-  if (sameDate) {
-    await userEvent.hover(sameDate as HTMLElement)
-  }
-
-  // Calendar should not have re-rendered unnecessarily
-  expect(getCalendarEl().getAttribute('data-test-render')).toBe('true')
-
-  // Focus should remain on June 20
-  const stillFocusedDate = getCalendarEl().querySelector('[data-focus="true"]')
-  expect(stillFocusedDate?.getAttribute('data-value')).toBe('2020-06-20')
+  expect(document.activeElement).toBe(focusedDay)
+  expect(input.value).toBe('06/20/2020')
+  expect(calendar.hidden).toBe(false)
 })
