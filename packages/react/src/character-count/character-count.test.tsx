@@ -15,19 +15,20 @@ it('characterCount works standalone', async () => {
   await expect.element(screen.getByRole('textbox')).toBeVisible()
 })
 
-it('preserves the authored root id for links and external references', async () => {
+it.each([undefined, 'exact-counter'])('uses id as the machine namespace and ids.root as the DOM override (%s)', async (rootId) => {
   const screen = await render(
-    <CharacterCount.Root id="counter" maxLength={5}>
+    <CharacterCount.Root id="counter" ids={rootId ? { root: rootId } : undefined} maxLength={5}>
       <CharacterCount.Input />
       <CharacterCount.Status />
     </CharacterCount.Root>,
   )
-  const root = screen.container.querySelector('[data-part="root"]')!
-  expect(root.id).toBe('counter')
-  expect(document.getElementById('counter')).toBe(root)
+  const expectedRootId = rootId ?? 'character-count:counter'
+  const input = screen.getByRole('textbox').element() as HTMLInputElement
+  expect(document.getElementById(expectedRootId)).toContainElement(input)
+  expect(input.id).toBe('character-count:counter:input')
   await screen.getByRole('textbox').fill('abcdef')
   await expect.element(screen.getByText('1 character over limit')).toBeVisible()
-  expect(root.id).toBe('counter')
+  expect(input.validationMessage).toBe('The content is too long.')
 })
 
 it('prefilled over-limit input has native validity on mount', async () => {

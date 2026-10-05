@@ -24,14 +24,14 @@ function useCharacterCountContext() {
 }
 
 const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootProps>(
-  ({ className, id, ...props }, forwardedRef) => {
+  ({ className, ...props }, forwardedRef) => {
     const [machineProps, rest] = characterCount.splitProps(props)
     const api = useCharacterCount(machineProps as UseCharacterCountProps)
     const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <CharacterCountContext.Provider value={api}>
-        <div {...mergedProps} id={id ?? mergedProps.id} className={className} ref={forwardedRef} />
+        <div {...mergedProps} className={className} ref={forwardedRef} />
       </CharacterCountContext.Provider>
     )
   },
