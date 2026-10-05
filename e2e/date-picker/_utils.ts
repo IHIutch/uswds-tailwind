@@ -12,8 +12,8 @@ const fixtureStyles = `
     [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="month"],
     [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="year"],
     [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="month"],
-    [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="chunk"],
-    [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="chunk"] {
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-view="year"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-view="year"] {
       min-width: 2rem;
       min-height: 2rem;
     }

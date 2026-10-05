@@ -79,7 +79,7 @@ export const Basic = meta.story({
         <DatePicker.View view="year">
           {({ api }) => (
             <>
-              <DatePicker.PrevTrigger unit="chunk" />
+              <DatePicker.PrevTrigger view="year" />
               <DatePicker.Table>
                 <DatePicker.TableBody>
                   {chunk(api.years, 3).map((row, rowIdx) => (
@@ -95,7 +95,7 @@ export const Basic = meta.story({
                   ))}
                 </DatePicker.TableBody>
               </DatePicker.Table>
-              <DatePicker.NextTrigger unit="chunk" />
+              <DatePicker.NextTrigger view="year" />
             </>
           )}
         </DatePicker.View>

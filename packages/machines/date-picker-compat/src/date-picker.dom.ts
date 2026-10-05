@@ -91,8 +91,8 @@ export function getFocusedCell(ctx: Scope, view: DateView) {
 
 // Day-view nav: after a nav re-render, focus the SAME button, or fall back to the `CALENDAR_DATE_PICKER` container
 // (`viewControl`, tabindex=-1) when that button is now disabled at a boundary (`single-index.js:1240-1243`).
-export function getNavTriggerEl(ctx: Scope, direction: 'prev' | 'next', unit: NavigationUnit) {
-  return query<HTMLButtonElement>(getContentEl(ctx), `[data-part=${direction}-trigger][data-unit=${unit}]`)
+export function getNavTriggerEl(ctx: Scope, direction: 'prev' | 'next', view: 'day' | 'year', unit: NavigationUnit = 'month') {
+  return query<HTMLButtonElement>(getContentEl(ctx), `[data-part=${direction}-trigger][data-view=${view}]${view === 'day' ? `[data-unit=${unit}]` : ''}`)
 }
 export const getViewControlEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view-control]`)
 

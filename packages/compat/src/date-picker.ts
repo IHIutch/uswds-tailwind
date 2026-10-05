@@ -195,15 +195,15 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   private renderYearView() {
     const view = this.yearView
-    const previous = query<HTMLButtonElement>(view, '[data-part=prev-trigger][data-unit=chunk]')
-    const next = query<HTMLButtonElement>(view, '[data-part=next-trigger][data-unit=chunk]')
+    const previous = query<HTMLButtonElement>(view, '[data-part=prev-trigger][data-view=year]')
+    const next = query<HTMLButtonElement>(view, '[data-part=next-trigger][data-view=year]')
     const table = query<HTMLTableElement>(view, 'table')!
     const body = table.tBodies[0]!
 
     if (previous)
-      spreadProps(previous, this.api.getPrevTriggerProps({ unit: 'chunk' }))
+      spreadProps(previous, this.api.getPrevTriggerProps({ view: 'year' }))
     if (next)
-      spreadProps(next, this.api.getNextTriggerProps({ unit: 'chunk' }))
+      spreadProps(next, this.api.getNextTriggerProps({ view: 'year' }))
     spreadProps(table, this.api.getTableProps({ view: 'year' }))
 
     if (!this.yearTemplate)

@@ -39,11 +39,11 @@ export interface ViewTriggerProps {
 
 export interface TableProps extends ViewProps {}
 
-export type NavigationUnit = 'month' | 'year' | 'chunk'
+export type NavigationUnit = 'month' | 'year'
 
-export interface NavigationTriggerProps {
-  unit?: NavigationUnit
-}
+export type NavigationTriggerProps
+  = | { view?: 'day', unit?: NavigationUnit }
+  | { view: 'year', unit?: never }
 
 /* -----------------------------------------------------------------------------
  * Callback details (net-new Zag-idiom surface — USWDS has no callbacks; each is anchored to a USWDS observable)
@@ -166,7 +166,7 @@ export interface DatePickerProps extends DirectionProperty, CommonProperties {
 type PropsWithDefault = 'selectionMode' | 'min'
 
 // The event vocabulary (semantic; USWDS binding → event, `datePickerEvents` L2117-2256). Payloads are the minimal
-// documented shape. GOTO events follow Zag, with a unit for USWDS month/year/chunk controls.
+// documented shape. GOTO events follow Zag, with a unit for USWDS month/year controls in the day view.
 export type DatePickerEvent
   = | { type: 'TRIGGER.CLICK', index?: EndpointIndex } // toggle button CLICK → `toggleCalendar` L2119; `index` is NET-NEW range endpoint targeting (the original IS two triggers, one per picker — range-index.js)
     | { type: 'OPEN', index?: EndpointIndex }
@@ -174,7 +174,7 @@ export type DatePickerEvent
     | { type: 'CLOSE' } // programmatic close
     | { type: 'CELL.CLICK', value?: DateValue } // `.__date`/`.__month`/`.__year` L2122-2128; the machine reads the current view from context
     | { type: 'VIEW.SET', view: DateView } // `.__month-selection`/`.__year-selection` L2149/2153
-    | { type: 'GOTO.PREV' | 'GOTO.NEXT', unit: NavigationUnit }
+    | { type: 'GOTO.PREV' | 'GOTO.NEXT', view: 'day' | 'year', unit?: NavigationUnit }
     | { type: 'INPUT.CHANGE', value: string, index?: EndpointIndex } // external `input` → reconcile L2251; `index` = the typed FIELD (0=start/single, 1=range end) so the commit merges into that pair slot (each range field commits independently, as in `range-index.js`)
     // (No INPUT.ENTER/INPUT.BLUR events: Enter/focusout validation L2167/L2241 is a pure DOM side-effect wired
     // directly in connect's getInputProps — it never reaches the machine.)

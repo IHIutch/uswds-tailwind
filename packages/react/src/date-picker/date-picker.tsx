@@ -139,20 +139,21 @@ export type DatePickerNavigationTriggerProps = React.ButtonHTMLAttributes<HTMLBu
 
 function createNavigationTrigger(direction: 'prev' | 'next') {
   return React.forwardRef<HTMLButtonElement, DatePickerNavigationTriggerProps>(
-    ({ className, children, unit = 'month', ...props }, forwardedRef) => {
+    ({ className, children, view = 'day', unit = 'month', ...props }, forwardedRef) => {
       const { api } = useDatePickerContext()
-      const triggerProps = direction === 'prev' ? api.getPrevTriggerProps({ unit }) : api.getNextTriggerProps({ unit })
+      const navigationProps: datepicker.NavigationTriggerProps = view === 'year' ? { view } : { view, unit }
+      const triggerProps = direction === 'prev' ? api.getPrevTriggerProps(navigationProps) : api.getNextTriggerProps(navigationProps)
       const mergedProps = mergeProps(triggerProps, props)
-      const icon = unit === 'year'
+      const icon = view === 'day' && unit === 'year'
         ? direction === 'prev' ? 'icon-[material-symbols--keyboard-double-arrow-left]' : 'icon-[material-symbols--keyboard-double-arrow-right]'
         : direction === 'prev' ? 'icon-[material-symbols--keyboard-arrow-left]' : 'icon-[material-symbols--keyboard-arrow-right]'
       return (
         <button
           {...mergedProps}
-          className={cn('flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', unit === 'chunk' ? 'h-26 w-16 shrink-0' : 'size-10', className)}
+          className={cn('flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0', view === 'year' ? 'h-26 w-16 shrink-0' : 'size-10', className)}
           ref={forwardedRef}
         >
-          {children || <span className={cn(icon, unit === 'chunk' ? 'size-8' : 'size-6')} />}
+          {children || <span className={cn(icon, view === 'year' ? 'size-8' : 'size-6')} />}
         </button>
       )
     },

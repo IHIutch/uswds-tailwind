@@ -83,8 +83,8 @@ const template = `
               </tr>
             </tbody>
           </table>
-          <button data-part="prev-trigger" data-unit="chunk"></button>
-          <button data-part="next-trigger" data-unit="chunk"></button>
+          <button data-part="prev-trigger" data-view="year"></button>
+          <button data-part="next-trigger" data-view="year"></button>
         </div>
       </div>
       <div data-part="status"></div>

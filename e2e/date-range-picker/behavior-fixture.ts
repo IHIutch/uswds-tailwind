@@ -32,8 +32,8 @@ export function createRangeFixture(options: { min?: string, max?: string, start?
           </div>
           <div data-part="view" data-view="year">
             <table><tbody><tr><td><button data-part="table-cell-trigger"></button></td></tr></tbody></table>
-            <button data-part="prev-trigger" data-unit="chunk" type="button"></button>
-            <button data-part="next-trigger" data-unit="chunk" type="button"></button>
+            <button data-part="prev-trigger" data-view="year" type="button"></button>
+            <button data-part="next-trigger" data-view="year" type="button"></button>
           </div>
         </div>
         <div data-part="status"></div>

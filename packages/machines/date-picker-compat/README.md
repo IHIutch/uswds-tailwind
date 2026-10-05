@@ -31,15 +31,15 @@ With `selectionMode: 'range'`, bind the start input and trigger to index `0` and
 
 Cells use plain `Date` values for days and numbers for months and years. React's `TableCell` and `TableCellTrigger` accept `value`; weekday headers accept `day` and `index`.
 
-Navigation uses `getPrevTriggerProps({ unit })` and `getNextTriggerProps({ unit })`, where `unit` is `'month'`, `'year'`, or `'chunk'`. The default is `'month'`; a chunk spans 12 years. These replace the six separate navigation getters.
+Navigation uses `getPrevTriggerProps` and `getNextTriggerProps`. Pass `{ view: 'year' }` to move through the displayed 12-year range. In the day view, pass `{ unit: 'month' }` or `{ unit: 'year' }`; the default is one month. These replace the six separate navigation getters.
 
 ## Zag naming
 
 Views share `getViewProps({ view })`, `getViewTriggerProps({ view })`, and `getTableProps({ view })`. Cell getters use `getDayTableCellProps`, `getDayTableCellTriggerProps`, `getMonthTableCellTriggerProps`, and `getYearTableCellTriggerProps`.
 
-The shared anatomy parts are `view`, `viewTrigger`, `prevTrigger`, `nextTrigger`, and `tableCellTrigger`. Use `data-view` to distinguish views and `data-unit` to distinguish navigation steps.
+The shared anatomy parts are `view`, `viewTrigger`, `prevTrigger`, `nextTrigger`, and `tableCellTrigger`. Use `data-view` to distinguish views and `data-unit` to distinguish month/year navigation steps in the day view.
 
-React exposes `ViewTrigger` with a `view` prop and `PrevTrigger` / `NextTrigger` with a `unit` prop. These replace the separate month, year, and decade trigger components.
+React exposes `ViewTrigger` with a `view` prop and `PrevTrigger` / `NextTrigger` with a `view` prop and an optional day-view `unit` prop. These replace the separate month, year, and decade trigger components.
 
 ## License
 

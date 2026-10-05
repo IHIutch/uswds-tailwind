@@ -73,7 +73,7 @@ function renderDatePicker(props: DatePickerRootProps = {}) {
         <DatePicker.View view="year">
           {({ api }) => (
             <>
-              <DatePicker.PrevTrigger unit="chunk" aria-label="Previous decade" />
+              <DatePicker.PrevTrigger view="year" aria-label="Previous decade" />
               <DatePicker.Table>
                 <DatePicker.TableBody>
                   {chunk(api.years, 3).map((row, rowIdx) => (
@@ -89,7 +89,7 @@ function renderDatePicker(props: DatePickerRootProps = {}) {
                   ))}
                 </DatePicker.TableBody>
               </DatePicker.Table>
-              <DatePicker.NextTrigger unit="chunk" aria-label="Next decade" />
+              <DatePicker.NextTrigger view="year" aria-label="Next decade" />
             </>
           )}
         </DatePicker.View>

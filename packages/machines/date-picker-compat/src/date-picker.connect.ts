@@ -7,7 +7,7 @@ import type {
   DayTableCellProps,
   InputProps,
   MonthTableCellProps,
-  NavigationUnit,
+  NavigationTriggerProps,
   TableHeaderProps,
   TriggerProps,
   WeekDay,
@@ -194,19 +194,21 @@ export function connect<T extends PropTypes>(
     srStatusText = statuses.join('. ')
   }
 
-  function getNavigationProps(direction: 'prev' | 'next', unit: NavigationUnit = 'month') {
-    const allowed = unit === 'chunk'
+  function getNavigationProps(direction: 'prev' | 'next', props: NavigationTriggerProps = {}) {
+    const { view = 'day', unit = 'month' } = props
+    const allowed = view === 'year'
       ? direction === 'prev' ? navigation.canChunkPrev : navigation.canChunkNext
       : direction === 'prev' ? navigation.canGoPrev : navigation.canGoNext
     return normalize.button({
       ...parts[direction === 'prev' ? 'prevTrigger' : 'nextTrigger'].attrs,
-      'data-unit': unit,
+      'data-view': view,
+      'data-unit': view === 'day' ? unit : undefined,
       'dir': prop('dir'),
       'type': 'button',
-      'aria-label': `Navigate ${direction === 'prev' ? 'back' : 'forward'} ${unit === 'chunk' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
+      'aria-label': `Navigate ${direction === 'prev' ? 'back' : 'forward'} ${view === 'year' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
       'disabled': !allowed,
       onClick() {
-        send({ type: direction === 'prev' ? 'GOTO.PREV' : 'GOTO.NEXT', unit })
+        send({ type: direction === 'prev' ? 'GOTO.PREV' : 'GOTO.NEXT', view, unit: view === 'day' ? unit : undefined })
       },
     })
   }
@@ -438,10 +440,10 @@ export function connect<T extends PropTypes>(
     // (L1006). aria-labels verbatim. `onClick` → `display*` (L2131-2141); native `disabled` blocks clicking a
     // boundary button, and the machine's `canGoPrev`/`canGoNext` guard mirrors it.
     getPrevTriggerProps(props = {}) {
-      return getNavigationProps('prev', props.unit)
+      return getNavigationProps('prev', props)
     },
     getNextTriggerProps(props = {}) {
-      return getNavigationProps('next', props.unit)
+      return getNavigationProps('next', props)
     },
     getViewTriggerProps(props) {
       const targetView = props.view

@@ -516,8 +516,8 @@ export const machine = createMachine<DatePickerSchema>({
       },
       // The prev/next buttons are disabled at the min/max month (`prevButtonsDisabled`/`nextButtonsDisabled`
       // L1005-1006) — nav is allowed only when the button is enabled (ports the `if(_buttonEl.disabled) return`).
-      canGoPrev: ({ computed, event }) => event.unit === 'chunk' ? computed('navigation').canChunkPrev : computed('navigation').canGoPrev,
-      canGoNext: ({ computed, event }) => event.unit === 'chunk' ? computed('navigation').canChunkNext : computed('navigation').canGoNext,
+      canGoPrev: ({ computed, event }) => event.view === 'year' ? computed('navigation').canChunkPrev : computed('navigation').canGoPrev,
+      canGoNext: ({ computed, event }) => event.view === 'year' ? computed('navigation').canChunkNext : computed('navigation').canGoNext,
       // Ports `selectMonth`/`selectYear` `if (el.disabled) return` (L1456/1708) as a machine guard,
       // not just native `disabled`. `event.value` is the UNCLAMPED target month/year date.
       isSelectableViewCell: ({ context, computed, event }) => {
@@ -681,11 +681,11 @@ export const machine = createMachine<DatePickerSchema>({
         const bounds = computed('activeBounds')
         const step = event.type === 'GOTO.PREV' ? -1 : 1
         const anchor = context.get('focusedValue')
-        const target = event.unit === 'chunk'
+        const target = event.view === 'year'
           ? setYear(anchor, Math.max(0, context.get('focusedYear') + step * YEAR_CHUNK))
           : event.unit === 'year' ? addYears(anchor, step) : addMonths(anchor, step)
         const capped = keepDateBetweenMinAndMax(target, bounds.min, bounds.max)
-        if (event.unit === 'chunk')
+        if (event.view === 'year')
           context.set('focusedYear', capped.getFullYear())
         else
           context.set('focusedValue', capped)
@@ -697,10 +697,10 @@ export const machine = createMachine<DatePickerSchema>({
       focusNavTrigger({ scope, event, refs }) {
         const direction = event.type === 'GOTO.PREV' ? 'prev' : 'next'
         scheduleFocusFrame({ scope, refs }, () => {
-          const btn = dom.getNavTriggerEl(scope, direction, event.unit ?? 'month')
+          const btn = dom.getNavTriggerEl(scope, direction, event.view, event.unit)
           if (btn && !btn.disabled)
             btn.focus()
-          else (event.unit === 'chunk' ? dom.getYearViewEl(scope) : dom.getViewControlEl(scope))?.focus()
+          else (event.view === 'year' ? dom.getYearViewEl(scope) : dom.getViewControlEl(scope))?.focus()
         })
       },
 
