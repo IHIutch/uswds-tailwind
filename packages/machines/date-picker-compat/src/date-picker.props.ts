@@ -2,7 +2,6 @@ import type { DatePickerProps } from './date-picker.types'
 import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
-// Form identity belongs to the visible input; formats and selection behavior follow USWDS.
 export const props = createProps<DatePickerProps>()([
   'dir',
   'disabled',

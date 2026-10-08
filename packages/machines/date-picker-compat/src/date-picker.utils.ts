@@ -1,17 +1,11 @@
 import type { DateValue, EndpointIndex } from './date-picker.types'
 
-// Date math follows USWDS, including adjusted input parsing, years below 100,
-// month-preserving arithmetic, and 12-year navigation chunks.
-// Validation helpers return values; the machine applies native input updates.
+// Date math follows USWDS, including year zero and month-preserving arithmetic.
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L129-L584
-
-/** USWDS constants (`single-index.js`). */
-export const DEFAULT_EXTERNAL_DATE_FORMAT = 'MM/DD/YYYY' // L101
-export const INTERNAL_DATE_FORMAT = 'YYYY-MM-DD' // L102
-export const YEAR_CHUNK = 12 // L98 (decade block = 12 years, NOT 10)
-const VALIDATION_MESSAGE = 'Please enter a valid date' // L82
-
-/** Shared availability for the active calendar endpoint's month and 12-year navigation. */
+export const DEFAULT_EXTERNAL_DATE_FORMAT = 'MM/DD/YYYY'
+export const INTERNAL_DATE_FORMAT = 'YYYY-MM-DD'
+export const YEAR_CHUNK = 12
+const VALIDATION_MESSAGE = 'Please enter a valid date'
 export function getNavigationAvailability(focusedValue: DateValue, rovingYear: number, min: DateValue, max: DateValue | undefined) {
   const yearChunkStart = Math.max(0, rovingYear - (rovingYear % YEAR_CHUNK))
   return {
@@ -23,11 +17,6 @@ export function getNavigationAvailability(focusedValue: DateValue, rovingYear: n
   }
 }
 
-/* -----------------------------------------------------------------------------
- * Core (L138-171)
- * ----------------------------------------------------------------------------- */
-
-/** `single-index.js:138` — nudge a rolled-over date back within `month` (over by only 1-3 days). */
 function keepDateWithinMonth(dateToCheck: DateValue, month: number): DateValue {
   if (month !== dateToCheck.getMonth()) {
     dateToCheck.setDate(0)
@@ -35,79 +24,41 @@ function keepDateWithinMonth(dateToCheck: DateValue, month: number): DateValue {
   return dateToCheck
 }
 
-/** `single-index.js:154` — `new Date(0)`+`setFullYear` ⇒ genuine year-0..9999 (month zero-indexed). */
+// setFullYear avoids the Date constructor remapping years 0-99 to 1900-1999.
 export function setDate(year: number, month: number, date: number): DateValue {
   const newDate = new Date(0)
   newDate.setFullYear(year, month, date)
   return newDate
 }
 
-/** `single-index.js:165` — today's Y/M/D via `setDate` (`new Date(0)`+`setFullYear`), so it carries epoch's local time-of-day, NOT midnight — inert since everything orders by Y/M/D (kept verbatim; `normalizeDate` handles consumer-supplied dates). */
 export function today(): DateValue {
   const newDate = new Date()
-  const day = newDate.getDate()
-  const month = newDate.getMonth()
-  const year = newDate.getFullYear()
-  return setDate(year, month, day)
+  return normalizeDate(newDate)
 }
 
-/* -----------------------------------------------------------------------------
- * Month/week boundaries (L179-195)
- * ----------------------------------------------------------------------------- */
-
-/** `single-index.js:179` — first day of `date`'s month. */
 function startOfMonth(date: DateValue): DateValue {
-  const newDate = new Date(0)
-  newDate.setFullYear(date.getFullYear(), date.getMonth(), 1)
-  return newDate
+  return setDate(date.getFullYear(), date.getMonth(), 1)
 }
 
-/** `single-index.js:191` — last day of `date`'s month (`day 0` of the next month). */
 function lastDayOfMonth(date: DateValue): DateValue {
-  const newDate = new Date(0)
-  newDate.setFullYear(date.getFullYear(), date.getMonth() + 1, 0)
-  return newDate
+  return setDate(date.getFullYear(), date.getMonth() + 1, 0)
 }
 
-/* -----------------------------------------------------------------------------
- * Arithmetic (L204-335)
- * ----------------------------------------------------------------------------- */
-
-/** `single-index.js:204`. */
 export function addDays(_date: DateValue, numDays: number): DateValue {
   const newDate = new Date(_date.getTime())
   newDate.setDate(newDate.getDate() + numDays)
   return newDate
 }
 
-/** `single-index.js:217`. */
-export function subDays(_date: DateValue, numDays: number): DateValue {
-  return addDays(_date, -numDays)
-}
-
-/** `single-index.js:226`. */
-export function addWeeks(_date: DateValue, numWeeks: number): DateValue {
-  return addDays(_date, numWeeks * 7)
-}
-
-/** `single-index.js:235`. */
-export function subWeeks(_date: DateValue, numWeeks: number): DateValue {
-  return addWeeks(_date, -numWeeks)
-}
-
-/** `single-index.js:243` — Sunday-start of `_date`'s week. */
 export function startOfWeek(_date: DateValue): DateValue {
-  const dayOfWeek = _date.getDay()
-  return subDays(_date, dayOfWeek)
+  return addDays(_date, -_date.getDay())
 }
 
-/** `single-index.js:255` — Saturday-end of `_date`'s week. */
 export function endOfWeek(_date: DateValue): DateValue {
-  const dayOfWeek = _date.getDay()
-  return addDays(_date, 6 - dayOfWeek)
+  return addDays(_date, 6 - _date.getDay())
 }
 
-/** `single-index.js:267` — add months, preserving the intended month via `keepDateWithinMonth` (Jan31+1→Feb28/29). */
+/** Preserve the intended month when the day overflows, e.g. January 31 to February 28. */
 export function addMonths(_date: DateValue, numMonths: number): DateValue {
   const newDate = new Date(_date.getTime())
   const dateMonth = (newDate.getMonth() + 12 + numMonths) % 12
@@ -116,22 +67,10 @@ export function addMonths(_date: DateValue, numMonths: number): DateValue {
   return newDate
 }
 
-/** `single-index.js:284`. */
-export function subMonths(_date: DateValue, numMonths: number): DateValue {
-  return addMonths(_date, -numMonths)
-}
-
-/** `single-index.js:293`. */
 export function addYears(_date: DateValue, numYears: number): DateValue {
   return addMonths(_date, numYears * 12)
 }
 
-/** `single-index.js:302`. */
-export function subYears(_date: DateValue, numYears: number): DateValue {
-  return addYears(_date, -numYears)
-}
-
-/** `single-index.js:311` — set month (zero-indexed), preserving via `keepDateWithinMonth`. */
 export function setMonth(_date: DateValue, month: number): DateValue {
   const newDate = new Date(_date.getTime())
   newDate.setMonth(month)
@@ -139,7 +78,6 @@ export function setMonth(_date: DateValue, month: number): DateValue {
   return newDate
 }
 
-/** `single-index.js:327` — set year, preserving the month via `keepDateWithinMonth` (Feb29→non-leap→Feb28). */
 export function setYear(_date: DateValue, year: number): DateValue {
   const newDate = new Date(_date.getTime())
   const month = newDate.getMonth()
@@ -148,44 +86,26 @@ export function setYear(_date: DateValue, year: number): DateValue {
   return newDate
 }
 
-/* -----------------------------------------------------------------------------
- * Compare / clamp (L344-453)
- * ----------------------------------------------------------------------------- */
-
-/** `single-index.js:344` — earliest of the two (fresh Date). */
 function min(dateA: DateValue, dateB: DateValue): DateValue {
-  let newDate = dateA
-  if (dateB.getTime() < dateA.getTime()) {
-    newDate = dateB
-  }
-  return new Date(newDate.getTime())
+  return new Date(dateB.getTime() < dateA.getTime() ? dateB : dateA)
 }
 
-/** `single-index.js:361` — latest of the two (fresh Date). */
 function max(dateA: DateValue, dateB: DateValue): DateValue {
-  let newDate = dateA
-  if (dateB.getTime() > dateA.getTime()) {
-    newDate = dateB
-  }
-  return new Date(newDate.getTime())
+  return new Date(dateB.getTime() > dateA.getTime() ? dateB : dateA)
 }
 
-/** `single-index.js:378` — same calendar year (falsy-safe: false if either date is missing). */
 export function isSameYear(dateA: DateValue | undefined, dateB: DateValue | undefined): boolean {
   return !!(dateA && dateB && dateA.getFullYear() === dateB.getFullYear())
 }
 
-/** `single-index.js:388` — same year AND month. */
 export function isSameMonth(dateA: DateValue | undefined, dateB: DateValue | undefined): boolean {
   return isSameYear(dateA, dateB) && dateA!.getMonth() === dateB!.getMonth()
 }
 
-/** `single-index.js:398` — same year, month AND day. */
 export function isSameDay(dateA: DateValue | undefined, dateB: DateValue | undefined): boolean {
   return isSameMonth(dateA, dateB) && dateA!.getDate() === dateB!.getDate()
 }
 
-/** `single-index.js:409` — clamp `date` into `[minDate, maxDate]` (maxDate optional); fresh Date. */
 export function keepDateBetweenMinAndMax(
   date: DateValue,
   minDate: DateValue,
@@ -201,7 +121,6 @@ export function keepDateBetweenMinAndMax(
   return new Date(newDate.getTime())
 }
 
-/** `single-index.js:429` — `date >= min && (!max || date <= max)`. */
 export function isDateWithinMinAndMax(
   date: DateValue,
   minDate: DateValue,
@@ -210,7 +129,6 @@ export function isDateWithinMinAndMax(
   return date.getTime() >= minDate.getTime() && (!maxDate || date.getTime() <= maxDate.getTime())
 }
 
-/** `single-index.js:440` — is `date`'s whole month outside `[min,max]`. */
 export function isDatesMonthOutsideMinOrMax(
   date: DateValue,
   minDate: DateValue,
@@ -222,7 +140,6 @@ export function isDatesMonthOutsideMinOrMax(
   )
 }
 
-/** `single-index.js:451` — is `date`'s whole year outside `[min,max]`. */
 export function isDatesYearOutsideMinOrMax(
   date: DateValue,
   minDate: DateValue,
@@ -234,111 +151,52 @@ export function isDatesYearOutsideMinOrMax(
   )
 }
 
-/** `single-index.js:470` — range highlight bounds; within-* are STRICTLY interior (start+1..end−1, L475-476). */
-export interface RangeDates {
-  rangeStartDate: DateValue | undefined
-  rangeEndDate: DateValue | undefined
-  withinRangeStartDate: DateValue | undefined
-  withinRangeEndDate: DateValue | undefined
-}
-export function setRangeDates(date: DateValue, rangeDate: DateValue | undefined): RangeDates {
-  if (!rangeDate) {
-    return {
-      rangeStartDate: undefined,
-      rangeEndDate: undefined,
-      withinRangeStartDate: undefined,
-      withinRangeEndDate: undefined,
-    }
-  }
+/** Preview bounds exclude both endpoints. */
+export function setRangeDates(date: DateValue, rangeDate: DateValue) {
   const rangeStartDate = min(date, rangeDate)
   const rangeEndDate = max(date, rangeDate)
   return {
     rangeStartDate,
     rangeEndDate,
     withinRangeStartDate: addDays(rangeStartDate, 1),
-    withinRangeEndDate: subDays(rangeEndDate, 1),
+    withinRangeEndDate: addDays(rangeEndDate, -1),
   }
 }
 
-/* -----------------------------------------------------------------------------
- * Parse / format (L494-582)
- * ----------------------------------------------------------------------------- */
-
-/**
- * `single-index.js:494` — parse `MM/DD/YYYY` (external) or `YYYY-MM-DD` (internal). `adjustDate` clamps month
- * (1-12) + day (1..lastDay) and expands a <3-digit year against the current-decade stub (L520-527). A date is
- * built ONLY if `month && day && year != null` (L555) → year 0 is valid; month/day 0 are falsy ⇒ no date.
- */
+/** Adjusted parsing clamps month/day and expands short years; validation uses the raw text. */
 export function parseDateString(
   dateString: string | undefined | null,
   dateFormat: string = INTERNAL_DATE_FORMAT,
   adjustDate = false,
 ): DateValue | undefined {
-  let date: DateValue | undefined
-  let month: number | undefined
-  let day: number | undefined
-  let year: number | undefined
-  let parsed: number
+  if (!dateString)
+    return undefined
 
-  if (dateString) {
-    let monthStr: string | undefined
-    let dayStr: string | undefined
-    let yearStr: string | undefined
+  const external = dateFormat === DEFAULT_EXTERNAL_DATE_FORMAT
+  const parts = dateString.split(external ? '/' : '-')
+  const [monthText = '', dayText = '', yearText = ''] = external ? parts : [parts[1], parts[2], parts[0]]
+  let month = Number.parseInt(monthText, 10)
+  let day = Number.parseInt(dayText, 10)
+  let year = Number.parseInt(yearText, 10)
+  if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year))
+    return undefined
 
-    if (dateFormat === DEFAULT_EXTERNAL_DATE_FORMAT) {
-      ;[monthStr, dayStr, yearStr] = dateString.split('/')
+  if (adjustDate) {
+    const parsedYear = year
+    year = Math.max(0, year)
+    if (yearText.length < 3) {
+      const currentYear = today().getFullYear()
+      const yearStub = currentYear - (currentYear % 10 ** yearText.length)
+      year = yearStub + parsedYear
     }
-    else {
-      ;[yearStr, monthStr, dayStr] = dateString.split('-')
-    }
-
-    if (yearStr) {
-      parsed = Number.parseInt(yearStr, 10)
-      if (!Number.isNaN(parsed)) {
-        year = parsed
-        if (adjustDate) {
-          year = Math.max(0, year)
-          if (yearStr.length < 3) {
-            const currentYear = today().getFullYear()
-            const currentYearStub = currentYear - (currentYear % 10 ** yearStr.length)
-            year = currentYearStub + parsed
-          }
-        }
-      }
-    }
-
-    if (monthStr) {
-      parsed = Number.parseInt(monthStr, 10)
-      if (!Number.isNaN(parsed)) {
-        month = parsed
-        if (adjustDate) {
-          month = Math.max(1, month)
-          month = Math.min(12, month)
-        }
-      }
-    }
-
-    if (month && dayStr && year != null) {
-      parsed = Number.parseInt(dayStr, 10)
-      if (!Number.isNaN(parsed)) {
-        day = parsed
-        if (adjustDate) {
-          const lastDayOfTheMonth = setDate(year, month, 0).getDate()
-          day = Math.max(1, day)
-          day = Math.min(lastDayOfTheMonth, day)
-        }
-      }
-    }
-
-    if (month && day && year != null) {
-      date = setDate(year, month - 1, day)
-    }
+    month = Math.max(1, Math.min(12, month))
+    day = Math.max(1, Math.min(setDate(year, month, 0).getDate(), day))
   }
 
-  return date
+  return month && day ? setDate(year, month - 1, day) : undefined
 }
 
-/** `single-index.js:570` — serialize; external `MM/DD/YYYY`, internal `YYYY-MM-DD` (default). `padZeros` zero-pads. */
+/** Format as ISO YYYY-MM-DD by default, or MM/DD/YYYY for visible inputs. */
 export function formatDate(date: DateValue, dateFormat: string = INTERNAL_DATE_FORMAT): string {
   const padZeros = (value: number, length: number): string => `0000${value}`.slice(-length)
 
@@ -353,59 +211,30 @@ export function formatDate(date: DateValue, dateFormat: string = INTERNAL_DATE_F
   return [padZeros(year, 4), padZeros(month, 2), padZeros(day, 2)].join('-')
 }
 
-/* -----------------------------------------------------------------------------
- * Validation chain (L798-869) — ported PURE (see HEADLESS BOUNDARY above)
- * ----------------------------------------------------------------------------- */
+/** Preserve endpoint positions, including sparse-array holes, in ISO payloads. */
+export function serializeDates(value: readonly (DateValue | undefined)[]): string[] {
+  return Array.from(value, date => date ? formatDate(date) : '')
+}
 
-/**
- * `single-index.js:798` — is the EXTERNAL `MM/DD/YYYY` value invalid? Empty ⇒ valid (L804). Otherwise valid ONLY
- * if a raw-split round-trip matches month/day/year (rejects overflow like `02/31`), the year part is EXACTLY 4
- * chars (L821), and the date sits within `[min,max]`. Reads the RAW string (NOT an adjusted parse). `minDate` is
- * always resolved (default `0000-01-01`); `maxDate` optional.
- */
 export function isDateInputInvalid(
   dateString: string,
   minDate: DateValue,
   maxDate: DateValue | undefined,
 ): boolean {
-  let isInvalid = false
+  if (!dateString)
+    return false
 
-  if (dateString) {
-    isInvalid = true
-
-    const dateStringParts = dateString.split('/')
-    const [month, day, year] = dateStringParts.map((str) => {
-      let value: number | undefined
-      const parsed = Number.parseInt(str, 10)
-      if (!Number.isNaN(parsed))
-        value = parsed
-      return value
-    })
-
-    if (month && day && year != null) {
-      const checkDate = setDate(year, month - 1, day)
-
-      if (
-        checkDate.getMonth() === month - 1
-        && checkDate.getDate() === day
-        && checkDate.getFullYear() === year
-        && dateStringParts[2]?.length === 4
-        && isDateWithinMinAndMax(checkDate, minDate, maxDate)
-      ) {
-        isInvalid = false
-      }
-    }
-  }
-
-  return isInvalid
+  const [month = '', day = '', year = ''] = dateString.split('/')
+  const date = parseDateString(dateString, DEFAULT_EXTERNAL_DATE_FORMAT)
+  return !date
+    || date.getMonth() !== Number.parseInt(month, 10) - 1
+    || date.getDate() !== Number.parseInt(day, 10)
+    || date.getFullYear() !== Number.parseInt(year, 10)
+    || year.length !== 4
+    || !isDateWithinMinAndMax(date, minDate, maxDate)
 }
 
-/**
- * `single-index.js:838` — PURE port of the scoped constraint-validation decision. Returns the custom-validity
- * string connect should apply (connect calls `el.setCustomValidity`), or `null` for NO change:
- *   • set `VALIDATION_MESSAGE` only if invalid AND no existing message (L842).
- *   • clear (`""`) only if the current message IS `VALIDATION_MESSAGE` (L846) — never stomps a foreign validity.
- */
+/** Return null to preserve validity; never overwrite another validator's message. */
 export function validateDateInput(
   dateString: string,
   minDate: DateValue,
@@ -425,41 +254,22 @@ export function validateDateInput(
   return null
 }
 
-/**
- * `single-index.js:858` — PURE port: the internal ISO value that should mirror the EXTERNAL value. `""` when the
- * external is empty/invalid; else `formatDate` of the ADJUSTED parse (2-digit-year expansion + clamping via
- * `adjustDate=true`). Connect writes-if-changed + dispatches `change` (L866-868). QUIRK-ADJUSTED-VALIDATION: the
- * mirror uses the ADJUSTED `inputDate`, but the invalid-guard reads the RAW string via `isDateInputInvalid`.
- */
-export function reconcileInputValues(
+// Validate the raw input before accepting its adjusted parse.
+export function parseInputValue(
   externalValue: string,
   minDate: DateValue,
   maxDate: DateValue | undefined,
-): string {
-  const inputDate = parseDateString(externalValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
-  let newValue = ''
-
-  if (inputDate && !isDateInputInvalid(externalValue, minDate, maxDate)) {
-    newValue = formatDate(inputDate)
-  }
-
-  return newValue
+): DateValue | undefined {
+  if (isDateInputInvalid(externalValue, minDate, maxDate))
+    return undefined
+  return parseDateString(externalValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
 }
 
-/* -----------------------------------------------------------------------------
- * Render support (L977-1116) — the day-grid loop + locale labels
- * ----------------------------------------------------------------------------- */
-
-// The Zag port exposes raw `Date` value/min/max props USWDS never had. A consumer's
-// `new Date(y,m,d)` is LOCAL midnight, but internal dates are `setDate`-built (epoch-offset time-of-day), so a raw
-// getTime() clamp would mis-disable boundary cells. Normalize every incoming Date through `setDate` so ALL dates
-// share one offset and comparisons stay Y/M/D-consistent.
+/** Ignore time of day when comparing selections. */
 export function normalizeDate(date: DateValue): DateValue {
   return setDate(date.getFullYear(), date.getMonth(), date.getDate())
 }
 
-// `single-index.js:1104-1116` — the visible day array: start at the Sunday of the focused month's first week, push
-// until ≥28 cells AND past the focused month AND a whole-week boundary (28-42 cells / 4-6 whole weeks).
 export function getVisibleDays(focusedValue: DateValue): DateValue[] {
   const focusedMonth = focusedValue.getMonth()
   let cursor = startOfWeek(startOfMonth(focusedValue))
@@ -471,33 +281,22 @@ export function getVisibleDays(focusedValue: DateValue): DateValue[] {
   return days
 }
 
-// Locale label seeds — `single-index.js:85-92`. `new Date(0, i)` = 1900-based (the 2-digit-year map), but only the
-// locale month/weekday NAMES matter, which are year-independent. `DAY_OF_WEEK_DATE_SEED[0]` = Sun (`new Date(0,0,0)`
-// = Dec 31 1899). Ported verbatim so the day-cell `aria-label` month/weekday text matches the original byte-for-byte.
+// Day zero of January 1900 is Sunday, so weekday labels start with Sunday.
 const MONTH_DATE_SEED = Array.from({ length: 12 }, (_, i) => new Date(0, i))
 const DAY_OF_WEEK_DATE_SEED = Array.from({ length: 7 }, (_, i) => new Date(0, 0, i))
 
-/** `single-index.js:710` — long month names Jan..Dec for the given locale (BCP-47 / `document.documentElement.lang`). */
 export function getMonthLabels(locale: string): string[] {
   return MONTH_DATE_SEED.map(d => d.toLocaleString(locale, { month: 'long' }))
 }
 
-/** `single-index.js:713` — long weekday names Sun..Sat (aria-labels). */
 export function getWeekdayLabels(locale: string): string[] {
   return DAY_OF_WEEK_DATE_SEED.map(d => d.toLocaleString(locale, { weekday: 'long' }))
 }
 
-/** `single-index.js:718` — narrow weekday abbreviations Sun..Sat (the `<th>` text). */
 export function getWeekdayNarrow(locale: string): string[] {
   return DAY_OF_WEEK_DATE_SEED.map(d => d.toLocaleString(locale, { weekday: 'narrow' }))
 }
 
-/* -----------------------------------------------------------------------------
- * Range cross-clamp — the intra-machine replacement for `range-index.js`'s dataset sync
- * ----------------------------------------------------------------------------- */
-
-// Each endpoint is bounded by its peer and the global limits.
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/index.js#L65-L105
 export interface EffectiveDateBounds {
   min: DateValue
   max: DateValue | undefined
@@ -519,7 +318,7 @@ export function getEffectiveDateBounds(
   }
 }
 
-/** Keep source endpoint slots stable, including end-only `[undefined, end]`. */
+/** Preserve endpoint slots, including end-only [undefined, end]. */
 export function setRangeEndpoint(
   value: (DateValue | undefined)[],
   index: EndpointIndex,
@@ -531,7 +330,6 @@ export function setRangeEndpoint(
   return next
 }
 
-/** Defend JavaScript callers as well as the narrow public TypeScript API. */
 export function isEndpointIndex(value: unknown): value is EndpointIndex {
   return value === 0 || value === 1
 }
