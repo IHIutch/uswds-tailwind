@@ -59,36 +59,11 @@ export const getViewControlEl = (ctx: Scope) => query<HTMLElement>(getContentEl(
 
 export const getYearViewEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view][data-view=year]`)
 
-// Frameworks may mount input parts after the machine starts.
-export function observeInitialInputs(ctx: Scope, count: number, initialize: (element: HTMLInputElement, index: number, internal: boolean) => void): VoidFunction {
-  const win = ctx.getWin()
-  const seen = new WeakSet<HTMLInputElement>()
-  let observer: MutationObserver
-  let live = true
-  const visit = () => {
-    if (!live)
-      return
-    let complete = true
-    for (let index = 0; index < count; index++) {
-      for (const [element, internal] of [[getHiddenInputEl(ctx, index), true], [getExternalInputEl(ctx, index), false]] as const) {
-        if (!element) {
-          complete = false
-          continue
-        }
-        if (!seen.has(element)) {
-          seen.add(element)
-          initialize(element, index, internal)
-        }
-      }
+export function forEachInitialInput(ctx: Scope, count: number, initialize: (element: HTMLInputElement, index: number, internal: boolean) => void): void {
+  for (let index = 0; index < count; index++) {
+    for (const [element, internal] of [[getHiddenInputEl(ctx, index), true], [getExternalInputEl(ctx, index), false]] as const) {
+      if (element)
+        initialize(element, index, internal)
     }
-    if (complete)
-      observer.disconnect()
-  }
-  observer = new win.MutationObserver(visit)
-  observer.observe(ctx.getRootNode(), { childList: true, subtree: true, attributes: true, attributeFilter: ['id', 'data-part'] })
-  visit()
-  return () => {
-    live = false
-    observer.disconnect()
   }
 }

@@ -45,7 +45,7 @@ export function createDatePickerInputs({ scope, context, prop }: Pick<Params<Dat
 
   return {
     initialize() {
-      return dom.observeInitialInputs(scope, prop('selectionMode') === 'range' ? 2 : 1, (element, index, internal) => {
+      dom.forEachInitialInput(scope, prop('selectionMode') === 'range' ? 2 : 1, (element, index, internal) => {
         const date = context.get('value')[index]
         const text = acceptedText(date)[internal ? 'internal' : 'external']
         if (date)

@@ -23,7 +23,6 @@ export type {
   TableProps,
   TriggerProps,
   ValueChangeDetails,
-  ViewChangeDetails,
   ViewProps,
   ViewTriggerProps,
   WeekDay,

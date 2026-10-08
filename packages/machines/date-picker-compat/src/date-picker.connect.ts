@@ -106,7 +106,7 @@ export function connect<T extends PropTypes>(
   const years: number[] = []
   for (let y = yearChunkStart; y < yearChunkStart + YEAR_CHUNK; y += 1) years.push(y)
 
-  const locale = prop('locale') ?? (scope.getDoc().documentElement.lang || 'en')
+  const locale = scope.getDoc().documentElement.lang || 'en'
   const monthLabels = getMonthLabels(locale)
   const weekdayLabels = getWeekdayLabels(locale)
   const weekdayNarrow = getWeekdayNarrow(locale)

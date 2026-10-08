@@ -36,10 +36,6 @@ export interface ValueChangeDetails {
   view: DateView
 }
 
-export interface ViewChangeDetails {
-  view: DateView
-}
-
 export interface OpenChangeDetails {
   open: boolean
 }
@@ -58,8 +54,6 @@ export type ElementIds = Partial<{
 export interface DatePickerProps extends CommonProperties {
   /** Element ids for composition. */
   ids?: ElementIds | undefined
-  /** BCP-47 locale for labels; defaults to the document language or en. */
-  locale?: string | undefined
   /**
    * Selection mode. Range slots are start and end.
    * @default "single"
@@ -69,10 +63,6 @@ export interface DatePickerProps extends CommonProperties {
   value?: (DateValue | undefined)[] | undefined
   /** Initial selection when uncontrolled. */
   defaultValue?: (DateValue | undefined)[] | undefined
-  /** Controlled calendar focus, independent of selection. */
-  focusedValue?: DateValue | undefined
-  /** Initial focused date when uncontrolled. */
-  defaultFocusedValue?: DateValue | undefined
   /** Navigation fallback; does not select or submit a value. */
   defaultDate?: DateValue | undefined
   /** Fixed peer anchor for range markers and preview, independent of selection. */
@@ -93,7 +83,6 @@ export interface DatePickerProps extends CommonProperties {
   /** Reports selection proposals with ISO dates in valueAsString. */
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
   onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
-  onViewChange?: ((details: ViewChangeDetails) => void) | undefined
 }
 
 type PropsWithDefault = 'selectionMode' | 'min'
@@ -101,7 +90,6 @@ type PropsWithDefault = 'selectionMode' | 'min'
 export type DatePickerEvent
   = | { type: 'TRIGGER.CLICK', index?: EndpointIndex }
     | { type: 'OPEN', index?: EndpointIndex }
-    | { type: 'BOUNDS.CHANGE' }
     | { type: 'CLOSE' }
     | { type: 'CELL.CLICK', value?: DateValue }
     | { type: 'VIEW.SET', view: DateView }
@@ -161,7 +149,6 @@ export interface DatePickerSchema {
     | 'commitInputValue'
     | 'syncInputElement'
     | 'reconcileCalendar'
-    | 'refreshCalendarBounds'
     | 'resetView'
     | 'markOpeningRender'
     | 'applyNav'

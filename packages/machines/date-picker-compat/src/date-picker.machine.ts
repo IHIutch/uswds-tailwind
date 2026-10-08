@@ -63,8 +63,6 @@ function scheduleFocusFrame({ scope, refs }: Pick<Params<DatePickerSchema>, 'sco
       refs.set('focusRafCleanup', null)
   }
   id = win.requestAnimationFrame(() => {
-    if (refs.get('focusRafCleanup') !== cleanup)
-      return
     cleanup()
     callback()
   })
@@ -166,7 +164,6 @@ export const machine = createMachine<DatePickerSchema>({
     },
   },
 
-  // Navigation and input transactions require same-task reads of preceding writes.
   context({ prop, bindable }) {
     return {
       // Array.from preserves sparse range slots as explicit empty endpoints.
@@ -176,54 +173,42 @@ export const machine = createMachine<DatePickerSchema>({
           defaultValue: Array.from(prop('defaultValue') ?? [], d => (d ? normalizeDate(d) : undefined)),
           value: controlledValue ? Array.from(controlledValue, d => (d ? normalizeDate(d) : undefined)) : undefined,
           isEqual: isDateArrayEqual,
-          hash: v => serializeDates(v).join(','),
+          // Input commits read the new selection in the same task.
           sync: true,
         }
       }),
       focusedValue: bindable<DateValue>(() => ({
-        defaultValue: normalizeDate(prop('defaultFocusedValue') ?? today()),
-        value: prop('focusedValue') ? normalizeDate(prop('focusedValue')!) : undefined,
+        defaultValue: today(),
         isEqual: isDateEqual,
-        sync: true,
       })),
       view: bindable<DateView>(() => ({
         defaultValue: 'day',
-        // Notify only committed view changes, including suppression of no-op updates.
-        onChange(view) {
-          prop('onViewChange')?.({ view })
-        },
       })),
       hoveredValue: bindable<DateValue | null>(() => ({
         defaultValue: null,
         isEqual: isDateEqual,
       })),
-      activeIndex: bindable<0 | 1>(() => ({ defaultValue: 0, sync: true })),
+      activeIndex: bindable<0 | 1>(() => ({ defaultValue: 0 })),
       inputValues: bindable<string[]>(() => ({
         defaultValue: [],
-        sync: true,
       })),
       isOpeningRender: bindable<boolean>(() => ({
         defaultValue: false,
       })),
       focusedYear: bindable<number>(() => ({
         defaultValue: 0,
-        sync: true,
       })),
       focusedMonth: bindable<number>(() => ({
         defaultValue: 0,
-        sync: true,
       })),
     }
   },
 
   effects: ['bridgeMountedInputs'],
 
-  watch({ track, prop, action, send }) {
+  watch({ track, prop, action }) {
     track([() => prop('value') === undefined ? undefined : serializeDates(prop('value')!).join(',')], () => {
       action(['syncInputElement'])
-    })
-    track([() => prop('min').getTime(), () => prop('max')?.getTime(), () => prop('rangeAnchor')?.getTime()], () => {
-      send({ type: 'BOUNDS.CHANGE' })
     })
   },
 
@@ -256,8 +241,6 @@ export const machine = createMachine<DatePickerSchema>({
 
     open: {
       effects: ['trackDismissableElement'],
-      // Cancel calendar focus before close actions schedule input focus.
-      exit: ['cancelFocusRaf'],
       entry: ['focusActiveCell'],
       on: {
         'CELL.CLICK': [
@@ -273,7 +256,6 @@ export const machine = createMachine<DatePickerSchema>({
         ],
         'CELL.POINTER_MOVE': { guard: 'isChoosingRangeEnd', actions: ['setHoveredDate'] },
         'VIEW.SET': { actions: ['setView', 'focusActiveCell'] },
-        'BOUNDS.CHANGE': { actions: ['refreshCalendarBounds'] },
         'TABLE.ARROW_LEFT': { actions: ['keyboardNav'] },
         'TABLE.ARROW_RIGHT': { actions: ['keyboardNav'] },
         'TABLE.ARROW_UP': { actions: ['keyboardNav'] },
@@ -320,7 +302,7 @@ export const machine = createMachine<DatePickerSchema>({
     guards: {
       isInteractive: ({ prop }) => !prop('disabled') && !prop('readOnly'),
       isDifferentActiveIndex: ({ context, prop, event }) =>
-        !prop('disabled') && !prop('readOnly') && (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN')
+        (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN')
         && prop('selectionMode') === 'range'
         && event.index !== undefined
         && event.index !== context.get('activeIndex'),
@@ -371,8 +353,7 @@ export const machine = createMachine<DatePickerSchema>({
       },
 
       setHoveredDate({ context, event }) {
-        if (event.value)
-          context.set('hoveredValue', normalizeDate(event.value))
+        context.set('hoveredValue', normalizeDate(event.value))
       },
       clearHoveredDate({ context }) {
         context.set('hoveredValue', null)
@@ -412,10 +393,6 @@ export const machine = createMachine<DatePickerSchema>({
         const next = isRange
           ? setRangeEndpoint(current, index, parsed)
           : parsed ? [parsed] : []
-        // Unchanged input must not dispatch another value callback.
-        if (isDateArrayEqual(current, next)) {
-          return
-        }
         context.set('value', next)
         emitValueChange(params, next)
         // Rejected controlled proposals must not reach the ISO mirror.
@@ -424,13 +401,6 @@ export const machine = createMachine<DatePickerSchema>({
 
       reconcileCalendar(params) {
         reconcileVisibleCalendar(params, params.event.value, params.event.index)
-      },
-      refreshCalendarBounds(params) {
-        const { scope, context } = params
-        const index = context.get('activeIndex')
-        const input = dom.getExternalInputEl(scope, index)
-        if (input)
-          reconcileVisibleCalendar(params, input.value, index)
       },
 
       resetView({ context }) {
@@ -554,7 +524,7 @@ export const machine = createMachine<DatePickerSchema>({
       bridgeMountedInputs({ scope, context, prop, refs }) {
         const inputs = createDatePickerInputs({ scope, context, prop })
         refs.set('inputs', inputs)
-        return inputs.initialize()
+        inputs.initialize()
       },
       trackDismissableElement({ scope, send }) {
         return trackDismissableElement(() => dom.getContentEl(scope), {
