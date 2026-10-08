@@ -129,7 +129,6 @@ export function connect<T extends PropTypes>(
       'type': 'button',
       'data-view': view,
       'data-value': value,
-      ...(view === 'month' ? { 'data-label': monthLabels[value] ?? '' } : {}),
       'aria-selected': selected ? 'true' : 'false',
       'tabIndex': focused ? 0 : -1,
       'disabled': cellDisabled,
@@ -314,7 +313,6 @@ export function connect<T extends PropTypes>(
         'disabled': disabled,
         'aria-disabled': ariaAttr(readOnly),
         'data-state': open ? 'open' : 'closed',
-        'data-index': isRange && eventIndex !== undefined ? index : undefined,
         onClick() {
           send({ type: 'TRIGGER.CLICK', index: eventIndex })
         },

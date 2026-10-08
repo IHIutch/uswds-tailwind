@@ -32,9 +32,9 @@ export function createDisposableDatePicker(id: string, template: string, props?:
       const getRootEl = () => document.getElementById(`date-picker:${id}`)
       const getInstance = () => DatePicker.getInstance(getRootEl())
       const getInputEl = () => query<HTMLInputElement>(getRootEl()!, '[data-part="input"]')!
-      const getTriggerEl = () => query<HTMLButtonElement>(getRootEl()!, '[data-part="trigger"]')!
-      const getCalendarEl = () => query<HTMLElement>(getRootEl()!, '[data-part="content"]')!
-      const getStatusEl = () => query<HTMLElement>(getRootEl()!, '[data-part="status"]')!
+      const getTriggerEl = () => document.getElementById(`date-picker:${id}:trigger`) as HTMLButtonElement
+      const getCalendarEl = () => document.getElementById(`date-picker:${id}:content`)!
+      const getStatusEl = () => document.getElementById(`date-picker:${id}:status`)!
       const getMonthSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="month"]')!
       const getYearSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="year"]')!
       const getMonthViewEl = getMonthSelectionEl

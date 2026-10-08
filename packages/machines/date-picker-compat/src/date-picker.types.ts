@@ -91,10 +91,10 @@ export type DatePickerEvent
   = | { type: 'TRIGGER.CLICK', index?: EndpointIndex }
     | { type: 'OPEN', index?: EndpointIndex }
     | { type: 'CLOSE' }
-    | { type: 'CELL.CLICK', value?: DateValue }
+    | { type: 'CELL.CLICK', value: DateValue }
     | { type: 'VIEW.SET', view: DateView }
     | { type: 'GOTO.PREV' | 'GOTO.NEXT', view: 'day' | 'year', unit?: NavigationUnit }
-    | { type: 'INPUT.CHANGE', value: string, index?: EndpointIndex }
+    | { type: 'INPUT.CHANGE', value: string, index: EndpointIndex }
     | { type: 'INTERACT_OUTSIDE' }
     | { type: 'TABLE.ESCAPE' }
     | { type: 'CELL.POINTER_MOVE', value: DateValue }

@@ -1,5 +1,5 @@
 import type { Params } from '@zag-js/core'
-import type { DatePickerSchema, DateValue, DateView } from './date-picker.types'
+import type { DatePickerSchema, DateValue, DateView, EndpointIndex } from './date-picker.types'
 import { createMachine } from '@zag-js/core'
 import { trackDismissableElement } from '@zag-js/dismissable'
 import * as dom from './date-picker.dom'
@@ -95,16 +95,13 @@ function selectionKeyTarget(type: string, value: number, view: 'month' | 'year')
     default: return value
   }
 }
-function reconcileVisibleCalendar(params: Params<DatePickerSchema>, inputValue: string, inputIndex?: number) {
-  const { context, prop, scope, action, state } = params
-  if (!state.matches('open'))
-    return
+function reconcileVisibleCalendar(params: Params<DatePickerSchema>, inputValue: string, index: EndpointIndex) {
+  const { context, prop, scope, action } = params
   const inputDate = parseDateString(inputValue, DEFAULT_EXTERNAL_DATE_FORMAT, true)
   if (!inputDate)
     return
   // USWDS replaces the grid on refresh, discarding the previous hover preview.
   context.set('hoveredValue', null)
-  const index = inputIndex ?? context.get('activeIndex')
   const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
   context.set('focusedValue', keepDateBetweenMinAndMax(inputDate, bounds.min, bounds.max))
   // USWDS returns to the day grid when typed input refreshes the calendar.
@@ -138,13 +135,6 @@ export const machine = createMachine<DatePickerSchema>({
 
   initialState() {
     return 'idle'
-  },
-
-  refs() {
-    return {
-      focusRafCleanup: null,
-      inputs: null,
-    }
   },
 
   exit: ['cancelFocusRaf', 'cancelNativeSyncRaf'],
@@ -302,13 +292,9 @@ export const machine = createMachine<DatePickerSchema>({
     guards: {
       isInteractive: ({ prop }) => !prop('disabled') && !prop('readOnly'),
       isDifferentActiveIndex: ({ context, prop, event }) =>
-        (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN')
-        && prop('selectionMode') === 'range'
-        && event.index !== undefined
+        prop('selectionMode') === 'range'
         && event.index !== context.get('activeIndex'),
       isSelectableDate: ({ computed, event }) => {
-        if (!event.value)
-          return false
         const bounds = computed('activeBounds')
         return isDateWithinMinAndMax(event.value, bounds.min, bounds.max)
       },
@@ -316,7 +302,7 @@ export const machine = createMachine<DatePickerSchema>({
       canGoNext: ({ computed, event }) => event.view === 'year' ? computed('navigation').canChunkNext : computed('navigation').canGoNext,
       isSelectableViewCell: ({ context, computed, event }) => {
         const view = context.get('view')
-        if (view === 'day' || !event.value)
+        if (view === 'day')
           return false
         const bounds = computed('activeBounds')
         if (view === 'month')
@@ -338,7 +324,7 @@ export const machine = createMachine<DatePickerSchema>({
         if (event.type === 'VALUE.SET') {
           value = Array.from(event.value, date => date ? normalizeDate(date) : undefined)
         }
-        else if (event.type === 'CELL.CLICK' && event.value) {
+        else if (event.type === 'CELL.CLICK') {
           const date = normalizeDate(event.value)
           value = isRange ? setRangeEndpoint(context.get('value'), index, date) : [date]
         }
@@ -438,26 +424,20 @@ export const machine = createMachine<DatePickerSchema>({
       },
 
       setView({ context, event }) {
-        if (event.view) {
-          // A view change discards the day grid's hover preview.
-          context.set('hoveredValue', null)
-          context.set('view', event.view)
-          context.set('isOpeningRender', false)
-          const anchor = context.get('focusedValue')
-          if (event.view === 'year')
-            context.set('focusedYear', anchor.getFullYear())
-          if (event.view === 'month')
-            context.set('focusedMonth', anchor.getMonth())
-        }
+        // A view change discards the day grid's hover preview.
+        context.set('hoveredValue', null)
+        context.set('view', event.view)
+        context.set('isOpeningRender', false)
+        const anchor = context.get('focusedValue')
+        context.set('focusedYear', anchor.getFullYear())
+        context.set('focusedMonth', anchor.getMonth())
       },
 
       setFocusedValueForView({ context, computed, event }) {
-        if (event.value) {
-          const bounds = computed('activeBounds')
-          context.set('focusedValue', keepDateBetweenMinAndMax(event.value, bounds.min, bounds.max))
-          context.set('isOpeningRender', false)
-          context.set('hoveredValue', null)
-        }
+        const bounds = computed('activeBounds')
+        context.set('focusedValue', keepDateBetweenMinAndMax(event.value, bounds.min, bounds.max))
+        context.set('isOpeningRender', false)
+        context.set('hoveredValue', null)
       },
 
       // Boundary no-ops preserve hover, status and focus.
