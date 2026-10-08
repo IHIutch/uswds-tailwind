@@ -33,3 +33,7 @@ __screenshots__
 
 .env
 .vitest
+
+# Mutation testing
+.stryker-tmp
+reports/mutation
