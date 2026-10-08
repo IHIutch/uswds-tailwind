@@ -126,7 +126,6 @@ export function connect<T extends PropTypes>(
     const cellDisabled = month ? isDatesMonthOutsideMinOrMax(date, effMin, effMax) : isDatesYearOutsideMinOrMax(date, effMin, effMax)
     return normalize.button({
       ...parts.tableCellTrigger.attrs,
-      'dir': prop('dir'),
       'type': 'button',
       'data-view': view,
       'data-value': value,
@@ -186,7 +185,6 @@ export function connect<T extends PropTypes>(
       ...parts[direction === 'prev' ? 'prevTrigger' : 'nextTrigger'].attrs,
       'data-view': view,
       'data-unit': view === 'day' ? unit : undefined,
-      'dir': prop('dir'),
       'type': 'button',
       'aria-label': `Navigate ${direction === 'prev' ? 'back' : 'forward'} ${view === 'year' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
       'disabled': !allowed,
@@ -226,7 +224,6 @@ export function connect<T extends PropTypes>(
     getRootProps() {
       return normalize.element({
         ...(isRange ? rangeParts.root.attrs : parts.root.attrs),
-        'dir': prop('dir'),
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
         'data-disabled': dataAttr(disabled),
@@ -243,8 +240,6 @@ export function connect<T extends PropTypes>(
     getControlProps() {
       return normalize.element({
         ...parts.control.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
         id: dom.getControlId(scope),
       })
     },
@@ -269,7 +264,6 @@ export function connect<T extends PropTypes>(
         : {}
       return normalize.input({
         ...parts.input.attrs,
-        'dir': prop('dir'),
         'id': dom.getInputId(scope, index),
         'name': props.name ?? prop('name'),
         ...rangeBoundsProps,
@@ -300,7 +294,6 @@ export function connect<T extends PropTypes>(
     getHiddenInputProps() {
       return normalize.input({
         ...parts.hiddenInput.attrs,
-        'dir': prop('dir'),
         'type': 'text',
         'aria-hidden': true,
         'tabIndex': -1,
@@ -313,7 +306,6 @@ export function connect<T extends PropTypes>(
       const eventIndex = isEndpointIndex(props.index) ? props.index : undefined
       return normalize.button({
         ...parts.trigger.attrs,
-        'dir': prop('dir'),
         'id': dom.getTriggerId(scope, index),
         'type': 'button',
         'aria-haspopup': true,
@@ -332,7 +324,6 @@ export function connect<T extends PropTypes>(
     getContentProps() {
       return normalize.element({
         ...parts.content.attrs,
-        'dir': prop('dir'),
         'id': dom.getContentId(scope),
         'role': 'application',
         'hidden': !open,
@@ -364,7 +355,6 @@ export function connect<T extends PropTypes>(
     getStatusProps() {
       return normalize.element({
         ...parts.status.attrs,
-        'dir': prop('dir'),
         'id': dom.getStatusId(scope),
         'role': 'status',
         'aria-live': 'polite',
@@ -376,7 +366,6 @@ export function connect<T extends PropTypes>(
       const cellView = props.view ?? 'day'
       return normalize.element({
         ...parts.view.attrs,
-        'dir': prop('dir'),
         'data-view': cellView,
         'hidden': view !== cellView,
         'tabIndex': cellView === 'day' ? undefined : -1,
@@ -385,8 +374,6 @@ export function connect<T extends PropTypes>(
     getViewControlProps() {
       return normalize.element({
         ...parts.viewControl.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
         tabIndex: -1,
       })
     },
@@ -401,7 +388,6 @@ export function connect<T extends PropTypes>(
       const targetView = props.view
       return normalize.button({
         ...parts.viewTrigger.attrs,
-        'dir': prop('dir'),
         'type': 'button',
         'data-view': targetView,
         'aria-label': targetView === 'month' ? `${focusedMonthName}. Select month` : `${focusedYear}. Select year`,
@@ -414,7 +400,6 @@ export function connect<T extends PropTypes>(
     getTableProps(props = {}) {
       return normalize.element({
         ...parts.table.attrs,
-        'dir': prop('dir'),
         'data-view': props.view ?? 'day',
         'role': props.view && props.view !== 'day' ? 'presentation' : undefined,
       })
@@ -422,14 +407,11 @@ export function connect<T extends PropTypes>(
     getTableHeadProps() {
       return normalize.element({
         ...parts.tableHead.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
       })
     },
     getTableHeaderProps(props: TableHeaderProps) {
       return normalize.element({
         ...parts.tableHeader.attrs,
-        'dir': prop('dir'),
         'scope': 'col',
         'aria-label': weekdayLabels[props.index] ?? '',
       })
@@ -437,21 +419,16 @@ export function connect<T extends PropTypes>(
     getTableBodyProps() {
       return normalize.element({
         ...parts.tableBody.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
       })
     },
     getTableRowProps() {
       return normalize.element({
         ...parts.tableRow.attrs,
-        // eslint-disable-next-line style/quote-props
-        'dir': prop('dir'),
       })
     },
     getDayTableCellProps(props: DayTableCellProps) {
       return normalize.element({
         ...parts.tableCell.attrs,
-        'dir': prop('dir'),
         'data-value': formatDate(props.value),
       })
     },
@@ -468,7 +445,6 @@ export function connect<T extends PropTypes>(
       const outsideMonth = !isSameMonth(value, focusedValue)
       return normalize.button({
         ...parts.tableCellTrigger.attrs,
-        'dir': prop('dir'),
         'type': 'button',
         'data-view': 'day',
         'data-day': day,

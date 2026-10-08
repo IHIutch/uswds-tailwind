@@ -1,5 +1,5 @@
 import type { Machine, Service } from '@zag-js/core'
-import type { CommonProperties, DirectionProperty, PropTypes, RequiredBy } from '@zag-js/types'
+import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 import type { DatePickerInputs } from './date-picker.inputs'
 import type { getEffectiveDateBounds, getNavigationAvailability } from './date-picker.utils'
 
@@ -55,7 +55,7 @@ export type ElementIds = Partial<{
   status: string
 }>
 
-export interface DatePickerProps extends DirectionProperty, CommonProperties {
+export interface DatePickerProps extends CommonProperties {
   /** Element ids for composition. */
   ids?: ElementIds | undefined
   /** BCP-47 locale for labels; defaults to the document language or en. */

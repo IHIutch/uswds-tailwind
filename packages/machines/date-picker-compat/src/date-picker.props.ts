@@ -3,7 +3,6 @@ import { createProps } from '@zag-js/types'
 import { createSplitProps } from '@zag-js/utils'
 
 export const props = createProps<DatePickerProps>()([
-  'dir',
   'disabled',
   'defaultValue',
   'defaultFocusedValue',
