@@ -5,7 +5,6 @@ export const anatomy = createAnatomy('date-picker').parts(
   'root',
   'control',
   'input',
-  'hiddenInput',
   'trigger',
   'content',
   'status',

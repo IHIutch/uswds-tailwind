@@ -77,7 +77,7 @@ export interface DatePickerProps extends CommonProperties {
   readOnly?: boolean | undefined
   /** Mark the visible form field as required. */
   required?: boolean | undefined
-  /** Name of the visible MM/DD/YYYY form field; the ISO mirror has no name. */
+  /** Name of the MM/DD/YYYY form field. */
   name?: string | undefined
 
   /** Reports selection proposals with ISO dates in valueAsString. */
@@ -244,8 +244,6 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   getControlProps: () => T['element']
   /** Visible MM/DD/YYYY form field. */
   getInputProps: (props?: InputProps) => T['input']
-  /** Hidden text input with no id or name; range mirrors are located by DOM order. */
-  getHiddenInputProps: () => T['input']
   getTriggerProps: (props?: TriggerProps) => T['button']
   getContentProps: () => T['element']
   getStatusProps: () => T['element']

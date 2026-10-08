@@ -353,7 +353,7 @@ export const machine = createMachine<DatePickerSchema>({
         const value = context.get('value')
         const index = (event.type === 'TRIGGER.CLICK' || event.type === 'OPEN') && isEndpointIndex(event.index) ? event.index : 0
         context.set('activeIndex', index)
-        const externalEl = dom.getExternalInputEl(scope, index)
+        const externalEl = dom.getInputEl(scope, index)
         const inputDate = externalEl
           ? parseDateString(externalEl.value, DEFAULT_EXTERNAL_DATE_FORMAT, true)
           : undefined
@@ -381,8 +381,6 @@ export const machine = createMachine<DatePickerSchema>({
           : parsed ? [parsed] : []
         context.set('value', next)
         emitValueChange(params, next)
-        // Rejected controlled proposals must not reach the ISO mirror.
-        params.refs.get('inputs')?.mirrorTyped(index, parsed)
       },
 
       reconcileCalendar(params) {
@@ -419,7 +417,7 @@ export const machine = createMachine<DatePickerSchema>({
           const btn = dom.getNavTriggerEl(scope, direction, event.view, event.unit)
           if (btn && !btn.disabled)
             btn.focus()
-          else (event.view === 'year' ? dom.getYearViewEl(scope) : dom.getViewControlEl(scope))?.focus()
+          else (event.view === 'year' ? dom.getViewEl(scope, 'year') : dom.getViewControlEl(scope))?.focus()
         })
       },
 
@@ -482,7 +480,7 @@ export const machine = createMachine<DatePickerSchema>({
       focusInputElement({ scope, refs, context, prop }) {
         scheduleFocusFrame({ scope, refs }, () => {
           const index = prop('selectionMode') === 'range' ? context.get('activeIndex') : 0
-          dom.getExternalInputEl(scope, index)?.focus()
+          dom.getInputEl(scope, index)?.focus()
         })
       },
 

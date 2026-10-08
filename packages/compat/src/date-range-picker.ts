@@ -51,9 +51,6 @@ export class DateRangePicker extends DatePicker {
     spreadProps(start!, this.api.getInputProps({ index: 0, name: names[0] }))
     spreadProps(end!, this.api.getInputProps({ index: 1, name: names[1] }))
 
-    getParts<HTMLInputElement>(this.rootEl, parts.hiddenInput).forEach((input) => {
-      spreadProps(input, this.api.getHiddenInputProps())
-    })
     getParts<HTMLButtonElement>(this.rootEl, parts.trigger).forEach((trigger, index) => {
       spreadProps(trigger, this.api.getTriggerProps({ index: index === 0 ? 0 : 1 }))
     })

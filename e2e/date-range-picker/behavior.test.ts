@@ -123,24 +123,15 @@ it('marks the committed endpoints and only the days between them', { tags: ['par
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/index.js#L64-L105 (updating one endpoint changes only the peer's bounds)
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L632-L642 (internal change event carries the ISO value)
 it('retyping one endpoint preserves the other endpoint and the painted range', { tags: ['parity'] }, async () => {
   await using component = createRangeFixture()
   const start = component.elements.getStartInputEl()!
   const end = component.elements.getEndInputEl()!
-  const changes: Array<{ endpoint: number, value: string }> = []
-  document.querySelectorAll<HTMLInputElement>('[data-part="hidden-input"]').forEach((input, endpoint) => {
-    input.addEventListener('change', (event) => {
-      changes.push({ endpoint, value: (event as CustomEvent<{ value: string }>).detail.value })
-    })
-  })
   await userEvent.fill(start, '06/10/2024')
   await userEvent.fill(end, '06/20/2024')
   await userEvent.fill(start, '06/12/2024')
 
   expect([start.value, end.value]).toEqual(['06/12/2024', '06/20/2024'])
-  expect(changes).toContainEqual({ endpoint: 0, value: '2024-06-12' })
-  expect(changes).toContainEqual({ endpoint: 1, value: '2024-06-20' })
   expect([...new FormData(document.querySelector('form')!).values()]).toEqual(['06/12/2024', '06/20/2024'])
   await userEvent.click(component.elements.getStartTriggerEl()!)
   expect(day('2024-06-12').hasAttribute('data-range-start')).toBe(true)

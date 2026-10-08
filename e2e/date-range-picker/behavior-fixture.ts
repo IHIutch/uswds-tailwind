@@ -7,11 +7,9 @@ export function createRangeFixture(options: { min?: string, max?: string, start?
       <div data-scope="date-range-picker" data-part="root" id="range" ${min ? `data-min-date="${min}"` : ''} ${max ? `data-max-date="${max}"` : ''}>
         <label for="start">Start date</label>
         <input data-part="input" id="start" name="start" type="text" value="${start}" />
-        <input data-part="hidden-input" type="text" aria-hidden="true" />
         <button data-part="trigger" data-target="start" type="button"></button>
         <label for="end">End date</label>
         <input data-part="input" id="end" name="end" type="text" value="${end}" />
-        <input data-part="hidden-input" type="text" aria-hidden="true" />
         <button data-part="trigger" data-target="end" type="button"></button>
         <div data-part="content" hidden>
           <div data-part="view" data-view="day">

@@ -16,7 +16,6 @@ const template = `
             name="input-dates-of-use"
             type="text"
           />
-          <input data-part="hidden-input" type="hidden">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
             <div data-part="view" data-view="day">

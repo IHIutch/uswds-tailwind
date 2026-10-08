@@ -18,7 +18,6 @@ const template = `
             type="text"
             required
           />
-        <input data-part="hidden-input" type="text" aria-hidden="true" />
           <button data-part="trigger" data-target="start" type="button"></button>
         </div>
 
@@ -33,7 +32,6 @@ const template = `
             type="text"
             required
           />
-        <input data-part="hidden-input" type="text" aria-hidden="true" />
           <button data-part="trigger" data-target="end" type="button"></button>
         </div>
 

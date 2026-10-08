@@ -48,7 +48,6 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
     spreadProps(this.input, this.api.getInputProps())
-    spreadProps(this.hiddenInput, this.api.getHiddenInputProps())
     spreadProps(this.trigger, this.api.getTriggerProps())
     this.renderCalendar()
   }
@@ -76,10 +75,6 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     if (!el)
       throw new Error('Expected input element to be defined')
     return el
-  }
-
-  private get hiddenInput() {
-    return getPart<HTMLInputElement>(this.rootEl, parts.hiddenInput)!
   }
 
   private get trigger() {

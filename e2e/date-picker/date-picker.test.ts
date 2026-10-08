@@ -13,7 +13,6 @@ const template = `
         <label for="input-dob">Date of birth</label>
         <div data-scope="date-picker" data-part="root" id="${rootId}">
           <input data-part="input" id="input-dob" name="input-dob" type="text">
-          <input data-part="hidden-input" type="hidden">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
             <div data-part="view" data-view="day">
@@ -72,11 +71,10 @@ const template = `
   `
 
 const rangeTemplate = template.replace(
-  '<input data-part="hidden-input" type="hidden">',
-  `<label for="input-dob:1">End date</label>
-     <input data-part="input" id="input-dob:1" name="end-date" type="text">
-     <input data-part="hidden-input" type="hidden">
-     <input data-part="hidden-input" type="hidden">`,
+  '<input data-part="input" id="input-dob" name="input-dob" type="text">',
+  `<input data-part="input" id="input-dob" name="input-dob" type="text">
+     <label for="input-dob:1">End date</label>
+     <input data-part="input" id="input-dob:1" name="end-date" type="text">`,
 )
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L907-L909 (enhancement clears an authored input value before applying defaults)
@@ -84,10 +82,8 @@ it('clears an authored input value when there is no selected default', { tags: [
   const authoredTemplate = template.replace('name="input-dob" type="text"', 'name="input-dob" type="text" value="08/14/2024"')
   await using component = createDisposableDatePicker(rootId, authoredTemplate)
   const visibleInput = component.elements.getInputEl()
-  const hiddenInput = query<HTMLInputElement>(component.elements.getRootEl()!, '[data-part="hidden-input"]')!
 
   expect(visibleInput.value).toBe('')
-  expect(hiddenInput.value).toBe('')
 })
 
 // Port-only validation state must follow the text written by a calendar selection.
@@ -193,9 +189,7 @@ it.each([0, 1] as const)('rejects a controlled range endpoint %i proposal withou
   const instance = component.elements.getInstance()!
   const root = component.elements.getRootEl()!
   const inputs = queryAll<HTMLInputElement>(root, '[data-part="input"]')
-  const hidden = queryAll<HTMLInputElement>(root, '[data-part="hidden-input"]')
   const changes: string[] = []
-  hidden.forEach((input, i) => input.addEventListener('change', () => changes.push(`hidden:${i}:${input.value}`)))
   inputs.forEach((input, i) => input.addEventListener('change', () => changes.push(`visible:${i}:${input.value}`)))
 
   instance.api.setOpen(true, index)
@@ -208,13 +202,9 @@ it.each([0, 1] as const)('rejects a controlled range endpoint %i proposal withou
 
   await page.getByRole('button', { name: '15 June 2024 Saturday' }).click()
   const expected = ['06/10/2024', '06/20/2024']
-  const expectedInternal = ['2024-06-10', '2024-06-20'][index]
   await vi.waitFor(() => expect(inputs.map(input => input.value)).toEqual(expected))
   await vi.waitFor(() => expect(document.activeElement).toBe(inputs[index]))
-  expect(changes).toEqual([
-    `hidden:${index}:${expectedInternal}`,
-    `visible:${index}:${expected[index]}`,
-  ])
+  expect(changes).toEqual([`visible:${index}:${expected[index]}`])
   expect(onValueChange).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
     valueAsString: index === 0 ? ['2024-06-15', '2024-06-20'] : ['2024-06-10', '2024-06-15'],
   }))
@@ -874,24 +864,21 @@ it.each([
 it('announces the new month and keeps focus on the navigation control', { tags: ['parity'] }, async () => {
   await using component = createDisposableDatePicker(rootId, templateWith('data-default-value="2024-06-15" data-min-date="2024-03-01" data-max-date="2024-09-30"'))
   const calendar = component.elements.getCalendarEl()!
-  await page.getByRole('button', { name: 'Toggle calendar' }).click()
-  const nextMonth = page.getByRole('button', { name: 'Navigate forward one month' }).element() as HTMLButtonElement
-  await page.getByRole('button', { name: 'Navigate forward one month' }).click()
-  expect(component.elements.getStatusEl()?.textContent).toBe('July 2024')
+  await userEvent.click(component.elements.getTriggerEl())
+  await userEvent.click(component.elements.getNextTriggerEl('month'))
+  await expect.element(component.elements.getStatusEl()).toHaveTextContent('July 2024')
   expect(focusedDay(calendar).dataset.value?.startsWith('2024-07')).toBe(true)
-  expect(document.activeElement).toBe(nextMonth)
+  await expect.element(component.elements.getNextTriggerEl('month')).toHaveFocus()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L1237-L1249 (previous-year navigation clamps and falls back when disabled)
 it('announces the clamped month and moves focus to the calendar control when navigation disables itself', { tags: ['parity'] }, async () => {
   await using component = createDisposableDatePicker(rootId, templateWith('data-default-value="2024-06-15" data-min-date="2024-03-01" data-max-date="2024-09-30"'))
-  const calendar = component.elements.getCalendarEl()!
-  await page.getByRole('button', { name: 'Toggle calendar' }).click()
-  const previousYear = page.getByRole('button', { name: 'Navigate back one year' }).element() as HTMLButtonElement
-  await page.getByRole('button', { name: 'Navigate back one year' }).click()
-  expect(component.elements.getStatusEl()?.textContent).toBe('March 2024')
-  expect(previousYear).toBeDisabled()
-  expect(document.activeElement).toBe(query(calendar, '[data-part="view-control"]'))
+  await userEvent.click(component.elements.getTriggerEl())
+  await userEvent.click(component.elements.getPrevTriggerEl('year'))
+  await expect.element(component.elements.getStatusEl()).toHaveTextContent('March 2024')
+  await expect.element(component.elements.getPrevTriggerEl('year')).toBeDisabled()
+  await expect.element(component.elements.getViewControlEl()).toHaveFocus()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L929-L947 (the visible named input retains form identity; the ISO mirror loses name)

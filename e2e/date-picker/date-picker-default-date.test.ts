@@ -11,7 +11,6 @@ const template = `
       <label for="input-dates-of-use">Dates of use</label>
       <div data-scope="date-picker" data-part="root" id="${rootId}" data-default-date="2020-05-22">
         <input data-part="input" id="input-dates-of-use" name="input-dates-of-use" type="text">
-        <input data-part="hidden-input" type="hidden">
         <button data-part="trigger" type="button"></button>
         <div data-part="content" hidden>
           <div data-part="view" data-view="day">

@@ -11,7 +11,6 @@ const template = `
       <label for="input-dob">Date of birth</label>
       <div data-scope="date-picker" data-part="root" id="${rootId}" data-min-date="2020-05-22" data-max-date="2021-06-20">
         <input data-part="input" id="input-dob" name="input-dob" type="text">
-        <input data-part="hidden-input" type="hidden">
         <button data-part="trigger" type="button"></button>
         <div data-part="content" hidden>
           <div data-part="view" data-view="day">
@@ -860,6 +859,16 @@ it('should show a date that is the minimum date as valid', { tags: ['legacy'] },
   await userEvent.keyboard('{Enter}')
 
   expect(input.validationMessage).toBe('')
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L927-L935
+it('should throw when minDate is larger than maxDate', { tags: ['legacy'] }, () => {
+  const templateWithConstraints = template.replace(
+    'data-min-date="2020-05-22" data-max-date="2021-06-20"',
+    'data-min-date="2020-07-04" data-max-date="2020-06-20"',
+  )
+
+  expect(() => createDisposableDatePicker(rootId, templateWithConstraints)).toThrow('Minimum date cannot be after maximum date')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L937

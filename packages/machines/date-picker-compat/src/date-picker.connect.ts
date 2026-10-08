@@ -182,6 +182,7 @@ export function connect<T extends PropTypes>(
       : direction === 'prev' ? navigation.canGoPrev : navigation.canGoNext
     return normalize.button({
       ...parts[direction === 'prev' ? 'prevTrigger' : 'nextTrigger'].attrs,
+      'id': dom.getNavTriggerId(scope, direction, view, unit),
       'data-view': view,
       'data-unit': view === 'day' ? unit : undefined,
       'type': 'button',
@@ -289,17 +290,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    // USWDS uses a hidden text input without id or name as the non-submitting ISO mirror.
-    getHiddenInputProps() {
-      return normalize.input({
-        ...parts.hiddenInput.attrs,
-        'type': 'text',
-        'aria-hidden': true,
-        'tabIndex': -1,
-        'style': { display: 'none' },
-      })
-    },
-
     getTriggerProps(props: TriggerProps = {}) {
       const index = isEndpointIndex(props.index) ? props.index : 0
       const eventIndex = isEndpointIndex(props.index) ? props.index : undefined
@@ -364,6 +354,7 @@ export function connect<T extends PropTypes>(
       const cellView = props.view ?? 'day'
       return normalize.element({
         ...parts.view.attrs,
+        'id': dom.getViewId(scope, cellView),
         'data-view': cellView,
         'hidden': view !== cellView,
         'tabIndex': cellView === 'day' ? undefined : -1,
@@ -372,6 +363,7 @@ export function connect<T extends PropTypes>(
     getViewControlProps() {
       return normalize.element({
         ...parts.viewControl.attrs,
+        id: dom.getViewControlId(scope),
         tabIndex: -1,
       })
     },
@@ -386,6 +378,7 @@ export function connect<T extends PropTypes>(
       const targetView = props.view
       return normalize.button({
         ...parts.viewTrigger.attrs,
+        'id': dom.getViewTriggerId(scope, targetView),
         'type': 'button',
         'data-view': targetView,
         'aria-label': targetView === 'month' ? `${focusedMonthName}. Select month` : `${focusedYear}. Select year`,

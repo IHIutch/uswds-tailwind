@@ -1,5 +1,5 @@
 import type * as datePicker from '../../packages/machines/date-picker-compat/src'
-import { query, queryAll } from '@zag-js/dom-query'
+import { queryAll } from '@zag-js/dom-query'
 import { DatePicker, datePickerInit } from '../../packages/compat/src/date-picker'
 import { createDisposableComponent } from '../_utils'
 
@@ -31,14 +31,19 @@ export function createDisposableDatePicker(id: string, template: string, props?:
     () => {
       const getRootEl = () => document.getElementById(`date-picker:${id}`)
       const getInstance = () => DatePicker.getInstance(getRootEl())
-      const getInputEl = () => query<HTMLInputElement>(getRootEl()!, '[data-part="input"]')!
+      const getInputEl = (index = 0) => queryAll<HTMLInputElement>(getRootEl()!, '[data-part="input"]')[index]!
       const getTriggerEl = () => document.getElementById(`date-picker:${id}:trigger`) as HTMLButtonElement
       const getCalendarEl = () => document.getElementById(`date-picker:${id}:content`)!
       const getStatusEl = () => document.getElementById(`date-picker:${id}:status`)!
-      const getMonthSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="month"]')!
-      const getYearSelectionEl = () => query<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="year"]')!
+      const getViewEl = (view: 'day' | 'month' | 'year') => document.getElementById(`date-picker:${id}:view:${view}`)!
+      const getMonthSelectionEl = () => getViewEl('month')
+      const getYearSelectionEl = () => getViewEl('year')
       const getMonthViewEl = getMonthSelectionEl
       const getYearViewEl = getYearSelectionEl
+      const getViewControlEl = () => document.getElementById(`date-picker:${id}:view-control`)!
+      const getViewTriggerEl = (view: 'month' | 'year') => document.getElementById(`date-picker:${id}:view-trigger:${view}`) as HTMLButtonElement
+      const getPrevTriggerEl = (target: 'month' | 'year' | 'year-chunk') => document.getElementById(`date-picker:${id}:prev-trigger:${target}`) as HTMLButtonElement
+      const getNextTriggerEl = (target: 'month' | 'year' | 'year-chunk') => document.getElementById(`date-picker:${id}:next-trigger:${target}`) as HTMLButtonElement
       const getDateButtonEls = () => queryAll<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="day"] [data-part="table-cell-trigger"]')
       const getMonthButtonEls = () => queryAll<HTMLElement>(getMonthSelectionEl()!, '[data-part="table-cell-trigger"]')
       const getYearButtonEls = () => queryAll<HTMLElement>(getYearSelectionEl()!, '[data-part="table-cell-trigger"]')
@@ -50,10 +55,15 @@ export function createDisposableDatePicker(id: string, template: string, props?:
         getTriggerEl,
         getCalendarEl,
         getStatusEl,
+        getViewEl,
         getMonthSelectionEl,
         getYearSelectionEl,
         getMonthViewEl,
         getYearViewEl,
+        getViewControlEl,
+        getViewTriggerEl,
+        getPrevTriggerEl,
+        getNextTriggerEl,
         getDateButtonEls,
         getMonthButtonEls,
         getYearButtonEls,

@@ -67,12 +67,7 @@ const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttrib
 
     const mergedProps = mergeProps(apiProps, fieldProps, props, { 'aria-describedby': describedBy })
 
-    return (
-      <>
-        <Input {...mergedProps} className={className} ref={forwardedRef} />
-        <input {...api.getHiddenInputProps()} />
-      </>
-    )
+    return <Input {...mergedProps} className={className} ref={forwardedRef} />
   },
 )
 

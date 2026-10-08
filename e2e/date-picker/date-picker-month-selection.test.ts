@@ -11,7 +11,6 @@ const template = `
         <label for="input-dob">Date of birth</label>
         <div data-scope="date-picker" data-part="root" id="${rootId}">
           <input data-part="input" id="input-dob" name="input-dob" type="text">
-          <input data-part="hidden-input" type="hidden">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
             <div data-part="view" data-view="day">

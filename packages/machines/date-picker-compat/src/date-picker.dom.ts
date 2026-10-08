@@ -1,6 +1,6 @@
 import type { Scope } from '@zag-js/core'
 import type { DateValue, DateView, ElementIds, NavigationUnit } from './date-picker.types'
-import { query, queryAll } from '@zag-js/dom-query'
+import { queryAll } from '@zag-js/dom-query'
 import { validateDateInput } from './date-picker.utils'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `date-picker:${ctx.id}`
@@ -19,16 +19,17 @@ export function getTriggerId(ctx: Scope, index = 0) {
 }
 export const getContentId = (ctx: Scope) => ctx.ids?.content ?? `date-picker:${ctx.id}:content`
 export const getStatusId = (ctx: Scope) => ctx.ids?.status ?? `date-picker:${ctx.id}:status`
+export const getViewId = (ctx: Scope, view: DateView) => `date-picker:${ctx.id}:view:${view}`
+export const getViewControlId = (ctx: Scope) => `date-picker:${ctx.id}:view-control`
+export const getViewTriggerId = (ctx: Scope, view: DateView) => `date-picker:${ctx.id}:view-trigger:${view}`
+export function getNavTriggerId(ctx: Scope, direction: 'prev' | 'next', view: 'day' | 'year', unit: NavigationUnit = 'month') {
+  return `date-picker:${ctx.id}:${direction}-trigger:${view === 'day' ? unit : 'year-chunk'}`
+}
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
 export const getContentEl = (ctx: Scope) => ctx.getById(getContentId(ctx))
 
-export const getExternalInputEl = (ctx: Scope, index = 0) => ctx.getById<HTMLInputElement>(getInputId(ctx, index))
-
-// The ISO mirror has no id or name; range endpoints are located by DOM order.
-export function getHiddenInputEl(ctx: Scope, index = 0) {
-  return queryAll<HTMLInputElement>(getRootEl(ctx), `[data-part=hidden-input]`)[index] ?? null
-}
+export const getInputEl = (ctx: Scope, index = 0) => ctx.getById<HTMLInputElement>(getInputId(ctx, index))
 
 // Create change events in the input's own window for iframe compatibility.
 export function changeElementValue(el: HTMLInputElement, value = ''): void {
@@ -52,18 +53,6 @@ export function getFocusedCell(ctx: Scope, view: DateView) {
   return queryAll<HTMLElement>(getContentEl(ctx), `[data-part=table-cell-trigger][data-view=${view}][data-focus]`).find(el => !el.closest('[hidden]')) ?? null
 }
 
-export function getNavTriggerEl(ctx: Scope, direction: 'prev' | 'next', view: 'day' | 'year', unit: NavigationUnit = 'month') {
-  return query<HTMLButtonElement>(getContentEl(ctx), `[data-part=${direction}-trigger][data-view=${view}]${view === 'day' ? `[data-unit=${unit}]` : ''}`)
-}
-export const getViewControlEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view-control]`)
-
-export const getYearViewEl = (ctx: Scope) => query<HTMLElement>(getContentEl(ctx), `[data-part=view][data-view=year]`)
-
-export function forEachInitialInput(ctx: Scope, count: number, initialize: (element: HTMLInputElement, index: number, internal: boolean) => void): void {
-  for (let index = 0; index < count; index++) {
-    for (const [element, internal] of [[getHiddenInputEl(ctx, index), true], [getExternalInputEl(ctx, index), false]] as const) {
-      if (element)
-        initialize(element, index, internal)
-    }
-  }
-}
+export const getNavTriggerEl = (ctx: Scope, direction: 'prev' | 'next', view: 'day' | 'year', unit?: NavigationUnit) => ctx.getById<HTMLButtonElement>(getNavTriggerId(ctx, direction, view, unit))
+export const getViewControlEl = (ctx: Scope) => ctx.getById(getViewControlId(ctx))
+export const getViewEl = (ctx: Scope, view: DateView) => ctx.getById(getViewId(ctx, view))
