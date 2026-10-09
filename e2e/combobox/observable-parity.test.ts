@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { Combobox } from '../../packages/compat/src/combobox.js'
 import { createDisposableCombobox } from './_utils.js'
 
@@ -155,7 +155,7 @@ it('moves focus and the active option together with arrows and mouse hover', { t
 
   await userEvent.tab()
   await userEvent.keyboard('{ArrowDown}')
-  expect(document.activeElement?.textContent).toBe('Apple')
+  await expect.element(page.getByRole('option', { name: 'Apple' })).toHaveFocus()
   expect(activeOption(input)?.textContent).toBe('Apple')
 
   await userEvent.keyboard('{ArrowDown}')
@@ -182,7 +182,7 @@ it('scrolls keyboard navigation into view in a height-constrained list', { tags:
   await userEvent.tab()
   await userEvent.keyboard('{ArrowDown}')
   expect(getItemEls().length).toBe(5)
-  expect(document.activeElement?.textContent).toBe('Apple')
+  await expect.element(page.getByRole('option', { name: 'Apple' })).toHaveFocus()
   for (const item of getItemEls())
     item.style.cssText = 'display:block;height:30px;box-sizing:border-box'
 
@@ -191,14 +191,14 @@ it('scrolls keyboard navigation into view in a height-constrained list', { tags:
     expect(document.activeElement?.textContent).toBe(['Apricot', 'Banana', 'Cherry', 'Grape'][index])
   }
   expect(document.activeElement?.textContent).toBe('Grape')
-  expect(getListEl().scrollTop).toBeGreaterThan(0)
+  await expect.poll(() => getListEl().scrollTop).toBeGreaterThan(0)
 
   for (let index = 0; index < 4; index++) {
     await userEvent.keyboard('{ArrowUp}')
     expect(document.activeElement?.textContent).toBe(['Cherry', 'Banana', 'Apricot', 'Apple'][index])
   }
   expect(document.activeElement?.textContent).toBe('Apple')
-  expect(getListEl().scrollTop).toBe(0)
+  await expect.poll(() => getListEl().scrollTop).toBe(0)
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L118-L125 (disables the visible combobox controls)

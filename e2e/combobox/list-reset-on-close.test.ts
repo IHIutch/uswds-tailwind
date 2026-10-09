@@ -1,4 +1,4 @@
-import { expect, it, vi } from 'vitest'
+import { expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 import { createDisposableCombobox } from './_utils.js'
 
@@ -44,7 +44,7 @@ it('reopens scrolled to the first option after closing a list that was scrolled 
   await userEvent.click(page.getByRole('combobox', { name: 'Fruit' }))
   await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}')
   await expect.element(page.getByRole('option', { name: 'Grape' })).toHaveFocus()
-  await vi.waitFor(() => expect(list.scrollTop).toBeGreaterThan(0))
+  await expect.poll(() => list.scrollTop).toBeGreaterThan(0)
   await userEvent.keyboard('{Escape}')
   await expect.element(list).not.toBeVisible()
   await userEvent.click(page.getByRole('combobox', { name: 'Fruit' }))

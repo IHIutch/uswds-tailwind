@@ -42,8 +42,8 @@ catalog:
   '@types/twig': ^1.12.17
   '@uswds/uswds': ^3.13.0
   '@vitejs/plugin-react': 4.7.0
-  '@vitest/browser': ^5.0.1
-  '@vitest/browser-playwright': ^5.0.1
+  '@vitest/browser': ^5.0.3
+  '@vitest/browser-playwright': ^5.0.3
   '@zag-js/anatomy': ^1.44.0
   '@zag-js/aria-hidden': ^1.44.0
   '@zag-js/core': ^1.44.0
@@ -87,7 +87,7 @@ catalog:
   turbo: ^2.10.13
   typescript: ^5.9.3
   vite: 7.2.7
-  vitest: ^5.0.1
+  vitest: ^5.0.3
   vitest-browser-react: ^2.3.0
   wrangler: ^4.54.0
 

@@ -1,4 +1,4 @@
-import { expect, it, vi } from 'vitest'
+import { expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 import { createDisposableCombobox } from './_utils.js'
 
@@ -32,7 +32,7 @@ it('scrolls the selected option into view when the list opens', { tags: ['parity
 
   await expect.element(list).toBeVisible()
   const grape = page.getByRole('option', { name: 'Grape' }).element() as HTMLElement
-  await vi.waitFor(() => expect(list.scrollTop).toBeGreaterThan(0))
+  await expect.poll(() => list.scrollTop).toBeGreaterThan(0)
   expect(grape.offsetTop).toBeGreaterThanOrEqual(list.scrollTop)
   expect(grape.offsetTop + grape.offsetHeight).toBeLessThanOrEqual(list.scrollTop + list.clientHeight)
   await expect.element(page.getByRole('combobox', { name: 'Fruit' })).toHaveFocus()
@@ -55,5 +55,5 @@ it('scrolls the active option back into view when ArrowDown is pressed from the 
   await userEvent.keyboard('{ArrowDown}')
 
   await expect.element(page.getByRole('option', { name: 'Grape' })).toHaveFocus()
-  await vi.waitFor(() => expect(list.scrollTop).toBeGreaterThan(0))
+  await expect.poll(() => list.scrollTop).toBeGreaterThan(0)
 })
