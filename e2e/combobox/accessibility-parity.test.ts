@@ -56,7 +56,7 @@ it('ignores modified ArrowDown combinations and opens on an unmodified ArrowDown
 
   await userEvent.keyboard('{ArrowDown}')
   expect(list.hidden).toBe(false)
-  expect(document.activeElement?.textContent).toBe('Apple')
+  await expect.element(page.getByRole('option', { name: 'Apple' })).toHaveFocus()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L857-L861 (maps both ArrowDown and its legacy Down alias to the input handler)

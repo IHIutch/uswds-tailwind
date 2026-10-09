@@ -215,7 +215,6 @@ export const machine = createMachine<ComboboxSchema>({
       // Keep tracking while closed so leaving the input restores the selection.
       trackInteractOutside({ scope, send }) {
         return trackInteractOutside(() => dom.getRootEl(scope), {
-          defer: true,
           onInteractOutside() {
             send({ type: 'LAYER.INTERACT_OUTSIDE' })
           },
