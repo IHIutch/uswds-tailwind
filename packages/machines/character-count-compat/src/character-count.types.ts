@@ -52,7 +52,7 @@ export interface CharacterCountSchema {
     srAnnouncementCleanup: VoidFunction | undefined
     previousOverLimit: boolean
   }
-  action: 'setValue' | 'cancelValiditySync' | 'announceValue'
+  action: 'setValue' | 'syncInputValue' | 'cancelValiditySync' | 'announceValue'
   guard: never
   effect: 'trackSrStatus'
   event: { type: 'VALUE.SET', value: string }

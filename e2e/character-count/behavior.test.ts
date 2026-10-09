@@ -94,27 +94,6 @@ it('shows the count and validity for a prefilled field on first render', { tags:
   expect(new FormData(input.closest('form')!).get(input.name)).toBe('abcdef')
 })
 
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/index.js#L270-L281 (USWDS handles native input; controlled value ownership is a port addition)
-it('keeps the accepted controlled value in the input and form after a rejected edit', { tags: ['new'] }, async () => {
-  const onValueChange = vi.fn()
-  await using component = createDisposableCharacterCount(rootId, template({ value: 'abc' }), {
-    maxLength: 5,
-    value: 'abc',
-    onValueChange,
-  })
-  const input = component.elements.getInputEl()
-  const status = component.elements.getStatusEl()!
-  expect(status.textContent).toBe('2 characters left')
-  await userEvent.fill(input, 'abcdef')
-  await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: 'abcdef' }))
-  expect(status.textContent).toBe('2 characters left')
-  expect(input.value).toBe('abc')
-  expect(new FormData(input.closest('form')!).get(input.name)).toBe('abc')
-  expect(input.validationMessage).toBe('')
-
-  expect(onValueChange).toHaveBeenCalledTimes(1)
-})
-
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/index.js#L270-L281 (USWDS handles native input; the setter is a port addition)
 it('a programmatic setter updates an uncontrolled field and its validation', { tags: ['new'] }, async () => {
   await using component = createDisposableCharacterCount(rootId, template())

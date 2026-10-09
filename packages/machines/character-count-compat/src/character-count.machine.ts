@@ -1,5 +1,6 @@
 import type { CharacterCountSchema } from './character-count.types'
 import { createMachine } from '@zag-js/core'
+import { setElementValue } from '@zag-js/dom-query'
 import * as dom from './character-count.dom'
 
 const isOverLimit = (value: string, maxLength: number) => maxLength > 0 && value.length > maxLength
@@ -68,7 +69,7 @@ export const machine = createMachine<CharacterCountSchema>({
 
   watch({ track, action, context }) {
     track([() => context.get('value')], () => {
-      action(['cancelValiditySync', 'announceValue'])
+      action(['syncInputValue', 'cancelValiditySync', 'announceValue'])
     })
   },
 
@@ -84,9 +85,11 @@ export const machine = createMachine<CharacterCountSchema>({
 
   implementations: {
     actions: {
-      setValue({ context, event, scope }) {
+      setValue({ context, event }) {
         context.set('value', event.value)
-        dom.setInputValue(scope, context.get('value'))
+      },
+      syncInputValue({ context, scope }) {
+        setElementValue(dom.getInputEl(scope), context.get('value'))
       },
       cancelValiditySync({ scope }) {
         const input = dom.getInputEl(scope)

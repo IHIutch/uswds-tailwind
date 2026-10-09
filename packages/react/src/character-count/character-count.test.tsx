@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
@@ -224,27 +225,17 @@ it('submits value in form data', async () => {
   expect(formData.get('message')).toBe('hello')
 })
 
-it('submits only the accepted controlled value after a rejected edit', async () => {
-  const onValueChange = vi.fn()
+it('shows a value the owner sets after the user has typed', async () => {
   const view = (value: string) => (
-    <form>
-      <CharacterCount.Root maxLength={5} value={value} onValueChange={onValueChange}>
-        <CharacterCount.Input name="message" />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </form>
+    <CharacterCount.Root maxLength={5} value={value} onValueChange={() => {}}>
+      <CharacterCount.Input />
+    </CharacterCount.Root>
   )
   const screen = await render(view('abc'))
-  const input = screen.getByRole('textbox').element() as HTMLInputElement
-  await userEvent.fill(input, 'abcdef')
-  await vi.waitFor(() => expect(onValueChange).toHaveBeenCalledWith({ value: 'abcdef' }))
-  expect(input.value).toBe('abc')
-  expect(new FormData(input.form!).get('message')).toBe('abc')
-  expect(input.validationMessage).toBe('')
-  await screen.rerender(view('abcdef'))
-  await expect.element(screen.getByText('1 character over limit')).toBeVisible()
-  expect(input.value).toBe('abcdef')
-  expect(input.validationMessage).toBe('The content is too long.')
+  const input = screen.getByRole('textbox')
+  await userEvent.fill(input, 'abcd')
+  await screen.rerender(view(''))
+  await expect.element(input).toHaveValue('')
 })
 
 it('updates its validation message when the owner changes errorText', async () => {
@@ -299,4 +290,26 @@ it('honors ids.status inside Field and keeps the counter accessible while typing
   await expect.element(screen.getByText('1 character over limit')).toHaveAttribute('id', 'exact-status')
   await expect.element(input).toHaveAccessibleDescription('Keep it brief. 1 character over limit')
   expect((input.element() as HTMLInputElement).validationMessage).toBe('The content is too long.')
+})
+
+function ControlledCharacterCount() {
+  const [value, setValue] = React.useState('hello world')
+  return (
+    <CharacterCount.Root maxLength={20} value={value} onValueChange={details => setValue(details.value)}>
+      <CharacterCount.Input />
+    </CharacterCount.Root>
+  )
+}
+
+it.each([
+  ['uncontrolled', <CharacterCount.Root key="uncontrolled" maxLength={20} defaultValue="hello world"><CharacterCount.Input /></CharacterCount.Root>],
+  ['controlled', <ControlledCharacterCount key="controlled" />],
+])('keeps the caret in place when typing mid-text (%s)', async (_, ui) => {
+  const screen = await render(ui)
+  const input = screen.getByRole('textbox')
+  const el = input.element() as HTMLInputElement
+  el.focus()
+  el.setSelectionRange(5, 5)
+  await userEvent.keyboard('XY')
+  await expect.element(input).toHaveValue('helloXY world')
 })

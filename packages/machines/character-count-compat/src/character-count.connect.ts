@@ -52,7 +52,7 @@ export function connect<T extends PropTypes>(
         'id': dom.getInputId(scope),
         'aria-describedby': prop('inputDescriptionIds'),
         'data-invalid': dataAttr(invalid),
-        'value': value,
+        'defaultValue': value,
         onInput(event: { currentTarget: HTMLInputElement | HTMLTextAreaElement }) {
           send({ type: 'VALUE.SET', value: event.currentTarget.value })
         },

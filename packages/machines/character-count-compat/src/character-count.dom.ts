@@ -12,12 +12,6 @@ export const getSrStatusId = (scope: Scope) => scope.ids?.srStatus ?? `character
 
 export const getInputEl = (scope: Scope) => scope.getById<HTMLInputElement | HTMLTextAreaElement>(getInputId(scope))
 
-export function setInputValue(scope: Scope, value: string) {
-  const input = getInputEl(scope)
-  if (input)
-    input.value = value
-}
-
 const ownedValidityMessages = new WeakMap<HTMLInputElement | HTMLTextAreaElement, string>()
 const validitySyncTimers = new WeakMap<HTMLInputElement | HTMLTextAreaElement, VoidFunction>()
 
