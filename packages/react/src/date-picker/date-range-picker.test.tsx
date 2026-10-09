@@ -10,13 +10,11 @@ function renderRangePicker(
 ) {
   return render(
     <DatePicker.Root selectionMode="range" {...rootProps}>
-      <DatePicker.Control bound="start">
-        <DatePicker.Input aria-label="Start date" />
-        <DatePicker.Trigger />
-      </DatePicker.Control>
-      <DatePicker.Control bound="end">
-        <DatePicker.Input aria-label="End date" />
-        <DatePicker.Trigger />
+      <DatePicker.Control>
+        <DatePicker.Input index={0} aria-label="Start date" />
+        <DatePicker.Trigger index={0} />
+        <DatePicker.Input index={1} aria-label="End date" />
+        <DatePicker.Trigger index={1} />
       </DatePicker.Control>
       <DatePicker.Content>
         <DatePicker.View view="day">
@@ -85,16 +83,14 @@ it('renders two inputs and two triggers', async () => {
   await expect.element(screen.getByRole('button', { name: 'Open end calendar' })).toBeVisible()
 })
 
-it('trigger derives aria-label from Control bound', async () => {
+it('trigger derives aria-label from its index', async () => {
   const screen = await render(
     <DatePicker.Root selectionMode="range">
-      <DatePicker.Control bound="start">
-        <DatePicker.Input aria-label="Start date" />
-        <DatePicker.Trigger />
-      </DatePicker.Control>
-      <DatePicker.Control bound="end">
-        <DatePicker.Input aria-label="End date" />
-        <DatePicker.Trigger />
+      <DatePicker.Control>
+        <DatePicker.Input index={0} aria-label="Start date" />
+        <DatePicker.Trigger index={0} />
+        <DatePicker.Input index={1} aria-label="End date" />
+        <DatePicker.Trigger index={1} />
       </DatePicker.Control>
     </DatePicker.Root>,
   )
@@ -103,16 +99,14 @@ it('trigger derives aria-label from Control bound', async () => {
   await expect.element(screen.getByRole('button', { name: 'Open end calendar' })).toBeVisible()
 })
 
-it('consumer aria-label on Trigger overrides bound-derived default', async () => {
+it('consumer aria-label on Trigger overrides the index-derived default', async () => {
   const screen = await render(
     <DatePicker.Root selectionMode="range">
-      <DatePicker.Control bound="start">
-        <DatePicker.Input aria-label="From" />
-        <DatePicker.Trigger aria-label="Pick a from date" />
-      </DatePicker.Control>
-      <DatePicker.Control bound="end">
-        <DatePicker.Input aria-label="To" />
-        <DatePicker.Trigger />
+      <DatePicker.Control>
+        <DatePicker.Input index={0} aria-label="From" />
+        <DatePicker.Trigger index={0} aria-label="Pick a from date" />
+        <DatePicker.Input index={1} aria-label="To" />
+        <DatePicker.Trigger index={1} />
       </DatePicker.Control>
     </DatePicker.Root>,
   )
@@ -257,13 +251,11 @@ it('field.Label htmlFor matches the start input id by default', async () => {
     <Field.Root>
       <Field.Label>Trip dates</Field.Label>
       <DatePicker.Root selectionMode="range">
-        <DatePicker.Control bound="start">
-          <DatePicker.Input />
-          <DatePicker.Trigger />
-        </DatePicker.Control>
-        <DatePicker.Control bound="end">
-          <DatePicker.Input aria-label="End date" />
-          <DatePicker.Trigger />
+        <DatePicker.Control>
+          <DatePicker.Input index={0} />
+          <DatePicker.Trigger index={0} />
+          <DatePicker.Input index={1} aria-label="End date" />
+          <DatePicker.Trigger index={1} />
         </DatePicker.Control>
       </DatePicker.Root>
     </Field.Root>,
@@ -282,11 +274,9 @@ it('submits both values in form data with distinct names', async () => {
     }}
     >
       <DatePicker.Root selectionMode="range">
-        <DatePicker.Control bound="start">
-          <DatePicker.Input name="start" aria-label="Start date" />
-        </DatePicker.Control>
-        <DatePicker.Control bound="end">
-          <DatePicker.Input name="end" aria-label="End date" />
+        <DatePicker.Control>
+          <DatePicker.Input index={0} name="start" aria-label="Start date" />
+          <DatePicker.Input index={1} name="end" aria-label="End date" />
         </DatePicker.Control>
       </DatePicker.Root>
       <button type="submit">Submit</button>

@@ -24,10 +24,12 @@ function keepDateWithinMonth(dateToCheck: DateValue, month: number): DateValue {
   return dateToCheck
 }
 
-// setFullYear avoids the Date constructor remapping years 0-99 to 1900-1999.
+// setFullYear keeps years 0-99 from turning into 1900-1999.
 export function setDate(year: number, month: number, date: number): DateValue {
   const newDate = new Date(0)
   newDate.setFullYear(year, month, date)
+  // Without this, dates keep a leftover time of day.
+  newDate.setHours(0, 0, 0, 0)
   return newDate
 }
 

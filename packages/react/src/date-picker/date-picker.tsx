@@ -38,28 +38,19 @@ const DatePickerRoot = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
   },
 )
 
-type RangeBound = 'start' | 'end'
-
-function boundToIndex(bound: RangeBound | undefined): datepicker.EndpointIndex {
-  return bound === 'end' ? 1 : 0
+type DatePickerInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  /** Range endpoint: 0 for the start, 1 for the end. */
+  index?: datepicker.EndpointIndex
 }
 
-const DatePickerControlContext = React.createContext<{ bound?: RangeBound } | null>(null)
-
-function useControlBound(): RangeBound | undefined {
-  return React.useContext(DatePickerControlContext)?.bound
-}
-
-const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, ...props }, forwardedRef) => {
+const DatePickerInput = React.forwardRef<HTMLInputElement, DatePickerInputProps>(
+  ({ className, index = 0, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
     const field = useFieldContext()
-    const controlBound = useControlBound()
 
-    const resolvedIndex = boundToIndex(controlBound)
-    const apiProps = api.getInputProps({ index: resolvedIndex })
+    const apiProps = api.getInputProps({ index })
 
-    const fieldProps = resolvedIndex === 0 ? field?.getInputProps() : undefined
+    const fieldProps = index === 0 ? field?.getInputProps() : undefined
 
     const describedBy = [fieldProps?.['aria-describedby'], apiProps['aria-describedby']]
       .filter(Boolean)
@@ -71,20 +62,23 @@ const DatePickerInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttrib
   },
 )
 
-const DatePickerTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, children, ...props }, forwardedRef) => {
+type DatePickerTriggerProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  /** Range endpoint this button opens: 0 for the start, 1 for the end. */
+  index?: datepicker.EndpointIndex
+}
+
+const DatePickerTrigger = React.forwardRef<HTMLButtonElement, DatePickerTriggerProps>(
+  ({ className, children, index, ...props }, forwardedRef) => {
     const { api } = useDatePickerContext()
-    const controlBound = useControlBound()
-    const resolvedIndex = boundToIndex(controlBound)
 
     const defaultLabel
-      = controlBound === 'start'
+      = index === 0
         ? 'Open start calendar'
-        : controlBound === 'end'
+        : index === 1
           ? 'Open end calendar'
           : undefined
 
-    const apiProps = api.getTriggerProps({ index: resolvedIndex })
+    const apiProps = api.getTriggerProps({ index })
     const mergedProps = mergeProps(
       apiProps,
       defaultLabel ? { 'aria-label': defaultLabel } : {},
@@ -101,18 +95,10 @@ const DatePickerTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAt
   },
 )
 
-type DatePickerControlProps = React.HTMLAttributes<HTMLDivElement> & {
-  // For range mode: declares which range bound this Control's Input/Trigger represent.
-  bound?: RangeBound
-}
-
-function DatePickerControl({ className, bound, ...props }: DatePickerControlProps) {
-  const value = React.useMemo(() => ({ bound }), [bound])
-  return (
-    <DatePickerControlContext.Provider value={value}>
-      <div {...props} className={cn('w-full flex', className)} />
-    </DatePickerControlContext.Provider>
-  )
+function DatePickerControl({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const { api } = useDatePickerContext()
+  const mergedProps = mergeProps(api.getControlProps(), props)
+  return <div {...mergedProps} className={cn('w-full flex', className)} />
 }
 
 const DatePickerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
