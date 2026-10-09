@@ -6,28 +6,27 @@ import { createDisposableCharacterCount } from './_utils.js'
 const rootId = 'test'
 
 const TEMPLATE = `<div data-scope="character-count" data-part="root" id="${rootId}">
-    <label
-      for="input-limit"
-    >Text input</label>
-    <div>
+    <div data-part="control">
+      <label
+        for="input-limit"
+      >Text input</label>
       <span id="input-hint">This is an input with a character counter.</span>
-    </div>
-    <div>
       <input
         data-part="input"
         id="input-limit"
         aria-describedby="input-hint character-count-hint"
         maxlength="20"
       />
+      <span data-part="description" id="character-count-hint"></span>
     </div>
     <div>
-      <span id="character-count-hint"></span>
       <span
         data-part="status"
         aria-hidden="true"
       ></span>
       <span data-part="sr-status"></span>
-    </div>`
+    </div>
+  </div>`
 
 it('keeps an authored label associated with the input', async () => {
   await using component = createDisposableCharacterCount(rootId, TEMPLATE)
@@ -40,10 +39,10 @@ it('keeps an authored label associated with the input', async () => {
 
 it('hides the requirements hint for screen readers', async () => {
   await using component = createDisposableCharacterCount(rootId, TEMPLATE)
-  const statusMessageSR = component.elements.getSrStatusEl()!
+  const requirementsMessage = component.elements.getDescriptionEl()!
 
   Object.entries(visuallyHiddenStyle).forEach(([key, value]) => {
-    const elStyle = statusMessageSR.style[key]
+    const elStyle = requirementsMessage.style[key]
       .replace(/0px/g, '0')
       .replace(/,\s*/g, ' ')
       .replace(/\s+/g, ' ')
@@ -134,9 +133,10 @@ it('should show the component and input as invalid when the input is over the li
 
   await userEvent.fill(input, '123456789012345678901')
 
-  expect(input.validationMessage).toBe('The content is too long.')
-  expect(input.hasAttribute('data-invalid')).toBe(true)
-  expect(visibleStatus.hasAttribute('data-invalid')).toBe(true)
+  await expect.poll(() => input.validationMessage).toBe('The content is too long.')
+  await expect.element(input).toHaveAttribute('data-invalid')
+  await expect.element(component.elements.getControlEl()).toHaveAttribute('data-invalid')
+  await expect.element(visibleStatus).toHaveAttribute('data-invalid')
 })
 
 it('should not allow for innerHTML of child elements', async () => {

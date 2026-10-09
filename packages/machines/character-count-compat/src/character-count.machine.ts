@@ -50,9 +50,6 @@ export const machine = createMachine<CharacterCountSchema>({
           politeness: undefined,
         },
       })),
-      isDescriptionRendered: bindable<boolean>(() => ({
-        defaultValue: false,
-      })),
     }
   },
 
@@ -66,18 +63,12 @@ export const machine = createMachine<CharacterCountSchema>({
     return {
       srAnnouncementCleanup: undefined,
       previousOverLimit: isOverLimit(context.get('value'), prop('maxLength')),
-      descriptionRef(node: HTMLElement | null) {
-        context.set('isDescriptionRendered', Boolean(node))
-      },
     }
   },
 
-  watch({ track, action, context, prop }) {
-    track([() => context.get('value'), () => prop('maxLength')], () => {
-      action(['syncInputValidity', 'announceValue'])
-    })
-    track([() => prop('errorText')], () => {
-      action(['syncInputValidity'])
+  watch({ track, action, context }) {
+    track([() => context.get('value')], () => {
+      action(['cancelValiditySync', 'announceValue'])
     })
   },
 
@@ -97,12 +88,10 @@ export const machine = createMachine<CharacterCountSchema>({
         context.set('value', event.value)
         dom.setInputValue(scope, context.get('value'))
       },
-      syncInputValidity({ computed, prop, scope }) {
+      cancelValiditySync({ scope }) {
         const input = dom.getInputEl(scope)
-        if (input) {
+        if (input)
           dom.cancelValiditySync(input)
-          dom.applyOwnedValidity(input, computed('isOverLimit'), prop('errorText'))
-        }
       },
       announceValue({ context, computed, prop, scope, refs }) {
         if (!prop('maxLength'))

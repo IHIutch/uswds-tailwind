@@ -18,7 +18,7 @@ export interface ValueChangeDetails {
 
 export interface CharacterCountProps extends CommonProperties {
   ids?: ElementIds | undefined
-  /** Existing descriptions stay linked when the optional description mounts. */
+  /** Ids for the input's aria-describedby. */
   inputDescriptionIds?: string | undefined
   /** The allowed character count; the input has no native maxlength. */
   maxLength: number
@@ -43,7 +43,6 @@ export interface CharacterCountSchema {
   context: {
     value: string
     srStatus: { text: string, politeness: 'polite' | 'assertive' | undefined }
-    isDescriptionRendered: boolean
   }
   computed: {
     isOverLimit: boolean
@@ -52,9 +51,8 @@ export interface CharacterCountSchema {
   refs: {
     srAnnouncementCleanup: VoidFunction | undefined
     previousOverLimit: boolean
-    descriptionRef: (node: HTMLElement | null) => void
   }
-  action: 'setValue' | 'syncInputValidity' | 'announceValue'
+  action: 'setValue' | 'cancelValiditySync' | 'announceValue'
   guard: never
   effect: 'trackSrStatus'
   event: { type: 'VALUE.SET', value: string }

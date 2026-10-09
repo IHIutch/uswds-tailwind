@@ -39,7 +39,7 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
     this.renderInput(this.input)
     const description = this.description
     if (description)
-      this.renderDescription(description)
+      spreadProps(description, this.api.getDescriptionProps())
     this.renderStatus(this.status)
     this.renderSrStatus(this.srStatus)
   }
@@ -77,12 +77,6 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
     const { ref, ...props } = this.api.getInputProps()
     spreadProps(input, props)
     ref?.(input)
-  }
-
-  private renderDescription(description: HTMLElement) {
-    const { ref, ...props } = this.api.getDescriptionProps()
-    spreadProps(description, props)
-    ref?.(description)
   }
 
   private renderStatus(el: HTMLElement) {
