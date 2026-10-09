@@ -28,7 +28,7 @@ export function connect<T extends PropTypes>(
   const srStatusText = open ? (count ? `${count} result${count > 1 ? 's' : ''} available.` : 'No results.') : ''
 
   // Never reference an option removed by a list rebuild.
-  const activeDescendant = open && highlightedIndex !== null
+  const activeDescendant = highlightedIndex !== null
     ? items[highlightedIndex]?.id
     : undefined
 
@@ -123,7 +123,7 @@ export function connect<T extends PropTypes>(
           }
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
-            const destination = open && items.length ? highlightedIndex ?? 0 : null
+            const destination = highlightedIndex ?? 0
             send({ type: 'INPUT.ARROW_DOWN', focusHandled: focusNow(destination) })
           }
         },
