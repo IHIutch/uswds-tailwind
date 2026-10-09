@@ -1,6 +1,5 @@
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { Combobox } from '../../packages/compat/src/combobox.js'
 import { createDisposableCombobox } from './_utils.js'
 
 const rootId = 'test'
@@ -90,7 +89,7 @@ const TEMPLATE = `<div
       </select>
 
       <div class="relative mt-2">
-        <div class="flex w-full">
+        <div class="flex w-full" style="display:flex">
           <input
             required
             data-part="input"
@@ -268,13 +267,10 @@ it('should sort matches by options that start with the query, then options that 
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632
 it('should reset input values when an incomplete item is remaining on blur', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
+  await using component = createDisposableCombobox(rootId, `${TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="apricot"')}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('apricot')
 
   await userEvent.fill(input, 'a')
 
@@ -289,13 +285,10 @@ it('should reset input values when an incomplete item is remaining on blur', { t
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
 it('should reset input values when an incomplete item is submitted through enter', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="cantaloupe"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('cantaloupe')
 
   await userEvent.hover(component.elements.getLabelEl())
   await userEvent.fill(input, 'a')
@@ -329,13 +322,10 @@ it('prevents Enter in a closed combobox from submitting its form', { tags: ['leg
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
 it('should close the list and reset input value when escape is performed while the list is open', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="cherry"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('cherry')
 
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
@@ -349,13 +339,10 @@ it('should close the list and reset input value when escape is performed while t
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L632
 it('should reset the input value when a complete selection is left on blur from the input element', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, `${TEMPLATE}<button id="outside">Outside</button>`)
+  await using component = createDisposableCombobox(rootId, `${TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="coconut"')}<button id="outside">Outside</button>`)
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('coconut')
 
   await userEvent.fill(input, 'date')
   expect(list.hidden).toBe(false)
@@ -369,13 +356,10 @@ it('should reset the input value when a complete selection is left on blur from 
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
 it('should set the input value when a complete selection is submitted by pressing enter', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="cranberry"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('cranberry')
 
   await userEvent.fill(input, 'grape')
   expect(list.hidden).toBe(false)
@@ -444,12 +428,9 @@ it('should focus the first item in the list when pressing down from the input', 
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
 it('should select the focused list item in the list when pressing enter on a focused item', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="pineapple"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('pineapple')
   await userEvent.hover(component.elements.getLabelEl())
   await userEvent.fill(input, 'berry')
   await userEvent.keyboard('{ArrowDown}')
@@ -464,12 +445,9 @@ it('should select the focused list item in the list when pressing enter on a foc
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L739-L752
 it('should select the focused list item in the list when pressing space on a focused item', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="cantaloupe"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('cantaloupe')
 
   await userEvent.hover(component.elements.getLabelEl())
   await userEvent.fill(input, 'berry')
@@ -522,13 +500,10 @@ it('should focus the last item in the list when pressing down many times from th
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
 it('should not select the focused item in the list when pressing escape from the focused item', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, TEMPLATE)
+  await using component = createDisposableCombobox(rootId, TEMPLATE.replace('data-part="root"', 'data-part="root" data-default-value="pineapple"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('pineapple')
 
   await userEvent.fill(input, 'la')
   expect(!list.hidden && list.children.length).toBeTruthy()

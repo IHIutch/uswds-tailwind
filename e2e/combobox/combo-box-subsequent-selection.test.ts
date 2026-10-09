@@ -89,7 +89,7 @@ const template = `<div
       </select>
 
       <div class="relative mt-2">
-        <div class="flex w-full">
+        <div class="flex w-full" style="display:flex">
           <input
             required
             data-part="input"
@@ -174,7 +174,7 @@ it('should clear the input when the clear button is clicked', { tags: ['legacy']
   expect(select.value).toBe('blackberry')
   expect(input.value).toBe('Blackberry')
 
-  const clearButton = document.querySelector('[data-part="clear-trigger"]')!
+  const clearButton = component.elements.getClearButtonEl()
   await userEvent.click(clearButton)
 
   expect(select.value).toBe('')
