@@ -151,30 +151,12 @@
         aria-live="polite"
       ></div> -->
     </div>
-
-    <button
-      id="set-value"
-      type="button"
-    >Set Value</button>
   </div>
 
   <script
     type="module"
     src="./src/index.ts"
   ></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const setValueButton = document.getElementById('set-value')
-      setValueButton.addEventListener('click', () => {
-        const instance = Combobox.getInstance(document.getElementById('basic-combobox'))
-        if (instance) {
-          // console.log(instance.api)
-          instance.api.setValue('apricot')
-        }
-      })
-    })
-  </script>
 
 </body>
 

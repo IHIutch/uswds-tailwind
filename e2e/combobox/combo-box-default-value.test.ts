@@ -88,7 +88,7 @@ const template = `<div
   </select>
 
   <div class="relative mt-2">
-    <div class="flex w-full">
+    <div class="flex w-full" style="display:flex">
       <input
         required
         data-part="input"
