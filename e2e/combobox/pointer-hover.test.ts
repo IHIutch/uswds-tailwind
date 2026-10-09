@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
+import { expectNever } from '../_utils.js'
 import { createDisposableCombobox } from './_utils.js'
 
 const template = `<style>
@@ -47,8 +48,7 @@ it('keeps focus in the input when the pointer moves onto the option that is alre
   await expect.element(page.getByRole('combobox', { name: 'Fruit' })).toHaveFocus()
   await expect.element(component.elements.getListEl()).toBeVisible()
   await userEvent.hover(page.getByRole('option', { name: 'Apple' }))
-  // Let any focus queued for the next animation frame run.
-  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+  await expectNever(() => expect(document.activeElement).toBe(page.getByRole('option', { name: 'Apple' }).element()))
 
   await expect.element(page.getByRole('combobox', { name: 'Fruit' })).toHaveFocus()
 })

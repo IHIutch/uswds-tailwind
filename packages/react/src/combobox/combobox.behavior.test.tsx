@@ -61,6 +61,16 @@ it('clears an open selection and shows all options', async () => {
   expect(document.querySelector<HTMLSelectElement>('[data-scope="combobox"][data-part="hidden-select"]')?.value).toBe('')
 })
 
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L435-L441 (only options with a value are listed)
+it('leaves an option with an empty value out of the list', async () => {
+  const screen = await render(<MachineCombobox options={[{ value: '', label: 'Choose a fruit' }, ...options]} />)
+  await userEvent.click(screen.getByRole('button', { name: 'Toggle the dropdown list' }))
+
+  await expect.element(screen.getByRole('option', { name: 'Apple' })).toBeVisible()
+  await expect.element(screen.getByRole('option', { name: 'Choose a fruit' })).not.toBeInTheDocument()
+  await expect.element(screen.getByRole('status')).toHaveTextContent('3 results available.')
+})
+
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L682-L698
 it('focuses the selected option when ArrowDown opens the list', async () => {
   const screen = await render(<MachineCombobox defaultValue="cherry" />)
