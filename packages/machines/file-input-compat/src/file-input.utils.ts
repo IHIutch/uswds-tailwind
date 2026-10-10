@@ -3,9 +3,9 @@ import { hash } from '@zag-js/utils'
 
 export const getFileId = (file: File) => hash(`${file.name}-${file.size}`)
 
-export const getItemsLabel = (multiple: boolean) => (multiple ? 'files' : 'file')
+export const getItemsLabel = (multiple?: boolean) => (multiple ? 'files' : 'file')
 
-export function getStatusMessage(files: readonly File[], multiple: boolean): string {
+export function getStatusMessage(files: readonly File[], multiple?: boolean): string {
   if (files.length === 1)
     return `You have selected the file: ${files[0]?.name ?? ''}`
   if (files.length > 1)
@@ -21,7 +21,7 @@ export function isBatchValid(accept: string | undefined, files: File[]): boolean
   if (!accept)
     return true
   const tokens = accept.split(',')
-  return files.every(file => !file || tokens.some(token =>
+  return files.every(file => tokens.some(token =>
     file.name.indexOf(token) > 0 || file.type.includes(token.replace(/\*/g, '')),
   ))
 }

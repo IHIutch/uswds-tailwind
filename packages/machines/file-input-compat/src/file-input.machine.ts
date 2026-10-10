@@ -5,9 +5,6 @@ import { getStatusMessage, isBatchValid } from './file-input.utils'
 export const machine = createMachine<FileInputSchema>({
   props({ props }) {
     return {
-      disabled: false,
-      ariaDisabled: false,
-      multiple: false,
       errorText: 'Error: This is not a valid file type.',
       ...props,
     }

@@ -3,7 +3,7 @@ import type { FileInputApi, FileInputService } from './file-input.types'
 import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
-import { getDefaultAriaLabel, getFileId, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
+import { getDefaultAriaLabel, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
 
 export function connect<T extends PropTypes>(
   service: FileInputService,
@@ -51,8 +51,6 @@ export function connect<T extends PropTypes>(
 
     dragText,
     chooseText,
-    disabled,
-    getFileId,
     getPreviewType(file) {
       return getPreviewType(file)
     },
@@ -149,9 +147,8 @@ export function connect<T extends PropTypes>(
     getPreviewHeadingProps() {
       return normalize.element({
         ...parts.previewHeading.attrs,
-        'id': dom.getPreviewHeadingId(scope),
-        'hidden': !hasFiles,
-        'data-change-text': changeText,
+        id: dom.getPreviewHeadingId(scope),
+        hidden: !hasFiles,
       })
     },
 

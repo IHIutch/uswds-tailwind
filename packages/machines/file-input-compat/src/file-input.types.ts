@@ -46,7 +46,7 @@ export interface FileInputProps extends DirectionProperty, CommonProperties {
   errorText?: string | undefined
 }
 
-type PropsWithDefault = 'disabled' | 'ariaDisabled' | 'multiple' | 'errorText'
+type PropsWithDefault = 'errorText'
 
 export interface FileInputSchema {
   props: RequiredBy<FileInputProps, PropsWithDefault>
@@ -87,9 +87,6 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   previewChangeText: string
   dragText: string
   chooseText: string
-  disabled: boolean
-  /** Stable ID derived from the file name and size. */
-  getFileId: (file: File) => string
   getPreviewType: (file: File) => PreviewType
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
