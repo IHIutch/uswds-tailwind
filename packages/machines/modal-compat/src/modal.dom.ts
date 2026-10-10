@@ -20,9 +20,10 @@ export const getPositionerEl = (ctx: Scope) => ctx.getById(getPositionerId(ctx))
 export const getTitleEl = (ctx: Scope) => ctx.getById(getTitleId(ctx))
 export const getDescriptionEl = (ctx: Scope) => ctx.getById(getDescriptionId(ctx))
 
-// The trigger that opened the modal, else the first trigger, for returning focus on close.
-export function getActiveTriggerEl(ctx: Scope, index: number | null): HTMLElement | null {
+// Where focus returns on close: the trigger that opened the modal, else whatever was focused before it opened (the
+// element that invoked it, per the APG). A WebKit click does not focus the trigger, so the trigger is looked up by index.
+export function getReturnFocusEl(ctx: Scope, index: number | null, previousEl: HTMLElement | SVGElement) {
   if (index == null)
-    return getTriggerEl(ctx)
-  return ctx.getById(getTriggerId(ctx, index))
+    return previousEl
+  return ctx.getById(getTriggerId(ctx, index)) ?? previousEl
 }

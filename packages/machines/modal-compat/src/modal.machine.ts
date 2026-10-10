@@ -120,9 +120,7 @@ export const machine = createMachine<ModalSchema>({
 
       trapFocus({ scope, context }) {
         return trapFocus(() => dom.getContentEl(scope), {
-          // Returns focus to the trigger that opened the modal, else the first trigger, else whatever was
-          // focused before. A WebKit click does not focus the button, so the trap alone would land on body.
-          setReturnFocus: el => dom.getActiveTriggerEl(scope, context.get('triggerIndex')) ?? el,
+          setReturnFocus: el => dom.getReturnFocusEl(scope, context.get('triggerIndex'), el),
           initialFocus: () => getInitialFocus({
             root: dom.getContentEl(scope),
             getInitialEl: () => query(dom.getContentEl(scope), '[data-focus]'),
@@ -141,7 +139,8 @@ export const machine = createMachine<ModalSchema>({
         })
       },
       setTriggerIndex({ context, event }) {
-        context.set('triggerIndex', event.index ?? null)
+        // A trigger rendered without an index gets the index 0 id.
+        context.set('triggerIndex', event.index ?? 0)
       },
       invokeOnOpen({ prop }) {
         prop('onOpenChange')?.({ open: true })
