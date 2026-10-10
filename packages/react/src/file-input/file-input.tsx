@@ -8,6 +8,7 @@ import { useFileInput } from './use-file-input'
 
 export interface FileInputContextProps {
   api: fileInput.Api
+  multiple?: boolean | undefined
 }
 
 const FileInputContext = React.createContext<FileInputContextProps | null>(null)
@@ -27,7 +28,7 @@ function FileInputRoot({ className, children, id, ids, ...props }: FileInputRoot
   const mergedProps = mergeProps(api.getRootProps(), props)
 
   return (
-    <FileInputContext.Provider value={{ api }}>
+    <FileInputContext.Provider value={{ api, multiple: props.multiple }}>
       <div
         {...mergedProps}
         className={cn('relative z-0 max-w-lg', className)}
@@ -93,7 +94,7 @@ const FileInputInput = React.forwardRef<HTMLInputElement, FileInputInputProps>(
 export type FileInputInstructionsProps = React.ComponentPropsWithoutRef<'div'>
 
 function FileInputInstructions({ className, children, ...props }: FileInputInstructionsProps) {
-  const { api } = useFileInputContext()
+  const { api, multiple } = useFileInputContext()
   const mergedProps = mergeProps(api.getInstructionsProps(), props)
 
   return (
@@ -106,13 +107,9 @@ function FileInputInstructions({ className, children, ...props }: FileInputInstr
           {/*
             Mirrors USWDS createVisibleInstructions (composed from getItemsLabel):
             "Drag file here or" / "Drag files here or" + "choose from folder".
-            The machine pre-computes these strings based on `multiple`.
           */}
-          <span>
-            {api.dragText}
-            {' '}
-          </span>
-          <span className="text-blue-60v underline">{api.chooseText}</span>
+          <span>{`Drag ${multiple ? 'files' : 'file'} here or `}</span>
+          <span className="text-blue-60v underline">choose from folder</span>
         </>
       )}
     </div>

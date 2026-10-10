@@ -18,8 +18,6 @@ export function connect<T extends PropTypes>(
   const srStatusText = context.get('srStatusText')
 
   const itemsLabel = getItemsLabel(prop('multiple'))
-  const dragText = `Drag ${itemsLabel} here or`
-  const chooseText = 'choose from folder'
   const defaultAriaLabel = getDefaultAriaLabel(itemsLabel)
   const ariaLabelText = invalid
     ? `${errorText} ${defaultAriaLabel}`
@@ -49,8 +47,6 @@ export function connect<T extends PropTypes>(
     previewHeadingText,
     previewChangeText: changeText,
 
-    dragText,
-    chooseText,
     getPreviewType(file) {
       return getPreviewType(file)
     },
@@ -125,14 +121,6 @@ export function connect<T extends PropTypes>(
         'aria-hidden': true,
         'hidden': hasFiles,
       })
-    },
-
-    getDragTextProps() {
-      return normalize.element({ ...parts.dragText.attrs })
-    },
-
-    getChooseProps() {
-      return normalize.element({ ...parts.choose.attrs })
     },
 
     getItemGroupProps() {

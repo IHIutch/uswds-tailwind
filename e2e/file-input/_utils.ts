@@ -60,7 +60,7 @@ export function fileInputTemplate(options: FileInputOptions = {}) {
     <label data-part="label">Upload file</label>
     <div data-part="sr-status"></div>
     <div data-part="dropzone">
-      <div data-part="instructions"><span data-part="drag-text"></span> <span data-part="choose"></span></div>
+      <div data-part="instructions"><span>Drag ${multiple ? 'files' : 'file'} here or</span> <span>choose from folder</span></div>
       <input data-part="input" type="file"
         ${multiple ? 'multiple' : ''} ${disabled ? 'disabled' : ''}
         ${ariaDisabled ? 'aria-disabled="true"' : ''}
