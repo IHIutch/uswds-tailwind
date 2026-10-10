@@ -8,6 +8,7 @@ const rootId = 'test'
 const TEMPLATE = `<div data-scope="character-count" data-part="root" id="${rootId}">
     <div data-part="control">
       <label
+        data-part="label"
         for="input-limit"
       >Text input</label>
       <span id="input-hint">This is an input with a character counter.</span>
@@ -134,6 +135,7 @@ it('should show the component and input as invalid when the input is over the li
   await userEvent.fill(input, '123456789012345678901')
 
   await expect.poll(() => input.validationMessage).toBe('The content is too long.')
+  await expect.element(component.elements.getLabelEl()).toHaveAttribute('data-invalid')
   await expect.element(input).toHaveAttribute('data-invalid')
   await expect.element(component.elements.getControlEl()).toHaveAttribute('data-invalid')
   await expect.element(visibleStatus).toHaveAttribute('data-invalid')

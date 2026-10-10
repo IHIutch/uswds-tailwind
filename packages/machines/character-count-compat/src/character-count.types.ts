@@ -4,6 +4,7 @@ import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 /* Element IDs */
 export type ElementIds = Partial<{
   root: string
+  label: string
   control: string
   input: string
   description: string
@@ -76,6 +77,7 @@ export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   setValue: (value: string) => void
 
   getRootProps: () => T['element']
+  getLabelProps: () => T['label']
   getControlProps: () => T['element']
   getInputProps: () => T['input']
   getDescriptionProps: () => T['element']

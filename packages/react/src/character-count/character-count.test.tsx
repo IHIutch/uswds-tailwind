@@ -47,13 +47,13 @@ it('prefilled over-limit input has native validity on mount', async () => {
 
 it('field.Label htmlFor matches CharacterCount.Input id', async () => {
   const screen = await render(
-    <Field.Root>
-      <Field.Label>Message</Field.Label>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root>
+        <Field.Label>Message</Field.Label>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
   const label = screen.getByText('Message')
@@ -63,13 +63,13 @@ it('field.Label htmlFor matches CharacterCount.Input id', async () => {
 
 it('characterCount inherits disabled from Field.Root', async () => {
   const screen = await render(
-    <Field.Root disabled>
-      <Field.Label>Message</Field.Label>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root disabled>
+        <Field.Label>Message</Field.Label>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
   await expect.element(screen.getByRole('textbox')).toBeDisabled()
@@ -77,75 +77,74 @@ it('characterCount inherits disabled from Field.Root', async () => {
 
 it('characterCount inherits invalid from Field.Root', async () => {
   const screen = await render(
-    <Field.Root invalid>
-      <Field.Label>Message</Field.Label>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root invalid>
+        <Field.Label>Message</Field.Label>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
   await expect.element(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true')
 })
 
-it('characterCount.Status is referenced by aria-describedby', async () => {
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/usa-character-count.twig#L2-L16 (the form group holds the label, hint and input; the hint describes the input, the status does not)
+it('field.Description describes CharacterCount.Input', async () => {
   const screen = await render(
-    <Field.Root>
-      <Field.Label>Message</Field.Label>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root>
+        <Field.Label>Message</Field.Label>
+        <Field.Description>Keep it brief.</Field.Description>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
-  const input = screen.getByRole('textbox')
-  await expect.element(input).toHaveAccessibleDescription(/characters/)
+  await expect.element(screen.getByRole('textbox')).toHaveAccessibleDescription('Keep it brief.')
 })
 
-// TODO: CharacterCount.Status owns aria-describedby — need to combine with Field error IDs
-it.skip('field.ErrorMessage id is referenced by CharacterCount aria-describedby when invalid', async () => {
+it('field.ErrorMessage id is referenced by CharacterCount aria-describedby when invalid', async () => {
   const screen = await render(
-    <Field.Root invalid>
-      <Field.Label>Message</Field.Label>
-      <Field.ErrorMessage>Required</Field.ErrorMessage>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root invalid>
+        <Field.Label>Message</Field.Label>
+        <Field.ErrorMessage>Required</Field.ErrorMessage>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
   const input = screen.getByRole('textbox')
   await expect.element(input).toHaveAccessibleDescription(/Required/)
 })
 
-// TODO: CharacterCount.Status owns aria-describedby — need to combine with Field error IDs
-it.skip('aria-describedby updates when invalid is set dynamically', async () => {
+it('aria-describedby updates when invalid is set dynamically', async () => {
   const screen = await render(
-    <Field.Root>
-      <Field.Label>Message</Field.Label>
-      <Field.ErrorMessage>Required</Field.ErrorMessage>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root>
+        <Field.Label>Message</Field.Label>
+        <Field.ErrorMessage>Required</Field.ErrorMessage>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
   const input = screen.getByRole('textbox')
   await expect.element(input).not.toHaveAccessibleDescription(/Required/)
 
   await screen.rerender(
-    <Field.Root invalid>
-      <Field.Label>Message</Field.Label>
-      <Field.ErrorMessage>Required</Field.ErrorMessage>
-      <CharacterCount.Root maxLength={100}>
+    <CharacterCount.Root maxLength={100}>
+      <Field.Root invalid>
+        <Field.Label>Message</Field.Label>
+        <Field.ErrorMessage>Required</Field.ErrorMessage>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
 
   await expect.element(input).toHaveAccessibleDescription(/Required/)
@@ -163,13 +162,13 @@ it('status text shows character count', async () => {
 
 it('keeps the screen reader status unchanged when unrelated content rerenders', async () => {
   const view = (label: string) => (
-    <Field.Root>
-      <Field.Label>{label}</Field.Label>
-      <CharacterCount.Root maxLength={20}>
+    <CharacterCount.Root maxLength={20}>
+      <Field.Root>
+        <Field.Label>{label}</Field.Label>
         <CharacterCount.Input />
-        <CharacterCount.SrStatus />
-      </CharacterCount.Root>
-    </Field.Root>
+      </Field.Root>
+      <CharacterCount.SrStatus />
+    </CharacterCount.Root>
   )
   const screen = await render(view('Before'))
   await screen.rerender(view('After'))
@@ -272,24 +271,42 @@ it('preserves another validator when the owner changes errorText', async () => {
   expect(input.validationMessage).toBe('Please correct this field.')
 })
 
-it('honors ids.status inside Field and keeps the counter accessible while typing', async () => {
+it('honors ids.status and describes the input with inputDescriptionIds and Field.Description', async () => {
   const screen = await render(
-    <Field.Root>
-      <Field.Label>Message</Field.Label>
-      <p id="counter-help">Keep it brief.</p>
-      <CharacterCount.Root ids={{ status: 'exact-status' }} inputDescriptionIds="counter-help" maxLength={5}>
+    <CharacterCount.Root ids={{ status: 'exact-status' }} inputDescriptionIds="counter-help" maxLength={5}>
+      <Field.Root>
+        <Field.Label>Message</Field.Label>
+        <Field.Description>Keep it brief.</Field.Description>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <p id="counter-help">You can enter up to 5 characters.</p>
+      <CharacterCount.Status />
+    </CharacterCount.Root>,
   )
   const input = screen.getByRole('textbox', { name: 'Message' })
-  await expect.element(screen.getByText('5 characters allowed')).toHaveAttribute('id', 'exact-status')
-  await expect.element(input).toHaveAccessibleDescription('Keep it brief. 5 characters allowed')
+  await expect.element(input).toHaveAccessibleDescription('You can enter up to 5 characters. Keep it brief.')
   await input.fill('abcdef')
   await expect.element(screen.getByText('1 character over limit')).toHaveAttribute('id', 'exact-status')
-  await expect.element(input).toHaveAccessibleDescription('Keep it brief. 1 character over limit')
-  expect((input.element() as HTMLInputElement).validationMessage).toBe('The content is too long.')
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-character-count/src/index.js#L230-L236 (the form group and label show the error state over the limit)
+it('marks the Field root and label invalid over the limit', async () => {
+  const screen = await render(
+    <CharacterCount.Root maxLength={5}>
+      <Field.Root data-testid="field">
+        <Field.Label>Message</Field.Label>
+        <CharacterCount.Input />
+      </Field.Root>
+    </CharacterCount.Root>,
+  )
+  const input = screen.getByRole('textbox', { name: 'Message' })
+  await input.fill('abcdef')
+  await expect.element(screen.getByTestId('field')).toHaveAttribute('data-invalid')
+  await expect.element(screen.getByText('Message')).toHaveAttribute('data-invalid')
+  await expect.element(input).not.toHaveAttribute('aria-invalid')
+  await input.fill('abc')
+  await expect.element(screen.getByTestId('field')).not.toHaveAttribute('data-invalid')
+  await expect.element(screen.getByText('Message')).not.toHaveAttribute('data-invalid')
 })
 
 function ControlledCharacterCount() {

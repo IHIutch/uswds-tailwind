@@ -3,6 +3,7 @@ import * as characterCount from '@uswds-tailwind/character-count-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { useFieldContext } from '../field/field'
+import { FieldControlContext } from '../field/use-field'
 import { Input } from '../input/input'
 import { cn } from '../tv.config'
 import { composeRefs } from '../utils/compose-refs'
@@ -29,9 +30,15 @@ const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootPr
     const api = useCharacterCount(machineProps as UseCharacterCountProps)
     const mergedProps = mergeProps(api.getRootProps(), rest)
 
+    // A Field inside the root is the form group: it labels this input and shows the over-limit state.
+    const inputId = api.getInputProps().id as string
+    const control = React.useMemo(() => ({ id: inputId, invalid: api.invalid }), [inputId, api.invalid])
+
     return (
       <CharacterCountContext.Provider value={api}>
-        <div {...mergedProps} className={className} ref={forwardedRef} />
+        <FieldControlContext.Provider value={control}>
+          <div {...mergedProps} className={className} ref={forwardedRef} />
+        </FieldControlContext.Provider>
       </CharacterCountContext.Provider>
     )
   },
@@ -40,8 +47,12 @@ const CharacterCountRoot = React.forwardRef<HTMLDivElement, CharacterCountRootPr
 const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInputProps>(
   (props, forwardedRef) => {
     const api = useCharacterCountContext()
+    const field = useFieldContext()
+    const inputProps = api.getInputProps()
 
-    const mergedProps = mergeProps(api.getInputProps(), props)
+    const mergedProps = mergeProps(inputProps, {
+      'aria-describedby': [inputProps['aria-describedby'], field?.ariaDescribedby].filter(Boolean).join(' ') || undefined,
+    }, props)
 
     return (
       <Input
@@ -54,9 +65,8 @@ const CharacterCountInput = React.forwardRef<HTMLInputElement, CharacterCountInp
 
 function CharacterCountStatus({ className, ...props }: CharacterCountStatusProps) {
   const api = useCharacterCountContext()
-  const field = useFieldContext()
 
-  const mergedProps = mergeProps(field?.getDescriptionProps(), api.getStatusProps(), props)
+  const mergedProps = mergeProps(api.getStatusProps(), props)
 
   return (
     <div

@@ -38,6 +38,15 @@ export function connect<T extends PropTypes>(
       })
     },
 
+    getLabelProps() {
+      return normalize.label({
+        ...parts.label.attrs,
+        'id': dom.getLabelId(scope),
+        'htmlFor': dom.getInputId(scope),
+        'data-invalid': dataAttr(invalid),
+      })
+    },
+
     getControlProps() {
       return normalize.element({
         ...parts.control.attrs,

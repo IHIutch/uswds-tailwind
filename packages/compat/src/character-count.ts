@@ -6,12 +6,22 @@ import { getId } from './lib/id-generator'
 
 const parts = characterCount.anatomy.build()
 
+function mergeIds(...values: Array<string | null | undefined>) {
+  const ids = values.flatMap(value => value?.trim().split(/\s+/) ?? [])
+  return [...new Set(ids)].join(' ') || undefined
+}
+
 export class CharacterCount extends Component<characterCount.Props, characterCount.Api> {
   static override root = parts.root
 
   initMachine(props: characterCount.Props): VanillaMachine<characterCount.Schema> {
     const input = this.input
+    const label = this.label
+    const description = this.description
     const maxLength = input.getAttribute('maxlength') ?? this.rootEl.getAttribute('data-maxlength')
+    const descriptionId = description
+      ? props.ids?.description ?? (description.id || getId(description, 'character-count-description'))
+      : props.ids?.description
 
     return new VanillaMachine(characterCount.machine, {
       ...props,
@@ -19,11 +29,15 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
       ids: {
         ...props.ids,
         input: props.ids?.input ?? (input.id || undefined),
-        description: props.ids?.description ?? (this.description?.id || undefined),
+        label: props.ids?.label ?? (label?.id || undefined),
+        description: descriptionId,
       },
       maxLength: props.maxLength ?? (maxLength === null ? 0 : Number(maxLength)),
       defaultValue: props.defaultValue ?? input.value,
-      inputDescriptionIds: props.inputDescriptionIds ?? input.getAttribute('aria-describedby') ?? undefined,
+      inputDescriptionIds: mergeIds(
+        props.inputDescriptionIds ?? input.getAttribute('aria-describedby'),
+        description ? descriptionId : undefined,
+      ),
     })
   }
 
@@ -33,6 +47,9 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
 
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
+    const label = this.label
+    if (label)
+      spreadProps(label, this.api.getLabelProps())
     const control = this.control
     if (control)
       spreadProps(control, this.api.getControlProps())
@@ -42,6 +59,10 @@ export class CharacterCount extends Component<characterCount.Props, characterCou
       spreadProps(description, this.api.getDescriptionProps())
     this.renderStatus(this.status)
     this.renderSrStatus(this.srStatus)
+  }
+
+  private get label() {
+    return getPart<HTMLLabelElement>(this.rootEl, parts.label)
   }
 
   private get control() {

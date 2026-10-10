@@ -227,6 +227,12 @@ it('removing another counter preserves the latest pending announcement', { tags:
   await vi.waitFor(() => expect(secondSrStatus.textContent).toBe('4 characters left'), { timeout: 1700 })
 })
 
+it('describes the input with the description part', { tags: ['new'] }, async () => {
+  const markup = template().replace('<span data-part="description"></span>', '<span data-part="description">You can enter up to 5 characters.</span>')
+  await using component = createDisposableCharacterCount(rootId, markup)
+  await expect.element(component.elements.getInputEl()).toHaveAccessibleDescription('You can enter up to 5 characters.')
+})
+
 it('preserves authored descriptions when the optional description mounts', { tags: ['new'] }, async () => {
   const markup = template()
     .replace('name="behavior"', 'name="behavior" aria-describedby="authored-hint counter-hint"')

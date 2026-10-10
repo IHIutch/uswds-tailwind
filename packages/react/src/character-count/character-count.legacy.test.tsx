@@ -14,14 +14,14 @@ function renderCharacterCount({
   withSrStatus = false,
 }: { maxLength?: number, withSrStatus?: boolean } = {}) {
   return render(
-    <Field.Root>
-      <Field.Label>Text input</Field.Label>
-      <CharacterCount.Root maxLength={maxLength}>
+    <CharacterCount.Root maxLength={maxLength}>
+      <Field.Root>
+        <Field.Label>Text input</Field.Label>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-        {withSrStatus && <CharacterCount.SrStatus />}
-      </CharacterCount.Root>
-    </Field.Root>,
+      </Field.Root>
+      <CharacterCount.Status />
+      {withSrStatus && <CharacterCount.SrStatus />}
+    </CharacterCount.Root>,
   )
 }
 

@@ -4,6 +4,7 @@ export const SR_STATUS_DEBOUNCE_MS = 1200
 export const AT_DEFER_MS = 100
 
 export const getRootId = (scope: Scope) => scope.ids?.root ?? `character-count:${scope.id}`
+export const getLabelId = (scope: Scope) => scope.ids?.label ?? `character-count:${scope.id}:label`
 export const getControlId = (scope: Scope) => scope.ids?.control ?? `character-count:${scope.id}:control`
 export const getInputId = (scope: Scope) => scope.ids?.input ?? `character-count:${scope.id}:input`
 export const getDescriptionId = (scope: Scope) => scope.ids?.description ?? `character-count:${scope.id}:description`
