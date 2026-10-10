@@ -56,13 +56,15 @@ export interface FileInputSchema {
     invalid: boolean
     errorText: string
     srStatusText: string
+    /** Whether the primary pointer can hover precisely; picks the input's default name. */
+    finePointer: boolean
   }
   refs: {
     statusTimers: Set<ReturnType<Window['setTimeout']>>
     /** Fixed at initialization: initially disabled inputs never gain a status region. */
     hasStatus: boolean
   }
-  effect: 'cleanupTimers'
+  effect: 'cleanupTimers' | 'trackFinePointer'
   action: 'setEventFiles'
   event:
     | { type: 'FILE.SELECT', files: File[] }

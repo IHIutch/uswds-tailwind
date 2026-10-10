@@ -13,7 +13,12 @@ export function getStatusMessage(files: readonly File[], multiple?: boolean): st
   return `No ${getItemsLabel(multiple)} selected.`
 }
 
-export const getDefaultAriaLabel = (itemsLabel: string) => `Drag ${itemsLabel} here or choose from folder`
+// USWDS getFinePointerMediaQueryList: without matchMedia there is no fine pointer, so the drag text stays hidden.
+export function getFinePointerQuery(win: Window) {
+  if (typeof win.matchMedia !== 'function')
+    return null
+  return win.matchMedia('(hover: hover) and (pointer: fine)')
+}
 
 // USWDS matches raw, case-sensitive tokens: no trimming, filename index > 0,
 // MIME substring index >= 0, and every asterisk removed from MIME tokens.

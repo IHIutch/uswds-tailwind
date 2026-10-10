@@ -3,7 +3,7 @@ import type { FileInputApi, FileInputService } from './file-input.types'
 import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
-import { getDefaultAriaLabel, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
+import { getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
 
 export function connect<T extends PropTypes>(
   service: FileInputService,
@@ -16,9 +16,11 @@ export function connect<T extends PropTypes>(
   const invalid = context.get('invalid')
   const errorText = context.get('errorText')
   const srStatusText = context.get('srStatusText')
+  const finePointer = context.get('finePointer')
 
   const itemsLabel = getItemsLabel(prop('multiple'))
-  const defaultAriaLabel = getDefaultAriaLabel(itemsLabel)
+  // Without a fine pointer USWDS drops the drag text and capitalizes the choose action.
+  const defaultAriaLabel = finePointer ? `Drag ${itemsLabel} here or choose from folder` : 'Choose from folder'
   const ariaLabelText = invalid
     ? `${errorText} ${defaultAriaLabel}`
     : acceptedFiles.length > 1

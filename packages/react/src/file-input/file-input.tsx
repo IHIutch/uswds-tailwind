@@ -106,10 +106,16 @@ function FileInputInstructions({ className, children, ...props }: FileInputInstr
         <>
           {/*
             Mirrors USWDS createVisibleInstructions (composed from getItemsLabel):
-            "Drag file here or" / "Drag files here or" + "choose from folder".
+            "Drag file here or" / "Drag files here or" + "choose from folder",
+            or just "Choose from folder" without a fine pointer.
           */}
-          <span>{`Drag ${multiple ? 'files' : 'file'} here or `}</span>
-          <span className="text-blue-60v underline">choose from folder</span>
+          <span className="fine-pointer:hidden">
+            <span className="text-blue-60v underline">Choose from folder</span>
+          </span>
+          <span className="hidden fine-pointer:inline">
+            {`Drag ${multiple ? 'files' : 'file'} here or `}
+            <span className="text-blue-60v underline">choose from folder</span>
+          </span>
         </>
       )}
     </div>

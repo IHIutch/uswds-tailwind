@@ -63,8 +63,13 @@
               data-part="instructions"
               class="py-8 px-4 pointer-events-none z-30 relative text-center data-[valid]:hidden"
             >
-              <span>Drag file here or</span>
-              <span class="text-blue-60v underline">choose from folder</span>
+              <span class="fine-pointer:hidden">
+                <span class="text-blue-60v underline">Choose from folder</span>
+              </span>
+              <span class="hidden fine-pointer:inline">
+                Drag file here or
+                <span class="text-blue-60v underline">choose from folder</span>
+              </span>
             </div>
             <div
               data-part="error-text"
