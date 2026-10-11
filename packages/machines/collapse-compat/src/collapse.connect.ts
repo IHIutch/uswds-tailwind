@@ -15,9 +15,7 @@ export function connect<T extends PropTypes>(
     open,
 
     setOpen(nextOpen) {
-      if (open === nextOpen)
-        return
-      send(open ? { type: 'CLOSE' } : { type: 'OPEN' })
+      send({ type: nextOpen ? 'OPEN' : 'CLOSE', replaces: 'open' })
     },
 
     getRootProps() {
