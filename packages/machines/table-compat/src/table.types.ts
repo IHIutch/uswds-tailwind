@@ -11,8 +11,6 @@ export interface HeaderProps {
   columnIndex: number
   /** Match the text rendered in the header. */
   headerName: string
-  /** Distinguishes headers sharing a column index in a multirow head. */
-  headerId?: string
 }
 
 export interface CellProps {
@@ -30,8 +28,8 @@ export interface SortChangeDetails {
 
 export type ElementIds = Partial<{
   root: string
-  header: (headerId: string | number) => string
-  sortTrigger: (headerId: string | number) => string
+  header: (columnIndex: number) => string
+  sortTrigger: (columnIndex: number) => string
   srStatus: string
 }>
 
@@ -59,8 +57,7 @@ export interface TableSchema {
   action: 'setSortDescriptor'
   event: {
     type: 'SORT'
-    columnIndex: number | null
-    direction?: SortDirection | undefined
+    columnIndex: number
   }
 }
 
@@ -71,8 +68,6 @@ export interface TableApi<T extends PropTypes = PropTypes> {
   sortDescriptor: SortDescriptor | null
   /** Render this text in the element returned by getSrStatusProps. */
   announcement: string
-
-  setSortDescriptor: (sortDescriptor: SortDescriptor | null) => void
 
   getRootProps: () => T['element']
   getTableProps: () => T['element']
