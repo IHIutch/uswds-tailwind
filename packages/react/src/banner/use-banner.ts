@@ -2,12 +2,14 @@ import * as collapse from '@uswds-tailwind/collapse-compat'
 import { normalizeProps, useMachine } from '@zag-js/react'
 import { useId } from 'react'
 
-export interface UseBannerProps extends Omit<collapse.Props, 'id' | 'getRootNode'> {}
+export type UseBannerProps = Omit<collapse.Props, 'getRootNode' | 'id'> & { id?: string }
 
-export function useBanner(props?: UseBannerProps) {
+export function useBanner(props: UseBannerProps = {}) {
+  const generatedId = useId()
+  const { id, ...rest } = props
   const service = useMachine(collapse.machine, {
-    id: useId(),
-    ...props,
+    id: id ?? generatedId,
+    ...rest,
   })
   return collapse.connect(service, normalizeProps)
 }
