@@ -60,43 +60,31 @@ function useTableContext() {
 
 // Root
 
-export type TableRootProps = React.ComponentPropsWithoutRef<'table'> & {
+export type TableRootProps = Omit<React.ComponentPropsWithoutRef<'table'>, 'id'> & Omit<table.Props, 'getRootNode' | 'id'> & {
+  id?: string
   variant?: TableVariant
   compact?: boolean
   stacked?: boolean
-  captionText?: table.Props['captionText']
-  /** Accessible column names, required for each sortable column index. */
-  columnNames?: table.Props['columnNames']
-  defaultSortDescriptor?: table.Props['defaultSortDescriptor']
-  sortDescriptor?: table.Props['sortDescriptor']
-  onSortChange?: table.Props['onSortChange']
 }
 
 function TableRoot({
   variant = 'bordered',
   compact = false,
   stacked = false,
-  captionText,
-  columnNames,
-  defaultSortDescriptor,
-  sortDescriptor,
-  onSortChange,
   className,
   ...props
 }: TableRootProps) {
+  const [machineProps, rest] = table.splitProps(props)
+  const generatedId = React.useId()
   const service = useMachine(table.machine, {
-    id: React.useId(),
-    captionText,
-    columnNames,
-    defaultSortDescriptor,
-    sortDescriptor,
-    onSortChange,
+    ...machineProps,
+    id: machineProps.id ?? generatedId,
   })
   const api = table.connect(service, normalizeProps)
-  const tableProps = mergeProps(api.getTableProps(), props)
+  const tableProps = mergeProps(api.getTableProps(), rest)
 
   return (
-    <TableContext.Provider value={{ api, columnNames, variant, compact, stacked }}>
+    <TableContext.Provider value={{ api, columnNames: machineProps.columnNames, variant, compact, stacked }}>
       <div {...api.getRootProps()} className="@container">
         <table
           {...tableProps}
@@ -214,14 +202,12 @@ function TableColumnHeader({ scope = 'col', columnIndex, sortable, className, ch
 
 // SortTrigger (internal)
 
-type TableSortTriggerProps = React.ComponentPropsWithoutRef<'button'> & {
-  columnIndex: number
-  headerName: string
-}
+type TableSortTriggerProps = React.ComponentPropsWithoutRef<'button'> & table.HeaderProps
 
-function TableSortTrigger({ columnIndex, headerName, className, ...props }: TableSortTriggerProps) {
+function TableSortTrigger({ className, ...props }: TableSortTriggerProps) {
   const { api } = useTableContext()
-  const mergedProps = mergeProps(api.getSortTriggerProps({ columnIndex, headerName }), props)
+  const [headerProps, rest] = table.splitHeaderProps(props)
+  const mergedProps = mergeProps(api.getSortTriggerProps(headerProps), rest)
   return (
     <button
       {...mergedProps}

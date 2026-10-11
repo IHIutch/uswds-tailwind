@@ -40,6 +40,7 @@ export interface TableProps extends CommonProperties {
   sortDescriptor?: SortDescriptor | null | undefined
   defaultSortDescriptor?: SortDescriptor | null | undefined
   captionText?: string | undefined
+  /** Accessible column names, required for each sortable column index. */
   columnNames?: Record<number, string> | undefined
 }
 
