@@ -276,7 +276,7 @@ const NavDropdownTrigger = React.forwardRef<HTMLButtonElement, NavDropdownTrigge
         {...mergedProps}
         className={cn(
           // base
-          'relative text-gray-60 cursor-pointer text-left flex items-center justify-between gap-3 leading-none ',
+          'group relative text-gray-60 cursor-pointer text-left flex items-center justify-between gap-3 leading-none',
           // :after
           'data-current:after:block data-current:after:absolute data-current:after:bg-blue-60v',
           // Mobile
@@ -376,7 +376,7 @@ function NavDropdownIndicator({ className, children, ...props }: NavDropdownIndi
     <div
       {...props}
       aria-hidden="true"
-      className={cn('group h-full flex items-center ml-auto shrink-0', className)}
+      className={cn('h-full flex items-center ml-auto shrink-0', className)}
     >
       {children || (
         <span className={cn(
