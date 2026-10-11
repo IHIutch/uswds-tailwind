@@ -327,7 +327,7 @@ export type NavDropdownItemProps = React.ComponentPropsWithoutRef<'li'> & {
 const NavDropdownItem = React.forwardRef<HTMLLIElement, NavDropdownItemProps>(
   ({ className, value, ...props }, forwardedRef) => {
     const { api } = useNavDropdownContext()
-    const mergedProps = mergeProps(api.getItemProps({ value }), props)
+    const mergedProps = mergeProps(api.getItemProps(), props)
 
     return (
       <NavDropdownItemContext.Provider value={value}>

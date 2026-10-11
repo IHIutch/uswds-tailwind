@@ -57,10 +57,6 @@ export type DropdownMachine = Machine<DropdownSchema>
  * Component API
  * ----------------------------------------------------------------------------- */
 
-export interface ItemProps {
-  value?: string | undefined
-}
-
 export interface ItemLinkProps {
   value?: string | undefined
 }
@@ -74,6 +70,6 @@ export interface DropdownApi<T extends PropTypes = PropTypes> {
   getRootProps: () => T['element']
   getTriggerProps: () => T['button']
   getContentProps: () => T['element']
-  getItemProps: (props: ItemProps) => T['element']
+  getItemProps: () => T['element']
   getItemLinkProps: (props: ItemLinkProps) => T['element']
 }

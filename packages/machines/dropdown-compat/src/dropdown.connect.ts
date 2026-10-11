@@ -45,17 +45,13 @@ export function connect<T extends PropTypes>(
     getContentProps() {
       return normalize.element({
         ...parts.content.attrs,
-        'id': dom.getContentId(scope),
-        'hidden': !open,
-        'data-state': open ? 'open' : 'closed',
+        id: dom.getContentId(scope),
+        hidden: !open,
       })
     },
 
-    getItemProps(itemProps) {
-      return normalize.element({
-        ...parts.item.attrs,
-        'data-value': itemProps.value,
-      })
+    getItemProps() {
+      return normalize.element({ ...parts.item.attrs })
     },
 
     getItemLinkProps(itemProps) {

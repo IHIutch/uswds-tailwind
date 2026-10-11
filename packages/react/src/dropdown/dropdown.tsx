@@ -93,7 +93,7 @@ const DropdownItem = React.forwardRef<HTMLLIElement, DropdownItemProps>(
   ({ className, value, ...props }, forwardedRef) => {
     const { api } = useDropdownContext()
 
-    const mergedProps = mergeProps(api.getItemProps({ value }), props)
+    const mergedProps = mergeProps(api.getItemProps(), props)
 
     return (
       <DropdownItemContext.Provider value={value}>
