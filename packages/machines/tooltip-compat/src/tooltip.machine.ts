@@ -6,17 +6,11 @@ import * as dom from './tooltip.dom'
 import { positionTooltip } from './tooltip.utils'
 
 function trackPositioning({ scope, context, prop }: Params<TooltipSchema>): () => void {
-  const measure = (): (() => void) | undefined => {
-    const content = dom.getContentEl(scope)
-    const trigger = dom.getTriggerEl(scope)
-    if (!content || !trigger)
-      return raf(measure)
-
+  return raf(() => {
+    const content = dom.getContentEl(scope)!
+    const trigger = dom.getTriggerEl(scope)!
     context.set('currentPlacement', positionTooltip(content, trigger, prop('placement'), scope.getWin()))
-    return undefined
-  }
-
-  return raf(measure)
+  })
 }
 
 export const machine = createMachine<TooltipSchema>({
