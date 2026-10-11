@@ -11,11 +11,11 @@ for (const modifier of ['Control', 'Shift', 'Alt', 'Meta']) {
     const { getTriggerEl, getContentEl } = component.elements
     await userEvent.hover(getTriggerEl())
     getTriggerEl().focus()
-    expect(getContentEl().getAttribute('aria-hidden')).toBe('false')
+    await expect.element(getContentEl()).toHaveAttribute('aria-hidden', 'false')
 
     await userEvent.keyboard(`{${modifier}>}{Escape}{/${modifier}}`)
 
-    expect(getContentEl().getAttribute('aria-hidden')).toBe('false')
+    await expectNever(() => expect(getContentEl().getAttribute('aria-hidden')).toBe('true'))
   })
 }
 
