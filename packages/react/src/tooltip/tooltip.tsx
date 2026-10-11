@@ -38,19 +38,17 @@ function useTooltipContext() {
 // ============================================================================
 
 const TooltipRoot = React.forwardRef<HTMLDivElement, TooltipRootProps>(
-  ({ className, id, ids, content, position, open, defaultOpen, onOpenChange, ...props }, forwardedRef) => {
+  ({ className, content, position, ...props }, forwardedRef) => {
+    const [machineProps, rest] = tooltip.splitProps(props)
     const generatedId = React.useId()
     const service = useMachine(tooltip.machine, {
-      id: id ?? generatedId,
-      ids,
+      ...machineProps,
+      id: machineProps.id ?? generatedId,
       placement: position,
-      open,
-      defaultOpen,
-      onOpenChange,
     })
 
     const api = tooltip.connect(service, normalizeProps)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <TooltipContext.Provider value={{ api, content }}>
