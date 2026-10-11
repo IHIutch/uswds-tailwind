@@ -36,16 +36,16 @@ function useDropdownItemValue() {
 }
 
 const DropdownRoot = React.forwardRef<HTMLDivElement, DropdownRootProps>(
-  ({ className, id, ids, ...props }, forwardedRef) => {
+  ({ className, id, ...props }, forwardedRef) => {
     const generatedId = React.useId()
+    const [machineProps, rest] = dropdown.splitProps(props)
     const service = useMachine(dropdown.machine, {
       id: id ?? generatedId,
-      ids,
-      ...props,
+      ...machineProps,
     })
 
     const api = dropdown.connect(service, normalizeProps)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <DropdownContext.Provider value={{ api }}>

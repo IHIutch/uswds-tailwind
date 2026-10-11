@@ -239,13 +239,15 @@ function useNavDropdownItemValue() {
 
 export type NavDropdownProps = Omit<dropdown.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
-function NavDropdown({ className, ...props }: NavDropdownProps) {
+function NavDropdown({ className, id, ...props }: NavDropdownProps) {
+  const generatedId = React.useId()
+  const [machineProps, rest] = dropdown.splitProps(props)
   const service = useMachine(dropdown.machine, {
-    id: React.useId(),
-    ...props,
+    id: id ?? generatedId,
+    ...machineProps,
   })
   const api = dropdown.connect(service, normalizeProps)
-  const mergedProps = mergeProps(api.getRootProps(), props)
+  const mergedProps = mergeProps(api.getRootProps(), rest)
 
   return (
     <NavDropdownContext.Provider value={{ api }}>
