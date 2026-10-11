@@ -32,7 +32,6 @@ export type InputMaskService = Service<InputMaskSchema>
 export type InputMaskMachine = Machine<InputMaskSchema>
 
 export interface InputMaskApi<T extends PropTypes = PropTypes> {
-  value: string
   overlayValue: string
   mask: string
   remainingPlaceholder: string

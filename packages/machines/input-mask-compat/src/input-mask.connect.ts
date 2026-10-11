@@ -15,7 +15,6 @@ export function connect<T extends PropTypes>(
   const remainingPlaceholder = mask.substring(value.length)
 
   return {
-    value,
     overlayValue: value,
     mask,
     remainingPlaceholder,
