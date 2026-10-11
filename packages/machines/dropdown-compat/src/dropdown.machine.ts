@@ -90,7 +90,7 @@ export const machine = createMachine<DropdownSchema>({
           send({ type: open ? 'CONTROLLED.OPEN' : 'CONTROLLED.CLOSE' })
       },
       focusTrigger({ scope }) {
-        dom.getTriggerEl(scope)?.focus({ preventScroll: true })
+        dom.getTriggerEl(scope)?.focus()
       },
     },
   },
