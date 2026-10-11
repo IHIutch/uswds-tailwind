@@ -1,3 +1,5 @@
+import { expect, vi } from 'vitest'
+
 interface Destroyable { destroy: () => void }
 
 export function createDisposableComponent<T>(
@@ -21,4 +23,12 @@ export function createDisposableComponent<T>(
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     },
   }
+}
+
+/**
+ * Asserts that something never happens: passes only if `assertion` keeps failing for `timeout` ms.
+ * @see https://www.epicweb.dev/inverse-assertions
+ */
+export async function expectNever(assertion: () => void | Promise<void>, timeout = 250) {
+  await expect(vi.waitFor(assertion, { timeout })).rejects.toThrow()
 }

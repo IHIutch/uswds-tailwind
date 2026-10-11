@@ -1,5 +1,6 @@
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
+import { expectNever } from '../_utils.js'
 import { createDisposableDropdown } from './_utils.js'
 
 const rootId = 'test'
@@ -59,4 +60,16 @@ it.each(['pointer', 'keyboard'] as const)('returns focus to the trigger on %s li
   }
 
   await expect.element(trigger).toHaveFocus()
+})
+
+it('keeps the menu open when a link click is cancelled', { tags: ['new'] }, async () => {
+  await using _component = createDisposableDropdown(rootId, TEMPLATE)
+  const trigger = page.getByRole('button', { name: 'Languages' })
+  const link = page.getByRole('link', { name: 'English' })
+
+  await userEvent.click(trigger)
+  link.element().addEventListener('click', event => event.preventDefault(), { capture: true })
+  await userEvent.click(link)
+
+  await expectNever(() => expect(trigger.element()).toHaveAttribute('aria-expanded', 'false'))
 })
