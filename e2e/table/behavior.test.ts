@@ -31,8 +31,8 @@ it('starts with the sort declared on the vanilla root', { tags: ['new'] }, async
   expect(component.elements.getHeaderEl(1).getAttribute('aria-sort')).toBe('descending')
 })
 
-// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-table/src/index.js#L228-L246
-// USWDS flips the declared direction during initialization. Preserving it is an addition here.
+// https://designsystem.digital.gov/components/table/ (aria-sort sets the sort direction on load)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-table/src/index.js#L241-L246 (USWDS init flips it instead)
 it('starts with the sort declared on a header', { tags: ['new'] }, async () => {
   const template = TEMPLATE.replace('<th data-sortable>Age', '<th data-sortable aria-sort="descending">Age')
   await using component = createDisposableTable(rootId, template)
@@ -64,6 +64,7 @@ it('sorts visible rows and resets the previous column when a different header is
   await userEvent.click(getSortButtonEl(0)!)
   await vi.waitFor(() => expect(names(tbody)).toEqual(['Alice', 'Bob', 'Charlie']))
   expect(getHeaderEl(0).getAttribute('aria-sort')).toBe('ascending')
+  expect(Array.from(tbody.rows).every(row => row.cells[0]!.getAttribute('data-sort-active') === 'true' && !row.cells[1]!.hasAttribute('data-sort-active'))).toBe(true)
   expect(getSrStatusEl().textContent).toBe('The table named "People" is now sorted by Name in ascending order.')
 
   await userEvent.click(getSortButtonEl(1)!)
