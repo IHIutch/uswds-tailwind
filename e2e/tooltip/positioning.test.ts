@@ -97,3 +97,18 @@ it('reopens a bottom tooltip in the same place', { tags: ['parity'] }, async () 
   await expect.element(getContentEl()).toHaveAttribute('data-visible')
   expect(getContentEl().getBoundingClientRect().top).toBe(firstTop)
 })
+
+// USWDS places this tooltip away from the trigger: https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L192-L205
+it('places a left tooltip next to a trigger with a wide left margin', { tags: ['new'] }, async () => {
+  await using component = createDisposableTooltip('test', TOOLTIP('test', 'left'))
+  const { getRootEl, getTriggerEl, getContentEl } = component.elements
+  getRootEl().style.cssText = 'position: fixed; top: 150px; left: 100px'
+  getTriggerEl().style.marginLeft = '200px'
+  getContentEl().style.cssText = CONTENT_STYLE
+
+  await userEvent.hover(getTriggerEl())
+
+  await expect.element(getContentEl()).toHaveAttribute('data-placement', 'left')
+  const gap = getTriggerEl().getBoundingClientRect().left - getContentEl().getBoundingClientRect().right
+  expect(gap).toBeCloseTo(5, 0)
+})

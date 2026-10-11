@@ -44,10 +44,9 @@ function applyPlacement(content: HTMLElement, trigger: HTMLElement, placement: P
     }
     case 'left': {
       const height = marginOffset(trigger, 'top', content.offsetHeight, win)
-      const offset = trigger.offsetLeft > content.offsetWidth ? trigger.offsetLeft - content.offsetWidth : content.offsetWidth
-      const width = marginOffset(trigger, 'left', offset, win)
+      const width = marginOffset(trigger, 'left', content.offsetWidth, win)
       y = `calc(50% - ${height / 2}px)`
-      x = `calc(${trigger.offsetLeft > content.offsetWidth ? width : -width}px - ${TOOLTIP_OFFSET})`
+      x = `calc(${-width}px - ${TOOLTIP_OFFSET})`
       arrowX = '100%'
       break
     }
