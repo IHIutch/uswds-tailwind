@@ -66,9 +66,8 @@ export const machine = createMachine<AccordionSchema>({
         const next = prop('multiple') ? add<string>(context.get('value'), event.value) : [event.value]
         context.set('value', next)
       },
-      collapse({ context, prop, event }) {
-        const next = prop('multiple') ? remove<string>(context.get('value'), event.value) : []
-        context.set('value', next)
+      collapse({ context, event }) {
+        context.set('value', remove<string>(context.get('value'), event.value))
       },
       scrollIntoView({ scope, event, refs, context }) {
         const value = event.value
