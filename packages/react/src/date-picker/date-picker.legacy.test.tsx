@@ -348,7 +348,7 @@ it('clicking a day cell selects that date and closes the calendar', async () => 
   const day10 = Array.from(dayButtons).find(b => b.textContent?.trim() === '10') as HTMLButtonElement
   await userEvent.click(day10)
 
-  expect((input.element() as HTMLInputElement).value).toBe('01/10/2020')
+  await expect.element(input).toHaveValue('01/10/2020')
   expect(getContent()?.hasAttribute('hidden')).toBe(true)
 })
 

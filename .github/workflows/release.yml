@@ -12,8 +12,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate:
+    name: Validate
+    permissions:
+      contents: read
+    uses: ./.github/workflows/ci.yml
+
   release:
     name: Release
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -43,6 +50,7 @@ jobs:
         id: changesets
         uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           version-script: pnpm changeset:version
           publish-script: pnpm changeset:publish
           commit-message: 'chore(release): version packages'

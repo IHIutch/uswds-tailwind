@@ -13,9 +13,11 @@ advance the beta counter, for example to `2.0.0-beta.1`.
 
 The GitHub release workflow runs on `next`:
 
-1. Changesets opens or updates a release PR when there are pending changesets.
-2. Merging that PR builds and publishes the packages through Changesets.
-3. `scripts/promote-beta.mjs` checks that every public package's exact beta
+1. Every push calls the shared CI workflow to build, lint, type-check, and test
+   the packages before Changesets runs.
+2. Changesets opens or updates a release PR when there are pending changesets.
+3. Merging that PR validates again, then publishes the packages through Changesets.
+4. `scripts/promote-beta.mjs` checks that every public package's exact beta
    version exists on npm, then assigns those versions to `latest`.
 
 The beta suffix stays in the version number. Ordinary npm installs receive the

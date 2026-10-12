@@ -1,7 +1,8 @@
 name: CI
 
-# Runs on PRs only. Pushes to next/main go through release.yml or admin-bypass merges (e.g. the changesets version PR)
+# Runs directly on PRs and is called by release.yml before versioning or publishing.
 on:
+  workflow_call:
   pull_request:
     branches:
       - main
@@ -28,7 +29,9 @@ jobs:
       - name: Build packages
         run: pnpm build:packages
 
-      - run: pnpm dlx pkg-pr-new publish ./packages/**/*
+      - name: Publish PR previews
+        if: github.event_name == 'pull_request'
+        run: pnpm dlx pkg-pr-new publish ./packages/**/*
 
   lint:
     name: Lint
