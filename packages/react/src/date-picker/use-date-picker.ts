@@ -15,7 +15,7 @@ export function useDatePicker(props: UseDatePickerProps = {}) {
   const service = useMachine(datepicker.machine, {
     id: React.useId(),
     ids: {
-      input: field?.ids.control,
+      input: field ? index => index === 0 ? field.ids.control : `${field.ids.control}:${index}` : undefined,
     },
     disabled,
     ...restProps,

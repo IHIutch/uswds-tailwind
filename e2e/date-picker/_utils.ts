@@ -1,48 +1,69 @@
-import { datePickerInit } from '../../packages/compat/src/date-picker'
+import type * as datePicker from '../../packages/machines/date-picker-compat/src'
+import { queryAll } from '@zag-js/dom-query'
+import { DatePicker, datePickerInit } from '../../packages/compat/src/date-picker'
 import { createDisposableComponent } from '../_utils'
 
-export function createDisposableDatePicker(id: string, template: string) {
+// The browser fixture has no USWDS icon CSS, so give its empty trigger and
+// navigation buttons usable click targets while preserving their accessible names.
+const fixtureStyles = `
+  <style>
+    [data-scope="date-picker"] button[data-part="trigger"],
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="year"],
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-unit="month"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="year"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-unit="month"],
+    [data-scope="date-picker"] button[data-part="prev-trigger"][data-view="year"],
+    [data-scope="date-picker"] button[data-part="next-trigger"][data-view="year"] {
+      min-width: 2rem;
+      min-height: 2rem;
+    }
+  </style>
+`
+
+export function createDisposableDatePicker(id: string, template: string, props?: datePicker.Props) {
   return createDisposableComponent(
-    template,
-    datePickerInit,
+    `${fixtureStyles}${template}`,
+    () => {
+      if (props === undefined)
+        return datePickerInit()
+      return [new DatePicker(document.getElementById(id), props).init()]
+    },
     () => {
       const getRootEl = () => document.getElementById(`date-picker:${id}`)
-      const getInputEl = () => document.getElementById(`date-picker:${id}:input`) as HTMLInputElement
+      const getInstance = () => DatePicker.getInstance(getRootEl())
+      const getInputEl = (index = 0) => queryAll<HTMLInputElement>(getRootEl()!, '[data-part="input"]')[index]!
       const getTriggerEl = () => document.getElementById(`date-picker:${id}:trigger`) as HTMLButtonElement
-      const getCalendarEl = () => document.getElementById(`date-picker:${id}:calendar`)
-      const getStatusEl = () => document.getElementById(`date-picker:${id}:status`)
-      const getMonthSelectionEl = () => document.getElementById(`date-picker:${id}:month-selection`)
-      const getYearSelectionEl = () => document.getElementById(`date-picker:${id}:year-selection`)
-
-      // const getDayViewEl = () => document.getElementById(`date-picker:${id}:day-view`)
-      const getMonthViewEl = () => document.getElementById(`date-picker:${id}:month-view`)
-      const getYearViewEl = () => document.getElementById(`date-picker:${id}:year-view`)
-
-      const getDateButtonEls = () => {
-        const calendar = getCalendarEl()
-        return Array.from(calendar?.querySelectorAll('[data-part="date-button"]') || [])
-      }
-
-      const getMonthButtonEls = () => {
-        const monthSelection = getMonthSelectionEl()
-        return Array.from(monthSelection?.querySelectorAll('[data-part="month-button"]') || [])
-      }
-
-      const getYearButtonEls = () => {
-        const yearSelection = getYearSelectionEl()
-        return Array.from(yearSelection?.querySelectorAll('[data-part="year-button"]') || [])
-      }
+      const getCalendarEl = () => document.getElementById(`date-picker:${id}:content`)!
+      const getStatusEl = () => document.getElementById(`date-picker:${id}:status`)!
+      const getViewEl = (view: 'day' | 'month' | 'year') => document.getElementById(`date-picker:${id}:view:${view}`)!
+      const getMonthSelectionEl = () => getViewEl('month')
+      const getYearSelectionEl = () => getViewEl('year')
+      const getMonthViewEl = getMonthSelectionEl
+      const getYearViewEl = getYearSelectionEl
+      const getViewControlEl = () => document.getElementById(`date-picker:${id}:view-control`)!
+      const getViewTriggerEl = (view: 'month' | 'year') => document.getElementById(`date-picker:${id}:view-trigger:${view}`) as HTMLButtonElement
+      const getPrevTriggerEl = (target: 'month' | 'year' | 'year-chunk') => document.getElementById(`date-picker:${id}:prev-trigger:${target}`) as HTMLButtonElement
+      const getNextTriggerEl = (target: 'month' | 'year' | 'year-chunk') => document.getElementById(`date-picker:${id}:next-trigger:${target}`) as HTMLButtonElement
+      const getDateButtonEls = () => queryAll<HTMLElement>(getCalendarEl()!, '[data-part="view"][data-view="day"] [data-part="table-cell-trigger"]')
+      const getMonthButtonEls = () => queryAll<HTMLElement>(getMonthSelectionEl()!, '[data-part="table-cell-trigger"]')
+      const getYearButtonEls = () => queryAll<HTMLElement>(getYearSelectionEl()!, '[data-part="table-cell-trigger"]')
 
       return {
         getRootEl,
+        getInstance,
         getInputEl,
         getTriggerEl,
         getCalendarEl,
         getStatusEl,
+        getViewEl,
         getMonthSelectionEl,
         getYearSelectionEl,
         getMonthViewEl,
         getYearViewEl,
+        getViewControlEl,
+        getViewTriggerEl,
+        getPrevTriggerEl,
+        getNextTriggerEl,
         getDateButtonEls,
         getMonthButtonEls,
         getYearButtonEls,

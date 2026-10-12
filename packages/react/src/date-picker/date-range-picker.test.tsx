@@ -10,31 +10,29 @@ function renderRangePicker(
 ) {
   return render(
     <DatePicker.Root selectionMode="range" {...rootProps}>
-      <DatePicker.Control bound="start">
-        <DatePicker.Input aria-label="Start date" />
-        <DatePicker.Trigger />
-      </DatePicker.Control>
-      <DatePicker.Control bound="end">
-        <DatePicker.Input aria-label="End date" />
-        <DatePicker.Trigger />
+      <DatePicker.Control>
+        <DatePicker.Input index={0} aria-label="Start date" />
+        <DatePicker.Trigger index={0} />
+        <DatePicker.Input index={1} aria-label="End date" />
+        <DatePicker.Trigger index={1} />
       </DatePicker.Control>
       <DatePicker.Content>
         <DatePicker.View view="day">
           {({ api }) => (
             <>
               <DatePicker.ViewControl>
-                <DatePicker.PrevYearTrigger aria-label="Previous year" />
-                <DatePicker.PrevMonthTrigger aria-label="Previous month" />
-                <DatePicker.MonthTrigger />
-                <DatePicker.YearTrigger />
-                <DatePicker.NextMonthTrigger aria-label="Next month" />
-                <DatePicker.NextYearTrigger aria-label="Next year" />
+                <DatePicker.PrevTrigger unit="year" aria-label="Previous year" />
+                <DatePicker.PrevTrigger unit="month" aria-label="Previous month" />
+                <DatePicker.ViewTrigger view="month" />
+                <DatePicker.ViewTrigger view="year" />
+                <DatePicker.NextTrigger unit="month" aria-label="Next month" />
+                <DatePicker.NextTrigger unit="year" aria-label="Next year" />
               </DatePicker.ViewControl>
               <DatePicker.Table>
                 <DatePicker.TableHead>
                   <DatePicker.TableRow>
-                    {api.weekDays.map(day => (
-                      <DatePicker.TableHeader key={day.long} day={day} />
+                    {api.weekDays.map((day, index) => (
+                      <DatePicker.TableHeader key={day.long} day={day} index={index} />
                     ))}
                   </DatePicker.TableRow>
                 </DatePicker.TableHead>
@@ -42,9 +40,9 @@ function renderRangePicker(
                   {api.weeks.map((week, row) => (
                     <DatePicker.TableRow key={row}>
                       {week.map(cell => (
-                        <DatePicker.TableCell key={cell.dateString} cell={cell}>
-                          <DatePicker.TableCellTrigger cell={cell}>
-                            {cell.day}
+                        <DatePicker.TableCell key={cell.toISOString()} value={cell}>
+                          <DatePicker.TableCellTrigger value={cell}>
+                            {cell.getDate()}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -61,13 +59,13 @@ function renderRangePicker(
 }
 
 function getContent() {
-  return document.querySelector('[data-scope="datepicker"][data-part="calendar"]') as HTMLElement | null
+  return document.querySelector('[data-scope="date-picker"][data-part="content"]') as HTMLElement | null
 }
 
 function getDayCells() {
   return Array.from(
     document.querySelectorAll<HTMLButtonElement>(
-      '[data-scope="datepicker"][data-part="cell-trigger"]',
+      '[data-scope="date-picker"][data-part="table-cell-trigger"]',
     ),
   )
 }
@@ -85,16 +83,14 @@ it('renders two inputs and two triggers', async () => {
   await expect.element(screen.getByRole('button', { name: 'Open end calendar' })).toBeVisible()
 })
 
-it('trigger derives aria-label from Control bound', async () => {
+it('trigger derives aria-label from its index', async () => {
   const screen = await render(
     <DatePicker.Root selectionMode="range">
-      <DatePicker.Control bound="start">
-        <DatePicker.Input aria-label="Start date" />
-        <DatePicker.Trigger />
-      </DatePicker.Control>
-      <DatePicker.Control bound="end">
-        <DatePicker.Input aria-label="End date" />
-        <DatePicker.Trigger />
+      <DatePicker.Control>
+        <DatePicker.Input index={0} aria-label="Start date" />
+        <DatePicker.Trigger index={0} />
+        <DatePicker.Input index={1} aria-label="End date" />
+        <DatePicker.Trigger index={1} />
       </DatePicker.Control>
     </DatePicker.Root>,
   )
@@ -103,16 +99,14 @@ it('trigger derives aria-label from Control bound', async () => {
   await expect.element(screen.getByRole('button', { name: 'Open end calendar' })).toBeVisible()
 })
 
-it('consumer aria-label on Trigger overrides bound-derived default', async () => {
+it('consumer aria-label on Trigger overrides the index-derived default', async () => {
   const screen = await render(
     <DatePicker.Root selectionMode="range">
-      <DatePicker.Control bound="start">
-        <DatePicker.Input aria-label="From" />
-        <DatePicker.Trigger aria-label="Pick a from date" />
-      </DatePicker.Control>
-      <DatePicker.Control bound="end">
-        <DatePicker.Input aria-label="To" />
-        <DatePicker.Trigger />
+      <DatePicker.Control>
+        <DatePicker.Input index={0} aria-label="From" />
+        <DatePicker.Trigger index={0} aria-label="Pick a from date" />
+        <DatePicker.Input index={1} aria-label="To" />
+        <DatePicker.Trigger index={1} />
       </DatePicker.Control>
     </DatePicker.Root>,
   )
@@ -125,6 +119,25 @@ it('clicking the start trigger opens the calendar', async () => {
   const screen = await renderRangePicker()
   await userEvent.click(screen.getByRole('button', { name: 'Open start calendar' }))
   expect(getContent()?.hasAttribute('hidden')).toBe(false)
+})
+
+it('an unindexed range trigger opens and closes the start calendar', async () => {
+  const screen = await render(
+    <DatePicker.Root selectionMode="range">
+      <DatePicker.Control>
+        <DatePicker.Input aria-label="Start date" />
+        <DatePicker.Trigger />
+        <DatePicker.Input index={1} aria-label="End date" />
+      </DatePicker.Control>
+      <DatePicker.Content />
+    </DatePicker.Root>,
+  )
+  const trigger = screen.getByRole('button', { name: 'Toggle calendar' })
+
+  await userEvent.click(trigger)
+  await expect.element(trigger).toHaveAttribute('data-state', 'open')
+  await userEvent.click(trigger)
+  await expect.element(trigger).toHaveAttribute('data-state', 'closed')
 })
 
 it('clicking the end trigger opens the calendar', async () => {
@@ -143,8 +156,8 @@ it('selecting a day after opening with start trigger writes to the start input',
 
   await userEvent.click(findDay('10') as HTMLButtonElement)
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/10/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('')
+  await expect.element(startInput).toHaveValue('01/10/2020')
+  await expect.element(endInput).toHaveValue('')
 })
 
 it('selecting a day after opening with end trigger writes to the end input', async () => {
@@ -157,8 +170,8 @@ it('selecting a day after opening with end trigger writes to the end input', asy
 
   await userEvent.click(findDay('20') as HTMLButtonElement)
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/01/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
+  await expect.element(startInput).toHaveValue('01/01/2020')
+  await expect.element(endInput).toHaveValue('01/20/2020')
 })
 
 it('selecting via start trigger then end trigger fills both inputs', async () => {
@@ -173,11 +186,11 @@ it('selecting via start trigger then end trigger fills both inputs', async () =>
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
   await userEvent.click(findDay('20') as HTMLButtonElement)
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/10/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
+  await expect.element(startInput).toHaveValue('01/10/2020')
+  await expect.element(endInput).toHaveValue('01/20/2020')
 })
 
-it('after selecting start, days between start and hovered cell paint data-within-range', async () => {
+it('after selecting start, days between start and hovered cell paint data-in-range', async () => {
   const screen = await renderRangePicker()
   const startInput = screen.getByRole('textbox', { name: 'Start date' })
 
@@ -191,7 +204,7 @@ it('after selecting start, days between start and hovered cell paint data-within
   await userEvent.hover(day15)
 
   const day12 = findDay('12') as HTMLButtonElement
-  expect(day12.hasAttribute('data-within-range')).toBe(true)
+  expect(day12.hasAttribute('data-in-range')).toBe(true)
 })
 
 it('selecting end input then a day before start swaps the range bounds', async () => {
@@ -205,7 +218,7 @@ it('selecting end input then a day before start swaps the range bounds', async (
 
   const day5 = findDay('5') as HTMLButtonElement // before start
   expect(day5.disabled).toBe(true)
-  expect((endInput.element() as HTMLInputElement).value).toBe('')
+  await expect.element(endInput).toHaveValue('')
 })
 
 it('after start is selected, dates before it are disabled when end picker is open', async () => {
@@ -248,7 +261,7 @@ it('start selection paints data-range-start; end selection paints data-range-end
   const day20 = findDay('20') as HTMLButtonElement
 
   expect(day10.hasAttribute('data-range-start')).toBe(true)
-  expect(day15.hasAttribute('data-within-range')).toBe(true)
+  expect(day15.hasAttribute('data-in-range')).toBe(true)
   expect(day20.hasAttribute('data-range-end')).toBe(true)
 })
 
@@ -257,13 +270,11 @@ it('field.Label htmlFor matches the start input id by default', async () => {
     <Field.Root>
       <Field.Label>Trip dates</Field.Label>
       <DatePicker.Root selectionMode="range">
-        <DatePicker.Control bound="start">
-          <DatePicker.Input />
-          <DatePicker.Trigger />
-        </DatePicker.Control>
-        <DatePicker.Control bound="end">
-          <DatePicker.Input aria-label="End date" />
-          <DatePicker.Trigger />
+        <DatePicker.Control>
+          <DatePicker.Input index={0} />
+          <DatePicker.Trigger index={0} />
+          <DatePicker.Input index={1} aria-label="End date" />
+          <DatePicker.Trigger index={1} />
         </DatePicker.Control>
       </DatePicker.Root>
     </Field.Root>,
@@ -282,11 +293,9 @@ it('submits both values in form data with distinct names', async () => {
     }}
     >
       <DatePicker.Root selectionMode="range">
-        <DatePicker.Control bound="start">
-          <DatePicker.Input name="start" aria-label="Start date" />
-        </DatePicker.Control>
-        <DatePicker.Control bound="end">
-          <DatePicker.Input name="end" aria-label="End date" />
+        <DatePicker.Control>
+          <DatePicker.Input index={0} name="start" aria-label="Start date" />
+          <DatePicker.Input index={1} name="end" aria-label="End date" />
         </DatePicker.Control>
       </DatePicker.Root>
       <button type="submit">Submit</button>
@@ -303,14 +312,14 @@ it('submits both values in form data with distinct names', async () => {
 
 it('defaultValue with two dates initializes both inputs', async () => {
   const screen = await renderRangePicker({
-    defaultValue: ['2020-01-10', '2020-01-20'],
+    defaultValue: [new Date(2020, 0, 10), new Date(2020, 0, 20)],
   })
 
   const startInput = screen.getByRole('textbox', { name: 'Start date' })
   const endInput = screen.getByRole('textbox', { name: 'End date' })
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/10/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
+  await expect.element(startInput).toHaveValue('01/10/2020')
+  await expect.element(endInput).toHaveValue('01/20/2020')
 })
 
 it('typing a malformed date in end input flips end aria-invalid only', async () => {
@@ -405,18 +414,18 @@ it('end picker prev-year is disabled when focused on start month', async () => {
 
 it('switching from start to end picker focuses the end-bound cell, not start', async () => {
   const screen = await renderRangePicker({
-    defaultValue: ['2020-01-10', '2020-01-20'],
+    defaultValue: [new Date(2020, 0, 10), new Date(2020, 0, 20)],
   })
 
   await userEvent.click(screen.getByRole('button', { name: 'Open start calendar' }))
   let focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent.trim()).toBe('10')
 
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
   focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent?.trim()).toBe('20')
 })
@@ -428,19 +437,15 @@ it('keyboard nav in end picker cannot move focus before the start date', async (
   await userEvent.fill(startInput, '01/15/2020')
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
 
-  // Opening the end picker focuses the start-bound cell (15), the effective min.
   const day15 = findDay('15') as HTMLButtonElement
   const day14 = findDay('14') as HTMLButtonElement
-  // 14 is before the start date, so it is disabled for the end input.
   expect(day14.disabled).toBe(true)
 
-  // ArrowLeft must clamp against the active field's effective min (the start
-  // date), not the global min, so focus stays on 15 instead of landing on 14.
   day15.focus()
   await userEvent.keyboard('{ArrowLeft}')
 
   const focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent?.trim()).toBe('15')
 })
@@ -454,16 +459,13 @@ it('keyboard nav in start picker cannot move focus after the end date', async ()
 
   const day15 = findDay('15') as HTMLButtonElement
   const day16 = findDay('16') as HTMLButtonElement
-  // 16 is after the end date, so it is disabled for the start input.
   expect(day16.disabled).toBe(true)
 
-  // ArrowRight must clamp against the active field's effective max (the end
-  // date), not the global max, so focus stays on 15 instead of landing on 16.
   day15.focus()
   await userEvent.keyboard('{ArrowRight}')
 
   const focused = document.querySelector<HTMLButtonElement>(
-    '[data-scope="datepicker"][data-part="cell-trigger"][data-focused]',
+    '[data-scope="date-picker"][data-part="table-cell-trigger"][data-focus]',
   )
   expect(focused?.textContent?.trim()).toBe('15')
 })
@@ -472,10 +474,10 @@ it('clicking start trigger then end trigger reuses the same calendar instance', 
   const screen = await renderRangePicker()
 
   await userEvent.click(screen.getByRole('button', { name: 'Open start calendar' }))
-  const calendarsAfterStart = document.querySelectorAll('[data-scope="datepicker"][data-part="calendar"]')
+  const calendarsAfterStart = document.querySelectorAll('[data-scope="date-picker"][data-part="content"]')
   expect(calendarsAfterStart.length).toBe(1)
 
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
-  const calendarsAfterEnd = document.querySelectorAll('[data-scope="datepicker"][data-part="calendar"]')
+  const calendarsAfterEnd = document.querySelectorAll('[data-scope="date-picker"][data-part="content"]')
   expect(calendarsAfterEnd.length).toBe(1)
 })
