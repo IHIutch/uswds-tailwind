@@ -86,15 +86,16 @@ export type DatePickerEvent
     | { type: 'INTERACT_OUTSIDE' }
     | { type: 'TABLE.ESCAPE' }
     | { type: 'CELL.POINTER_MOVE', value: Date }
-    | { type: 'TABLE.ARROW_LEFT' | 'TABLE.ARROW_RIGHT' | 'TABLE.ARROW_UP' | 'TABLE.ARROW_DOWN' }
-    | { type: 'TABLE.HOME' | 'TABLE.END' }
-    | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN', larger?: boolean }
+    | { type: 'TABLE.ARROW_LEFT' | 'TABLE.ARROW_RIGHT' | 'TABLE.ARROW_UP' | 'TABLE.ARROW_DOWN', focus?: boolean }
+    | { type: 'TABLE.HOME' | 'TABLE.END', focus?: boolean }
+    | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN', larger?: boolean, focus?: boolean }
     | { type: 'VALUE.SET', value: (Date | undefined)[] }
 
 export interface DatePickerSchema {
   props: RequiredBy<DatePickerProps, 'selectionMode' | 'min'>
   computed: {
     valueAsString: string[]
+    inputBounds: [Interval, Interval]
     activeBounds: Interval
     navigation: ReturnType<typeof getNavigationAvailability>
   }
@@ -126,25 +127,40 @@ export interface DatePickerSchema {
     | 'isSelectableDate'
     | 'canGoPrev'
     | 'canGoNext'
+    | 'hasParsableInput'
     | 'isSelectableViewCell'
     | 'isChoosingRangeEnd'
+    | 'isMonthView'
+    | 'isYearView'
   action:
     | 'setDateValue'
+    | 'setSelectedDate'
     | 'setHoveredDate'
     | 'clearHoveredDate'
     | 'setFocusedValueOnOpen'
-    | 'commitInputValue'
+    | 'setInputValue'
+    | 'selectParsedDate'
+    | 'focusParsedDate'
+    | 'restoreCalendarFocus'
+    | 'clearHoveredDateIfKeyboard'
+    | 'focusActiveCellIfNeeded'
+    | 'setActiveIndex'
     | 'validateInput'
     | 'syncInputElement'
     | 'syncInputValue'
-    | 'reconcileCalendar'
     | 'resetView'
     | 'markOpeningRender'
-    | 'applyNav'
+    | 'clearOpeningRender'
+    | 'focusPreviousPage'
+    | 'focusNextPage'
+    | 'focusPreviousYearChunk'
+    | 'focusNextYearChunk'
     | 'focusNavTrigger'
     | 'setView'
     | 'setFocusedValueForView'
-    | 'keyboardNav'
+    | 'focusDayCell'
+    | 'focusMonthCell'
+    | 'focusYearCell'
     | 'invokeOnOpenChange'
     | 'focusInputElement'
     | 'focusActiveCell'

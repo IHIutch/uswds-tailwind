@@ -1,6 +1,6 @@
 import type { Params } from '@zag-js/core'
 import type { DatePickerSchema, DateView, EndpointIndex } from './date-picker.types'
-import { createMachine } from '@zag-js/core'
+import { createGuards, createMachine } from '@zag-js/core'
 import { trackDismissableElement } from '@zag-js/dismissable'
 import { raf } from '@zag-js/dom-query'
 import * as dom from './date-picker.dom'
@@ -27,8 +27,6 @@ import {
   isAfter,
   isMonthInInterval,
   isSameDay,
-  isSameMonth,
-  isSameYear,
   isWithinInterval,
   isYearInInterval,
   parseDateString,
@@ -49,71 +47,7 @@ function isDateArrayEqual(a: (Date | undefined)[], b: (Date | undefined)[] | und
   return a.every((date, index) => isDateEqual(date, b[index]))
 }
 
-// Focus runs after rendering; a newer request cancels the previous one.
-function scheduleFocusFrame({ refs }: Pick<Params<DatePickerSchema>, 'scope' | 'refs'>, callback: () => void) {
-  refs.get('focusRafCleanup')?.()
-  refs.set('focusRafCleanup', raf(() => {
-    refs.set('focusRafCleanup', null)
-    callback()
-  }))
-}
-
-type InputParams = Pick<Params<DatePickerSchema>, 'scope' | 'context' | 'prop' | 'refs'>
-
-// Show each endpoint's date. Typing owns a focused draft unless a selection or setValue replaces it.
-function syncInputElement(params: InputParams, explicit: ReadonlySet<EndpointIndex>) {
-  const { scope, context } = params
-  const value = context.get('value')
-  const inputValues = context.get('inputValues')
-  const next = [...inputValues]
-  for (const index of [0, 1] as const) {
-    const input = dom.getInputEl(scope, index)
-    if (!input)
-      continue
-    if (explicit.has(index) || !scope.isActiveElement(input)) {
-      const date = value[index]
-      next[index] = date ? formatDate(date, DEFAULT_EXTERNAL_DATE_FORMAT) : ''
-    }
-    applyInputValidity(params, index, next[index] ?? '')
-  }
-  if (next.some((text, index) => text !== inputValues[index]))
-    context.set('inputValues', next)
-  return next
-}
-
-function syncInputValue({ scope }: InputParams, texts: readonly string[]) {
-  texts.forEach((text, index) => {
-    const input = dom.getInputEl(scope, index)
-    if (input && input.value !== text)
-      input.value = text
-  })
-}
-
-// Validation never replaces a message set by another validator.
-function applyInputValidity({ scope, context, prop }: InputParams, index: number, text: string) {
-  const input = dom.getInputEl(scope, index)
-  if (!input)
-    return
-  const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
-  const invalid = isDateInputInvalid(text, bounds.start, bounds.end)
-  if (invalid && !input.validationMessage)
-    input.setCustomValidity(VALIDATION_MESSAGE)
-  else if (!invalid && input.validationMessage === VALIDATION_MESSAGE)
-    input.setCustomValidity('')
-}
-
-// Write after a frame so a controlled parent can accept or reject the value first.
-function scheduleInputSync(params: InputParams, explicitIndexes: EndpointIndex[] = []) {
-  const { refs } = params
-  const explicit = refs.get('explicitInputs')
-  explicitIndexes.forEach(index => explicit.add(index))
-  refs.get('inputSyncCleanup')?.()
-  refs.set('inputSyncCleanup', raf(() => {
-    refs.set('inputSyncCleanup', null)
-    syncInputElement(params, explicit)
-    explicit.clear()
-  }))
-}
+const { and } = createGuards<DatePickerSchema>()
 
 export const machine = createMachine<DatePickerSchema>({
   props({ props }) {
@@ -148,13 +82,16 @@ export const machine = createMachine<DatePickerSchema>({
 
   computed: {
     valueAsString: ({ context }) => serializeDates(context.get('value')),
-    activeBounds: ({ context, prop }) => getEffectiveDateBounds(
-      prop('selectionMode') === 'range',
-      context.get('activeIndex'),
-      context.get('value'),
-      prop('min'),
-      prop('max'),
-    ),
+    // A range endpoint cannot cross its peer.
+    inputBounds: ({ context, prop }) => {
+      const isRange = prop('selectionMode') === 'range'
+      const value = context.get('value')
+      return [
+        getEffectiveDateBounds(isRange, 0, value, prop('min'), prop('max')),
+        getEffectiveDateBounds(isRange, 1, value, prop('min'), prop('max')),
+      ]
+    },
+    activeBounds: ({ context, computed }) => computed('inputBounds')[context.get('activeIndex')],
     navigation: ({ context, computed }) => {
       const bounds = computed('activeBounds')
       return getNavigationAvailability(context.get('focusedValue'), context.get('focusedYear'), bounds.start, bounds.end)
@@ -209,7 +146,15 @@ export const machine = createMachine<DatePickerSchema>({
 
   effects: ['syncInputsOnMount'],
 
-  watch({ track, context, action }) {
+  watch({ track, context, event, action }) {
+    // Any change to what the calendar shows ends the opening announcement, as USWDS's calendarWasHidden does.
+    // A key that cannot move changes nothing, so hover, status and focus stay put.
+    track([() => context.hash('focusedValue'), () => context.get('focusedMonth'), () => context.get('focusedYear'), () => context.get('view')], () => {
+      const { type } = event.current()
+      if (type === 'TRIGGER.CLICK' || type === 'OPEN')
+        return
+      action(['clearOpeningRender', 'clearHoveredDateIfKeyboard', 'focusActiveCellIfNeeded'])
+    })
     track([() => context.hash('value')], () => {
       action(['syncInputElement'])
     })
@@ -222,9 +167,16 @@ export const machine = createMachine<DatePickerSchema>({
     'VALUE.SET': {
       actions: ['setDateValue'],
     },
-    'INPUT.CHANGE': {
-      actions: ['commitInputValue', 'reconcileCalendar'],
-    },
+    'INPUT.CHANGE': [
+      {
+        // USWDS re-renders an open calendar for every parsable draft, even an unchanged date.
+        guard: 'hasParsableInput',
+        actions: ['setInputValue', 'selectParsedDate', 'clearHoveredDate', 'focusParsedDate', 'resetView', 'clearOpeningRender', 'restoreCalendarFocus'],
+      },
+      {
+        actions: ['setInputValue', 'selectParsedDate'],
+      },
+    ],
     'INPUT.BLUR': {
       actions: ['validateInput'],
     },
@@ -239,12 +191,12 @@ export const machine = createMachine<DatePickerSchema>({
         'TRIGGER.CLICK': {
           target: 'open',
           guard: 'isInteractive',
-          actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
+          actions: ['clearHoveredDate', 'setActiveIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
         },
         'OPEN': {
           target: 'open',
           guard: 'isInteractive',
-          actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
+          actions: ['clearHoveredDate', 'setActiveIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'invokeOnOpenChange'],
         },
         'TABLE.ESCAPE': {
           actions: ['focusInputElement'],
@@ -259,30 +211,74 @@ export const machine = createMachine<DatePickerSchema>({
         'CELL.CLICK': [
           {
             guard: 'isSelectableViewCell',
-            actions: ['setFocusedValueForView', 'resetView', 'focusActiveCell'],
+            actions: ['setFocusedValueForView', 'clearHoveredDate', 'resetView', 'focusActiveCell'],
           },
           {
             target: 'idle',
             guard: 'isSelectableDate',
-            actions: ['setDateValue', 'focusInputElement', 'invokeOnOpenChange'],
+            actions: ['setSelectedDate', 'clearHoveredDate', 'focusInputElement', 'invokeOnOpenChange'],
           },
         ],
-        'CELL.POINTER_MOVE': { guard: 'isChoosingRangeEnd', actions: ['setHoveredDate'] },
-        'VIEW.SET': { actions: ['setView', 'focusActiveCell'] },
-        'TABLE.ARROW_LEFT': { actions: ['keyboardNav'] },
-        'TABLE.ARROW_RIGHT': { actions: ['keyboardNav'] },
-        'TABLE.ARROW_UP': { actions: ['keyboardNav'] },
-        'TABLE.ARROW_DOWN': { actions: ['keyboardNav'] },
-        'TABLE.HOME': { actions: ['keyboardNav'] },
-        'TABLE.END': { actions: ['keyboardNav'] },
-        'TABLE.PAGE_UP': { actions: ['keyboardNav'] },
-        'TABLE.PAGE_DOWN': { actions: ['keyboardNav'] },
-        'GOTO.PREV': { guard: 'canGoPrev', actions: ['applyNav', 'clearHoveredDate', 'focusNavTrigger'] },
-        'GOTO.NEXT': { guard: 'canGoNext', actions: ['applyNav', 'clearHoveredDate', 'focusNavTrigger'] },
+        'CELL.POINTER_MOVE': {
+          guard: 'isChoosingRangeEnd',
+          actions: ['setHoveredDate'],
+        },
+        'VIEW.SET': {
+          actions: ['clearHoveredDate', 'setView', 'focusActiveCell'],
+        },
+        'TABLE.ARROW_LEFT': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.ARROW_RIGHT': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.ARROW_UP': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.ARROW_DOWN': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.HOME': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.END': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.PAGE_UP': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'TABLE.PAGE_DOWN': [
+          { guard: 'isMonthView', actions: ['focusMonthCell'] },
+          { guard: 'isYearView', actions: ['focusYearCell'] },
+          { actions: ['focusDayCell'] },
+        ],
+        'GOTO.PREV': [
+          { guard: and('isYearView', 'canGoPrev'), actions: ['focusPreviousYearChunk', 'clearHoveredDate', 'focusNavTrigger'] },
+          { guard: 'canGoPrev', actions: ['focusPreviousPage', 'clearHoveredDate', 'focusNavTrigger'] },
+        ],
+        'GOTO.NEXT': [
+          { guard: and('isYearView', 'canGoNext'), actions: ['focusNextYearChunk', 'clearHoveredDate', 'focusNavTrigger'] },
+          { guard: 'canGoNext', actions: ['focusNextPage', 'clearHoveredDate', 'focusNavTrigger'] },
+        ],
+        // An open range calendar moves to the other endpoint instead of closing.
         'TRIGGER.CLICK': [
           {
             guard: 'isDifferentActiveIndex',
-            actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusActiveCell'],
+            actions: ['clearHoveredDate', 'setActiveIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusActiveCell'],
           },
           {
             target: 'idle',
@@ -292,7 +288,7 @@ export const machine = createMachine<DatePickerSchema>({
         ],
         'OPEN': {
           guard: 'isDifferentActiveIndex',
-          actions: ['clearHoveredDate', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusActiveCell'],
+          actions: ['clearHoveredDate', 'setActiveIndex', 'setFocusedValueOnOpen', 'resetView', 'markOpeningRender', 'focusActiveCell'],
         },
         'CLOSE': {
           target: 'idle',
@@ -314,20 +310,17 @@ export const machine = createMachine<DatePickerSchema>({
     guards: {
       isInteractive: ({ prop }) => !prop('disabled') && !prop('readOnly'),
       isDifferentActiveIndex: ({ context, prop, event }) => prop('selectionMode') === 'range' && (event.index ?? 0) !== context.get('activeIndex'),
-      isSelectableDate: ({ computed, event }) => {
-        const bounds = computed('activeBounds')
-        return isWithinInterval(event.value, bounds)
-      },
+      isMonthView: ({ context, event }) => (event.view ?? context.get('view')) === 'month',
+      isYearView: ({ context, event }) => (event.view ?? context.get('view')) === 'year',
+      isSelectableDate: ({ computed, event }) => isWithinInterval(event.value, computed('activeBounds')),
       canGoPrev: ({ computed, event }) => event.view === 'year' ? computed('navigation').canChunkPrev : computed('navigation').canGoPrev,
       canGoNext: ({ computed, event }) => event.view === 'year' ? computed('navigation').canChunkNext : computed('navigation').canGoNext,
+      hasParsableInput: ({ event }) => Boolean(parseDateString(event.value, DEFAULT_EXTERNAL_DATE_FORMAT, true)),
       isSelectableViewCell: ({ context, computed, event }) => {
         const view = context.get('view')
-        if (view === 'day')
-          return false
-        const bounds = computed('activeBounds')
         if (view === 'month')
-          return isMonthInInterval(event.value, bounds)
-        return isYearInInterval(event.value, bounds)
+          return isMonthInInterval(event.value, computed('activeBounds'))
+        return view === 'year' && isYearInInterval(event.value, computed('activeBounds'))
       },
       isChoosingRangeEnd: ({ context, prop }) =>
         (prop('selectionMode') === 'range' && context.get('activeIndex') === 1 && Boolean(context.get('value')[0]) && !context.get('value')[1])
@@ -337,39 +330,86 @@ export const machine = createMachine<DatePickerSchema>({
     actions: {
       setDateValue(params) {
         const { context, prop, event } = params
+        context.set('value', normalizeDates(event.value))
+        scheduleInputSync(params, prop('selectionMode') === 'range' ? [0, 1] : [0])
+      },
+
+      setSelectedDate(params) {
+        const { context, prop, event } = params
         const isRange = prop('selectionMode') === 'range'
         const index = isRange ? context.get('activeIndex') : 0
-        let value: (Date | undefined)[]
-        let indexes: EndpointIndex[]
-        if (event.type === 'VALUE.SET') {
-          value = normalizeDates(event.value)
-          indexes = isRange ? [0, 1] : [0]
-        }
-        else if (event.type === 'CELL.CLICK') {
-          const date = startOfDay(event.value)
-          value = isRange ? setRangeEndpoint(context.get('value'), index, date) : [date]
-          indexes = [index]
-        }
-        else {
-          return
-        }
-        context.set('value', value)
-        scheduleInputSync(params, indexes)
-
-        if (event.type === 'CELL.CLICK' && isRange) {
-          context.set('hoveredValue', null)
-        }
+        const date = startOfDay(event.value)
+        context.set('value', isRange ? setRangeEndpoint(context.get('value'), index, date) : [date])
+        scheduleInputSync(params, [index])
       },
 
       setHoveredDate({ context, event }) {
         context.set('hoveredValue', startOfDay(event.value))
       },
+
       clearHoveredDate({ context }) {
         context.set('hoveredValue', null)
       },
 
+      setActiveIndex({ context, event }) {
+        context.set('activeIndex', event.index ?? 0)
+      },
+
+      // Opening uses the adjusted draft even when the raw input is invalid.
+      setFocusedValueOnOpen({ scope, context, computed, prop, event }) {
+        const index: EndpointIndex = event.index ?? 0
+        const value = context.get('value')
+        const input = dom.getInputEl(scope, index)
+        let date = input ? parseDateString(input.value, DEFAULT_EXTERNAL_DATE_FORMAT, true) : undefined
+        if (!date && prop('selectionMode') === 'range')
+          date = value[index] ?? value[1 - index]
+        if (!date && !input)
+          date = value[index]
+        context.set('focusedValue', clamp(date ?? prop('defaultDate') ?? startOfToday(), computed('inputBounds')[index]))
+      },
+
+      setInputValue({ context, event }) {
+        const next = [...context.get('inputValues')]
+        next[event.index] = event.value
+        context.set('inputValues', next)
+      },
+
+      selectParsedDate({ context, computed, prop, event }) {
+        const index: EndpointIndex = event.index
+        const bounds = computed('inputBounds')[index]
+        const date = parseInputValue(event.value, bounds.start, bounds.end)
+        if (prop('selectionMode') === 'range')
+          context.set('value', setRangeEndpoint(context.get('value'), index, date))
+        else
+          context.set('value', date ? [date] : [])
+      },
+
+      focusParsedDate({ context, computed, event }) {
+        const date = parseDateString(event.value, DEFAULT_EXTERNAL_DATE_FORMAT, true)!
+        const index: EndpointIndex = event.index
+        context.set('focusedValue', clamp(date, computed('inputBounds')[index]))
+      },
+
+      // Rebuilding the grid can blur its focused cell; restore calendar focus.
+      restoreCalendarFocus({ scope, action }) {
+        if (dom.getContentEl(scope)?.contains(scope.getActiveElement()))
+          action(['focusActiveCell'])
+      },
+
+      clearHoveredDateIfKeyboard({ context, event }) {
+        if (event.current().focus)
+          context.set('hoveredValue', null)
+      },
+
+      // Keyboard events carry focus: true, as in Zag.
+      focusActiveCellIfNeeded({ event, action }) {
+        if (event.current().focus)
+          action(['focusActiveCell'])
+      },
+
       validateInput(params) {
-        applyInputValidity(params, params.event.index, params.context.get('inputValues')[params.event.index] ?? '')
+        const { context, event } = params
+        applyInputValidity(params, event.index, context.get('inputValues')[event.index] ?? '')
       },
 
       syncInputValue(params) {
@@ -378,59 +418,6 @@ export const machine = createMachine<DatePickerSchema>({
 
       syncInputElement(params) {
         scheduleInputSync(params)
-      },
-      // Opening uses the adjusted draft even when the raw input is invalid.
-      setFocusedValueOnOpen({ context, prop, scope, event }) {
-        const value = context.get('value')
-        const index = event.type === 'TRIGGER.CLICK' || event.type === 'OPEN' ? event.index ?? 0 : 0
-        context.set('activeIndex', index)
-        const externalEl = dom.getInputEl(scope, index)
-        const inputDate = externalEl
-          ? parseDateString(externalEl.value, DEFAULT_EXTERNAL_DATE_FORMAT, true)
-          : undefined
-        const isRange = prop('selectionMode') === 'range'
-        let fallback: Date | undefined
-        if (isRange)
-          fallback = value[index] ?? value[1 - index]
-        else if (!externalEl)
-          fallback = value[index]
-        const candidate = inputDate ?? fallback ?? prop('defaultDate') ?? startOfToday()
-        const bounds = getEffectiveDateBounds(isRange, index, value, prop('min'), prop('max'))
-        context.set('focusedValue', clamp(candidate, bounds))
-      },
-
-      commitInputValue(params) {
-        const { context, prop, event } = params
-        const index = event.index ?? 0
-        const nextTexts = [...context.get('inputValues')]
-        nextTexts[index] = event.value
-        context.set('inputValues', nextTexts)
-        const current = context.get('value')
-        const isRange = prop('selectionMode') === 'range'
-        const bounds = getEffectiveDateBounds(isRange, index, current, prop('min'), prop('max'))
-        const parsed = parseInputValue(event.value, bounds.start, bounds.end)
-        const next = isRange
-          ? setRangeEndpoint(current, index, parsed)
-          : parsed ? [parsed] : []
-        context.set('value', next)
-      },
-
-      reconcileCalendar(params) {
-        const { context, prop, scope, event, action } = params
-        const inputDate = parseDateString(event.value, DEFAULT_EXTERNAL_DATE_FORMAT, true)
-        if (!inputDate)
-          return
-        context.set('hoveredValue', null)
-        const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', event.index, context.get('value'), prop('min'), prop('max'))
-        context.set('focusedValue', clamp(inputDate, bounds))
-        context.set('view', 'day')
-        context.set('isOpeningRender', false)
-        // Rebuilding the grid can blur its focused cell; restore calendar focus.
-        const contentEl = dom.getContentEl(scope)
-        const active = scope.getActiveElement()
-        if (contentEl && active && contentEl.contains(active)) {
-          action(['focusActiveCell'])
-        }
       },
 
       resetView({ context }) {
@@ -441,80 +428,72 @@ export const machine = createMachine<DatePickerSchema>({
         context.set('isOpeningRender', true)
       },
 
-      applyNav({ context, computed, event }) {
-        const bounds = computed('activeBounds')
-        const step = event.type === 'GOTO.PREV' ? -1 : 1
-        const anchor = context.get('focusedValue')
-        const target = event.view === 'year'
-          ? setYear(anchor, Math.max(0, context.get('focusedYear') + step * YEAR_CHUNK))
-          : event.unit === 'year' ? addYears(anchor, step) : addMonths(anchor, step)
-        const capped = clamp(target, bounds)
-        if (event.view === 'year')
-          context.set('focusedYear', capped.getFullYear())
-        else
-          context.set('focusedValue', capped)
+      clearOpeningRender({ context }) {
         context.set('isOpeningRender', false)
       },
 
+      focusPreviousPage({ context, computed, event }) {
+        const focusedValue = context.get('focusedValue')
+        const target = event.unit === 'year' ? addYears(focusedValue, -1) : addMonths(focusedValue, -1)
+        context.set('focusedValue', clamp(target, computed('activeBounds')))
+      },
+
+      focusNextPage({ context, computed, event }) {
+        const focusedValue = context.get('focusedValue')
+        const target = event.unit === 'year' ? addYears(focusedValue, 1) : addMonths(focusedValue, 1)
+        context.set('focusedValue', clamp(target, computed('activeBounds')))
+      },
+
+      focusPreviousYearChunk({ context, computed }) {
+        const target = setYear(context.get('focusedValue'), Math.max(0, context.get('focusedYear') - YEAR_CHUNK))
+        context.set('focusedYear', clamp(target, computed('activeBounds')).getFullYear())
+      },
+
+      focusNextYearChunk({ context, computed }) {
+        const target = setYear(context.get('focusedValue'), context.get('focusedYear') + YEAR_CHUNK)
+        context.set('focusedYear', clamp(target, computed('activeBounds')).getFullYear())
+      },
+
+      // A newly disabled navigation button needs a focus fallback.
       focusNavTrigger({ scope, event, refs }) {
         const direction = event.type === 'GOTO.PREV' ? 'prev' : 'next'
         scheduleFocusFrame({ scope, refs }, () => {
-          const btn = dom.getNavTriggerEl(scope, direction, event.view, event.unit)
-          if (btn && !btn.disabled)
-            btn.focus()
-          else (event.view === 'year' ? dom.getViewEl(scope, 'year') : dom.getViewControlEl(scope))?.focus()
+          const button = dom.getNavTriggerEl(scope, direction, event.view, event.unit)
+          if (button && !button.disabled)
+            button.focus()
+          else if (event.view === 'year')
+            dom.getViewEl(scope, 'year')?.focus()
+          else
+            dom.getViewControlEl(scope)?.focus()
         })
       },
 
       setView({ context, event }) {
-        context.set('hoveredValue', null)
+        const focusedValue = context.get('focusedValue')
         context.set('view', event.view)
-        context.set('isOpeningRender', false)
-        const anchor = context.get('focusedValue')
-        context.set('focusedYear', anchor.getFullYear())
-        context.set('focusedMonth', anchor.getMonth())
+        context.set('focusedYear', focusedValue.getFullYear())
+        context.set('focusedMonth', focusedValue.getMonth())
       },
 
       setFocusedValueForView({ context, computed, event }) {
-        const bounds = computed('activeBounds')
-        context.set('focusedValue', clamp(event.value, bounds))
-        context.set('isOpeningRender', false)
-        context.set('hoveredValue', null)
+        context.set('focusedValue', clamp(event.value, computed('activeBounds')))
       },
 
-      keyboardNav({ context, computed, event, action }) {
-        const bounds = computed('activeBounds')
-        const view = context.get('view')
-        const focusedValue = context.get('focusedValue')
-        if (view === 'month') {
-          const currentMonth = context.get('focusedMonth')
-          const currentDate = setMonth(focusedValue, currentMonth)
-          const target = getMonthYearKeyTarget(event.type, currentMonth, 'month')
-          const nextMonth = Math.max(0, Math.min(11, target))
-          const capped = clamp(setMonth(focusedValue, nextMonth), bounds)
-          if (isSameMonth(currentDate, capped))
-            return
-          context.set('focusedMonth', capped.getMonth())
-        }
-        else if (view === 'year') {
-          const currentYear = context.get('focusedYear')
-          const currentDate = setYear(focusedValue, currentYear)
-          const target = getMonthYearKeyTarget(event.type, currentYear, 'year')
-          const nextYear = Math.max(0, target)
-          const capped = clamp(setYear(focusedValue, nextYear), bounds)
-          if (isSameYear(currentDate, capped))
-            return
-          context.set('focusedYear', capped.getFullYear())
-        }
-        else {
-          const capped = clamp(getDayKeyTarget(event.type, focusedValue, event.larger), bounds)
-          if (isSameDay(focusedValue, capped))
-            return
-          context.set('focusedValue', capped)
-        }
-        context.set('isOpeningRender', false)
-        context.set('hoveredValue', null)
-        action(['focusActiveCell'])
+      focusDayCell({ context, computed, event }) {
+        const target = getDayKeyTarget(event.type, context.get('focusedValue'), event.larger)
+        context.set('focusedValue', clamp(target, computed('activeBounds')))
+      },
+
+      focusMonthCell({ context, computed, event }) {
+        const month = Math.max(0, Math.min(11, getMonthYearKeyTarget(event.type, context.get('focusedMonth'), 'month')))
+        const target = setMonth(context.get('focusedValue'), month)
+        context.set('focusedMonth', clamp(target, computed('activeBounds')).getMonth())
+      },
+
+      focusYearCell({ context, computed, event }) {
+        const year = Math.max(0, getMonthYearKeyTarget(event.type, context.get('focusedYear'), 'year'))
+        const target = setYear(context.get('focusedValue'), year)
+        context.set('focusedYear', clamp(target, computed('activeBounds')).getFullYear())
       },
 
       invokeOnOpenChange({ prop, state }) {
@@ -522,8 +501,8 @@ export const machine = createMachine<DatePickerSchema>({
       },
 
       focusInputElement({ scope, refs, context, prop }) {
+        const index = prop('selectionMode') === 'range' ? context.get('activeIndex') : 0
         scheduleFocusFrame({ scope, refs }, () => {
-          const index = prop('selectionMode') === 'range' ? context.get('activeIndex') : 0
           dom.getInputEl(scope, index)?.focus()
         })
       },
@@ -543,7 +522,7 @@ export const machine = createMachine<DatePickerSchema>({
       // Set initial input values on mount. Vanilla spreadProps reapplies defaultValue each render and overwrites drafts.
       syncInputsOnMount(params) {
         // The inputValues watch does not fire for the first set.
-        syncInputValue(params, syncInputElement(params, new Set([0, 1])))
+        syncInputValue(params, updateInputValues(params, new Set([0, 1])))
         return () => params.refs.get('inputSyncCleanup')?.()
       },
       trackDismissableElement({ scope, send }) {
@@ -563,3 +542,69 @@ export const machine = createMachine<DatePickerSchema>({
     },
   },
 })
+
+// Focus runs after rendering; a newer request cancels the previous one.
+function scheduleFocusFrame({ refs }: Pick<Params<DatePickerSchema>, 'scope' | 'refs'>, callback: () => void) {
+  refs.get('focusRafCleanup')?.()
+  refs.set('focusRafCleanup', raf(() => {
+    refs.set('focusRafCleanup', null)
+    callback()
+  }))
+}
+
+type InputParams = Pick<Params<DatePickerSchema>, 'scope' | 'context' | 'prop' | 'refs' | 'computed'>
+
+// Show each endpoint's date. Typing owns a focused draft unless a selection or setValue replaces it.
+function updateInputValues(params: InputParams, explicit: ReadonlySet<EndpointIndex>) {
+  const { scope, context } = params
+  const next = [...context.get('inputValues')]
+  for (const index of [0, 1] as const) {
+    const input = dom.getInputEl(scope, index)
+    if (!input)
+      continue
+    if (explicit.has(index) || !scope.isActiveElement(input)) {
+      const date = context.get('value')[index]
+      next[index] = date ? formatDate(date, DEFAULT_EXTERNAL_DATE_FORMAT) : ''
+    }
+    applyInputValidity(params, index, next[index] ?? '')
+  }
+  if (next.some((text, index) => text !== context.get('inputValues')[index]))
+    context.set('inputValues', next)
+  return next
+}
+
+// Not Zag's setElementValue: it also writes the value attribute, so a form reset would keep the date instead of
+// clearing the field as USWDS does.
+function syncInputValue({ scope }: InputParams, texts: readonly string[]) {
+  texts.forEach((text, index) => {
+    const input = dom.getInputEl(scope, index)
+    if (input && input.value !== text)
+      input.value = text
+  })
+}
+
+// Validation never replaces a message set by another validator.
+function applyInputValidity(params: InputParams, index: EndpointIndex, text: string) {
+  const input = dom.getInputEl(params.scope, index)
+  if (!input)
+    return
+  const bounds = params.computed('inputBounds')[index]
+  const invalid = isDateInputInvalid(text, bounds.start, bounds.end)
+  if (invalid && !input.validationMessage)
+    input.setCustomValidity(VALIDATION_MESSAGE)
+  else if (!invalid && input.validationMessage === VALIDATION_MESSAGE)
+    input.setCustomValidity('')
+}
+
+// Write after a frame so a controlled parent can accept or reject the value first.
+function scheduleInputSync(params: InputParams, explicitIndexes: EndpointIndex[] = []) {
+  const { refs } = params
+  const explicit = refs.get('explicitInputs')
+  explicitIndexes.forEach(index => explicit.add(index))
+  refs.get('inputSyncCleanup')?.()
+  refs.set('inputSyncCleanup', raf(() => {
+    refs.set('inputSyncCleanup', null)
+    updateInputValues(params, explicit)
+    explicit.clear()
+  }))
+}
