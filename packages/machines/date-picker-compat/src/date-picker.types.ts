@@ -86,9 +86,9 @@ export type DatePickerEvent
     | { type: 'INTERACT_OUTSIDE' }
     | { type: 'TABLE.ESCAPE' }
     | { type: 'CELL.POINTER_MOVE', value: Date }
-    | { type: 'TABLE.ARROW_LEFT' | 'TABLE.ARROW_RIGHT' | 'TABLE.ARROW_UP' | 'TABLE.ARROW_DOWN', focus?: boolean }
-    | { type: 'TABLE.HOME' | 'TABLE.END', focus?: boolean }
-    | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN', larger?: boolean, focus?: boolean }
+    | { type: 'TABLE.ARROW_LEFT' | 'TABLE.ARROW_RIGHT' | 'TABLE.ARROW_UP' | 'TABLE.ARROW_DOWN' }
+    | { type: 'TABLE.HOME' | 'TABLE.END' }
+    | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN', larger?: boolean }
     | { type: 'VALUE.SET', value: (Date | undefined)[] }
 
 export interface DatePickerSchema {
@@ -142,8 +142,6 @@ export interface DatePickerSchema {
     | 'selectParsedDate'
     | 'focusParsedDate'
     | 'restoreCalendarFocus'
-    | 'clearHoveredDateIfKeyboard'
-    | 'focusActiveCellIfNeeded'
     | 'setActiveIndex'
     | 'validateInput'
     | 'syncInputElement'

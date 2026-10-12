@@ -153,7 +153,9 @@ export const machine = createMachine<DatePickerSchema>({
       const { type } = event.current()
       if (type === 'TRIGGER.CLICK' || type === 'OPEN')
         return
-      action(['clearOpeningRender', 'clearHoveredDateIfKeyboard', 'focusActiveCellIfNeeded'])
+      action(['clearOpeningRender'])
+      if (type.startsWith('TABLE.') && type !== 'TABLE.ESCAPE')
+        action(['clearHoveredDate', 'focusActiveCell'])
     })
     track([() => context.hash('value')], () => {
       action(['syncInputElement'])
@@ -393,17 +395,6 @@ export const machine = createMachine<DatePickerSchema>({
       // Rebuilding the grid can blur its focused cell; restore calendar focus.
       restoreCalendarFocus({ scope, action }) {
         if (dom.getContentEl(scope)?.contains(scope.getActiveElement()))
-          action(['focusActiveCell'])
-      },
-
-      clearHoveredDateIfKeyboard({ context, event }) {
-        if (event.current().focus)
-          context.set('hoveredValue', null)
-      },
-
-      // Keyboard events carry focus: true, as in Zag.
-      focusActiveCellIfNeeded({ event, action }) {
-        if (event.current().focus)
           action(['focusActiveCell'])
       },
 

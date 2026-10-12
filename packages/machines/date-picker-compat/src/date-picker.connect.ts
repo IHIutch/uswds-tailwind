@@ -36,14 +36,14 @@ import {
 } from './date-utils'
 
 const GRID_KEYS: Record<string, DatePickerEvent> = {
-  ArrowUp: { type: 'TABLE.ARROW_UP', focus: true },
-  ArrowDown: { type: 'TABLE.ARROW_DOWN', focus: true },
-  ArrowLeft: { type: 'TABLE.ARROW_LEFT', focus: true },
-  ArrowRight: { type: 'TABLE.ARROW_RIGHT', focus: true },
-  Home: { type: 'TABLE.HOME', focus: true },
-  End: { type: 'TABLE.END', focus: true },
-  PageUp: { type: 'TABLE.PAGE_UP', focus: true },
-  PageDown: { type: 'TABLE.PAGE_DOWN', focus: true },
+  ArrowUp: { type: 'TABLE.ARROW_UP' },
+  ArrowDown: { type: 'TABLE.ARROW_DOWN' },
+  ArrowLeft: { type: 'TABLE.ARROW_LEFT' },
+  ArrowRight: { type: 'TABLE.ARROW_RIGHT' },
+  Home: { type: 'TABLE.HOME' },
+  End: { type: 'TABLE.END' },
+  PageUp: { type: 'TABLE.PAGE_UP' },
+  PageDown: { type: 'TABLE.PAGE_DOWN' },
 }
 
 function gridKeyEvent(event: Pick<KeyboardEvent, 'key' | 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'>, view: 'day' | 'month' | 'year'): DatePickerEvent | null {
@@ -52,7 +52,7 @@ function gridKeyEvent(event: Pick<KeyboardEvent, 'key' | 'altKey' | 'ctrlKey' | 
   const key = getEventKey(event)
   if (event.shiftKey) {
     const page = key === 'PageUp' || key === 'PageDown'
-    return view === 'day' && page ? { type: key === 'PageUp' ? 'TABLE.PAGE_UP' : 'TABLE.PAGE_DOWN', larger: true, focus: true } : null
+    return view === 'day' && page ? { type: key === 'PageUp' ? 'TABLE.PAGE_UP' : 'TABLE.PAGE_DOWN', larger: true } : null
   }
   return GRID_KEYS[key] ?? null
 }
