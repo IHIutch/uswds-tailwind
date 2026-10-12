@@ -293,7 +293,7 @@ export const machine = createMachine<DatePickerSchema>({
       isInteractive: ({ prop }) => !prop('disabled') && !prop('readOnly'),
       isDifferentActiveIndex: ({ context, prop, event }) =>
         prop('selectionMode') === 'range'
-        && event.index !== context.get('activeIndex'),
+        && (isEndpointIndex(event.index) ? event.index : 0) !== context.get('activeIndex'),
       isSelectableDate: ({ computed, event }) => {
         const bounds = computed('activeBounds')
         return isDateWithinMinAndMax(event.value, bounds.min, bounds.max)

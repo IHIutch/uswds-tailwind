@@ -26,13 +26,15 @@ export function createDatePickerInputs({ scope, context, prop }: Pick<Params<Dat
   function writeInput(index: number, date: DateValue | undefined, explicit = false) {
     const text = acceptedText(date)
     const input = dom.getInputEl(scope, index)
-    if (input && (explicit || !scope.isActiveElement(input))) {
-      if (explicit || input.value !== text) {
+    if (!input)
+      return
+    if (explicit || !scope.isActiveElement(input)) {
+      if (explicit || input.value !== text)
         dom.changeElementValue(input, text)
-        dom.applyDateInputValidity(input, text, prop('min'), prop('max'))
-      }
       rememberVisibleInput(index, text)
     }
+    const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
+    dom.applyDateInputValidity(input, input.value, bounds.min, bounds.max)
   }
 
   return {

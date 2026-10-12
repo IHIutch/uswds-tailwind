@@ -59,7 +59,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
       this.status.textContent = this.api.srStatusText
     }
     for (const view of ['day', 'month', 'year'] as const)
-      spreadProps(query<HTMLElement>(this.calendar, `[data-part=view][data-view=${view}]`)!, this.api.getViewProps({ view }))
+      spreadProps(this.getView(view), this.api.getViewProps({ view }))
     if (!this.api.open)
       return
     if (this.api.view === 'day')
@@ -78,31 +78,32 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   }
 
   private get trigger() {
-    return getPart<HTMLButtonElement>(this.rootEl, parts.trigger)!
+    const el = getPart<HTMLButtonElement>(this.rootEl, parts.trigger)
+    if (!el)
+      throw new Error('Expected trigger element to be defined')
+    return el
   }
 
   private get calendar() {
-    return getPart<HTMLElement>(this.rootEl, parts.content)!
+    const el = getPart<HTMLElement>(this.rootEl, parts.content)
+    if (!el)
+      throw new Error('Expected calendar element to be defined')
+    return el
   }
 
   private get status() {
     return getPart<HTMLElement>(this.rootEl, parts.status)
   }
 
-  private get dayView() {
-    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=day]')!
-  }
-
-  private get monthView() {
-    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=month]')!
-  }
-
-  private get yearView() {
-    return query<HTMLElement>(this.calendar, '[data-part=view][data-view=year]')!
+  private getView(view: datePicker.DateView) {
+    const el = query<HTMLElement>(this.calendar, `[data-part=view][data-view=${view}]`)
+    if (!el)
+      throw new Error(`Expected ${view} view element to be defined`)
+    return el
   }
 
   private renderDayView() {
-    const view = this.dayView
+    const view = this.getView('day')
     const control = getPart<HTMLElement>(view, parts.viewControl)!
     spreadProps(control, this.api.getViewControlProps())
     const nav = [
@@ -173,7 +174,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   }
 
   private renderMonthView() {
-    const view = this.monthView
+    const view = this.getView('month')
     const table = query<HTMLTableElement>(view, 'table')!
     const body = table.tBodies[0]!
     spreadProps(table, this.api.getTableProps({ view: 'month' }))
@@ -189,7 +190,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
   }
 
   private renderYearView() {
-    const view = this.yearView
+    const view = this.getView('year')
     const previous = query<HTMLButtonElement>(view, '[data-part=prev-trigger][data-view=year]')
     const next = query<HTMLButtonElement>(view, '[data-part=next-trigger][data-view=year]')
     const table = query<HTMLTableElement>(view, 'table')!
