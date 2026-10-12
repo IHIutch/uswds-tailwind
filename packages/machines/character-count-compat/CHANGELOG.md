@@ -1,5 +1,11 @@
 # @uswds-tailwind/character-count-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- e84fdaa: Simplify character count state and value handling across the machine, vanilla, and React adapters. Update the status, control, and description APIs while preserving validation and debounced screen reader announcements.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

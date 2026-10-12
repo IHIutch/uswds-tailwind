@@ -1,5 +1,11 @@
 # @uswds-tailwind/dropdown-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- effbba5: Update dropdown state and item-link handling across the machine, vanilla, and React adapters. Align the v2 dropdown API and add controlled-state and interaction coverage.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

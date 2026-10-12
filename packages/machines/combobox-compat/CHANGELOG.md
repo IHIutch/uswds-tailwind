@@ -1,5 +1,11 @@
 # @uswds-tailwind/combobox-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- d0d5197: Simplify combobox state and item handling across the machine, vanilla, and React adapters. Preserve native select synchronization, filtering, clear behavior, and duplicate-value handling while adding interaction, accessibility, and observable behavior coverage.
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes

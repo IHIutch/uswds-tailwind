@@ -1,5 +1,15 @@
 # @uswds-tailwind/modal-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- c2dd8e6: Update modal state, focus handling, scroll locking, and vanilla instance behavior. Align the React adapter with the v2 modal API, add parity coverage, and remove the deprecated modal machine package.
+
+### Patch Changes
+
+- b10075e: Update modal anatomy, trigger aria attributes
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

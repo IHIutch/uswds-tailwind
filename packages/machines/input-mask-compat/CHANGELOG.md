@@ -1,5 +1,11 @@
 # @uswds-tailwind/input-mask-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- ad34c7d: Simplify input mask state and value handling across the machine, vanilla, and React adapters. Update the v2 public API and add initial-value, controlled-state, and value-change coverage.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6
