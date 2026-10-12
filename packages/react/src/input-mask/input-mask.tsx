@@ -26,7 +26,7 @@ export type InputMaskRootProps = UseInputMaskProps & React.ComponentPropsWithout
 const InputMaskRoot = React.forwardRef<HTMLDivElement, InputMaskRootProps>(
   ({ className, children, placeholder, ...props }, forwardedRef) => {
     const [machineProps, rest] = inputMask.splitProps(props)
-    const { api } = useInputMask({ ...machineProps, placeholder })
+    const api = useInputMask({ ...machineProps, placeholder })
     const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
