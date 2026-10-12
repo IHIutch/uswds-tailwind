@@ -19,7 +19,7 @@ import {
 } from './date-utils'
 
 export const YEAR_CHUNK = 12
-const VALIDATION_MESSAGE = 'Please enter a valid date'
+export const VALIDATION_MESSAGE = 'Please enter a valid date'
 
 export function getDayKeyTarget(type: string, date: Date, larger = false) {
   switch (type) {
@@ -78,26 +78,6 @@ export function isDateInputInvalid(
     || date.getFullYear() !== Number.parseInt(year, 10)
     || year.length !== 4
     || !isWithinInterval(date, { start, end })
-}
-
-/** Return null to leave native validity unchanged, including messages from other validators. */
-export function validateDateInput(
-  dateString: string,
-  start: Date,
-  end: Date | undefined,
-  currentValidationMessage: string,
-) {
-  const isInvalid = isDateInputInvalid(dateString, start, end)
-
-  if (isInvalid && !currentValidationMessage) {
-    return VALIDATION_MESSAGE
-  }
-
-  if (!isInvalid && currentValidationMessage === VALIDATION_MESSAGE) {
-    return ''
-  }
-
-  return null
 }
 
 export function parseInputValue(

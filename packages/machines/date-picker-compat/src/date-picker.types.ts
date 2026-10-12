@@ -82,6 +82,7 @@ export type DatePickerEvent
     | { type: 'VIEW.SET', view: DateView }
     | { type: 'GOTO.PREV' | 'GOTO.NEXT', view: 'day' | 'year', unit?: NavigationUnit }
     | { type: 'INPUT.CHANGE', value: string, index: EndpointIndex }
+    | { type: 'INPUT.BLUR' | 'INPUT.ENTER', index: EndpointIndex }
     | { type: 'INTERACT_OUTSIDE' }
     | { type: 'TABLE.ESCAPE' }
     | { type: 'CELL.POINTER_MOVE', value: Date }
@@ -116,7 +117,7 @@ export interface DatePickerSchema {
   refs: {
     focusRafCleanup: VoidFunction | null
     inputSyncCleanup: VoidFunction | null
-    /** Inputs whose next write emits change even when the text is unchanged. */
+    /** Inputs whose next write replaces a focused draft. */
     explicitInputs: Set<EndpointIndex>
   }
   guard:
@@ -133,7 +134,9 @@ export interface DatePickerSchema {
     | 'clearHoveredDate'
     | 'setFocusedValueOnOpen'
     | 'commitInputValue'
+    | 'validateInput'
     | 'syncInputElement'
+    | 'syncInputValue'
     | 'reconcileCalendar'
     | 'resetView'
     | 'markOpeningRender'

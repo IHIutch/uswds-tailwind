@@ -262,9 +262,6 @@ export function connect<T extends PropTypes>(
       const inputMax = inputBounds.end
       const text = context.get('inputValues')[index] ?? ''
       const invalid = text !== '' && isDateInputInvalid(text, inputMin, inputMax)
-      const validate = (el: HTMLInputElement) => {
-        dom.applyDateInputValidity(el, el.value, inputMin, inputMax)
-      }
       const rangeBoundsProps = isRange
         ? {
             min: formatDate(inputMin) !== '0000-01-01' ? formatDate(inputMin) : undefined,
@@ -291,10 +288,10 @@ export function connect<T extends PropTypes>(
         // Enter also validates during composition.
         onKeyDown(event) {
           if (getEventKey(event) === 'Enter')
-            validate(event.currentTarget as HTMLInputElement)
+            send({ type: 'INPUT.ENTER', index })
         },
-        onBlur(event) {
-          validate(event.currentTarget as HTMLInputElement)
+        onBlur() {
+          send({ type: 'INPUT.BLUR', index })
         },
       })
     },

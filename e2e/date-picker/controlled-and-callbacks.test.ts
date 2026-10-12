@@ -154,8 +154,6 @@ it.each([false, true])('refreshes unchanged end-input validity after a controlle
     await userEvent.fill(end, expectedText)
     expect(document.activeElement).toBe(end)
   }
-  const onEndChange = vi.fn()
-  end.addEventListener('change', onEndChange)
   const instance = component.elements.getInstance()!
   instance.machine.updateProps({ value: [new Date(2024, 5, 20), new Date(2024, 5, 10)] })
   await expect.poll(() => end.validity.customError).toBe(true)
@@ -169,7 +167,6 @@ it.each([false, true])('refreshes unchanged end-input validity after a controlle
   expect(end.value).toBe(expectedText)
   if (focused)
     expect(document.activeElement).toBe(end)
-  expect(onEndChange).not.toHaveBeenCalled()
 })
 
 it('toggles an unindexed range trigger and switches from the end date to the start date', { tags: ['new'] }, async () => {

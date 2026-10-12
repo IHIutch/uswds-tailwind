@@ -9,10 +9,12 @@ import {
   getEffectiveDateBounds,
   getMonthYearKeyTarget,
   getNavigationAvailability,
+  isDateInputInvalid,
   normalizeDates,
   parseInputValue,
   serializeDates,
   setRangeEndpoint,
+  VALIDATION_MESSAGE,
   YEAR_CHUNK,
 } from './date-picker.utils'
 import {
@@ -58,30 +60,46 @@ function scheduleFocusFrame({ refs }: Pick<Params<DatePickerSchema>, 'scope' | '
 
 type InputParams = Pick<Params<DatePickerSchema>, 'scope' | 'context' | 'prop' | 'refs'>
 
-function rememberInputText({ context }: InputParams, index: number, text: string) {
+// Show each endpoint's date. Typing owns a focused draft unless a selection or setValue replaces it.
+function syncInputElement(params: InputParams, explicit: ReadonlySet<EndpointIndex>) {
+  const { scope, context } = params
+  const value = context.get('value')
   const inputValues = context.get('inputValues')
-  if (inputValues[index] === text)
-    return
   const next = [...inputValues]
-  next[index] = text
-  context.set('inputValues', next)
+  for (const index of [0, 1] as const) {
+    const input = dom.getInputEl(scope, index)
+    if (!input)
+      continue
+    if (explicit.has(index) || !scope.isActiveElement(input)) {
+      const date = value[index]
+      next[index] = date ? formatDate(date, DEFAULT_EXTERNAL_DATE_FORMAT) : ''
+    }
+    applyInputValidity(params, index, next[index] ?? '')
+  }
+  if (next.some((text, index) => text !== inputValues[index]))
+    context.set('inputValues', next)
+  return next
 }
 
-// Typing owns a focused input's text. Explicit writes come from selection and emit change even when unchanged.
-function writeInput(params: InputParams, index: number, explicit: boolean) {
-  const { scope, context, prop } = params
+function syncInputValue({ scope }: InputParams, texts: readonly string[]) {
+  texts.forEach((text, index) => {
+    const input = dom.getInputEl(scope, index)
+    if (input && input.value !== text)
+      input.value = text
+  })
+}
+
+// Validation never replaces a message set by another validator.
+function applyInputValidity({ scope, context, prop }: InputParams, index: number, text: string) {
   const input = dom.getInputEl(scope, index)
   if (!input)
     return
-  if (explicit || !scope.isActiveElement(input)) {
-    const date = context.get('value')[index]
-    const text = date ? formatDate(date, DEFAULT_EXTERNAL_DATE_FORMAT) : ''
-    if (explicit || input.value !== text)
-      dom.changeElementValue(input, text)
-    rememberInputText(params, index, text)
-  }
   const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
-  dom.applyDateInputValidity(input, input.value, bounds.start, bounds.end)
+  const invalid = isDateInputInvalid(text, bounds.start, bounds.end)
+  if (invalid && !input.validationMessage)
+    input.setCustomValidity(VALIDATION_MESSAGE)
+  else if (!invalid && input.validationMessage === VALIDATION_MESSAGE)
+    input.setCustomValidity('')
 }
 
 // Write after a frame so a controlled parent can accept or reject the value first.
@@ -92,8 +110,7 @@ function scheduleInputSync(params: InputParams, explicitIndexes: EndpointIndex[]
   refs.get('inputSyncCleanup')?.()
   refs.set('inputSyncCleanup', raf(() => {
     refs.set('inputSyncCleanup', null)
-    writeInput(params, 0, explicit.has(0))
-    writeInput(params, 1, explicit.has(1))
+    syncInputElement(params, explicit)
     explicit.clear()
   }))
 }
@@ -176,6 +193,7 @@ export const machine = createMachine<DatePickerSchema>({
       activeIndex: bindable<0 | 1>(() => ({ defaultValue: 0 })),
       inputValues: bindable<string[]>(() => ({
         defaultValue: [],
+        hash: texts => JSON.stringify(texts),
       })),
       isOpeningRender: bindable<boolean>(() => ({
         defaultValue: false,
@@ -195,6 +213,9 @@ export const machine = createMachine<DatePickerSchema>({
     track([() => context.hash('value')], () => {
       action(['syncInputElement'])
     })
+    track([() => context.hash('inputValues')], () => {
+      action(['syncInputValue'])
+    })
   },
 
   on: {
@@ -203,6 +224,12 @@ export const machine = createMachine<DatePickerSchema>({
     },
     'INPUT.CHANGE': {
       actions: ['commitInputValue', 'reconcileCalendar'],
+    },
+    'INPUT.BLUR': {
+      actions: ['validateInput'],
+    },
+    'INPUT.ENTER': {
+      actions: ['validateInput'],
     },
   },
 
@@ -339,6 +366,14 @@ export const machine = createMachine<DatePickerSchema>({
       },
       clearHoveredDate({ context }) {
         context.set('hoveredValue', null)
+      },
+
+      validateInput(params) {
+        applyInputValidity(params, params.event.index, params.context.get('inputValues')[params.event.index] ?? '')
+      },
+
+      syncInputValue(params) {
+        syncInputValue(params, params.context.get('inputValues'))
       },
 
       syncInputElement(params) {
@@ -507,21 +542,9 @@ export const machine = createMachine<DatePickerSchema>({
     effects: {
       // Set initial input values on mount. Vanilla spreadProps reapplies defaultValue each render and overwrites drafts.
       syncInputsOnMount(params) {
-        const { scope, context, prop, refs } = params
-        const count = prop('selectionMode') === 'range' ? 2 : 1
-        for (let index = 0; index < count; index++) {
-          const input = dom.getInputEl(scope, index)
-          if (!input)
-            continue
-          if (context.get('value')[index]) {
-            writeInput(params, index, true)
-            continue
-          }
-          if (input.value)
-            input.value = ''
-          rememberInputText(params, index, '')
-        }
-        return () => refs.get('inputSyncCleanup')?.()
+        // The inputValues watch does not fire for the first set.
+        syncInputValue(params, syncInputElement(params, new Set([0, 1])))
+        return () => params.refs.get('inputSyncCleanup')?.()
       },
       trackDismissableElement({ scope, send }) {
         return trackDismissableElement(() => dom.getContentEl(scope), {
