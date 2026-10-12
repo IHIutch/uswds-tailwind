@@ -99,7 +99,6 @@ it('should enhance the date picker and identify the start and end date pickers',
   expect(startInput).toBeTruthy()
   expect(endInput).toBeTruthy()
 
-  // Both inputs should have the default min/max date constraints
   expect(startInput.min).toBe('2020-05-22')
   expect(startInput.max).toBe('2021-06-20')
   expect(endInput.min).toBe('2020-05-22')
@@ -112,14 +111,11 @@ it('should not update the range end date picker properties when the range start 
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 
-  // Set initial value then clear it
   await userEvent.fill(startInput, '12/12/2020')
   await userEvent.clear(startInput)
 
-  // End input should maintain default min/max dates (not be cleared)
   expect(endInput.min).toBe('2020-05-22')
   expect(endInput.max).toBe('2021-06-20')
-  // expect(endInput.getAttribute('data-range-date')).toBeFalsy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker-min-date-max-date.spec.js#L101
@@ -130,10 +126,8 @@ it('should update the range end date picker properties to have a min date and ra
 
   await userEvent.fill(startInput, '12/12/2020')
 
-  // End input should get updated min date but keep the default max date
   expect(endInput.min).toBe('2020-12-12')
   expect(endInput.max).toBe('2021-06-20')
-  // expect(endInput.getAttribute('data-range-date')).toBe('2020-12-12')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker-min-date-max-date.spec.js#L128
@@ -144,10 +138,8 @@ it('should reset the range end date picker properties when the range start date 
 
   await userEvent.fill(startInput, 'ab/dc/efg')
 
-  // End input should revert to default min/max dates
   expect(endInput.min).toBe('2020-05-22')
   expect(endInput.max).toBe('2021-06-20')
-  // expect(endInput.getAttribute('data-range-date')).toBeFalsy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker-min-date-max-date.spec.js#L151
@@ -156,14 +148,11 @@ it('should not update the range start date picker properties when the range end 
   const startInput = component.elements.getStartInputEl()!
   const endInput = component.elements.getEndInputEl()!
 
-  // Set initial value then clear it
   await userEvent.fill(endInput, '12/11/2020')
   await userEvent.clear(endInput)
 
-  // Start input should maintain default min/max dates (not be cleared)
   expect(startInput.min).toBe('2020-05-22')
   expect(startInput.max).toBe('2021-06-20')
-  // expect(startInput.getAttribute('data-range-date')).toBe('')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker-min-date-max-date.spec.js#L174
@@ -174,10 +163,8 @@ it('should update the range start date picker properties to have a max date and 
 
   await userEvent.fill(endInput, '12/11/2020')
 
-  // Start input should get updated max date but keep the default min date
   expect(startInput.min).toBe('2020-05-22')
   expect(startInput.max).toBe('2020-12-11')
-  // expect(startInput.getAttribute('data-range-date')).toBe('2020-12-11')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker-min-date-max-date.spec.js#L201
@@ -188,8 +175,6 @@ it('should not update the range start date picker properties when the range end 
 
   await userEvent.fill(endInput, '35/35/3535')
 
-  // Start input should revert to default min/max dates
   expect(startInput.min).toBe('2020-05-22')
   expect(startInput.max).toBe('2021-06-20')
-  // expect(startInput.getAttribute('data-range-date')).toBe('')
 })

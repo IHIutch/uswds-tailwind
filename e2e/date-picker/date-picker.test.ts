@@ -200,7 +200,6 @@ it.each([0, 1] as const)('rejects a controlled range endpoint %i proposal withou
   instance.api.setOpen(true, index)
   await vi.waitFor(() => expect(instance.api.open).toBe(true))
   onOpenChange.mockClear()
-  // The shared calendar must reject a start after the end, or an end before the start.
   instance.machine.send({ type: 'CELL.CLICK', value: new Date(2024, 5, index === 0 ? 21 : 9) })
   expect(onValueChange).not.toHaveBeenCalled()
   expect(instance.api.open).toBe(true)
@@ -235,7 +234,6 @@ it('programmatic range opens target one endpoint and can switch the open calenda
   await page.getByRole('button', { name: '15 June 2024 Saturday' }).click()
   expect(instance.api.valueAsString).toEqual(['2024-06-15', '2024-06-20'])
   expect(instance.api.open).toBe(false)
-  // Reopening the start calendar keeps editing the start; it never advances to the end implicitly.
   instance.api.setOpen(true)
   await vi.waitFor(() => expect(instance.api.focusedValue.getDate()).toBe(15))
   await page.getByRole('button', { name: '16 June 2024 Sunday' }).click()
@@ -252,7 +250,6 @@ it('should enhance the date input with a date picker button', { tags: ['legacy']
   expect(button).toBeTruthy()
 })
 
-// mouse interactions
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker.spec.js#L54
 it('should display a calendar for the current date when the date picker button is clicked', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
@@ -475,7 +472,6 @@ it('should show an empty input as valid', { tags: ['legacy'] }, async () => {
   expect(input.validationMessage).toBe('')
 })
 
-// Month and Year Selection Tests
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker.spec.js#L365
 it('should display a month selection screen by clicking the month display within the calendar', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
@@ -585,7 +581,6 @@ it('should allow for the selection of a year within year selection screen', { ta
   expect(query(calendar, '[data-part="table-cell-trigger"][data-focus]')?.getAttribute('data-value')).toBe('2016-02-01')
 })
 
-// Keyboard Navigation Tests
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker.spec.js#L517
 it('should close the calendar when escape is pressed within the calendar', { tags: ['legacy'] }, async () => {
   await using component = createDisposableDatePicker(rootId, template)
@@ -834,7 +829,6 @@ it('should validate the input when a date is selected', { tags: ['legacy'] }, as
   expect(input.validationMessage).toBe('')
 })
 
-// Additional source behavior from the date-picker migration review.
 const templateWith = (attributes: string) => template.replace(`id="${rootId}"`, `id="${rootId}" ${attributes}`)
 const focusedDay = (calendar: Element) => query<HTMLButtonElement>(calendar, '[data-part="table-cell-trigger"][data-focus]')!
 

@@ -102,9 +102,6 @@ it('should disable back buttons when displaying the minimum month', { tags: ['le
   expect(prevMonthBtn).toBeDisabled()
   expect(prevYearBtn).toBeDisabled()
 
-  // await userEvent.click(prevMonthBtn)
-  // await userEvent.click(prevYearBtn)
-
   const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-30')
 })
@@ -125,9 +122,6 @@ it('should disable forward buttons when displaying the maximum month', { tags: [
 
   expect(nextMonthBtn).toBeDisabled()
   expect(nextYearBtn).toBeDisabled()
-
-  // await userEvent.click(nextMonthBtn)
-  // await userEvent.click(nextYearBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2021-06-01')
@@ -182,9 +176,6 @@ it('should not allow navigation back a month to a month that is fully disabled d
 
   const prevYearBtn = query(calendar, '[data-part="prev-trigger"][data-unit="year"]') as HTMLButtonElement
   expect(prevYearBtn).toBeDisabled()
-
-  // const prevMonthBtn = query(calendar, '[data-part="prev-trigger"][data-unit="month"]') as HTMLButtonElement
-  // await userEvent.click(prevMonthBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2020-05-30')
@@ -257,7 +248,6 @@ it('should not allow navigation forward a month to a month that is fully disable
 
   const nextMonthBtn = query(calendar, '[data-part="next-trigger"][data-unit="month"]') as HTMLButtonElement
   expect(nextMonthBtn).toBeDisabled()
-  // await userEvent.click(nextMonthBtn)
 
   const focusedDate = query(calendar, '[data-focus]')
   expect(focusedDate?.getAttribute('data-value')).toBe('2021-06-17')
@@ -297,14 +287,12 @@ it('should not allow selection of a month in the month selection screen that is 
   await userEvent.click(button)
 
   const monthTrigger = query(calendar, '[data-part="view-trigger"][data-view="month"]') as HTMLButtonElement
-  // expect(monthTrigger).toBeDisabled()
   await userEvent.click(monthTrigger)
 
   expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 
   const januaryButton = query(calendar, '[data-value="0"]') as HTMLButtonElement
   expect(januaryButton).toBeDisabled()
-  // await userEvent.click(januaryButton)
 
   expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 })
@@ -349,9 +337,6 @@ it('should not allow selection of a month in the month selection screen that is 
 
   const decemberButton = query(calendar, '[data-value="11"]') as HTMLButtonElement
   expect(decemberButton).toBeDisabled()
-  // await userEvent.click(decemberButton)
-
-  // expect(query(calendar, '[data-part="view"][data-view="month"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L376
@@ -417,9 +402,6 @@ it('should not allow selection of a year in the year selection screen that is fu
 
   const year2018Button = query(calendar, '[data-value="2018"]') as HTMLButtonElement
   expect(year2018Button).toBeDisabled()
-  // await userEvent.click(year2018Button)
-
-  // expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L445
@@ -439,9 +421,6 @@ it('should not allow selection of a year in the year selection screen that is fu
 
   const year2023Button = query(calendar, '[data-value="2023"]') as HTMLButtonElement
   expect(year2023Button).toBeDisabled()
-  // await userEvent.click(year2023Button)
-
-  // expect(query(calendar, '[data-part="view"][data-view="year"]')).toBeTruthy()
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L464
@@ -490,8 +469,6 @@ it('should not allow selection of a date that is before the minimum date', { tag
 
   const day15Button = query(calendar, '[data-day="15"]') as HTMLButtonElement
   expect(day15Button).toBeDisabled()
-  // await userEvent.click(day15Button)
-  // expect(calendar.hidden).toBe(false)
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L530
@@ -507,8 +484,6 @@ it('should not allow selection of a date that is after the maximum date', { tags
 
   const day25Button = query(calendar, '[data-day="25"]') as HTMLButtonElement
   expect(day25Button).toBeDisabled()
-  // await userEvent.click(day25Button)
-  // expect(calendar.hidden).toBe(false)
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/test/date-picker-min-date-max-date.spec.js#L552

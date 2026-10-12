@@ -48,7 +48,6 @@
             data-part="content"
             class="bg-gray-5 w-mobile absolute top-10 right-0 not-data-[state=open]:hidden"
           >
-            <!-- Date Grid View -->
             <div data-part="view" data-view="day">
               <div data-part="view-control" class="flex w-full justify-between">
                 <div class="flex">
@@ -93,22 +92,19 @@
                 </div>
               </div>
 
-              <!-- Calendar table layout -->
               <table class="w-full">
-                <!-- Table header with day names -->
                 <thead>
                   <tr>
-                    <!-- Day header template (will be cloned 7 times) -->
+                    <!-- The adapter clones this template for each weekday. -->
                     <th
                       data-part="table-header"
                       class="text-center py-1.5 font-normal"
                     ></th>
                   </tr>
                 </thead>
-                <!-- Table body with date buttons -->
                 <tbody>
                   <tr>
-                    <!-- Date button template (will be cloned 35-42 times) -->
+                    <!-- The adapter clones this template for each day in the visible weeks. -->
                     <td>
                       <button
                         data-part="table-cell-trigger"
@@ -120,16 +116,14 @@
               </table>
             </div>
 
-            <!-- Month Selection View -->
             <div
               data-part="view" data-view="month"
               class="py-5 px-1.5"
             >
-              <!-- Month selection table -->
               <table class="w-full">
                 <tbody>
                   <tr>
-                    <!-- Month button template (will be cloned 12 times) -->
+                    <!-- The adapter clones this template for the 12 months. -->
                     <td class="w-1/3">
                       <button
                         data-part="table-cell-trigger"
@@ -141,7 +135,6 @@
               </table>
             </div>
 
-            <!-- Year Selection View -->
             <div
               data-part="view" data-view="year"
               class="py-5 px-1.5"
@@ -153,11 +146,10 @@
                 >
                   <span class="icon-[material-symbols--keyboard-arrow-left] size-8"></span>
                 </button>
-                <!-- Year selection table -->
                 <table class="w-full">
                   <tbody>
                     <tr>
-                      <!-- Year button template (will be cloned 12+ times) -->
+                      <!-- The adapter clones this template for the 12 years in the current chunk. -->
                       <td class="w-1/4">
                         <button
                           data-part="table-cell-trigger"
@@ -178,13 +170,6 @@
 
           </div>
         </div>
-
-
-        <!-- <div
-          data-part="status"
-          aria-live="polite"
-          style="color: red; font-size: 14px; margin-top: 4px;"
-        ></div> -->
       </div>
     </section>
 

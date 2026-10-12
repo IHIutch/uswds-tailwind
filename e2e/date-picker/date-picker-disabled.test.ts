@@ -74,7 +74,6 @@ it('should not display the calendar when the button is clicked as it is disabled
   const button = component.elements.getTriggerEl()!
   const calendar = component.elements.getCalendarEl()!
 
-  // Force click the disabled button
   await userEvent.click(button, { force: true })
 
   expect(calendar.hidden).toBe(true)

@@ -31,7 +31,6 @@ function DayGrid() {
   )
 }
 
-// A parent that owns the value, accepting or rejecting each proposal.
 function ControlledDatePicker({ initial, accept = true, onValueChange, ...props }: DatePickerRootProps & {
   initial: (Date | undefined)[]
   accept?: boolean

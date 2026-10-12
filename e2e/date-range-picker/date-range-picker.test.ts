@@ -143,7 +143,6 @@ it('should reset the range end date picker properties when the range start date 
   await userEvent.fill(startInput, 'ab/dc/efg')
 
   expect(endInput.min).toBe('')
-  // expect(endInput.getAttribute('data-range-date')).toBe('')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker.spec.js#L115
@@ -156,7 +155,6 @@ it('should reset the range start date picker properties when the range end date 
   await userEvent.clear(endInput)
 
   expect(startInput.max).toBe('')
-  // expect(startInput.getAttribute('data-range-date')).toBe('')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker.spec.js#L129
@@ -168,7 +166,6 @@ it('should update the range start date picker properties to have a max date and 
   await userEvent.fill(endInput, '12/11/2020')
 
   expect(startInput.max).toBe('2020-12-11')
-  // expect(startInput.getAttribute('data-range-date')).toBe('2020-12-11')
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker.spec.js#L151
@@ -180,5 +177,4 @@ it('should reset the range start date picker properties when the range end date 
   await userEvent.fill(endInput, '35/35/3535')
 
   expect(startInput.max).toBe('')
-  // expect(startInput.getAttribute('data-range-date')).toBe('')
 })

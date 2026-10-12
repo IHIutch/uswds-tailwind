@@ -147,8 +147,8 @@ export const machine = createMachine<DatePickerSchema>({
   effects: ['syncInputsOnMount', 'trackFormControl'],
 
   watch({ track, context, event, action }) {
-    // Any change to what the calendar shows ends the opening announcement, as USWDS's calendarWasHidden does.
-    // A key that cannot move changes nothing, so hover, status and focus stay put.
+    // After opening, calendar changes clear the navigation help announcement.
+    // Keys blocked by bounds preserve hover, status, and focus.
     track([() => context.hash('focusedValue'), () => context.get('focusedMonth'), () => context.get('focusedYear'), () => context.get('view')], () => {
       const { type } = event.current()
       if (type === 'TRIGGER.CLICK' || type === 'OPEN')
@@ -510,13 +510,13 @@ export const machine = createMachine<DatePickerSchema>({
     },
 
     effects: {
-      // Set initial input values on mount. Vanilla spreadProps reapplies defaultValue each render and overwrites drafts.
+      // Initialize inputs here because spreadProps reapplies defaultValue on every render and would overwrite drafts.
       syncInputsOnMount(params) {
         // The inputValues watch does not fire for the first set.
         syncInputValue(params, updateInputValues(params, new Set([0, 1])))
         return () => params.refs.get('inputSyncCleanup')?.()
       },
-      // A native reset empties the fields but not the machine. Unlike USWDS, the range bounds clear too.
+      // Reset the machine selection with the form so range bounds clear too.
       trackFormControl({ scope, send }) {
         return trackFormControl(dom.getInputEl(scope, 0), {
           // A disabled fieldset already disables the native inputs and buttons.
@@ -555,7 +555,7 @@ function scheduleFocusFrame({ refs }: Pick<Params<DatePickerSchema>, 'scope' | '
 
 type InputParams = Pick<Params<DatePickerSchema>, 'scope' | 'context' | 'prop' | 'refs' | 'computed'>
 
-// Show each endpoint's date. Typing owns a focused draft unless a selection or setValue replaces it.
+// Preserve focused input drafts unless a selection or setValue explicitly replaces them.
 function updateInputValues(params: InputParams, explicit: ReadonlySet<EndpointIndex>) {
   const { scope, context } = params
   const next = [...context.get('inputValues')]
@@ -574,7 +574,7 @@ function updateInputValues(params: InputParams, explicit: ReadonlySet<EndpointIn
   return next
 }
 
-// Skip unchanged text so typing, including IME composition, is never rewritten.
+// Avoid resetting the cursor or interrupting IME composition when the text has not changed.
 function syncInputValue({ scope }: InputParams, texts: readonly string[]) {
   texts.forEach((text, index) => {
     const input = dom.getInputEl(scope, index)

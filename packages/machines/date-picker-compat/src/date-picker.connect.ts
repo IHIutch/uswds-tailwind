@@ -132,7 +132,7 @@ export function connect<T extends PropTypes>(
 
   const weeks = chunk(getVisibleDays(focusedValue), 7)
 
-  // Selection follows the date anchor; tabindex follows the independently roving cell.
+  // Arrow keys move tabindex independently of the selected month or year.
   function getSelectionCellProps(view: 'month' | 'year', value: number) {
     const month = view === 'month'
     const date = month ? setMonth(focusedValue, value) : setYear(focusedValue, value)
@@ -214,7 +214,7 @@ export function connect<T extends PropTypes>(
       send({ type: 'VALUE.SET', value: [] })
     },
     setOpen(nextOpen, index = 0) {
-      // Send every request; this snapshot can be stale within the same task.
+      // Consecutive calls can share a stale open value, so let the machine handle every request.
       send(nextOpen ? { type: 'OPEN', index } : { type: 'CLOSE' })
     },
 

@@ -437,14 +437,10 @@ it('keyboard nav in end picker cannot move focus before the start date', async (
   await userEvent.fill(startInput, '01/15/2020')
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
 
-  // Opening the end picker focuses the start-bound cell (15), the effective min.
   const day15 = findDay('15') as HTMLButtonElement
   const day14 = findDay('14') as HTMLButtonElement
-  // 14 is before the start date, so it is disabled for the end input.
   expect(day14.disabled).toBe(true)
 
-  // ArrowLeft must clamp against the active field's effective min (the start
-  // date), not the global min, so focus stays on 15 instead of landing on 14.
   day15.focus()
   await userEvent.keyboard('{ArrowLeft}')
 
@@ -463,11 +459,8 @@ it('keyboard nav in start picker cannot move focus after the end date', async ()
 
   const day15 = findDay('15') as HTMLButtonElement
   const day16 = findDay('16') as HTMLButtonElement
-  // 16 is after the end date, so it is disabled for the start input.
   expect(day16.disabled).toBe(true)
 
-  // ArrowRight must clamp against the active field's effective max (the end
-  // date), not the global max, so focus stays on 15 instead of landing on 16.
   day15.focus()
   await userEvent.keyboard('{ArrowRight}')
 

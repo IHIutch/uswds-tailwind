@@ -36,7 +36,7 @@ export function startOfWeek(_date: Date) {
   return addDays(_date, -_date.getDay())
 }
 
-// Unlike date-fns, USWDS returns midnight rather than 23:59:59.999.
+// USWDS uses midnight on the last day of the week.
 export function endOfWeek(_date: Date) {
   return addDays(_date, 6 - _date.getDay())
 }
@@ -83,7 +83,7 @@ export function setMonth(_date: Date, month: number) {
   return newDate
 }
 
-// Unlike date-fns, USWDS clamps February 29 to February 28 when setting a non-leap year.
+// Clamp February 29 to February 28 when the target year is not a leap year.
 export function setYear(_date: Date, year: number) {
   const newDate = new Date(_date.getTime())
   const month = newDate.getMonth()
@@ -108,7 +108,7 @@ export function max(dateA: Date, dateB: Date) {
   return new Date(isAfter(dateB, dateA) ? dateB : dateA)
 }
 
-// Unlike date-fns, these equality helpers accept undefined and return false for missing dates.
+// Missing dates compare as unequal, including two undefined values.
 export function isSameYear(dateA: Date | undefined, dateB: Date | undefined) {
   return !!(dateA && dateB && dateA.getFullYear() === dateB.getFullYear())
 }
@@ -146,7 +146,7 @@ export function isYearInInterval(date: Date, interval: Interval) {
   return areIntervalsOverlapping({ start: startOfYear(date), end: lastDayOfYear(date) }, interval)
 }
 
-/** Adjusted parsing clamps month/day and expands short years; validation uses the raw text. */
+/** With adjustDate, clamp the month and day and expand one- or two-digit years. Validation uses the raw text. */
 export function parseDateString(
   dateString: string | undefined | null,
   dateFormat: DateFormat = INTERNAL_DATE_FORMAT,

@@ -296,7 +296,6 @@ it('selecting a month from the month picker returns to day view on that month', 
   )!
   await userEvent.click(monthSelection)
 
-  // Click "June" in the month grid — find by visible text.
   const monthCells = Array.from(
     document.querySelectorAll<HTMLButtonElement>(
       '[data-scope="date-picker"][data-part="view"][data-view="month"] [data-part="table-cell-trigger"]',
@@ -305,7 +304,6 @@ it('selecting a month from the month picker returns to day view on that month', 
   const june = monthCells.find(b => /^Jun/i.test(b.textContent || ''))!
   await userEvent.click(june)
 
-  // Back in day view: month header now reads "June".
   const monthAfter = document.querySelector(
     '[data-scope="date-picker"][data-part="view-trigger"][data-view="month"]',
   )
@@ -323,7 +321,6 @@ it('selecting a year from the year picker returns to day view with that year', a
   )!
   await userEvent.click(yearSelection)
 
-  // Grab the first rendered year cell, click it, then confirm header reflects it.
   const yearCells = Array.from(
     document.querySelectorAll<HTMLButtonElement>(
       '[data-scope="date-picker"][data-part="view"][data-view="year"] [data-part="table-cell-trigger"]',

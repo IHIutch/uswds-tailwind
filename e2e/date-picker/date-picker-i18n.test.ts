@@ -5,7 +5,6 @@ import { createDisposableDatePicker } from './_utils.js'
 
 const rootId = 'test'
 
-// Template with default date to match legacy test
 const template = `
     <div>
       <div>
