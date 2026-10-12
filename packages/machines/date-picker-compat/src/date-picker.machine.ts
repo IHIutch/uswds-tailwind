@@ -2,8 +2,8 @@ import type { Params } from '@zag-js/core'
 import type { DatePickerSchema, DateView, EndpointIndex } from './date-picker.types'
 import { createMachine } from '@zag-js/core'
 import { trackDismissableElement } from '@zag-js/dismissable'
+import { raf } from '@zag-js/dom-query'
 import * as dom from './date-picker.dom'
-import { createDatePickerInputs } from './date-picker.inputs'
 import {
   getDayKeyTarget,
   getEffectiveDateBounds,
@@ -21,6 +21,7 @@ import {
   clamp,
   createDate,
   DEFAULT_EXTERNAL_DATE_FORMAT,
+  formatDate,
   isAfter,
   isMonthInInterval,
   isSameDay,
@@ -47,20 +48,54 @@ function isDateArrayEqual(a: (Date | undefined)[], b: (Date | undefined)[] | und
 }
 
 // Focus runs after rendering; a newer request cancels the previous one.
-function scheduleFocusFrame({ scope, refs }: Pick<Params<DatePickerSchema>, 'scope' | 'refs'>, callback: () => void) {
+function scheduleFocusFrame({ refs }: Pick<Params<DatePickerSchema>, 'scope' | 'refs'>, callback: () => void) {
   refs.get('focusRafCleanup')?.()
-  const win = scope.getWin()
-  let id = 0
-  const cleanup = () => {
-    win.cancelAnimationFrame(id)
-    if (refs.get('focusRafCleanup') === cleanup)
-      refs.set('focusRafCleanup', null)
-  }
-  id = win.requestAnimationFrame(() => {
-    cleanup()
+  refs.set('focusRafCleanup', raf(() => {
+    refs.set('focusRafCleanup', null)
     callback()
-  })
-  refs.set('focusRafCleanup', cleanup)
+  }))
+}
+
+type InputParams = Pick<Params<DatePickerSchema>, 'scope' | 'context' | 'prop' | 'refs'>
+
+function rememberInputText({ context }: InputParams, index: number, text: string) {
+  const inputValues = context.get('inputValues')
+  if (inputValues[index] === text)
+    return
+  const next = [...inputValues]
+  next[index] = text
+  context.set('inputValues', next)
+}
+
+// Typing owns a focused input's text. Explicit writes come from selection and emit change even when unchanged.
+function writeInput(params: InputParams, index: number, explicit: boolean) {
+  const { scope, context, prop } = params
+  const input = dom.getInputEl(scope, index)
+  if (!input)
+    return
+  if (explicit || !scope.isActiveElement(input)) {
+    const date = context.get('value')[index]
+    const text = date ? formatDate(date, DEFAULT_EXTERNAL_DATE_FORMAT) : ''
+    if (explicit || input.value !== text)
+      dom.changeElementValue(input, text)
+    rememberInputText(params, index, text)
+  }
+  const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
+  dom.applyDateInputValidity(input, input.value, bounds.start, bounds.end)
+}
+
+// Write after a frame so a controlled parent can accept or reject the value first.
+function scheduleInputSync(params: InputParams, explicitIndexes: EndpointIndex[] = []) {
+  const { refs } = params
+  const explicit = refs.get('explicitInputs')
+  explicitIndexes.forEach(index => explicit.add(index))
+  refs.get('inputSyncCleanup')?.()
+  refs.set('inputSyncCleanup', raf(() => {
+    refs.set('inputSyncCleanup', null)
+    writeInput(params, 0, explicit.has(0))
+    writeInput(params, 1, explicit.has(1))
+    explicit.clear()
+  }))
 }
 
 export const machine = createMachine<DatePickerSchema>({
@@ -84,7 +119,15 @@ export const machine = createMachine<DatePickerSchema>({
     return 'idle'
   },
 
-  exit: ['cancelFocusRaf', 'cancelNativeSyncRaf'],
+  exit: ['cancelFocusRaf'],
+
+  refs() {
+    return {
+      focusRafCleanup: null,
+      inputSyncCleanup: null,
+      explicitInputs: new Set(),
+    }
+  },
 
   computed: {
     valueAsString: ({ context }) => serializeDates(context.get('value')),
@@ -109,6 +152,7 @@ export const machine = createMachine<DatePickerSchema>({
           defaultValue: normalizeDates(prop('defaultValue') ?? []),
           value: controlledValue ? normalizeDates(controlledValue) : undefined,
           isEqual: isDateArrayEqual,
+          hash: value => serializeDates(value).join(','),
           onChange(value) {
             prop('onValueChange')?.({
               value,
@@ -116,8 +160,6 @@ export const machine = createMachine<DatePickerSchema>({
               view: getContext().get('view'),
             })
           },
-          // Native input commits read this value before queued renders.
-          sync: true,
         }
       }),
       focusedValue: bindable<Date>(() => ({
@@ -147,10 +189,10 @@ export const machine = createMachine<DatePickerSchema>({
     }
   },
 
-  effects: ['bridgeMountedInputs'],
+  effects: ['syncInputsOnMount'],
 
-  watch({ track, prop, action }) {
-    track([() => prop('value') === undefined ? undefined : serializeDates(prop('value')!).join(',')], () => {
+  watch({ track, context, action }) {
+    track([() => context.hash('value')], () => {
       action(['syncInputElement'])
     })
   },
@@ -285,7 +327,7 @@ export const machine = createMachine<DatePickerSchema>({
           return
         }
         context.set('value', value)
-        params.refs.get('inputs')?.commit(indexes)
+        scheduleInputSync(params, indexes)
 
         if (event.type === 'CELL.CLICK' && isRange) {
           context.set('hoveredValue', null)
@@ -299,11 +341,8 @@ export const machine = createMachine<DatePickerSchema>({
         context.set('hoveredValue', null)
       },
 
-      syncInputElement({ refs }) {
-        refs.get('inputs')?.reconcile()
-      },
-      cancelNativeSyncRaf({ refs }) {
-        refs.get('inputs')?.dispose()
+      syncInputElement(params) {
+        scheduleInputSync(params)
       },
       // Opening uses the adjusted draft even when the raw input is invalid.
       setFocusedValueOnOpen({ context, prop, scope, event }) {
@@ -466,10 +505,23 @@ export const machine = createMachine<DatePickerSchema>({
     },
 
     effects: {
-      bridgeMountedInputs({ scope, context, prop, refs }) {
-        const inputs = createDatePickerInputs({ scope, context, prop })
-        refs.set('inputs', inputs)
-        inputs.initialize()
+      // Set initial input values on mount. Vanilla spreadProps reapplies defaultValue each render and overwrites drafts.
+      syncInputsOnMount(params) {
+        const { scope, context, prop, refs } = params
+        const count = prop('selectionMode') === 'range' ? 2 : 1
+        for (let index = 0; index < count; index++) {
+          const input = dom.getInputEl(scope, index)
+          if (!input)
+            continue
+          if (context.get('value')[index]) {
+            writeInput(params, index, true)
+            continue
+          }
+          if (input.value)
+            input.value = ''
+          rememberInputText(params, index, '')
+        }
+        return () => refs.get('inputSyncCleanup')?.()
       },
       trackDismissableElement({ scope, send }) {
         return trackDismissableElement(() => dom.getContentEl(scope), {

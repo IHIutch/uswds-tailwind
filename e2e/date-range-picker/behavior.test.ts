@@ -26,14 +26,14 @@ it.each(['start', 'end'] as const)('selecting the %s date preserves the other da
   await userEvent.fill(end, '06/20/2024')
   await userEvent.click(trigger)
 
-  expect(component.elements.getCalendarEl()!.hidden).toBe(false)
-  expect(day(endpoint === 'start' ? '2024-06-21' : '2024-06-09').disabled).toBe(true)
+  await expect.poll(() => component.elements.getCalendarEl()!.hidden).toBe(false)
+  await expect.poll(() => day(endpoint === 'start' ? '2024-06-21' : '2024-06-09').disabled).toBe(true)
   await userEvent.click(day('2024-06-15'))
 
   const expected = endpoint === 'start' ? ['06/15/2024', '06/20/2024'] : ['06/10/2024', '06/15/2024']
-  expect([start.value, end.value]).toEqual(expected)
-  expect(Array.from(new FormData(document.querySelector('form')!).values())).toEqual(expected)
-  expect(component.elements.getCalendarEl()!.hidden).toBe(true)
+  await expect.poll(() => [start.value, end.value]).toEqual(expected)
+  await expect.poll(() => Array.from(new FormData(document.querySelector('form')!).values())).toEqual(expected)
+  await expect.poll(() => component.elements.getCalendarEl()!.hidden).toBe(true)
   await expect.poll(() => document.activeElement).toBe(input)
 })
 

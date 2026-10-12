@@ -1,6 +1,5 @@
 import type { Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
-import type { DatePickerInputs } from './date-picker.inputs'
 import type { getNavigationAvailability } from './date-picker.utils'
 import type { Interval } from './date-utils'
 
@@ -116,7 +115,9 @@ export interface DatePickerSchema {
   }
   refs: {
     focusRafCleanup: VoidFunction | null
-    inputs: DatePickerInputs | null
+    inputSyncCleanup: VoidFunction | null
+    /** Inputs whose next write emits change even when the text is unchanged. */
+    explicitInputs: Set<EndpointIndex>
   }
   guard:
     | 'isInteractive'
@@ -145,8 +146,7 @@ export interface DatePickerSchema {
     | 'focusInputElement'
     | 'focusActiveCell'
     | 'cancelFocusRaf'
-    | 'cancelNativeSyncRaf'
-  effect: 'trackDismissableElement' | 'bridgeMountedInputs'
+  effect: 'trackDismissableElement' | 'syncInputsOnMount'
   event: DatePickerEvent
 }
 
