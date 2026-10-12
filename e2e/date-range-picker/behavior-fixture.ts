@@ -5,10 +5,10 @@ export function createRangeFixture(options: { min?: string, max?: string, start?
   const template = `
     <form id="range-form">
       <div data-scope="date-range-picker" data-part="root" id="range" ${min ? `data-min-date="${min}"` : ''} ${max ? `data-max-date="${max}"` : ''}>
-        <label for="start">Start date</label>
+        <label data-part="label">Start date</label>
         <input data-part="input" id="start" name="start" type="text" value="${start}" />
         <button data-part="trigger" data-target="start" type="button"></button>
-        <label for="end">End date</label>
+        <label data-part="label">End date</label>
         <input data-part="input" id="end" name="end" type="text" value="${end}" />
         <button data-part="trigger" data-target="end" type="button"></button>
         <div data-part="content" hidden>

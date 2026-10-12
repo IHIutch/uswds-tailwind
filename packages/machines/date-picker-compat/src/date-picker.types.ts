@@ -38,6 +38,7 @@ export interface OpenChangeDetails {
 
 export type ElementIds = Partial<{
   root: string
+  label: (index: number) => string
   control: string
   /** Visible form field and label target. */
   input: (index: number) => string
@@ -152,6 +153,11 @@ export interface DatePickerSchema {
 export type DatePickerService = Service<DatePickerSchema>
 export type DatePickerMachine = Machine<DatePickerSchema>
 
+/** Endpoint the label names; defaults to index 0. */
+export interface LabelProps {
+  index?: EndpointIndex | undefined
+}
+
 export interface InputProps {
   index?: EndpointIndex | undefined
   name?: string | undefined
@@ -220,6 +226,7 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   monthLabels: string[]
 
   getRootProps: () => T['element']
+  getLabelProps: (props?: LabelProps) => T['label']
   getControlProps: () => T['element']
   /** Visible MM/DD/YYYY form field. */
   getInputProps: (props?: InputProps) => T['input']

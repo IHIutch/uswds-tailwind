@@ -8,7 +8,7 @@ const template = `
   <div>
     <div data-scope="date-range-picker" data-part="root" id="${rootId}">
       <div class="usa-form-group">
-        <label class="usa-label" for="appointment-date-start">Appointment Date Start</label>
+        <label data-part="label" class="usa-label">Appointment Date Start</label>
         <div class="usa-hint">mm/dd/yyyy</div>
         <input
           data-part="input"
@@ -22,7 +22,7 @@ const template = `
       </div>
 
       <div class="usa-form-group">
-        <label class="usa-label" for="appointment-date-end">Appointment Date End</label>
+        <label data-part="label" class="usa-label">Appointment Date End</label>
         <div class="usa-hint">mm/dd/yyyy</div>
         <input
           data-part="input"

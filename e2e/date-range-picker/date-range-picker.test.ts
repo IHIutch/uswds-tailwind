@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { createDisposableDateRangePicker } from './_utils.js'
 
 const rootId = 'test'
@@ -8,7 +8,7 @@ const template = `
   <div>
     <div data-scope="date-range-picker" data-part="root" id="${rootId}">
       <div class="usa-form-group">
-        <label class="usa-label" for="appointment-date-start">Appointment Date Start</label>
+        <label data-part="label" class="usa-label">Appointment Date Start</label>
         <div class="usa-hint">mm/dd/yyyy</div>
         <input
           data-part="input"
@@ -22,7 +22,7 @@ const template = `
       </div>
 
       <div class="usa-form-group">
-        <label class="usa-label" for="appointment-date-end">Appointment Date End</label>
+        <label data-part="label" class="usa-label">Appointment Date End</label>
         <div class="usa-hint">mm/dd/yyyy</div>
         <input
           data-part="input"
@@ -98,8 +98,8 @@ it('should enhance the date picker and identify the start and end date pickers',
 
   expect(startInput).toBeTruthy()
   expect(endInput).toBeTruthy()
-  expect(startInput.id).toBe('appointment-date-start')
-  expect(endInput.id).toBe('appointment-date-end')
+  expect(page.getByRole('textbox', { name: 'Appointment Date Start' }).element()).toBe(startInput)
+  expect(page.getByRole('textbox', { name: 'Appointment Date End' }).element()).toBe(endInput)
 })
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-range-picker/src/test/date-range-picker.spec.js#L57

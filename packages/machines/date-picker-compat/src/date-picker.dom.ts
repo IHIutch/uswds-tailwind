@@ -4,6 +4,7 @@ import { queryAll } from '@zag-js/dom-query'
 import { validateDateInput } from './date-picker.utils'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `date-picker:${ctx.id}`
+export const getLabelId = (ctx: Scope, index: number) => ctx.ids?.label?.(index) ?? `date-picker:${ctx.id}:label:${index}`
 export const getControlId = (ctx: Scope) => ctx.ids?.control ?? `date-picker:${ctx.id}:control`
 export const getInputId = (ctx: Scope, index: number) => ctx.ids?.input?.(index) ?? `date-picker:${ctx.id}:input:${index}`
 export function getTriggerId(ctx: Scope, index = 0) {

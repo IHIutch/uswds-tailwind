@@ -9,6 +9,7 @@ export type {
   ElementIds,
   EndpointIndex,
   InputProps,
+  LabelProps,
   DatePickerMachine as Machine,
   MonthTableCellProps,
   NavigationTriggerProps,

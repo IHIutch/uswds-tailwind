@@ -7,8 +7,8 @@ const rootId = 'test'
 const template = `
     <div>
       <div >
-        <label for="input-dob">Date of birth</label>
         <div data-scope="date-picker" data-part="root" id="${rootId}">
+          <label data-part="label">Date of birth</label>
           <input data-part="input" id="input-dob" name="input-dob" type="text">
           <button data-part="trigger" type="button"></button>
           <div data-part="content" hidden>
@@ -70,7 +70,7 @@ const template = `
 const rangeTemplate = template.replace(
   '<input data-part="input" id="input-dob" name="input-dob" type="text">',
   `<input data-part="input" id="input-dob" name="input-dob" type="text">
-     <label for="input-dob:1">End date</label>
+     <label data-part="label">End date</label>
      <input data-part="input" id="input-dob:1" name="end-date" type="text">`,
 )
 

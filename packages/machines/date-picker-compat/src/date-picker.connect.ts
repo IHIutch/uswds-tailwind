@@ -5,6 +5,7 @@ import type {
   DatePickerService,
   DayTableCellProps,
   InputProps,
+  LabelProps,
   MonthTableCellProps,
   TableHeaderProps,
   TriggerProps,
@@ -233,6 +234,17 @@ export function connect<T extends PropTypes>(
             send({ type: 'TABLE.ESCAPE' })
           }
         },
+      })
+    },
+
+    getLabelProps(props: LabelProps = {}) {
+      const index = props.index ?? 0
+      return normalize.label({
+        ...parts.label.attrs,
+        'id': dom.getLabelId(scope, index),
+        'htmlFor': dom.getInputId(scope, index),
+        'data-index': isRange ? index : undefined,
+        'data-disabled': dataAttr(disabled),
       })
     },
 

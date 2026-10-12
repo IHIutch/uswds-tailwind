@@ -8,8 +8,8 @@ const rootId = 'test'
 const template = `
     <div>
       <div class="usa-form-group">
-        <label class="usa-label" for="input-dates-of-use">Dates of use</label>
         <div data-scope="date-picker" data-part="root" data-range-date="2020-05-22" id="${rootId}">
+          <label data-part="label" class="usa-label">Dates of use</label>
           <input
             data-part="input"
             id="input-dates-of-use"

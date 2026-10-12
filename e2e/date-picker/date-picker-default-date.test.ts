@@ -8,8 +8,8 @@ const rootId = 'test'
 const template = `
   <div>
     <div>
-      <label for="input-dates-of-use">Dates of use</label>
       <div data-scope="date-picker" data-part="root" id="${rootId}" data-default-date="2020-05-22">
+        <label data-part="label">Dates of use</label>
         <input data-part="input" id="input-dates-of-use" name="input-dates-of-use" type="text">
         <button data-part="trigger" type="button"></button>
         <div data-part="content" hidden>

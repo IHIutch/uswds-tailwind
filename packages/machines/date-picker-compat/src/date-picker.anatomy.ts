@@ -3,6 +3,7 @@ import { createAnatomy } from '@zag-js/anatomy'
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-date-picker/src/index.js#L927-L947
 export const anatomy = createAnatomy('date-picker').parts(
   'root',
+  'label',
   'control',
   'input',
   'trigger',

@@ -22,8 +22,6 @@ export class DateRangePicker extends DatePicker {
       throw new Error('Expected end input element to be defined')
 
     const id = props.id || this.rootEl.id || getId(this.rootEl, 'date-range-picker')
-    const startId = start.id || `date-picker:${id}:input-start`
-    const endId = end.id || `date-picker:${id}:input-end`
     const startValue = datePicker.parseDateString(start.value, datePicker.DEFAULT_EXTERNAL_DATE_FORMAT)
     const endValue = datePicker.parseDateString(end.value, datePicker.DEFAULT_EXTERNAL_DATE_FORMAT)
     const defaultValue = endValue ? [startValue, endValue] : startValue ? [startValue] : []
@@ -31,10 +29,6 @@ export class DateRangePicker extends DatePicker {
     return new VanillaMachine(datePicker.machine, {
       ...props,
       id,
-      ids: {
-        ...props.ids,
-        input: props.ids?.input ?? ((index: number) => index === 0 ? startId : endId),
-      },
       selectionMode: 'range',
       disabled: props.disabled ?? (this.rootEl.hasAttribute('disabled') || start.disabled || end.disabled),
       readOnly: props.readOnly ?? (this.rootEl.hasAttribute('readonly') || start.readOnly || end.readOnly),
@@ -48,6 +42,9 @@ export class DateRangePicker extends DatePicker {
     const [start, end] = this.inputs
     const names = [start!.name, end!.name]
     spreadProps(this.rootEl, this.api.getRootProps())
+    getParts(this.rootEl, parts.label).forEach((label, index) => {
+      spreadProps(label, this.api.getLabelProps({ index: index === 0 ? 0 : 1 }))
+    })
     spreadProps(start!, this.api.getInputProps({ index: 0, name: names[0] }))
     spreadProps(end!, this.api.getInputProps({ index: 1, name: names[1] }))
 

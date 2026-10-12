@@ -4,7 +4,7 @@ import { query, queryAll } from '@zag-js/dom-query'
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla'
 import { Component } from './lib/component'
 import { getDataString } from './lib/data-attr'
-import { getPart } from './lib/dom'
+import { getPart, getParts } from './lib/dom'
 import { getId } from './lib/id-generator'
 
 const parts = datePicker.anatomy.build()
@@ -28,7 +28,6 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     return new VanillaMachine(datePicker.machine, {
       ...props,
       id: props.id || this.rootEl.id || getId(this.rootEl, 'date-picker'),
-      ids: { ...props.ids, input: props.ids?.input ?? (input.id ? index => index === 0 ? input.id : `${input.id}:${index}` : undefined) },
       name: props.name ?? input.name,
       required: props.required ?? input.required,
       disabled: props.disabled ?? (this.rootEl.hasAttribute('disabled') || input.disabled),
@@ -47,7 +46,12 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
 
   render() {
     spreadProps(this.rootEl, this.api.getRootProps())
-    spreadProps(this.input, this.api.getInputProps())
+    getParts(this.rootEl, parts.label).forEach((label, index) => {
+      spreadProps(label, this.api.getLabelProps({ index: index === 0 ? 0 : 1 }))
+    })
+    getParts<HTMLInputElement>(this.rootEl, parts.input).forEach((input, index) => {
+      spreadProps(input, this.api.getInputProps(index === 0 ? {} : { index: 1, name: input.name }))
+    })
     spreadProps(this.trigger, this.api.getTriggerProps())
     this.renderCalendar()
   }
