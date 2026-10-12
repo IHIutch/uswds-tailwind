@@ -1,5 +1,11 @@
 # @uswds-tailwind/date-picker-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 85f20eb: Update date-picker and date-range-picker behavior for v2. Simplify the shared machine, adopt Zag view, navigation, and cell naming, and migrate the React and vanilla adapters. Each range trigger selects its own endpoint while preserving the other input. Replace separate month, year, and decade trigger components with shared view and navigation triggers.
+
 ## 0.3.0-alpha.7
 
 ### Patch Changes

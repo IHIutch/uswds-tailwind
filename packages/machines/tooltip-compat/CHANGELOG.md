@@ -1,5 +1,11 @@
 # @uswds-tailwind/tooltip-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 910dfb6: Simplify tooltip state and interaction handling across the machine, vanilla, and React adapters. Update the v2 tooltip API and add behavior and controlled-state coverage.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6

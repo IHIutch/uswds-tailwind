@@ -1,5 +1,11 @@
 # @uswds-tailwind/table-compat
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- 170a7d6: Simplify table sorting to a nullable sort descriptor with Zag-style naming. Keep row sorting in the vanilla adapter, expose controlled sort state for React, and preserve accessible sort labels and announcements.
+
 ## 0.3.0-alpha.7
 
 ## 0.3.0-alpha.6
