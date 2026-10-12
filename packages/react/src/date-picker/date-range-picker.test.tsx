@@ -156,8 +156,8 @@ it('selecting a day after opening with start trigger writes to the start input',
 
   await userEvent.click(findDay('10') as HTMLButtonElement)
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/10/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('')
+  await expect.element(startInput).toHaveValue('01/10/2020')
+  await expect.element(endInput).toHaveValue('')
 })
 
 it('selecting a day after opening with end trigger writes to the end input', async () => {
@@ -170,8 +170,8 @@ it('selecting a day after opening with end trigger writes to the end input', asy
 
   await userEvent.click(findDay('20') as HTMLButtonElement)
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/01/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
+  await expect.element(startInput).toHaveValue('01/01/2020')
+  await expect.element(endInput).toHaveValue('01/20/2020')
 })
 
 it('selecting via start trigger then end trigger fills both inputs', async () => {
@@ -186,8 +186,8 @@ it('selecting via start trigger then end trigger fills both inputs', async () =>
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))
   await userEvent.click(findDay('20') as HTMLButtonElement)
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/10/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
+  await expect.element(startInput).toHaveValue('01/10/2020')
+  await expect.element(endInput).toHaveValue('01/20/2020')
 })
 
 it('after selecting start, days between start and hovered cell paint data-in-range', async () => {
@@ -218,7 +218,7 @@ it('selecting end input then a day before start swaps the range bounds', async (
 
   const day5 = findDay('5') as HTMLButtonElement // before start
   expect(day5.disabled).toBe(true)
-  expect((endInput.element() as HTMLInputElement).value).toBe('')
+  await expect.element(endInput).toHaveValue('')
 })
 
 it('after start is selected, dates before it are disabled when end picker is open', async () => {
@@ -318,8 +318,8 @@ it('defaultValue with two dates initializes both inputs', async () => {
   const startInput = screen.getByRole('textbox', { name: 'Start date' })
   const endInput = screen.getByRole('textbox', { name: 'End date' })
 
-  expect((startInput.element() as HTMLInputElement).value).toBe('01/10/2020')
-  expect((endInput.element() as HTMLInputElement).value).toBe('01/20/2020')
+  await expect.element(startInput).toHaveValue('01/10/2020')
+  await expect.element(endInput).toHaveValue('01/20/2020')
 })
 
 it('typing a malformed date in end input flips end aria-invalid only', async () => {

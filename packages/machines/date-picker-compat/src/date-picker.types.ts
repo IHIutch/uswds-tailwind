@@ -165,7 +165,7 @@ export interface DatePickerSchema {
     | 'focusInputElement'
     | 'focusActiveCell'
     | 'cancelFocusRaf'
-  effect: 'trackDismissableElement' | 'syncInputsOnMount'
+  effect: 'trackDismissableElement' | 'syncInputsOnMount' | 'trackFormControl'
   event: DatePickerEvent
 }
 

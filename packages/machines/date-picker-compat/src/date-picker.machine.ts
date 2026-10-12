@@ -2,7 +2,7 @@ import type { Params } from '@zag-js/core'
 import type { DatePickerSchema, DateView, EndpointIndex } from './date-picker.types'
 import { createGuards, createMachine } from '@zag-js/core'
 import { trackDismissableElement } from '@zag-js/dismissable'
-import { raf } from '@zag-js/dom-query'
+import { raf, setElementValue, trackFormControl } from '@zag-js/dom-query'
 import * as dom from './date-picker.dom'
 import {
   getDayKeyTarget,
@@ -144,7 +144,7 @@ export const machine = createMachine<DatePickerSchema>({
     }
   },
 
-  effects: ['syncInputsOnMount'],
+  effects: ['syncInputsOnMount', 'trackFormControl'],
 
   watch({ track, context, event, action }) {
     // Any change to what the calendar shows ends the opening announcement, as USWDS's calendarWasHidden does.
@@ -525,6 +525,16 @@ export const machine = createMachine<DatePickerSchema>({
         syncInputValue(params, updateInputValues(params, new Set([0, 1])))
         return () => params.refs.get('inputSyncCleanup')?.()
       },
+      // A native reset empties the fields but not the machine. Unlike USWDS, the range bounds clear too.
+      trackFormControl({ scope, send }) {
+        return trackFormControl(dom.getInputEl(scope, 0), {
+          // A disabled fieldset already disables the native inputs and buttons.
+          onFieldsetDisabledChange() {},
+          onFormReset() {
+            send({ type: 'VALUE.SET', value: [] })
+          },
+        })
+      },
       trackDismissableElement({ scope, send }) {
         return trackDismissableElement(() => dom.getContentEl(scope), {
           type: 'popover',
@@ -573,13 +583,12 @@ function updateInputValues(params: InputParams, explicit: ReadonlySet<EndpointIn
   return next
 }
 
-// Not Zag's setElementValue: it also writes the value attribute, so a form reset would keep the date instead of
-// clearing the field as USWDS does.
+// Skip unchanged text so typing, including IME composition, is never rewritten.
 function syncInputValue({ scope }: InputParams, texts: readonly string[]) {
   texts.forEach((text, index) => {
     const input = dom.getInputEl(scope, index)
     if (input && input.value !== text)
-      input.value = text
+      setElementValue(input, text)
   })
 }
 
