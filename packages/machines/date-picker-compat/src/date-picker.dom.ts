@@ -1,21 +1,13 @@
 import type { Scope } from '@zag-js/core'
-import type { DateView, ElementIds, NavigationUnit } from './date-picker.types'
+import type { DateView, NavigationUnit } from './date-picker.types'
 import { queryAll } from '@zag-js/dom-query'
 import { validateDateInput } from './date-picker.utils'
 
 export const getRootId = (ctx: Scope) => ctx.ids?.root ?? `date-picker:${ctx.id}`
 export const getControlId = (ctx: Scope) => ctx.ids?.control ?? `date-picker:${ctx.id}:control`
-function getIndexedId(id: ElementIds['input'], index: number, fallback: string) {
-  if (typeof id === 'function')
-    return id(index)
-  if (typeof id === 'string')
-    return index === 0 ? id : `${id}:${index}`
-  return fallback
-}
-export const getInputId = (ctx: Scope, index: number) => getIndexedId(ctx.ids?.input, index, `date-picker:${ctx.id}:input:${index}`)
+export const getInputId = (ctx: Scope, index: number) => ctx.ids?.input?.(index) ?? `date-picker:${ctx.id}:input:${index}`
 export function getTriggerId(ctx: Scope, index = 0) {
-  const fallback = index === 0 ? `date-picker:${ctx.id}:trigger` : `date-picker:${ctx.id}:trigger:${index}`
-  return getIndexedId(ctx.ids?.trigger, index, fallback)
+  return ctx.ids?.trigger?.(index) ?? (index === 0 ? `date-picker:${ctx.id}:trigger` : `date-picker:${ctx.id}:trigger:${index}`)
 }
 export const getContentId = (ctx: Scope) => ctx.ids?.content ?? `date-picker:${ctx.id}:content`
 export const getStatusId = (ctx: Scope) => ctx.ids?.status ?? `date-picker:${ctx.id}:status`

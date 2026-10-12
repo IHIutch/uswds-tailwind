@@ -40,9 +40,8 @@ export type ElementIds = Partial<{
   root: string
   control: string
   /** Visible form field and label target. */
-  input: string | ((index: number) => string)
-  /** A string id is unchanged for index 0 and gains an :index suffix for later endpoints. */
-  trigger: string | ((index: number) => string)
+  input: (index: number) => string
+  trigger: (index: number) => string
   content: string
   status: string
 }>

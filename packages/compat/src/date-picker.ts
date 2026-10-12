@@ -28,7 +28,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
     return new VanillaMachine(datePicker.machine, {
       ...props,
       id: props.id || this.rootEl.id || getId(this.rootEl, 'date-picker'),
-      ids: { ...props.ids, input: props.ids?.input || input.id || undefined },
+      ids: { ...props.ids, input: props.ids?.input ?? (input.id ? index => index === 0 ? input.id : `${input.id}:${index}` : undefined) },
       name: props.name ?? input.name,
       required: props.required ?? input.required,
       disabled: props.disabled ?? (this.rootEl.hasAttribute('disabled') || input.disabled),
