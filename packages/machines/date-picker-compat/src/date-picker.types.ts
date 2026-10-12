@@ -1,9 +1,8 @@
 import type { Machine, Service } from '@zag-js/core'
 import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 import type { DatePickerInputs } from './date-picker.inputs'
-import type { getEffectiveDateBounds, getNavigationAvailability } from './date-picker.utils'
-
-export type DateValue = Date
+import type { getNavigationAvailability } from './date-picker.utils'
+import type { Interval } from './date-utils'
 
 export type SelectionMode = 'single' | 'range'
 
@@ -20,8 +19,6 @@ export interface ViewTriggerProps {
   view: Exclude<DateView, 'day'>
 }
 
-export interface TableProps extends ViewProps {}
-
 export type NavigationUnit = 'month' | 'year'
 
 export type NavigationTriggerProps
@@ -29,9 +26,9 @@ export type NavigationTriggerProps
     | { view: 'year', unit?: never }
 
 export interface ValueChangeDetails {
-  /** Proposed selection with stable start/end slots. */
-  value: (DateValue | undefined)[]
-  /** ISO YYYY-MM-DD per slot; '' preserves an absent endpoint or sparse-array hole. */
+  /** Proposed dates, with start/end slots in range mode. */
+  value: (Date | undefined)[]
+  /** ISO dates, with '' for missing endpoints. */
   valueAsString: string[]
   view: DateView
 }
@@ -52,81 +49,69 @@ export type ElementIds = Partial<{
 }>
 
 export interface DatePickerProps extends CommonProperties {
-  /** Element ids for composition. */
   ids?: ElementIds | undefined
-  /**
-   * Selection mode. Range slots are start and end.
-   * @default "single"
-   */
+  /** @default "single" */
   selectionMode?: SelectionMode | undefined
   /** Controlled selection. Range slots are start/end and may independently be undefined. */
-  value?: (DateValue | undefined)[] | undefined
+  value?: (Date | undefined)[] | undefined
   /** Initial selection when uncontrolled. */
-  defaultValue?: (DateValue | undefined)[] | undefined
+  defaultValue?: (Date | undefined)[] | undefined
   /** Navigation fallback; does not select or submit a value. */
-  defaultDate?: DateValue | undefined
+  defaultDate?: Date | undefined
   /** Fixed peer anchor for range markers and preview, independent of selection. */
-  rangeAnchor?: DateValue | undefined
+  rangeAnchor?: Date | undefined
   /** Minimum selectable date; defaults to 0000-01-01. */
-  min?: DateValue | undefined
-  /** Maximum selectable date. */
-  max?: DateValue | undefined
-  /** Disable the visible input and trigger. */
+  min?: Date | undefined
+  max?: Date | undefined
   disabled?: boolean | undefined
   /** Make the visible input readonly and aria-disabled. */
   readOnly?: boolean | undefined
-  /** Mark the visible form field as required. */
   required?: boolean | undefined
   /** Name of the MM/DD/YYYY form field. */
   name?: string | undefined
 
-  /** Reports selection proposals with ISO dates in valueAsString. */
+  /** Fired when proposed dates differ from the current selection, including controlled proposals. */
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
   onOpenChange?: ((details: OpenChangeDetails) => void) | undefined
 }
-
-type PropsWithDefault = 'selectionMode' | 'min'
 
 export type DatePickerEvent
   = | { type: 'TRIGGER.CLICK', index?: EndpointIndex }
     | { type: 'OPEN', index?: EndpointIndex }
     | { type: 'CLOSE' }
-    | { type: 'CELL.CLICK', value: DateValue }
+    | { type: 'CELL.CLICK', value: Date }
     | { type: 'VIEW.SET', view: DateView }
     | { type: 'GOTO.PREV' | 'GOTO.NEXT', view: 'day' | 'year', unit?: NavigationUnit }
     | { type: 'INPUT.CHANGE', value: string, index: EndpointIndex }
     | { type: 'INTERACT_OUTSIDE' }
     | { type: 'TABLE.ESCAPE' }
-    | { type: 'CELL.POINTER_MOVE', value: DateValue }
+    | { type: 'CELL.POINTER_MOVE', value: Date }
     | { type: 'TABLE.ARROW_LEFT' | 'TABLE.ARROW_RIGHT' | 'TABLE.ARROW_UP' | 'TABLE.ARROW_DOWN' }
     | { type: 'TABLE.HOME' | 'TABLE.END' }
     | { type: 'TABLE.PAGE_UP' | 'TABLE.PAGE_DOWN', larger?: boolean }
-    | { type: 'VALUE.SET', value: (DateValue | undefined)[] }
+    | { type: 'VALUE.SET', value: (Date | undefined)[] }
 
 export interface DatePickerSchema {
-  props: RequiredBy<DatePickerProps, PropsWithDefault>
+  props: RequiredBy<DatePickerProps, 'selectionMode' | 'min'>
   computed: {
     valueAsString: string[]
-    activeBounds: ReturnType<typeof getEffectiveDateBounds>
+    activeBounds: Interval
     navigation: ReturnType<typeof getNavigationAvailability>
   }
   state: 'idle' | 'open'
   context: {
-    /** Committed selection with stable start/end slots; either endpoint may be undefined. */
-    value: (DateValue | undefined)[]
-    /** Raw visible input drafts, used for validation. */
+    value: (Date | undefined)[]
+    /** Raw input text, including unaccepted drafts. */
     inputValues: string[]
-    /** Date anchoring the calendar and focused day cell. */
-    focusedValue: DateValue
+    focusedValue: Date
     view: DateView
-    hoveredValue: DateValue | null
-    /** Endpoint owning the open calendar. */
+    hoveredValue: Date | null
     activeIndex: EndpointIndex
-    /** Announce navigation help on the first render after opening. */
+    /** Show navigation help in the opening announcement. */
     isOpeningRender: boolean
-    /** Roving year, independent of the selected year; chunk navigation moves it by twelve. */
+    /** Focused year in the year grid; may differ from focusedValue. */
     focusedYear: number
-    /** Roving month index 0-11, independent of the selected month. */
+    /** Focused month in the month grid; may differ from focusedValue. */
     focusedMonth: number
   }
   refs: {
@@ -179,7 +164,7 @@ export interface TriggerProps {
 }
 
 export interface DayTableCellProps {
-  value: DateValue
+  value: Date
 }
 
 /** Weekday column index, starting at 0 for Sunday. */
@@ -197,45 +182,40 @@ export interface YearTableCellProps {
   value: number
 }
 
-/** Narrow display label and full accessible weekday label. */
 export interface WeekDay {
   narrow: string
   long: string
 }
 
 export interface DatePickerApi<T extends PropTypes = PropTypes> {
-  /** Whether the calendar is open. */
   open: boolean
   view: DateView
   /** Date anchoring the calendar and focused day cell. */
-  focusedValue: DateValue
+  focusedValue: Date
   /** Open or close the calendar; opening another endpoint switches the existing calendar. */
   setOpen: (open: boolean, index?: EndpointIndex) => void
-  /** Committed selection; range slots may independently be undefined. */
-  value: (DateValue | undefined)[]
+  value: (Date | undefined)[]
   /** ISO YYYY-MM-DD per slot, with '' for absent endpoints; visible fields use MM/DD/YYYY. */
   valueAsString: string[]
-  /** Set the normalized selection and report it through onValueChange. */
-  setValue: (value: (DateValue | undefined)[]) => void
-  /** Clear the selection; fires `onValueChange` with `[]`. */
+  /** Propose a normalized selection; onValueChange fires when the dates differ. */
+  setValue: (value: (Date | undefined)[]) => void
+  /** Clear the selection; an already-empty selection does not fire onValueChange. */
   clearValue: () => void
   /** Visible day grid, grouped into 4-6 whole weeks. */
-  weeks: DateValue[][]
+  weeks: Date[][]
   /** Sunday-first weekday labels for display and accessibility. */
   weekDays: WeekDay[]
   /** Month indices 0-11. */
   months: number[]
   /** Month indices grouped into three-column display rows. */
   monthRows: number[][]
-  /** Twelve years in the current navigation chunk. */
+  /** The twelve years displayed in the year view. */
   years: number[]
   /** Years grouped into three-column display rows. */
   yearRows: number[][]
   /** Live-region status text; empty when closed. */
   srStatusText: string
-  /** Localized name of the focused month. */
   monthLabel: string
-  /** The focused year as a string (year trigger text). */
   yearLabel: string
   /** Localized month names indexed from 0-11. */
   monthLabels: string[]
@@ -254,7 +234,7 @@ export interface DatePickerApi<T extends PropTypes = PropTypes> {
   getPrevTriggerProps: (props?: NavigationTriggerProps) => T['button']
   getNextTriggerProps: (props?: NavigationTriggerProps) => T['button']
   /** Month/year tables use role="presentation"; the day table has no role. */
-  getTableProps: (props?: TableProps) => T['element']
+  getTableProps: (props?: ViewProps) => T['element']
   getTableHeadProps: () => T['element']
   getTableHeaderProps: (props: TableHeaderProps) => T['element']
   getTableBodyProps: () => T['element']

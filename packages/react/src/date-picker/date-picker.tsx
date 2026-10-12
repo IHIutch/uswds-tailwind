@@ -259,7 +259,7 @@ function DatePickerTableBody({ children, ...props }: Omit<React.HTMLAttributes<H
 }
 
 type DatePickerTableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
-  value?: datepicker.DateValue
+  value?: Date
 }
 
 function DatePickerTableCell({ value, ...props }: DatePickerTableCellProps) {
@@ -269,7 +269,7 @@ function DatePickerTableCell({ value, ...props }: DatePickerTableCellProps) {
 }
 
 type DatePickerTableCellTriggerProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'value'> & {
-  value: datepicker.DateValue | number
+  value: Date | number
   children?: React.ReactNode
 }
 
@@ -278,7 +278,7 @@ function DatePickerTableCellTrigger({ className, value, children, ...props }: Da
   const { view } = useDatePickerViewContext()
 
   const viewTriggerProps = {
-    day: () => api.getDayTableCellTriggerProps({ value: value as datepicker.DateValue }),
+    day: () => api.getDayTableCellTriggerProps({ value: value as Date }),
     month: () => api.getMonthTableCellTriggerProps({ value: value as number }),
     year: () => api.getYearTableCellTriggerProps({ value: value as number }),
   }[view]()

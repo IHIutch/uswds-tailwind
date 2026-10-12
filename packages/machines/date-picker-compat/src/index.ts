@@ -4,7 +4,6 @@ export { machine } from './date-picker.machine'
 export { props, splitProps } from './date-picker.props'
 export type {
   DatePickerApi as Api,
-  DateValue,
   DateView,
   DayTableCellProps,
   ElementIds,
@@ -20,7 +19,6 @@ export type {
   SelectionMode,
   DatePickerService as Service,
   TableHeaderProps,
-  TableProps,
   TriggerProps,
   ValueChangeDetails,
   ViewProps,
@@ -28,4 +26,4 @@ export type {
   WeekDay,
   YearTableCellProps,
 } from './date-picker.types'
-export { DEFAULT_EXTERNAL_DATE_FORMAT, formatDate, parseDateString } from './date-picker.utils'
+export { DEFAULT_EXTERNAL_DATE_FORMAT, formatDate, parseDateString } from './date-utils'

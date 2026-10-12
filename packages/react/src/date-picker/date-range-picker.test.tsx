@@ -121,6 +121,25 @@ it('clicking the start trigger opens the calendar', async () => {
   expect(getContent()?.hasAttribute('hidden')).toBe(false)
 })
 
+it('an unindexed range trigger opens and closes the start calendar', async () => {
+  const screen = await render(
+    <DatePicker.Root selectionMode="range">
+      <DatePicker.Control>
+        <DatePicker.Input aria-label="Start date" />
+        <DatePicker.Trigger />
+        <DatePicker.Input index={1} aria-label="End date" />
+      </DatePicker.Control>
+      <DatePicker.Content />
+    </DatePicker.Root>,
+  )
+  const trigger = screen.getByRole('button', { name: 'Toggle calendar' })
+
+  await userEvent.click(trigger)
+  await expect.element(trigger).toHaveAttribute('data-state', 'open')
+  await userEvent.click(trigger)
+  await expect.element(trigger).toHaveAttribute('data-state', 'closed')
+})
+
 it('clicking the end trigger opens the calendar', async () => {
   const screen = await renderRangePicker()
   await userEvent.click(screen.getByRole('button', { name: 'Open end calendar' }))

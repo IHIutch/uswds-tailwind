@@ -6,10 +6,8 @@ import type {
   DayTableCellProps,
   InputProps,
   MonthTableCellProps,
-  NavigationTriggerProps,
   TableHeaderProps,
   TriggerProps,
-  WeekDay,
   YearTableCellProps,
 } from './date-picker.types'
 import { ariaAttr, dataAttr, getEventKey, getTabbables } from '@zag-js/dom-query'
@@ -17,25 +15,25 @@ import { chunk } from '@zag-js/utils'
 import { parts, rangeParts } from './date-picker.anatomy'
 import * as dom from './date-picker.dom'
 import {
-  formatDate,
   getEffectiveDateBounds,
-  getMonthLabels,
+  getRangeDates,
   getVisibleDays,
-  getWeekdayLabels,
-  getWeekdayNarrow,
   isDateInputInvalid,
-  isDatesMonthOutsideMinOrMax,
-  isDatesYearOutsideMinOrMax,
-  isDateWithinMinAndMax,
-  isEndpointIndex,
-  isSameDay,
-  isSameMonth,
-  setMonth,
-  setRangeDates,
-  setYear,
-  today,
   YEAR_CHUNK,
 } from './date-picker.utils'
+import {
+  formatDate,
+  getMonthLabels,
+  getWeekDays,
+  isMonthInInterval,
+  isSameDay,
+  isSameMonth,
+  isWithinInterval,
+  isYearInInterval,
+  setMonth,
+  setYear,
+  startOfToday,
+} from './date-utils'
 
 const GRID_KEYS: Record<string, DatePickerEvent> = {
   ArrowUp: { type: 'TABLE.ARROW_UP' },
@@ -59,6 +57,32 @@ function gridKeyEvent(event: Pick<KeyboardEvent, 'key' | 'altKey' | 'ctrlKey' | 
   return GRID_KEYS[key] ?? null
 }
 
+function getRangeDisplayState({ isRange, selectedValue, focusedValue, hoveredValue, peerAnchor }: {
+  isRange: boolean
+  selectedValue: (Date | undefined)[]
+  focusedValue: Date
+  hoveredValue: Date | null
+  peerAnchor: Date | undefined
+}) {
+  const [start, end] = selectedValue
+  const anchor = peerAnchor ?? (isRange ? start : undefined)
+  const committedEndpoint = (selectedValue.length === 2 ? end : start) ?? focusedValue
+
+  let previewEndpoint: Date | undefined = focusedValue
+  if (peerAnchor)
+    previewEndpoint = start ?? hoveredValue ?? focusedValue
+  else if (selectedValue.length === 2)
+    previewEndpoint = end
+  else if (selectedValue.length === 1)
+    previewEndpoint = hoveredValue ?? focusedValue
+
+  return {
+    anchor,
+    committedRange: anchor ? getRangeDates(committedEndpoint, anchor) : undefined,
+    previewRange: anchor && previewEndpoint ? getRangeDates(anchor, previewEndpoint) : undefined,
+  }
+}
+
 export function connect<T extends PropTypes>(
   service: DatePickerService,
   normalize: NormalizeProps<T>,
@@ -75,28 +99,23 @@ export function connect<T extends PropTypes>(
   const activeIndex = context.get('activeIndex')
   const hoveredValue = context.get('hoveredValue')
   const selectedValue = context.get('value')
-  const [selectedDate, selectedEnd] = selectedValue
+  const [selectedDate] = selectedValue
   const activeSelectedDate = selectedValue[activeIndex]
   const focusedValue = context.get('focusedValue')
   const isOpeningRender = context.get('isOpeningRender')
-  const min = prop('min')
-  const max = prop('max')
-  const todaysDate = today()
+  const propMin = prop('min')
+  const propMax = prop('max')
+  const todaysDate = startOfToday()
 
   const effectiveBounds = computed('activeBounds')
-  const { min: effMin, max: effMax } = effectiveBounds
 
-  // Hover affects only interior fill; committed markers follow selection or the display date.
-  const peerAnchor = prop('rangeAnchor')
-  const rangeAnchor = peerAnchor ?? (isRange ? selectedDate : undefined)
-  const conclusion = (selectedValue.length === 2 ? selectedEnd : selectedDate) ?? focusedValue
-  const committedBounds = rangeAnchor ? setRangeDates(conclusion, rangeAnchor) : undefined
-  const previewConclusion = peerAnchor
-    ? selectedDate ?? hoveredValue ?? focusedValue
-    : selectedValue.length === 2
-      ? selectedEnd
-      : selectedValue.length === 1 ? hoveredValue ?? focusedValue : focusedValue
-  const withinBounds = rangeAnchor && previewConclusion ? setRangeDates(rangeAnchor, previewConclusion) : undefined
+  const { anchor: rangeAnchor, committedRange, previewRange } = getRangeDisplayState({
+    isRange,
+    selectedValue,
+    focusedValue,
+    hoveredValue,
+    peerAnchor: prop('rangeAnchor'),
+  })
 
   const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
   const rovingYear = context.get('focusedYear')
@@ -108,14 +127,12 @@ export function connect<T extends PropTypes>(
 
   const locale = scope.getDoc().documentElement.lang || 'en'
   const monthLabels = getMonthLabels(locale)
-  const weekdayLabels = getWeekdayLabels(locale)
-  const weekdayNarrow = getWeekdayNarrow(locale)
+  const weekDays = getWeekDays(locale)
 
   const focusedMonthName = monthLabels[focusedValue.getMonth()] ?? ''
   const focusedYear = focusedValue.getFullYear()
 
   const weeks = chunk(getVisibleDays(focusedValue), 7)
-  const weekDays: WeekDay[] = weekdayNarrow.map((narrow, i) => ({ narrow, long: weekdayLabels[i] ?? '' }))
 
   // Selection follows the date anchor; tabindex follows the independently roving cell.
   function getSelectionCellProps(view: 'month' | 'year', value: number) {
@@ -123,7 +140,7 @@ export function connect<T extends PropTypes>(
     const date = month ? setMonth(focusedValue, value) : setYear(focusedValue, value)
     const selected = value === (month ? focusedValue.getMonth() : focusedYear)
     const focused = value === (month ? rovingMonth : rovingYear)
-    const cellDisabled = month ? isDatesMonthOutsideMinOrMax(date, effMin, effMax) : isDatesYearOutsideMinOrMax(date, effMin, effMax)
+    const cellDisabled = month ? !isMonthInInterval(date, effectiveBounds) : !isYearInInterval(date, effectiveBounds)
     return normalize.button({
       ...parts.tableCellTrigger.attrs,
       'type': 'button',
@@ -147,16 +164,17 @@ export function connect<T extends PropTypes>(
     })
   }
 
-  let srStatusText = ''
-  if (open && view === 'month') {
-    srStatusText = 'Select a month.'
-  }
-  else if (open && view === 'year') {
-    // USWDS escapes numeric zero as an empty string in the first year-chunk announcement.
-    const sourceYearChunkStart = yearChunkStart === 0 ? '' : String(yearChunkStart)
-    srStatusText = `Showing years ${sourceYearChunkStart} to ${yearChunkStart + YEAR_CHUNK - 1}. Select a year.`
-  }
-  else if (open) {
+  function getStatusText() {
+    if (!open)
+      return ''
+    if (view === 'month')
+      return 'Select a month.'
+    if (view === 'year') {
+      // USWDS announces year zero as an empty string.
+      const sourceYearChunkStart = yearChunkStart === 0 ? '' : String(yearChunkStart)
+      return `Showing years ${sourceYearChunkStart} to ${yearChunkStart + YEAR_CHUNK - 1}. Select a year.`
+    }
+
     const statuses: string[] = []
     if (isSameDay(activeSelectedDate, focusedValue))
       statuses.push('Selected date')
@@ -172,26 +190,7 @@ export function connect<T extends PropTypes>(
     else {
       statuses.push(`${focusedMonthName} ${focusedYear}`)
     }
-    srStatusText = statuses.join('. ')
-  }
-
-  function getNavigationProps(direction: 'prev' | 'next', props: NavigationTriggerProps = {}) {
-    const { view = 'day', unit = 'month' } = props
-    const allowed = view === 'year'
-      ? direction === 'prev' ? navigation.canChunkPrev : navigation.canChunkNext
-      : direction === 'prev' ? navigation.canGoPrev : navigation.canGoNext
-    return normalize.button({
-      ...parts[direction === 'prev' ? 'prevTrigger' : 'nextTrigger'].attrs,
-      'id': dom.getNavTriggerId(scope, direction, view, unit),
-      'data-view': view,
-      'data-unit': view === 'day' ? unit : undefined,
-      'type': 'button',
-      'aria-label': `Navigate ${direction === 'prev' ? 'back' : 'forward'} ${view === 'year' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
-      'disabled': !allowed,
-      onClick() {
-        send({ type: direction === 'prev' ? 'GOTO.PREV' : 'GOTO.NEXT', view, unit: view === 'day' ? unit : undefined })
-      },
-    })
+    return statuses.join('. ')
   }
 
   return {
@@ -204,7 +203,7 @@ export function connect<T extends PropTypes>(
     monthRows: chunk(months, 3),
     years,
     yearRows: chunk(years, 3),
-    srStatusText,
+    srStatusText: getStatusText(),
     monthLabel: focusedMonthName,
     yearLabel: String(focusedYear),
     monthLabels,
@@ -217,7 +216,7 @@ export function connect<T extends PropTypes>(
       send({ type: 'VALUE.SET', value: [] })
     },
     setOpen(nextOpen, index = 0) {
-      // Always send imperative changes: a render snapshot can be stale across same-task calls.
+      // Send every request; this snapshot can be stale within the same task.
       send(nextOpen ? { type: 'OPEN', index } : { type: 'CLOSE' })
     },
 
@@ -245,14 +244,12 @@ export function connect<T extends PropTypes>(
     },
 
     getInputProps(props: InputProps = {}) {
-      const index = isEndpointIndex(props.index) ? props.index : 0
-      // Validate this endpoint independently of the currently open calendar.
-      const inputBounds = getEffectiveDateBounds(isRange, index, selectedValue, min, max)
-      const inputMin = inputBounds.min
-      const inputMax = inputBounds.max
+      const index = props.index ?? 0
+      const inputBounds = getEffectiveDateBounds(isRange, index, selectedValue, propMin, propMax)
+      const inputMin = inputBounds.start
+      const inputMax = inputBounds.end
       const text = context.get('inputValues')[index] ?? ''
       const invalid = text !== '' && isDateInputInvalid(text, inputMin, inputMax)
-      // Preserve validation messages owned by other validators.
       const validate = (el: HTMLInputElement) => {
         dom.applyDateInputValidity(el, el.value, inputMin, inputMax)
       }
@@ -279,7 +276,7 @@ export function connect<T extends PropTypes>(
           const el = event.currentTarget as HTMLInputElement
           send({ type: 'INPUT.CHANGE', value: el.value, index })
         },
-        // Enter validates even while the input is composing.
+        // Enter also validates during composition.
         onKeyDown(event) {
           if (getEventKey(event) === 'Enter')
             validate(event.currentTarget as HTMLInputElement)
@@ -291,8 +288,7 @@ export function connect<T extends PropTypes>(
     },
 
     getTriggerProps(props: TriggerProps = {}) {
-      const index = isEndpointIndex(props.index) ? props.index : 0
-      const eventIndex = isEndpointIndex(props.index) ? props.index : undefined
+      const index = props.index ?? 0
       return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope, index),
@@ -304,7 +300,7 @@ export function connect<T extends PropTypes>(
         'aria-disabled': ariaAttr(readOnly),
         'data-state': open ? 'open' : 'closed',
         onClick() {
-          send({ type: 'TRIGGER.CLICK', index: eventIndex })
+          send({ type: 'TRIGGER.CLICK', index })
         },
       })
     },
@@ -316,9 +312,7 @@ export function connect<T extends PropTypes>(
         'role': 'application',
         'hidden': !open,
         'data-state': open ? 'open' : 'closed',
-        // USWDS omits the focused-date attribute until the first open.
         'data-value': open ? formatDate(focusedValue) : undefined,
-        // Wrap only at the focus boundaries; middle Tab presses use normal browser ordering.
         onKeyDown(event) {
           if (getEventKey(event) !== 'Tab' || event.altKey || event.ctrlKey || event.metaKey)
             return
@@ -349,7 +343,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    // Keep the navigation header available as a focus fallback when the day grid is hidden.
     getViewProps(props = {}) {
       const cellView = props.view ?? 'day'
       return normalize.element({
@@ -369,10 +362,36 @@ export function connect<T extends PropTypes>(
     },
 
     getPrevTriggerProps(props = {}) {
-      return getNavigationProps('prev', props)
+      const { view = 'day', unit = 'month' } = props
+      const allowed = view === 'year' ? navigation.canChunkPrev : navigation.canGoPrev
+      return normalize.button({
+        ...parts.prevTrigger.attrs,
+        'id': dom.getNavTriggerId(scope, 'prev', view, unit),
+        'data-view': view,
+        'data-unit': view === 'day' ? unit : undefined,
+        'type': 'button',
+        'aria-label': `Navigate back ${view === 'year' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
+        'disabled': !allowed,
+        onClick() {
+          send({ type: 'GOTO.PREV', view, unit: view === 'day' ? unit : undefined })
+        },
+      })
     },
     getNextTriggerProps(props = {}) {
-      return getNavigationProps('next', props)
+      const { view = 'day', unit = 'month' } = props
+      const allowed = view === 'year' ? navigation.canChunkNext : navigation.canGoNext
+      return normalize.button({
+        ...parts.nextTrigger.attrs,
+        'id': dom.getNavTriggerId(scope, 'next', view, unit),
+        'data-view': view,
+        'data-unit': view === 'day' ? unit : undefined,
+        'type': 'button',
+        'aria-label': `Navigate forward ${view === 'year' ? `${YEAR_CHUNK} years` : `one ${unit}`}`,
+        'disabled': !allowed,
+        onClick() {
+          send({ type: 'GOTO.NEXT', view, unit: view === 'day' ? unit : undefined })
+        },
+      })
     },
     getViewTriggerProps(props) {
       const targetView = props.view
@@ -404,7 +423,7 @@ export function connect<T extends PropTypes>(
       return normalize.element({
         ...parts.tableHeader.attrs,
         'scope': 'col',
-        'aria-label': weekdayLabels[props.index] ?? '',
+        'aria-label': weekDays[props.index]?.long ?? '',
       })
     },
     getTableBodyProps() {
@@ -429,11 +448,14 @@ export function connect<T extends PropTypes>(
       const day = value.getDate()
       const month = value.getMonth()
       const year = value.getFullYear()
-      const disabled = !isDateWithinMinAndMax(value, effMin, effMax)
+      const disabled = !isWithinInterval(value, effectiveBounds)
       const selected = isSameDay(value, selectedDate) || (isRange && isSameDay(value, selectedValue[1]))
       const focused = isSameDay(value, focusedValue)
       const isTodayCell = isSameDay(value, todaysDate)
       const outsideMonth = !isSameMonth(value, focusedValue)
+      const inPreviewRange = !!previewRange && isWithinInterval(value, { start: previewRange.withinRangeStartDate, end: previewRange.withinRangeEndDate })
+      const canPreviewRange = !disabled && !outsideMonth && !activeSelectedDate
+        && (isRange || (!!rangeAnchor && selectedValue.length === 0))
       return normalize.button({
         ...parts.tableCellTrigger.attrs,
         'type': 'button',
@@ -442,19 +464,19 @@ export function connect<T extends PropTypes>(
         'data-month': month + 1,
         'data-year': year,
         'data-value': formatDate(value),
-        'aria-label': `${day} ${monthLabels[month] ?? ''} ${year} ${weekdayLabels[value.getDay()] ?? ''}`,
+        'aria-label': `${day} ${monthLabels[month] ?? ''} ${year} ${weekDays[value.getDay()]?.long ?? ''}`,
         'aria-selected': selected ? 'true' : 'false',
         'tabIndex': focused ? 0 : -1,
         'disabled': disabled,
         'data-selected': dataAttr(selected),
-        'data-today': dataAttr(isTodayCell),
+        'data-startOfToday': dataAttr(isTodayCell),
         'aria-current': isTodayCell ? 'date' : undefined,
         'data-focus': dataAttr(focused),
         'data-outside-month': dataAttr(outsideMonth),
         'data-range-date': dataAttr(isSameDay(value, rangeAnchor)),
-        'data-range-start': dataAttr(isSameDay(value, committedBounds?.rangeStartDate)),
-        'data-range-end': dataAttr(isSameDay(value, committedBounds?.rangeEndDate)),
-        'data-in-range': dataAttr(!!(withinBounds?.withinRangeStartDate && withinBounds.withinRangeEndDate && isDateWithinMinAndMax(value, withinBounds.withinRangeStartDate, withinBounds.withinRangeEndDate))),
+        'data-range-start': dataAttr(isSameDay(value, committedRange?.rangeStartDate)),
+        'data-range-end': dataAttr(isSameDay(value, committedRange?.rangeEndDate)),
+        'data-in-range': dataAttr(inPreviewRange),
         onClick() {
           send({ type: 'CELL.CLICK', value })
         },
@@ -466,9 +488,7 @@ export function connect<T extends PropTypes>(
           }
         },
         onPointerOver(event) {
-          // A blank single picker can preview against its coordinated peer anchor.
-          if (event.pointerType !== 'touch' && !disabled && !outsideMonth && !activeSelectedDate
-            && (isRange || (rangeAnchor && selectedValue.length === 0))) {
+          if (event.pointerType !== 'touch' && canPreviewRange) {
             send({ type: 'CELL.POINTER_MOVE', value })
           }
         },

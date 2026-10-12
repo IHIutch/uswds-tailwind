@@ -103,7 +103,8 @@ it('clears an invalid draft marker when selecting the same calendar date', { tag
 })
 
 it('keeps programmatic set and clear values in sync with visible validation', { tags: ['new'] }, async () => {
-  await using component = createDisposableDatePicker(rootId, template)
+  const onValueChange = vi.fn()
+  await using component = createDisposableDatePicker(rootId, template, { onValueChange })
   const input = component.elements.getInputEl()
   const instance = component.elements.getInstance()!
 
@@ -113,10 +114,16 @@ it('keeps programmatic set and clear values in sync with visible validation', { 
   instance.api.setValue([new Date(2024, 5, 15)])
   await vi.waitFor(() => expect(input.value).toBe('06/15/2024'))
   expect(input.hasAttribute('aria-invalid')).toBe(false)
+  expect(onValueChange).toHaveBeenCalledExactlyOnceWith({ value: [new Date(2024, 5, 15)], valueAsString: ['2024-06-15'], view: 'day' })
+  instance.api.setValue([new Date(2024, 5, 15, 12)])
+  expect(onValueChange).toHaveBeenCalledTimes(1)
 
   instance.api.clearValue()
   await vi.waitFor(() => expect(input.value).toBe(''))
   expect(input.hasAttribute('aria-invalid')).toBe(false)
+  expect(onValueChange).toHaveBeenLastCalledWith({ value: [], valueAsString: [], view: 'day' })
+  instance.api.clearValue()
+  expect(onValueChange).toHaveBeenCalledTimes(2)
 })
 
 it('shows the accepted controlled value after rejecting a calendar proposal', { tags: ['new'] }, async () => {

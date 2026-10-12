@@ -1,7 +1,8 @@
 import type { Params } from '@zag-js/core'
-import type { DatePickerSchema, DateValue } from './date-picker.types'
+import type { DatePickerSchema } from './date-picker.types'
 import * as dom from './date-picker.dom'
-import { DEFAULT_EXTERNAL_DATE_FORMAT, formatDate, getEffectiveDateBounds } from './date-picker.utils'
+import { getEffectiveDateBounds } from './date-picker.utils'
+import { DEFAULT_EXTERNAL_DATE_FORMAT, formatDate } from './date-utils'
 
 export function createDatePickerInputs({ scope, context, prop }: Pick<Params<DatePickerSchema>, 'scope' | 'context' | 'prop'>) {
   const win = scope.getWin()
@@ -17,13 +18,12 @@ export function createDatePickerInputs({ scope, context, prop }: Pick<Params<Dat
     context.set('inputValues', next)
   }
 
-  function acceptedText(date: DateValue | undefined) {
+  function acceptedText(date: Date | undefined) {
     return date ? formatDate(date, DEFAULT_EXTERNAL_DATE_FORMAT) : ''
   }
 
-  // Explicit commits always emit a change. Passive updates write only changed
-  // values and preserve the input's active draft.
-  function writeInput(index: number, date: DateValue | undefined, explicit = false) {
+  // Explicit commits emit change even when the value is unchanged.
+  function writeInput(index: number, date: Date | undefined, explicit = false) {
     const text = acceptedText(date)
     const input = dom.getInputEl(scope, index)
     if (!input)
@@ -34,7 +34,7 @@ export function createDatePickerInputs({ scope, context, prop }: Pick<Params<Dat
       rememberVisibleInput(index, text)
     }
     const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
-    dom.applyDateInputValidity(input, input.value, bounds.min, bounds.max)
+    dom.applyDateInputValidity(input, input.value, bounds.start, bounds.end)
   }
 
   return {
@@ -53,13 +53,13 @@ export function createDatePickerInputs({ scope, context, prop }: Pick<Params<Dat
         rememberVisibleInput(index, text)
         if (date) {
           const bounds = getEffectiveDateBounds(prop('selectionMode') === 'range', index, context.get('value'), prop('min'), prop('max'))
-          dom.applyDateInputValidity(input, text, bounds.min, bounds.max)
+          dom.applyDateInputValidity(input, text, bounds.start, bounds.end)
         }
       }
     },
     commit(indexes: number[]) {
       const commit = () => indexes.forEach(index => writeInput(index, context.get('value')[index], true))
-      // Uncontrolled actions preserve intermediate values; controlled actions wait for acceptance.
+      // Controlled commits wait a frame for the consumer to accept the proposal.
       if (prop('value') === undefined) {
         commit()
         return
@@ -73,7 +73,7 @@ export function createDatePickerInputs({ scope, context, prop }: Pick<Params<Dat
     reconcile() {
       if (acceptedFrame !== undefined)
         win.cancelAnimationFrame(acceptedFrame)
-      // Do not cancel explicit transactions queued before this accepted update.
+      // Keep pending explicit commits when replacing a reconciliation frame.
       const frame = win.requestAnimationFrame(() => {
         if (acceptedFrame !== frame)
           return

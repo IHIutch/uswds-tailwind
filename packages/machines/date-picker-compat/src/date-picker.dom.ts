@@ -1,5 +1,5 @@
 import type { Scope } from '@zag-js/core'
-import type { DateValue, DateView, ElementIds, NavigationUnit } from './date-picker.types'
+import type { DateView, ElementIds, NavigationUnit } from './date-picker.types'
 import { queryAll } from '@zag-js/dom-query'
 import { validateDateInput } from './date-picker.utils'
 
@@ -32,7 +32,7 @@ export const getContentEl = (ctx: Scope) => ctx.getById(getContentId(ctx))
 export const getInputEl = (ctx: Scope, index = 0) => ctx.getById<HTMLInputElement>(getInputId(ctx, index))
 
 // Create change events in the input's own window for iframe compatibility.
-export function changeElementValue(el: HTMLInputElement, value = ''): void {
+export function changeElementValue(el: HTMLInputElement, value = '') {
   el.value = value
   const EventCtor = el.ownerDocument.defaultView?.CustomEvent ?? CustomEvent
   el.dispatchEvent(new EventCtor('change', {
@@ -42,9 +42,8 @@ export function changeElementValue(el: HTMLInputElement, value = ''): void {
   }))
 }
 
-/** Preserve validation messages owned by other validators. */
-export function applyDateInputValidity(element: HTMLInputElement, text: string, min: DateValue, max: DateValue | undefined): void {
-  const validity = validateDateInput(text, min, max, element.validationMessage)
+export function applyDateInputValidity(element: HTMLInputElement, text: string, start: Date, end: Date | undefined) {
+  const validity = validateDateInput(text, start, end, element.validationMessage)
   if (validity !== null)
     element.setCustomValidity(validity)
 }
