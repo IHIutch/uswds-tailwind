@@ -59,3 +59,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
           NPM_TOKEN: '' # https://github.com/changesets/changesets/issues/1152#issuecomment-3190884868
+
+      # Run on publish retries too, even when Changesets has nothing new to publish.
+      - name: Promote npm packages to latest
+        id: npm-latest
+        if: steps.changesets.outputs.has-changesets == 'false'
+        timeout-minutes: 10
+        run: pnpm release:latest
+
+      - name: Mark GitHub releases as latest beta releases
+        if: steps.changesets.outputs.has-changesets == 'false'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_PACKAGES: ${{ steps.npm-latest.outputs.packages }}
+        run: |
+          # GitHub permits one Latest release per repository. React represents this release.
+          while IFS= read -r package; do
+            gh release edit "$package" --repo "$GITHUB_REPOSITORY" \
+              --prerelease=false --latest=false
+          done < <(jq -r '.[] | select(startswith("@uswds-tailwind/react@") | not)' <<< "$RELEASE_PACKAGES")
+          react_release=$(jq -er '.[] | select(startswith("@uswds-tailwind/react@"))' <<< "$RELEASE_PACKAGES")
+          gh release edit "$react_release" --repo "$GITHUB_REPOSITORY" \
+            --prerelease=false --latest

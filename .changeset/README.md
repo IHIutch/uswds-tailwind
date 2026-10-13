@@ -17,8 +17,10 @@ The GitHub release workflow runs on `next`:
    the packages before Changesets runs.
 2. Changesets opens or updates a release PR when there are pending changesets.
 3. Merging that PR validates again, then publishes the packages through Changesets.
-4. `scripts/promote-beta.mjs` checks that every public package's exact beta
-   version exists on npm, then assigns those versions to `latest`.
+4. `scripts/promote-beta.mjs` waits for every package's exact beta version to
+   become visible on npm, then points each package's `latest` tag to that version.
+5. The workflow clears GitHub's pre-release flag while keeping the beta version
+   and title. React's release is explicitly marked Latest for the repository.
 
 The beta suffix stays in the version number. Ordinary npm installs receive the
 beta because `latest` points to it. Previously released alpha changesets are removed from the active release cycle;
@@ -34,22 +36,22 @@ npm 11.21.0, which supports trusted publishing for distribution tags.
 
 ## Verification and retries
 
-```sh
-pnpm release:latest --dry-run
-pnpm changeset publish-plan
-```
+`pnpm release:latest --dry-run` prints the npm promotion commands without
+changing anything. Run it from a release commit with beta manifest versions.
 
-The dry run prints promotion commands without contacting npm or changing tags.
-Run it on the generated release PR, where package versions are beta versions.
-`publish-plan` reads the registry but does not publish. To inspect the first
-release locally, run `pnpm changeset:version` in a disposable worktree.
+`pnpm changeset publish-plan` reads the registry and reports what would be
+published without changing anything. To inspect versioning locally, run
+`pnpm changeset:version` in a disposable worktree.
 
-If promotion fails after publication, rerun the release workflow or run
-`pnpm release:latest` from the release commit with npm authentication. It always
-uses the exact versions in the manifests, so no new version is needed for a retry.
-Tag changes are sequential; a partial failure can leave some packages promoted
-until the retry completes.
+If promotion fails after publication, rerun the release workflow. The
+promotion steps use the exact manifest versions even when no new packages need
+publishing, so no version bump is needed for a retry. npm lookups retry temporary
+404 responses up to 12 times, with 10 seconds between attempts. Authentication
+and permission errors fail immediately.
 
-Before leaving beta mode, remove the promotion command from the publish script,
+Tag and release edits are sequential. A partial failure can leave some packages
+promoted until the retry completes.
+
+Before leaving beta mode, remove the beta promotion steps from the release workflow,
 change package publishing tags to `latest`, and run `pnpm changeset pre exit`
 followed by `pnpm changeset:version` to prepare the stable release.
