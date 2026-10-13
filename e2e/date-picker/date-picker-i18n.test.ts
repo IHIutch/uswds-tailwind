@@ -224,3 +224,19 @@ it('should display the aria-label in the document language', { tags: ['legacy'] 
     'sábado',
   ])
 })
+
+it('uses the locale option instead of the page language', { tags: ['new'] }, async () => {
+  const pageLang = document.documentElement.lang
+  document.documentElement.lang = 'es'
+  try {
+    await using component = createDisposableDatePicker(rootId, template, { locale: 'fr' })
+    const root = component.elements.getRootEl()!
+
+    await userEvent.click(component.elements.getTriggerEl())
+
+    expect(query(root, '[data-part="view-trigger"][data-view="month"]')?.textContent).toBe('mai')
+  }
+  finally {
+    document.documentElement.lang = pageLang
+  }
+})

@@ -203,7 +203,7 @@
     "build": "tsdown",
     "lint": "eslint src",
     "publint": "publint",
-    "test": "vitest run && vitest run --config vitest.ssr.config.ts",
+    "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
