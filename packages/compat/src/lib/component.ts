@@ -12,11 +12,16 @@ interface ComponentInterface<Api> {
   render: () => void
 }
 
-const activeComponents = new Set<Component<any, any>>()
+const activeComponents = new Set<WeakRef<Component<any, any>>>()
 
 export function destroyAllComponents() {
-  for (const component of [...activeComponents])
-    component.destroy()
+  for (const reference of [...activeComponents]) {
+    const component = reference.deref()
+    if (component)
+      component.destroy()
+    else
+      activeComponents.delete(reference)
+  }
 }
 
 // One instance per element, regardless of component type.
@@ -42,6 +47,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   rootEl: HTMLElement
   machine: VanillaMachine<any>
   api: Api
+  private readonly activeReference = new WeakRef(this)
 
   get doc(): Document {
     return this.rootEl.ownerDocument
@@ -70,7 +76,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
   abstract initApi(): Api
 
   init() {
-    activeComponents.add(this)
+    activeComponents.add(this.activeReference)
     this.render()
     this.machine.subscribe(() => {
       this.api = this.initApi()
@@ -85,7 +91,7 @@ export abstract class Component<Props, Api> implements ComponentInterface<Api> {
       this.machine.stop()
     }
     finally {
-      activeComponents.delete(this)
+      activeComponents.delete(this.activeReference)
       if (instances.get(this.rootEl) === this)
         instances.delete(this.rootEl)
     }

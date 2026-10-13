@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { Accordion } from '../../packages/compat/src/accordion.js'
+import { destroyAllComponents } from '../../packages/compat/src/lib/component.js'
 import { createDisposableAccordion } from './_utils.js'
 
 const rootId = 'test'
@@ -27,6 +28,32 @@ function TEMPLATE({ multiple = false }: { multiple?: boolean } = {}) {
 // open(), close() and toggle() stand in for the USWDS accordion.show(), accordion.hide() and accordion.toggle().
 // Every test opens A with a click first, so it starts from a known open item.
 describe('instance methods', { tags: ['parity'] }, () => {
+  it('global teardown clears lookup and allows a fresh instance on the same root', async () => {
+    await using component = createDisposableAccordion(rootId, TEMPLATE())
+    const root = component.elements.getRootEl()!
+    const trigger = component.elements.getTriggerEl('a')!
+    destroyAllComponents()
+    expect(Accordion.getInstance(root)).toBeNull()
+
+    let changes = 0
+    const fresh = Accordion.getOrCreateInstance(root, {
+      id: rootId,
+      onValueChange() {
+        changes++
+      },
+    })
+    try {
+      await userEvent.click(trigger)
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(changes).toBe(1)
+      destroyAllComponents()
+      expect(Accordion.getInstance(root)).toBeNull()
+    }
+    finally {
+      fresh.destroy()
+    }
+  })
+
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-accordion/src/index.js#L60 (show)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-accordion/src/index.js#L47-L53 (expanding one item collapses the others)
   it('open() opens the item and collapses the others', async () => {
