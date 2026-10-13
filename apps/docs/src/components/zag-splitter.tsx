@@ -13,9 +13,13 @@ export default function ZagSplitter({ resize = true, children }: { resize: boole
     )
   }
 
+  // Use size instead of defaultSize to prevent Zag from resetting the panel width when the height changes.
+  const [size, setSize] = React.useState([100, 0])
+
   const service = useMachine(splitter.machine, {
     id: React.useId(),
-    defaultSize: [100, 0],
+    size,
+    onResize: details => setSize(details.size),
     panels: [
       { id: 'a', collapsible: resize },
       { id: 'b' },
