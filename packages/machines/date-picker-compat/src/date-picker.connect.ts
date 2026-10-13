@@ -123,7 +123,7 @@ export function connect<T extends PropTypes>(
   const years: number[] = []
   for (let y = yearChunkStart; y < yearChunkStart + YEAR_CHUNK; y += 1) years.push(y)
 
-  const locale = scope.getDoc().documentElement.lang || 'en'
+  const locale = typeof document === 'undefined' ? 'en' : scope.getDoc().documentElement.lang || 'en'
   const monthLabels = getMonthLabels(locale)
   const weekDays = getWeekDays(locale)
 
