@@ -1,16 +1,8 @@
 import { DatePicker } from '@uswds-tailwind/react'
 
-const minDate = '2026-09-01'
-const maxDate = '2026-10-31'
-const initialDate = ['2026-09-28']
-
-function rowsOfThree<T>(items: T[]): T[][] {
-  const rows: T[][] = []
-  for (let index = 0; index < items.length; index += 3) {
-    rows.push(items.slice(index, index + 3))
-  }
-  return rows
-}
+const minDate = new Date(2026, 8, 1)
+const maxDate = new Date(2026, 9, 31)
+const initialDate = [new Date(2026, 8, 28)]
 
 export default function DatePickerDemo() {
   return (
@@ -20,7 +12,7 @@ export default function DatePickerDemo() {
         MM/DD/YYYY, September 1 through October 31, 2026. Try an unavailable or impossible date.
       </div>
       <DatePicker.Root
-        ids={{ input: 'appointment-date' }}
+        ids={{ input: () => 'appointment-date' }}
         min={minDate}
         max={maxDate}
         defaultValue={initialDate}
@@ -35,20 +27,20 @@ export default function DatePickerDemo() {
             {({ api }) => (
               <>
                 <DatePicker.ViewControl>
-                  <DatePicker.PrevYearTrigger />
-                  <DatePicker.PrevMonthTrigger />
+                  <DatePicker.PrevTrigger unit="year" />
+                  <DatePicker.PrevTrigger />
                   <div className="flex grow justify-center">
-                    <DatePicker.MonthTrigger />
-                    <DatePicker.YearTrigger />
+                    <DatePicker.ViewTrigger view="month" />
+                    <DatePicker.ViewTrigger view="year" />
                   </div>
-                  <DatePicker.NextMonthTrigger />
-                  <DatePicker.NextYearTrigger />
+                  <DatePicker.NextTrigger />
+                  <DatePicker.NextTrigger unit="year" />
                 </DatePicker.ViewControl>
                 <DatePicker.Table>
                   <DatePicker.TableHead>
                     <DatePicker.TableRow>
-                      {api.weekDays.map(day => (
-                        <DatePicker.TableHeader key={day.long} day={day} />
+                      {api.weekDays.map((day, index) => (
+                        <DatePicker.TableHeader key={day.long} day={day} index={index} />
                       ))}
                     </DatePicker.TableRow>
                   </DatePicker.TableHead>
@@ -56,9 +48,9 @@ export default function DatePickerDemo() {
                     {api.weeks.map((week, row) => (
                       <DatePicker.TableRow key={row}>
                         {week.map(cell => (
-                          <DatePicker.TableCell key={cell.dateString} cell={cell}>
-                            <DatePicker.TableCellTrigger cell={cell}>
-                              {cell.day}
+                          <DatePicker.TableCell key={cell.getTime()} value={cell}>
+                            <DatePicker.TableCellTrigger value={cell}>
+                              {cell.getDate()}
                             </DatePicker.TableCellTrigger>
                           </DatePicker.TableCell>
                         ))}
@@ -73,12 +65,12 @@ export default function DatePickerDemo() {
             {({ api }) => (
               <DatePicker.Table>
                 <DatePicker.TableBody>
-                  {rowsOfThree(api.months).map((row, rowIndex) => (
+                  {api.monthRows.map((row, rowIndex) => (
                     <DatePicker.TableRow key={rowIndex}>
                       {row.map(month => (
-                        <DatePicker.TableCell key={month.month}>
-                          <DatePicker.TableCellTrigger cell={month}>
-                            {month.label}
+                        <DatePicker.TableCell key={month}>
+                          <DatePicker.TableCellTrigger value={month}>
+                            {api.monthLabels[month]}
                           </DatePicker.TableCellTrigger>
                         </DatePicker.TableCell>
                       ))}
@@ -91,15 +83,15 @@ export default function DatePickerDemo() {
           <DatePicker.View view="year">
             {({ api }) => (
               <>
-                <DatePicker.PrevDecadeTrigger />
+                <DatePicker.PrevTrigger view="year" />
                 <DatePicker.Table>
                   <DatePicker.TableBody>
-                    {rowsOfThree(api.years).map((row, rowIndex) => (
+                    {api.yearRows.map((row, rowIndex) => (
                       <DatePicker.TableRow key={rowIndex}>
                         {row.map(year => (
-                          <DatePicker.TableCell key={year.year}>
-                            <DatePicker.TableCellTrigger cell={year}>
-                              {year.year}
+                          <DatePicker.TableCell key={year}>
+                            <DatePicker.TableCellTrigger value={year}>
+                              {year}
                             </DatePicker.TableCellTrigger>
                           </DatePicker.TableCell>
                         ))}
@@ -107,7 +99,7 @@ export default function DatePickerDemo() {
                     ))}
                   </DatePicker.TableBody>
                 </DatePicker.Table>
-                <DatePicker.NextDecadeTrigger />
+                <DatePicker.NextTrigger view="year" />
               </>
             )}
           </DatePicker.View>

@@ -18,4 +18,4 @@ The visible input uses `MM/DD/YYYY`. Set `min` and `max` on `DatePicker.Root` wh
 
 Provide a visible format hint and a label for the input. The calendar trigger lets people choose a date without typing, while the same bounds apply to both paths. Malformed or out-of-bounds text sets `aria-invalid`; leaving the field or pressing Enter updates native validity.
 
-`min`, `max`, and `defaultValue` use ISO `YYYY-MM-DD` strings. `onValueChange` returns selected `Date` values and ISO strings in `valueAsString`.
+`min` and `max` use `Date` values; `defaultValue` is an array of dates. Create calendar dates with local year, month, and day values, such as `new Date(2026, 8, 28)` for September 28. `onValueChange` returns selected `Date` values and ISO strings in `valueAsString`.

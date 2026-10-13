@@ -1,11 +1,11 @@
 {
   "name": "DatePicker range",
-  "intro": "The React range picker uses DatePicker with selectionMode=\"range\". Render one Control with bound=\"start\" and another with bound=\"end\" inside the same Root. The visible fields use MM/DD/YYYY; callback valueAsString uses ISO YYYY-MM-DD.",
+  "intro": "Use DatePicker with selectionMode=\"range\". Set index={0} on the start Input and Trigger and index={1} on the end Input and Trigger. Both endpoints share one calendar. The visible fields use MM/DD/YYYY; callback valueAsString uses ISO YYYY-MM-DD.",
   "parts": [
     {
       "name": "Root",
       "element": "div",
-      "description": "Owns the start and end dates.",
+      "description": "Owns selected dates, bounds, and calendar state.",
       "props": [
         {
           "name": "selectionMode",
@@ -14,33 +14,53 @@
         },
         {
           "name": "defaultValue",
-          "type": "string[]",
-          "description": "Initial start and end dates. Use ISO YYYY-MM-DD strings."
+          "type": "(Date | undefined)[]",
+          "description": "Initial uncontrolled selected dates. In range mode, index 0 is the start and index 1 is the end; either slot may be undefined."
         },
         {
           "name": "value",
-          "type": "Date[]",
-          "description": "Controlled selected dates."
+          "type": "(Date | undefined)[]",
+          "description": "Controlled selected dates. In range mode, index 0 is the start and index 1 is the end; either slot may be undefined."
         },
         {
           "name": "min",
-          "type": "string",
-          "description": "Earliest selectable date. Use ISO YYYY-MM-DD."
+          "type": "Date",
+          "description": "Earliest selectable calendar date."
         },
         {
           "name": "max",
-          "type": "string",
-          "description": "Latest selectable date. Use ISO YYYY-MM-DD."
+          "type": "Date",
+          "description": "Latest selectable calendar date."
         },
         {
           "name": "onValueChange",
-          "type": "({ value: Date[]; valueAsString: string[] }) => void",
-          "description": "Receives only the selected Date values and their ISO YYYY-MM-DD strings. Unset range endpoints are omitted."
+          "type": "({ value: (Date | undefined)[]; valueAsString: string[]; view: day | month | year }) => void",
+          "description": "Receives proposed dates, ISO YYYY-MM-DD strings, and the view. Unset range endpoints keep their slots as undefined and empty strings. Update value in the callback when controlling the selection."
         },
         {
           "name": "ids",
           "type": "Datepicker ElementIds",
-          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+          "description": "Overrides generated part IDs. Input, label, and trigger IDs use callbacks, such as input: index => index === 0 ? \"start-date\" : \"end-date\"."
+        },
+        {
+          "name": "defaultDate",
+          "type": "Date",
+          "description": "Initial navigation fallback when no date is selected. Does not select or submit a value."
+        },
+        {
+          "name": "rangeAnchor",
+          "type": "Date",
+          "description": "Fixed peer date for range markers and preview; independent of the selected value."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "description": "Makes the visible inputs read-only and prevents calendar editing."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Marks the visible inputs required."
         }
       ]
     },
@@ -48,23 +68,31 @@
       "name": "Control",
       "element": "div",
       "description": "Groups each date input and calendar trigger.",
-      "props": [
-        {
-          "name": "bound",
-          "type": "start | end (required for this pattern)",
-          "description": "Identifies which range endpoint this control edits."
-        }
-      ]
+      "props": []
     },
     {
       "name": "Input",
       "element": "input",
-      "description": "Receives a typed MM/DD/YYYY start or end date. Each field sets aria-invalid for malformed text or a date outside its effective bounds."
+      "description": "Receives a typed MM/DD/YYYY start or end date. Each field sets aria-invalid for malformed text or a date outside its effective bounds.",
+      "props": [
+        {
+          "name": "index",
+          "type": "0 | 1",
+          "description": "Endpoint to edit or open: 0 for start, 1 for end. Use the same index on each input and its trigger."
+        }
+      ]
     },
     {
       "name": "Trigger",
       "element": "button",
-      "description": "Opens the calendar for its Control."
+      "description": "Opens the shared calendar for the indexed input.",
+      "props": [
+        {
+          "name": "index",
+          "type": "0 | 1",
+          "description": "Endpoint to edit or open: 0 for start, 1 for end. Use the same index on each input and its trigger."
+        }
+      ]
     },
     {
       "name": "Content",
@@ -89,9 +117,9 @@
       "description": "Selects a date in the range.",
       "props": [
         {
-          "name": "cell",
-          "type": "DayCell | MonthCell | YearCell (required)",
-          "description": "Cell from the active view."
+          "name": "value",
+          "type": "Date | number (required)",
+          "description": "Use a Date from api.weeks for a day, a zero-based month from api.months for a month, or a year from api.years for a year."
         }
       ],
       "data": [
@@ -106,9 +134,9 @@
           "purpose": "Styles the range end."
         },
         {
-          "attribute": "data-within-range",
+          "attribute": "data-in-range",
           "value": "Present inside the range",
-          "purpose": "Styles days in the range."
+          "purpose": "Styles the active endpoint preview interval."
         }
       ]
     }
