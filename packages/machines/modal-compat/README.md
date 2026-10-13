@@ -11,7 +11,7 @@ Headless [zag-js](https://zagjs.com/) state machine for the USWDS modal componen
 ## Install
 
 ```bash
-npm install @uswds-tailwind/modal-compat@beta
+npm install @uswds-tailwind/modal-compat
 ```
 
 ## Usage
