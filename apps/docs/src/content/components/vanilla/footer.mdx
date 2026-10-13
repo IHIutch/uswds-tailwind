@@ -1,0 +1,636 @@
+---
+title: "Footer"
+description: "Help visitors find useful links at the bottom of a page with footer layouts in default, medium, and slim styles."
+---
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Footer" code={`
+  <footer class="@container">
+    <div class="px-4 py-5 @desktop:px-8">
+      <a
+        href="#"
+        class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+      >Return to top</a>
+    </div>
+    <div class="bg-gray-5 grid @tablet:grid-cols-3 gap-x-4">
+      <nav
+        aria-label="Footer navigation"
+        class="@tablet:col-span-2 @mobile-lg:py-8 @mobile-lg:px-4 @desktop:px-8 border-b @tablet:border-b-0 border-b-gray-30"
+      >
+        <div
+          data-scope="accordion" data-part="root"
+          class="@mobile-lg:hidden @desktop:gap-x-8 divide-y @mobile-lg:divide-y-0 divide-gray-30 border-t @mobile-lg:border-t-0 border-t-gray-30"
+        >
+          <section
+            data-scope="accordion" data-part="item"
+            data-value="one"
+          >
+            <h4 class="relative font-bold font-merriweather">
+              <button
+                data-scope="accordion" data-part="item-trigger"
+                class="group flex items-center w-full p-4 bg-gray-5 font-bold focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v cursor-pointer text-left gap-2"
+              >
+                <div
+                  class="size-6 icon-[material-symbols--chevron-right] group-aria-expanded:icon-[material-symbols--expand-more]"
+                ></div>
+                Topic
+              </button>
+            </h4>
+            <div data-scope="accordion" data-part="item-content">
+              <ul class="space-y-4 px-4 pb-6 pt-3">
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+              </ul>
+            </div>
+          </section>
+          <section
+            data-scope="accordion" data-part="item"
+            data-value="two"
+          >
+            <h4 class="relative font-bold font-merriweather">
+              <button
+                data-scope="accordion" data-part="item-trigger"
+                class="group flex items-center w-full p-4 bg-gray-5 font-bold focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v cursor-pointer text-left gap-2"
+              >
+                <div
+                  class="size-6 icon-[material-symbols--chevron-right] group-aria-expanded:icon-[material-symbols--expand-more]"
+                ></div>
+                Topic
+              </button>
+            </h4>
+            <div data-scope="accordion" data-part="item-content">
+              <ul class="space-y-4 px-4 pb-6 pt-3">
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+              </ul>
+            </div>
+          </section>
+          <section
+            data-scope="accordion" data-part="item"
+            data-value="three"
+          >
+            <h4 class="relative font-bold font-merriweather">
+              <button
+                data-scope="accordion" data-part="item-trigger"
+                class="group flex items-center w-full p-4 bg-gray-5 font-bold focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v cursor-pointer text-left gap-2"
+              >
+                <div
+                  class="size-6 icon-[material-symbols--chevron-right] group-aria-expanded:icon-[material-symbols--expand-more]"
+                ></div>
+                Topic
+              </button>
+            </h4>
+            <div data-scope="accordion" data-part="item-content">
+              <ul class="space-y-4 px-4 pb-6 pt-3">
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+              </ul>
+            </div>
+          </section>
+          <section
+            data-scope="accordion" data-part="item"
+            data-value="four"
+          >
+            <h4 class="relative font-bold font-merriweather">
+              <button
+                data-scope="accordion" data-part="item-trigger"
+                class="group flex items-center w-full p-4 bg-gray-5 font-bold focus:outline-4 focus:-outline-offset-4 focus:outline-blue-40v cursor-pointer text-left gap-2"
+              >
+                <div
+                  class="size-6 icon-[material-symbols--chevron-right] group-aria-expanded:icon-[material-symbols--expand-more]"
+                ></div>
+                Topic
+              </button>
+            </h4>
+            <div data-scope="accordion" data-part="item-content">
+              <ul class="space-y-4 px-4 pb-6 pt-3">
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                  >Secondary link</a>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+
+        <div class="hidden @mobile-lg:grid @mobile-lg:grid-cols-2 @desktop:grid-cols-4 gap-x-4 gap-y-8">
+          <section>
+            <h4 class="font-bold font-merriweather mb-4">Topic</h4>
+            <ul class="space-y-4">
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4 class="font-bold font-merriweather mb-4">Topic</h4>
+            <ul class="space-y-4">
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4 class="font-bold font-merriweather mb-4">Topic</h4>
+            <ul class="space-y-4">
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4 class="font-bold font-merriweather mb-4">Topic</h4>
+            <ul class="space-y-4">
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+                >Secondary link</a>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </nav>
+      <div class="py-8 px-4 @desktop:px-8">
+        <h3 class="text-lg font-bold font-merriweather">Sign Up</h3>
+        <div class="max-w-xs mt-3">
+          <label
+            for="email"
+            class="block"
+          >Your email address</label>
+          <div class="mt-2 relative">
+            <input
+              id="email"
+              type="email"
+              class="p-2 w-full max-w-lg h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v invalid:ring-4 invalid:ring-red-60v invalid:border-transparent invalid:outline-offset-4 valid:ring-4 valid:ring-green-cool-40v valid:border-transparent valid:outline-offset-4"
+            >
+          </div>
+        </div>
+        <div class="mt-4 @mobile-lg:mt-6">
+          <button
+            class="w-full @mobile-lg:w-auto rounded font-bold leading-none text-white px-5 py-3 bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v"
+          >Sign Up</button>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-10 px-4 @desktop:px-8 py-5">
+      <div class="grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4">
+        <div class="flex flex-wrap flex-col @mobile-lg:flex-row @mobile-lg:items-center gap-4">
+          <div>
+            <img
+              src=""
+              alt=""
+              class="bg-white size-20 rounded-full object-cover"
+            >
+          </div>
+          <div>
+            <p class="text-xl font-bold">Name of agency</p>
+          </div>
+        </div>
+        <div class="@mobile-lg:text-right grow space-y-3">
+          <div class="flex flex-wrap @mobile-lg:justify-end gap-2">
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--facebook] size-full"></div>
+                <span class="sr-only">Facebook</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--twitter] size-full"></div>
+                <span class="sr-only">Twitter</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--youtube] size-full"></div>
+                <span class="sr-only">YouTube</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--instagram] size-full"></div>
+                <span class="sr-only">Instagram</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[material-symbols--rss-feed] size-full"></div>
+                <span class="sr-only">RSS</span>
+              </a>
+            </div>
+          </div>
+          <p class="text-xl font-bold">Agency Contact Center</p>
+          <address class="flex flex-wrap @mobile-lg:justify-end gap-x-4 @desktop:gap-x-8">
+            <div class="leading-tighter">
+              <a
+                href="tel:1-800-555-5555"
+                class="text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+              >(800) 555-GOVT
+              </a>
+            </div>
+            <div class="leading-tighter">
+              <a
+                href="mailto:info@agency.gov"
+                class="text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+              >info@agency.gov
+              </a>
+            </div>
+          </address>
+        </div>
+      </div>
+    </div>
+  </footer>
+`} />
+
+### Medium
+
+<ComponentPreview title="Footer Medium" code={`
+  <footer class="@container">
+    <div class="px-4 py-5 @desktop:px-8">
+      <a
+        href="#"
+        class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+      >Return to top</a>
+    </div>
+    <nav class="bg-gray-5 @desktop:px-4">
+      <ul
+        class="flex flex-col @mobile-lg:flex-row flex-wrap divide-y @mobile-lg:divide-y-0 divide-y-gray-30 border-y @mobile-lg:border-y-0 border-y-gray-30"
+      >
+        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+        <li class="@mobile-lg:w-1/3 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="bg-gray-10 px-4 @desktop:px-8 py-5">
+      <div class="grid @mobile-lg:grid-cols-2 gap-y-8 gap-x-4">
+        <div class="flex flex-wrap flex-col @mobile-lg:flex-row @mobile-lg:items-center gap-4">
+          <div>
+            <img
+              src=""
+              alt=""
+              class="bg-white size-20 rounded-full object-cover"
+            >
+          </div>
+          <div>
+            <p class="text-xl font-bold">Name of agency</p>
+          </div>
+        </div>
+        <div class="@mobile-lg:text-right grow space-y-3">
+          <div class="flex flex-wrap @mobile-lg:justify-end gap-2">
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--facebook] size-full"></div>
+                <span class="sr-only">Facebook</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--twitter] size-full"></div>
+                <span class="sr-only">Twitter</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--youtube] size-full"></div>
+                <span class="sr-only">YouTube</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[fa6-brands--instagram] size-full"></div>
+                <span class="sr-only">Instagram</span>
+              </a>
+            </div>
+            <div>
+              <a
+                href="#"
+                class="block text-gray-90 size-12 p-2 bg-black/10 hover:bg-white focus:outline-4 focus:outline-blue-40v"
+              >
+                <div class="icon-[material-symbols--rss-feed] size-full"></div>
+                <span class="sr-only">RSS</span>
+              </a>
+            </div>
+          </div>
+          <p class="text-xl font-bold">Agency Contact Center</p>
+          <address class="flex flex-wrap @mobile-lg:justify-end gap-x-4 @desktop:gap-x-8">
+            <div class="leading-tighter">
+              <a
+                href="tel:1-800-555-5555"
+                class="text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+              >(800) 555-GOVT
+              </a>
+            </div>
+            <div class="leading-tighter">
+              <a
+                href="mailto:info@agency.gov"
+                class="text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+              >info@agency.gov
+              </a>
+            </div>
+          </address>
+        </div>
+      </div>
+    </div>
+  </footer>
+`} />
+
+### Slim
+
+<ComponentPreview title="Footer Slim" code={`
+  <footer class="@container">
+    <div class="px-4 py-5 @desktop:px-8">
+      <a
+        href="#"
+        class="text-blue-60v visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+      >Return to top</a>
+    </div>
+    <nav class="bg-gray-5 @desktop:px-4 grid @mobile-lg:grid-cols-3">
+      <ul
+        class="flex flex-wrap @mobile-lg:col-span-2 flex-col @mobile-lg:flex-row divide-y @mobile-lg:divide-y-0 divide-y-gray-30 border-y @mobile-lg:border-y-0 border-y-gray-30"
+      >
+        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+        <li class="@mobile-lg:w-1/2 @desktop:w-auto">
+          <a
+            href="#"
+            class="block p-4 font-bold text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >Primary link</a>
+        </li>
+      </ul>
+      <address class="flex flex-wrap p-4 @mobile-lg:p-0 gap-x-8 @mobile-lg:gap-x-0">
+        <div class="w-auto @mobile-lg:w-full @desktop:p-4 leading-tighter">
+          <a
+            href="tel:1-800-555-5555"
+            class="@mobile-lg:block @mobile-lg:p-4 @desktop:p-0 @desktop:inline text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >(800) 555-GOVT
+          </a>
+        </div>
+        <div class="w-auto @mobile-lg:w-full @desktop:p-4 leading-tighter">
+          <a
+            href="mailto:info@agency.gov"
+            class="@mobile-lg:block @mobile-lg:p-4 @desktop:p-0 @desktop:inline text-gray-90 visited:text-violet-70v hover:text-blue-70v focus:outline-4 focus:outline-blue-40v underline"
+          >info@agency.gov
+          </a>
+        </div>
+      </address>
+    </nav>
+    <div class="bg-gray-10 px-4 @desktop:px-8 py-5">
+      <div class="flex flex-wrap @mobile-lg:items-center @mobile-lg:justify-between gap-4">
+        <img
+          src=""
+          alt=""
+          class="bg-white size-12 rounded-full object-cover"
+        >
+        <p class="text-xl font-bold">Agency Contact Center</p>
+      </div>
+    </div>
+  </footer>
+`} />
+
+## Component API
+
+The Default example uses Accordion for its mobile navigation. Initialize it after the markup exists:
+
+```js
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
+
+accordionInit()
+```
+
+There is no separate Footer initializer. The Medium and Slim examples use ordinary links and forms. See the [Accordion API](/docs/vanilla/components/accordion#component-api) for configuration, methods, and cleanup.

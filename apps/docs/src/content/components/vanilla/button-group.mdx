@@ -1,0 +1,50 @@
+---
+title: "Button group"
+description: "Group related buttons into a single set of actions. Compare standard, segmented, and outline button group styles."
+---
+
+## Examples
+
+### Default
+
+<ComponentPreview title="Button Group Default" code={`
+  <div role="group" aria-label="Default actions" class="flex mobile-lg:flex-row flex-col gap-2">
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-blue-60v bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v px-5 py-3 font-bold rounded-sm grow mobile-lg:grow-0">Left</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm grow mobile-lg:grow-0">Right</button>
+  </div>
+`} />
+
+### Segmented
+
+<ComponentPreview title="Button Group Segmented" code={`
+  <div role="group" aria-label="Segmented actions" class="flex">
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-px border-x">Left</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-px border-x">Middle</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-px border-x">Right</button>
+  </div>
+`} />
+
+### Segmented Red
+
+<ComponentPreview title="Button Group Segmented Red" code={`
+  <div role="group" aria-label="Segmented Red actions" class="flex">
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-red-50 hover:bg-red-60v active:bg-red-70v border-red-60v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-px border-x">Left</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-red-50 hover:bg-red-60v active:bg-red-70v border-red-60v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-px border-x">Middle</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-red-50 hover:bg-red-60v active:bg-red-70v border-red-60v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-px border-x">Right</button>
+  </div>
+`} />
+
+### Segmented Outline
+
+<ComponentPreview title="Button Group Segmented Outline" code={`
+  <div role="group" aria-label="Segmented Outline actions" class="flex">
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-blue-60v bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-0.5">Left</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-blue-60v bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-0.5">Middle</button>
+    <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-blue-60v bg-transparent ring-inset ring-2 ring-blue-60v hover:ring-blue-warm-70v hover:text-blue-warm-70v active:ring-blue-warm-80v active:text-blue-warm-80v px-5 py-3 font-bold grow mobile-lg:grow-0 first:rounded-s-sm first:border-s-0 last:rounded-e-sm last:border-e-0 rounded-none hover:z-10 focus:z-10 not-first:-ms-0.5">Right</button>
+  </div>
+`} />
+
+## Accessibility
+
+- Give each group an accessible name that describes how its actions relate. The examples use `role="group"` and `aria-label`.
+- Use `<button type="button">` for actions that do not submit a form.

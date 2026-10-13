@@ -7,41 +7,62 @@
 USWDS components as drop-in vanilla JavaScript modules. Auto-initializes elements with USWDS data attributes. No framework required.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases.
+> This package is in **v2 beta**. APIs may change between releases.
 
 ## Install
 
 ```bash
-npm install @uswds-tailwind/compat@alpha
+npm install @uswds-tailwind/compat@latest @uswds-tailwind/theme@latest tailwindcss
 ```
 
 ## Usage
 
 ### Auto-initialize all components
 
-Import once at the top of your entry file. Every supported USWDS component on the page is wired up automatically:
+Import the auto entry once. It scans the document on `DOMContentLoaded`, or immediately if the document is already ready:
 
 ```js
 import '@uswds-tailwind/compat/auto'
 ```
 
+For manual control, import `initAll` from `@uswds-tailwind/compat` and call it after the markup exists. Do not combine auto and manual initialization on the same elements. These scans do not observe later DOM insertions.
+
 ### Initialize specific components
 
-If you'd rather opt in to individual components:
+```js
+import { accordionInit } from '@uswds-tailwind/compat/accordion'
+
+// Run once after the accordion markup is in the document.
+accordionInit()
+```
+
+Accordion markup uses `data-scope="accordion" data-part="root"`, then `data-part="item"`, `data-part="item-trigger"`, and `data-part="item-content"`. Each item needs a unique `data-value`. CSS classes supply presentation; they are not initialization selectors.
+
+### Own an instance
 
 ```js
-import { accordion } from '@uswds-tailwind/compat/accordion'
+import { Accordion } from '@uswds-tailwind/compat/accordion'
 
-accordion.on(document.querySelector('.usa-accordion'))
+const root = document.querySelector('#questions')
+if (!root) throw new Error('Accordion root is missing')
+const accordion = Accordion.getOrCreateInstance(root, { id: 'questions' })
+await accordion.open('eligibility')
+
+// Before removing the component:
+accordion.destroy()
 ```
+
+Retain the element reference because rendering can change its ID. `getInstance` accepts an element or CSS selector, `getOrCreateInstance` reuses an existing instance without reapplying options, and `destroy` stops it without restoring the original HTML. Accordion, Character Count, Collapse, Combobox, Dropdown, File Input, Input Mask, Modal, Table, and Tooltip share this factory API. See the [JavaScript reference](https://v2.uswds-tailwind.com/docs/vanilla/javascript#instance-lifecycle).
 
 ## Components
 
 `accordion`, `character-count`, `collapse`, `combobox`, `date-picker`, `date-range-picker`, `dropdown`, `file-input`, `input-mask`, `modal`, `table`, `tooltip`.
 
+The [Vanilla getting-started guide](https://v2.uswds-tailwind.com/docs/vanilla/getting-started) shows how to use these packages in a plain HTML project. Use either the auto import or selective initialization for a component, not both.
+
 ## Documentation
 
-[uswds-tailwind.com](https://uswds-tailwind.com)
+[v2.uswds-tailwind.com](https://v2.uswds-tailwind.com)
 
 ## License
 

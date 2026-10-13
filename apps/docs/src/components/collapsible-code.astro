@@ -1,0 +1,49 @@
+---
+interface Props {
+  className?: string
+}
+
+const { className } = Astro.props
+---
+
+<div class:list={['relative overflow-hidden', className]} data-collapsible-code>
+  <div class="max-h-96 overflow-hidden" data-code-viewport>
+    <div class="not-docs-prose" data-code-content>
+      <slot />
+    </div>
+  </div>
+  <button
+    type="button"
+    aria-expanded="false"
+    class="group flex justify-center items-end h-32 pb-3 absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-cool-2/100 from-[24px] to-gray-cool-2/0 border-gray-cool-20 border-b border-x rounded-b outline-hidden"
+    style="display: none"
+    data-code-expand
+  >
+    <span class="flex items-center gap-2 rounded-sm font-bold leading-none cursor-pointer text-white px-5 py-3 bg-blue-60v group-hover:bg-blue-warm-70v group-active:bg-blue-warm-80v group-focus:outline-4 group-focus:outline-offset-4 group-focus:outline-blue-40v">
+      Expand Code
+    </span>
+  </button>
+</div>
+
+<script>
+  function initCollapsibleCode() {
+    for (const wrapper of document.querySelectorAll<HTMLElement>('[data-collapsible-code]')) {
+      const viewport = wrapper.querySelector<HTMLElement>('[data-code-viewport]')
+      const content = wrapper.querySelector<HTMLElement>('[data-code-content]')
+      const button = wrapper.querySelector<HTMLButtonElement>('[data-code-expand]')
+      if (!viewport || !content || !button || content.scrollHeight <= 384 || button.dataset.initialized)
+        continue
+
+      button.dataset.initialized = 'true'
+      button.style.display = ''
+      button.addEventListener('click', () => {
+        viewport.classList.remove('max-h-96')
+        button.setAttribute('aria-expanded', 'true')
+        button.style.display = 'none'
+      })
+    }
+  }
+
+  initCollapsibleCode()
+  document.addEventListener('astro:page-load', initCollapsibleCode)
+</script>

@@ -22,12 +22,8 @@ export interface NavLinks {
   }[]
 }
 
-export type AttrMap = Record<string, any>
-
 export interface ogImageProps {
   title?: string
   description?: string
   isHome?: boolean
 }
-
-export type IconSuffix = '' | 'outline' | 'rounded' | 'outline-rounded' | 'sharp' | 'outline-sharp'

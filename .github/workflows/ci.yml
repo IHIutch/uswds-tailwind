@@ -29,6 +29,12 @@ jobs:
       - name: Build packages
         run: pnpm build:packages
 
+      - name: Build documentation site
+        run: pnpm build:website
+
+      - name: Check documentation types
+        run: pnpm check:website
+
       - name: Publish PR previews
         if: github.event_name == 'pull_request'
         run: pnpm dlx pkg-pr-new publish ./packages/**/*

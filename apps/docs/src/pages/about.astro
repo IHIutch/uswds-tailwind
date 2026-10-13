@@ -17,7 +17,7 @@ const { Content, headings } = await render(post)
 const visibleHeadings = headings.filter(h => h.depth <= 2);
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} markdown>
   <ContentLayout>
     <div class="flex w-full">
       <TableOfContents headings={visibleHeadings} />

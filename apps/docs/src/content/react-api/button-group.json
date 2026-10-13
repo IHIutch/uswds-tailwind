@@ -1,0 +1,57 @@
+{
+  "name": "ButtonGroup",
+  "intro": "Place ButtonGroup.Button parts inside Root. The root supplies shared Button styling defaults.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Groups related actions.",
+      "props": [
+        {
+          "name": "segmented",
+          "type": "boolean",
+          "description": "Joins the buttons into one visual segment.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "variant",
+          "type": "Button variant",
+          "description": "Default color treatment for child buttons."
+        },
+        {
+          "name": "size",
+          "type": "Button size",
+          "description": "Default size for child buttons."
+        },
+        {
+          "name": "unstyled",
+          "type": "boolean",
+          "description": "Default text-link treatment for child buttons."
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "element": "button",
+      "description": "Uses Button styling and can override the root variant, size, or unstyled setting.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "Button variant",
+          "description": "Overrides the group variant."
+        },
+        {
+          "name": "size",
+          "type": "Button size",
+          "description": "Overrides the group size."
+        },
+        {
+          "name": "unstyled",
+          "type": "boolean",
+          "description": "Overrides the group text-link treatment."
+        }
+      ]
+    }
+  ],
+  "accessibility": "Choose labels that distinguish each action. The root supplies the group role; add an accessible group name when the relationship needs one."
+}

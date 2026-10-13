@@ -1,0 +1,24 @@
+---
+title: "Summary box"
+description: "Highlight key information or next steps from a longer page with a summary box."
+---
+
+## Example
+
+<ComponentPreview title="Summary Box" code={`
+  <div role="complementary" aria-labelledby="summary-box-heading" class="border border-cyan-20 bg-cyan-5 rounded-sm p-6">
+    <div id="summary-box-heading" class="text-xl font-bold">Key information</div>
+    <div class="mt-4 prose">
+      <ul>
+        <li>If you are under 18, you cannot apply.</li>
+        <li>You must be a U.S. citizen or permanent resident.</li>
+        <li>You must have a valid Social Security number.</li>
+      </ul>
+    </div>
+  </div>
+`} />
+
+## Accessibility
+
+- The summary box is a complementary landmark. Its visible heading labels the landmark through `aria-labelledby`.
+- Use a heading element inside the heading slot if the title should appear in the page's heading structure.

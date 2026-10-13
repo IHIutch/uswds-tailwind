@@ -1,6 +1,6 @@
 import type { IconifyJSON } from '@iconify/types'
+import { z } from 'astro/zod'
 import { defineAction } from 'astro:actions'
-import { z } from 'astro:schema'
 import Fuse from 'fuse.js'
 
 // Cache for all icons and Fuse instance to avoid repeated API calls and initialization
@@ -64,14 +64,6 @@ export const server = {
           totalIconCount: iconCache.length,
         }
       }
-
-      // Get SVGs for each icon
-      // const filteredIcons = await Promise.all(
-      //   iconNames.map(async (name: string) => {
-      //     const svg = await fetch(`https://api.iconify.design/material-symbols:${name}.svg?height=unset`).then(r => r.text())
-      //     return { name, svg }
-      //   })
-      // )
 
       const iconRes = await fetch(`https://api.iconify.design/material-symbols.json?icons=${iconNames.join(',')}`)
       const filteredIcons = await iconRes.json() as IconifyJSON

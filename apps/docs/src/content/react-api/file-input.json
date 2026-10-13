@@ -1,0 +1,176 @@
+{
+  "name": "FileInput",
+  "intro": "Root connects the file control, dropzone, instructions, error, and preview parts.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns accepted files and rejects the entire selection if any file fails accept validation.",
+      "props": [
+        {
+          "name": "accept",
+          "type": "string",
+          "description": "Accepted file types."
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "description": "Allows more than one file.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables selection.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "errorText",
+          "type": "string",
+          "description": "Message for rejected files. Defaults to \"Error: This is not a valid file type.\"",
+          "defaultValue": "\"Error: This is not a valid file type.\""
+        },
+        {
+          "name": "ariaDisabled",
+          "type": "boolean",
+          "description": "Marks the input disabled for assistive technology while keeping it operable.",
+          "defaultValue": "false"
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; label?: string; dropzone?: string; box?: string; input?: string; instructions?: string; itemGroup?: string; previewHeading?: string; srStatus?: string; errorText?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "label",
+      "description": "Names the file input.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "SrStatus",
+      "element": "div",
+      "description": "Announces file selection status after a one-second delay. Initially disabled inputs hide this region."
+    },
+    {
+      "name": "Dropzone",
+      "element": "div",
+      "description": "Displays the drag and drop target.",
+      "data": [
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        },
+        {
+          "attribute": "data-dragging",
+          "value": "Present while dragging files",
+          "purpose": "Styles drag feedback."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Native file input over the dropzone. Pass native name, required, and onChange props here."
+    },
+    {
+      "name": "Instructions",
+      "element": "div",
+      "description": "Explains how to choose files; children replace the default text."
+    },
+    {
+      "name": "ErrorMessage",
+      "element": "div",
+      "description": "Displays rejected-file feedback."
+    },
+    {
+      "name": "ItemGroup",
+      "element": "div",
+      "description": "Contains previews of accepted files.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | ({ acceptedFiles: File[] }) => ReactNode",
+          "description": "Can render from accepted files."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-valid",
+          "value": "Present when files are selected",
+          "purpose": "Style the populated preview."
+        }
+      ]
+    },
+    {
+      "name": "PreviewHeader",
+      "element": "div",
+      "description": "Groups the preview heading and change action."
+    },
+    {
+      "name": "PreviewTitle",
+      "element": "div",
+      "description": "Displays the selected-file heading."
+    },
+    {
+      "name": "Item",
+      "element": "div",
+      "description": "Provides one file to the preview parts.",
+      "props": [
+        {
+          "name": "file",
+          "type": "File (required)",
+          "description": "The file represented by this item."
+        }
+      ]
+    },
+    {
+      "name": "ItemPreview",
+      "element": "div",
+      "description": "Arranges the preview icon, image, and file name."
+    },
+    {
+      "name": "ItemPreviewIcon",
+      "element": "div",
+      "description": "Displays a file-type icon.",
+      "data": [
+        {
+          "attribute": "data-type",
+          "value": "pdf | word | excel | video | generic | image",
+          "purpose": "Styles the file icon."
+        }
+      ]
+    },
+    {
+      "name": "ItemPreviewImage",
+      "element": "img",
+      "description": "Displays an image thumbnail when available."
+    },
+    {
+      "name": "ItemName",
+      "element": "div",
+      "description": "Displays the file name by default."
+    },
+    {
+      "name": "ChangeTrigger",
+      "element": "span",
+      "description": "Displays decorative change-files text. The overlaid native Input opens the file picker."
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+---
+interface Props {
+  label: string
+}
+
+const { label } = Astro.props
+---
+
+<div
+  class="api-table not-docs-prose"
+  role="region"
+  aria-label={label}
+  tabindex="0"
+>
+  <slot />
+</div>
+
+<style>
+  @reference '../styles/main.css';
+
+  .api-table {
+    @apply my-6 w-full overflow-x-auto focus-visible:outline-4 focus-visible:outline-blue-40v;
+  }
+
+  .api-table :global(table) {
+    @apply w-full border-separate border-spacing-0 text-sm leading-normal text-left;
+    min-width: 32rem;
+  }
+
+  .api-table :global(th) {
+    @apply border-b border-black bg-gray-10 px-4 py-2 font-semibold align-bottom;
+  }
+
+  .api-table :global(td) {
+    @apply border-b border-black bg-white px-3 py-1 align-top;
+  }
+
+  .api-table :global(th:first-child),
+  .api-table :global(td:first-child) {
+    width: 25%;
+  }
+
+  .api-table :global(code) {
+    @apply font-roboto-mono text-xs;
+    overflow-wrap: anywhere;
+  }
+
+  .api-table :global(a) {
+    @apply text-blue-60v underline hover:text-blue-70v focus-visible:outline-4 focus-visible:outline-blue-40v;
+  }
+
+  .api-table :global(p) {
+    margin: 0;
+  }
+</style>

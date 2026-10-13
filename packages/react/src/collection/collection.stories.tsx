@@ -27,15 +27,15 @@ export const Default = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
-              <Tag className="bg-orange-50v">NEW</Tag>
+              <Tag variant="vivid-orange">NEW</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">PMA</Tag>
+              <Tag variant="light-gray">PMA</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">OMB</Tag>
+              <Tag variant="light-gray">OMB</Tag>
             </Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
@@ -54,9 +54,9 @@ export const Default = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">SBA</Tag>
+              <Tag variant="light-gray">SBA</Tag>
             </Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
@@ -75,21 +75,21 @@ export const Default = meta.story({
               <time>September 17, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">QUARTERLY UPDATE</Tag>
+              <Tag variant="light-gray">QUARTERLY UPDATE</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">CAP GOAL</Tag>
+              <Tag variant="light-gray">CAP GOAL</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">APG</Tag>
+              <Tag variant="light-gray">APG</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">PMA</Tag>
+              <Tag variant="light-gray">PMA</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">SUCCESS STORY</Tag>
+              <Tag variant="light-gray">SUCCESS STORY</Tag>
             </Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
@@ -255,15 +255,15 @@ export const WithThumbnail = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
-              <Tag className="bg-orange-50v">NEW</Tag>
+              <Tag variant="vivid-orange">NEW</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">PMA</Tag>
+              <Tag variant="light-gray">PMA</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">OMB</Tag>
+              <Tag variant="light-gray">OMB</Tag>
             </Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
@@ -287,9 +287,9 @@ export const WithThumbnail = meta.story({
               <time>September 30, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">SBA</Tag>
+              <Tag variant="light-gray">SBA</Tag>
             </Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>
@@ -313,21 +313,21 @@ export const WithThumbnail = meta.story({
               <time>September 17, 2020</time>
             </Collection.MetaListItem>
           </Collection.MetaList>
-          <Collection.MetaList aria-label="Topics" className="flex-row flex-wrap">
+          <Collection.MetaList aria-label="Topics" className="flex-row">
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">QUARTERLY UPDATE</Tag>
+              <Tag variant="light-gray">QUARTERLY UPDATE</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">CAP GOAL</Tag>
+              <Tag variant="light-gray">CAP GOAL</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">APG</Tag>
+              <Tag variant="light-gray">APG</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">PMA</Tag>
+              <Tag variant="light-gray">PMA</Tag>
             </Collection.MetaListItem>
             <Collection.MetaListItem>
-              <Tag className="bg-gray-10 text-ink">SUCCESS STORY</Tag>
+              <Tag variant="light-gray">SUCCESS STORY</Tag>
             </Collection.MetaListItem>
           </Collection.MetaList>
         </Collection.Item>

@@ -1,0 +1,21 @@
+---
+title: "Date range picker"
+description: "Let people choose start and end dates with a date range picker and calendar controls."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import DateRangePickerDemo from '../../../examples/date-range-picker-demo'
+
+## Examples
+
+<ReactPreview title="Example" example="date-range-picker-demo">
+  <DateRangePickerDemo client:load />
+</ReactPreview>
+
+## Range endpoints
+
+Use one `DatePicker.Root` with `selectionMode="range"`. Group each input and trigger in a `DatePicker.Control`. Set `index={0}` on the start Input and Trigger and `index={1}` on the end Input and Trigger. There is no separate `DateRangePicker` export.
+
+Give each endpoint its own visible label, format hint, and form name. The start cannot be after the end, and the end cannot be before the start. Root bounds further limit both fields and the shared calendar.
+
+`min` and `max` use `Date` values; `defaultValue` is an array of dates. Create calendar dates with local year, month, and day values, such as `new Date(2026, 8, 28)` for September 28. `onValueChange` receives the selected `Date` values and their ISO strings in `valueAsString`. It preserves start and end slots, using `undefined` in `value` and an empty string in `valueAsString` for an unset endpoint. Selecting a date closes the calendar; use the other endpoint's trigger to edit it. The visible fields use `MM/DD/YYYY`.

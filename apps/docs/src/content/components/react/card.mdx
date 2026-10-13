@@ -1,0 +1,29 @@
+---
+title: "Card"
+description: "Present content and related actions about one subject in cards. Compare vertical, horizontal, and grouped layouts."
+---
+
+import ReactPreview from '#components/react-preview.astro'
+import CardGroupDemo from '../../../examples/card-group-demo'
+import CardHorizontalDemo from '../../../examples/card-horizontal-demo'
+import CardVerticalDemo from '../../../examples/card-vertical-demo'
+
+## Examples
+
+### Vertical
+
+<ReactPreview title="Vertical" example="card-vertical-demo">
+  <CardVerticalDemo client:load />
+</ReactPreview>
+
+### Horizontal
+
+<ReactPreview title="Horizontal" example="card-horizontal-demo">
+  <CardHorizontalDemo client:load />
+</ReactPreview>
+
+### Group
+
+<ReactPreview title="Group" example="card-group-demo">
+  <CardGroupDemo client:load />
+</ReactPreview>

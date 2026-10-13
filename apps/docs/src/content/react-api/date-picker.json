@@ -1,0 +1,296 @@
+{
+  "name": "DatePicker",
+  "intro": "Root supplies date state. Group Input and Trigger in Control, with Content containing the calendar views and tables. The visible input uses MM/DD/YYYY; valueAsString in onValueChange uses ISO YYYY-MM-DD.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns selected dates, bounds, and calendar state.",
+      "props": [
+        {
+          "name": "selectionMode",
+          "type": "single | range",
+          "description": "Selects one date or a date range."
+        },
+        {
+          "name": "min",
+          "type": "Date",
+          "description": "Earliest selectable calendar date."
+        },
+        {
+          "name": "max",
+          "type": "Date",
+          "description": "Latest selectable calendar date."
+        },
+        {
+          "name": "defaultValue",
+          "type": "(Date | undefined)[]",
+          "description": "Initial uncontrolled selected dates. In range mode, index 0 is the start and index 1 is the end; either slot may be undefined."
+        },
+        {
+          "name": "value",
+          "type": "(Date | undefined)[]",
+          "description": "Controlled selected dates. In range mode, index 0 is the start and index 1 is the end; either slot may be undefined."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables date selection."
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: (Date | undefined)[]; valueAsString: string[]; view: day | month | year }) => void",
+          "description": "Receives proposed dates, ISO YYYY-MM-DD strings, and the view. Unset range endpoints keep their slots as undefined and empty strings. Update value in the callback when controlling the selection."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "({ open }) => void",
+          "description": "Receives calendar visibility changes."
+        },
+        {
+          "name": "ids",
+          "type": "Datepicker ElementIds",
+          "description": "Overrides generated part IDs. Input, label, and trigger IDs use callbacks, such as input: index => index === 0 ? \"start-date\" : \"end-date\"."
+        },
+        {
+          "name": "defaultDate",
+          "type": "Date",
+          "description": "Initial navigation fallback when no date is selected. Does not select or submit a value."
+        },
+        {
+          "name": "rangeAnchor",
+          "type": "Date",
+          "description": "Fixed peer date for range markers and preview; independent of the selected value."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "description": "Makes the visible inputs read-only and prevents calendar editing."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Marks the visible inputs required."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        },
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Control",
+      "element": "div",
+      "description": "Groups an Input and Trigger.",
+      "props": []
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Receives a typed MM/DD/YYYY date. Malformed or out-of-bounds text sets aria-invalid; blur and Enter update native validity.",
+      "props": [
+        {
+          "name": "index",
+          "type": "0 | 1",
+          "description": "Endpoint to edit or open: 0 for start, 1 for end. Use the same index on each input and its trigger."
+        }
+      ]
+    },
+    {
+      "name": "Trigger",
+      "element": "button",
+      "description": "Opens the shared calendar for the indexed input.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ],
+      "props": [
+        {
+          "name": "index",
+          "type": "0 | 1",
+          "description": "Endpoint to edit or open: 0 for start, 1 for end. Use the same index on each input and its trigger."
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Place the calendar views inside the popover.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "ViewControl",
+      "element": "div",
+      "description": "Groups the calendar navigation controls."
+    },
+    {
+      "name": "PrevTrigger",
+      "element": "button",
+      "description": "Moves backward by one month or year in day view, or by twelve years in year view.",
+      "props": [
+        {
+          "name": "view",
+          "type": "day | year",
+          "description": "Navigation view. Defaults to day."
+        },
+        {
+          "name": "unit",
+          "type": "month | year",
+          "description": "Day-view navigation step. Defaults to month; omit in year view."
+        }
+      ]
+    },
+    {
+      "name": "NextTrigger",
+      "element": "button",
+      "description": "Moves forward by one month or year in day view, or by twelve years in year view.",
+      "props": [
+        {
+          "name": "view",
+          "type": "day | year",
+          "description": "Navigation view. Defaults to day."
+        },
+        {
+          "name": "unit",
+          "type": "month | year",
+          "description": "Day-view navigation step. Defaults to month; omit in year view."
+        }
+      ]
+    },
+    {
+      "name": "ViewTrigger",
+      "element": "button",
+      "description": "Opens month or year selection.",
+      "props": [
+        {
+          "name": "view",
+          "type": "month | year (required)",
+          "description": "View to open."
+        }
+      ]
+    },
+    {
+      "name": "View",
+      "element": "div",
+      "description": "Renders the day, month, or year view.",
+      "props": [
+        {
+          "name": "view",
+          "type": "day | month | year (required)",
+          "description": "Selects the displayed calendar view."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode | ({ api }) => ReactNode",
+          "description": "Can render from the date picker API."
+        }
+      ]
+    },
+    {
+      "name": "Table",
+      "element": "table",
+      "description": "Lays out the calendar grid."
+    },
+    {
+      "name": "TableHead",
+      "element": "thead",
+      "description": "Contains weekday headings."
+    },
+    {
+      "name": "TableRow",
+      "element": "tr",
+      "description": "Contains a row of calendar cells."
+    },
+    {
+      "name": "TableHeader",
+      "element": "th",
+      "description": "Displays a weekday heading.",
+      "props": [
+        {
+          "name": "day",
+          "type": "WeekDay (required)",
+          "description": "Weekday from the date picker API."
+        },
+        {
+          "name": "index",
+          "type": "number (required)",
+          "description": "Weekday index from api.weekDays, used for its accessible label."
+        }
+      ]
+    },
+    {
+      "name": "TableBody",
+      "element": "tbody",
+      "description": "Contains date rows."
+    },
+    {
+      "name": "TableCell",
+      "element": "td",
+      "description": "Wraps a day button. Pass its Date as value to apply day-cell attributes.",
+      "props": [
+        {
+          "name": "value",
+          "type": "Date",
+          "description": "Date from api.weeks. Omit value when wrapping month or year buttons."
+        }
+      ]
+    },
+    {
+      "name": "TableCellTrigger",
+      "element": "button",
+      "description": "Selects a day, month, or year cell.",
+      "props": [
+        {
+          "name": "value",
+          "type": "Date | number (required)",
+          "description": "Use a Date from api.weeks for a day, a zero-based month from api.months for a month, or a year from api.years for a year."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-selected",
+          "value": "Present when selected",
+          "purpose": "Styles a selected date."
+        },
+        {
+          "attribute": "data-range-start",
+          "value": "Present at the range start",
+          "purpose": "Styles the range start."
+        },
+        {
+          "attribute": "data-range-end",
+          "value": "Present at the range end",
+          "purpose": "Styles the range end."
+        },
+        {
+          "attribute": "data-in-range",
+          "value": "Present inside the range",
+          "purpose": "Styles the active endpoint preview interval."
+        }
+      ]
+    },
+    {
+      "name": "Status",
+      "element": "div",
+      "description": "Announces calendar status text in a visually hidden region."
+    }
+  ],
+  "accessibility": "Provide a visible label and format hint. A typed date must be a real calendar date within Root's min and max; an empty optional input remains valid."
+}

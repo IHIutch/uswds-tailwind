@@ -1,0 +1,134 @@
+{
+  "name": "Accordion",
+  "intro": "Put each Item in Root, with its ItemTrigger and ItemContent inside the same item. Each item needs a unique, nonempty value. Wrap ItemTrigger in a heading when the panel introduces a section; choose the heading level for the page. ItemIndicator is optional.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Provides the expanded values shared by its items. Native div props pass through, and its ref points to the root element.",
+      "props": [
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "description": "Allows several items to remain expanded.",
+          "defaultValue": "false",
+          "anchor": "accordion-multiple"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string[]",
+          "description": "Initially expanded item values for uncontrolled state.",
+          "defaultValue": "[]",
+          "anchor": "accordion-default-value"
+        },
+        {
+          "name": "value",
+          "type": "string[]",
+          "description": "Controlled expanded values; update this prop after a change callback.",
+          "defaultValue": "\u2014",
+          "anchor": "accordion-value"
+        },
+        {
+          "name": "onValueChange",
+          "type": "({ value: string[] }) => void",
+          "description": "Called when the expanded values change or a controlled change is requested.",
+          "defaultValue": "\u2014",
+          "anchor": "accordion-on-value-change"
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; itemContent?: (value: string) => string; itemTrigger?: (value: string) => string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "accordion, root",
+          "purpose": "Select the root."
+        },
+        {
+          "attribute": "data-multiple",
+          "value": "Present when multiple is true",
+          "purpose": "Style multiple-item mode."
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "element": "div",
+      "description": "Groups a trigger and panel under one value.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string (required)",
+          "description": "Unique, nonempty value used in Root's expanded-value array.",
+          "anchor": "accordion-item-value"
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "accordion, item",
+          "purpose": "Select the item."
+        },
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "ItemTrigger",
+      "element": "button",
+      "slug": "itemtrigger",
+      "description": "Toggles its item's panel.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "accordion, item-trigger",
+          "purpose": "Select the trigger."
+        },
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "ItemContent",
+      "element": "div",
+      "slug": "itemcontent",
+      "description": "Contains the panel content. Closed panels are hidden.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "accordion, item-content",
+          "purpose": "Select the panel."
+        },
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "ItemIndicator",
+      "element": "div",
+      "slug": "itemindicator",
+      "description": "The default icon changes with the expanded state.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | (({ value, open }) => ReactNode)",
+          "description": "Replaces the default icon with content or a render function based on the item state.",
+          "anchor": "accordion-indicator-children"
+        }
+      ]
+    }
+  ],
+  "accessibility": "Users can activate a focused trigger with Enter or Space. The component associates each trigger with its panel and hides closed panels. Provide meaningful trigger text and headings where appropriate."
+}

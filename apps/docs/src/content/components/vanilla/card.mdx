@@ -1,0 +1,153 @@
+---
+title: "Card"
+description: "Present content and related actions about one subject in cards. Compare vertical, horizontal, and grouped layouts."
+---
+
+## Examples
+
+### Vertical
+
+<ComponentPreview title="Cards Vertical" code={`
+  <div class="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
+    <div class="bg-white border-2 border-gray-10 rounded grid">
+      <div class="px-6 pt-6">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6">
+        <div class="text-xl font-bold">Card title</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+    <div class="bg-white border-2 border-gray-10 rounded grid">
+      <div class="overflow-hidden rounded-t-xs">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6">
+        <div class="text-xl font-bold">Flush media</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+    <div class="bg-white border-2 border-gray-10 rounded grid">
+      <div class="overflow-hidden -mx-0.5 -mt-0.5 rounded-t order-0 py-2">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6 order-first">
+        <div class="text-xl font-bold">Header first</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+  </div>
+`} />
+
+### Horizontal
+
+<ComponentPreview title="Cards Horizontal" code={`
+  <div class="space-y-4">
+    <div class="bg-white border-2 border-gray-10 rounded grid md:grid-cols-[auto_1fr]">
+      <div class="row-span-3 md:col-start-1 md:w-60 p-6 md:pr-0">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6">
+        <div class="text-xl font-bold">Media left</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+    <div class="bg-white border-2 border-gray-10 rounded grid md:grid-cols-[1fr_auto]">
+      <div class="row-span-3 row-start-1 md:col-start-2 md:w-60 p-6 md:pl-0">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div>
+        <div class="pb-2 px-6 pt-6">
+          <div class="text-xl font-bold">Media right</div>
+        </div>
+        <div class="grow py-2 px-6">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+        </div>
+        <div class="px-6 pb-6 pt-2">
+          <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+        </div>
+      </div>
+    </div>
+  </div>
+`} />
+
+### Group
+
+<ComponentPreview title="Cards Group" code={`
+  <ul class="grid gap-4 grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3">
+  <li>
+    <div class="bg-white border-2 border-gray-10 rounded grid">
+      <div class="px-6 pt-6">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6">
+        <div class="text-xl font-bold">Card title 1</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="bg-white border-2 border-gray-10 rounded grid">
+      <div class="px-6 pt-6">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6">
+        <div class="text-xl font-bold">Card title 2</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+  </li>
+  <li>
+    <div class="bg-white border-2 border-gray-10 rounded grid">
+      <div class="px-6 pt-6">
+        <img class="size-full object-cover" src="https://raw.githubusercontent.com/IHIutch/uswds-tailwind/68343230edc85966427c380f8a0442c6cbda2721/apps/docs/public/assets/images/preview.jpg" alt="">
+      </div>
+      <div class="pb-2 px-6 pt-6">
+        <div class="text-xl font-bold">Card title 3</div>
+      </div>
+      <div class="grow py-2 px-6">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis earum tenetur quo.</p>
+      </div>
+      <div class="px-6 pb-6 pt-2">
+        <button type="button" class="cursor-pointer inline-flex items-center leading-none justify-center focus:outline-4 focus:outline-offset-4 focus:outline-blue-40v disabled:bg-gray-20 disabled:text-gray-70 disabled:cursor-not-allowed text-white bg-blue-60v hover:bg-blue-warm-70v active:bg-blue-warm-80v border-blue-warm-70v px-5 py-3 font-bold rounded-sm">Visit agency</button>
+      </div>
+    </div>
+  </li>
+  </ul>
+`} />
+
+## Accessibility
+
+- Use a list when presenting a group of related cards. The group example wraps each card in an `<li>`.
+- Use a suitable heading element when the card title should appear in the page’s heading structure.
+- Give informative images descriptive alternative text. Use an empty `alt` attribute when the image is decorative, as in these examples.

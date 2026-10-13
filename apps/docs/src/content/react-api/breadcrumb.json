@@ -1,0 +1,56 @@
+{
+  "name": "Breadcrumb",
+  "intro": "Put Item parts inside List, with a Link for each destination. Mark the current item on Item.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "nav",
+      "description": "Set aria-label to name this navigation landmark.",
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string (required)",
+          "description": "Names the navigation landmark."
+        },
+        {
+          "name": "wrap",
+          "type": "boolean (required by the current type)",
+          "description": "Allows the trail to wrap instead of truncating earlier items. Runtime default is false.",
+          "defaultValue": "false"
+        }
+      ]
+    },
+    {
+      "name": "List",
+      "element": "ol",
+      "description": "Orders the breadcrumb items."
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Groups a destination and its separator.",
+      "props": [
+        {
+          "name": "isCurrent",
+          "type": "boolean",
+          "description": "Marks this item as the current page."
+        }
+      ]
+    },
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Renders a link, or current-page text when its Item is current."
+    },
+    {
+      "name": "Separator",
+      "element": "span",
+      "description": "Displays the separator between items."
+    },
+    {
+      "name": "Previous",
+      "element": "span",
+      "description": "Displays the compact previous-page trail."
+    }
+  ]
+}

@@ -1,6 +1,0 @@
-{
-  "component": "textarea",
-  "variant": "textarea.twig",
-  "propsPath": "",
-  "componentPath": "src/__demos__/textarea/examples/textarea.twig"
-}

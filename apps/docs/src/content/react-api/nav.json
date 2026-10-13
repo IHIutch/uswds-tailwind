@@ -1,0 +1,176 @@
+{
+  "name": "Nav",
+  "intro": "Root manages the mobile navigation drawer. Put Trigger, Backdrop, and Positioner inside it, with Content inside Positioner. Use List and Link for destinations or Dropdown parts for submenus.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Pass open to control the mobile drawer and forceAction to prevent automatic dismissal.",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Sets the drawer open state. Root does not forward onOpenChange; omit open for an interactive uncontrolled drawer."
+        },
+        {
+          "name": "forceAction",
+          "type": "boolean",
+          "description": "Prevents automatic dismissal."
+        }
+      ]
+    },
+    {
+      "name": "Trigger",
+      "element": "button",
+      "description": "Opens the mobile drawer.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Backdrop",
+      "element": "div",
+      "description": "Covers the page behind an open mobile drawer.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Positioner",
+      "element": "div",
+      "description": "Positions drawer content on mobile and inline navigation on desktop."
+    },
+    {
+      "name": "Content",
+      "element": "nav",
+      "description": "Contains navigation links.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "CloseTrigger",
+      "element": "button",
+      "description": "Closes the mobile drawer.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "List",
+      "element": "ul",
+      "description": "Add ListItem children for direct links and nested menus."
+    },
+    {
+      "name": "ListItem",
+      "element": "li",
+      "description": "Wrap one Link or Dropdown."
+    },
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Uses drawer styling on mobile and inline styling on desktop."
+    },
+    {
+      "name": "Dropdown",
+      "element": "div",
+      "description": "Owns a nested menu.",
+      "props": [
+        {
+          "name": "onOpenChange",
+          "type": "({ open: boolean }) => void",
+          "description": "Receives nested menu state changes."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Controlled nested menu visibility."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "description": "Initial uncontrolled nested menu visibility."
+        },
+        {
+          "name": "onItemSelect",
+          "type": "({ value: string }) => void",
+          "description": "Receives an activated nested menu value."
+        }
+      ]
+    },
+    {
+      "name": "DropdownTrigger",
+      "element": "button",
+      "description": "Opens a nested menu.",
+      "props": [
+        {
+          "name": "isCurrent",
+          "type": "boolean",
+          "description": "Marks the trigger as the current section."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        },
+        {
+          "attribute": "data-current",
+          "value": "Present when current",
+          "purpose": "Styles the current section."
+        }
+      ]
+    },
+    {
+      "name": "DropdownContent",
+      "element": "ul",
+      "description": "Contains nested menu items.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "DropdownItem",
+      "element": "li",
+      "description": "Provides one nested menu value.",
+      "props": [
+        {
+          "name": "value",
+          "type": "string (required)",
+          "description": "Unique item value."
+        }
+      ]
+    },
+    {
+      "name": "DropdownLink",
+      "element": "a",
+      "description": "Uses nested-menu link styling at both breakpoints."
+    },
+    {
+      "name": "DropdownIndicator",
+      "element": "div",
+      "description": "Changes its icon when the nested menu opens."
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "name": "Select",
+  "intro": "Put Field and optional Icon inside Root. Field is the native select control.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Owns value and validation state.",
+      "props": [
+        {
+          "name": "defaultValue",
+          "type": "string",
+          "description": "Initial uncontrolled selection."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Controlled selection."
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "description": "Receives selection changes."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Form field name."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "Requires a selection."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables the select."
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "description": "Marks the selection invalid."
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "description": "Passes readOnly to the select. Native select elements do not enforce read-only behavior; use disabled to prevent interaction."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Field",
+      "element": "select",
+      "description": "Native select control containing option elements.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    },
+    {
+      "name": "Icon",
+      "element": "div",
+      "description": "Displays the dropdown indicator.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    }
+  ]
+}

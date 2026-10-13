@@ -1,0 +1,109 @@
+{
+  "name": "Banner",
+  "intro": "Place Header and collapsible Content inside Root. Trigger controls the content panel.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "section",
+      "description": "Owns the expanded state.",
+      "props": [
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "description": "Initially expands uncontrolled content."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Controls the expanded state."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "({ open: boolean }) => void",
+          "description": "Receives requested state changes."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Header",
+      "element": "header",
+      "description": "Put Flag and HeaderText beside Trigger."
+    },
+    {
+      "name": "Flag",
+      "element": "div",
+      "description": "Displays the U.S. flag graphic by default; children replace it."
+    },
+    {
+      "name": "HeaderText",
+      "element": "div",
+      "description": "Place the banner message beside Flag."
+    },
+    {
+      "name": "Trigger",
+      "element": "button",
+      "description": "Toggles the guidance panel.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Indicator",
+      "element": "div",
+      "description": "Shows the expansion indicator; children can replace it."
+    },
+    {
+      "name": "CloseButton",
+      "element": "div",
+      "description": "Displays a decorative close icon in the expanded header."
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Place Guidance parts in the collapsible panel.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Guidance",
+      "element": "div",
+      "description": "Use one per guidance message."
+    },
+    {
+      "name": "GuidanceIcon",
+      "element": "div",
+      "description": "Place the icon beside GuidanceContent."
+    },
+    {
+      "name": "GuidanceContent",
+      "element": "div",
+      "description": "Group GuidanceTitle and GuidanceBody here."
+    },
+    {
+      "name": "GuidanceTitle",
+      "element": "div",
+      "description": "Use a short title for each guidance message."
+    },
+    {
+      "name": "GuidanceBody",
+      "element": "div",
+      "description": "Add supporting details for the guidance title."
+    }
+  ]
+}

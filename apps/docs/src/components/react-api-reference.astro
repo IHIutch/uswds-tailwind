@@ -1,0 +1,49 @@
+---
+import type { ReactReference } from '../reference/react/schema'
+import { apiHeadingSlug } from '../reference/react/schema'
+import ApiTable from './api-table.astro'
+
+interface Props {
+  reference: ReactReference
+}
+
+const { reference } = Astro.props
+---
+
+<h2 id="component-api">Component API</h2>
+{reference.intro && <p class="max-w-prose">{reference.intro}</p>}
+{reference.parts.map(part => (
+  <section>
+    <h3 id={apiHeadingSlug(part.name, part.slug)}>
+      {part.name}
+      {part.element && <span class="ml-3 text-sm font-normal text-gray-60"><code>{`<${part.element}>`}</code></span>}
+    </h3>
+    <p class="max-w-prose">{part.description}</p>
+    {part.props && part.props.length > 0 && (
+      <ApiTable label={`React ${reference.name} ${part.name} props`}>
+        <table>
+          <thead><tr><th scope="col">Prop</th><th scope="col">Type</th>{part.props.some(prop => prop.defaultValue !== undefined) && <th scope="col">Default</th>}<th scope="col">Description</th></tr></thead>
+          <tbody>
+            {part.props.map(prop => (
+              <tr><td><span id={prop.anchor}><code>{prop.name}</code></span></td><td><code>{prop.type}</code></td>{part.props?.some(row => row.defaultValue !== undefined) && <td><code>{prop.defaultValue ?? '—'}</code></td>}<td>{prop.description}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </ApiTable>
+    )}
+    {part.note && <p class="max-w-prose">{part.note}</p>}
+    {part.data && part.data.length > 0 && (
+      <ApiTable label={`React ${reference.name} ${part.name} data attributes`}>
+        <table>
+          <thead><tr><th scope="col">Attribute</th><th scope="col">Value</th><th scope="col">Purpose</th></tr></thead>
+          <tbody>
+            {part.data.map(attribute => (
+              <tr><td><code>{attribute.attribute}</code></td><td><code>{attribute.value}</code></td><td>{attribute.purpose}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </ApiTable>
+    )}
+  </section>
+))}
+{reference.accessibility && <><h3 id={apiHeadingSlug(reference.accessibilityHeading ?? 'Accessibility')}>{reference.accessibilityHeading ?? 'Accessibility'}</h3><p class="max-w-prose">{reference.accessibility}</p></>}

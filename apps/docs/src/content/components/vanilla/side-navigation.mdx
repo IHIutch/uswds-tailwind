@@ -1,0 +1,25 @@
+---
+title: "Side Navigation"
+description: "Organize related pages in a hierarchy and show the current page with side navigation."
+---
+
+## Examples
+
+<ComponentPreview title="Side Navigation" code={`<nav aria-label="Program navigation" class="max-w-64 border-b border-gray-10">
+  <ul class="list-none p-0 m-0">
+    <li class="border-t border-gray-10"><a href="#overview" aria-current="page" class="relative block px-4 py-2 font-bold text-blue-60v">Overview</a></li>
+    <li class="border-t border-gray-10">
+      <a href="#eligibility" class="block px-4 py-2 text-gray-60 hover:text-blue-60v">Eligibility</a>
+      <ul class="list-none p-0 m-0">
+        <li><a href="#requirements" class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v">Requirements</a></li>
+        <li><a href="#exceptions" class="block py-2 pl-8 pr-4 text-gray-60 hover:text-blue-60v">Exceptions</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>`} />
+
+## Component API
+
+### Markup
+
+Use nested lists for nested destinations. Mark the current page with `aria-current="page"` on its link and give the navigation landmark a useful label.

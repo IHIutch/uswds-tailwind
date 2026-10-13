@@ -6,17 +6,19 @@ export default function ColorSwatch({ hex, level, name }: {
   level: string
   name: string
 }) {
-  const [isCopied, setIsCopied] = React.useState(false)
   const [copyMessage, setCopyMessage] = React.useState<string | null>(null)
 
   const readableName = name.replaceAll('-', ' ').replace('v', ' vivid')
 
-  const handleCopyToClipboard = () => {
-    copyToClipboard(hex)
-    setIsCopied(true)
-    setCopyMessage(`${readableName} copied to clipboard`)
-
-    setTimeout(() => setIsCopied(false), 1000)
+  const handleCopyToClipboard = async () => {
+    setCopyMessage(null)
+    try {
+      await copyToClipboard(hex)
+      setCopyMessage(`${readableName} copied to clipboard`)
+    }
+    catch {
+      setCopyMessage(`Unable to copy ${readableName} to clipboard`)
+    }
   }
 
   return (

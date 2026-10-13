@@ -1,6 +1,6 @@
 ---
 title: "About"
-description: "This project hopes to make it easier for federal product teams to work with, adjust, and extend the USWDS."
+description: "Learn how this project combines federal design patterns, Tailwind CSS, and reusable components for modern web projects."
 ---
 
 ## Motivation
@@ -9,7 +9,7 @@ The USWDS has played an incredible role unifying the federal government's digita
 
 Given the USWDS's existing utility classes, I saw an opportunity to modernize it by using [Tailwind CSS](https://tailwindcss.com/), which offers similar functionality out of the box. This project is an experiment combining Tailwind's utility-first approach with the USWDS's design tokens. 
 
-Additionally, (while originally unintended) updating the JavaScript workflow with [Alpine.js](https://alpinejs.dev/) felt natural, allowing for declarative, streamlined event handling without needing to target custom classes.
+Earlier versions used Alpine.js directives. The current packages use Zag state machines through Vanilla JavaScript and React adapters; Alpine is not a current dependency. See the [JavaScript guide](/docs/vanilla/javascript) for initialization.
 
 My hope is that this project makes working with the USWDS a simpler, easier, and more efficient tool for developers, **and therefore users**.
 
@@ -18,7 +18,7 @@ My hope is that this project makes working with the USWDS a simpler, easier, and
 ### Efficiency and Performance
 Tailwind optimizes our projects by generating only the necessary CSS, significantly reducing the CSS footprint compared to SCSS functions and nesting. This leads to faster load times and improved performance for end users by minimizing the resources they need to download. 
 
-By using Tailwind alone to build the components of the USWDS, we're able to ship only **123 KB**. If we use fewer components, we ship even less!
+The CSS your application ships depends on the components and utilities it uses. Tailwind generates styles from the classes present in your source.
 
 ### Enhanced Developer Experience
 I've got to say it: the USWDS has some really complicated SCSS. This makes it particularly difficult to work with and extend. 
@@ -55,27 +55,15 @@ Dynamic generation of icons with Iconify removes the burden of managing icon lib
 ### Enhanced Flexibility
 By installing fonts within projects, we're able to have greater flexibility over how we manage, update, or rollback fonts. Relying on updates from the USWDS means we're forced to update all or nothing. This puts extra stress on individual teams and on USDWS maintainers when consuming and publishing updates.
 
-## Parcel
+## Build tooling
 
-### Speed and Simplicity
-[Parcel](https://parceljs.org/) is a compiler and bundler that is extremely fast. It's able to compile all of our assets in **600ms**. Compiling our CSS happens faster than you can blink, at **60ms**! 
+The component packages are built with [tsdown](https://tsdown.dev/). The documentation site uses Astro and Tailwind CSS. Your application can use its own build tooling; follow the [Vanilla getting-started guide](/docs/vanilla/getting-started) or [React getting-started guide](/docs/react/getting-started) for the packages and styles to install.
 
-Parcel doesn't require an `index.html` or a custom configuration file. We can configure how we want Parcel to work right in our `package.json`.
 
-### Tailwind Compatibility
-Parcel integrates seamlessly with Tailwind by using <code>[lightningcss](https://lightningcss.dev/)</code> to generate efficient CSS. Tailwind is adopting the same tool for its CLI in a [coming release](https://tailwindcss.com/blog/tailwindcss-v4-alpha#unified-toolchain).
+## JavaScript behavior
 
-## Alpine.js
+The Vanilla package binds state machines to authored HTML, while React components render the corresponding machine state. Use the [Vanilla getting-started guide](/docs/vanilla/getting-started) or [React getting-started guide](/docs/react/getting-started) for the current setup. Per-component availability and release limitations are documented in the [JavaScript guide](/docs/vanilla/javascript).
 
-### Declarative and Intuitive Syntax
-Alpine.js complements Tailwind's declarative nature with a Vue-like syntax, making event binding and attribute manipulation straightforward and easy to understand.
+## Component examples
 
-### Component Encapsulation
-Custom directives in Alpine.js allow us to build encapsulated components without worrying about event bubbling or behavior leakage, enhancing modularity and maintainability.
-
-### Rich Plugin Ecosystem
-Alpine.js offers a variety of plugins that simplify complex functionalities such as input masking, popovers, and focus management, accelerating development and reducing code complexity.
-
-## Twig
-
-You may have noticed that each of the component examples is written in [Twig](https://twig.symfony.com/), a templating language for PHP. This is because much of the federal government still uses Drupal as its primary CMS, which relies heavily on Twig to render content. In order to demonstrate the rendering of conditional attributes and specific markup, I chose to demonstrate it with a syntax I felt would be most widely understood. If you're only interested in the rendered HTML, you can "inspect" any of the examples and simply copy the code directly.
+Component documentation is written in MDX. Vanilla examples show HTML markup, while React examples show runnable TSX. Each preview includes its source so you can copy the example or open it in StackBlitz.

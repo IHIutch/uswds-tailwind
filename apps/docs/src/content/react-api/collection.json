@@ -1,0 +1,75 @@
+{
+  "name": "Collection",
+  "intro": "Use List and Item for a collection of related entries. Choose the calendar or thumbnail parts for the media in each item.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Place List inside Root."
+    },
+    {
+      "name": "List",
+      "element": "ul",
+      "description": "Contains collection entries."
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Use startElement for media before the entry text.",
+      "props": [
+        {
+          "name": "startElement",
+          "type": "ReactNode",
+          "description": "Adds media or another leading element."
+        }
+      ]
+    },
+    {
+      "name": "Heading",
+      "element": "div",
+      "description": "Styles the entry heading."
+    },
+    {
+      "name": "Description",
+      "element": "div",
+      "description": "Put the entry summary below Heading."
+    },
+    {
+      "name": "MetaList",
+      "element": "ul",
+      "description": "Groups entry metadata."
+    },
+    {
+      "name": "MetaListItem",
+      "element": "li",
+      "description": "Use one item per metadata value."
+    },
+    {
+      "name": "Calendar",
+      "element": "time",
+      "description": "Displays a date block.",
+      "props": [
+        {
+          "name": "dateTime",
+          "type": "Date (required)",
+          "description": "Supplies the month and day text and the time element date."
+        }
+      ]
+    },
+    {
+      "name": "CalendarDate",
+      "element": "div",
+      "description": "Displays the day number."
+    },
+    {
+      "name": "CalendarMonth",
+      "element": "div",
+      "description": "Displays the month label."
+    },
+    {
+      "name": "Thumbnail",
+      "element": "div",
+      "description": "Holds thumbnail media."
+    }
+  ]
+}

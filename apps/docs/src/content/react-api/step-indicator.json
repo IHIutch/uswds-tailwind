@@ -1,0 +1,111 @@
+{
+  "name": "StepIndicator",
+  "intro": "Root receives ordered steps and the current step number. List can render its children or use the Segments shortcut.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Computes each step status.",
+      "props": [
+        {
+          "name": "steps",
+          "type": "{ label: string }[]",
+          "description": "Ordered step labels.",
+          "defaultValue": "[]"
+        },
+        {
+          "name": "currentStep",
+          "type": "number (required)",
+          "description": "One-based current step."
+        },
+        {
+          "name": "variant",
+          "type": "default | centered | noLabels",
+          "description": "Controls label alignment and visibility.",
+          "defaultValue": "default"
+        },
+        {
+          "name": "counters",
+          "type": "unset | sm | lg",
+          "description": "Controls numbered circle styling.",
+          "defaultValue": "unset"
+        }
+      ]
+    },
+    {
+      "name": "List",
+      "element": "ol",
+      "description": "Put ListItem parts here or render them from computed step statuses.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | ({ steps }) => ReactNode",
+          "description": "Can render from computed step statuses."
+        }
+      ]
+    },
+    {
+      "name": "ListItem",
+      "element": "li",
+      "description": "Pass its computed status to select complete, current, or incomplete styling.",
+      "props": [
+        {
+          "name": "status",
+          "type": "complete | current | incomplete",
+          "description": "Selects step styling.",
+          "defaultValue": "incomplete"
+        }
+      ]
+    },
+    {
+      "name": "Segment",
+      "element": "span",
+      "description": "Displays the status segment and optional counter.",
+      "props": [
+        {
+          "name": "status",
+          "type": "complete | current | incomplete (required)",
+          "description": "Selects segment styling."
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "element": "span",
+      "description": "Displays a step label when the variant allows labels."
+    },
+    {
+      "name": "Summary",
+      "element": "div",
+      "description": "Holds a text summary of progress."
+    },
+    {
+      "name": "Counter",
+      "element": "span",
+      "description": "Displays the current and total steps.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | (context) => ReactNode",
+          "description": "A render function replaces the default counter content."
+        }
+      ]
+    },
+    {
+      "name": "Heading",
+      "element": "span",
+      "description": "Displays a heading for the current step.",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "Overrides the computed heading text."
+        }
+      ]
+    },
+    {
+      "name": "Segments",
+      "description": "Renders a ListItem and Segment for every computed step."
+    }
+  ]
+}

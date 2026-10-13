@@ -1,6 +1,0 @@
-{
-  "component": "process-list",
-  "variant": "process-list-no-text.twig",
-  "propsPath": "",
-  "componentPath": "src/__demos__/process-list/examples/process-list-no-text.twig"
-}

@@ -1,0 +1,8 @@
+---
+import { isLibrary } from '#utils/library'
+
+const { library } = Astro.params
+if (!isLibrary(library))
+  return new Response('Page not found', { status: 404 })
+return Astro.redirect(`/docs/${library}/components/accordion${Astro.url.search}`)
+---

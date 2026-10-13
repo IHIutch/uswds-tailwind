@@ -1,0 +1,47 @@
+{
+  "name": "RangeSlider",
+  "intro": "Use a Root and Input for a styled native range control.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Provides disabled state. For validation state, wrap the slider in Field.Root with invalid.",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disables the slider."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Form field name."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "element": "input",
+      "description": "Native range input; set min, max, step, and value here.",
+      "data": [
+        {
+          "attribute": "data-disabled",
+          "value": "Present when disabled",
+          "purpose": "Style the disabled state."
+        },
+        {
+          "attribute": "data-invalid",
+          "value": "Present when invalid",
+          "purpose": "Style the error state."
+        }
+      ]
+    }
+  ]
+}

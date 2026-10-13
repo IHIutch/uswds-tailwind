@@ -1,0 +1,236 @@
+---
+title: "Date range picker"
+description: "Let people choose start and end dates with a date range picker and calendar controls."
+---
+
+import ApiTable from "#components/api-table.astro"
+
+
+## Example
+
+<ComponentPreview title="Date Range Picker" minHeight="384px" resize={false}  mark={[/data-part="[^\"]*"/g]} code={`
+  <div
+    data-scope="date-range-picker" data-part="root"
+    id="date-range-picker-1"
+    class="space-y-6"
+  >
+    <div class="max-w-mobile-lg">
+      <label data-part="label"
+        id="event-date-start-label"
+        for="date-picker:date-range-picker-1:input:0"
+        class="text-sm font-medium text-gray-900 min-w-0 shrink-0"
+      >Start Date</label>
+      <div id="event-date-start-hint" class="text-gray-50">mm/dd/yyyy</div>
+      <div class="flex relative">
+        <input
+          data-part="input"
+          id="date-picker:date-range-picker-1:input:0"
+          name="eventStart"
+          type="text"
+          placeholder="MM/DD/YYYY"
+          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+          aria-describedby="event-date-start-hint"
+        />
+        <button
+          data-part="trigger"
+          class="cursor-pointer w-12 bg-transparent hover:bg-gray-10! data-[state=open]:bg-gray-5 active:bg-gray-30 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 flex items-center justify-center"
+          aria-label="Open calendar for start date"
+        >
+          <span class="icon-[material-symbols--calendar-today] size-7"></span>
+        </button>
+      </div>
+    </div>
+    <div class="max-w-mobile-lg">
+      <label data-part="label"
+        id="event-date-end-label"
+        for="date-picker:date-range-picker-1:input:1"
+        class="text-sm font-medium text-gray-900 min-w-0 shrink-0"
+      >End Date</label>
+      <div id="event-date-end-hint" class="text-gray-50">mm/dd/yyyy</div>
+      <div class="flex relative">
+        <input
+          data-part="input"
+          id="date-picker:date-range-picker-1:input:1"
+          name="eventEnd"
+          type="text"
+          placeholder="MM/DD/YYYY"
+          class="p-2 w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4 placeholder:invisible"
+          aria-describedby="event-date-end-hint"
+        />
+        <button
+          data-part="trigger"
+          class="cursor-pointer w-12 bg-transparent hover:bg-gray-10! data-[state=open]:bg-gray-5 active:bg-gray-30 focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 flex items-center justify-center"
+          aria-label="Open calendar for end date"
+        >
+          <span class="icon-[material-symbols--calendar-today] size-7"></span>
+        </button>
+        <div
+          data-part="content"
+          class="bg-gray-5 w-mobile absolute top-10 right-0 not-data-[state=open]:hidden"
+        >
+          <div data-part="view" data-view="day">
+            <div data-part="view-control" class="flex w-full justify-between">
+              <div class="flex">
+                <button
+                  data-part="prev-trigger"
+                  data-unit="year"
+                  class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                >
+                  <span class="icon-[material-symbols--keyboard-double-arrow-left] size-6"></span>
+                </button>
+                <button
+                  data-part="prev-trigger"
+                  data-unit="month"
+                  class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                >
+                  <span class="icon-[material-symbols--keyboard-arrow-left] size-6"></span>
+                </button>
+              </div>
+              <div class="flex grow-1 justify-center">
+                <button
+                  data-part="view-trigger"
+                  data-view="month"
+                  class="h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4"
+                ></button>
+                <button
+                  data-part="view-trigger"
+                  data-view="year"
+                  class="h-10 px-1 flex items-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4"
+                ></button>
+              </div>
+              <div class="flex">
+                <button
+                  data-part="next-trigger"
+                  data-unit="month"
+                  class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                >
+                  <span class="icon-[material-symbols--keyboard-arrow-right] size-6"></span>
+                </button>
+                <button
+                  data-part="next-trigger"
+                  data-unit="year"
+                  class="size-10 flex items-center justify-center hover:bg-gray-10 cursor-pointer focus:outline-4 focus:outline-blue-40v focus:-outline-offset-4 disabled:cursor-not-allowed disabled:opacity-0"
+                >
+                  <span class="icon-[material-symbols--keyboard-double-arrow-right] size-6"></span>
+                </button>
+              </div>
+            </div>
+            <table class="w-full">
+              <thead>
+                <tr>
+                  <th
+                    data-part="table-header"
+                    class="text-center py-1.5 font-normal"
+                  ></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <button
+                      data-part="table-cell-trigger"
+                      class="w-full py-1.5 hover:bg-gray-10 cursor-pointer text-center data-previous-month:text-gray-warm-60 data-next-month:text-gray-warm-60 data-[focus]:outline-2 data-[focus]:outline-blue-warm-80v data-[focus]:-outline-offset-2 focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! data-[range-start]:bg-blue-warm-60v data-[range-start]:text-white data-[range-start]:rounded-s-sm data-[range-end]:bg-blue-warm-60v data-[range-end]:text-white data-[range-end]:rounded-e-sm data-[in-range]:bg-blue-warm-10v data-[in-range]:text-ink data-[range-hover]:bg-blue-warm-10v active:bg-gray-30 data-selected:active:bg-blue-warm-70v disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent"
+                    ></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            data-part="view" data-view="month"
+            class="py-5 px-1.5"
+          >
+            <table class="w-full">
+              <tbody>
+                <tr>
+                  <td class="w-1/3">
+                    <button
+                      data-part="table-cell-trigger"
+                      class="size-full text-center py-2.5 hover:bg-gray-10 cursor-pointer data-[focus]:outline-2 data-[focus]:outline-blue-warm-80v data-[focus]:-outline-offset-2 data-[selected]:bg-blue-warm-60v data-[selected]:text-white focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! leading-none disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent"
+                    ></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            data-part="view" data-view="year"
+            class="py-5 px-1.5"
+          >
+            <div class="flex items-center">
+              <button
+                data-part="prev-trigger"
+                data-view="year"
+                class="hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0"
+              >
+                <span class="icon-[material-symbols--keyboard-arrow-left] size-8"></span>
+              </button>
+              <table class="w-full">
+                <tbody>
+                  <tr>
+                    <td class="w-1/3">
+                      <button
+                        data-part="table-cell-trigger"
+                        class="size-full text-center py-2.5 hover:bg-gray-10 cursor-pointer data-[focus]:outline-2 data-[focus]:outline-blue-warm-80v data-[focus]:-outline-offset-2 data-[selected]:bg-blue-warm-60v data-[selected]:text-white focus:outline-4! focus:outline-blue-40v! focus:-outline-offset-4! leading-none disabled:cursor-not-allowed disabled:opacity-60 disabled:text-black/30 disabled:hover:bg-transparent"
+                      ></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button
+                data-part="next-trigger"
+                data-view="year"
+                class="hover:bg-gray-10 cursor-pointer text-center h-26 w-16 shrink-0"
+              >
+                <span class="icon-[material-symbols--keyboard-arrow-right] size-8"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-part="status" class="sr-only"></div>
+  </div>
+`} />
+
+## Component API
+
+### Initialization
+
+```js
+import { dateRangePickerInit } from '@uswds-tailwind/compat/date-range-picker'
+
+dateRangePickerInit()
+```
+
+The initializer returns an array of instances and reuses existing instances. For one picker, use `DateRangePicker.getOrCreateInstance(elementOrSelector, options)`.
+
+### Anatomy
+
+Use `data-scope="date-range-picker" data-part="root"` on the root. Both inputs use `data-part="input"`; both calendar buttons use `data-part="trigger"`. Their DOM order determines the endpoint: the first input and trigger edit the start, and the second input and trigger edit the end. No `data-target` attribute is needed.
+
+Both endpoints share one `content` element and one `status` region. Keep the day, month, and year `view` elements and complete calendar templates from the example. The calendar uses the same short part names and navigation attributes as [Date Picker](/docs/vanilla/components/date-picker#component-api).
+
+### Configuration
+
+The wrapper always uses range selection. Constructor options take precedence over authored HTML. Attributes are read during construction; later changes do not reconfigure the instance.
+
+<ApiTable label="Date range picker configuration">
+
+| HTML source | Constructor option | Behavior |
+| --- | --- | --- |
+| Root `data-min-date`, `data-max-date` | `min: Date`, `max: Date` | Date bounds. HTML uses ISO `YYYY-MM-DD`. |
+| Input `value` | `defaultValue: (Date \| undefined)[]` | Initial endpoints. HTML values use `MM/DD/YYYY`; constructor values use Date objects, with start at index 0 and end at index 1. |
+| Root or either input `disabled` | `disabled: boolean` | Disables both endpoints and the calendar. |
+| Root or either input `readonly` | `readOnly: boolean` | Prevents input and calendar editing. |
+| Each input `name` | None for separate names | Each visible field keeps its authored form name. |
+
+</ApiTable>
+
+Selecting a date closes the calendar without advancing to the other endpoint. Open the other trigger to edit that endpoint. `onValueChange` receives endpoint slots in `value` and ISO strings in `valueAsString`; missing dates remain `undefined` and empty strings respectively.
+
+### Accessibility and lifecycle
+
+Give each endpoint a distinct visible label, form name, and format hint. The start cannot follow the end; the end cannot precede the start. Root bounds further limit both endpoints.
+
+Retain the root element because initialization changes generated IDs. Use the shared element-based `getInstance()` and call `destroy()` before removing the markup. See [instance lifecycle](/docs/vanilla/javascript#instance-lifecycle).

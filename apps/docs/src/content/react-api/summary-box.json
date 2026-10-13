@@ -1,0 +1,21 @@
+{
+  "name": "SummaryBox",
+  "intro": "Place a Heading and Content inside Root to emphasize key information.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "div",
+      "description": "Place Heading before Content."
+    },
+    {
+      "name": "Heading",
+      "element": "div",
+      "description": "Names the summary box. Place a heading element inside at the appropriate page level."
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Put summary text and supporting links below Heading."
+    }
+  ]
+}

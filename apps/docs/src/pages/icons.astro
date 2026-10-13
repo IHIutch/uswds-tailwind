@@ -1,6 +1,5 @@
 ---
 import IconList from '#components/icon-list'
-// import TableOfContents from "#components/table-of-contents.astro";
 import BaseLayout from '#layouts/base-layout.astro'
 import ContentLayout from '#layouts/content-layout.astro'
 import { actions } from 'astro:actions'
@@ -14,11 +13,12 @@ const res = await Astro.callAction(actions.searchIcons, { query: '' })
 
 const initialIcons = res.data?.filteredIcons || []
 const totalIconCount = res.data?.totalIconCount || 0;
+const description = 'Browse and search Material Symbols icons and copy their Tailwind CSS class names.'
 ---
 
 <BaseLayout
   title="Icons"
-  description="Icons help communicate meaning, actions, status, or feedback."
+  description={description}
 >
   <ContentLayout>
     <main id="main-content" class="flex w-full">
@@ -28,7 +28,7 @@ const totalIconCount = res.data?.totalIconCount || 0;
             <div class="mb-16">
               <h1 class="text-4xl font-bold mb-4">Icons</h1>
               <p class="text-xl font-light max-w-prose">
-                Icons help communicate meaning, actions, status, or feedback.
+                {description}
               </p>
             </div>
             <IconList

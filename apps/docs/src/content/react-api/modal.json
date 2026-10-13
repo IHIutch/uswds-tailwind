@@ -1,0 +1,170 @@
+{
+  "name": "Modal",
+  "intro": "Root provides context. Keep Backdrop and Positioner beside the trigger inside Root, and place Content inside Positioner. Give the dialog an accessible name through Title or aria-label on Root.",
+  "parts": [
+    {
+      "name": "Root",
+      "description": "Root controls whether the dialog is open and sets its size.",
+      "props": [
+        {
+          "name": "size",
+          "type": "\"default\" | \"lg\"",
+          "description": "Changes content width and body/title spacing.",
+          "defaultValue": "default",
+          "anchor": "modal-size"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "description": "Controlled open state; update it after a change callback.",
+          "defaultValue": "\u2014",
+          "anchor": "modal-open"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "({ open: boolean }) => void",
+          "description": "Called when an open-state change is requested.",
+          "defaultValue": "\u2014",
+          "anchor": "modal-on-open-change"
+        },
+        {
+          "name": "forceAction",
+          "type": "boolean",
+          "description": "Prevents Escape and outside interaction from dismissing the dialog. Supply an explicit action.",
+          "defaultValue": "false",
+          "anchor": "modal-force-action"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "description": "Names the dialog directly and takes precedence over the Title relationship."
+        },
+        {
+          "name": "ids",
+          "type": "{ root?: string; trigger?: string; backdrop?: string; positioner?: string; content?: string; closeTrigger?: string; title?: string; description?: string }",
+          "description": "Overrides generated part IDs. Use Root IDs when a label or external control needs a stable input or trigger target."
+        }
+      ],
+      "note": "The dialog traps focus, prevents background scrolling, and restores focus after closing. These behaviors are managed automatically; the dialog role is fixed to dialog."
+    },
+    {
+      "name": "Trigger",
+      "element": "button",
+      "description": "Opens the dialog and uses the default Button styling. Accepts native button props.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "modal, trigger",
+          "purpose": "Select the trigger."
+        },
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Backdrop",
+      "element": "div",
+      "description": "Covers the page behind the dialog. Clicking it closes the dialog when forceAction is false.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "modal, backdrop",
+          "purpose": "Select the backdrop."
+        },
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Positioner",
+      "element": "div",
+      "description": "Centers the dialog content.",
+      "data": [
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "element": "div",
+      "description": "Holds the dialog content. Use Title or aria-label on Root to name the dialog.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "modal, content",
+          "purpose": "Select the dialog content."
+        },
+        {
+          "attribute": "data-state",
+          "value": "open | closed",
+          "purpose": "Style the open and closed states."
+        }
+      ]
+    },
+    {
+      "name": "Title",
+      "element": "div",
+      "description": "Names the dialog. Put a heading inside it at the appropriate page level.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "modal, title",
+          "purpose": "Select the title."
+        }
+      ]
+    },
+    {
+      "name": "Description",
+      "element": "div",
+      "description": "Provides an optional description for the dialog.",
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "modal, description",
+          "purpose": "Select the description."
+        }
+      ]
+    },
+    {
+      "name": "Body",
+      "element": "div",
+      "description": "Spacing responds to Root's size variant."
+    },
+    {
+      "name": "Footer",
+      "element": "div",
+      "description": "Provides spacing for dialog actions."
+    },
+    {
+      "name": "CloseTrigger",
+      "element": "button",
+      "slug": "closetrigger",
+      "description": "Closes the dialog. Supply aria-label when using the default icon-only button.",
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "description": "Overrides the default accessible name.",
+          "anchor": "modal-close-trigger-aria-label"
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-scope, data-part",
+          "value": "modal, close-trigger",
+          "purpose": "Select the close button."
+        }
+      ]
+    }
+  ],
+  "accessibility": "The dialog manages focus, labeling, and closed-state visibility. Provide a useful title or label, meaningful action names, and an explicit way to finish a forced-action dialog."
+}

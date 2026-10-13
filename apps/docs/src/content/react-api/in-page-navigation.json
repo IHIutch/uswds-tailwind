@@ -1,0 +1,104 @@
+{
+  "name": "InPageNav",
+  "intro": "Root receives the page headings. Put List and optional Heading inside it; Items can render links from the headings array.",
+  "parts": [
+    {
+      "name": "Root",
+      "element": "nav",
+      "description": "Owns the heading list and active destination.",
+      "props": [
+        {
+          "name": "headings",
+          "type": "InPageNavHeading[] (required)",
+          "description": "Each heading has an anchor href, label, and depth from 1 through 6."
+        },
+        {
+          "name": "activeHref",
+          "type": "string",
+          "description": "Initial active anchor."
+        },
+        {
+          "name": "onActiveChange",
+          "type": "(href: string) => void",
+          "description": "Called when the active heading changes."
+        }
+      ]
+    },
+    {
+      "name": "Heading",
+      "element": "div",
+      "description": "Displays a label for the navigation."
+    },
+    {
+      "name": "List",
+      "element": "ul",
+      "description": "Contains navigation items.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode | ({ headings, activeHref }) => ReactNode",
+          "description": "Renders links directly or from heading state."
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "element": "li",
+      "description": "Wrap one Link inside the list."
+    },
+    {
+      "name": "Link",
+      "element": "a",
+      "description": "Point href to a heading anchor on this page.",
+      "props": [
+        {
+          "name": "href",
+          "type": "string (required)",
+          "description": "Anchor target."
+        },
+        {
+          "name": "depth",
+          "type": "number",
+          "description": "Heading level used to style indentation."
+        }
+      ],
+      "data": [
+        {
+          "attribute": "data-active",
+          "value": "Present for the active link",
+          "purpose": "Highlights the current section."
+        },
+        {
+          "attribute": "data-depth",
+          "value": "Heading depth",
+          "purpose": "Styles nesting."
+        },
+        {
+          "attribute": "data-primary",
+          "value": "Present at the shallowest depth",
+          "purpose": "Styles top-level items."
+        }
+      ]
+    },
+    {
+      "name": "Scrollspy",
+      "description": "Observes heading intersections and updates the active destination.",
+      "props": [
+        {
+          "name": "root",
+          "type": "RefObject<Element | null>",
+          "description": "Optional scroll container."
+        },
+        {
+          "name": "options",
+          "type": "IntersectionObserverInit without root",
+          "description": "Intersection observer settings."
+        }
+      ]
+    },
+    {
+      "name": "Items",
+      "description": "Renders Item and Link for each supplied heading."
+    }
+  ]
+}

@@ -76,7 +76,7 @@ export function useFieldset(props: UseFieldsetProps = {}) {
         'aria-labelledby': legendId,
         'aria-describedby': labelIds,
       }) as React.HTMLAttributes<HTMLElement>,
-    [disabled, invalid],
+    [labelIds, legendId],
   )
 
   const getLegendProps = React.useMemo(

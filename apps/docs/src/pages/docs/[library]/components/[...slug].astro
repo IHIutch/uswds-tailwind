@@ -1,0 +1,58 @@
+---
+import Alert from '#components/alert.astro'
+import ComponentPreview from '#components/component-preview.astro'
+import ContentList from '#components/content-list.astro'
+import ReactApiReference from '#components/react-api-reference.astro'
+import TableOfContents from '#components/table-of-contents.astro'
+import BaseLayout from '#layouts/base-layout.astro'
+import ContentLayout from '#layouts/content-layout.astro'
+import { prefersMarkdown } from '#utils/handle-prefers-markdown'
+import { isLibrary, privateRedirect } from '#utils/library'
+import { getEntry, render } from 'astro:content'
+import { apiHeadingSlug } from '../../../../reference/react/schema'
+
+const { library, slug } = Astro.params
+if (!isLibrary(library))
+  return new Response('Page not found', { status: 404 })
+const entry = slug ? await getEntry(library === 'react' ? 'react-components' : 'vanilla-components', slug) : undefined
+if (!entry)
+  return new Response('Page not found', { status: 404 })
+if (prefersMarkdown(Astro))
+  return privateRedirect(Astro.redirect(`${Astro.url.pathname}.md${Astro.url.search}`))
+
+const { Content, headings } = await render(entry)
+const reference = library === 'react' ? await getEntry('react-api', entry.id) : undefined
+const referenceHeadings = reference?.data.parts.map(part => ({
+  depth: 3,
+  slug: apiHeadingSlug(part.name, part.slug),
+  text: part.name,
+})) ?? []
+if (reference?.data.accessibility) {
+  const text = reference.data.accessibilityHeading ?? 'Accessibility'
+  referenceHeadings.push({ depth: 3, slug: apiHeadingSlug(text), text })
+}
+const visibleHeadings = [
+  ...headings.filter(heading => heading.depth <= 3),
+  ...(reference ? [{ depth: 2, slug: 'component-api', text: 'Component API' }, ...referenceHeadings] : []),
+]
+---
+
+<BaseLayout title={`${entry.data.title} (${library === 'react' ? 'React' : 'Vanilla'})`} description={entry.data.description} markdown>
+  <ContentLayout>
+    <div class="flex w-full">
+      <TableOfContents headings={visibleHeadings} />
+      <main id="main-content" class="px-4 tablet:px-12 py-12 min-w-0 w-full">
+        <div class="flex flex-col mx-auto max-w-6xl">
+          <div class="mb-16">
+            <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
+            <p class="text-xl font-light max-w-prose">{entry.data.description}</p>
+          </div>
+          <div class:list={['docs-prose max-w-none', library === 'vanilla' && '[&_>_*:not(.not-docs-prose)]:max-w-prose']}>
+            <Content components={library === 'vanilla' ? { ContentList, ComponentPreview, Alert } : undefined} />
+            {reference && <ReactApiReference reference={reference.data} />}
+          </div>
+        </div>
+      </main>
+    </div>
+  </ContentLayout>
+</BaseLayout>
