@@ -11,7 +11,7 @@ Headless [zag-js](https://zagjs.com/) state machine for the USWDS file input com
 ## Install
 
 ```bash
-npm install @uswds-tailwind/file-input-compat@beta
+npm install @uswds-tailwind/file-input-compat
 ```
 
 ## Usage
