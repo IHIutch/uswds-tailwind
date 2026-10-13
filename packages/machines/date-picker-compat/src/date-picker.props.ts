@@ -9,6 +9,7 @@ export const props = createProps<DatePickerProps>()([
   'getRootNode',
   'id',
   'ids',
+  'locale',
   'max',
   'min',
   'name',

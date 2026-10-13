@@ -37,6 +37,7 @@ export class DatePicker extends Component<datePicker.Props, datePicker.Api> {
       rangeAnchor: props.rangeAnchor ?? datePicker.parseDateString(getDataString(this.rootEl, 'range-date')),
       defaultDate: props.defaultDate ?? datePicker.parseDateString(getDataString(this.rootEl, 'default-date')),
       defaultValue: props.defaultValue ?? (defaultValue ? [defaultValue] : []),
+      locale: props.locale ?? this.doc.documentElement.lang,
     })
   }
 

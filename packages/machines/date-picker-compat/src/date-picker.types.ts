@@ -68,6 +68,11 @@ export interface DatePickerProps extends CommonProperties {
   required?: boolean | undefined
   /** Name of the MM/DD/YYYY form field. */
   name?: string | undefined
+  /**
+   * Locale code for month and weekday labels, such as "en" or "fr".
+   * @default "en"
+   */
+  locale?: string | undefined
 
   /** Fired when proposed dates differ from the current selection, including controlled proposals. */
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined

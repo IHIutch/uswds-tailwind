@@ -35,6 +35,7 @@ export class DateRangePicker extends DatePicker {
       min: props.min ?? datePicker.parseDateString(getDataString(this.rootEl, 'min-date')),
       max: props.max ?? datePicker.parseDateString(getDataString(this.rootEl, 'max-date')),
       defaultValue: props.defaultValue ?? defaultValue,
+      locale: props.locale ?? this.doc.documentElement.lang,
     })
   }
 

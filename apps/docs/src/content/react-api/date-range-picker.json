@@ -61,6 +61,11 @@
           "name": "required",
           "type": "boolean",
           "description": "Marks the visible inputs required."
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "description": "Locale for month and weekday labels. Defaults to English."
         }
       ]
     },
