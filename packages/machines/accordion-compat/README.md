@@ -11,7 +11,7 @@ Headless [zag-js](https://zagjs.com/) state machine for the USWDS accordion comp
 ## Install
 
 ```bash
-npm install @uswds-tailwind/accordion-compat@beta
+npm install @uswds-tailwind/accordion-compat
 ```
 
 ## Usage
