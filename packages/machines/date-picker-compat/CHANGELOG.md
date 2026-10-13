@@ -1,5 +1,15 @@
 # @uswds-tailwind/date-picker-compat
 
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- 54fcba3: Add a `locale` option to Date Picker and Date Range Picker for month and weekday labels. React defaults to English. Vanilla uses `<html lang>`, or English if it is unset.
+
+### Patch Changes
+
+- 1179efc: Allow date pickers to render on the server without a browser document. Keep global component teardown tracking from retaining detached component instances.
+
 ## 2.0.0-beta.0
 
 ### Major Changes

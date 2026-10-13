@@ -1,5 +1,29 @@
 # @uswds-tailwind/react
 
+## 2.0.0-beta.1
+
+### Minor Changes
+
+- 54fcba3: Add a `locale` option to Date Picker and Date Range Picker for month and weekday labels. React defaults to English. Vanilla uses `<html lang>`, or English if it is unset.
+- 1179efc: Add `vivid-orange` and `light-gray` Tag variants. Export `InPageNav` and `Link` from the React package root. Apply Fieldset root accessibility props, read the in-page navigation scroll root when observing, and let Collection metadata wrap. Export `destroyAllComponents` from `@uswds-tailwind/compat` for page-transition teardown.
+
+### Patch Changes
+
+- Updated dependencies [54fcba3]
+- Updated dependencies [1179efc]
+  - @uswds-tailwind/date-picker-compat@2.0.0-beta.1
+  - @uswds-tailwind/accordion-compat@2.0.0-beta.1
+  - @uswds-tailwind/character-count-compat@2.0.0-beta.1
+  - @uswds-tailwind/collapse-compat@2.0.0-beta.1
+  - @uswds-tailwind/combobox-compat@2.0.0-beta.1
+  - @uswds-tailwind/dropdown-compat@2.0.0-beta.1
+  - @uswds-tailwind/file-input-compat@2.0.0-beta.1
+  - @uswds-tailwind/input-mask-compat@2.0.0-beta.1
+  - @uswds-tailwind/modal-compat@2.0.0-beta.1
+  - @uswds-tailwind/table-compat@2.0.0-beta.1
+  - @uswds-tailwind/tooltip-compat@2.0.0-beta.1
+  - @uswds-tailwind/theme@2.0.0-beta.1
+
 ## 2.0.0-beta.0
 
 ### Major Changes
