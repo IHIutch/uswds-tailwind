@@ -12,7 +12,7 @@ export default function DatePickerDemo() {
         MM/DD/YYYY, September 1 through October 31, 2026. Try an unavailable or impossible date.
       </div>
       <DatePicker.Root
-        ids={{ input: () => 'appointment-date' }}
+        ids={{ input: index => index === 0 ? 'appointment-date' : 'appointment-date-end' }}
         min={minDate}
         max={maxDate}
         defaultValue={initialDate}

@@ -1,5 +1,6 @@
-import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
+import { isLibrary, libraryFromPath } from '#utils/library'
 
+import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
 import * as React from 'react'
 import { createPortal } from 'react-dom'
 
@@ -58,6 +59,14 @@ export default function Search({ isMobile = false }: { isMobile?: boolean }) {
                 return items.map((item, index) => {
                   const a = document.createElement('a')
                   a.href = item.url
+                  const selectedLibrary = document.documentElement.dataset.library
+                  const library = isLibrary(selectedLibrary) ? selectedLibrary : 'vanilla'
+                  // Keep the existing index usable until its V2 recrawl completes.
+                  const path = libraryFromPath(a.pathname)
+                    ? a.pathname.replace(/^\/docs\/(vanilla|react)/, `/docs/${library}`)
+                    : /^\/(?:components(?:\/|$)|getting-started(?:\/|$)|javascript(?:\/|$))/.test(a.pathname)
+                      ? `/docs/${library}${a.pathname}`
+                      : a.pathname
 
                   if (item.hierarchy?.lvl0) {
                     item.hierarchy.lvl0 = item.hierarchy.lvl0.replace(/&amp;/g, '&')
@@ -73,7 +82,7 @@ export default function Search({ isMobile = false }: { isMobile?: boolean }) {
 
                   return {
                     ...item,
-                    url: `${a.pathname}${a.hash}`,
+                    url: `${path}${a.search}${a.hash}`,
                     __is_result: () => true,
                     // __is_parent: () =>
                     //   item.type === 'lvl1' && items.length > 1 && index === 0,
