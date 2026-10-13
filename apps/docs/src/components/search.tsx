@@ -1,7 +1,21 @@
-import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
+import { transformSearchResults } from '#utils/search-results'
 
+import * as DocSearch from '@docsearch/react' // https://github.com/algolia/docsearch/pull/2117#issuecomment-1793855627
 import * as React from 'react'
 import { createPortal } from 'react-dom'
+
+// Keep response formatting and result limits in the website rather than index defaults.
+const searchIndices: DocSearch.DocSearchProps['indices'] = [{
+  name: 'uswds-tailwind-vercel',
+  searchParameters: {
+    hitsPerPage: 20,
+    distinct: 1,
+    attributesToRetrieve: ['hierarchy', 'content', 'anchor', 'url', 'url_without_anchor', 'type'],
+    attributesToHighlight: ['hierarchy', 'content'],
+    highlightPreTag: '<mark>',
+    highlightPostTag: '</mark>',
+  },
+}]
 
 const Hit: DocSearch.DocSearchProps['hitComponent'] = ({ hit, children }) => {
   return (
@@ -48,45 +62,14 @@ export default function Search({ isMobile = false }: { isMobile?: boolean }) {
             <DocSearch.DocSearchModal
               initialScrollY={window.scrollY}
               appId="C7D4AGKF3W"
-              indices={['uswds-tailwind-vercel']}
+              indices={searchIndices}
+              maxResultsPerGroup={5}
               apiKey="28412ab462fa29c28f804fa3577d6b13"
               onClose={() => setIsOpen(false)}
               onAskAiToggle={() => {}}
               placeholder="Search the docs..."
               hitComponent={Hit}
-              transformItems={(items) => {
-                return items.map((item, index) => {
-                  const a = document.createElement('a')
-                  a.href = item.url
-
-                  if (item.hierarchy?.lvl0) {
-                    item.hierarchy.lvl0 = item.hierarchy.lvl0.replace(/&amp;/g, '&')
-                  }
-
-                  if (item._highlightResult?.hierarchy?.lvl0?.value) {
-                    item._highlightResult.hierarchy.lvl0.value
-                      = item._highlightResult.hierarchy.lvl0.value.replace(
-                        /&amp;/g,
-                        '&',
-                      )
-                  }
-
-                  return {
-                    ...item,
-                    url: `${a.pathname}${a.hash}`,
-                    __is_result: () => true,
-                    // __is_parent: () =>
-                    //   item.type === 'lvl1' && items.length > 1 && index === 0,
-                    // __is_child: () =>
-                    //   item.type !== 'lvl1' &&
-                    //   items.length > 1 &&
-                    //   items[0].type === 'lvl1' &&
-                    //   index !== 0,
-                    __is_first: () => index === 1,
-                    __is_last: () => index === items.length - 1 && index !== 0,
-                  }
-                })
-              }}
+              transformItems={transformSearchResults}
             />,
             document.body,
           ))

@@ -2,6 +2,7 @@
 import GlobalNav from "#components/global-nav/index.astro";
 import { LIBRARY_COOKIE, libraryFromPath, resolveLibrary } from '#utils/library'
 import { getPageLinks } from '#utils/metadata'
+import { getSearchCategory } from '#utils/search-results'
 import { SEO } from "astro-seo";
 import { ClientRouter } from "astro:transitions";
 
@@ -78,6 +79,7 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
           ...(markdown ? [{ rel: 'alternate', type: 'text/markdown', href: links.markdown.href, title: `${title} (Markdown)` }] : []),
         ],
         meta: [
+          { name: 'docsearch:category', content: getSearchCategory(Astro.url.pathname) },
           { name: "generator", content: Astro.generator },
           { name: "color-scheme", content: "only light" },
         ],
