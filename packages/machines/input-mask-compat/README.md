@@ -11,7 +11,7 @@ Headless [zag-js](https://zagjs.com/) state machine for the USWDS masked input c
 ## Install
 
 ```bash
-npm install @uswds-tailwind/input-mask-compat@beta
+npm install @uswds-tailwind/input-mask-compat
 ```
 
 ## Usage
