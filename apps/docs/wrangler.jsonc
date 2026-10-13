@@ -1,5 +1,8 @@
 {
-  "name": "uswds-tailwind-v2",
+  "name": "uswds-tailwind",
+  "routes": [
+    { "pattern": "uswds-tailwind.com", "custom_domain": true }
+  ],
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2025-09-18",
   "compatibility_flags": [

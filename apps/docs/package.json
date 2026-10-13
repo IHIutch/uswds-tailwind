@@ -7,7 +7,7 @@
     "check": "wrangler types --include-runtime=false && astro check",
     "dev": "wrangler types --include-runtime=false && astro dev",
     "start": "wrangler types --include-runtime=false && astro dev",
-    "build": "wrangler types --include-runtime=false && astro build",
+    "build": "pnpm --workspace-root build:packages && wrangler types --include-runtime=false && astro build",
     "preview": "wrangler types --include-runtime=false && astro preview",
     "deploy": "wrangler deploy",
     "astro": "astro"

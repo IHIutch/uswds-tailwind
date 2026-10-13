@@ -18,6 +18,16 @@ pnpm --filter website exec astro check
 pnpm build:website
 ```
 
+## Production deployment
+
+The site deploys to the `uswds-tailwind` Worker at `https://uswds-tailwind.com`.
+Astro uses this origin for canonical URLs, the sitemap, and search metadata.
+Cloudflare's connected production build tracks the `next` branch.
+
+Cloudflare Builds runs `pnpm build` from `apps/docs`. This command builds the
+workspace packages before building Astro, so a clean checkout can resolve the
+React and Vanilla package exports. The repo's deployment script is `pnpm run deploy`.
+
 ## Edit content
 
 - Shared pages live in `src/content/pages/`. `getting-started.mdx` is the Vanilla guide; `getting-started-react.mdx` is the React guide. `src/components/docs-getting-started-page.astro` selects the page using the library route.
