@@ -11,7 +11,7 @@ Headless [zag-js](https://zagjs.com/) state machine for the USWDS sortable table
 ## Install
 
 ```bash
-npm install @uswds-tailwind/table-compat@beta
+npm install @uswds-tailwind/table-compat
 ```
 
 ## Usage
