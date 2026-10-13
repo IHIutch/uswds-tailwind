@@ -4,6 +4,10 @@
     "**/.env.*local"
   ],
   "tasks": {
+    "check": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
     "build": {
       "dependsOn": [
         "^build"

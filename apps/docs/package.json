@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "check": "wrangler types --include-runtime=false && astro check",
     "dev": "wrangler types --include-runtime=false && astro dev",
     "start": "wrangler types --include-runtime=false && astro dev",
     "build": "wrangler types --include-runtime=false && astro build",

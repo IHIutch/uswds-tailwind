@@ -11,6 +11,7 @@
   "scripts": {
     "build:packages": "turbo run build --filter='./packages/**'",
     "build:website": "turbo run build --filter='./apps/docs'",
+    "check:website": "turbo run check --filter='./apps/docs'",
     "deploy:website": "turbo run deploy",
     "lint": "turbo run lint",
     "publint": "turbo run publint --filter='./packages/**'",
