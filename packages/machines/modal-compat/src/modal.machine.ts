@@ -67,7 +67,7 @@ export const machine = createMachine<ModalSchema>({
         },
         'OPEN': {
           target: 'open',
-          actions: ['invokeOnOpen'],
+          actions: ['invokeOnOpen', 'setTriggerIndex'],
         },
         'TOGGLE': [
           {
@@ -139,8 +139,8 @@ export const machine = createMachine<ModalSchema>({
         })
       },
       setTriggerIndex({ context, event }) {
-        // A trigger rendered without an index gets the index 0 id.
-        context.set('triggerIndex', event.index ?? 0)
+        // A trigger rendered without an index gets the index 0 id. OPEN clears it, so focus returns to the invoking element.
+        context.set('triggerIndex', event.type === 'TOGGLE' ? event.index ?? 0 : null)
       },
       invokeOnOpen({ prop }) {
         prop('onOpenChange')?.({ open: true })
