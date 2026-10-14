@@ -11,6 +11,23 @@ USWDS components for Tailwind CSS, available as React components or vanilla JS m
 
 Full guides, component API, and examples live at [uswds-tailwind.com](https://uswds-tailwind.com).
 
+## Start a project
+
+Copy a standalone Vite template with [tiged](https://github.com/tiged/tiged). Requires Node.js 22.12.0 or later.
+
+For React and TypeScript:
+
+```bash
+npx tiged IHIutch/uswds-tailwind/templates/react-ts my-project
+cd my-project
+npm install
+npm run dev
+```
+
+For vanilla HTML and TypeScript, use `IHIutch/uswds-tailwind/templates/vanilla-ts` instead. Both templates include Tailwind CSS v4, USWDS + Tailwind, and a working accordion. Run `npm run build` to typecheck and build for production.
+
+See [templates](./templates) for details. For an existing app, follow the documentation's getting-started guide.
+
 ## Packages
 
 | Package | Description |
@@ -28,6 +45,7 @@ Full guides, component API, and examples live at [uswds-tailwind.com](https://us
 - `packages/theme/`: Tailwind v4 theme
 - `packages/machines/`: per-component zag-js state machines
 - `examples/`: minimal example projects
+- `templates/`: standalone starter projects for copying with tiged
 
 ## Local development
 
