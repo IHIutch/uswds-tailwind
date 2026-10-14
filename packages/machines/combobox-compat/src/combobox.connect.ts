@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { JSX, NormalizeProps, PropTypes } from '@zag-js/types'
 import type { ComboboxApi, ComboboxItem, ComboboxSchema } from './combobox.types'
-import { ariaAttr, dataAttr, isLeftClick, visuallyHiddenStyle } from '@zag-js/dom-query'
+import { ariaAttr, contains, dataAttr, isLeftClick, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
 import { focusVisibleItem } from './combobox.utils'
@@ -23,13 +23,12 @@ export function connect<T extends PropTypes>(
   const value = context.get('value')
   const inputValue = context.get('inputValue')
   const highlightedIndex = context.get('highlightedIndex')
-  const isPristine = context.get('isPristine')
   const items = context.get('items')
   const count = items.length
   const srStatusText = open ? (count ? `${count} result${count > 1 ? 's' : ''} available.` : 'No results.') : ''
 
   // Never reference an option removed by a list rebuild.
-  const activeDescendant = open && highlightedIndex !== null
+  const activeDescendant = highlightedIndex !== null
     ? items[highlightedIndex]?.id
     : undefined
 
@@ -45,27 +44,24 @@ export function connect<T extends PropTypes>(
   const focusNow = (index: number | null) => focusVisibleItem(scope, index)
 
   return {
-    open,
-    value,
     inputValue,
     items,
     srStatusText,
-
-    setValue(next) {
-      send({ type: 'VALUE.SET', value: next })
-    },
 
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
         'id': dom.getRootId(scope),
         'data-state': open ? 'open' : 'closed',
-        'data-pristine': dataAttr(isPristine),
-        'data-disabled': dataAttr(disabled || ariaDisabled),
         onKeyDown(event) {
           if (event.key === 'Escape' && sourcePlainModifierMatch(event)) {
             send({ type: 'LAYER.ESCAPE' })
           }
+        },
+        onBlur(event) {
+          if (contains(event.currentTarget, event.relatedTarget))
+            return
+          send({ type: 'ROOT.BLUR' })
         },
       })
     },
@@ -86,7 +82,7 @@ export function connect<T extends PropTypes>(
         'aria-hidden': true,
         'tabIndex': -1,
         'style': visuallyHiddenStyle,
-        // React requires onChange for the controlled native form bridge.
+        // Silences React's controlled-select warning.
         onChange() {},
         value,
       })
@@ -102,7 +98,6 @@ export function connect<T extends PropTypes>(
         'id': dom.getInputId(scope),
         'type': 'text',
         'role': 'combobox',
-        'aria-owns': dom.getListId(scope),
         'aria-controls': dom.getListId(scope),
         'aria-autocomplete': 'list',
         'aria-expanded': open,
@@ -117,8 +112,6 @@ export function connect<T extends PropTypes>(
         'placeholder': prop('placeholder'),
         'value': inputValue,
         onClick(event) {
-          if (disabled)
-            return
           if (event.defaultPrevented)
             return
           send({ type: 'INPUT.CLICK' })
@@ -135,7 +128,7 @@ export function connect<T extends PropTypes>(
           }
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
-            const destination = open && items.length ? highlightedIndex ?? 0 : null
+            const destination = highlightedIndex ?? 0
             send({ type: 'INPUT.ARROW_DOWN', focusHandled: focusNow(destination) })
           }
         },
@@ -156,8 +149,6 @@ export function connect<T extends PropTypes>(
             event.preventDefault()
         },
         onClick(event) {
-          if (disabled)
-            return
           if (event.defaultPrevented)
             return
           send({ type: 'VALUE.CLEAR' })
@@ -179,8 +170,6 @@ export function connect<T extends PropTypes>(
             event.preventDefault()
         },
         onClick(event) {
-          if (disabled)
-            return
           if (event.defaultPrevented)
             return
           send({ type: 'TRIGGER.CLICK' })
@@ -196,7 +185,6 @@ export function connect<T extends PropTypes>(
         'aria-labelledby': dom.getLabelId(scope),
         'tabIndex': -1,
         'hidden': !open,
-        'data-state': open ? 'open' : 'closed',
       })
     },
 
@@ -216,8 +204,6 @@ export function connect<T extends PropTypes>(
         'data-highlighted': dataAttr(highlighted),
         'tabIndex': highlighted ? 0 : -1,
         onClick(event) {
-          if (disabled)
-            return
           if (event.defaultPrevented)
             return
           selectItem()
@@ -243,7 +229,7 @@ export function connect<T extends PropTypes>(
           else if (key === 'ArrowDown' || key === 'Down') {
             event.preventDefault()
             const destination = index + 1
-            if (index >= 0 && destination < items.length)
+            if (destination < items.length)
               send({ type: 'HIGHLIGHTED_INDEX.SET', index: destination, scroll: true, focusHandled: focusNow(destination) })
           }
           else if (key === 'Enter' || key === ' ') {

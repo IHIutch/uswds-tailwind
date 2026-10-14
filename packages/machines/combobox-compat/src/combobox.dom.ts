@@ -12,7 +12,6 @@ export const getClearTriggerId = (ctx: Scope) => ctx.ids?.clearTrigger ?? `combo
 export const getItemId = (ctx: Scope, index: number) => `combobox:${ctx.id}:item:${index}`
 
 export const getRootEl = (ctx: Scope) => ctx.getById(getRootId(ctx))
-export const getHiddenSelectEl = (ctx: Scope) => ctx.getById<HTMLSelectElement>(getHiddenSelectId(ctx))
 export const getInputEl = (ctx: Scope) => ctx.getById<HTMLInputElement>(getInputId(ctx))
 export const getListEl = (ctx: Scope) => ctx.getById(getListId(ctx))
 export const getItemEl = (ctx: Scope, index: number) => ctx.getById<HTMLElement>(getItemId(ctx, index))

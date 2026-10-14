@@ -1,6 +1,5 @@
 import { expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { Combobox } from '../../packages/compat/src/combobox.js'
 import { createDisposableCombobox } from './_utils.js'
 
 const rootId = 'basic-combobox'
@@ -88,7 +87,7 @@ const template = `<div
       </select>
 
       <div class="relative mt-2">
-        <div class="flex w-full">
+        <div class="flex w-full" style="display:flex">
           <input
             data-part="input"
             class="pr-10 p-2 bg-white w-full h-10 border border-gray-60 focus:outline-offset-0 focus:outline-4 focus:outline-blue-40v data-[invalid]:ring-4 data-[invalid]:ring-red-60v data-[invalid]:border-transparent data-[invalid]:outline-offset-4"
@@ -154,13 +153,10 @@ it('should update native values when selecting an item from the option list when
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
 it('should update native values when resetting input values when an incomplete item is submitted through enter', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template.replace('data-part="root"', 'data-part="root" data-default-value="apple"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('apple')
 
   await userEvent.clear(input)
   await userEvent.fill(input, 'a')
@@ -175,13 +171,10 @@ it('should update native values when resetting input values when an incomplete i
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L592-L603
 it('should update native values when closing the list but not the clear the input value when escape is performed while the list is open', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template.replace('data-part="root"', 'data-part="root" data-default-value="apple"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('apple')
   await userEvent.fill(input, 'a')
   expect(list.hidden).toBe(false)
 
@@ -194,13 +187,10 @@ it('should update native values when closing the list but not the clear the inpu
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
 it('should update native values when setting the input value when a complete selection is submitted by pressing enter', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template.replace('data-part="root"', 'data-part="root" data-default-value="apple"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('apple')
   await userEvent.fill(input, 'fig')
   expect(list.hidden).toBe(false)
 
@@ -213,12 +203,9 @@ it('should update native values when setting the input value when a complete sel
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L642-L716
 it('should update native values when selecting the focused list item in the list when pressing enter on a focused item', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template.replace('data-part="root"', 'data-part="root" data-default-value="grapefruit"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'emo')
 
   await userEvent.keyboard('{ArrowDown}')
@@ -232,13 +219,10 @@ it('should update native values when selecting the focused list item in the list
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L610-L674
 it('should update native values when pressing escape from a focused item', { tags: ['legacy'] }, async () => {
-  await using component = createDisposableCombobox(rootId, template)
+  await using component = createDisposableCombobox(rootId, template.replace('data-part="root"', 'data-part="root" data-default-value="grapefruit"'))
   const input = component.elements.getInputEl()!
   const select = component.elements.getSelectEl()!
   const list = component.elements.getListEl()!
-
-  const instance = Combobox.getInstance(component.elements.getRootEl())
-  instance?.api.setValue('grapefruit')
   await userEvent.fill(input, 'dew')
   expect(!list.hidden && list.children.length).toBeTruthy()
 

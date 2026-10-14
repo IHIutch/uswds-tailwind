@@ -59,14 +59,9 @@ export const machine = createMachine<ComboboxSchema>({
     }
   },
 
-  watch({ context, prop, scope, state, track, action }) {
+  watch({ context, prop, state, track, action }) {
     track([() => context.get('value')], () => {
       prop('onValueChange')?.({ value: context.get('value'), label: context.get('inputValue') })
-    })
-    track([() => context.get('inputValue')], () => {
-      const inputEl = dom.getInputEl(scope)
-      if (inputEl)
-        inputEl.value = context.get('inputValue')
     })
     track([() => context.get('inputValue'), () => context.get('value'), () => context.get('isPristine')], () => {
       if (state.matches('open'))
@@ -78,14 +73,13 @@ export const machine = createMachine<ComboboxSchema>({
     'INPUT.CHANGE': { target: 'open', actions: ['setInputValue'] },
     'INPUT.ENTER': { target: 'closed', actions: ['completeSelection'] },
     'LAYER.INTERACT_OUTSIDE': { target: 'closed', actions: ['revertInputValue'] },
+    'ROOT.BLUR': { target: 'closed', actions: ['revertInputValue'] },
     'LAYER.ESCAPE': { target: 'closed', actions: ['revertInputValue', 'focusInput'] },
     'VALUE.CLEAR': { actions: ['clearValue', 'focusInput'] },
-    'VALUE.SET': { actions: ['selectItem'] },
   },
 
   states: {
     closed: {
-      tags: ['closed'],
       entry: ['resetList'],
       on: {
         'TRIGGER.CLICK': { target: 'open', actions: ['focusInput'] },
@@ -154,7 +148,7 @@ export const machine = createMachine<ComboboxSchema>({
 
       setHighlightedIndex({ context, scope, refs, event }) {
         const index = event.type === 'HIGHLIGHTED_INDEX.SET' ? event.index : context.get('highlightedIndex')
-        if (index === null || !context.get('items')[index])
+        if (index === null)
           return
         context.set('highlightedIndex', index)
         if (event.type === 'INPUT.ARROW_DOWN' || (event.type === 'HIGHLIGHTED_INDEX.SET' && event.scroll))
@@ -177,12 +171,10 @@ export const machine = createMachine<ComboboxSchema>({
       },
 
       selectItem(params) {
-        const { prop, event } = params
-        if (!('value' in event))
+        const { event } = params
+        if (event.type !== 'ITEM.SELECT')
           return
-        const { value } = event
-        const label = 'label' in event ? event.label : (prop('options').find(o => o.value === value)?.label ?? '')
-        setValue(params, value, label)
+        setValue(params, event.value, event.label)
       },
 
       completeSelection(params) {
@@ -224,7 +216,6 @@ export const machine = createMachine<ComboboxSchema>({
       // Keep tracking while closed so leaving the input restores the selection.
       trackInteractOutside({ scope, send }) {
         return trackInteractOutside(() => dom.getRootEl(scope), {
-          defer: true,
           onInteractOutside() {
             send({ type: 'LAYER.INTERACT_OUTSIDE' })
           },

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { createDisposableCombobox } from './_utils.js'
 
 function template(filter: string, labels: string[], extraAttributes = '') {
@@ -43,4 +43,15 @@ it('matches typed regex operators literally instead of executing them', { tags: 
   await using component = createDisposableCombobox('regex', template('something {{query}}', ['something .* else', 'something ?? else']))
   await userEvent.fill(component.elements.getInputEl(), '.* else')
   expect(component.elements.getItemEls().map(item => item.textContent)).toEqual(['something .* else'])
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L340-L353 ({{query}} always takes the typed text, even when the extras have a "query" key)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-combo-box/src/index.js#L382-L383 (the combo box dataset supplies the extras)
+it('substitutes the typed text for {{query}} even when the root has a data-query attribute', { tags: ['parity'] }, async () => {
+  await using component = createDisposableCombobox('regex', template('{{query}}.*', ['Apple', 'Apricot', 'Banana'], 'data-query="(z)"'))
+
+  await userEvent.fill(page.getByRole('combobox', { name: 'Choice' }), 'ap')
+
+  await expect.element(page.getByRole('option', { name: 'Apricot' })).toBeVisible()
+  expect(component.elements.getItemEls().map(item => item.textContent)).toEqual(['Apple', 'Apricot'])
 })

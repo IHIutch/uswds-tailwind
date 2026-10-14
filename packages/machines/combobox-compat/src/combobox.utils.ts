@@ -47,13 +47,7 @@ function getOrderedOptions(params: BuildItemsParams, query: string, regex: RegEx
     return available
 
   if (customFilter) {
-    // Consume each source occurrence once; ignore foreign or repeated entries.
-    return customFilter(inputValueRaw, [...available]).flatMap((option) => {
-      const index = available.indexOf(option)
-      if (index < 0)
-        return []
-      return available.splice(index, 1)
-    })
+    return [...customFilter(inputValueRaw, available)]
   }
 
   const startsWith: ComboboxOptionData[] = []
@@ -78,7 +72,7 @@ export function buildItems(params: BuildItemsParams) {
   // leaving the last rendered duplicate selected (index.js L467-480).
   let selectedIndex: number | null = null
   for (const [index, item] of items.entries()) {
-    if (selectValue && item.value === selectValue)
+    if (item.value === selectValue)
       selectedIndex = index
   }
 

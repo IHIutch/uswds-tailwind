@@ -118,7 +118,7 @@ export interface ComboboxSchema {
     | { type: 'INPUT.ENTER' }
     | { type: 'LAYER.ESCAPE' }
     | { type: 'LAYER.INTERACT_OUTSIDE' }
-    | { type: 'VALUE.SET', value: string }
+    | { type: 'ROOT.BLUR' }
   )
 }
 
@@ -126,18 +126,12 @@ export type ComboboxService = Service<ComboboxSchema>
 export type ComboboxMachine = Machine<ComboboxSchema>
 
 export interface ComboboxApi<T extends PropTypes = PropTypes> {
-  open: boolean
-
-  value: string
-
   inputValue: string
 
   items: ComboboxItem[]
 
   /** Render this into the status part; the machine does not inject children. */
   srStatusText: string
-
-  setValue: (value: string) => void
 
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
