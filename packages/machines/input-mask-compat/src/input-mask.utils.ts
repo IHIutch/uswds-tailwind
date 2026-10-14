@@ -11,7 +11,7 @@ export function maskValue(rawValue: string, mask: string, charset?: string): str
     const char = stripped[inputIndex]
 
     if (NUMBER_SLOTS.includes(slot)) {
-      if (char === undefined || Number.isNaN(Number.parseInt(char, 10)))
+      if (Number.isNaN(Number.parseInt(char!, 10)))
         return result
       result += char
       inputIndex++

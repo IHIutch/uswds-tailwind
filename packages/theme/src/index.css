@@ -46,6 +46,11 @@
     @slot;
   }
 }
+@custom-variant fine-pointer {
+  @media (hover: hover) and (pointer: fine) {
+    @slot;
+  }
+}
 @custom-variant forced-colors {
   @media (forced-colors: active) {
     @slot;

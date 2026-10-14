@@ -45,12 +45,10 @@ export const machine = createMachine<TableSchema>({
       setSortDescriptor({ context, event }) {
         const { columnIndex } = event
         const sortDescriptor = context.get('sortDescriptor')
-        context.set('sortDescriptor', columnIndex === null
-          ? null
-          : {
-              column: columnIndex,
-              direction: event.direction ?? (sortDescriptor?.column === columnIndex && sortDescriptor.direction === 'ascending' ? 'descending' : 'ascending'),
-            })
+        context.set('sortDescriptor', {
+          column: columnIndex,
+          direction: sortDescriptor?.column === columnIndex && sortDescriptor.direction === 'ascending' ? 'descending' : 'ascending',
+        })
       },
     },
   },

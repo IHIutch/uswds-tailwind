@@ -1,13 +1,11 @@
 import type { FileInputSchema } from './file-input.types'
 import { createMachine } from '@zag-js/core'
-import { getStatusMessage, isBatchValid } from './file-input.utils'
+import { isDom } from '@zag-js/dom-query'
+import { getFinePointerQuery, getStatusMessage, isBatchValid } from './file-input.utils'
 
 export const machine = createMachine<FileInputSchema>({
   props({ props }) {
     return {
-      disabled: false,
-      ariaDisabled: false,
-      multiple: false,
       errorText: 'Error: This is not a valid file type.',
       ...props,
     }
@@ -25,9 +23,9 @@ export const machine = createMachine<FileInputSchema>({
     }
   },
 
-  effects: ['cleanupTimers'],
+  effects: ['cleanupTimers', 'trackFinePointer'],
 
-  context({ prop, bindable }) {
+  context({ prop, bindable, scope }) {
     return {
       acceptedFiles: bindable<File[]>(() => ({
         defaultValue: [],
@@ -35,6 +33,9 @@ export const machine = createMachine<FileInputSchema>({
       invalid: bindable<boolean>(() => ({ defaultValue: false })),
       errorText: bindable<string>(() => ({ defaultValue: '' })),
       srStatusText: bindable<string>(() => ({ defaultValue: getStatusMessage([], prop('multiple')) })),
+      finePointer: bindable<boolean>(() => ({
+        defaultValue: isDom() && !!getFinePointerQuery(scope.getWin())?.matches,
+      })),
     }
   },
 
@@ -80,6 +81,15 @@ export const machine = createMachine<FileInputSchema>({
       },
     },
     effects: {
+      // USWDS rebuilds its instructions whenever the pointer media query changes.
+      trackFinePointer({ context, scope }) {
+        const mediaQuery = getFinePointerQuery(scope.getWin())
+        if (!mediaQuery)
+          return
+        const onChange = () => context.set('finePointer', mediaQuery.matches)
+        mediaQuery.addEventListener('change', onChange)
+        return () => mediaQuery.removeEventListener('change', onChange)
+      },
       cleanupTimers({ scope, refs }) {
         return () => {
           const win = scope.getWin()

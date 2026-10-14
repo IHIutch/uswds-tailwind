@@ -41,6 +41,8 @@ export class Table extends Component<table.Props, table.Api> {
     const headerSortColumn = initialHeader
       ? Array.from(initialHeader.parentElement!.children).indexOf(initialHeader)
       : undefined
+    // Starts in the declared direction, as the USWDS docs describe. USWDS init flips it.
+    // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-table/src/index.js#L241-L246
     const headerSortDirection = initialHeader?.getAttribute('aria-sort') === 'ascending' ? 'ascending' : initialHeader ? 'descending' : undefined
     const columnIndex = rootSortColumn ?? headerSortColumn
     const direction = getDataEnum(this.rootEl, 'sort-direction', ['ascending', 'descending']) ?? headerSortDirection ?? 'ascending'

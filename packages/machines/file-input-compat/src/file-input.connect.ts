@@ -3,7 +3,7 @@ import type { FileInputApi, FileInputService } from './file-input.types'
 import { ariaAttr, dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './file-input.anatomy'
 import * as dom from './file-input.dom'
-import { getDefaultAriaLabel, getFileId, getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
+import { getItemsLabel, getPreviewType, isBatchValid } from './file-input.utils'
 
 export function connect<T extends PropTypes>(
   service: FileInputService,
@@ -16,11 +16,11 @@ export function connect<T extends PropTypes>(
   const invalid = context.get('invalid')
   const errorText = context.get('errorText')
   const srStatusText = context.get('srStatusText')
+  const finePointer = context.get('finePointer')
 
   const itemsLabel = getItemsLabel(prop('multiple'))
-  const dragText = `Drag ${itemsLabel} here or`
-  const chooseText = 'choose from folder'
-  const defaultAriaLabel = getDefaultAriaLabel(itemsLabel)
+  // Without a fine pointer USWDS drops the drag text and capitalizes the choose action.
+  const defaultAriaLabel = finePointer ? `Drag ${itemsLabel} here or choose from folder` : 'Choose from folder'
   const ariaLabelText = invalid
     ? `${errorText} ${defaultAriaLabel}`
     : acceptedFiles.length > 1
@@ -49,10 +49,6 @@ export function connect<T extends PropTypes>(
     previewHeadingText,
     previewChangeText: changeText,
 
-    dragText,
-    chooseText,
-    disabled,
-    getFileId,
     getPreviewType(file) {
       return getPreviewType(file)
     },
@@ -129,14 +125,6 @@ export function connect<T extends PropTypes>(
       })
     },
 
-    getDragTextProps() {
-      return normalize.element({ ...parts.dragText.attrs })
-    },
-
-    getChooseProps() {
-      return normalize.element({ ...parts.choose.attrs })
-    },
-
     getItemGroupProps() {
       return normalize.element({
         ...parts.itemGroup.attrs,
@@ -149,9 +137,8 @@ export function connect<T extends PropTypes>(
     getPreviewHeadingProps() {
       return normalize.element({
         ...parts.previewHeading.attrs,
-        'id': dom.getPreviewHeadingId(scope),
-        'hidden': !hasFiles,
-        'data-change-text': changeText,
+        id: dom.getPreviewHeadingId(scope),
+        hidden: !hasFiles,
       })
     },
 

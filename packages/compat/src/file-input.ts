@@ -95,16 +95,6 @@ export class FileInput extends Component<fileInput.Props, fileInput.Api> {
   }
 
   private renderCopy() {
-    const dragText = getOwnedPart<HTMLElement>(this.rootEl, parts.dragText)
-    if (dragText) {
-      spreadProps(dragText, this.api.getDragTextProps())
-      dragText.textContent = this.api.dragText
-    }
-    const choose = getOwnedPart<HTMLElement>(this.rootEl, parts.choose)
-    if (choose) {
-      spreadProps(choose, this.api.getChooseProps())
-      choose.textContent = this.api.chooseText
-    }
     const heading = getOwnedPart<HTMLElement>(this.rootEl, parts.previewHeading)
     if (heading) {
       spreadProps(heading, this.api.getPreviewHeadingProps())

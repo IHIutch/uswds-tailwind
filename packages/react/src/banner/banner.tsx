@@ -1,5 +1,5 @@
-import type * as collapse from '@uswds-tailwind/collapse-compat'
 import type { UseBannerProps } from './use-banner'
+import * as collapse from '@uswds-tailwind/collapse-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { cn } from '../tv.config'
@@ -26,9 +26,10 @@ function useBannerContext() {
 export type BannerRootProps = UseBannerProps & React.ComponentPropsWithoutRef<'section'>
 
 const BannerRoot = React.forwardRef<HTMLElement, BannerRootProps>(
-  ({ open, defaultOpen, onOpenChange, className, ...props }, forwardedRef) => {
-    const api = useBanner({ open, defaultOpen, onOpenChange })
-    const mergedProps = mergeProps(api.getRootProps(), props)
+  ({ className, ...props }, forwardedRef) => {
+    const [machineProps, rest] = collapse.splitProps(props)
+    const api = useBanner(machineProps as UseBannerProps)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <BannerContext.Provider value={{ api }}>
