@@ -118,6 +118,7 @@ export interface ComboboxSchema {
     | { type: 'INPUT.ENTER' }
     | { type: 'LAYER.ESCAPE' }
     | { type: 'LAYER.INTERACT_OUTSIDE' }
+    | { type: 'ROOT.BLUR' }
   )
 }
 

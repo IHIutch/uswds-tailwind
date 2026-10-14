@@ -1,7 +1,7 @@
 import type { Service } from '@zag-js/core'
 import type { JSX, NormalizeProps, PropTypes } from '@zag-js/types'
 import type { ComboboxApi, ComboboxItem, ComboboxSchema } from './combobox.types'
-import { ariaAttr, dataAttr, isLeftClick, visuallyHiddenStyle } from '@zag-js/dom-query'
+import { ariaAttr, contains, dataAttr, isLeftClick, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './combobox.anatomy'
 import * as dom from './combobox.dom'
 import { focusVisibleItem } from './combobox.utils'
@@ -57,6 +57,11 @@ export function connect<T extends PropTypes>(
           if (event.key === 'Escape' && sourcePlainModifierMatch(event)) {
             send({ type: 'LAYER.ESCAPE' })
           }
+        },
+        onBlur(event) {
+          if (contains(event.currentTarget, event.relatedTarget))
+            return
+          send({ type: 'ROOT.BLUR' })
         },
       })
     },

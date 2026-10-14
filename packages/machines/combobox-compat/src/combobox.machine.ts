@@ -73,6 +73,7 @@ export const machine = createMachine<ComboboxSchema>({
     'INPUT.CHANGE': { target: 'open', actions: ['setInputValue'] },
     'INPUT.ENTER': { target: 'closed', actions: ['completeSelection'] },
     'LAYER.INTERACT_OUTSIDE': { target: 'closed', actions: ['revertInputValue'] },
+    'ROOT.BLUR': { target: 'closed', actions: ['revertInputValue'] },
     'LAYER.ESCAPE': { target: 'closed', actions: ['revertInputValue', 'focusInput'] },
     'VALUE.CLEAR': { actions: ['clearValue', 'focusInput'] },
   },
