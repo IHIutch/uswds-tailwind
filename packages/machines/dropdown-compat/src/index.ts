@@ -7,7 +7,6 @@ export type {
   DropdownSchema,
   ElementIds,
   ItemLinkProps,
-  ItemProps,
   ItemSelectDetails,
   DropdownMachine as Machine,
   OpenChangeDetails,

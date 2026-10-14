@@ -60,7 +60,7 @@ export class Dropdown extends Component<VanillaDropdownProps, dropdown.Api> {
 
   private renderItem(el: HTMLElement) {
     const value = getDataString(el, 'value') || el.id || undefined
-    spreadProps(el, this.api.getItemProps({ value }))
+    spreadProps(el, this.api.getItemProps())
     getOwnedElements<HTMLAnchorElement>(this.rootEl, el, 'a')
       .forEach(link => spreadProps(link, this.api.getItemLinkProps({ value })))
   }

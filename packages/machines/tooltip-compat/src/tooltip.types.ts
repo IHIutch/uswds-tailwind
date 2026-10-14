@@ -61,8 +61,6 @@ export interface TooltipApi<T extends PropTypes = PropTypes> {
   visible: boolean
   /** The resolved placement. Null until positioning has run once. */
   placement: Placement | null
-  /** Request the next open state. A controlled parent must update `open` to accept the request. */
-  setOpen: (open: boolean) => void
 
   getRootProps: () => T['element']
   getTriggerProps: () => T['element']

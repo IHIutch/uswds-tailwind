@@ -8,8 +8,6 @@ export const anatomy = createAnatomy('fileInput').parts(
   'box',
   'input',
   'instructions',
-  'dragText',
-  'choose',
   'itemGroup',
   'previewHeading',
   'item',

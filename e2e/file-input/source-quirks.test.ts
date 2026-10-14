@@ -12,3 +12,11 @@ it('queues each announcement during rapid selections', { tags: ['parity'] }, asy
   await vi.waitFor(() => expect(getSrStatusEl()!.textContent).toBe('You have selected the file: first.png'), { timeout: 800, interval: 10 })
   await vi.waitFor(() => expect(getSrStatusEl()!.textContent).toBe('You have selected the file: second.png'), { timeout: 1000 })
 })
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L565 (a filename match must start after index 0)
+it('rejects a file whose name starts with the accepted extension', { tags: ['parity'] }, async () => {
+  await using component = createDisposableFileInput('status', fileInputTemplate({ id: 'status', accept: '.pdf' }))
+  const { getErrorMessageEl, getInputEl } = component.elements
+  await userEvent.upload(getInputEl()!, [file('.pdf', '')])
+  await expect.element(getErrorMessageEl()!).toBeVisible()
+})
