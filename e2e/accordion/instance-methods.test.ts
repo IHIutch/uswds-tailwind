@@ -87,6 +87,21 @@ describe('instance methods', { tags: ['parity'] }, () => {
     expect(getContentEl('b')?.hasAttribute('hidden')).toBeTruthy()
   })
 
+  // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-accordion/src/index.js#L47-L53 (only an expanding button collapses the others)
+  it('close() on a closed item leaves the open item open', async () => {
+    await using component = createDisposableAccordion(rootId, TEMPLATE())
+    const { getRootEl, getTriggerEl, getContentEl } = component.elements
+    await userEvent.click(getTriggerEl('a')!)
+    expect(getTriggerEl('a')?.getAttribute('aria-expanded')).toBe('true')
+
+    await Accordion.getInstance(getRootEl())?.close('b')
+
+    expect(getTriggerEl('a')?.getAttribute('aria-expanded')).toBe('true')
+    expect(getContentEl('a')?.hasAttribute('hidden')).toBeFalsy()
+    expect(getTriggerEl('b')?.getAttribute('aria-expanded')).toBe('false')
+    expect(getContentEl('b')?.hasAttribute('hidden')).toBeTruthy()
+  })
+
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-accordion/src/index.js#L35-L54 (toggle)
   it('toggle() opens a closed item and collapses the others', async () => {
     await using component = createDisposableAccordion(rootId, TEMPLATE())
@@ -126,6 +141,23 @@ describe('instance methods', { tags: ['parity'] }, () => {
 
     expect(getTriggerEl('a')?.getAttribute('aria-expanded')).toBe('true')
     expect(getContentEl('a')?.hasAttribute('hidden')).toBeFalsy()
+    expect(getTriggerEl('b')?.getAttribute('aria-expanded')).toBe('true')
+    expect(getContentEl('b')?.hasAttribute('hidden')).toBeFalsy()
+  })
+
+  // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-accordion/src/index.js#L66 (hide)
+  it('close() keeps the other items open with data-multiple', async () => {
+    await using component = createDisposableAccordion(rootId, TEMPLATE({ multiple: true }))
+    const { getRootEl, getTriggerEl, getContentEl } = component.elements
+    await userEvent.click(getTriggerEl('a')!)
+    await userEvent.click(getTriggerEl('b')!)
+    expect(getTriggerEl('a')?.getAttribute('aria-expanded')).toBe('true')
+    expect(getTriggerEl('b')?.getAttribute('aria-expanded')).toBe('true')
+
+    await Accordion.getInstance(getRootEl())?.close('a')
+
+    expect(getTriggerEl('a')?.getAttribute('aria-expanded')).toBe('false')
+    expect(getContentEl('a')?.hasAttribute('hidden')).toBeTruthy()
     expect(getTriggerEl('b')?.getAttribute('aria-expanded')).toBe('true')
     expect(getContentEl('b')?.hasAttribute('hidden')).toBeFalsy()
   })

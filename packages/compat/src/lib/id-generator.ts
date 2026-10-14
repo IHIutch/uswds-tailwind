@@ -1,29 +1,34 @@
 /**
- * Generates unique, incremental IDs for component instances
- * Uses WeakMap for automatic garbage collection when instances are destroyed
+ * Generates stable IDs for component root elements
+ * Uses WeakMap for automatic garbage collection when elements are removed
  */
 
 // One counter per component type (prefix)
 const counters = new Map<string, number>()
-// Memo: instance -> id (GC-friendly)
-const ids = new WeakMap<object, string>()
+// Memo: element -> id (GC-friendly)
+const ids = new WeakMap<Element, string>()
 
 /**
- * Get a stable, per-type unique ID for an instance.
- * IDs are never reused, even if instances are destroyed.
+ * Get a stable ID for a root element.
+ * Memoized, so re-init ignores the prefixed id the machine wrote to the element.
  *
- * @param instance - The component instance (any object).
+ * @param element - The component root element.
  * @param prefix - Component name, e.g. "accordion" or "modal".
- * @returns e.g. "accordion-1", "modal-3"
+ * @returns The authored id, or e.g. "accordion-1"
  */
-export function getId(instance: object, prefix: string) {
-  let id = ids.get(instance)
+export function getId(element: Element, prefix: string) {
+  let id = ids.get(element)
   if (id)
     return id
 
-  const next = (counters.get(prefix) || 0) + 1
-  counters.set(prefix, next)
-  id = `${prefix}-${next}`
-  ids.set(instance, id)
+  if (element.id) {
+    id = element.id
+  }
+  else {
+    const next = (counters.get(prefix) || 0) + 1
+    counters.set(prefix, next)
+    id = `${prefix}-${next}`
+  }
+  ids.set(element, id)
   return id
 }

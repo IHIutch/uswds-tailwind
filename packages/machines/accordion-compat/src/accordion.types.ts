@@ -44,7 +44,7 @@ export interface AccordionProps extends CommonProperties {
   onValueChange?: ((details: ValueChangeDetails) => void) | undefined
 }
 
-type PropsWithDefault = 'multiple' | 'defaultValue'
+type PropsWithDefault = 'defaultValue'
 
 export interface AccordionSchema {
   props: RequiredBy<AccordionProps, PropsWithDefault>
@@ -55,14 +55,13 @@ export interface AccordionSchema {
   refs: {
     scrollCleanup: VoidFunction | null
   }
-  action: 'expand' | 'collapse' | 'setValue' | 'scrollIntoView' | 'cancelScrollIntoView'
+  action: 'expand' | 'collapse' | 'scrollIntoView' | 'cancelScrollIntoView'
   guard: 'isExpanded'
   event: EventObject & {
     type:
       | 'TRIGGER.CLICK'
       | 'TRIGGER.EXPAND'
       | 'TRIGGER.COLLAPSE'
-      | 'VALUE.SET'
   }
 }
 
@@ -92,10 +91,6 @@ export interface AccordionApi<T extends PropTypes = PropTypes> {
    * The values of the expanded accordion items.
    */
   value: string[]
-  /**
-   * Sets the expanded accordion items.
-   */
-  setValue: (value: string[]) => void
   /**
    * Returns the state of an accordion item.
    */
