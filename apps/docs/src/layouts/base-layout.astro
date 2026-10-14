@@ -3,6 +3,9 @@ import GlobalNav from "#components/global-nav/index.astro";
 import { LIBRARY_COOKIE, libraryFromPath, resolveLibrary } from '#utils/library'
 import { getPageLinks } from '#utils/metadata'
 import { getSearchCategory } from '#utils/search-results'
+import merriweatherUrl from '@fontsource-variable/merriweather/files/merriweather-latin-wght-normal.woff2?url'
+import publicSansUrl from '@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2?url'
+import sourceSansUrl from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url'
 import { SEO } from "astro-seo";
 import { ClientRouter } from "astro:transitions";
 
@@ -46,6 +49,9 @@ Astro.response.headers.set('Cache-Control', 'private, no-store')
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={publicSansUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={merriweatherUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={sourceSansUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     <SEO
       title={metaTitle}
       description={description}
