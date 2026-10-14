@@ -7,6 +7,7 @@ export const machine = createMachine<InputMaskSchema>({
   props({ props }) {
     return {
       defaultValue: '',
+      mask: '',
       ...props,
     }
   },
@@ -16,7 +17,7 @@ export const machine = createMachine<InputMaskSchema>({
   },
 
   context({ bindable, prop }) {
-    const mask = prop('mask') ?? ''
+    const mask = prop('mask')
     const initialValue = maskValue(prop('value') ?? prop('defaultValue'), mask, prop('charset'))
     return {
       value: bindable<string>(() => {
@@ -25,7 +26,10 @@ export const machine = createMachine<InputMaskSchema>({
           defaultValue: initialValue,
           value: controlledValue === undefined
             ? undefined
-            : maskValue(controlledValue, prop('mask') ?? '', prop('charset')),
+            : maskValue(controlledValue, prop('mask'), prop('charset')),
+          onChange(value) {
+            prop('onValueChange')?.({ value })
+          },
         }
       }),
     }
@@ -46,10 +50,9 @@ export const machine = createMachine<InputMaskSchema>({
   implementations: {
     actions: {
       updateValue({ event, prop, context, scope }) {
-        const masked = maskValue(event.value, prop('mask') ?? '', prop('charset'))
+        const masked = maskValue(event.value, prop('mask'), prop('charset'))
         context.set('value', masked)
         dom.setInputValue(scope, prop('value') === undefined ? masked : context.get('value'))
-        prop('onValueChange')?.({ value: masked })
       },
       syncInput({ context, scope }) {
         dom.setInputValue(scope, context.get('value'))

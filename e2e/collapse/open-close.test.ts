@@ -48,3 +48,12 @@ it('close() is a no-op when already closed', { tags: ['new'] }, async () => {
 
   expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('closed')
 })
+
+it('open() then close() in the same tick ends closed', { tags: ['new'] }, async () => {
+  await using component = createDisposableCollapse(rootId, TEMPLATE)
+  const instance = component.elements.getInstance()!
+  void instance.open()
+  await instance.close()
+
+  expect(component.elements.getRootEl()?.getAttribute('data-state')).toBe('closed')
+})

@@ -7,10 +7,6 @@ export const machine = createMachine<CollapseSchema>({
     return open ? 'open' : 'closed'
   },
 
-  context() {
-    return {}
-  },
-
   watch({ track, prop, action }) {
     track([() => prop('open')], () => {
       action(['syncControlledOpen'])

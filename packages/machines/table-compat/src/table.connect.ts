@@ -17,10 +17,6 @@ export function connect<T extends PropTypes>(
     sortDescriptor,
     announcement,
 
-    setSortDescriptor(sortDescriptor) {
-      send({ type: 'SORT', columnIndex: sortDescriptor?.column ?? null, direction: sortDescriptor?.direction })
-    },
-
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
@@ -32,29 +28,25 @@ export function connect<T extends PropTypes>(
       return normalize.element(parts.table.attrs)
     },
 
-    getHeaderProps({ columnIndex, headerName, headerId }) {
+    getHeaderProps({ columnIndex, headerName }) {
       const direction = sortDescriptor?.column === columnIndex ? sortDescriptor.direction : undefined
       return normalize.element({
         ...parts.header.attrs,
-        'id': dom.getHeaderId(scope, headerId ?? columnIndex),
+        'id': dom.getHeaderId(scope, columnIndex),
         'data-sortable': dataAttr(true),
         'aria-sort': direction,
         'aria-label': `${headerName}, sortable column, currently ${direction ? `sorted ${direction}` : 'unsorted'}`,
       })
     },
 
-    getSortTriggerProps({ columnIndex, headerName, headerId }) {
+    getSortTriggerProps({ columnIndex, headerName }) {
       const sortedAscending = sortDescriptor?.column === columnIndex && sortDescriptor.direction === 'ascending'
       return normalize.button({
         ...parts.sortTrigger.attrs,
-        id: dom.getSortTriggerId(scope, headerId ?? columnIndex),
+        id: dom.getSortTriggerId(scope, columnIndex),
         type: 'button',
         title: `Click to sort by ${headerName} in ${sortedAscending ? 'descending' : 'ascending'} order.`,
-        onClick(event) {
-          const root = dom.getRootEl(scope)
-          if (!root?.contains(event.currentTarget))
-            return
-          event.preventDefault()
+        onClick() {
           send({
             type: 'SORT',
             columnIndex,

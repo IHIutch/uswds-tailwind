@@ -6,12 +6,12 @@
 Headless [zag-js](https://zagjs.com/) state machine for the USWDS collapsible (disclosure) component. Provides state and accessibility behavior used by `@uswds-tailwind/react` and `@uswds-tailwind/compat`.
 
 > [!NOTE]
-> This package is in **alpha**. APIs may change between releases.
+> This package is in **beta**. APIs may change between releases.
 
 ## Install
 
 ```bash
-npm install @uswds-tailwind/collapse-compat@alpha
+npm install @uswds-tailwind/collapse-compat
 ```
 
 ## Usage
