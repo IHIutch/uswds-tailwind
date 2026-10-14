@@ -42,6 +42,12 @@ export interface UseFieldProps {
 
 export type UseFieldReturn = ReturnType<typeof useField>
 
+/**
+ * Shared by a control root that wraps a Field (e.g. CharacterCount): its input id, and its own
+ * validity, which styles the root and label without making the field invalid.
+ */
+export const FieldControlContext = React.createContext<{ id: string, invalid: boolean } | null>(null)
+
 export function useField(props: UseFieldProps = {}) {
   const fieldset = useFieldsetContext()
 
@@ -49,9 +55,11 @@ export function useField(props: UseFieldProps = {}) {
 
   const [hasErrorText, setHasErrorText] = React.useState(false)
   const [hasDescription, setHasDescription] = React.useState(false)
+  const control = React.useContext(FieldControlContext)
+  const controlInvalid = Boolean(control?.invalid)
 
   const uid = React.useId()
-  const id = props.id ?? uid
+  const id = control?.id ?? props.id ?? uid
   const rootRef = React.useRef<HTMLDivElement>(null)
 
   const rootId = ids?.control ?? `field::${id}`
@@ -93,9 +101,9 @@ export function useField(props: UseFieldProps = {}) {
         'id': rootId,
         'ref': rootRef,
         'data-disabled': dataAttr(disabled),
-        'data-invalid': dataAttr(invalid),
+        'data-invalid': dataAttr(invalid || controlInvalid),
       }) as React.HTMLAttributes<HTMLElement>,
-    [disabled, invalid, readOnly, rootId],
+    [disabled, invalid, controlInvalid, readOnly, rootId],
   )
 
   const getLabelProps = React.useMemo(
@@ -105,9 +113,9 @@ export function useField(props: UseFieldProps = {}) {
         'id': labelId,
         'htmlFor': id,
         'data-disabled': dataAttr(disabled),
-        'data-invalid': dataAttr(invalid),
+        'data-invalid': dataAttr(invalid || controlInvalid),
       }) as React.LabelHTMLAttributes<HTMLLabelElement>,
-    [disabled, invalid, readOnly, required, id, labelId],
+    [disabled, invalid, controlInvalid, readOnly, required, id, labelId],
   )
 
   const getControlProps = React.useMemo(

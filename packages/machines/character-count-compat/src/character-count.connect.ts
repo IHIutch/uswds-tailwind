@@ -5,22 +5,16 @@ import { dataAttr, visuallyHiddenStyle } from '@zag-js/dom-query'
 import { parts } from './character-count.anatomy'
 import * as dom from './character-count.dom'
 
-function mergeIds(...values: Array<string | undefined>) {
-  const ids = values.flatMap(value => value?.trim().split(/\s+/) ?? [])
-  return [...new Set(ids)].join(' ') || undefined
-}
-
 export function connect<T extends PropTypes>(
   service: Service<CharacterCountSchema>,
   normalize: NormalizeProps<T>,
 ): CharacterCountApi<T> {
-  const { send, prop, context, computed, scope, refs } = service
+  const { send, prop, context, computed, scope } = service
 
   const value = context.get('value')
   const count = value.length
   const maxLength = prop('maxLength')
   const srStatus = context.get('srStatus')
-  const descriptionRendered = context.get('isDescriptionRendered')
   const invalid = computed('isOverLimit')
   const statusText = computed('statusText')
 
@@ -44,6 +38,15 @@ export function connect<T extends PropTypes>(
       })
     },
 
+    getLabelProps() {
+      return normalize.label({
+        ...parts.label.attrs,
+        'id': dom.getLabelId(scope),
+        'htmlFor': dom.getInputId(scope),
+        'data-invalid': dataAttr(invalid),
+      })
+    },
+
     getControlProps() {
       return normalize.element({
         ...parts.control.attrs,
@@ -56,12 +59,9 @@ export function connect<T extends PropTypes>(
       const inputProps = {
         ...parts.input.attrs,
         'id': dom.getInputId(scope),
-        'aria-describedby': mergeIds(
-          prop('inputDescriptionIds'),
-          descriptionRendered ? dom.getDescriptionId(scope) : undefined,
-        ),
+        'aria-describedby': prop('inputDescriptionIds'),
         'data-invalid': dataAttr(invalid),
-        'value': value,
+        'defaultValue': value,
         onInput(event: { currentTarget: HTMLInputElement | HTMLTextAreaElement }) {
           send({ type: 'VALUE.SET', value: event.currentTarget.value })
         },
@@ -81,7 +81,6 @@ export function connect<T extends PropTypes>(
         'id': dom.getDescriptionId(scope),
         'aria-live': 'off',
         'style': visuallyHiddenStyle,
-        'ref': refs.get('descriptionRef'),
       })
     },
 
