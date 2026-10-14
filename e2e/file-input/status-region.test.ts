@@ -32,5 +32,5 @@ it('does not announce a rejected selection', { tags: ['parity'] }, async () => {
 
   await userEvent.upload(getInputEl()!, [file('bad.pdf', 'application/pdf')])
   await expect.element(getErrorMessageEl()!).toBeVisible()
-  await expectNever(() => expect(page.getByRole('status').element()).not.toHaveTextContent('No file selected.'), 1500)
+  await expectNever(() => expect(page.getByRole('status').query()?.textContent).not.toBe('No file selected.'), 1500)
 })
