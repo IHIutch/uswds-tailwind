@@ -239,13 +239,15 @@ function useNavDropdownItemValue() {
 
 export type NavDropdownProps = Omit<dropdown.Props, 'id'> & React.ComponentPropsWithoutRef<'div'>
 
-function NavDropdown({ className, ...props }: NavDropdownProps) {
+function NavDropdown({ className, id, ...props }: NavDropdownProps) {
+  const generatedId = React.useId()
+  const [machineProps, rest] = dropdown.splitProps(props)
   const service = useMachine(dropdown.machine, {
-    id: React.useId(),
-    ...props,
+    id: id ?? generatedId,
+    ...machineProps,
   })
   const api = dropdown.connect(service, normalizeProps)
-  const mergedProps = mergeProps(api.getRootProps(), props)
+  const mergedProps = mergeProps(api.getRootProps(), rest)
 
   return (
     <NavDropdownContext.Provider value={{ api }}>
@@ -274,7 +276,7 @@ const NavDropdownTrigger = React.forwardRef<HTMLButtonElement, NavDropdownTrigge
         {...mergedProps}
         className={cn(
           // base
-          'relative text-gray-60 cursor-pointer text-left flex items-center justify-between gap-3 leading-none ',
+          'group relative text-gray-60 cursor-pointer text-left flex items-center justify-between gap-3 leading-none',
           // :after
           'data-current:after:block data-current:after:absolute data-current:after:bg-blue-60v',
           // Mobile
@@ -327,7 +329,7 @@ export type NavDropdownItemProps = React.ComponentPropsWithoutRef<'li'> & {
 const NavDropdownItem = React.forwardRef<HTMLLIElement, NavDropdownItemProps>(
   ({ className, value, ...props }, forwardedRef) => {
     const { api } = useNavDropdownContext()
-    const mergedProps = mergeProps(api.getItemProps({ value }), props)
+    const mergedProps = mergeProps(api.getItemProps(), props)
 
     return (
       <NavDropdownItemContext.Provider value={value}>
@@ -374,7 +376,7 @@ function NavDropdownIndicator({ className, children, ...props }: NavDropdownIndi
     <div
       {...props}
       aria-hidden="true"
-      className={cn('group h-full flex items-center ml-auto shrink-0', className)}
+      className={cn('h-full flex items-center ml-auto shrink-0', className)}
     >
       {children || (
         <span className={cn(
