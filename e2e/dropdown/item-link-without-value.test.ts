@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { expect, it, vi } from 'vitest'
+import { page, userEvent } from 'vitest/browser'
 import { createDisposableDropdown } from './_utils.js'
 
 const id = 'test'
@@ -27,4 +27,16 @@ it('a link in an item without a value closes the menu', { tags: ['parity'] }, as
   await userEvent.click(link)
   expect(trigger.getAttribute('aria-expanded')).toBe('false')
   expect(component.elements.getContentEl()?.hidden).toBe(true)
+})
+
+it('a link in an item without a value does not report a selection', { tags: ['new'] }, async () => {
+  const onItemSelect = vi.fn()
+  await using _component = createDisposableDropdown(id, TEMPLATE, { onItemSelect })
+  const trigger = page.getByRole('button', { name: `Open ${id}` })
+
+  await userEvent.click(trigger)
+  await userEvent.click(page.getByRole('link', { name: 'No value' }))
+
+  await expect.element(trigger).toHaveAttribute('aria-expanded', 'false')
+  expect(onItemSelect).not.toHaveBeenCalled()
 })

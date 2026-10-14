@@ -5,13 +5,6 @@ import { dataAttr } from '@zag-js/dom-query'
 import { parts } from './tooltip.anatomy'
 import * as dom from './tooltip.dom'
 
-const ARROW_FLOATING_STYLE = {
-  bottom: 'rotate(45deg)',
-  left: 'rotate(135deg)',
-  top: 'rotate(225deg)',
-  right: 'rotate(315deg)',
-} as const
-
 export function connect<T extends PropTypes>(service: Service<TooltipSchema>, normalize: NormalizeProps<T>): TooltipApi<T> {
   const { context, prop, scope, send, state } = service
 
@@ -26,9 +19,6 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
     open,
     visible,
     placement: currentPlacement,
-    setOpen(nextOpen) {
-      send({ type: nextOpen ? 'show' : 'hide' })
-    },
 
     getRootProps() {
       return normalize.element({
@@ -47,19 +37,13 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
         'aria-describedby': contentId,
         'tabIndex': 0,
         'data-placement': prop('placement'),
-        onMouseOver(event) {
-          if (!dom.isOwnTriggerEvent(event))
-            return
+        onMouseOver() {
           send({ type: 'show' })
         },
-        onFocus(event) {
-          if (!dom.isOwnTriggerEvent(event))
-            return
+        onFocus() {
           send({ type: 'show' })
         },
-        onBlur(event) {
-          if (!dom.isOwnTriggerEvent(event))
-            return
+        onBlur() {
           send({ type: 'hide' })
         },
       })
@@ -76,7 +60,6 @@ export function connect<T extends PropTypes>(service: Service<TooltipSchema>, no
         'data-placement': currentPlacement ?? undefined,
         'style': {
           '--arrow-offset': '-50%',
-          '--arrow-transform': currentPlacement ? ARROW_FLOATING_STYLE[currentPlacement] : undefined,
         },
       })
     },

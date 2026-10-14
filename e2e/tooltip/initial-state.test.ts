@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createDisposableTooltip, TOOLTIP } from './_utils.js'
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L321-L355 (initial placement, trigger description, and hidden content)
@@ -13,4 +14,15 @@ it('renders the trigger, description link, and hidden content', { tags: ['parity
   expect(content.getAttribute('role')).toBe('tooltip')
   expect(content.getAttribute('aria-hidden')).toBe('true')
   expect(content.textContent).toBe('Tooltip test')
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L321-L325 (a trigger without a position defaults to top)
+it('places the tooltip on top when no placement is set', { tags: ['parity'] }, async () => {
+  await using component = createDisposableTooltip('test', TOOLTIP('test').replace(' data-placement="top"', ''))
+  const { getTriggerEl, getContentEl } = component.elements
+
+  await userEvent.hover(getTriggerEl())
+
+  await expect.element(getTriggerEl()).toHaveAttribute('data-placement', 'top')
+  await expect.element(getContentEl()).toHaveAttribute('data-placement', 'top')
 })
