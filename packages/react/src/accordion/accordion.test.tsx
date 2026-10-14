@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
@@ -112,9 +113,9 @@ it.skip('keyboard: Space toggles panel', async () => {
   await expect.element(content).toBeVisible()
 })
 
-it.each([undefined, 'exact-accordion'])('uses the machine namespace and honors ids.root (%s)', async (rootId) => {
+it.each([undefined, 'exact-accordion'])('uses the machine namespace and honors ids (%s)', async (rootId) => {
   const screen = await render(
-    <Accordion.Root id="faq" ids={{ root: rootId, itemContent: () => 'exact-panel' }}>
+    <Accordion.Root id="faq" ids={{ root: rootId, itemTrigger: () => 'exact-button', itemContent: () => 'exact-panel' }}>
       <Accordion.Item value="first">
         <Accordion.ItemTrigger>First</Accordion.ItemTrigger>
         <Accordion.ItemContent>First content</Accordion.ItemContent>
@@ -123,8 +124,26 @@ it.each([undefined, 'exact-accordion'])('uses the machine namespace and honors i
   )
   const trigger = screen.getByRole('button', { name: 'First' })
   expect(document.getElementById(rootId ?? 'accordion:faq')).toContainElement(trigger.element())
-  expect(trigger.element().id).toBe('accordion:faq:trigger:first')
+  expect(trigger.element().id).toBe('exact-button')
   expect(trigger.element().getAttribute('aria-controls')).toBe('exact-panel')
   await trigger.click()
+  await expect.element(screen.getByText('First content')).toBeVisible()
+})
+
+it('a controlled accordion opens on click', async () => {
+  function Controlled() {
+    const [value, setValue] = React.useState<string[]>([])
+    return (
+      <Accordion.Root value={value} onValueChange={details => setValue(details.value)}>
+        <Accordion.Item value="first">
+          <Accordion.ItemTrigger>First</Accordion.ItemTrigger>
+          <Accordion.ItemContent>First content</Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
+    )
+  }
+  const screen = await render(<Controlled />)
+
+  await screen.getByRole('button', { name: 'First' }).click()
   await expect.element(screen.getByText('First content')).toBeVisible()
 })

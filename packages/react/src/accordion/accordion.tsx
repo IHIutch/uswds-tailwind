@@ -50,19 +50,16 @@ function useAccordionItemContext() {
 }
 
 const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
-  ({ className, id, ids, multiple, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
+  ({ className, ...props }, forwardedRef) => {
+    const [machineProps, rest] = accordion.splitProps(props)
     const generatedId = React.useId()
     const service = useMachine(accordion.machine, {
-      id: id ?? generatedId,
-      ids,
-      multiple,
-      value,
-      defaultValue,
-      onValueChange,
+      ...machineProps,
+      id: machineProps.id ?? generatedId,
     })
 
     const api = accordion.connect(service, normalizeProps)
-    const mergedProps = mergeProps(api.getRootProps(), props)
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <AccordionContext.Provider value={{ api }}>
@@ -73,9 +70,11 @@ const AccordionRoot = React.forwardRef<HTMLDivElement, AccordionRootProps>(
 )
 
 const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
-  ({ className, value, ...props }, forwardedRef) => {
+  ({ className, ...props }, forwardedRef) => {
     const { api } = useAccordionContext()
-    const mergedProps = mergeProps(api.getItemProps({ value }), props)
+    const [itemProps, rest] = accordion.splitItemProps(props)
+    const { value } = itemProps
+    const mergedProps = mergeProps(api.getItemProps(itemProps), rest)
 
     return (
       <AccordionItemContext.Provider value={{ value }}>
