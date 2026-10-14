@@ -45,3 +45,70 @@ it('drops the wrap marker on close after every placement is clipped', { tags: ['
   expect(content.hasAttribute('data-wrap')).toBe(false)
   expect(content.getAttribute('data-placement')).toBe('left')
 })
+
+// Bare markup has no tooltip styles; lay the content out from the machine's coordinates.
+const CONTENT_STYLE = 'position: absolute; display: block; top: var(--tooltip-y); left: var(--tooltip-x); white-space: nowrap'
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L220-L259 (a clipped placement falls back to the first one that fits)
+it('flips a top tooltip clipped by the viewport to the bottom', { tags: ['parity'] }, async () => {
+  await using component = createDisposableTooltip('test', TOOLTIP('test'))
+  const { getRootEl, getTriggerEl, getContentEl } = component.elements
+  getRootEl().style.cssText = 'position: fixed; top: 0; left: 150px'
+  getContentEl().style.cssText = CONTENT_STYLE
+
+  await userEvent.hover(getTriggerEl())
+
+  await expect.element(getContentEl()).toHaveAttribute('data-placement', 'bottom')
+  expect(getContentEl().getBoundingClientRect().top).toBeGreaterThan(getTriggerEl().getBoundingClientRect().bottom)
+})
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L134-L137 (top is centered on the trigger)
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L154-L155 (bottom is centered on the trigger)
+for (const placement of ['top', 'bottom']) {
+  it(`centers a ${placement} tooltip on its trigger`, { tags: ['parity'] }, async () => {
+    await using component = createDisposableTooltip('test', TOOLTIP('test', placement))
+    const { getRootEl, getTriggerEl, getContentEl } = component.elements
+    getRootEl().style.cssText = 'position: fixed; top: 150px; left: 150px'
+    getContentEl().style.cssText = CONTENT_STYLE
+
+    await userEvent.hover(getTriggerEl())
+
+    await expect.element(getContentEl()).toHaveAttribute('data-placement', placement)
+    const content = getContentEl().getBoundingClientRect()
+    const trigger = getTriggerEl().getBoundingClientRect()
+    expect(content.left + content.width / 2).toBeCloseTo(trigger.left + trigger.width / 2, 0)
+  })
+}
+
+// https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L65-L72 (old coordinates are cleared before measuring)
+it('reopens a bottom tooltip in the same place', { tags: ['parity'] }, async () => {
+  await using component = createDisposableTooltip('test', TOOLTIP('test', 'bottom'))
+  const { getRootEl, getTriggerEl, getContentEl } = component.elements
+  getRootEl().style.cssText = 'position: fixed; top: 150px; left: 150px'
+  getContentEl().style.cssText = CONTENT_STYLE
+  await userEvent.hover(getTriggerEl())
+  await expect.element(getContentEl()).toHaveAttribute('data-visible')
+  const firstTop = getContentEl().getBoundingClientRect().top
+  await userEvent.unhover(getTriggerEl())
+  await expect.element(getContentEl()).toHaveAttribute('aria-hidden', 'true')
+
+  await userEvent.hover(getTriggerEl())
+
+  await expect.element(getContentEl()).toHaveAttribute('data-visible')
+  expect(getContentEl().getBoundingClientRect().top).toBe(firstTop)
+})
+
+// USWDS places this tooltip away from the trigger: https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-tooltip/src/index.js#L192-L205
+it('places a left tooltip next to a trigger with a wide left margin', { tags: ['new'] }, async () => {
+  await using component = createDisposableTooltip('test', TOOLTIP('test', 'left'))
+  const { getRootEl, getTriggerEl, getContentEl } = component.elements
+  getRootEl().style.cssText = 'position: fixed; top: 150px; left: 100px'
+  getTriggerEl().style.marginLeft = '200px'
+  getContentEl().style.cssText = CONTENT_STYLE
+
+  await userEvent.hover(getTriggerEl())
+
+  await expect.element(getContentEl()).toHaveAttribute('data-placement', 'left')
+  const gap = getTriggerEl().getBoundingClientRect().left - getContentEl().getBoundingClientRect().right
+  expect(gap).toBeCloseTo(5, 0)
+})
