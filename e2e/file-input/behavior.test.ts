@@ -10,7 +10,6 @@ describe('file input behavior', () => {
     const { elements } = component
 
     expect(elements.getInstructionsEl()).toBeVisible()
-    expect(elements.getInstructionsEl()).toHaveTextContent('Drag file here or choose from folder')
     expect(elements.getInputEl()).toHaveAccessibleName('Drag file here or choose from folder')
     expect(elements.getSrStatusEl()).toHaveTextContent('No file selected.')
     expect(elements.getPreviewHeaderEl()).not.toBeVisible()

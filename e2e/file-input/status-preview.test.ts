@@ -49,6 +49,27 @@ describe('file previews and live status', () => {
     })
   })
 
+  // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L470-L491 (extension fallbacks for files without an image preview)
+  it('shows word, excel, video, and generic fallbacks', { tags: ['parity'] }, async () => {
+    await using component = createDisposableFileInput('behavior', fileInputTemplate({ multiple: true }))
+    const { elements } = component
+    const fallbacks = {
+      'a.doc': 'word',
+      'b.docx': 'word',
+      'c.pages': 'word',
+      'd.xls': 'excel',
+      'e.xlsx': 'excel',
+      'f.numbers': 'excel',
+      'g.mov': 'video',
+      'h.mp4': 'video',
+      'i.txt': 'generic',
+    }
+
+    await userEvent.upload(elements.getInputEl()!, Object.keys(fallbacks).map(name => file(name)))
+    for (const [name, type] of Object.entries(fallbacks))
+      await expect.poll(() => elements.getItemPreviewImageEl(name)?.getAttribute('data-preview-type')).toBe(type)
+  })
+
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L319-L353 (remove old previews and restore instructions)
   // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-file-input/src/index.js#L439-L446 (clear previews before rendering a new selection)
   it('removes the old preview when a newer selection arrives', { tags: ['parity'] }, async () => {

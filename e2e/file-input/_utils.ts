@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import { fileInputInit } from '../../packages/compat/src/file-input'
 import { createDisposableComponent } from '../_utils'
 
@@ -39,6 +40,28 @@ export function createDisposableFileInput(id: string, template: string) {
   )
 }
 
+// userEvent can't change the pointer type, so tests replace matchMedia the way the USWDS specs do.
+// `null` removes matchMedia entirely. Declare with `using` so the original is restored.
+export function stubPointer(matches: boolean | null) {
+  const listeners = new Set<() => void>()
+  const mediaQuery = {
+    matches: !!matches,
+    media: '(hover: hover) and (pointer: fine)',
+    addEventListener: (_type: string, listener: () => void) => listeners.add(listener),
+    removeEventListener: (_type: string, listener: () => void) => listeners.delete(listener),
+  }
+  vi.stubGlobal('matchMedia', matches === null ? undefined : () => mediaQuery)
+  return {
+    change(next: boolean) {
+      mediaQuery.matches = next
+      listeners.forEach(listener => listener())
+    },
+    [Symbol.dispose]: () => {
+      vi.unstubAllGlobals()
+    },
+  }
+}
+
 export function file(name: string, type = 'application/octet-stream', contents = 'content') {
   return new File([contents], name, { type })
 }
@@ -60,7 +83,7 @@ export function fileInputTemplate(options: FileInputOptions = {}) {
     <label data-part="label">Upload file</label>
     <div data-part="sr-status"></div>
     <div data-part="dropzone">
-      <div data-part="instructions"><span data-part="drag-text"></span> <span data-part="choose"></span></div>
+      <div data-part="instructions"><span class="fine-pointer:hidden"><span>Choose from folder</span></span><span class="hidden fine-pointer:inline">Drag ${multiple ? 'files' : 'file'} here or <span>choose from folder</span></span></div>
       <input data-part="input" type="file"
         ${multiple ? 'multiple' : ''} ${disabled ? 'disabled' : ''}
         ${ariaDisabled ? 'aria-disabled="true"' : ''}

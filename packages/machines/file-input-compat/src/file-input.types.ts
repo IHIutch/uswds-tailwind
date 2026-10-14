@@ -46,7 +46,7 @@ export interface FileInputProps extends DirectionProperty, CommonProperties {
   errorText?: string | undefined
 }
 
-type PropsWithDefault = 'disabled' | 'ariaDisabled' | 'multiple' | 'errorText'
+type PropsWithDefault = 'errorText'
 
 export interface FileInputSchema {
   props: RequiredBy<FileInputProps, PropsWithDefault>
@@ -56,13 +56,15 @@ export interface FileInputSchema {
     invalid: boolean
     errorText: string
     srStatusText: string
+    /** Whether the primary pointer can hover precisely; picks the input's default name. */
+    finePointer: boolean
   }
   refs: {
     statusTimers: Set<ReturnType<Window['setTimeout']>>
     /** Fixed at initialization: initially disabled inputs never gain a status region. */
     hasStatus: boolean
   }
-  effect: 'cleanupTimers'
+  effect: 'cleanupTimers' | 'trackFinePointer'
   action: 'setEventFiles'
   event:
     | { type: 'FILE.SELECT', files: File[] }
@@ -85,11 +87,6 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   /** Leading heading text, excluding the change action. */
   previewHeadingText: string
   previewChangeText: string
-  dragText: string
-  chooseText: string
-  disabled: boolean
-  /** Stable ID derived from the file name and size. */
-  getFileId: (file: File) => string
   getPreviewType: (file: File) => PreviewType
   getRootProps: () => T['element']
   getLabelProps: () => T['label']
@@ -97,8 +94,6 @@ export interface FileInputApi<T extends PropTypes = PropTypes> {
   getBoxProps: () => T['element']
   getInputProps: () => T['input']
   getInstructionsProps: () => T['element']
-  getDragTextProps: () => T['element']
-  getChooseProps: () => T['element']
   getItemGroupProps: () => T['element']
   getPreviewHeadingProps: () => T['element']
   getItemProps: (props: ItemProps) => T['element']
