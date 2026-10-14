@@ -1,5 +1,6 @@
-import { expect, it, vi } from 'vitest'
-import { userEvent } from 'vitest/browser'
+import { expect, it, onTestFinished, vi } from 'vitest'
+import { page, userEvent } from 'vitest/browser'
+import { expectNever } from '../_utils.js'
 import { createDisposableDropdown } from './_utils.js'
 
 const rootId = 'test'
@@ -16,7 +17,7 @@ const TEMPLATE = `
 `
 
 // https://github.com/uswds/uswds/blob/v3.14.0/packages/usa-language-selector/src/index.js#L60 (link activation closes the active menu)
-it.each(['pointer', 'keyboard'] as const)('closes the menu and returns focus without preventing link navigation on %s activation', { tags: ['parity'] }, async (activation) => {
+it.each(['pointer', 'keyboard'] as const)('closes the menu without preventing link navigation on %s activation', { tags: ['parity'] }, async (activation) => {
   const originalUrl = location.href
   try {
     history.replaceState(null, '', '#before-selection')
@@ -36,9 +37,39 @@ it.each(['pointer', 'keyboard'] as const)('closes the menu and returns focus wit
 
     await vi.waitFor(() => expect(location.hash).toBe('#english'))
     await vi.waitFor(() => expect(getContentEl()?.hidden).toBe(true))
-    expect(document.activeElement).toBe(getTriggerEl())
   }
   finally {
     history.replaceState(null, '', originalUrl)
   }
+})
+
+it.each(['pointer', 'keyboard'] as const)('returns focus to the trigger on %s link activation', { tags: ['new'] }, async (activation) => {
+  const originalUrl = location.href
+  onTestFinished(() => history.replaceState(null, '', originalUrl))
+  await using _component = createDisposableDropdown(rootId, TEMPLATE)
+  const trigger = page.getByRole('button', { name: 'Languages' })
+  const link = page.getByRole('link', { name: 'English' })
+
+  await userEvent.click(trigger)
+  if (activation === 'pointer') {
+    await userEvent.click(link)
+  }
+  else {
+    link.element().focus()
+    await userEvent.keyboard('{Enter}')
+  }
+
+  await expect.element(trigger).toHaveFocus()
+})
+
+it('keeps the menu open when a link click is cancelled', { tags: ['new'] }, async () => {
+  await using _component = createDisposableDropdown(rootId, TEMPLATE)
+  const trigger = page.getByRole('button', { name: 'Languages' })
+  const link = page.getByRole('link', { name: 'English' })
+
+  await userEvent.click(trigger)
+  link.element().addEventListener('click', event => event.preventDefault(), { capture: true })
+  await userEvent.click(link)
+
+  await expectNever(() => expect(trigger.element()).toHaveAttribute('aria-expanded', 'false'))
 })
