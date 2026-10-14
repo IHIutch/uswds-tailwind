@@ -19,23 +19,10 @@ export function connect<T extends PropTypes>(
       send({ type: nextOpen ? 'OPEN' : 'CLOSE' })
     },
 
-    getRootProps() {
-      return normalize.element({
-        ...parts.root.attrs,
-        'id': dom.getRootId(scope),
-        'data-state': open ? 'open' : 'closed',
-        'style': compact<JSX.CSSProperties>({
-          pointerEvents: 'none',
-        }),
-      })
-    },
-
     getTriggerProps({ index}: { index?: number } = {}) {
       return normalize.button({
         ...parts.trigger.attrs,
         'id': dom.getTriggerId(scope, index),
-        'type': 'button',
-        'data-ownedby': scope.id,
         'aria-controls': dom.getContentId(scope),
         'data-state': open ? 'open' : 'closed',
         'role': 'button',
@@ -109,7 +96,6 @@ export function connect<T extends PropTypes>(
         onClick(event) {
           if (event.defaultPrevented)
             return
-          event.stopPropagation()
           send({ type: 'CLOSE' })
         },
       })

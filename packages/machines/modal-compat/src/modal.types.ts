@@ -2,7 +2,6 @@ import type { EventObject, Machine, Service } from '@zag-js/core'
 import type {
   CommonProperties,
   PropTypes,
-  RequiredBy,
 } from '@zag-js/types'
 
 /* -----------------------------------------------------------------------------
@@ -54,10 +53,8 @@ export interface ModalProps extends CommonProperties {
   'forceAction'?: boolean | undefined
 }
 
-type PropsWithDefault = 'forceAction'
-
 export interface ModalSchema {
-  props: RequiredBy<ModalProps, PropsWithDefault>
+  props: ModalProps
   state: 'open' | 'closed'
   context: {
     rendered: {
@@ -96,7 +93,6 @@ export interface ModalApi<T extends PropTypes = PropTypes> {
    */
   setOpen: (open: boolean) => void
 
-  getRootProps: () => T['element']
   getTriggerProps: (props?: { index?: number }) => T['button']
   getBackdropProps: () => T['element']
   getPositionerProps: () => T['element']

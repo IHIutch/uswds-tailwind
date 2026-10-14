@@ -8,13 +8,6 @@ import { preventBodyScroll } from '@zag-js/remove-scroll'
 import * as dom from './modal.dom'
 
 export const machine = createMachine<ModalSchema>({
-  props({ props }) {
-    return {
-      forceAction: false,
-      ...props,
-    }
-  },
-
   initialState({ prop }) {
     return prop('open') ? 'open' : 'closed'
   },
@@ -72,16 +65,10 @@ export const machine = createMachine<ModalSchema>({
         'CONTROLLED.OPEN': {
           target: 'open',
         },
-        'OPEN': [
-          {
-            guard: 'isOpenControlled',
-            actions: ['invokeOnOpen'],
-          },
-          {
-            target: 'open',
-            actions: ['invokeOnOpen'],
-          },
-        ],
+        'OPEN': {
+          target: 'open',
+          actions: ['invokeOnOpen', 'setTriggerIndex'],
+        },
         'TOGGLE': [
           {
             guard: 'isOpenControlled',
@@ -105,10 +92,8 @@ export const machine = createMachine<ModalSchema>({
       trackDismissableElement({ scope, send, prop }) {
         const getContentEl = () => dom.getContentEl(scope)
         return trackDismissableElement(getContentEl, {
-          defer: true,
           pointerBlocking: true,
           layerStyleTargets: [() => dom.getBackdropEl(scope), () => dom.getPositionerEl(scope)],
-          exclude: [dom.getTriggerEl(scope), ...dom.getTriggerEls(scope)].filter(Boolean) as HTMLElement[],
           onInteractOutside(event) {
             if (prop('forceAction')) {
               event.preventDefault()
@@ -130,15 +115,12 @@ export const machine = createMachine<ModalSchema>({
       },
       hideContentBelow({ scope }) {
         const getElements = () => [dom.getContentEl(scope)]
-        return ariaHidden(getElements, { defer: true })
+        return ariaHidden(getElements)
       },
 
       trapFocus({ scope, context }) {
         return trapFocus(() => dom.getContentEl(scope), {
-          preventScroll: true,
-          // Returns focus to the trigger that opened the modal, else the first trigger, else whatever was
-          // focused before. A WebKit click does not focus the button, so the trap alone would land on body.
-          setReturnFocus: el => dom.getActiveTriggerEl(scope, context.get('triggerIndex')) ?? el,
+          setReturnFocus: el => dom.getReturnFocusEl(scope, context.get('triggerIndex'), el),
           initialFocus: () => getInitialFocus({
             root: dom.getContentEl(scope),
             getInitialEl: () => query(dom.getContentEl(scope), '[data-focus]'),
@@ -157,7 +139,8 @@ export const machine = createMachine<ModalSchema>({
         })
       },
       setTriggerIndex({ context, event }) {
-        context.set('triggerIndex', event.type === 'TOGGLE' ? event.index ?? null : null)
+        // A trigger rendered without an index gets the index 0 id. OPEN clears it, so focus returns to the invoking element.
+        context.set('triggerIndex', event.type === 'TOGGLE' ? event.index ?? 0 : null)
       },
       invokeOnOpen({ prop }) {
         prop('onOpenChange')?.({ open: true })

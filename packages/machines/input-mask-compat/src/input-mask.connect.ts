@@ -10,12 +10,11 @@ export function connect<T extends PropTypes>(
 ): InputMaskApi<T> {
   const { send, prop, context, scope } = service
 
-  const mask = prop('mask') ?? ''
+  const mask = prop('mask')
   const value = context.get('value')
   const remainingPlaceholder = mask.substring(value.length)
 
   return {
-    value,
     overlayValue: value,
     mask,
     remainingPlaceholder,

@@ -1,7 +1,6 @@
 import type { Service } from '@zag-js/core'
 import type { NormalizeProps, PropTypes } from '@zag-js/types'
 import type { AccordionApi, AccordionSchema, ItemProps, ItemState } from './accordion.types'
-import { dataAttr } from '@zag-js/dom-query'
 import { parts } from './accordion.anatomy'
 import * as dom from './accordion.dom'
 
@@ -9,10 +8,9 @@ export function connect<T extends PropTypes>(
   service: Service<AccordionSchema>,
   normalize: NormalizeProps<T>,
 ): AccordionApi<T> {
-  const { send, context, scope, prop } = service
+  const { send, context, scope } = service
 
   const value = context.get('value')
-  const multiple = prop('multiple')
 
   function show(itemValue: string) {
     send({ type: 'TRIGGER.EXPAND', value: itemValue })
@@ -31,16 +29,6 @@ export function connect<T extends PropTypes>(
     }
   }
 
-  function setValue(value: string[]) {
-    let nextValue = value
-    if (!multiple && nextValue.length > 1) {
-      // @ts-expect-error: TS doesn't know that `multiple` is false here, so it thinks `nextValue` could be empty.
-      nextValue = [nextValue[0]]
-    }
-
-    send({ type: 'VALUE.SET', value: nextValue })
-  }
-
   function getItemState(props: ItemProps): ItemState {
     return {
       expanded: value.includes(props.value),
@@ -49,7 +37,6 @@ export function connect<T extends PropTypes>(
 
   return {
     value,
-    setValue,
     getItemState,
     show,
     hide,
@@ -58,8 +45,7 @@ export function connect<T extends PropTypes>(
     getRootProps() {
       return normalize.element({
         ...parts.root.attrs,
-        'data-multiple': dataAttr(multiple),
-        'id': dom.getRootId(scope),
+        id: dom.getRootId(scope),
       })
     },
 

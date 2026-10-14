@@ -23,14 +23,14 @@ export const Basic = meta.story({
     maxLength: 20,
   },
   render: ({ maxLength }) => (
-    <Field.Root>
-      <Field.Label>Character Count</Field.Label>
-      <CharacterCount.Root maxLength={maxLength}>
+    <CharacterCount.Root maxLength={maxLength}>
+      <Field.Root>
+        <Field.Label>Character Count</Field.Label>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-        <CharacterCount.SrStatus />
-      </CharacterCount.Root>
-    </Field.Root>
+      </Field.Root>
+      <CharacterCount.Status />
+      <CharacterCount.SrStatus />
+    </CharacterCount.Root>
   ),
 })
 
@@ -39,14 +39,14 @@ export const WithField = meta.story({
     maxLength: 20,
   },
   render: ({ maxLength }) => (
-    <Field.Root>
-      <CharacterCount.Root maxLength={maxLength}>
+    <CharacterCount.Root maxLength={maxLength}>
+      <Field.Root>
         <Field.Label>Character Count</Field.Label>
-        {/* <Field.Description>This is an input with a character counter</Field.Description> */}
+        <Field.Description>This is an input with a character counter</Field.Description>
         <CharacterCount.Input />
-        <CharacterCount.Status />
-        <CharacterCount.SrStatus />
-      </CharacterCount.Root>
-    </Field.Root>
+      </Field.Root>
+      <CharacterCount.Status />
+      <CharacterCount.SrStatus />
+    </CharacterCount.Root>
   ),
 })

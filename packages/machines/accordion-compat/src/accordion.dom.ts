@@ -13,7 +13,7 @@ const getItemTriggerEl = (ctx: Scope, value: string) => ctx.getById(getItemTrigg
 
 export function scrollIntoView(scope: Scope, value: string) {
   const trigger = getItemTriggerEl(scope, value)
-  if (trigger?.isConnected && !isInView(trigger, scope.getWin())) {
+  if (trigger && !isInView(trigger, scope.getWin())) {
     trigger.scrollIntoView()
   }
 }

@@ -11,7 +11,9 @@ export function createDisposableCharacterCount(id: string, template: string, pro
     () => {
       const getRootEl = () => document.getElementById(`character-count:${id}`)
       const getLabelEl = () => getRootEl()?.querySelector('label')
+      const getControlEl = () => document.getElementById(`character-count:${id}:control`)
       const getInputEl = () => getRootEl()?.querySelector('[data-part="input"]') as HTMLInputElement | HTMLTextAreaElement
+      const getDescriptionEl = () => getRootEl()?.querySelector<HTMLElement>('[data-part="description"]')
       const getStatusEl = () => document.getElementById(`character-count:${id}:status`)
       const getSrStatusEl = () => document.getElementById(`character-count:${id}:sr-status`)
       const getInstance = () => CharacterCount.getInstance(getRootEl())
@@ -19,7 +21,9 @@ export function createDisposableCharacterCount(id: string, template: string, pro
       return {
         getRootEl,
         getLabelEl,
+        getControlEl,
         getInputEl,
+        getDescriptionEl,
         getStatusEl,
         getSrStatusEl,
         getInstance,

@@ -3,9 +3,9 @@ import { hash } from '@zag-js/utils'
 
 export const getFileId = (file: File) => hash(`${file.name}-${file.size}`)
 
-export const getItemsLabel = (multiple: boolean) => (multiple ? 'files' : 'file')
+export const getItemsLabel = (multiple?: boolean) => (multiple ? 'files' : 'file')
 
-export function getStatusMessage(files: readonly File[], multiple: boolean): string {
+export function getStatusMessage(files: readonly File[], multiple?: boolean): string {
   if (files.length === 1)
     return `You have selected the file: ${files[0]?.name ?? ''}`
   if (files.length > 1)
@@ -13,7 +13,12 @@ export function getStatusMessage(files: readonly File[], multiple: boolean): str
   return `No ${getItemsLabel(multiple)} selected.`
 }
 
-export const getDefaultAriaLabel = (itemsLabel: string) => `Drag ${itemsLabel} here or choose from folder`
+// USWDS getFinePointerMediaQueryList: without matchMedia there is no fine pointer, so the drag text stays hidden.
+export function getFinePointerQuery(win: Window) {
+  if (typeof win.matchMedia !== 'function')
+    return null
+  return win.matchMedia('(hover: hover) and (pointer: fine)')
+}
 
 // USWDS matches raw, case-sensitive tokens: no trimming, filename index > 0,
 // MIME substring index >= 0, and every asterisk removed from MIME tokens.
@@ -21,7 +26,7 @@ export function isBatchValid(accept: string | undefined, files: File[]): boolean
   if (!accept)
     return true
   const tokens = accept.split(',')
-  return files.every(file => !file || tokens.some(token =>
+  return files.every(file => tokens.some(token =>
     file.name.indexOf(token) > 0 || file.type.includes(token.replace(/\*/g, '')),
   ))
 }

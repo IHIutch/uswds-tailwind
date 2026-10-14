@@ -4,6 +4,7 @@ import type { CommonProperties, PropTypes, RequiredBy } from '@zag-js/types'
 /* Element IDs */
 export type ElementIds = Partial<{
   root: string
+  label: string
   control: string
   input: string
   description: string
@@ -18,7 +19,7 @@ export interface ValueChangeDetails {
 
 export interface CharacterCountProps extends CommonProperties {
   ids?: ElementIds | undefined
-  /** Existing descriptions stay linked when the optional description mounts. */
+  /** Ids for the input's aria-describedby. */
   inputDescriptionIds?: string | undefined
   /** The allowed character count; the input has no native maxlength. */
   maxLength: number
@@ -43,7 +44,6 @@ export interface CharacterCountSchema {
   context: {
     value: string
     srStatus: { text: string, politeness: 'polite' | 'assertive' | undefined }
-    isDescriptionRendered: boolean
   }
   computed: {
     isOverLimit: boolean
@@ -52,9 +52,8 @@ export interface CharacterCountSchema {
   refs: {
     srAnnouncementCleanup: VoidFunction | undefined
     previousOverLimit: boolean
-    descriptionRef: (node: HTMLElement | null) => void
   }
-  action: 'setValue' | 'syncInputValidity' | 'announceValue'
+  action: 'setValue' | 'syncInputValue' | 'cancelValiditySync' | 'announceValue'
   guard: never
   effect: 'trackSrStatus'
   event: { type: 'VALUE.SET', value: string }
@@ -78,6 +77,7 @@ export interface CharacterCountApi<T extends PropTypes = PropTypes> {
   setValue: (value: string) => void
 
   getRootProps: () => T['element']
+  getLabelProps: () => T['label']
   getControlProps: () => T['element']
   getInputProps: () => T['input']
   getDescriptionProps: () => T['element']

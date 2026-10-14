@@ -1,5 +1,6 @@
 import type { CharacterCountSchema } from './character-count.types'
 import { createMachine } from '@zag-js/core'
+import { setElementValue } from '@zag-js/dom-query'
 import * as dom from './character-count.dom'
 
 const isOverLimit = (value: string, maxLength: number) => maxLength > 0 && value.length > maxLength
@@ -50,9 +51,6 @@ export const machine = createMachine<CharacterCountSchema>({
           politeness: undefined,
         },
       })),
-      isDescriptionRendered: bindable<boolean>(() => ({
-        defaultValue: false,
-      })),
     }
   },
 
@@ -66,18 +64,12 @@ export const machine = createMachine<CharacterCountSchema>({
     return {
       srAnnouncementCleanup: undefined,
       previousOverLimit: isOverLimit(context.get('value'), prop('maxLength')),
-      descriptionRef(node: HTMLElement | null) {
-        context.set('isDescriptionRendered', Boolean(node))
-      },
     }
   },
 
-  watch({ track, action, context, prop }) {
-    track([() => context.get('value'), () => prop('maxLength')], () => {
-      action(['syncInputValidity', 'announceValue'])
-    })
-    track([() => prop('errorText')], () => {
-      action(['syncInputValidity'])
+  watch({ track, action, context }) {
+    track([() => context.get('value')], () => {
+      action(['syncInputValue', 'cancelValiditySync', 'announceValue'])
     })
   },
 
@@ -93,16 +85,16 @@ export const machine = createMachine<CharacterCountSchema>({
 
   implementations: {
     actions: {
-      setValue({ context, event, scope }) {
+      setValue({ context, event }) {
         context.set('value', event.value)
-        dom.setInputValue(scope, context.get('value'))
       },
-      syncInputValidity({ computed, prop, scope }) {
+      syncInputValue({ context, scope }) {
+        setElementValue(dom.getInputEl(scope), context.get('value'))
+      },
+      cancelValiditySync({ scope }) {
         const input = dom.getInputEl(scope)
-        if (input) {
+        if (input)
           dom.cancelValiditySync(input)
-          dom.applyOwnedValidity(input, computed('isOverLimit'), prop('errorText'))
-        }
       },
       announceValue({ context, computed, prop, scope, refs }) {
         if (!prop('maxLength'))

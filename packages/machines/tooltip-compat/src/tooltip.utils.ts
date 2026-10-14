@@ -4,12 +4,6 @@ import { isInView } from '@zag-js/dom-query'
 const TOOLTIP_OFFSET = 'var(--tooltip-offset, 5px)'
 const PLACEMENTS: Placement[] = ['top', 'bottom', 'right', 'left']
 
-function setVar(content: HTMLElement, name: string, value?: string): void {
-  if (value === undefined)
-    content.style.removeProperty(name)
-  else content.style.setProperty(name, value)
-}
-
 function marginOffset(trigger: HTMLElement, side: 'top' | 'left', size: number, win: Window): number {
   const margin = Number.parseInt(win.getComputedStyle(trigger).getPropertyValue(`margin-${side}`), 10)
   return margin > 0 ? size - margin : size
@@ -17,8 +11,8 @@ function marginOffset(trigger: HTMLElement, side: 'top' | 'left', size: number, 
 
 function applyPlacement(content: HTMLElement, trigger: HTMLElement, placement: Placement, win: Window): void {
   // Clear the previous candidate before measuring the next one.
-  setVar(content, '--tooltip-y')
-  setVar(content, '--tooltip-x')
+  content.style.removeProperty('--tooltip-y')
+  content.style.removeProperty('--tooltip-x')
 
   let y: string
   let x: string
@@ -50,26 +44,22 @@ function applyPlacement(content: HTMLElement, trigger: HTMLElement, placement: P
     }
     case 'left': {
       const height = marginOffset(trigger, 'top', content.offsetHeight, win)
-      const offset = trigger.offsetLeft > content.offsetWidth ? trigger.offsetLeft - content.offsetWidth : content.offsetWidth
-      const width = marginOffset(trigger, 'left', offset, win)
+      const width = marginOffset(trigger, 'left', content.offsetWidth, win)
       y = `calc(50% - ${height / 2}px)`
-      x = `calc(${trigger.offsetLeft > content.offsetWidth ? width : -width}px - ${TOOLTIP_OFFSET})`
+      x = `calc(${-width}px - ${TOOLTIP_OFFSET})`
       arrowX = '100%'
       break
     }
   }
 
-  setVar(content, '--tooltip-y', y)
-  setVar(content, '--tooltip-x', x)
-  setVar(content, '--arrow-y', arrowY)
-  setVar(content, '--arrow-x', arrowX)
+  content.style.setProperty('--tooltip-y', y)
+  content.style.setProperty('--tooltip-x', x)
+  content.style.setProperty('--arrow-y', arrowY)
+  content.style.setProperty('--arrow-x', arrowX)
 }
 
 /** Applies USWDS placement probes synchronously so each viewport check sees the candidate's layout. */
-export function positionTooltip(content: HTMLElement, trigger: HTMLElement, preferred: Placement, win: Window): Placement | null {
-  if (!PLACEMENTS.includes(preferred))
-    return null
-
+export function positionTooltip(content: HTMLElement, trigger: HTMLElement, preferred: Placement, win: Window): Placement {
   applyPlacement(content, trigger, preferred, win)
   if (isInView(content, win))
     return preferred

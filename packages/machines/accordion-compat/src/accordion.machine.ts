@@ -7,7 +7,6 @@ import * as dom from './accordion.dom'
 export const machine = createMachine<AccordionSchema>({
   props({ props }) {
     return {
-      multiple: false,
       defaultValue: [],
       ...props,
     }
@@ -15,12 +14,6 @@ export const machine = createMachine<AccordionSchema>({
 
   initialState() {
     return 'idle'
-  },
-
-  refs() {
-    return {
-      scrollCleanup: null,
-    }
   },
 
   exit: ['cancelScrollIntoView'],
@@ -39,9 +32,6 @@ export const machine = createMachine<AccordionSchema>({
 
   // Global events always handled regardless of state
   on: {
-    'VALUE.SET': {
-      actions: ['setValue'],
-    },
     'TRIGGER.EXPAND': {
       actions: ['expand'],
     },
@@ -56,7 +46,7 @@ export const machine = createMachine<AccordionSchema>({
         'TRIGGER.CLICK': [
           {
             guard: 'isExpanded',
-            actions: ['cancelScrollIntoView', 'collapse'],
+            actions: ['collapse'],
           },
           {
             actions: ['expand', 'scrollIntoView'],
@@ -76,18 +66,13 @@ export const machine = createMachine<AccordionSchema>({
         const next = prop('multiple') ? add<string>(context.get('value'), event.value) : [event.value]
         context.set('value', next)
       },
-      collapse({ context, prop, event }) {
-        const next = prop('multiple') ? remove<string>(context.get('value'), event.value) : []
-        context.set('value', next)
-      },
-      setValue({ context, event }) {
-        context.set('value', event.value)
+      collapse({ context, event }) {
+        context.set('value', remove<string>(context.get('value'), event.value))
       },
       scrollIntoView({ scope, event, refs, context }) {
         const value = event.value
         refs.get('scrollCleanup')?.()
         refs.set('scrollCleanup', raf(() => {
-          refs.set('scrollCleanup', null)
           if (!context.get('value').includes(value)) {
             return
           }

@@ -19,7 +19,7 @@ export class Accordion extends Component<accordion.Props, accordion.Api> {
 
     return new VanillaMachine(accordion.machine, {
       ...props,
-      id: props.id || this.rootEl.id || getId(this.rootEl, 'accordion'),
+      id: props.id || getId(this.rootEl, 'accordion'),
       multiple,
       defaultValue: props.defaultValue ?? (multiple ? authoredValue : authoredValue.slice(0, 1)),
     })

@@ -15,7 +15,7 @@ export const props = createProps<TableProps>()([
 
 export const splitProps = createSplitProps<Partial<TableProps>>(props)
 
-export const headerProps = createProps<HeaderProps>()(['columnIndex', 'headerName', 'headerId'])
+export const headerProps = createProps<HeaderProps>()(['columnIndex', 'headerName'])
 export const splitHeaderProps = createSplitProps<HeaderProps>(headerProps)
 
 export const cellProps = createProps<CellProps>()(['columnIndex'])
