@@ -329,4 +329,34 @@ it.each([
   el.setSelectionRange(5, 5)
   await userEvent.keyboard('XY')
   await expect.element(input).toHaveValue('helloXY world')
+  expect([el.selectionStart, el.selectionEnd]).toEqual([7, 7])
+})
+
+it('clears the validation message each time the owner raises maxLength above the value', async () => {
+  const view = (maxLength: number) => (
+    <CharacterCount.Root maxLength={maxLength} defaultValue="abcdef">
+      <CharacterCount.Input />
+    </CharacterCount.Root>
+  )
+  const screen = await render(view(5))
+  const input = screen.getByRole('textbox')
+  await screen.rerender(view(10))
+  await expect.element(input).toBeValid()
+  await screen.rerender(view(5))
+  await expect.element(input).toBeInvalid()
+  await screen.rerender(view(10))
+  await expect.element(input).toBeValid()
+})
+
+it('field.Label follows the CharacterCount input id when both roots have an id', async () => {
+  const screen = await render(
+    <CharacterCount.Root id="counter" maxLength={5}>
+      <Field.Root id="field">
+        <Field.Label>Message</Field.Label>
+        <CharacterCount.Input />
+      </Field.Root>
+    </CharacterCount.Root>,
+  )
+  const input = screen.getByRole('textbox', { name: 'Message' })
+  await expect.element(input).toHaveAttribute('id', 'character-count:counter:input')
 })

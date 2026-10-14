@@ -38,6 +38,7 @@ export function applyOwnedValidity(
     if (!validitySyncTimers.has(el)) {
       const win = el.ownerDocument.defaultView!
       const timer = win.setTimeout(() => {
+        validitySyncTimers.delete(el)
         if (el.validationMessage === ownedMessage)
           el.setCustomValidity('')
       }, AT_DEFER_MS)

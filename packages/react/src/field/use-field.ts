@@ -59,7 +59,7 @@ export function useField(props: UseFieldProps = {}) {
   const controlInvalid = Boolean(control?.invalid)
 
   const uid = React.useId()
-  const id = props.id ?? control?.id ?? uid
+  const id = control?.id ?? props.id ?? uid
   const rootRef = React.useRef<HTMLDivElement>(null)
 
   const rootId = ids?.control ?? `field::${id}`
