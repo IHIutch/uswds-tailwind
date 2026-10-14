@@ -1,5 +1,11 @@
 # @uswds-tailwind/accordion-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- d36a8b1: Close only the requested accordion item in single mode and preserve the root ID across reinitialization. Remove unused connector methods and pass React props through the split-props helpers.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

@@ -1,5 +1,11 @@
 # @uswds-tailwind/file-input-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- e74e876: Move file-input instruction copy into markup and match USWDS touch-pointer instructions. Remove stale props, simplify validation, and update the React markup and theme styles.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

@@ -1,5 +1,9 @@
 # @uswds-tailwind/date-picker-compat
 
+## 2.0.0-beta.2
+
+No changes in this release.
+
 ## 2.0.0-beta.1
 
 ### Minor Changes

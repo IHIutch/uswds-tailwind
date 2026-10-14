@@ -1,5 +1,11 @@
 # @uswds-tailwind/tooltip-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- 5c91b6b: Position left tooltips beside their trigger. Remove redundant guards, the unused setOpen API, and the arrow rotation map, and split React machine props from root props.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

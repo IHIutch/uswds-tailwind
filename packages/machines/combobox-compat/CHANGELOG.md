@@ -1,5 +1,11 @@
 # @uswds-tailwind/combobox-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- ae1f25d: Preserve combobox focus redirection and empty-option behavior. Remove unused state and DOM helpers, expand keyboard and scrolling coverage, and remove the obsolete aria-owns documentation. Update Vitest browser dependencies to 5.0.3.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

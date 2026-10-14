@@ -1,5 +1,11 @@
 # @uswds-tailwind/character-count-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- b8e3918: Preserve the caret when syncing character-count values. Match USWDS announcements and limit behavior, and connect React Field descriptions and invalid state to the input.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

@@ -1,5 +1,40 @@
 # @uswds-tailwind/react
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- d36a8b1: Close only the requested accordion item in single mode and preserve the root ID across reinitialization. Remove unused connector methods and pass React props through the split-props helpers.
+- b8e3918: Preserve the caret when syncing character-count values. Match USWDS announcements and limit behavior, and connect React Field descriptions and invalid state to the input.
+- c4aae38: Apply the last collapse setOpen call made in the same tick. Remove unused context and DOM helpers, and pass React Banner props through the collapse split-props helper.
+- 9bf010a: Scroll the dropdown trigger into view when focus returns and flip the React Nav indicator when the menu opens. Remove unused item values and content state, and keep machine props off the React root element.
+- e74e876: Move file-input instruction copy into markup and match USWDS touch-pointer instructions. Remove stale props, simplify validation, and update the React markup and theme styles.
+- bd4c539: Report input-mask changes from the value binding so callbacks follow actual value changes. Default the mask in machine props, remove redundant fallbacks, and split React machine props from root props.
+- 880c5e8: Remove unused table sorting APIs and redundant click handling. Use the split-props helpers in React Table.Root and the sort trigger, and align compatibility checks with the documented sorting behavior.
+- 5c91b6b: Position left tooltips beside their trigger. Remove redundant guards, the unused setOpen API, and the arrow rotation map, and split React machine props from root props.
+- Updated dependencies [d36a8b1]
+- Updated dependencies [b8e3918]
+- Updated dependencies [c4aae38]
+- Updated dependencies [ae1f25d]
+- Updated dependencies [9bf010a]
+- Updated dependencies [e74e876]
+- Updated dependencies [bd4c539]
+- Updated dependencies [6365056]
+- Updated dependencies [880c5e8]
+- Updated dependencies [5c91b6b]
+  - @uswds-tailwind/accordion-compat@2.0.0-beta.2
+  - @uswds-tailwind/character-count-compat@2.0.0-beta.2
+  - @uswds-tailwind/collapse-compat@2.0.0-beta.2
+  - @uswds-tailwind/combobox-compat@2.0.0-beta.2
+  - @uswds-tailwind/dropdown-compat@2.0.0-beta.2
+  - @uswds-tailwind/file-input-compat@2.0.0-beta.2
+  - @uswds-tailwind/theme@2.0.0-beta.2
+  - @uswds-tailwind/input-mask-compat@2.0.0-beta.2
+  - @uswds-tailwind/modal-compat@2.0.0-beta.2
+  - @uswds-tailwind/table-compat@2.0.0-beta.2
+  - @uswds-tailwind/tooltip-compat@2.0.0-beta.2
+  - @uswds-tailwind/date-picker-compat@2.0.0-beta.2
+
 ## 2.0.0-beta.1
 
 ### Minor Changes

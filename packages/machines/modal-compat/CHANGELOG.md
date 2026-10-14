@@ -1,5 +1,11 @@
 # @uswds-tailwind/modal-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- 6365056: Return modal focus to the invoking element. Remove legacy root and trigger behavior and simplify the machine while preserving overlay controls and initial focus.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

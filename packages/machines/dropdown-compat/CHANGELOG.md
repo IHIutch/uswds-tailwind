@@ -1,5 +1,11 @@
 # @uswds-tailwind/dropdown-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- 9bf010a: Scroll the dropdown trigger into view when focus returns and flip the React Nav indicator when the menu opens. Remove unused item values and content state, and keep machine props off the React root element.
+
 ## 2.0.0-beta.1
 
 No changes in this release.

@@ -1,5 +1,11 @@
 # @uswds-tailwind/collapse-compat
 
+## 2.0.0-beta.2
+
+### Patch Changes
+
+- c4aae38: Apply the last collapse setOpen call made in the same tick. Remove unused context and DOM helpers, and pass React Banner props through the collapse split-props helper.
+
 ## 2.0.0-beta.1
 
 No changes in this release.
