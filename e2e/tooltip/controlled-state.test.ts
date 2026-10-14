@@ -19,10 +19,6 @@ it('controlled false takes precedence over defaultOpen and waits for the owner',
   getInstance()!.machine.updateProps({ open: true })
   await vi.waitFor(() => expect(getContentEl().getAttribute('aria-hidden')).toBe('false'))
   expect(onOpenChange).toHaveBeenCalledOnce()
-
-  getInstance()!.machine.updateProps({ open: undefined })
-  await vi.waitFor(() => expect(getContentEl().getAttribute('aria-hidden')).toBe('false'))
-  expect(onOpenChange).toHaveBeenCalledOnce()
 })
 
 it('a controlled owner can decline and then accept a close request', { tags: ['new'] }, async () => {

@@ -1,5 +1,5 @@
-import type * as inputMask from '@uswds-tailwind/input-mask-compat'
 import type { UseInputMaskProps } from './use-input-mask'
+import * as inputMask from '@uswds-tailwind/input-mask-compat'
 import { mergeProps } from '@zag-js/react'
 import * as React from 'react'
 import { Input } from '../input'
@@ -24,9 +24,10 @@ function useInputMaskContext() {
 export type InputMaskRootProps = UseInputMaskProps & React.ComponentPropsWithoutRef<'div'>
 
 const InputMaskRoot = React.forwardRef<HTMLDivElement, InputMaskRootProps>(
-  ({ className, children, id, ids, charset, placeholder, value, defaultValue, onValueChange, ...props }, forwardedRef) => {
-    const { api } = useInputMask({ id, ids, charset, placeholder, value, defaultValue, onValueChange })
-    const mergedProps = mergeProps(api.getRootProps(), props)
+  ({ className, children, placeholder, ...props }, forwardedRef) => {
+    const [machineProps, rest] = inputMask.splitProps(props)
+    const api = useInputMask({ ...machineProps, placeholder })
+    const mergedProps = mergeProps(api.getRootProps(), rest)
 
     return (
       <InputMaskContext.Provider value={{ api }}>
