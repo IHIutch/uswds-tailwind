@@ -5,10 +5,11 @@ interface Props {
   title: string
   /** TSX filename without its extension, relative to src/examples. */
   example: string
+  overflow?: 'hidden' | 'visible'
   playgroundDependencies?: Record<string, string>
 }
 
-const { title, example, playgroundDependencies } = Astro.props
+const { title, example, overflow, playgroundDependencies } = Astro.props
 const sources = import.meta.glob<string>('../examples/*.tsx', { query: '?raw', import: 'default' })
 const filename = `${example}.tsx`
 const loadSource = sources[`../examples/${filename}`]
@@ -17,6 +18,6 @@ if (!loadSource)
 const source = await loadSource()
 ---
 
-<ComponentPreview title={title} demo code={source} language="tsx" filename={filename} playgroundFiles={{ [filename]: source }} playgroundDependencies={playgroundDependencies}>
+<ComponentPreview title={title} overflow={overflow} demo code={source} language="tsx" filename={filename} playgroundFiles={{ [filename]: source }} playgroundDependencies={playgroundDependencies}>
   <slot />
 </ComponentPreview>

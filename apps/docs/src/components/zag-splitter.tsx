@@ -2,17 +2,7 @@ import { normalizeProps, useMachine } from '@zag-js/react'
 import * as splitter from '@zag-js/splitter'
 import * as React from 'react'
 
-export default function ZagSplitter({ resize = true, children }: { resize: boolean, children: React.ReactNode }) {
-  if (!resize) {
-    return (
-      <div
-        className="bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] py-4 px-8"
-      >
-        {children}
-      </div>
-    )
-  }
-
+export default function ZagSplitter({ overflow, children }: { overflow?: 'hidden' | 'visible', children: React.ReactNode }) {
   // Use size instead of defaultSize to prevent Zag from resetting the panel width when the height changes.
   const [size, setSize] = React.useState([100, 0])
 
@@ -21,19 +11,23 @@ export default function ZagSplitter({ resize = true, children }: { resize: boole
     size,
     onResize: details => setSize(details.size),
     panels: [
-      { id: 'a', collapsible: resize },
+      { id: 'a', collapsible: true },
       { id: 'b' },
     ],
   })
 
   const api = splitter.connect(service, normalizeProps)
+  const rootProps = api.getRootProps()
+  const panelProps = api.getPanelProps({ id: 'a' })
 
   return (
     <div
-      {...api.getRootProps()}
+      {...rootProps}
+      style={{ ...rootProps.style, overflow: overflow ?? 'hidden' }}
     >
       <div
-        {...api.getPanelProps({ id: 'a' })}
+        {...panelProps}
+        style={{ ...panelProps.style, overflow: overflow ?? 'hidden' }}
         className="bg-gray-cool-2 shadow-[1px_0px_0px_#dfe1e2] py-4 px-8"
       >
         {children}

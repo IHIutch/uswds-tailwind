@@ -8,8 +8,7 @@ import ReactStackBlitzButton from './react-stackblitz-button'
 import StackBlitzButton from './stackblitz-button'
 
 type Props = {
-  minHeight?: string
-  resize?: boolean
+  overflow?: 'hidden' | 'visible'
   code: string
   demo?: boolean
   language?: 'html' | 'tsx'
@@ -22,12 +21,12 @@ type Props = {
   del?: ExpressiveCodeBlockProps['del']
 }
 
-const { minHeight, resize = true, code, demo, language = 'html', filename, playgroundFiles, playgroundDependencies, title, mark, ins, del } = Astro.props
+const { overflow, code, demo, language = 'html', filename, playgroundFiles, playgroundDependencies, title, mark, ins, del } = Astro.props
 
 const markup = Array.isArray(code) ? code.join('\n') : code;
 ---
 
-<div class="not-docs-prose w-full max-w-6xl mt-6 mb-12" data-preview-library={demo ? 'react' : 'vanilla'}>
+<div class="not-docs-prose isolate w-full max-w-6xl mt-6 mb-12" data-preview-library={demo ? 'react' : 'vanilla'}>
   <div class="outline-1 outline-gray-cool-20 rounded-t">
     <div class="flex w-full overflow-hidden">
       <div
@@ -72,10 +71,11 @@ const markup = Array.isArray(code) ? code.join('\n') : code;
     </div>
     <div
       class="bg-gray-cool-4 min-w-80 outline-1 outline-gray-cool-20"
+      class:list={{ 'relative z-10': overflow === 'visible' }}
       style={{ backgroundImage: `url(${graphPaper.src})` }}
     >
-      <ZagSplitter resize={resize} client:load>
-        <div data-preview-canvas style={{ minHeight: minHeight || 'none' }}>
+      <ZagSplitter overflow={overflow} client:load>
+        <div data-preview-canvas>
           <!-- Example start -->
           {demo ? <slot /> : <Fragment set:html={markup} />}
           <!-- Example end -->
