@@ -6,9 +6,20 @@ import { getCollection } from 'astro:content'
 import DesktopNav from './desktop-nav.astro'
 import MobileNav from './mobile-nav.astro'
 
-const library = resolveLibrary(Astro.url, Astro.cookies.get('docs-library')?.value)
+const library = resolveLibrary(
+  Astro.url,
+  Astro.cookies.get('docs-library')?.value,
+)
 
 const allComponents = await getCollection('vanilla-components')
+const aboutNavigation = {
+  label: 'About',
+  isActive: ['/about', '/compare'].includes(Astro.url.pathname),
+  children: [
+    { label: 'About this project', href: '/about' },
+    { label: 'Compare', href: '/compare' },
+  ],
+}
 const desktopLinks: NavLinks = {
   primary: [
     {
@@ -35,10 +46,7 @@ const desktopLinks: NavLinks = {
       label: 'Typography',
       href: '/typography',
     },
-    {
-      label: 'About',
-      href: '/about',
-    },
+    aboutNavigation,
   ],
 }
 
@@ -75,10 +83,7 @@ const mobileLinks: NavLinks = {
       label: 'Typography',
       href: '/typography',
     },
-    {
-      label: 'About',
-      href: '/about',
-    },
+    aboutNavigation,
   ],
 }
 
@@ -88,8 +93,7 @@ const secondary: NavLinks['secondary'] = [
     href: 'https://forms.reform.app/szenkB/uswds-tailwind-feedback/sxml6n',
     target: '_blank',
   },
-]
-
+];
 ---
 
 <header
@@ -111,7 +115,11 @@ const secondary: NavLinks['secondary'] = [
           </a>
         </em>
         <div class="desktop:hidden ml-auto">
-          <MobileNav primary={mobileLinks.primary} secondary={secondary} library={library} />
+          <MobileNav
+            primary={mobileLinks.primary}
+            secondary={secondary}
+            library={library}
+          />
         </div>
       </div>
     </div>
@@ -122,45 +130,45 @@ const secondary: NavLinks['secondary'] = [
 </header>
 
 <script>
-  import { Accordion } from '@uswds-tailwind/compat/accordion'
-  import { Dropdown } from '@uswds-tailwind/compat/dropdown'
-  import { Modal } from '@uswds-tailwind/compat/modal'
+import { Accordion } from '@uswds-tailwind/compat/accordion'
+import { Dropdown } from '@uswds-tailwind/compat/dropdown'
+import { Modal } from '@uswds-tailwind/compat/modal'
 
-  let cleanup: (() => void) | undefined
+let cleanup: (() => void) | undefined
 
-  document.addEventListener('astro:page-load', () => {
-    cleanup?.()
-    const header = document.getElementById('docs-header')
-    const root = document.getElementById('mobile-docs-menu')
-    if (!header || !root)
-      return
+document.addEventListener('astro:page-load', () => {
+  cleanup?.()
+  const header = document.getElementById('docs-header')
+  const root = document.getElementById('mobile-docs-menu')
+  if (!header || !root)
+    return
 
-    const accordions = Accordion.createAll(header)
-    const dropdowns = Dropdown.createAll(header)
-    const menu = Modal.getOrCreateInstance(root)
-    const desktop = window.matchMedia('(min-width: 1024px)')
-    const closeOnDesktop = () => {
-      if (desktop.matches)
-        void menu.close()
-    }
-    const closeOnNavigation = (event: MouseEvent) => {
-      if (event.target instanceof Element && event.target.closest('a[href]'))
-        void menu.close()
-    }
+  const accordions = Accordion.createAll(header)
+  const dropdowns = Dropdown.createAll(header)
+  const menu = Modal.getOrCreateInstance(root)
+  const desktop = window.matchMedia('(min-width: 1024px)')
+  const closeOnDesktop = () => {
+    if (desktop.matches)
+      void menu.close()
+  }
+  const closeOnNavigation = (event: MouseEvent) => {
+    if (event.target instanceof Element && event.target.closest('a[href]'))
+      void menu.close()
+  }
 
-    desktop.addEventListener('change', closeOnDesktop)
-    root.addEventListener('click', closeOnNavigation)
-    closeOnDesktop()
+  desktop.addEventListener('change', closeOnDesktop)
+  root.addEventListener('click', closeOnNavigation)
+  closeOnDesktop()
 
-    cleanup = () => {
-      desktop.removeEventListener('change', closeOnDesktop)
-      root.removeEventListener('click', closeOnNavigation)
-      menu.destroy()
-      accordions.forEach(instance => instance.destroy())
-      dropdowns.forEach(instance => instance.destroy())
-      cleanup = undefined
-    }
-  })
+  cleanup = () => {
+    desktop.removeEventListener('change', closeOnDesktop)
+    root.removeEventListener('click', closeOnNavigation)
+    menu.destroy()
+    accordions.forEach(instance => instance.destroy())
+    dropdowns.forEach(instance => instance.destroy())
+    cleanup = undefined
+  }
+})
 
-  document.addEventListener('astro:before-swap', () => cleanup?.())
+document.addEventListener('astro:before-swap', () => cleanup?.())
 </script>

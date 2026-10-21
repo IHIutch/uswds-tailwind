@@ -1,0 +1,33 @@
+---
+title: "Compare"
+description: "Compare the CSS and JavaScript of the most used federal component libraries. All comparisons are minified, gzipped, and measured in KB's."
+---
+
+import FormBundleTable from '#components/comparison/form-bundle-table.astro'
+
+## Methodology
+
+For a fair comparison, a representative sample of form controls were compared, basic and enhanced. The totals include JavaScript for the selected components and each library's full default CSS.
+
+React and React DOM are not included in the totals. Together they add about 68.71 KB of gzipped JavaScript to each React library measured.
+
+## Basic form controls
+
+Includes text input, button, select, checkbox, radio, textarea and memorable date.
+
+<FormBundleTable profile="minimal" />
+
+## Enhanced form controls
+
+Includes the minimal form controls plus combo box, input mask, date picker and character count.
+
+<FormBundleTable profile="enhancedForm" />
+
+## Versions measured
+
+- [USWDS](https://designsystem.digital.gov/): 3.14.0
+- [USWDS + Tailwind (React)](/): 2.0.0-beta.2
+- [MetroStar Comet](https://metrostar.github.io/comet/): 3.14.0
+- [Trussworks](https://trussworks.github.io/react-uswds/): 13.0.0
+- [CMS Design System](https://design.cms.gov/): 18.1.0
+- [VA Design System](https://design.va.gov/): 56.19.0

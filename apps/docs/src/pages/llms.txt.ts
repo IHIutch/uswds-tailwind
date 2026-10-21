@@ -23,6 +23,7 @@ Build federal websites and applications faster than ever.
 - [Getting Started (Vanilla)](${siteUrl}/docs/vanilla/getting-started.md)
 - [Getting Started (React)](${siteUrl}/docs/react/getting-started.md)
 - [About](${siteUrl}/${about?.id}.md)
+- [Compare](${siteUrl}/compare.md)
 - [JavaScript (Vanilla)](${siteUrl}/docs/vanilla/javascript.md)
 - [Typography](${siteUrl}/${typography?.id}.md)
 

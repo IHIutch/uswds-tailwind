@@ -1,0 +1,58 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { formProfiles, formProfileSizes } from './form-profiles-data'
+import { kb, libraries } from './library-comparison-data'
+
+interface Props {
+  profile: 'minimal' | 'enhancedForm'
+}
+
+// Astro's role type does not yet include these W3C Digital Publishing ARIA roles.
+// https://www.w3.org/TR/dpub-aria-1.1/
+const noteReferenceRole = 'doc-noteref' as HTMLAttributes<'a'>['role']
+const noteReturnRole = 'doc-backlink' as HTMLAttributes<'a'>['role']
+const notesRole = 'doc-endnotes' as HTMLAttributes<'div'>['role']
+
+const { profile: profileId } = Astro.props
+const profile = formProfiles.find(profile => profile.id === profileId)!
+---
+
+<div class="not-docs-prose">
+  <div class="overflow-x-auto">
+    <table class="w-full table-fixed font-public-sans text-sm tablet:text-base text-left">
+      <caption class="sr-only">{profile.name}: compressed JavaScript and default CSS sizes in KB gzip</caption>
+      <colgroup>
+        <col class="w-[40%]" />
+        <col class="w-[20%]" />
+        <col class="w-[20%]" />
+        <col class="w-[20%]" />
+      </colgroup>
+      <thead class="border-b-2 border-gray-90">
+        <tr>
+          <th scope="col" class="py-3 pr-4">Library</th>
+          <th scope="col" class="py-3 px-1 tablet:px-3 text-right">JS</th>
+          <th scope="col" class="py-3 px-1 tablet:px-3 text-right">CSS</th>
+          <th scope="col" class="py-3 pl-1 tablet:pl-3 text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>{libraries.map((library) => {
+        const size = formProfileSizes[library.id][profile.id]
+        return <tr class:list={['border-b border-gray-20', library.id === 'ours' && 'bg-blue-5']}><th scope="row" class="py-4 pr-4 font-semibold">{library.name}{library.id === 'cms' && <sup><a id={`cms-note-ref-${profileId}`} href={`#cms-note-${profileId}`} role={noteReferenceRole} aria-label={`CMS ${profile.name.toLowerCase()} footnote`} class="text-blue-60v underline scroll-mt-24 desktop:scroll-mt-40 focus-visible:outline-4 focus-visible:outline-blue-40v">*</a></sup>}{library.id === 'va' && profileId === 'enhancedForm' && <sup><a id="va-note-ref-enhancedForm" href="#va-note-enhancedForm" role={noteReferenceRole} aria-label="VA enhanced form footnote" class="text-blue-60v underline scroll-mt-24 desktop:scroll-mt-40 focus-visible:outline-4 focus-visible:outline-blue-40v">†</a></sup>}</th><td class="py-4 px-1 tablet:px-3 text-right tabular-nums">{kb(size.js)}</td><td class="py-4 px-1 tablet:px-3 text-right tabular-nums">{kb(size.css)}</td><td class="py-4 pl-1 tablet:pl-3 text-right tabular-nums font-semibold">{kb(size.js + size.css)}</td></tr>
+      })}</tbody>
+    </table>
+  </div>
+  <div role={notesRole} aria-label={`${profile.name} table notes`} class="mt-4 text-sm font-public-sans text-gray-60">
+    <ul class="list-none space-y-2">
+      <li id={`cms-note-${profileId}`} tabindex="-1" class="scroll-mt-24 desktop:scroll-mt-40 focus-visible:outline-4 focus-visible:outline-blue-40v">
+        <sup>*</sup> CMS uses its Dropdown component instead of a native select.{profileId === 'enhancedForm' && ' It lacks character count, so its total includes only the available components.'}
+        <a href={`#cms-note-ref-${profileId}`} role={noteReturnRole} aria-label={`Return to CMS ${profile.name.toLowerCase()} row`} class="text-blue-60v underline focus-visible:outline-4 focus-visible:outline-blue-40v"><span aria-hidden="true" class="icon-[material-symbols--arrow-outward] inline-block size-4 align-middle"></span></a>
+      </li>
+      {profileId === 'enhancedForm' && (
+<li id="va-note-enhancedForm" tabindex="-1" class="scroll-mt-24 desktop:scroll-mt-40 focus-visible:outline-4 focus-visible:outline-blue-40v">
+        <sup>†</sup> VA lacks a calendar date picker, so its total includes only the available components. Its input mask supports phone numbers only.
+        <a href="#va-note-ref-enhancedForm" role={noteReturnRole} aria-label="Return to VA enhanced form row" class="text-blue-60v underline focus-visible:outline-4 focus-visible:outline-blue-40v"><span aria-hidden="true" class="icon-[material-symbols--arrow-outward] inline-block size-4 align-middle"></span></a>
+      </li>
+)}
+    </ul>
+  </div>
+</div>
