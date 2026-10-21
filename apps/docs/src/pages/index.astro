@@ -3,33 +3,48 @@ import tailwind from '#assets/img/tailwindcss-logo.svg'
 import tsdown from '#assets/img/tsdown-logo.svg'
 import zagjs from '#assets/img/zagjs-logo.svg'
 import Footer from '#components/footer.astro'
-import BaseLayout from '#layouts/base-layout.astro';
+import BaseLayout from '#layouts/base-layout.astro'
 ---
 
 <BaseLayout
   description="Build federal websites with Tailwind CSS components. Explore Vanilla JavaScript and React examples, API references, and setup guides."
 >
-  <main id="main-content" class="pt-12 desktop:pt-32">
+  <!-- Include the fixed header's borders in the offset so the alert's padding stays visible. -->
+  <main id="main-content" class="pt-[49px] desktop:pt-[131px]">
+    <div role="status" class="bg-cyan-5 border-l-8 border-l-cyan-30v">
+      <div class="relative pr-5 py-2 pl-4">
+        <p class="max-w-5xl mx-auto">
+          <span class="font-bold">v2 is in beta!</span> Now with React components and
+          a rebuilt Vanilla JavaScript API.
+        </p>
+      </div>
+    </div>
     <div class="bg-blue-80v py-24">
       <div class="max-w-5xl mx-auto px-4">
         <h1
-          class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl !leading-[1.125] font-public-sans font-bold text-white mb-12"
+          class="text-4xl mobile-lg:text-5xl tablet:text-6xl max-w-2xl leading-[1.125]! font-public-sans font-bold text-white mb-12"
         >
           Build federal websites and applications faster than ever.
         </h1>
 
         <p
-          class="text-white/90 text-xl mobile-lg:text-2xl font-public-sans !leading-relaxed max-w-screen-tablet"
+          class="text-white/90 text-xl mobile-lg:text-2xl font-public-sans leading-relaxed! max-w-tablet-lg"
         >
           Get started using the comprehensive design system, built with the
           speed and flexibility of modern tooling, as quickly as you can copy &
           paste.
         </p>
         <div class="mt-8 flex flex-wrap gap-4">
-          <a class="inline-flex min-h-12 items-center justify-center rounded-sm bg-white px-5 py-2 font-semibold text-blue-80v hover:bg-blue-5 focus:outline-4 focus:outline-offset-4 focus:outline-white" href="/docs/vanilla/getting-started">
+          <a
+            class="inline-flex min-h-12 items-center justify-center rounded-sm bg-white px-5 py-2 font-semibold text-blue-80v hover:bg-blue-5 focus:outline-4 focus:outline-offset-4 focus:outline-white"
+            href="/docs/vanilla/getting-started"
+          >
             Get started with Vanilla
           </a>
-          <a class="inline-flex min-h-12 items-center justify-center rounded-sm border-2 border-white px-5 py-2 font-semibold text-white hover:bg-white hover:text-blue-80v focus:outline-4 focus:outline-offset-4 focus:outline-white" href="/docs/react/getting-started">
+          <a
+            class="inline-flex min-h-12 items-center justify-center rounded-sm border-2 border-white px-5 py-2 font-semibold text-white hover:bg-white hover:text-blue-80v focus:outline-4 focus:outline-offset-4 focus:outline-white"
+            href="/docs/react/getting-started"
+          >
             Get started with React
           </a>
         </div>
@@ -169,7 +184,8 @@ import BaseLayout from '#layouts/base-layout.astro';
               </div>
             </div>
             <p class="text-sm text-gray-cool-70 mt-4">
-              Consistent and pure state logic achieves a significantly smaller bundle size while also ensuring framework-agnostic compatibility.
+              Consistent and pure state logic achieves a significantly smaller
+              bundle size while also ensuring framework-agnostic compatibility.
             </p>
           </div>
           <table class="sr-only whitespace-normal">
@@ -311,8 +327,8 @@ import BaseLayout from '#layouts/base-layout.astro';
               Flexible
             </h3>
             <p class="text-gray-cool-70">
-              Adjust component layouts and variants with utility classes to
-              fit your project.
+              Adjust component layouts and variants with utility classes to fit
+              your project.
             </p>
           </div>
           <div
