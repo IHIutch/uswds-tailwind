@@ -1,4 +1,5 @@
 import type { ogImageProps } from 'types'
+import logo from '../../public/logo.svg?raw'
 
 export default ({
   title,
@@ -26,7 +27,7 @@ export default ({
         }}
       >
         <img
-          src={`${import.meta.env.SITE}/logo.svg`}
+          src={`data:image/svg+xml,${encodeURIComponent(logo)}`}
           width={isHome ? 256 : 192}
           style={{
             width: isHome ? '256px' : '192px',
