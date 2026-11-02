@@ -13,8 +13,8 @@ export default ({
         width: '100%',
         height: '100%',
         display: 'flex',
-        padding: '10rem 14rem',
-        fontSize: '1rem',
+        padding: '5rem 7rem',
+        fontSize: '0.5rem',
         fontFamily: 'Public Sans',
         flexDirection: 'column',
         color: '#ffffff',
@@ -28,9 +28,9 @@ export default ({
       >
         <img
           src={`data:image/svg+xml,${encodeURIComponent(logo)}`}
-          width={isHome ? 256 : 192}
+          width={isHome ? 128 : 96}
           style={{
-            width: isHome ? '256px' : '192px',
+            width: isHome ? '128px' : '96px',
           }}
         />
         {isHome
@@ -38,10 +38,10 @@ export default ({
           : (
               <p
                 style={{
-                  fontSize: '5.5rem',
-                  lineHeight: '5rem',
+                  fontSize: '2.75rem',
+                  lineHeight: '2.5rem',
                   fontWeight: '700',
-                  marginLeft: '5rem',
+                  marginLeft: '2.5rem',
                 }}
               >
                 USWDS + Tailwind
@@ -58,19 +58,19 @@ export default ({
             >
               <p
                 style={{
-                  fontSize: '12rem',
+                  fontSize: '6rem',
                   fontWeight: '700',
-                  marginTop: '4rem',
+                  marginTop: '2rem',
                 }}
               >
                 {title}
               </p>
               <p
                 style={{
-                  fontSize: '5rem',
-                  lineHeight: '7rem',
+                  fontSize: '2.5rem',
+                  lineHeight: '3.5rem',
                   fontWeight: '400',
-                  marginTop: '3rem',
+                  marginTop: '1.5rem',
                 }}
               >
                 {description}
@@ -87,10 +87,10 @@ export default ({
             >
               <p
                 style={{
-                  fontSize: '11rem',
-                  lineHeight: '12.5rem',
+                  fontSize: '5.5rem',
+                  lineHeight: '6.25rem',
                   fontWeight: '700',
-                  marginBottom: '4rem',
+                  marginBottom: '2rem',
                 }}
               >
                 {title}
@@ -98,8 +98,8 @@ export default ({
               <p
                 style={{
                   display: 'block',
-                  fontSize: '5rem',
-                  lineHeight: '7rem',
+                  fontSize: '2.5rem',
+                  lineHeight: '3.5rem',
                   fontWeight: '400',
                   lineClamp: 2,
                   overflow: 'hidden',

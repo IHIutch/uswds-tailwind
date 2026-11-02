@@ -28,7 +28,7 @@ const {
 } = Astro.props;
 const links = getPageLinks(Astro.url.pathname, Astro.site ?? Astro.url)
 const { canonical } = links
-const ogImageUrl = new URL(Astro.props.ogImageUrl ?? '/og.jpg', canonical)
+const ogImageUrl = new URL(Astro.props.ogImageUrl ?? '/og.png', canonical)
 
 if (title) ogImageUrl.searchParams.set("title", title);
 if (description) ogImageUrl.searchParams.set("description", description);

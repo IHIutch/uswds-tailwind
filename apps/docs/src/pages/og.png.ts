@@ -17,7 +17,7 @@ export const GET: APIRoute = async ({ url }) => {
     return new Response(
       imageBuffer,
       {
-        headers: { 'Content-Type': 'image/svg+xml' },
+        headers: { 'Content-Type': 'image/png' },
       },
     )
   }

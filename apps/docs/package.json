@@ -17,7 +17,7 @@
     "@astrojs/cloudflare": "catalog:",
     "@astrojs/mdx": "catalog:",
     "@astrojs/react": "catalog:",
-    "@cf-wasm/satori": "catalog:",
+    "@cf-wasm/og": "catalog:",
     "@docsearch/css": "catalog:",
     "@docsearch/react": "catalog:",
     "@fontsource-variable/merriweather": "catalog:",
