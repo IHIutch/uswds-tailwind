@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USWDS + Tailwind</title>
+  </head>
+  <body class="font-source-sans">
+    <main class="mx-auto max-w-prose p-6">
+      <h1 class="mb-4 text-3xl font-bold">Hello, USWDS + Tailwind!</h1>
+      <p class="mb-6">Edit index.html to start building your site.</p>
+      <div data-scope="accordion" data-part="root">
+        <div data-scope="accordion" data-part="item" data-value="getting-started">
+          <h2>
+            <button
+              type="button"
+              data-scope="accordion"
+              data-part="item-trigger"
+              class="w-full cursor-pointer bg-gray-5 px-5 py-4 text-left font-bold hover:bg-gray-10 focus:outline-4 focus:outline-blue-40v"
+            >
+              What's included?
+            </button>
+          </h2>
+          <div data-scope="accordion" data-part="item-content" class="px-4 py-6 not-data-[state=open]:hidden">
+            <p>Vite, TypeScript, Tailwind CSS, and USWDS + Tailwind are ready to use.</p>
+            <a class="text-blue-60v underline" href="https://uswds-tailwind.com/docs/vanilla/getting-started">Read the documentation</a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -21,8 +21,8 @@
     "@iconify-json/fa6-brands": "catalog:",
     "@iconify-json/material-symbols": "catalog:",
     "@tailwindcss/vite": "catalog:",
-    "@uswds-tailwind/compat": "workspace:*",
-    "@uswds-tailwind/theme": "workspace:*",
+    "@uswds-tailwind/compat": "latest",
+    "@uswds-tailwind/theme": "latest",
     "tailwindcss": "catalog:"
   },
   "devDependencies": {
